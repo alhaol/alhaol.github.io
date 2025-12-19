@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Video Playlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Cybersecurity Architecture Series</h1>
+            <p class="text-gray-600">Video Collection with Metadata</p>
+        </header>
+
+        <!-- Grid Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="video-grid">
+            <!-- Videos will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        const videos = [
+            {
+                no: 1,
+                id: "jq_LZ1RFPfU",
+                url: "https://www.youtube.com/watch?v=jq_LZ1RFPfU",
+                userTime: 18,
+                title: "Cybersecurity Architecture: Data Security",
+                channel: "IBM Technology",
+                views: "847K",
+                date: "2023-07-19"
+            },
+            {
+                no: 2,
+                id: "EqNe55IzjAw",
+                url: "https://www.youtube.com/watch?v=EqNe55IzjAw",
+                userTime: 12,
+                title: "Cybersecurity Architecture: Roles and Tools",
+                channel: "IBM Technology",
+                views: "277K",
+                date: "2023-06-13"
+            },
+            {
+                no: 3,
+                id: "E9pHJRRfAhw",
+                url: "https://www.youtube.com/watch?v=E9pHJRRfAhw",
+                userTime: 14,
+                title: "Cybersecurity Architecture: Five Principles to Follow",
+                channel: "IBM Technology",
+                views: "213K",
+                date: "2023-05-31"
+            },
+            {
+                no: 4,
+                id: "5uNifnVlBy4",
+                url: "https://www.youtube.com/watch?v=5uNifnVlBy4",
+                userTime: 31,
+                title: "Cybersecurity Architecture: Detection",
+                channel: "IBM Technology",
+                views: "386K",
+                date: "2023-07-26"
+            },
+            {
+                no: 5,
+                id: "Njqid_JpqTs",
+                url: "https://www.youtube.com/watch?v=Njqid_JpqTs",
+                userTime: 14,
+                title: "Cybersecurity Architecture: Endpoints Are the IT Front Door",
+                channel: "IBM Technology",
+                views: "170K",
+                date: "2023-06-28"
+            },
+            {
+                no: 6,
+                id: "sesacY7Xz3c",
+                url: "https://www.youtube.com/watch?v=sesacY7Xz3c",
+                userTime: 27,
+                title: "Cybersecurity Architecture: Networks",
+                channel: "IBM Technology",
+                views: "403K",
+                date: "2023-07-05"
+            },
+            {
+                no: 7,
+                id: "nthEXs12nFE",
+                url: "https://www.youtube.com/watch?v=nthEXs12nFE",
+                userTime: 16,
+                title: "Cybersecurity Architecture: Identity and Access Management",
+                channel: "IBM Technology",
+                views: "188K",
+                date: "2023-06-20"
+            },
+            {
+                no: 8,
+                id: "UpkqXK0B2E0",
+                url: "https://www.youtube.com/watch?v=UpkqXK0B2E0",
+                userTime: 15,
+                title: "Cybersecurity Architecture: Application Security",
+                channel: "IBM Technology",
+                views: "140K",
+                date: "2023-07-12"
+            },
+            {
+                no: 9,
+                id: "VEu326IZpsc",
+                url: "https://www.youtube.com/watch?v=VEu326IZpsc",
+                userTime: 17,
+                title: "Cybersecurity Architecture: Response",
+                channel: "IBM Technology",
+                views: "130K",
+                date: "2023-08-02"
+            },
+            {
+                no: 10,
+                id: "Jk79QJCxPkM",
+                url: "https://www.youtube.com/watch?v=Jk79QJCxPkM",
+                userTime: 17,
+                title: "AI ATTACKS! How Hackers Weaponize Artificial Intelligence",
+                channel: "IBM Technology",
+                views: "108K",
+                date: "2025-11-18"
+            },
+            {
+                no: 11,
+                id: "kqaMIFEz15s",
+                url: "https://www.youtube.com/watch?v=kqaMIFEz15s",
+                userTime: 16,
+                title: "The Limits of AI: Generative AI, NLP, AGI, & What’s Next?",
+                channel: "IBM Technology",
+                views: "752K",
+                date: "2025-10-07"
+            },
+            {
+                no: 12,
+                id: "kqaMIFEz15s",
+                url: "https://www.youtube.com/watch?v=kqaMIFEz15s",
+                userTime: 17,
+                title: "The Limits of AI: Generative AI, NLP, AGI, & What’s Next?",
+                channel: "IBM Technology",
+                views: "752K",
+                date: "2025-10-07"
+            },
+            {
+                no: 13,
+                id: "0tHb6U2604g",
+                url: "https://www.youtube.com/watch?v=0tHb6U2604g",
+                userTime: 18,
+                title: "Cybersecurity Trends for 2025 and Beyond",
+                channel: "IBM Technology",
+                views: "74K",
+                date: "2024-12-30"
+            },
+            {
+                no: 14,
+                id: "CMHL1bPtQdI",
+                url: "https://www.youtube.com/watch?v=CMHL1bPtQdI",
+                userTime: 15,
+                title: "What is Zero Trust?",
+                channel: "IBM Technology",
+                views: "706K",
+                date: "2023-07-12"
+            },
+            {
+                no: 15,
+                id: "rBlCOLfMYfw",
+                url: "https://www.youtube.com/watch?v=rBlCOLfMYfw",
+                userTime: 20,
+                title: "Zero-Click Attacks: AI Agents and the Next Cybersecurity Challenge",
+                channel: "IBM Technology",
+                views: "290K",
+                date: "2025-09-30"
+            }
+        ];
+
+        // Global function to load the iframe only when user clicks
+        window.loadVideo = function(container, id, title) {
+            container.innerHTML = `
+                <iframe 
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/${id}?autoplay=1" 
+                    title="${title}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            `;
+            // Remove the onclick handler to prevent reloading
+            container.removeAttribute('onclick');
+            container.classList.remove('cursor-pointer');
+        };
+
+        const container = document.getElementById('video-grid');
+
+        videos.forEach(video => {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col";
+            
+            // Render thumbnail and play button first (Facade Pattern)
+            card.innerHTML = `
+                <div class="relative w-full cursor-pointer group" style="padding-top: 56.25%;" onclick="loadVideo(this, '${video.id}', '${video.title}')">
+                    <img 
+                        src="https://i.ytimg.com/vi/${video.id}/hqdefault.jpg" 
+                        class="absolute top-0 left-0 w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                        alt="${video.title}"
+                    >
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg group-hover:bg-red-700 transition-colors z-10">
+                        <i class="fas fa-play text-2xl ml-1"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">#${video.no}</span>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>${video.userTime} min</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 leading-tight mb-2 line-clamp-2" title="${video.title}">
+                        <a href="${video.url}" target="_blank" class="hover:text-blue-600 transition-colors">
+                            ${video.title}
+                        </a>
+                    </h3>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-sm text-gray-600 flex justify-between items-center">
+                        <span class="font-medium flex items-center">
+                            <i class="fab fa-youtube text-red-600 mr-2"></i> ${video.channel}
+                        </span>
+                        <div class="flex space-x-3 text-xs text-gray-400">
+                           <span>${video.views} views</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>
