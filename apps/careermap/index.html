@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahim AbuAlhaol's Journey</title>
+    
+    <!-- Leaflet & Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    
+    <!-- Leaflet Curve Plugin for Arced Paths -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-curve@1.0.0/leaflet.curve.min.js"></script>
+
+    <!-- Tailwind for Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body, html { 
+            height: 100%; margin: 0; background: #020617; color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; 
+        }
+        #map { height: 100%; width: 100%; z-index: 1; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar Transition */
+        .sidebar {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+
+        .location-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .location-card:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateX(8px);
+        }
+
+        .pulse-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 8px rgba(0,0,0,0.8));
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .pulse-marker:hover { transform: scale(1.3); }
+
+        /* Permanent Label Styling */
+        .company-label {
+            background: rgba(15, 23, 42, 0.9) !important;
+            border: 1px solid rgba(16, 185, 129, 0.6) !important;
+            border-radius: 6px !important;
+            color: #10b981 !important;
+            font-weight: 800 !important;
+            font-size: 10px !important;
+            padding: 2px 6px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+            pointer-events: none !important;
+        }
+
+        .custom-tooltip {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 1px solid rgba(16, 185, 129, 0.4) !important;
+            border-radius: 8px !important;
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        /* Animation for the curved lines */
+        .path-dash-animation {
+            stroke-dasharray: 10, 10;
+            animation: dash 30s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+
+        .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        /* Landing Page Styles */
+        #landing-page {
+            z-index: 2000;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        .fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row relative">
+
+    <!-- Landing Page Overlay -->
+    <div id="landing-page" class="fixed inset-0 flex flex-col items-center justify-center p-6 text-center">
+        <div class="max-w-3xl space-y-8">
+            <div class="space-y-2">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter text-white">Ibrahim AbuAlhaol's Journey</h1>
+                <p class="text-emerald-400 font-bold uppercase tracking-[0.2em] text-sm md:text-base">
+                    Passion • Purpose • Connection
+                </p>
+            </div>
+            
+            <div class="h-px w-24 bg-slate-800 mx-auto"></div>
+            
+            <p class="text-lg md:text-xl text-slate-400 italic leading-relaxed max-w-xl mx-auto">
+                "Finding fulfillment by doing what I enjoy, in the places I love, surrounded by people with clean hearts."
+            </p>
+            
+            <button onclick="enterExperience()" class="group relative px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest rounded-full transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-emerald-900/40">
+                Explore the Odyssey
+                <div class="absolute -inset-1 rounded-full bg-emerald-400/20 blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Premium Sidebar -->
+    <div id="main-sidebar" class="sidebar glass-panel fixed md:relative w-full md:w-96 h-1/2 md:h-full flex flex-col z-[1000] shadow-2xl overflow-hidden">
+        
+        <!-- Header & Stats -->
+        <div class="p-6 border-b border-slate-800">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white leading-tight">Ibrahim AbuAlhaol</h1>
+                    <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-[0.1em] mt-1">
+                        Professional Journey
+                    </p>
+                </div>
+                <button onclick="toggleSidebar()" class="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-500 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[9px] text-slate-500 uppercase font-bold">Distance</div>
+                    <div class="text-sm font-black text-white" id="dist-stat">0 km</div>
+                </div>
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 text-right">
+                    <div class="text-[9px] text-slate-500 uppercase font-bold text-right">Span</div>
+                    <div class="text-sm font-black text-white">24 Years</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="px-6 py-4 flex gap-2 border-b border-slate-800 bg-slate-900/20">
+            <button onclick="toggleJourney()" id="pathBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-[10px] font-black uppercase py-2 px-3 rounded-lg transition-all shadow-lg text-xs">
+                Toggle Path
+            </button>
+            <button onclick="startStoryMode()" id="storyBtn" class="flex-1 bg-slate-800 hover:bg-slate-700 text-[10px] font-black uppercase py-2 px-3 rounded-lg border border-slate-700 transition-all text-xs">
+                Play Story
+            </button>
+        </div>
+
+        <!-- Timeline List -->
+        <div class="flex-1 overflow-y-auto sidebar-scroll p-6 space-y-4" id="locationList">
+            <!-- Injected via JS -->
+        </div>
+    </div>
+
+    <!-- Map Area -->
+    <div class="flex-1 relative">
+        <div id="map"></div>
+        
+        <!-- Toggle Menu Button (When hidden) -->
+        <button id="show-sidebar-btn" onclick="toggleSidebar()" class="hidden absolute top-6 left-6 z-[1000] bg-slate-900/80 backdrop-blur-md p-3 rounded-lg border border-slate-700 hover:bg-emerald-600 transition-all shadow-2xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
+        <!-- Floating Reset Button -->
+        <button onclick="resetView()" class="absolute top-6 right-6 z-[1000] bg-slate-900/80 backdrop-blur-md p-3 rounded-full border border-slate-700 hover:bg-emerald-600 transition-all group shadow-2xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const locations = [
+            { id: 1, name: "Jordan Univ. of Science & Tech", short: "JUST", city: "Irbid, Jordan", coords: [32.4950, 35.9860], years: "2000 - 2004", type: "Education", flag: "🇯🇴", desc: "Foundational Engineering Degree" },
+            { id: 2, name: "University of Mississippi", short: "Ole Miss", city: "Oxford, MS", coords: [34.3664, -89.5380], years: "2005 - 2008", type: "Education", flag: "🇺🇸", desc: "Masters Studies & Research" },
+            { id: 3, name: "Qualcomm, Inc", short: "Qualcomm", city: "San Diego, CA", coords: [32.8987, -117.2184], years: "2008", type: "Work", flag: "🇺🇸", desc: "Wireless Systems Engineering" },
+            { id: 4, name: "Broadcom Limited", short: "Broadcom", city: "San Diego, CA", coords: [33.0127, -117.0914], years: "2009", type: "Work", flag: "🇺🇸", desc: "Integrated Circuit Development" },
+            { id: 5, name: "Khalifa University", short: "Khalifa Univ", city: "Abu Dhabi, UAE", coords: [24.4476, 54.3949], years: "2009 - 2014", type: "Research", flag: "🇦🇪", desc: "Ph.D. Research & Innovation" },
+            { id: 6, name: "Carleton University", short: "Carleton", city: "Ottawa, ON", coords: [45.3823, -75.6991], years: "2014 - 2017", type: "Education", flag: "🇨🇦", desc: "Post-Doc & Academic Research" },
+            { id: 7, name: "Larus Technologies", short: "Larus Tech", city: "Ottawa, ON", coords: [45.4202, -75.6945], years: "2017 - 2019", type: "Work", flag: "🇨🇦", desc: "Software Architecture & AI" },
+            { id: 8, name: "Huawei Technologies", short: "Huawei", city: "Ottawa, ON", coords: [45.3490, -75.9070], years: "2019 - 2020", type: "Work", flag: "🇨🇦", desc: "5G & Network Optimization" },
+            { id: 9, name: "Princess Sumaya University", short: "PSUT", city: "Amman, Jordan", coords: [32.0236, 35.8762], years: "2020 - 2022", type: "Work", flag: "🇯🇴", desc: "Academic Faculty & Research" },
+            { id: 10, name: "Dell Technologies", short: "Dell Tech", city: "Ottawa, ON", coords: [45.3442, -75.9246], years: "2022 - Now", type: "Work", flag: "🇨🇦", desc: "Principal Cloud Engineer" }
+        ];
+
+        const pathColors = ["#60a5fa", "#34d399", "#10b981", "#f472b6", "#c084fc", "#fbbf24", "#fb923c", "#ef4444", "#2dd4bf"];
+
+        function getDist(p1, p2) {
+            const R = 6371;
+            const dLat = (p2[0]-p1[0]) * Math.PI / 180;
+            const dLon = (p2[1]-p1[1]) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(p1[0] * Math.PI / 180) * Math.cos(p2[0] * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        const map = L.map('map', { 
+            center: [20, 0], 
+            zoom: 3, 
+            zoomControl: false, 
+            attributionControl: false 
+        });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+        let journeyLines = [];
+        let isJourneyVisible = false;
+        let storyActive = false;
+
+        // Entry Function
+        function enterExperience() {
+            document.getElementById('landing-page').classList.add('fade-out');
+            setTimeout(() => {
+                resetView();
+            }, 800);
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const showBtn = document.getElementById('show-sidebar-btn');
+            sidebar.classList.toggle('sidebar-hidden');
+            
+            if (sidebar.classList.contains('sidebar-hidden')) {
+                setTimeout(() => showBtn.classList.remove('hidden'), 500);
+            } else {
+                showBtn.classList.add('hidden');
+            }
+            
+            // Allow map to recalculate size after animation
+            setTimeout(() => {
+                map.invalidateSize({ pan: true });
+            }, 550);
+        }
+
+        let totalKm = 0;
+        for(let i=0; i < locations.length-1; i++) {
+            totalKm += getDist(locations[i].coords, locations[i+1].coords);
+        }
+        document.getElementById('dist-stat').innerText = `${Math.floor(totalKm).toLocaleString()} km`;
+
+        const list = document.getElementById('locationList');
+        locations.forEach((loc, i) => {
+            const card = document.createElement('div');
+            card.className = "location-card p-4 rounded-2xl bg-slate-900/40 border border-slate-800 cursor-pointer relative group";
+            card.onclick = () => { if(!storyActive) map.flyTo(loc.coords, 14, {duration: 10}); };
+            card.innerHTML = `
+                <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="flex items-center gap-4">
+                    <div class="text-2xl">${loc.flag}</div>
+                    <div class="flex-1 text-left">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">${loc.years}</span>
+                            <span class="text-[8px] font-black text-slate-500 uppercase tracking-tighter">${loc.type}</span>
+                        </div>
+                        <h3 class="font-bold text-slate-100 text-sm leading-tight">${loc.name}</h3>
+                        <p class="text-[10px] text-slate-500 mt-1 italic">${loc.desc}</p>
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+
+            const marker = L.marker(loc.coords, {
+                icon: L.divIcon({
+                    html: `<div class="pulse-marker">${loc.flag}</div>`,
+                    className: 'custom-marker',
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20]
+                })
+            }).addTo(map);
+
+            // Add Permanent Label for Place Name
+            marker.bindTooltip(loc.short, {
+                permanent: true,
+                direction: 'bottom',
+                className: 'company-label',
+                offset: [0, 10],
+                opacity: 0.9
+            });
+
+            // Standard Popup for Detailed View
+            marker.bindPopup(`
+                <div class="p-3">
+                    <div class="text-2xl mb-2">${loc.flag}</div>
+                    <div class="text-[10px] font-black text-emerald-500 uppercase">${loc.years}</div>
+                    <h2 class="text-lg font-black text-white leading-tight">${loc.name}</h2>
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">${loc.desc}</p>
+                    <div class="mt-4 pt-3 border-t border-slate-700 text-[9px] text-slate-500 font-bold uppercase tracking-widest text-left">
+                        Location: ${loc.city}
+                    </div>
+                </div>
+            `);
+        });
+
+        function createCurve(p1, p2, color) {
+            const latlng1 = L.latLng(p1);
+            const latlng2 = L.latLng(p2);
+            const offsetX = latlng2.lng - latlng1.lng;
+            const offsetY = latlng2.lat - latlng1.lat;
+            const r = Math.sqrt(Math.pow(offsetX, 2) + Math.pow(offsetY, 2));
+            const theta = Math.atan2(offsetY, offsetX);
+            const thetaOffset = 3.14 / 10;
+            const r2 = (r/2) / (Math.cos(thetaOffset));
+            const midpointX = (latlng1.lng + latlng2.lng) / 2;
+            const midpointY = (latlng1.lat + latlng2.lat) / 2;
+            const cpLat = midpointY + (r2 * Math.sin(theta + 3.14/2));
+            const cpLng = midpointX + (r2 * Math.cos(theta + 3.14/2));
+            const pathData = ['M', p1, 'Q', [cpLat, cpLng], p2];
+            return L.curve(pathData, { color: color, weight: 3, opacity: 0.6, fill: false, className: 'path-dash-animation' });
+        }
+
+        function toggleJourney() {
+            isJourneyVisible = !isJourneyVisible;
+            const btn = document.getElementById('pathBtn');
+            if (isJourneyVisible) {
+                for (let i = 0; i < locations.length - 1; i++) {
+                    const line = createCurve(locations[i].coords, locations[i+1].coords, pathColors[i % pathColors.length]);
+                    line.addTo(map);
+                    journeyLines.push(line);
+                }
+                btn.classList.replace('bg-emerald-600', 'bg-slate-700');
+                map.flyTo([30, -20], 3, { duration: 10 });
+            } else {
+                journeyLines.forEach(l => map.removeLayer(l));
+                journeyLines = [];
+                btn.classList.replace('bg-slate-700', 'bg-emerald-600');
+            }
+        }
+
+        async function startStoryMode() {
+            if(storyActive) return;
+            storyActive = true;
+            const btn = document.getElementById('storyBtn');
+            btn.innerText = "Journey Underway...";
+            btn.classList.add('animate-pulse');
+            
+            for (let i = 0; i < locations.length; i++) {
+                // Set duration to 10 seconds per movement
+                map.flyTo(locations[i].coords, 14, { 
+                    animate: true, 
+                    duration: 10 
+                });
+                // Wait for the move (10s) plus a small pause (3s)
+                await new Promise(r => setTimeout(r, 13000));
+            }
+            
+            storyActive = false;
+            btn.innerText = "Play Story";
+            btn.classList.remove('animate-pulse');
+            resetView();
+        }
+
+        function resetView() { 
+            map.flyTo([25, -20], 3, { duration: 10 }); 
+        }
+        
+        window.addEventListener('resize', () => map.invalidateSize());
+    </script>
+</body>
+</html>
