@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahim AbuAlhaol - AI Technical Lead</title>
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Default Fallback Variables */
+            --bg-color: #f9fafb;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --header-bg-start: #0f172a;
+            --header-bg-end: #1e293b;
+            --header-text: #ffffff;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            /* Smooth transition for theme switching */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        
+        /* Header Specifics */
+        .header-container {
+            position: relative;
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: var(--header-text);
+            overflow: hidden;
+        }
+        
+        #header-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Toggle Button */
+        .mode-toggle {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Typography Utilities */
+        .text-balance { text-wrap: balance; }
+        
+        /* Smooth height transition for toggles */
+        .section-content {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <!-- Loading State -->
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global state for re-rendering
+        let appData = null;
+        let dataSource = "";
+
+        // --- BUILT-IN DATA (Fallback) ---
+        const DEFAULT_DATA = {
+    "lastUpdated": "01:16 PM , 16-DEC-2025",
+    "personalInfo": {
+        "name": "Ibrahim AbuAlhaol",
+        "title": "AI Technical Lead | PhD, PEng, SMIEEE",
+        "email": "iabualhaol@gmail.com",
+        "location": "Ottawa, Canada",
+        "linkedin": "linkedin.com/in/abualhaol/",
+        "googleScholar": "https://scholar.google.com/citations?user=UougQ9UAAAAJ",
+        "summary": "AI Technical Lead and System Architect bridging the gap between academic research and industrial scale. An inventor with a robust patent portfolio, specializing in architecting Agentic AI, intelligent edge systems, and advanced cybersecurity solutions. Integrates System Engineering and Innovation Management to lead high-performing teams, delivering resilient solutions while empowering the next generation of engineering talent. Committed to ethical AI development and technical mentorship, fostering innovation from research concept to commercial deployment.",
+        "citations": 1061,
+        "conferences": 40,
+        "patents": 42,
+        "journals": 14
+    },
+    "education": [
+        {
+            "degree": "MEng in Technology Innovation Management",
+            "school": "Carleton University, Canada",
+            "year": "2014 - 2015",
+            "details": "GPA: 11.0/12.0 | Graduate Researcher",
+            "focus": "Specialized in Cybersecurity Architecture and Technology Management. Engineered custom cryptographic algorithms (AES/RSA) for end-to-end encryption services.",
+            "tags": [
+                "Security",
+                "System Design",
+                "Research"
+            ]
+        },
+        {
+            "degree": "PhD in Electrical and Computer Engineering",
+            "school": "University of Mississippi, USA",
+            "year": "2005 - 2008",
+            "details": "GPA: 4.0/4.0 | Sigma Xi & Phi Kappa Phi Honor Societies",
+            "focus": "Conducted advanced research in wireless systems (MIMO-OFDM). Served as Teaching Assistant for graduate modules on the theoretical foundations of AI: Statistical Analysis, Graph Theory, Coding Theory, and Random Signals.",
+            "tags": [
+                "Research",
+                "Wireless",
+                "AI"
+            ]
+        },
+        {
+            "degree": "MSc in Electrical Engineering",
+            "school": "Jordan University of Science & Technology",
+            "year": "2002 - 2004",
+            "details": "GPA: 84.4/100 | Academic Honors",
+            "focus": "Designed performance models for secure, multi-rate data transmission in constrained environments (Fast Frequency Hopping CDMA).",
+            "tags": [
+                "Research",
+                "Wireless"
+            ]
+        },
+        {
+            "degree": "BSc in Electrical Engineering",
+            "school": "Jordan University of Science & Technology",
+            "year": "1995 - 2000",
+            "details": "GPA: 84.4/100 | Telecommunications Engineering",
+            "focus": "Specialized in Telecommunications with a focus on optimizing short-range wireless networks.",
+            "tags": [
+                "System Design",
+                "Wireless"
+            ]
+        }
+    ],
+    "experience": [
+        {
+            "role": "AI Technical Lead",
+            "company": "Dell Technologies",
+            "location": "Ottawa, Canada",
+            "period": "2022 - Present",
+            "tags": [
+                "AI",
+                "System Design",
+                "Wireless",
+                "Research",
+                "Coding"
+            ],
+            "description": "Spearheads Multi-modal Agentic AI benchmarking initiatives. Architects zero-touch automation by integrating GNN-based Digital Twins and Knowledge Graphs to optimize system reliability and operational efficiency."
+        },
+        {
+            "role": "Assistant Professor, Data Science",
+            "company": "Princess Sumaya University for Technology",
+            "location": "Amman, Jordan",
+            "period": "2020 - 2022",
+            "tags": [
+                "AI",
+                "Research",
+                "Coding"
+            ],
+            "description": "Directed the founding of the Data Science department; led the faculty committee to design industry-aligned BSc/MSc curricula and forged strategic partnerships. Represented the department in the multi-agency consortium drafting the Jordan National AI Ethics Charter."
+        },
+        {
+            "role": "Principal Data Scientist",
+            "company": "Huawei Technologies",
+            "location": "Ottawa, Canada",
+            "period": "2019 - 2020",
+            "tags": [
+                "AI",
+                "Security",
+                "Coding"
+            ],
+            "description": "Technical lead for AI-driven cybersecurity solutions. Architected adaptive Deep Learning frameworks for threat detection, fortifying systems against zero-day attacks in real-time log streams."
+        },
+        {
+            "role": "Senior Data Scientist",
+            "company": "Larus Technologies",
+            "location": "Ottawa, Canada",
+            "period": "2017 - 2019",
+            "tags": [
+                "AI",
+                "Coding",
+                "System Design"
+            ],
+            "description": "Designed scalable Decision Support Systems (DSS) aligned with stakeholder requirements. Engineered predictive analytics models and robust data pipelines for logistics optimization."
+        },
+        {
+            "role": "Cybersecurity Research Scientist",
+            "company": "VENUS Cybersecurity / Carleton U",
+            "location": "Ottawa, Canada",
+            "period": "2014 - 2017",
+            "tags": [
+                "Security",
+                "Research",
+                "Coding"
+            ],
+            "description": "Led R&D initiatives to architect real-time anomaly detection solutions for large-scale network routing. Designed machine learning models to mitigate IP Prefix Hijacking and DDoS attacks."
+        },
+        {
+            "role": "Assistant Professor",
+            "company": "Khalifa University",
+            "location": "UAE",
+            "period": "2009 - 2014",
+            "tags": [
+                "Wireless",
+                "Research"
+            ],
+            "description": "Educated and mentored engineering students. Supervised advanced research on Multi-carrier Relay Systems and UAV networks, facilitating projects in Cognitive Radio Networks."
+        },
+        {
+            "role": "Wireless System Engineer",
+            "company": "Broadcom Corporation",
+            "location": "San Diego, USA",
+            "period": "2008 - 2009",
+            "tags": [
+                "Wireless",
+                "System Design",
+                "Coding"
+            ],
+            "description": "Conducted system-level analysis and optimization of 3G/4G wireless core components in cross-functional engineering environments. Validated RF/RX front-end performance."
+        }
+    ],
+    "publications": [
+        {
+            "title": "Dynamic Multi-Agent Framework with Knowledge Graph Profiles",
+            "category": "Patent App",
+            "id": "U.S. App 19/334763 (2025)",
+            "tags": [
+                "AI"
+            ],
+            "link": "",
+            "desc": "Architected a dynamic Agentic AI framework with Knowledge Graph profiles for adaptive, context-aware agent collaboration."
+        },
+        {
+            "title": "GNN-Based Network Digital Twin for O-RAN",
+            "category": "Patent",
+            "id": "U.S. Patent 12,302,162 (2025)",
+            "tags": [
+                "AI",
+                "Wireless"
+            ],
+            "link": "https://drive.google.com/file/d/1ev-WZGXi-4fXuITGhc8YfFmrzaGjzEve/view?usp=sharing",
+            "desc": "Architected a novel hybrid AI/ML digital twin integrating RNN/GNN models to capture temporal/spatial 5G/6G network dynamics."
+        },
+        {
+            "title": "Federated/Transfer Learning for O-RAN LLMs",
+            "category": "Patent App",
+            "id": "U.S. App 19/039407 (2025)",
+            "tags": [
+                "AI",
+                "Wireless"
+            ],
+            "link": "",
+            "desc": "Applied federated and transfer learning to train Large Language Models (LLMs) in O-RAN, enabling privacy-preserving AI/ML."
+        },
+        {
+            "title": "User Authentication through Statistical Analysis of Gesture Data",
+            "category": "Patent App",
+            "id": "U.S. App 19/170829 (2025)",
+            "tags": [
+                "Security",
+                "AI"
+            ],
+            "link": "",
+            "desc": "Developed a security mechanism for continuous authentication by applying statistical models to gesture data for Data Management."
+        },
+        {
+            "title": "Multivariate Malware Detection Methods and Systems",
+            "category": "Patent",
+            "id": "U.S. Patent (2024)",
+            "tags": [
+                "Security",
+                "AI"
+            ],
+            "link": "https://drive.google.com/file/d/1DoMkD-FTc2WjTGyv_vwYDCvvRAl00HOg/view?usp=sharing",
+            "desc": "Engineered a Deep Learning framework to detect zero-day and evasive threats by analyzing diverse features."
+        },
+        {
+            "title": "End-to-End Jordanian Dialect Speech-to-Text Framework",
+            "category": "Journal",
+            "id": "Frontiers in AI (2023)",
+            "tags": [
+                "AI"
+            ],
+            "link": "https://drive.google.com/file/d/1mmJsPrZ0Ws7rFaETVZTGFNwLvvkgLZya/view?usp=sharing",
+            "desc": "Developed a self-supervised learning framework for speech-to-text conversion of Jordanian dialect, advancing NLP capabilities."
+        },
+        {
+            "title": "Fake Base Station Detection Using Graph Analysis",
+            "category": "Patent App",
+            "id": "U.S. App 18/534373 (2023)",
+            "tags": [
+                "Security",
+                "AI"
+            ],
+            "link": "",
+            "desc": "Pioneered a security framework to detect fake base stations using temporal Knowledge Graph analysis and anomaly detection."
+        },
+        {
+            "title": "On Building Machine Learning Pipelines for Android Malware Detection",
+            "category": "Journal",
+            "id": "Cybersecurity (2022)",
+            "tags": [
+                "Security",
+                "AI"
+            ],
+            "link": "https://drive.google.com/file/d/1jktxQTZEMBAFbXtFdcNPW6C0d1SVX7NN/view?usp=sharing",
+            "desc": "Constructed robust, production-ready ML pipelines specifically designed to identify malicious Android applications."
+        },
+        {
+            "title": "Preserving User Privacy in Personalized Networks",
+            "category": "Journal",
+            "id": "IEEE Networking Letters (2021)",
+            "tags": [
+                "Security",
+                "Wireless",
+                "AI"
+            ],
+            "link": "https://drive.google.com/file/d/1sLoRjEjbRNwr5NmcZcF5rjdMkEDg5DxD/view?usp=sharing",
+            "desc": "Developed a privacy-centric framework using differential privacy techniques to balance network personalization with user data protection."
+        },
+        {
+            "title": "User Persona in Personalized Wireless Networks",
+            "category": "Conference",
+            "id": "IEEE VTC2020-Fall",
+            "tags": [
+                "AI",
+                "Wireless"
+            ],
+            "link": "https://drive.google.com/file/d/1C1JzFzJmWHxwEQFy6kg3AUl50IcCsGfi/view?usp=sharing",
+            "desc": "Designed a Deep Neural Network framework to predict real-time user satisfaction, bridging the gap between QoS and QoE."
+        }
+    ],
+    "recentActivities": [
+        {
+            "date": "Sep 2025",
+            "title": "Patent Filing: Agentic AI Orchestration",
+            "type": "Innovation",
+            "desc": "Submitted U.S. Patent Application 19/334763 for a new agentic AI framework utilizing Knowledge Graphs.",
+            "link": ""
+        },
+        {
+            "date": "May 2025",
+            "title": "Patent Grant: GNN Digital Twin for O-RAN",
+            "type": "Achievement",
+            "desc": "Awarded U.S. Patent 12,302,162 for pioneering work in O-RAN automation using Recurrent Graph Neural Networks.",
+            "link": "https://drive.google.com/file/d/1ev-WZGXi-4fXuITGhc8YfFmrzaGjzEve/view?usp=sharing"
+        },
+        {
+            "date": "2024",
+            "title": "Certification: Efficient LLM Customization",
+            "type": "Learning",
+            "desc": "Completed advanced specialized training from NVIDIA in Efficient Large Language Model Customization.",
+            "link": ""
+        }
+    ],
+    "allPublications": [
+        {
+            "date": "Sep 2025",
+            "title": "Dynamic Multi-Agent Framework with Knowledge Graph-Based Profiles",
+            "type": "Patent Application",
+            "desc": "Architected a dynamic Agentic AI framework with Knowledge Graph profiles for adaptive, context-aware agent collaboration.",
+            "link": ""
+        },
+        {
+            "date": "Sep 2025",
+            "title": "Optimizing Execution Planning of Orchestration Agent Using Knowledge Graphs",
+            "type": "Patent Application",
+            "desc": "Developed an orchestration agent using Knowledge Graphs to optimize planning and reliability for Agentic AI workflows.",
+            "link": ""
+        },
+        {
+            "date": "Sep 2025",
+            "title": "Agentic Workflow Adaptive Agentic Workflows via Modular Agent Frameworks and Graph-Based Knowledge",
+            "type": "Patent Application",
+            "desc": "Designed a modular Agentic AI framework with Knowledge Graph insights for resilient, self-optimizing automated workflows.",
+            "link": ""
+        },
+        {
+            "date": "Sep 2025",
+            "title": "Disambiguating Natural Language Communication with Large Language Model Agents",
+            "type": "Patent Application",
+            "desc": "Created a system for LLM agents in an Agentic AI framework to resolve language ambiguity, improving human-AI interaction.",
+            "link": ""
+        },
+        {
+            "date": "Jun 2025",
+            "title": "Agentic-Based Dynamic and Adaptive Graph Benchmarking and Improvement System",
+            "type": "Patent Application",
+            "desc": "Pioneered an Agentic AI system using agents to autonomously benchmark, find issues, and enhance Knowledge Graph quality.",
+            "link": ""
+        },
+        {
+            "date": "Apr 2025",
+            "title": "User Authentication in Computer Devices Through Statistical Analysis of Gesture Data",
+            "type": "Patent Application",
+            "desc": "Developed a security mechanism for continuous authentication by applying statistical models to gesture data.",
+            "link": ""
+        },
+        {
+            "date": "Mar 2025",
+            "title": "Intentionally Incomplete Data Sensing for Correlated Data Reconstruction at the Edge",
+            "type": "Patent Application",
+            "desc": "Designed a Data Management strategy with AI/ML to reconstruct datasets from incomplete sensor data, optimizing edge bandwidth.",
+            "link": ""
+        },
+        {
+            "date": "Feb 2025",
+            "title": "Long-Term Pattern Recognition Using Proximity Detection for Security Applications",
+            "type": "Patent Application",
+            "desc": "Created a context-aware security system that learns user habits via long-term proximity data for enhanced authentication.",
+            "link": ""
+        },
+        {
+            "date": "Feb 2025",
+            "title": "Large Language Model-Based Processes for Augmenting and Creating Macro-Ontologies",
+            "type": "Patent Application",
+            "desc": "Developed a process using LLMs to auto-augment/construct large-scale ontologies, improving Knowledge Graph scalability.",
+            "link": ""
+        },
+        {
+            "date": "Feb 2025",
+            "title": "Large Language Model-Based Processes for Augmenting and Creating Micro-Ontologies",
+            "type": "Patent Application",
+            "desc": "Created a process to generate specialized micro-ontologies with LLMs, enabling rapid Knowledge Graph development.",
+            "link": ""
+        },
+        {
+            "date": "Feb 2025",
+            "title": "Large Language Model-Based Processes for Augmenting/Creating Ontology Nodes",
+            "type": "Patent Application",
+            "desc": "Automated ontology node creation/augmentation with LLMs, accelerating Knowledge Graph development for AI/ML.",
+            "link": ""
+        },
+        {
+            "date": "Feb 2025",
+            "title": "Vector Database-Based Time Efficient Process for Entry Inclusion",
+            "type": "Patent Application",
+            "desc": "Engineered a time-efficient data inclusion process for vector databases, accelerating ingestion for large-scale AI/ML systems.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Generalized Framework for Network Incident Management",
+            "type": "Patent Application",
+            "desc": "Designed an adaptable framework for network security incident management, improving infrastructure resilience.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Risk Mitigation in Networks",
+            "type": "Patent Application",
+            "desc": "Developed a proactive framework to identify/mitigate security risks, enhancing network resilience.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Private Network Design and Optimization",
+            "type": "Patent Application",
+            "desc": "Designed a framework for automated design/optimization of private 5G/6G networks for enterprise solutions.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Network Data Compression with Multi-Modal Agentic Foundation Model",
+            "type": "Patent Application",
+            "desc": "Developed a multi-modal Agentic AI for intelligent network data compression, reducing 5G/6G data overhead.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Federated/Transfer Learning for O-RAN LLMs",
+            "type": "Patent Application",
+            "desc": "Applied federated/transfer learning to train LLMs in O-RAN, enabling privacy-preserving AI/ML in 5G/6G networks.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Network Policy Generation Using Knowledge Graphs and Generative Models",
+            "type": "Patent Application",
+            "desc": "Automated network policy generation with Knowledge Graphs and generative AI/ML for secure, consistent configurations.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Network Digital Twin with Agentic Model and Knowledge Graph",
+            "type": "Patent Application",
+            "desc": "Created a digital twin with Agentic AI and Knowledge Graph for real-time simulation/analysis for 5G/6G optimization.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "System and Method to Leverage Agentic Foundational Models to Enhance Graph Neural Networks in Mobile Communication",
+            "type": "Patent Application",
+            "desc": "Enhanced GNNs with Agentic AI models for mobile communications, improving AI/ML analytics in complex networks.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Method to Enhance Network Performance Using a Task-Agnostic Graph Abstraction and AFMs",
+            "type": "Patent Application",
+            "desc": "Developed a task-agnostic Knowledge Graph abstraction with Agentic AI for a flexible AI/ML network optimization framework.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Trust Scoring of LLM-Based KG with Expert in the Loop",
+            "type": "Patent Application",
+            "desc": "Established a trust scoring system for LLM-generated Knowledge Graphs with human-in-the-loop to ensure AI accuracy.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Systems and Methods for Radio Area Network Foundational Model Tuning Using Network Feedback and Reinforcement Learning",
+            "type": "Patent Application",
+            "desc": "Designed a system to tune RAN AI/ML models with reinforcement learning/network feedback for adaptive 5G/6G networks.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Wide-Angle Orientation-Insensitive Wearable Device",
+            "type": "Patent Application",
+            "desc": "Designed a wide-angle, orientation-insensitive wearable for robust 5G/6G sensor/communication performance.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Wide-Angle Distance-Insensitive Unit Cell Design for Passive Wearable Metasurfaces",
+            "type": "Patent Application",
+            "desc": "Engineered a unit cell for passive wearable metasurfaces, ensuring consistent performance for 5G/6G.",
+            "link": ""
+        },
+        {
+            "date": "Jan 2025",
+            "title": "Utilizing Passive Wearable Devices to Capture Device Interaction Data for Supplementary Authentication",
+            "type": "Patent Application",
+            "desc": "Devised a supplementary authentication method using passive wearable data for a continuous, unobtrusive security layer.",
+            "link": ""
+        },
+        {
+            "date": "Nov 2024",
+            "title": "Dual Encoder GNNs for Enhanced Entity Resolution",
+            "type": "Patent Application",
+            "desc": "Developed an advanced AI/ML model using dual-encoder GNNs for high-accuracy entity resolution.",
+            "link": ""
+        },
+        {
+            "date": "Jun 2024",
+            "title": "Local Device Radio Configuration Adaptation",
+            "type": "Patent Application",
+            "desc": "Created a system for adaptive radio configuration, enabling devices to adjust to 5G/6G network conditions.",
+            "link": ""
+        },
+        {
+            "date": "Dec 2023",
+            "title": "Fake Base Station Detection Using Temporal Graph Analysis and Anomaly Detection",
+            "type": "Patent Application",
+            "desc": "Pioneered a security framework to detect fake base stations using temporal Knowledge Graph analysis/anomaly detection.",
+            "link": ""
+        },
+        {
+            "date": "Nov 2023",
+            "title": "Proactive Signaling of Predicted Extended Reality User Behavior",
+            "type": "Patent Application",
+            "desc": "Designed a proactive 5G/6G signaling system using predictive analytics to pre-allocate resources for XR.",
+            "link": ""
+        },
+        {
+            "date": "Oct 2023",
+            "title": "Dynamic Base Station Idle Mode Barring",
+            "type": "Patent Application",
+            "desc": "Developed a dynamic barring mechanism to optimize idle mode in 5G/6G base stations, reducing congestion.",
+            "link": ""
+        },
+        {
+            "date": "Oct 2025",
+            "title": "Method and system for using a digital twin of a mobile network to provide energy efficiency [cite: 50, 273]",
+            "type": "Granted Patent",
+            "desc": "Pioneered an AI-driven digital twin to cut mobile network energy use, simulating 5G/6G power-saving scenarios.",
+            "link": "https://drive.google.com/file/d/1vapAprcEEZDPsAZvRcooyO380uFnf65g/view?usp=sharing"
+        },
+        {
+            "date": "May 2025",
+            "title": "Methods and processes to enable RNN-GNN-based network digital twin for O-RAN [cite: 53, 277]",
+            "type": "Granted Patent",
+            "desc": "Architected a novel hybrid AI/ML digital twin for O-RAN integrating RNN/GNN models to capture temporal/spatial network dynamics.",
+            "link": "https://drive.google.com/file/d/1ev-WZGXi-4fXuITGhc8YfFmrzaGjzEve/view?usp=sharing"
+        },
+        {
+            "date": "Sep 2024",
+            "title": "Multivariate malware detection methods and systems [cite: 58, 280]",
+            "type": "Granted Patent",
+            "desc": "Advanced cybersecurity with a deep learning multivariate malware detection engine to find zero-day/evasive threats.",
+            "link": "https://drive.google.com/file/d/1DoMkD-FTc2WjTGyv_vwYDCvvRAl00HOg/view?usp=sharing"
+        },
+        {
+            "date": "Aug 2023",
+            "title": "Enabling wireless network personalization using zone of tolerance modeling and predictive analytics [cite: 63, 284]",
+            "type": "Granted Patent",
+            "desc": "Addressed network inefficiency with an AI framework for predictive, personalized QoS and dynamic resource allocation.",
+            "link": "https://drive.google.com/file/d/15ou18rumZ-DhRZgEWI_XDzrUC_Cw5uKf/view?usp=sharing"
+        },
+        {
+            "date": "Feb 2023",
+            "title": "System, method and apparatus for malicious software detection [cite: 69, 287]",
+            "type": "Granted Patent",
+            "desc": "Developed a cybersecurity method to detect obfuscated malware via a multi-stage AI/ML pipeline using feature hashing.",
+            "link": "https://drive.google.com/file/d/1xQnjxXwQcEN1QjoyH7YB6PvyZoJ9vHxd/view?usp=sharing"
+        },
+        {
+            "date": "2023",
+            "title": "End-to-end Jordanian dialect speech-to-text self-supervised learning framework [cite: 74, 245]",
+            "type": "Journal",
+            "desc": "Developed a self-supervised learning framework for speech-to-text conversion of Jordanian dialect, advancing NLP capabilities.",
+            "link": "https://drive.google.com/file/d/1mmJsPrZ0Ws7rFaETVZTGFNwLvvkgLZya/view?usp=sharing"
+        },
+        {
+            "date": "2022",
+            "title": "On building machine learning pipelines for Android malware detection [cite: 78, 247]",
+            "type": "Journal",
+            "desc": "Constructed robust, production-ready ML pipelines specifically designed to identify malicious Android applications.",
+            "link": "https://drive.google.com/file/d/1jktxQTZEMBAFbXtFdcNPW6C0d1SVX7NN/view?usp=sharing"
+        },
+        {
+            "date": "2021",
+            "title": "Preserving User Privacy in Personalized Networks [cite: 88, 249]",
+            "type": "Journal",
+            "desc": "Proposed a framework to preserve user privacy in personalized wireless networks using differential privacy techniques.",
+            "link": "https://drive.google.com/file/d/1sLoRjEjbRNwr5NmcZcF5rjdMkEDg5DxD/view?usp=sharing"
+        },
+        {
+            "date": "2021",
+            "title": "A Survey on Cross-Architectural IoT Malware Threat Hunting [cite: 83, 251]",
+            "type": "Journal",
+            "desc": "Comprehensive survey analyzing cross-architecture IoT malware attack vectors and defense mechanisms.",
+            "link": "https://drive.google.com/file/d/1WSr-RAtQytiqnFemkRHkcuOCpCnfcWsA/view?usp=sharing"
+        },
+        {
+            "date": "2020",
+            "title": "Personalized Resource Allocation in Wireless Networks [cite: 253]",
+            "type": "Journal",
+            "desc": "Investigated AI/ML approaches for personalized resource allocation in wireless networks to enhance user experience.",
+            "link": "https://drive.google.com/file/d/1lFy1X7wAqY-Uj8eOGHPkyqv3kh5Vcaur/view?usp=sharing"
+        },
+        {
+            "date": "2020",
+            "title": "Big Data-Driven AI-based Framework to Enable Personalization in Wireless Networks [cite: 93, 255]",
+            "type": "Journal",
+            "desc": "Proposed a holistic Big Data and AI architecture to transition wireless networks to user-centric service models.",
+            "link": "https://drive.google.com/file/d/1dbB9Dw514aqFqHaHz9Q9vXzAeI1VJxaU/view?usp=sharing"
+        },
+        {
+            "date": "2018",
+            "title": "Modeling the Speed-based Vessel Schedule Recovery Problem [cite: 99, 257]",
+            "type": "Journal",
+            "desc": "Formulated a mathematical optimization model for maritime logistics utilizing intelligent vessel speed adjustments.",
+            "link": "https://drive.google.com/file/d/1aY-h4i5A1oXoSOfCHegnyWcpqgBppo-c/view?usp=sharing"
+        },
+        {
+            "date": "2017",
+            "title": "Combining Exploratory Analysis and Automated Analysis for Anomaly Detection [cite: 259]",
+            "type": "Journal",
+            "desc": "Explored hybrid methods for anomaly detection combining automated analysis with exploratory data techniques.",
+            "link": "https://drive.google.com/file/d/1vF90PHl4nJMntfsY5xESHkL20ClHbV7a/view?usp=sharing"
+        },
+        {
+            "date": "2016",
+            "title": "License Compliance in Open Source Cybersecurity Projects [cite: 261]",
+            "type": "Journal",
+            "desc": "Analyzed license compliance issues within open-source cybersecurity projects.",
+            "link": "https://drive.google.com/file/d/1ko0xDHVUEQAqwLY2apXloa4cP95ziF2F/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "Performance Enhancements of MIMO-OFDM system [cite: 263]",
+            "type": "Journal",
+            "desc": "Investigated performance enhancement techniques for MIMO-OFDM wireless systems.",
+            "link": "https://drive.google.com/file/d/1mKXwwwFdDn9y46EbewdAMe8NjDOzFhl9/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Unified Analysis of Optimized Relay-based Wireless Systems [cite: 265]",
+            "type": "Journal",
+            "desc": "Presented a unified analysis framework for optimized relay-based wireless communication systems.",
+            "link": "https://drive.google.com/file/d/1Rei_PsDUiEE7EDPPwWQ_58xksXAbL8OC/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Performance analysis of cooperative multi-carrier relay-based UAV networks [cite: 267]",
+            "type": "Journal",
+            "desc": "Analyzed the performance of cooperative multi-carrier relay-based networks specifically for UAV applications.",
+            "link": "https://drive.google.com/file/d/1xxGVf0Jm20ARKr1P4BSN7YC6ToqtjYqA/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Enhanced Iterative-based ZP-OFDM Receiver in Multi Relay Cooperative Networks [cite: 268]",
+            "type": "Journal",
+            "desc": "Proposed an enhanced iterative ZP-OFDM receiver design for multi-relay cooperative networks.",
+            "link": "https://drive.google.com/file/d/150Nq9vEo8fqNLZD_kKz2ufiFaXb_AW7j/view?usp=sharing"
+        },
+        {
+            "date": "2009",
+            "title": "Throughput Optimization of Cooperative Teleoperated UGV Network [cite: 270]",
+            "type": "Journal",
+            "desc": "focused on optimizing throughput for cooperative teleoperated Unmanned Ground Vehicle (UGV) networks.",
+            "link": "https://drive.google.com/file/d/1mqhcY27Y9Om_4GGbhgtyWmDQbLHmdJHY/view?usp=sharing"
+        },
+        {
+            "date": "2022",
+            "title": "A holistic assessment of the carbon footprint of NOOR, a very large Arabic Language Model [cite: 110, 192]",
+            "type": "Conference",
+            "desc": "Conducted an environmental impact assessment of training 'NOOR', establishing benchmarks for sustainable AI.",
+            "link": "https://drive.google.com/file/d/1SOIifGnDuzErA6THq_E4IjaT7oOB9gyJ/view?usp=sharing"
+        },
+        {
+            "date": "2021",
+            "title": "User Satisfaction Prediction Framework for Personalized Wireless Networks: A DNN Approach [cite: 114, 194]",
+            "type": "Conference",
+            "desc": "Designed a DNN framework to predict real-time user satisfaction, bridging the gap between QoS and QoE.",
+            "link": "https://drive.google.com/file/d/1hDh0l70ezJHdPf2abZ8FuW079PbbNw3e/view?usp=sharing"
+        },
+        {
+            "date": "2020",
+            "title": "User Persona in Personalized Wireless Networks: A Big Data-Driven Prediction Framework [cite: 195]",
+            "type": "Conference",
+            "desc": "Developed a Big Data-driven prediction framework to model user personas for hyper-personalized service delivery.",
+            "link": "https://drive.google.com/file/d/1C1JzFzJmWHxwEQFy6kg3AUl50IcCsGfi/view?usp=sharing"
+        },
+        {
+            "date": "2019",
+            "title": "A Synthetic Dataset Modeling for Data-Driven AI-Based Personalized Wireless Networks [cite: 196]",
+            "type": "Conference",
+            "desc": "Modeled synthetic datasets to enable research into data-driven, AI-based personalized wireless networks.",
+            "link": "https://drive.google.com/file/d/1vKAGYCJXi_E5MebB64lmprQT3h3QEo1T/view?usp=sharing"
+        },
+        {
+            "date": "2019",
+            "title": "Dataset Modeling for Data-Driven AI-based Personalized Wireless Networks [cite: 197]",
+            "type": "Conference",
+            "desc": "Presented methodologies for modeling datasets required for AI-driven personalization in wireless networks.",
+            "link": "https://drive.google.com/file/d/1eZL_la0dwvkdixZAyXWq40npanAiAGfy/view?usp=sharing"
+        },
+        {
+            "date": "2018",
+            "title": "Data-Driven Vessel Service Time Forecasting using Long Short-Term Memory Recurrent Neural Networks [cite: 117, 198]",
+            "type": "Conference",
+            "desc": "Implemented LSTM-RNN models to forecast vessel service times with high precision by mining AIS data.",
+            "link": "https://drive.google.com/file/d/1C6IUhOP7wR17Mrzi_Yf5yfILFKBtm5lN/view?usp=sharing"
+        },
+        {
+            "date": "2018",
+            "title": "Mining Port Congestion Indicators from Big AIS Data [cite: 120, 199]",
+            "type": "Conference",
+            "desc": "Developed unsupervised learning algorithms to extract hidden congestion indicators from raw maritime traffic data.",
+            "link": "https://drive.google.com/file/d/12MfHxR18_3kTMP1U7wozsxTdAUPC1jjL/view?usp=sharing"
+        },
+        {
+            "date": "2017",
+            "title": "Data Caching and Selection in 5G Networks Using F2F Communication [cite: 200]",
+            "type": "Conference",
+            "desc": "Proposed data caching and selection strategies in 5G networks utilizing Friend-to-Friend (F2F) communication.",
+            "link": "https://drive.google.com/file/d/1_l2X3qosiDaRWEXF_QV-L74iuWOhsrzr/view?usp=sharing"
+        },
+        {
+            "date": "2017",
+            "title": "Big-Data-Enabled Modelling and Optimization of Granular Speed-based Vessel Schedule Recovery Problem [cite: 201]",
+            "type": "Conference",
+            "desc": "Applied Big Data techniques to model and optimize vessel schedule recovery through granular speed adjustments.",
+            "link": "https://drive.google.com/file/d/1K6XIVzSU19BGPkPqLliOTeqzjh1ooykk/view?usp=sharing"
+        },
+        {
+            "date": "2016",
+            "title": "Securing D2D Wireless Links by Continuous Authenticity with Legitimacy Patterns [cite: 124, 202]",
+            "type": "Conference",
+            "desc": "Proposed 'continuous authenticity' for D2D communications using behavioral legitimacy patterns.",
+            "link": "https://drive.google.com/file/d/1rmykva7TiOq3iQyjPoEe75Xg5klrmHO6/view?usp=sharing"
+        },
+        {
+            "date": "2016",
+            "title": "A Leader-Driven Open Collaboration Platform for Exploring New Domains [cite: 203]",
+            "type": "Conference",
+            "desc": "Discussed a platform for leader-driven open collaboration to explore and innovate in new domains.",
+            "link": "https://drive.google.com/file/d/12AKeeuWBWZG3fyiS9X5T_hP9tENUsT2l/view?usp=sharing"
+        },
+        {
+            "date": "2016",
+            "title": "Optimum HDAF Relay-Assisted Combining Scheme with Relay Decision Information [cite: 204]",
+            "type": "Conference",
+            "desc": "Analyzed an optimum Hybrid Decode-Amplify-Forward (HDAF) relay-assisted combining scheme.",
+            "link": "https://drive.google.com/file/d/1say3wz2cioJL3JJJUypcnvP0RHauKQvg/view?usp=sharing"
+        },
+        {
+            "date": "2015",
+            "title": "Optimum Decode-and-Forward Relay-Assisted Combining Scheme with Relay Decision Information [cite: 205]",
+            "type": "Conference",
+            "desc": "Presented an optimum Decode-and-Forward relay-assisted combining scheme incorporating relay decision information.",
+            "link": "https://drive.google.com/file/d/1_ffUg7DT-zgN3QNi6saOmcOFKfmAZ2qq/view?usp=sharing"
+        },
+        {
+            "date": "2015",
+            "title": "Modeling Conditional Error Probability for Hybrid Decode-Amplify-Forward Cooperative System [cite: 206]",
+            "type": "Conference",
+            "desc": "Modeled the conditional error probability for Hybrid Decode-Amplify-Forward cooperative systems.",
+            "link": "https://drive.google.com/file/d/1xcmyUhlYSUbz1rHaZVWoZ-sSAtFMMDOF/view?usp=sharing"
+        },
+        {
+            "date": "2014",
+            "title": "Error Rate Performance Analysis of Cooperative SCR in VANETs over Generalized Fading Channels [cite: 207]",
+            "type": "Conference",
+            "desc": "Analyzed error rate performance of cooperative Selective Relaying (SCR) in VANETs over generalized fading channels.",
+            "link": "https://drive.google.com/file/d/12cVoNOImv5o6ufsrgMSAyE4IAGluy-_6/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Efficient non-coherent detection techniques for broadband cooperative networks [cite: 208]",
+            "type": "Conference",
+            "desc": "Proposed efficient non-coherent detection techniques for broadband cooperative networks.",
+            "link": "https://drive.google.com/file/d/1OH6YgMvip_dWOpCocBrFrGtks1d2LIjR/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Error rate performance analysis of cooperative MRC receivers over generalized fading channels [cite: 209]",
+            "type": "Conference",
+            "desc": "Analyzed error rate performance of cooperative Maximal Ratio Combining (MRC) receivers.",
+            "link": "https://drive.google.com/file/d/1b8WAi3KFxeKcuHJgli2hTbLa6k51UIpL/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "General BER analysis over Nakagami-m fading channels [cite: 210]",
+            "type": "Conference",
+            "desc": "Provided a general Bit Error Rate (BER) analysis for systems operating over Nakagami-m fading channels.",
+            "link": "https://drive.google.com/file/d/1qezOgLzEOSSooXUT0-htqvIQUkF8xEm4/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Non-coherent Detection for Cooperative OFDM-Based System Over Time-Varying Fading Channels [cite: 211]",
+            "type": "Conference",
+            "desc": "Investigated non-coherent detection methods for cooperative OFDM systems in time-varying fading environments.",
+            "link": "https://drive.google.com/file/d/1qWicW1NCrJT31tpOsOWdwJplbUH8SzMN/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "An Efficient Approximation of Q(sqrt(x)) Function and General BER Performance Analysis [cite: 212]",
+            "type": "Conference",
+            "desc": "Proposed an efficient approximation for the Q-function to simplify general BER performance analysis.",
+            "link": "https://drive.google.com/file/d/1BnxYo8L5AV3WQXHRi3btE_XOktj65Qsf/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Generalized Average BER Expression for SC and MRC Receiver over Nakagami-m Fading channels [cite: 213]",
+            "type": "Conference",
+            "desc": "Derived generalized average BER expressions for Selection Combining and MRC receivers over Nakagami-m channels.",
+            "link": "https://drive.google.com/file/d/1cFOA8xIgi1RrNb9RCXWa8bYmSfQGnwGv/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Random-based Fair Allocation Algorithm with Fuzzy Comprehensive Evaluation for Single Carrier Multi-Relay Cooperative Networks [cite: 214]",
+            "type": "Conference",
+            "desc": "Developed a random-based fair allocation algorithm using fuzzy evaluation for single carrier multi-relay networks.",
+            "link": "https://drive.google.com/file/d/1ud5kZwuqwhondxG6tCXalfL96LDubvsH/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "Enhanced Channel Estimation Technique in MIMO-OFDM System [cite: 215]",
+            "type": "Conference",
+            "desc": "Presented an enhanced channel estimation technique for MIMO-OFDM systems.",
+            "link": "https://drive.google.com/file/d/1tN2n4skE5kghSMMYR7hBQfsurrxtTIIb/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "BER Enhancement of MIMO-OFDM Using an Optimized NLMS Receiver [cite: 216]",
+            "type": "Conference",
+            "desc": "Proposed a method for BER enhancement in MIMO-OFDM using an optimized NLMS receiver.",
+            "link": "https://drive.google.com/file/d/1BC8Yu5MaJ90Dh-QgqkgznZm4vABTOw1t/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "Cluster-Based Fair Allocation Algorithm for Multi-Relay Single Carrier Distributed Networks [cite: 217]",
+            "type": "Conference",
+            "desc": "Proposed a cluster-based fair allocation algorithm for multi-relay single carrier distributed networks.",
+            "link": "https://drive.google.com/file/d/1Ido9ZXm8gR_dl6s-JuL-ixmhPZEgA13G/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "Enhanced ZP-OFDM Receiver in Multi-Relay Cooperative Networks [cite: 218]",
+            "type": "Conference",
+            "desc": "Presented an enhanced ZP-OFDM receiver for multi-relay cooperative networks.",
+            "link": "https://drive.google.com/file/d/12wW9kWtMBo3AeCAs2DDG1TWO_dPWiz5k/view?usp=sharing"
+        },
+        {
+            "date": "2012",
+            "title": "Lifetime Evaluation of Cooperative OFDM WSNs [cite: 219]",
+            "type": "Conference",
+            "desc": "Evaluated the network lifetime of cooperative OFDM Wireless Sensor Networks (WSNs).",
+            "link": "https://drive.google.com/file/d/1_ITJdzZPViTMDlYVGZ0WyU6jqIr8NbkI/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Symbol Error Rate Analysis of Relay-Based Wireless Systems [cite: 220]",
+            "type": "Conference",
+            "desc": "Analyzed the Symbol Error Rate (SER) of relay-based wireless systems.",
+            "link": "https://drive.google.com/file/d/1Fzj-dp3udvQNh71aqKBGj3r7u1D0v1CL/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Capacity Analysis of Cooperative Relay-Based Communication System [cite: 221]",
+            "type": "Conference",
+            "desc": "Analyzed the capacity of cooperative relay-based communication systems.",
+            "link": "https://drive.google.com/file/d/1zQqwlqKIvBiR6m1E88X-bYGdr4YiT9Ws/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Distributed Single-Carrier Frequency-Domain Equalization for Multi-Relay Cooperative Networks Over Frequency-Selective Rician Channels [cite: 222]",
+            "type": "Conference",
+            "desc": "Investigated distributed single-carrier frequency-domain equalization for multi-relay networks over Rician channels.",
+            "link": "https://drive.google.com/file/d/1jnwj21LuCdmfM1V4YCBsY2dE21tlq7-4/view?usp=sharing"
+        },
+        {
+            "date": "2011",
+            "title": "Enhanced SBS Instability Growth Rate of Extraordinary Electromagnetic Waves in Strongly Coupled Magnetized Plasma [cite: 223]",
+            "type": "Conference",
+            "desc": "Studied the enhanced SBS instability growth rate of electromagnetic waves in strongly coupled magnetized plasma.",
+            "link": "https://drive.google.com/file/d/1nKNaVbrL469CkWbP7f56C-GubMG_Awtc/view?usp=sharing"
+        },
+        {
+            "date": "2010",
+            "title": "Performance Analysis of Multi-Carrier Relay-Based UAV Network over Fading Channels [cite: 224]",
+            "type": "Conference",
+            "desc": "Analyzed the performance of multi-carrier relay-based UAV networks over fading channels.",
+            "link": "https://drive.google.com/file/d/1Csvp67BVbAh_chkT22pMwD1-ph9zKvD3/view?usp=sharing"
+        },
+        {
+            "date": "2010",
+            "title": "Random-Based Fair Allocation in Multi-Relay Cooperative OFDM System [cite: 225]",
+            "type": "Conference",
+            "desc": "Presented a random-based fair allocation method for multi-relay cooperative OFDM systems.",
+            "link": "https://drive.google.com/file/d/1n5qjsZpk-0NOkY6WqgR1nyuGAwS8Tz4z/view?usp=sharing"
+        },
+        {
+            "date": "2010",
+            "title": "Enhanced Cooperative Coding for Relay-Based MIMO-OFDM Systems [cite: 226]",
+            "type": "Conference",
+            "desc": "Proposed enhanced cooperative coding techniques for relay-based MIMO-OFDM systems.",
+            "link": "https://drive.google.com/file/d/1xEEkJKtw-8BZ0xJmUqf8NiLzbC3FPtXs/view?usp=sharing"
+        },
+        {
+            "date": "2008",
+            "title": "Subchannel-Division Adaptive Resource Allocation Technique for Cooperative Relay-Based MIMO-OFDM Wireless Systems [cite: 227]",
+            "type": "Conference",
+            "desc": "Developed a subchannel-division adaptive resource allocation technique for cooperative MIMO-OFDM systems.",
+            "link": "https://drive.google.com/file/d/148yWQlqKsnVOsvKbLb-5g66QcuZNjFYo/view?usp=sharing"
+        },
+        {
+            "date": "2008",
+            "title": "Capacity Analysis of MIMO System Over Nakagami-m Fading Channels Using Finite Mixture with Expectation-Maximization Algorithm [cite: 228]",
+            "type": "Conference",
+            "desc": "Analyzed MIMO system capacity over Nakagami-m channels using finite mixture models and the EM algorithm.",
+            "link": "https://drive.google.com/file/d/1ct9dhqEk-zwmxFBjwB8uxRRtrDoaahMW/view?usp=sharing"
+        },
+        {
+            "date": "2007",
+            "title": "End-to-End Performance Analysis of Cooperative Relay-Based Wireless System Over Generalized Gaussian-Finite-Mixture Fading Channels [cite: 229]",
+            "type": "Conference",
+            "desc": "Performed end-to-end performance analysis of cooperative relay systems over generalized Gaussian-Finite-Mixture channels.",
+            "link": "https://drive.google.com/file/d/1xowcMPz8BlnL9ypw39m5zB2TqB0PP2aX/view?usp=sharing"
+        },
+        {
+            "date": "2007",
+            "title": "Capacity Analysis of MIMO System Over Identically Independent Distributed Weibull Fading Channels [cite: 230]",
+            "type": "Conference",
+            "desc": "Analyzed capacity of MIMO systems over IID Weibull fading channels.",
+            "link": "https://drive.google.com/file/d/1YENn20f9wbtnTNMYvD7l57DShtTIugNs/view?usp=sharing"
+        },
+        {
+            "date": "2006",
+            "title": "Throughput Optimization of Cooperative UAVs Using Adaptive Channel Assignment [cite: 231]",
+            "type": "Conference",
+            "desc": "Optimized throughput of cooperative UAVs using adaptive channel assignment strategies.",
+            "link": "https://drive.google.com/file/d/1YsrlTiiNGCPVeb5w7ZvhH7utDgqiAGf9/view?usp=sharing"
+        },
+        {
+            "date": "2006",
+            "title": "Outage Probability Analysis in a Cooperative UAV Network Over Nakagami-m Fading Channels [cite: 233]",
+            "type": "Conference",
+            "desc": "Analyzed outage probability in cooperative UAV networks operating over Nakagami-m fading channels.",
+            "link": "https://drive.google.com/file/d/1GvuX9q9V0hDWs276VcvRJURHZGNgKXYg/view?usp=sharing"
+        },
+        {
+            "date": "2017",
+            "title": "Securing Smart Cities Systems and Services: A Risk-Based Analytics-Driven Approach [cite: 236]",
+            "type": "Book Chapter",
+            "desc": "Discussed a risk-based, analytics-driven approach to securing smart cities systems and services.",
+            "link": "https://drive.google.com/file/d/1oLUlzS13vV7s09RtOKdtYglTCILbIpW8/view?usp=sharing"
+        },
+        {
+            "date": "2014",
+            "title": "Intrusion Detection in Vehicular Ad-Hoc Networks on Lower Layers [cite: 238]",
+            "type": "Book Chapter",
+            "desc": "Explored lower-layer intrusion detection methods for Vehicular Ad-Hoc Networks (VANETs).",
+            "link": "https://drive.google.com/file/d/1RIBcQFelKotiucCoU9-0vmtEQLpFg_4Z/view?usp=sharing"
+        },
+        {
+            "date": "2013",
+            "title": "Intrusion Detection in Vehicular Ad-Hoc Networks: A Physical Layer Approach [cite: 240]",
+            "type": "Book Chapter",
+            "desc": "Examined physical layer approaches to intrusion detection in VANETs.",
+            "link": "https://drive.google.com/file/d/1J47dvEycnaG6S3AD_wb3UVdtMCSdDbSW/view?usp=sharing"
+        },
+        {
+            "date": "2010",
+            "title": "Resource Allocation for a Cooperative Broadband MIMO-OFDM System [cite: 242]",
+            "type": "Book Chapter",
+            "desc": "Discussed resource allocation strategies for cooperative broadband MIMO-OFDM systems.",
+            "link": "https://drive.google.com/file/d/1sS_Ij9Gz-X1oRUyjG3s9w81Mx0YCXj_s/view?usp=sharing"
+        }
+    ],
+    "skills": {
+        "Agentic & Generative AI": [
+            "Multi-modal GenAI & SLMs",
+            "Agentic AI & Orchestration",
+            "Knowledge Graphs & GraphRAG",
+            "Deep Learning (PyTorch/TensorFlow)",
+            "Graph Neural Networks (GNN)"
+        ],
+        "Cybersecurity & Networks": [
+            "Intrusion Detection",
+            "Malware Analysis",
+            "Differential Privacy",
+            "BGP Security",
+            "5G/6G O-RAN",
+            "Network Digital Twins"
+        ],
+        "Infrastructure & Data": [
+            "Kubernetes & Docker",
+            "Apache Spark & Kafka",
+            "NVIDIA DGX (H100/H200)",
+            "AWS / GCP / Azure",
+            "AIOps & MLOps"
+        ],
+        "Leadership": [
+            "AI Strategy & Innovation",
+            "AI & Data Product Strategy",
+            "Cross-Functional Team Leadership",
+            "R&D & IP Portfolio Management",
+            "Strategic Mentorship & Talent Dev",
+            "Academic-Industry Partnerships"
+        ]
+    },
+    "config": {
+        "currentTheme": "cybersecurity",
+        "themes": {
+            "default": {
+                "name": "Professional (Clean)",
+                "imageSize": "large",
+                "colors": {
+                    "background": "#f8fafc",
+                    "textMain": "#0f172a",
+                    "textMuted": "#475569",
+                    "primary": "#0f172a",
+                    "secondary": "#334155",
+                    "cardBg": "#ffffff",
+                    "borderColor": "#e2e8f0",
+                    "headerStart": "#0f172a",
+                    "headerEnd": "#1e293b"
+                },
+                "animation": "none"
+            },
+            "cybersecurity": {
+                "name": "Cybersecurity (High Contrast)",
+                "imageSize": "large",
+                "colors": {
+                    "background": "#050505",
+                    "textMain": "#ffffff",
+                    "textMuted": "#d4d4d4",
+                    "primary": "#00ff41",
+                    "secondary": "#00cc33",
+                    "cardBg": "#111111",
+                    "borderColor": "#333333",
+                    "headerStart": "#000000",
+                    "headerEnd": "#0a0a0a"
+                },
+                "animation": "falling-binary"
+            },
+            "ai": {
+                "name": "AI Future (Navy)",
+                "imageSize": "large",
+                "colors": {
+                    "background": "#f8fafc",
+                    "textMain": "#0f172a",
+                    "textMuted": "#475569",
+                    "primary": "#2563eb",
+                    "secondary": "#3b82f6",
+                    "cardBg": "#ffffff",
+                    "borderColor": "#e2e8f0",
+                    "headerStart": "#1e1b4b",
+                    "headerEnd": "#312e81"
+                },
+                "animation": "particle-network"
+            },
+            "innovation": {
+                "name": "Innovation (Amber)",
+                "imageSize": "normal",
+                "colors": {
+                    "background": "#fffbeb",
+                    "textMain": "#451a03",
+                    "textMuted": "#92400e",
+                    "primary": "#d97706",
+                    "secondary": "#f59e0b",
+                    "cardBg": "#ffffff",
+                    "borderColor": "#fcd34d",
+                    "headerStart": "#92400e",
+                    "headerEnd": "#78350f"
+                },
+                "animation": "floating-orbs"
+            },
+            "wireless": {
+                "name": "Wireless (5G/6G)",
+                "imageSize": "large",
+                "colors": {
+                    "background": "#f0fdfa",
+                    "textMain": "#042f2e",
+                    "textMuted": "#134e4a",
+                    "primary": "#0d9488",
+                    "secondary": "#14b8a6",
+                    "cardBg": "#ffffff",
+                    "borderColor": "#ccfbf1",
+                    "headerStart": "#115e59",
+                    "headerEnd": "#0f766e"
+                },
+                "animation": "sine-wave"
+            }
+        }
+    }
+}; // --- ICON DEFINITIONS (SVG Paths) --- 
+        // DO NOT REMOVE THE COMMENT ABOVE. IT IS A MARKER FOR THE PYTHON SCRIPT.
+
+        const icons = {
+            mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+            phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+            mapPin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+            linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+            bookOpen: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+            award: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+            layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+            briefcase: '<rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+            user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+            terminal: '<polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/>',
+            graduationCap: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+            brain: '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>',
+            shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />',
+            wifi: '<path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />',
+            code: '<polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />',
+            layout: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="21" x2="9" y2="9" />',
+            research: '<path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/>',
+            lightbulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+            clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+            chevronDown: '<polyline points="6 9 12 15 18 9"/>',
+            building: '<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M16 18h.01"/>',
+            
+            // New icons for specific categories
+            fileText: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
+            presentation: '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="M7 21h10"/><path d="M12 16v5"/>',
+            quote: '<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>',
+            medal: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>'
+        };
+
+        function getIcon(name, size = 24, className = "") {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}">${icons[name] || ''}</svg>`;
+        }
+        
+        // Helper to get stat icon
+        function getStatIcon(statName) {
+            const lower = statName.toLowerCase();
+            if (lower.includes('citation')) return getIcon('quote', 32);
+            if (lower.includes('patent')) return getIcon('medal', 32);
+            if (lower.includes('conference')) return getIcon('presentation', 32);
+            if (lower.includes('journal')) return getIcon('fileText', 32);
+            return getIcon('award', 32);
+        }
+
+        // Helper to get publication icon
+        function getPubIcon(category) {
+            if (!category) return getIcon('bookOpen', 20);
+            const c = category.toLowerCase();
+            if (c.includes('patent')) return getIcon('medal', 20);
+            if (c.includes('conference')) return getIcon('presentation', 20);
+            if (c.includes('journal')) return getIcon('fileText', 20);
+            return getIcon('bookOpen', 20);
+        }
+
+        // --- ANIMATION ENGINE ---
+        function initAnimation(type, color) {
+            const canvas = document.getElementById('header-canvas'); // Target new canvas in header
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let animationFrameId;
+
+            // Resize canvas to match header container
+            const header = document.querySelector('.header-container');
+            const resize = () => {
+                canvas.width = header.offsetWidth;
+                canvas.height = header.offsetHeight;
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Clear previous animation loop
+            if (window.currentAnim) cancelAnimationFrame(window.currentAnim);
+
+            if (type === 'falling-binary') {
+                const fontSize = 18; // Increased from 14
+                const columns = canvas.width / fontSize;
+                const drops = Array(Math.floor(columns)).fill(1);
+                
+                // Add FPS limiting for falling binary
+                let lastTime = 0;
+                const fps = 20;
+                const interval = 1000 / fps;
+
+                function drawMatrix(timestamp) {
+                    window.currentAnim = requestAnimationFrame(drawMatrix);
+                    
+                    // Cap frame rate
+                    const deltaTime = timestamp - lastTime;
+                    if (deltaTime < interval) return;
+                    lastTime = timestamp - (deltaTime % interval);
+
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = color; // e.g. Neon Green
+                    ctx.font = fontSize + "px JetBrains Mono";
+
+                    for (let i = 0; i < drops.length; i++) {
+                        const text = Math.floor(Math.random() * 2);
+                        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                        drops[i]++;
+                    }
+                }
+                requestAnimationFrame(drawMatrix);
+            } else if (type === 'particle-network') {
+                const nodeSize = 5.5; // Increased size
+                const particles = [];
+                for(let i=0; i<60; i++) { // Fewer particles for header
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 0.15, // Slowed down from 0.3
+                        vy: (Math.random() - 0.5) * 0.15 // Slowed down from 0.3
+                    });
+                }
+
+                function drawNetwork() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = color;
+                    ctx.fillStyle = color;
+                    
+                    particles.forEach((p, index) => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        // Bounce off edges
+                        if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                        if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, nodeSize, 0, Math.PI*2);
+                        ctx.fill();
+
+                        for(let j=index+1; j<particles.length; j++) {
+                            const p2 = particles[j];
+                            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                            if(dist < 250) { // Increased distance to make it look "fully connected"
+                                ctx.globalAlpha = 1 - (dist/250);
+                                ctx.beginPath();
+                                ctx.moveTo(p.x, p.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.stroke();
+                                ctx.globalAlpha = 1;
+                            }
+                        }
+                    });
+                    window.currentAnim = requestAnimationFrame(drawNetwork);
+                }
+                drawNetwork();
+            } else if (type === 'floating-orbs') {
+                const particles = [];
+                for(let i=0; i<30; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        radius: Math.random() * 20 + 5,
+                        vy: (Math.random() * 0.5) + 0.2
+                    });
+                }
+
+                function drawOrbs() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = color;
+                    
+                    particles.forEach((p) => {
+                        p.y -= p.vy;
+                        if(p.y + p.radius < 0) p.y = canvas.height + p.radius;
+
+                        ctx.globalAlpha = 0.4;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+                        ctx.fill();
+                        ctx.globalAlpha = 1;
+                    });
+                    window.currentAnim = requestAnimationFrame(drawOrbs);
+                }
+                drawOrbs();
+            } else if (type === 'sine-wave') {
+                let time = 0;
+                function drawSine() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    
+                    ctx.beginPath();
+                    for (let x = 0; x < canvas.width; x++) {
+                        const y = canvas.height / 2 + Math.sin(x * 0.01 + time) * 50;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+
+                    // Second wave
+                    ctx.beginPath();
+                    ctx.strokeStyle = color + '80'; // 50% opacity
+                    for (let x = 0; x < canvas.width; x++) {
+                        const y = canvas.height / 2 + Math.sin(x * 0.02 + time * 1.5) * 30;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+
+                    time += 0.05;
+                    window.currentAnim = requestAnimationFrame(drawSine);
+                }
+                drawSine();
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // Toggle Theme Mode Function
+        window.toggleThemeMode = function() {
+            if (appData) {
+                const current = appData.config.currentTheme;
+                // Simple toggle logic: if cybersecurity -> ai, else -> cybersecurity
+                const nextTheme = (current === 'cybersecurity') ? 'ai' : 'cybersecurity';
+                
+                appData.config.currentTheme = nextTheme;
+                render(appData, "Theme Switch");
+            }
+        };
+
+        // Toggle Function
+        window.toggleSection = function(id) {
+            const sections = ['about', 'experience', 'education', 'publications', 'updates'];
+            
+            sections.forEach(key => {
+                const content = document.getElementById(key);
+                const icon = document.getElementById('icon-' + key);
+                if (!content || !icon) return;
+                
+                if (key === id) {
+                    // Toggle the clicked section
+                    const isHidden = content.classList.contains('hidden');
+                    if (isHidden) {
+                        content.classList.remove('hidden');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                } else {
+                    // Close other sections
+                    content.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            });
+        };
+
+        function render(data, source) {
+            const app = document.getElementById('app');
+            
+            // 1. Apply Theme Colors
+            const themes = data.config?.themes || DEFAULT_DATA.config.themes;
+            const activeThemeName = data.config?.currentTheme || 'ai'; // Default to AI if not set
+            const theme = themes[activeThemeName] || themes['ai'];
+
+            if(theme && theme.colors) {
+                const root = document.documentElement;
+                root.style.setProperty('--bg-color', theme.colors.background);
+                root.style.setProperty('--text-main', theme.colors.textMain);
+                root.style.setProperty('--text-muted', theme.colors.textMuted);
+                root.style.setProperty('--primary-color', theme.colors.primary);
+                root.style.setProperty('--secondary-color', theme.colors.secondary);
+                root.style.setProperty('--card-bg', theme.colors.cardBg);
+                root.style.setProperty('--border-color', theme.colors.borderColor);
+                root.style.setProperty('--header-bg-start', theme.colors.headerStart);
+                root.style.setProperty('--header-bg-end', theme.colors.headerEnd);
+            }
+
+            // Animation Config
+            let animColor;
+            if (activeThemeName === 'cybersecurity') {
+                animColor = '#00ff41';
+            } else if (activeThemeName === 'ai') {
+                animColor = 'rgba(14, 165, 233, 0.9)'; // Darker, opaque blue/cyan
+            } else if (activeThemeName === 'innovation') {
+                animColor = '#fbbf24'; // Amber-400 for visibility on dark header
+            } else if (activeThemeName === 'wireless') {
+                animColor = '#06b6d4';
+            } else {
+                animColor = 'rgba(255, 255, 255, 0.3)';
+            }
+            
+            // Set image size class
+            const imgSizeClass = theme.imageSize === 'large' ? 'w-48 h-48 md:w-64 md:h-64' : 'w-32 h-32 md:w-44 md:h-44';
+            
+            // Determine toggle icon (Show the icon for the OTHER mode)
+            // If current is cybersecurity, show Brain (to switch to AI).
+            // If current is ai (or default), show Shield (to switch to Security).
+            const toggleIconSvg = (activeThemeName === 'cybersecurity') 
+                ? getIcon('brain', 20) 
+                : getIcon('shield', 20);
+                
+            const toggleTitle = (activeThemeName === 'cybersecurity') ? "Switch to AI Mode" : "Switch to Security Mode";
+
+            // Wait for DOM update to init animation
+            setTimeout(() => initAnimation(theme.animation, animColor), 50);
+
+            // ... (Helpers: same as before) ...
+            const buildSkills = (category) => {
+                if(!data.skills[category]) return '';
+                return data.skills[category].map(skill => 
+                    `<span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full border border-gray-200">${skill}</span>`
+                ).join('');
+            };
+
+            const getCategoryStyle = (cat) => {
+                if (!cat) return 'bg-gray-100 text-gray-600 ring-1 ring-gray-200';
+                const c = cat.toLowerCase();
+                if (c.includes('patent')) return 'bg-amber-50 text-amber-700 ring-1 ring-amber-100';
+                if (c.includes('journal')) return 'bg-blue-50 text-blue-700 ring-1 ring-blue-100';
+                if (c.includes('conference')) return 'bg-purple-50 text-purple-700 ring-1 ring-purple-100';
+                return 'bg-blue-50 text-blue-700 ring-1 ring-blue-100';
+            };
+
+            const experienceHtml = data.experience.map(item => {
+                // ... same tags logic ...
+                let tagsHtml = '';
+                if(item.tags) {
+                    if(item.tags.includes("AI")) tagsHtml += `<div title="AI" class="p-1.5 bg-purple-50 text-purple-600 rounded-md">${getIcon('brain', 16)}</div>`;
+                    if(item.tags.includes("Security")) tagsHtml += `<div title="Security" class="p-1.5 bg-red-50 text-red-600 rounded-md">${getIcon('shield', 16)}</div>`;
+                    if(item.tags.includes("Wireless")) tagsHtml += `<div title="Wireless" class="p-1.5 bg-green-50 text-green-600 rounded-md">${getIcon('wifi', 16)}</div>`;
+                    if(item.tags.includes("Coding")) tagsHtml += `<div title="Coding" class="p-1.5 bg-gray-100 text-gray-600 rounded-md">${getIcon('code', 16)}</div>`;
+                    if(item.tags.includes("System Design")) tagsHtml += `<div title="System" class="p-1.5 bg-orange-50 text-orange-600 rounded-md">${getIcon('layout', 16)}</div>`;
+                    if(item.tags.includes("Research")) tagsHtml += `<div title="Research" class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md">${getIcon('research', 16)}</div>`;
+                }
+
+                return `
+                <div class="mb-8 border-l-2 border-[var(--border-color)] pl-6 relative">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[var(--primary-color)] border-4 border-[var(--bg-color)] shadow-sm"></div>
+                    <div class="theme-card p-6 rounded-xl shadow-sm hover:shadow-md transition-all group">
+                        <div class="flex flex-wrap justify-between items-start mb-2">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-xl font-bold group-hover:text-[var(--primary-color)] transition-colors">${item.role}</h3>
+                                <div class="flex gap-2">${tagsHtml}</div>
+                            </div>
+                            <span class="text-sm font-medium text-[var(--primary-color)] px-3 py-1 rounded-full border border-[var(--border-color)]">${item.period}</span>
+                        </div>
+                        <div class="text-[var(--text-muted)] font-medium mb-4 flex items-center gap-2 text-sm">
+                            ${getIcon('building', 16)} ${item.company} 
+                            <span class="opacity-30">|</span> 
+                            ${getIcon('mapPin', 16)} ${item.location}
+                        </div>
+                        <p class="text-[var(--text-muted)] leading-relaxed text-sm">${item.description}</p>
+                    </div>
+                </div>`;
+            }).join('');
+
+            const publicationsHtml = data.publications ? data.publications.map(pub => {
+                let focusIcons = '';
+                if (pub.tags) {
+                    focusIcons = pub.tags.map(tag => {
+                        let iconName = 'brain'; // default
+                        let colorClass = 'text-purple-500';
+                        const t = tag.toLowerCase();
+                        if (t.includes('security')) { iconName = 'shield'; colorClass = 'text-red-500'; }
+                        if (t.includes('wireless')) { iconName = 'wifi'; colorClass = 'text-green-500'; }
+                        if (t.includes('ai') || t.includes('ml')) { iconName = 'brain'; colorClass = 'text-blue-500'; }
+                        
+                        return `<span class="${colorClass} ml-2 inline-flex" title="${tag}">${getIcon(iconName, 18)}</span>`;
+                    }).join('');
+                }
+
+                return `
+                <div class="theme-card p-5 rounded-xl hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4">
+                        <div class="mt-1 text-[var(--text-muted)] bg-gray-50 p-2.5 rounded-full border border-gray-100">
+                            ${getPubIcon(pub.category)}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg leading-snug flex items-center flex-wrap">
+                                ${pub.link ? `<a href="${pub.link}" target="_blank" class="hover:text-[var(--primary-color)] hover:underline transition-colors">${pub.title}</a>` : pub.title}
+                                ${focusIcons}
+                            </h4>
+                            <div class="flex items-center gap-2 text-sm text-[var(--text-muted)] mt-2 mb-2">
+                                <span class="px-2 py-0.5 rounded font-medium text-xs uppercase tracking-wide ${getCategoryStyle(pub.category)}">
+                                    ${pub.category}
+                                </span>
+                                <span class="text-xs opacity-75">${pub.id}</span>
+                            </div>
+                            <p class="text-sm text-[var(--text-muted)] leading-relaxed">${pub.desc}</p>
+                        </div>
+                    </div>
+                </div>
+            `;}).join('') : '';
+
+            const educationHtml = data.education.map(edu => `
+                <div class="theme-card p-5 rounded-xl flex items-start gap-4 hover:shadow-md transition-shadow">
+                    <div class="mt-1 text-[var(--primary-color)] p-2.5 rounded-full border border-[var(--border-color)]">
+                        ${getIcon('graduationCap', 20)}
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-lg">${edu.degree}</h4>
+                        <p class="text-[var(--text-muted)] font-medium">${edu.school}</p>
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--text-muted)] mt-2 mb-3">
+                            <span class="px-2 py-0.5 rounded border border-[var(--border-color)] font-medium">${edu.year}</span>
+                            <span class="font-semibold text-[var(--primary-color)]">${edu.details}</span>
+                        </div>
+                        ${edu.focus ? `<div class="text-sm text-[var(--text-muted)] p-3 rounded-lg border border-[var(--border-color)] italic">${edu.focus}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            // Helper: Build Recent Activities Items
+            const activitiesHtml = data.recentActivities ? data.recentActivities.map(act => `
+                <div class="flex items-start gap-4 pb-6 last:pb-0 border-l border-[var(--border-color)] pl-6 relative">
+                    <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-[var(--primary-color)] ring-4 ring-[var(--card-bg)]"></div>
+                    <div class="flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-1">
+                            <span class="text-xs font-mono text-[var(--text-muted)] opacity-70">${act.date}</span>
+                            <span class="hidden sm:inline text-[var(--border-color)]">•</span>
+                            <span class="text-xs font-medium uppercase tracking-wide text-[var(--primary-color)]">${act.type}</span>
+                        </div>
+                        <h4 class="font-bold text-md leading-snug mb-1">
+                            ${act.link ? `<a href="${act.link}" target="_blank" class="hover:text-[var(--primary-color)] hover:underline transition-colors">${act.title}</a>` : act.title}
+                        </h4>
+                        <p class="text-sm text-[var(--text-muted)] leading-relaxed opacity-90">${act.desc}</p>
+                    </div>
+                </div>
+            `).join('') : '';
+
+            // --- HTML STRUCTURE ---
+            app.innerHTML = `
+                <div class="min-h-screen pb-12">
+                    <!-- HEADER SECTION -->
+                    <div class="header-container pt-24 pb-32 px-4">
+                        <canvas id="header-canvas"></canvas>
+                        
+                        <!-- THEME TOGGLE BUTTON -->
+                        <div class="absolute top-4 right-4 z-50">
+                            <button onclick="toggleThemeMode()" class="mode-toggle p-3 rounded-full shadow-lg hover:shadow-xl focus:outline-none" title="${toggleTitle}">
+                                ${toggleIconSvg}
+                            </button>
+                        </div>
+                        
+                        <div class="max-w-5xl mx-auto relative z-10">
+                            <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
+                                <div class="shrink-0">
+                                    <!-- Profile Image with correct path -->
+                                    <img src="imgs/ibrahim-image-circle.png" alt="${data.personalInfo.name}" class="${imgSizeClass} rounded-full shadow-2xl border-4 border-white/20 shrink-0 object-cover bg-white transition-all duration-500" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IA&background=0D8ABC&color=fff';"/>
+                                </div>
+                                <div class="text-center md:text-left flex-1">
+                                    <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-tight text-white">${data.personalInfo.name}</h1>
+                                    <p class="text-xl text-blue-100 mb-8 font-light max-w-2xl">${data.personalInfo.title}</p>
+                                    
+                                    <div class="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-white/90">
+                                        <a href="mailto:${data.personalInfo.email}" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
+                                            ${getIcon('mail', 16)} ${data.personalInfo.email}
+                                        </a>
+                                        <a href="https://${data.personalInfo.linkedin}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
+                                            ${getIcon('linkedin', 16)} LinkedIn
+                                        </a>
+                                        ${data.personalInfo.googleScholar ? `
+                                        <a href="${data.personalInfo.googleScholar}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
+                                            ${getIcon('graduationCap', 16)} Google Scholar
+                                        </a>` : ''}
+                                        <span class="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/30">
+                                            ${getIcon('mapPin', 16)} ${data.personalInfo.location}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAIN CONTENT -->
+                    <div class="max-w-6xl mx-auto px-4 -mt-16 relative z-20">
+                        <!-- Stats Row -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                            ${['Citations', 'Patents', 'Conferences', 'Journals'].map(stat => `
+                                <div class="theme-card flex flex-col items-center justify-center p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow group">
+                                    <div class="text-[var(--primary-color)] mb-2 group-hover:scale-110 transition-transform">${getStatIcon(stat)}</div>
+                                    <span class="text-3xl font-bold">${data.personalInfo[stat.toLowerCase()] || 0}</span>
+                                    <span class="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-1">${stat}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            <!-- Left Column -->
+                            <div class="lg:col-span-8 space-y-12">
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('about')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('user', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">About Me</h2>
+                                        </div>
+                                        <div id="icon-about" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="about" class="transition-all duration-300 overflow-hidden hidden">
+                                        <div class="theme-card p-8 rounded-xl leading-relaxed text-lg text-[var(--text-muted)]">
+                                            ${data.personalInfo.summary}
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('experience')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('briefcase', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Professional Experience</h2>
+                                        </div>
+                                        <div id="icon-experience" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="experience" class="space-y-4 transition-all duration-300 overflow-hidden hidden">${experienceHtml}</div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('education')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('graduationCap', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Education</h2>
+                                        </div>
+                                        <div id="icon-education" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="education" class="grid gap-4 transition-all duration-300 overflow-hidden hidden">${educationHtml}</div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('publications')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('lightbulb', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Selected Publications</h2>
+                                        </div>
+                                        <div id="icon-publications" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="publications" class="grid gap-4 md:grid-cols-2 transition-all duration-300 overflow-hidden hidden">${publicationsHtml}</div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('updates')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('clock', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Latest Updates</h2>
+                                        </div>
+                                        <div id="icon-updates" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="updates" class="theme-card p-8 rounded-xl transition-all duration-300 overflow-hidden hidden">
+                                        <div class="mt-2">
+                                            ${activitiesHtml}
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- Right Column (Sidebar) -->
+                            <div class="lg:col-span-4 space-y-8">
+                                <section class="theme-card p-6 rounded-xl sticky top-8">
+                                    <div class="flex items-center gap-3 mb-6 border-b border-[var(--border-color)] pb-4">
+                                        <div class="text-[var(--primary-color)]">${getIcon('layers', 24)}</div>
+                                        <h3 class="font-bold text-xl">Technical Expertise</h3>
+                                    </div>
+                                    <div class="space-y-8">
+                                        <div>
+                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                ${getIcon('brain', 14)} Agentic & Generative AI
+                                            </h4>
+                                            <div class="flex flex-wrap gap-2">${buildSkills("Agentic & Generative AI")}</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                ${getIcon('shield', 14)} Cybersecurity & Networks
+                                            </h4>
+                                            <div class="flex flex-wrap gap-2">${buildSkills("Cybersecurity & Networks")}</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                ${getIcon('layout', 14)} Infrastructure & Data
+                                            </h4>
+                                            <div class="flex flex-wrap gap-2">${buildSkills("Infrastructure & Data")}</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                ${getIcon('user', 14)} Leadership
+                                            </h4>
+                                            <div class="flex flex-wrap gap-2">${buildSkills("Leadership")}</div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <footer class="mt-24 border-t border-[var(--border-color)] py-8 text-center text-sm text-[var(--text-muted)]">
+                        <p>© ${new Date().getFullYear()} Ibrahim AbuAlhaol. All rights reserved.</p>
+                        <p class="text-xs mt-2 opacity-50">Last updated: ${data.lastUpdated || 'Data source: ' + source}</p>
+                    </footer>
+                </div>
+            `;
+            
+            // Set initial theme selection in dropdown
+            const selector = document.getElementById('theme-selector');
+            if (selector && data.config?.currentTheme) {
+                selector.value = data.config.currentTheme;
+            }
+        }
+
+        async function init() {
+            try {
+                // Initialize globalData with default to prevent errors if fetch fails
+                appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+                
+                const profileRes = await fetch('./profile.json');
+                if (profileRes.ok) {
+                    const profileData = await profileRes.json();
+                    
+                    // Try fetch style.json
+                    try {
+                        const styleRes = await fetch('./style.json');
+                        if (styleRes.ok) {
+                            profileData.config = await styleRes.json();
+                        } else {
+                            profileData.config = DEFAULT_DATA.config;
+                        }
+                    } catch (e) {
+                        profileData.config = DEFAULT_DATA.config;
+                    }
+                    
+                    // Merge timestamp from embedded data if missing in file (likely generated by build script)
+                    if (!profileData.lastUpdated && DEFAULT_DATA.lastUpdated) {
+                        profileData.lastUpdated = DEFAULT_DATA.lastUpdated;
+                    }
+                    
+                    appData = profileData;
+                    render(appData, "Loaded from profile.json");
+                } else {
+                    throw new Error('Profile not found');
+                }
+            } catch (err) {
+                // If local fetch fails (e.g. strict CORS), fallback to embedded data
+                // We ensure embedded data has the full theme structure too.
+                console.log("Using embedded data");
+                appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+                render(appData, "Embedded Data");
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
