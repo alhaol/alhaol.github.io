@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Archive: AI Research Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;600&display=swap');
+        
+        :root {
+            --ai-accent: #6366f1;
+            --ai-glow: rgba(99, 102, 241, 0.3);
+            --ai-bg: #030712;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--ai-bg);
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .heading-font {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .neural-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .book-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 1.5rem;
+        }
+
+        .book-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px var(--ai-glow);
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .active-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .search-container input {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            border-color: var(--ai-accent);
+            box-shadow: 0 0 15px var(--ai-glow);
+            outline: none;
+        }
+
+        .tag-pill {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+
+        .img-wrapper {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin: 0.75rem;
+        }
+
+        .img-wrapper::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(3, 7, 18, 0.8) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .book-card:hover .img-wrapper::after {
+            opacity: 1;
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .ai-status {
+            width: 8px; height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse-soft 2s infinite;
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+    <div class="neural-bg"></div>
+
+    <header class="sticky top-0 z-50 bg-slate-950/60 backdrop-blur-xl border-b border-white/5 px-6 py-6">
+        <div class="max-w-[95rem] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
+                    <i class="fa-solid fa-brain text-indigo-400 text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent uppercase">
+                        Neural Archive
+                    </h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <div class="ai-status"></div>
+                        <span id="systemStatus" class="text-[10px] text-slate-500 font-semibold tracking-widest uppercase">System: Initializing...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
+                <div class="search-container relative w-full sm:w-96">
+                    <i class="fa-solid fa-sparkles absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400/50"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Search for titles, tech, or tags..." 
+                        class="w-full pl-12 pr-4 py-3 rounded-2xl text-sm text-slate-200"
+                    >
+                </div>
+
+                <div class="flex bg-slate-900/80 p-1.5 rounded-2xl border border-white/5" id="viewControls">
+                    <button onclick="updateCols(1)" data-val="1" class="col-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-white">1</button>
+                    <button onclick="updateCols(2)" data-val="2" class="col-btn active-btn px-4 py-2 rounded-xl text-xs font-bold transition-all">2</button>
+                    <button onclick="updateCols(4)" data-val="4" class="col-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-white">4</button>
+                    <button onclick="updateCols(8)" data-val="8" class="col-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-white">8</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[95rem] mx-auto px-6 mt-12">
+        <div id="bookGrid" class="grid gap-10 transition-all duration-500">
+            <!-- Shimmering Load State -->
+            <div class="book-card h-80 shimmer opacity-10"></div>
+            <div class="book-card h-80 shimmer opacity-10"></div>
+            <div class="book-card h-80 shimmer opacity-10"></div>
+            <div class="book-card h-80 shimmer opacity-10"></div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-32">
+            <div class="inline-flex p-6 bg-slate-900/50 rounded-full mb-6 border border-white/5">
+                <i class="fa-solid fa-magnifying-glass-chart text-indigo-500/20 text-6xl"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-slate-400 uppercase tracking-wider">Analysis: Null_Result</h3>
+            <p class="text-slate-600 mt-2">No data points matching your search criteria were found in the archive.</p>
+        </div>
+    </main>
+
+    <script>
+        let books = [];
+        let currentCols = 2;
+        let searchQuery = "";
+
+        const bookGrid = document.getElementById('bookGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+        const statusText = document.getElementById('systemStatus');
+
+        async function fetchArchiveData() {
+            try {
+                const response = await fetch('data/data.json');
+                if (!response.ok) throw new Error('Network failure');
+                books = await response.json();
+                statusText.innerText = "System: Operational // Data_Nodes: " + books.length;
+                renderBooks();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                statusText.innerText = "System: Offline // Data_Source: Unreachable";
+                statusText.classList.replace('text-slate-500', 'text-red-500');
+                bookGrid.innerHTML = `
+                    <div class="col-span-full text-center py-20 border border-red-500/20 rounded-3xl bg-red-500/5">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
+                        <h4 class="text-red-400 font-bold uppercase tracking-widest">Archive_Access_Denied</h4>
+                        <p class="text-slate-500 text-sm mt-2">Unable to load data/data.json. Please verify directory structure.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderBooks() {
+            const filtered = books.filter(book => 
+                book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                book.cat.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            if (filtered.length === 0 && books.length > 0) {
+                bookGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            bookGrid.classList.remove('hidden');
+            noResults.classList.add('hidden');
+
+            bookGrid.innerHTML = filtered.map(book => `
+                <div class="book-card group flex flex-col">
+                    <div class="img-wrapper bg-slate-950 aspect-[3/4]">
+                        <img 
+                            src="data/${book.img}" 
+                            alt="${book.title}"
+                            class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 scale-[1.01] group-hover:scale-110"
+                            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center p-8 text-center bg-slate-900\'><i class=\'fa-solid fa-microchip text-4xl mb-4 text-indigo-500/20\'></i><p class=\'text-[10px] uppercase font-black text-indigo-400/60 tracking-widest\'>Cover_Visual_Missing</p><p class=\'text-[9px] text-slate-600 mt-2 font-mono\'>${book.title}</p></div>';"
+                        >
+                    </div>
+                    <div class="px-6 pb-6 pt-2 flex flex-col flex-grow">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="tag-pill px-2.5 py-1 rounded-lg font-bold uppercase tracking-tighter">${book.cat}</span>
+                            <span class="text-[10px] text-slate-700 font-mono tracking-widest">V.0${book.id}</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-100 text-lg leading-snug line-clamp-2 mb-8 group-hover:text-indigo-400 transition-colors duration-300">
+                            ${book.title}
+                        </h3>
+                        <div class="mt-auto">
+                            <a href="data/${book.pdf}" target="_blank" 
+                               class="group/btn relative inline-flex items-center gap-3 w-full justify-center bg-indigo-500/5 hover:bg-indigo-500/10 border border-white/5 hover:border-indigo-500/30 py-3.5 rounded-2xl transition-all duration-300 shadow-lg">
+                                <span class="text-[10px] font-black text-slate-400 group-hover/btn:text-white uppercase tracking-[0.2em] z-10 transition-colors">Launch Module</span>
+                                <i class="fa-solid fa-chevron-right text-[10px] text-indigo-500 group-hover/btn:translate-x-1 transition-transform z-10"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateGridStyles();
+        }
+
+        function updateCols(num) {
+            currentCols = num;
+            document.querySelectorAll('.col-btn').forEach(btn => {
+                parseInt(btn.getAttribute('data-val')) === num ? btn.classList.add('active-btn') : btn.classList.remove('active-btn');
+            });
+            updateGridStyles();
+        }
+
+        function updateGridStyles() {
+            // Default spacing
+            bookGrid.className = "grid transition-all duration-500";
+            
+            if (currentCols === 1) {
+                bookGrid.classList.add('grid-cols-1', 'gap-10', 'max-w-xl', 'mx-auto');
+            } else if (currentCols === 2) {
+                bookGrid.classList.add('grid-cols-1', 'sm:grid-cols-2', 'gap-10');
+            } else if (currentCols === 4) {
+                bookGrid.classList.add('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'gap-10');
+            } else if (currentCols === 8) {
+                // Dense layout for large screens
+                bookGrid.classList.add('grid-cols-2', 'sm:grid-cols-4', 'md:grid-cols-6', 'xl:grid-cols-8', 'gap-4');
+            }
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderBooks();
+        });
+
+        window.onload = () => {
+            fetchArchiveData();
+            updateCols(2);
+        };
+    </script>
+</body>
+</html>
