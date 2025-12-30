@@ -220,7 +220,7 @@
         class TaskApp {
             constructor() {
                 this.tasks = [];
-                this.STORAGE_KEY = 'taskmaster_focus_v5'; // Bump version for schema change
+                this.STORAGE_KEY = 'taskmaster_focus_v6'; // Bump version to force fresh load of defaults
                 this.lastTick = Date.now();
                 
                 this.categoryColors = {
@@ -263,7 +263,38 @@
                             if (t.isPaused === undefined) t.isPaused = false;
                         });
                     } catch (e) { this.tasks = []; }
+                } else {
+                    // No data found? Load the user's requested defaults
+                    this.initDefaults();
                 }
+            }
+
+            initDefaults() {
+                const defaultTasks = [
+                    { title: "Pray Doha", min: 5, cat: 'A' },
+                    { title: "Handshake all family members", min: 5, cat: 'F' },
+                    { title: "Check your email", min: 5, cat: 'P' },
+                    { title: "Check website links", min: 5, cat: 'I' },
+                    { title: "Call parents", min: 15, cat: 'S' },
+                    { title: "Sun therapy and cold shower", min: 15, cat: 'H' }
+                ];
+
+                const now = Date.now();
+                
+                this.tasks = defaultTasks.map((def, index) => ({
+                    id: 'init_' + index + '_' + Math.random().toString(36).substr(2),
+                    title: def.title,
+                    created: now,
+                    durationMinutes: def.min,
+                    durationMs: def.min * 60 * 1000,
+                    elapsedMs: 0,
+                    category: def.cat,
+                    isCompleted: false,
+                    isPaused: false, // Default to running (Active task will run)
+                    completedAt: null
+                }));
+                
+                this.saveTasks();
             }
 
             saveTasks() {
