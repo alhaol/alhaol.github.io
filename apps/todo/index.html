@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster Pro - Focus UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .progress-bar-transition {
+            transition: width 0.2s linear; 
+        }
+
+        .task-completed {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        .task-completed .task-title {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        /* Pulsing animation for the Active Task Hero Section */
+        @keyframes pulse-border {
+            0% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+            50% { border-color: rgba(59, 130, 246, 0.8); box-shadow: 0 0 25px rgba(59, 130, 246, 0.3); }
+            100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+        }
+        .hero-active {
+            animation: pulse-border 3s infinite;
+            border: 1px solid #3b82f6;
+            transform: scale(1.01);
+        }
+        
+        /* Pause state for hero */
+        .hero-paused {
+            border: 1px solid #eab308;
+            box-shadow: none;
+            transform: scale(1);
+        }
+
+        .category-radio:checked + div {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px currentColor;
+            z-index: 10;
+        }
+
+        /* FAB Animation */
+        .fab-hover:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* Background Pattern */
+        .bg-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black text-slate-100 font-sans min-h-screen flex flex-col items-center py-6 pb-24 relative overflow-x-hidden">
+    
+    <!-- Background Texture -->
+    <div class="fixed inset-0 bg-pattern pointer-events-none z-0"></div>
+
+    <div class="w-full max-w-2xl px-4 flex flex-col gap-6 relative z-10">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 drop-shadow-sm">
+                    TaskMaster <span class="text-slate-500 text-base font-normal">Focus</span>
+                </h1>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="app.downloadJSON()" class="p-2 text-slate-400 hover:text-blue-400 transition" title="Export JSON">
+                    <i class="fas fa-file-download fa-lg"></i>
+                </button>
+                <label for="file-upload" class="p-2 text-slate-400 hover:text-emerald-400 transition cursor-pointer" title="Import JSON">
+                    <i class="fas fa-file-upload fa-lg"></i>
+                </label>
+                <input id="file-upload" type="file" accept=".json" class="hidden" onchange="app.uploadJSON(this)"/>
+            </div>
+        </header>
+
+        <!-- HERO SECTION: Active Task -->
+        <div id="heroContainer" class="w-full">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- QUEUE LABEL -->
+        <div class="flex items-center gap-4 text-slate-500 text-xs font-bold uppercase tracking-widest divider-text">
+            <div class="h-px bg-slate-700 flex-grow"></div>
+            <span>Up Next / History</span>
+            <div class="h-px bg-slate-700 flex-grow"></div>
+        </div>
+
+        <!-- Task List (Queue) -->
+        <div id="taskList" class="space-y-3 pb-20">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20 opacity-50">
+            <div class="text-slate-600 text-6xl mb-4"><i class="fas fa-check-circle"></i></div>
+            <p class="text-slate-500 text-lg">All caught up! Tap + to add a task.</p>
+        </div>
+    </div>
+
+    <!-- Floating Action Button (FAB) -->
+    <button onclick="app.openAddModal()" 
+        class="fixed bottom-8 right-8 w-16 h-16 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group z-40 border-2 border-blue-400/50">
+        <i class="fas fa-plus text-2xl group-hover:rotate-90 transition-transform duration-300"></i>
+    </button>
+
+    <!-- Add Task Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/90 hidden items-end sm:items-center justify-center z-50 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-slate-800 border border-slate-700 p-6 rounded-t-2xl sm:rounded-2xl w-full max-w-lg mx-4 shadow-2xl transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">New Task</h3>
+                <button onclick="app.closeAddModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            
+            <div class="flex flex-col gap-6">
+                <!-- Task Name -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">What are you working on?</label>
+                    <input type="text" id="addTitleInput" placeholder="e.g. Finish Monthly Report" 
+                        class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-4 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white text-lg placeholder-slate-600">
+                </div>
+
+                <!-- Duration -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Time Allocation (Minutes)</label>
+                    <div class="flex gap-4">
+                        <button onclick="document.getElementById('addTimeInput').value=15" class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm font-mono text-slate-300">15m</button>
+                        <button onclick="document.getElementById('addTimeInput').value=30" class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm font-mono text-slate-300">30m</button>
+                        <button onclick="document.getElementById('addTimeInput').value=60" class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm font-mono text-slate-300">1h</button>
+                        <div class="relative flex-grow">
+                            <input type="number" id="addTimeInput" placeholder="Custom" value="30" min="1"
+                                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-white text-center h-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <span class="block text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Category</span>
+                    <div class="flex gap-4 justify-between sm:justify-start" id="addCategoryContainer">
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="A" class="category-radio sr-only">
+                            <div class="w-10 h-10 rounded-full border-2 border-orange-500 text-orange-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-orange-500/20 transition-all">A</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Action</span>
+                        </label>
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="F" class="category-radio sr-only">
+                            <div class="w-10 h-10 rounded-full border-2 border-emerald-500 text-emerald-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-emerald-500/20 transition-all">F</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Fin</span>
+                        </label>
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="P" class="category-radio sr-only" checked>
+                            <div class="w-10 h-10 rounded-full border-2 border-blue-500 text-blue-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-blue-500/20 transition-all">P</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Pers</span>
+                        </label>
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="I" class="category-radio sr-only">
+                            <div class="w-10 h-10 rounded-full border-2 border-cyan-500 text-cyan-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-cyan-500/20 transition-all">I</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Info</span>
+                        </label>
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="S" class="category-radio sr-only">
+                            <div class="w-10 h-10 rounded-full border-2 border-violet-500 text-violet-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-violet-500/20 transition-all">S</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Study</span>
+                        </label>
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="addCategory" value="H" class="category-radio sr-only">
+                            <div class="w-10 h-10 rounded-full border-2 border-rose-500 text-rose-500 flex items-center justify-center font-bold bg-slate-900 hover:bg-rose-500/20 transition-all">H</div>
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100">Health</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="app.addTask()" 
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-blue-500/20 transition duration-200 mt-2 flex items-center justify-center gap-2">
+                    <i class="fas fa-bolt"></i> Start Task Immediately
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal (Simplified) -->
+    <div id="editModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-slate-800 border border-slate-700 p-6 rounded-xl w-full max-w-md mx-4 shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-white">Adjust Time</h3>
+            <input type="hidden" id="editTaskId">
+            <div class="mb-6">
+                <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase">Total Minutes Needed</label>
+                <input type="number" id="editDurationInput" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="document.getElementById('editModal').classList.add('hidden')" class="px-4 py-2 rounded-lg text-slate-300 hover:bg-slate-700 transition">Cancel</button>
+                <button onclick="app.saveEdit()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-lg">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TaskApp {
+            constructor() {
+                this.tasks = [];
+                this.STORAGE_KEY = 'taskmaster_focus_v5'; // Bump version for schema change
+                this.lastTick = Date.now();
+                
+                this.categoryColors = {
+                    'A': 'bg-orange-500 text-white border-orange-500',
+                    'F': 'bg-emerald-500 text-white border-emerald-500',
+                    'P': 'bg-blue-500 text-white border-blue-500',
+                    'I': 'bg-cyan-500 text-slate-900 border-cyan-500',
+                    'S': 'bg-violet-500 text-white border-violet-500',
+                    'H': 'bg-rose-500 text-white border-rose-500'
+                };
+
+                this.loadTasks();
+                this.render();
+                
+                setInterval(() => this.tick(), 1000);
+            }
+
+            // --- UI Modal Logic ---
+            openAddModal() {
+                document.getElementById('addModal').classList.remove('hidden');
+                document.getElementById('addModal').classList.add('flex');
+                document.getElementById('addTitleInput').focus();
+            }
+            closeAddModal() {
+                document.getElementById('addModal').classList.add('hidden');
+                document.getElementById('addModal').classList.remove('flex');
+            }
+
+            // --- Data Logic ---
+
+            loadTasks() {
+                const stored = localStorage.getItem(this.STORAGE_KEY);
+                if (stored) {
+                    try {
+                        this.tasks = JSON.parse(stored);
+                        this.tasks.forEach(t => {
+                            if (t.elapsedMs === undefined) t.elapsedMs = 0;
+                            if (t.durationMs === undefined) t.durationMs = t.durationMinutes * 60 * 1000;
+                            if (!t.category) t.category = 'P';
+                            if (t.isPaused === undefined) t.isPaused = false;
+                        });
+                    } catch (e) { this.tasks = []; }
+                }
+            }
+
+            saveTasks() {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
+            }
+
+            addTask() {
+                const titleInput = document.getElementById('addTitleInput');
+                const timeInput = document.getElementById('addTimeInput');
+                const categoryInput = document.querySelector('input[name="addCategory"]:checked');
+                
+                const title = titleInput.value.trim();
+                const durationMinutes = parseInt(timeInput.value);
+                const category = categoryInput ? categoryInput.value : 'P';
+
+                if (!title) return alert("Please enter a task name.");
+                if (!durationMinutes || durationMinutes <= 0) return alert("Please enter a valid duration.");
+
+                const newTask = {
+                    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                    title: title,
+                    created: Date.now(),
+                    durationMinutes: durationMinutes,
+                    durationMs: durationMinutes * 60 * 1000,
+                    elapsedMs: 0,
+                    category: category,
+                    isCompleted: false,
+                    isPaused: false,
+                    completedAt: null
+                };
+
+                // Add to TOP
+                this.tasks.unshift(newTask);
+                this.saveTasks();
+                this.render();
+                this.closeAddModal();
+
+                // Reset Inputs
+                titleInput.value = '';
+                const defaultRadio = document.querySelector('input[name="addCategory"][value="P"]');
+                if(defaultRadio) defaultRadio.checked = true;
+            }
+
+            deleteTask(id) {
+                if(confirm('Delete this task?')) {
+                    this.tasks = this.tasks.filter(t => t.id !== id);
+                    this.saveTasks();
+                    this.render();
+                }
+            }
+
+            toggleComplete(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (task) {
+                    task.isCompleted = !task.isCompleted;
+                    task.completedAt = task.isCompleted ? Date.now() : null;
+                    task.isPaused = false; // Reset pause state on complete toggle
+                    
+                    if (task.isCompleted) {
+                        this.tasks = this.tasks.filter(t => t.id !== id);
+                        this.tasks.push(task); // To bottom
+                    } else {
+                        this.tasks = this.tasks.filter(t => t.id !== id);
+                        this.tasks.unshift(task); // To top
+                    }
+                    this.saveTasks();
+                    this.render();
+                }
+            }
+
+            togglePause(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (task) {
+                    task.isPaused = !task.isPaused;
+                    this.saveTasks();
+                    this.render();
+                }
+            }
+
+            // --- Engine ---
+
+            tick() {
+                const now = Date.now();
+                const delta = now - this.lastTick;
+                this.lastTick = now;
+
+                const activeIndex = this.tasks.findIndex(t => !t.isCompleted);
+                
+                if (activeIndex !== -1) {
+                    const activeTask = this.tasks[activeIndex];
+                    
+                    // Only update time if NOT paused
+                    if (!activeTask.isPaused) {
+                        activeTask.elapsedMs += delta;
+                        if (activeIndex === 0) this.saveTasks();
+                        this.updateTaskDOM(activeTask, true);
+                    }
+                }
+            }
+
+            formatTime(ms) {
+                const totalSeconds = Math.floor(ms / 1000);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+            }
+
+            updateTaskDOM(task, isActive) {
+                const bar = document.getElementById(`progress-${task.id}`);
+                const label = document.getElementById(`timer-${task.id}`);
+                
+                if (!bar || !label) return;
+
+                const percent = Math.min((task.elapsedMs / task.durationMs) * 100, 100);
+                const remaining = Math.max(0, task.durationMs - task.elapsedMs);
+
+                // Update width
+                bar.style.width = `${percent}%`;
+
+                // Update colors (Active only)
+                if (isActive) {
+                    bar.className = bar.className.replace(/bg-\w+-\d+/, '');
+                    let color = 'bg-blue-500';
+                    if (percent > 50) color = 'bg-yellow-500';
+                    if (percent > 85) color = 'bg-orange-500';
+                    if (percent >= 100) color = 'bg-red-600';
+                    
+                    // If paused, maybe grey it out? No, keep it visible but static.
+                    bar.classList.add(color);
+                }
+
+                // Update Text
+                if (isActive) {
+                    if (remaining <= 0) {
+                        label.innerHTML = `<span class="text-red-400 font-bold animate-pulse">OVERTIME: +${this.formatTime(Math.abs(remaining))}</span>`;
+                    } else {
+                        label.innerText = this.formatTime(remaining);
+                    }
+                }
+            }
+
+            // --- Rendering ---
+
+            render() {
+                const heroContainer = document.getElementById('heroContainer');
+                const listContainer = document.getElementById('taskList');
+                const emptyState = document.getElementById('emptyState');
+                
+                heroContainer.innerHTML = '';
+                listContainer.innerHTML = '';
+
+                if (this.tasks.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                emptyState.classList.add('hidden');
+
+                const activeIndex = this.tasks.findIndex(t => !t.isCompleted);
+                const activeTask = activeIndex !== -1 ? this.tasks[activeIndex] : null;
+
+                // 1. Render Hero (Active Task)
+                if (activeTask) {
+                    const catStyle = this.categoryColors[activeTask.category] || this.categoryColors['P'];
+                    const percent = Math.min((activeTask.elapsedMs / activeTask.durationMs) * 100, 100);
+                    
+                    // Dynamic classes based on pause state
+                    const containerClass = activeTask.isPaused ? 'hero-paused border-yellow-500/50' : 'hero-active';
+                    const timerColor = activeTask.isPaused ? 'text-yellow-400' : 'text-blue-400';
+                    const progressColor = activeTask.isPaused ? 'bg-yellow-500' : 'bg-blue-500';
+
+                    const heroHTML = `
+                        <div class="glass-panel p-6 rounded-2xl relative overflow-hidden ${containerClass} shadow-2xl mb-2 transition-all duration-300">
+                            <!-- Background Progress -->
+                            <div class="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
+                                <div id="progress-${activeTask.id}" class="h-full ${progressColor} progress-bar-transition" style="width: ${percent}%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${catStyle} shadow-lg shadow-black/50">
+                                    ${activeTask.isPaused ? 'Paused' : 'Current Focus'}
+                                </span>
+                                <div class="flex gap-2">
+                                    <button onclick="app.togglePause('${activeTask.id}')" class="text-slate-300 hover:text-yellow-400 p-2 border border-slate-600 rounded-full w-10 h-10 flex items-center justify-center transition hover:bg-slate-700" title="${activeTask.isPaused ? 'Resume' : 'Pause'}">
+                                        <i class="fas fa-${activeTask.isPaused ? 'play pl-1' : 'pause'}"></i>
+                                    </button>
+                                    <button onclick="app.openEditModal('${activeTask.id}')" class="text-slate-500 hover:text-blue-400 p-2"><i class="fas fa-pen"></i></button>
+                                    <button onclick="app.toggleComplete('${activeTask.id}')" class="text-emerald-500 hover:text-emerald-400 p-2 border border-emerald-500/30 rounded-full w-10 h-10 flex items-center justify-center hover:bg-emerald-500/10 transition"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-2xl sm:text-4xl font-bold text-white mb-2 tracking-tight leading-tight">${activeTask.title}</h2>
+                            
+                            <div class="flex items-center gap-4 text-slate-400 mt-4">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Time Remaining</span>
+                                    <span id="timer-${activeTask.id}" class="text-3xl font-mono ${timerColor} font-bold tabular-nums">
+                                        ${activeTask.isPaused ? 'PAUSED' : 'Loading...'}
+                                    </span>
+                                </div>
+                                <div class="h-8 w-px bg-slate-700"></div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Allocated</span>
+                                    <span class="text-lg font-mono text-slate-300">${activeTask.durationMinutes}m</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    heroContainer.innerHTML = heroHTML;
+                }
+
+                // 2. Render Queue (Everything else)
+                this.tasks.forEach((task, index) => {
+                    if (task === activeTask) return; // Skip active
+
+                    const isQueued = !task.isCompleted;
+                    const catStyle = this.categoryColors[task.category] || this.categoryColors['P'];
+
+                    const itemHTML = `
+                        <div class="glass-panel rounded-lg p-4 flex items-center justify-between group ${task.isCompleted ? 'task-completed' : 'opacity-80 hover:opacity-100'} transition-all">
+                            <div class="flex items-center gap-4">
+                                <button onclick="app.toggleComplete('${task.id}')" 
+                                    class="w-5 h-5 rounded-full border-2 ${task.isCompleted ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 hover:border-emerald-500'} flex items-center justify-center transition">
+                                    ${task.isCompleted ? '<i class="fas fa-check text-white text-[10px]"></i>' : ''}
+                                </button>
+                                
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold ${catStyle}">
+                                            ${task.category}
+                                        </span>
+                                        <span class="font-medium text-slate-200 ${task.isCompleted ? 'line-through text-slate-500' : ''}">${task.title}</span>
+                                    </div>
+                                    <div class="text-xs text-slate-500 ml-6 mt-0.5">
+                                        ${task.durationMinutes}m • ${task.isCompleted ? 'Done' : 'Queued'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="app.deleteTask('${task.id}')" class="text-slate-600 hover:text-red-400 p-2 opacity-0 group-hover:opacity-100 transition">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    `;
+                    listContainer.innerHTML += itemHTML;
+                });
+            }
+            
+            // --- Edit ---
+            openEditModal(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (!task) return;
+                document.getElementById('editTaskId').value = id;
+                document.getElementById('editDurationInput').value = task.durationMinutes;
+                document.getElementById('editModal').classList.remove('hidden');
+                document.getElementById('editModal').classList.add('flex');
+            }
+
+            saveEdit() {
+                const id = document.getElementById('editTaskId').value;
+                const newDuration = parseInt(document.getElementById('editDurationInput').value);
+                const task = this.tasks.find(t => t.id === id);
+                if (task && newDuration > 0) {
+                    task.durationMinutes = newDuration;
+                    task.durationMs = newDuration * 60 * 1000;
+                    this.saveTasks();
+                    this.render();
+                    document.getElementById('editModal').classList.add('hidden');
+                    document.getElementById('editModal').classList.remove('flex');
+                }
+            }
+
+            // --- JSON ---
+            downloadJSON() {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.tasks, null, 2));
+                const a = document.createElement('a');
+                a.href = dataStr;
+                a.download = "taskmaster_focus_" + new Date().toISOString().slice(0,10) + ".json";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            }
+
+            uploadJSON(input) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        this.tasks = JSON.parse(e.target.result);
+                        this.saveTasks();
+                        this.render();
+                    } catch(err) { alert("Invalid JSON"); }
+                };
+                reader.readAsText(file);
+            }
+        }
+        const app = new TaskApp();
+    </script>
+</body>
+</html>
