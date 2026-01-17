@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Mobile App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    <title>21 Repetitions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #172554 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; 
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            color: #f8fafc;
+        }
+
+        @media (min-height: 800px) {
+            body {
+                justify-content: center;
+                padding-top: 0;
+            }
+        }
+
+        /* Bubble Styles */
+        .bubble-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            perspective: 1000px;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .bubble-grid {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 2rem;
+                max-width: 700px;
+            }
+        }
+
+        .bubble-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-touch-callout: none;
+        }
+
+        .bubble-container:active {
+            transform: scale(0.90);
+        }
+
+        /* The shiny bubble look */
+        .bubble {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.4) 20%, #38bdf8 60%, #0284c7 100%);
+            box-shadow: 
+                inset -5px -5px 10px rgba(0,0,0,0.3),
+                inset 5px 5px 10px rgba(255,255,255,0.5),
+                0 0 15px rgba(56, 189, 248, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            color: white;
+            font-size: clamp(0.9rem, 4vw, 1.5rem);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .bubble::after {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 25%;
+            height: 15%;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: rotate(-45deg);
+            filter: blur(1px);
+        }
+
+        .popped .bubble {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed #334155;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #334155;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 4vw, 1.5rem);
+            position: absolute;
+            z-index: 1;
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .popped .placeholder {
+            border: 2px solid #10b981;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            animation: pulse-green 0.3s ease-out;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+        
+        .popped .placeholder::before {
+            content: '✓';
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 320px;
+            height: 10px;
+            background-color: #1e293b;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid #334155;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Timer Styles */
+        .timer-container {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid #334155;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Hourglass Visualization */
+        .hourglass-viz {
+            width: 20px;
+            height: 24px;
+            position: relative;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+        
+        .hourglass-viz.running {
+            opacity: 1;
+            animation: hourglass-rotate 3s ease-in-out infinite;
+        }
+
+        .hourglass-viz::before,
+        .hourglass-viz::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #475569;
+            box-sizing: border-box;
+            border: 1px solid #94a3b8;
+        }
+
+        .hourglass-viz::before {
+            top: 0;
+            border-radius: 3px 3px 12px 12px;
+            border-bottom: none;
+            overflow: hidden;
+            background: #1e293b;
+        }
+        
+        .hourglass-viz::after {
+            bottom: 0;
+            border-radius: 12px 12px 3px 3px;
+            border-top: none;
+            overflow: hidden;
+            background: #1e293b;
+        }
+
+        .sand-top {
+            position: absolute;
+            top: 1px; left: 2px; right: 2px; bottom: 50%;
+            background: #38bdf8;
+            border-radius: 1px 1px 8px 8px;
+            transform-origin: bottom;
+            z-index: 10;
+        }
+
+        .sand-bottom {
+            position: absolute;
+            top: 50%; left: 2px; right: 2px; bottom: 1px;
+            background: #38bdf8;
+            border-radius: 8px 8px 1px 1px;
+            transform-origin: bottom;
+            transform: scaleY(0);
+            z-index: 10;
+        }
+
+        .hourglass-viz.running .sand-top { animation: sand-drain 1.5s linear infinite; }
+        .hourglass-viz.running .sand-bottom { animation: sand-fill 1.5s linear infinite; }
+
+        @keyframes hourglass-rotate {
+            0%, 45% { transform: rotate(0deg); }
+            50%, 95% { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes sand-drain {
+            0% { transform: scaleY(1); }
+            45% { transform: scaleY(0); }
+            50%, 100% { transform: scaleY(0); }
+        }
+
+        @keyframes sand-fill {
+            0% { transform: scaleY(0); }
+            45% { transform: scaleY(1); }
+            50%, 100% { transform: scaleY(1); }
+        }
+
+        /* Report Modal & Badges */
+        .new-record-badge {
+            background: #f59e0b;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-left: 6px;
+            display: none; /* Hidden by default */
+        }
+
+        button { touch-action: manipulation; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Area -->
+    <div class="text-center mb-4 px-4 z-10 w-full max-w-lg">
+        <h1 class="text-3xl font-black text-white mb-1 tracking-tight drop-shadow-lg">21 Repetitions</h1>
+        <p class="text-slate-400 font-medium text-sm mb-4">Tap bubbles to track progress</p>
+        
+        <div class="flex flex-col items-center justify-center">
+            <div class="text-4xl font-black text-sky-400 mb-2 drop-shadow-md tracking-tighter">
+                <span id="counter">0</span><span class="text-2xl text-slate-500 font-bold mx-2">/</span><span class="text-2xl text-slate-500">21</span>
+            </div>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <!-- Timer Section -->
+            <div class="timer-container">
+                <div id="hourglass-viz" class="hourglass-viz">
+                    <div class="sand-top"></div>
+                    <div class="sand-bottom"></div>
+                </div>
+                <div id="timer-display" class="timer-display">00:00</div>
+                
+                <div class="flex gap-2">
+                    <button onclick="toggleTimer()" id="timer-toggle-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-sky-600 hover:bg-sky-500 text-white transition-colors active:scale-95 shadow-lg">
+                        <i class="fas fa-play text-sm"></i>
+                    </button>
+                    <button onclick="resetTimer()" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors active:scale-95 shadow-lg">
+                        <i class="fas fa-undo text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bubble Grid -->
+    <div class="bubble-grid" id="grid"></div>
+
+    <!-- Footer / Controls -->
+    <div class="mt-auto mb-6 z-10 flex gap-4">
+        <button onclick="resetBubbles(true)" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 font-bold rounded-xl transition-colors text-sm shadow-lg active:scale-95">
+            Reset
+        </button>
+        <button onclick="toggleSound()" id="sound-btn" class="px-6 py-3 bg-slate-800 hover:bg-sky-900 text-sky-400 border border-sky-900/50 font-bold rounded-xl transition-colors text-sm shadow-lg active:scale-95">
+            Sound: On
+        </button>
+    </div>
+
+    <!-- Report Modal Overlay -->
+    <div id="report-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-2xl max-w-xs w-full mx-4 text-center transform scale-95 transition-transform duration-300" id="report-content">
+            <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check text-3xl text-emerald-500"></i>
+            </div>
+            <h2 class="text-2xl font-black text-white mb-1">Session Done</h2>
+            <p class="text-slate-400 text-sm mb-6">Great work completing 21 reps!</p>
+            
+            <div class="space-y-3 mb-8">
+                <!-- Current Duration -->
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">Session Duration</p>
+                    <p id="report-time" class="text-2xl font-mono font-bold text-sky-400">00:00</p>
+                </div>
+
+                <!-- Personal Best -->
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700 flex items-center justify-between px-4">
+                    <div class="text-left">
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-0.5">Best Time <span id="new-record-badge" class="new-record-badge">New!</span></p>
+                        <p id="best-time-display" class="text-lg font-mono font-bold text-slate-300">--:--</p>
+                    </div>
+                    <i class="fas fa-trophy text-amber-500 opacity-50"></i>
+                </div>
+
+                <!-- Timestamp -->
+                <div class="bg-slate-900/50 p-2 rounded-xl border border-slate-700">
+                    <p id="report-date" class="text-xs font-bold text-slate-400">--:--</p>
+                </div>
+            </div>
+
+            <button onclick="closeReportAndReset()" class="w-full py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-colors shadow-lg active:scale-95 transform duration-100">
+                Start New Session
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        const TOTAL_BUBBLES = 21;
+        let soundEnabled = true;
+        let poppedState = JSON.parse(localStorage.getItem('bubbleState')) || Array(TOTAL_BUBBLES).fill(false);
+        let bestTime = parseInt(localStorage.getItem('bubbleBestTime')) || null; // in seconds
+        
+        // Timer State
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+
+        // --- Audio & Haptics ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function triggerHaptic() {
+            // Check if vibration API is supported
+            if (navigator.vibrate) {
+                navigator.vibrate(15); // Short, sharp vibration
+            }
+        }
+
+        function playPopSound() {
+            if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(500 + Math.random() * 200, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // --- UI Rendering ---
+        const gridEl = document.getElementById('grid');
+        const counterEl = document.getElementById('counter');
+        const progressBarEl = document.getElementById('progress-bar');
+        const soundBtn = document.getElementById('sound-btn');
+        const timerDisplay = document.getElementById('timer-display');
+        const timerBtn = document.getElementById('timer-toggle-btn');
+        const hourglassViz = document.getElementById('hourglass-viz');
+        
+        // Report Elements
+        const reportModal = document.getElementById('report-modal');
+        const reportContent = document.getElementById('report-content');
+        const reportTime = document.getElementById('report-time');
+        const reportDate = document.getElementById('report-date');
+        const bestTimeDisplay = document.getElementById('best-time-display');
+        const newRecordBadge = document.getElementById('new-record-badge');
+
+        function init() {
+            gridEl.innerHTML = '';
+            poppedState.forEach((isPopped, index) => {
+                const container = document.createElement('div');
+                container.className = `bubble-container ${isPopped ? 'popped' : ''}`;
+                container.onclick = () => handlePop(index, container);
+                
+                const placeholder = document.createElement('div');
+                placeholder.className = 'placeholder';
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.innerText = index + 1;
+
+                container.appendChild(placeholder);
+                container.appendChild(bubble);
+                gridEl.appendChild(container);
+            });
+            updateStats();
+        }
+
+        function handlePop(index, element) {
+            if (poppedState[index]) return;
+
+            // Auto-start timer on first pop
+            if (!isTimerRunning && poppedState.every(v => v === false)) {
+                toggleTimer();
+            }
+
+            poppedState[index] = true;
+            saveState();
+
+            element.classList.add('popped');
+            triggerHaptic(); // Vibrate!
+            playPopSound();
+            updateStats();
+
+            // Check completion
+            if (poppedState.every(Boolean)) {
+                setTimeout(() => {
+                    showReport();
+                }, 500);
+            }
+        }
+
+        function updateStats() {
+            const count = poppedState.filter(Boolean).length;
+            counterEl.innerText = count;
+            const percentage = (count / TOTAL_BUBBLES) * 100;
+            progressBarEl.style.width = `${percentage}%`;
+        }
+
+        function saveState() {
+            localStorage.setItem('bubbleState', JSON.stringify(poppedState));
+        }
+
+        function resetBubbles(askConfirmation = true) {
+            if(!askConfirmation || confirm("Reset your repetition progress?")) {
+                poppedState = Array(TOTAL_BUBBLES).fill(false);
+                saveState();
+                init();
+                resetTimer();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            soundBtn.innerText = soundEnabled ? "Sound: On" : "Sound: Off";
+            soundBtn.className = soundEnabled 
+                ? "px-6 py-3 bg-slate-800 hover:bg-sky-900 text-sky-400 border border-sky-900/50 font-bold rounded-xl transition-colors text-sm shadow-lg active:scale-95"
+                : "px-6 py-3 bg-slate-800 text-slate-500 border border-slate-700 font-bold rounded-xl transition-colors text-sm shadow-lg active:scale-95";
+        }
+
+        // --- Timer Functions ---
+        function toggleTimer() {
+            isTimerRunning = !isTimerRunning;
+            if (isTimerRunning) {
+                hourglassViz.classList.add('running');
+                timerBtn.innerHTML = '<i class="fas fa-pause text-sm"></i>';
+                timerBtn.classList.remove('bg-sky-600', 'hover:bg-sky-500');
+                timerBtn.classList.add('bg-amber-600', 'hover:bg-amber-500');
+                
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            } else {
+                pauseTimerUI();
+                clearInterval(timerInterval);
+            }
+        }
+
+        function pauseTimerUI() {
+            hourglassViz.classList.remove('running');
+            timerBtn.innerHTML = '<i class="fas fa-play text-sm"></i>';
+            timerBtn.classList.add('bg-sky-600', 'hover:bg-sky-500');
+            timerBtn.classList.remove('bg-amber-600', 'hover:bg-amber-500');
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerSeconds = 0;
+            updateTimerDisplay();
+            pauseTimerUI();
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateTimerDisplay() {
+            const timeString = formatTime(timerSeconds);
+            timerDisplay.innerText = timeString;
+            return timeString;
+        }
+
+        // --- Report Logic ---
+        function showReport() {
+            // Stop Timer
+            if (isTimerRunning) toggleTimer();
+            
+            // Populate Session Time
+            reportTime.innerText = formatTime(timerSeconds);
+            
+            // Handle Best Time
+            newRecordBadge.style.display = 'none';
+            
+            if (bestTime === null || timerSeconds < bestTime) {
+                // New Record!
+                bestTime = timerSeconds;
+                localStorage.setItem('bubbleBestTime', bestTime);
+                newRecordBadge.style.display = 'inline-block';
+            }
+            
+            bestTimeDisplay.innerText = formatTime(bestTime);
+
+            // Populate Date
+            const now = new Date();
+            reportDate.innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Show Modal
+            reportModal.classList.remove('opacity-0', 'pointer-events-none');
+            reportContent.classList.remove('scale-95');
+            reportContent.classList.add('scale-100');
+        }
+
+        function closeReportAndReset() {
+            // Hide Modal
+            reportModal.classList.add('opacity-0', 'pointer-events-none');
+            reportContent.classList.remove('scale-100');
+            reportContent.classList.add('scale-95');
+
+            // Reset App
+            setTimeout(() => {
+                resetBubbles(false); 
+            }, 300);
+        }
+
+        // --- Start App ---
+        init();
+
+    </script>
+</body>
+</html>
