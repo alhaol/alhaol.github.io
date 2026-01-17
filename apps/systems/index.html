@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Visualizer | AFPISH & P3N3SLW</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z'/%3E%3C/svg%3E">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            base: '#0f172a',    /* Slate 900 */
+                            dark: '#020617',    /* Slate 950 */
+                            card: 'rgba(30, 41, 59, 0.7)', /* Slate 800 with opacity for glass */
+                            gold: '#fbbf24',    /* Amber 400 */
+                            accent: '#10b981',  /* Emerald 500 */
+                        }
+                    },
+                    fontFamily: {
+                        'serif-display': ['"Scheherazade New"', 'serif'],
+                        'sans': ['"Inter"', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background-color: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-font {
+            font-family: 'Scheherazade New', serif;
+            line-height: 1.2;
+        }
+
+        .hidden-section { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            /* Removed display:flex to prevent Chart.js resize flickering */
+            display: block; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.5); border-radius: 4px; }
+        
+        .highlight-row {
+            border-color: #fbbf24 !important; 
+            background-color: rgba(51, 65, 85, 0.8) !important;
+            transition: all 0.3s ease-out;
+            transform: scale(1.02);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+
+    <!-- LOGIN VIEW -->
+    <div id="loginView" class="w-full max-w-sm mx-auto relative z-20 glass-panel p-8 rounded-2xl fade-in flex flex-col items-center justify-center min-h-[50vh]">
+        <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 ring-1 ring-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+            <i data-lucide="layers" class="w-8 h-8 text-emerald-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-1 title-font">System Architect</h2>
+        <p class="text-xs text-slate-500 uppercase tracking-widest mb-8">Multi-System Visualization</p>
+        
+        <div class="w-full space-y-4">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Username</label>
+                <div class="relative">
+                    <input type="text" id="usernameInput" class="w-full bg-slate-900/50 border border-slate-700 text-white rounded-xl p-3 pl-10 focus:ring-2 focus:ring-theme-gold outline-none placeholder-slate-600" placeholder="Enter username">
+                    <i data-lucide="user" class="absolute left-3 top-3.5 w-4 h-4 text-slate-500"></i>
+                </div>
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Password</label>
+                <div class="relative">
+                    <input type="password" id="passwordInput" class="w-full bg-slate-900/50 border border-slate-700 text-white rounded-xl p-3 pl-10 focus:ring-2 focus:ring-theme-gold outline-none placeholder-slate-600" placeholder="Enter password">
+                    <i data-lucide="key" class="absolute left-3 top-3.5 w-4 h-4 text-slate-500"></i>
+                </div>
+            </div>
+            <button onclick="attemptLogin()" class="w-full bg-gradient-to-r from-theme-gold to-yellow-500 hover:from-yellow-400 text-slate-900 font-bold py-3.5 px-4 rounded-xl shadow-lg mt-4 flex items-center justify-center gap-2 group">
+                <span>Access Systems</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+            <p id="loginError" class="text-center text-xs text-red-400 mt-2 hidden animate-pulse bg-red-500/10 py-2 rounded-lg border border-red-500/20">Incorrect credentials</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="appContainer" class="w-full max-w-2xl mx-auto relative z-10 hidden-section pb-20">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6 fade-in sticky top-0 z-30 bg-[#020617]/90 backdrop-blur-md py-4 border-b border-slate-800">
+            <div>
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-theme-gold to-yellow-200 tracking-wide title-font">
+                    Life Systems
+                </h1>
+                <p class="text-slate-400 text-[10px] tracking-widest uppercase">Overview</p>
+            </div>
+            <button onclick="logout()" class="p-2 bg-slate-800/50 rounded-lg hover:text-red-400 transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView" class="fade-in space-y-8">
+             <div id="systemsContainer" class="space-y-8">
+                 <!-- Charts Injected Here -->
+                 <p class="text-center text-slate-500 text-xs">Loading System Data...</p>
+             </div>
+             
+             <!-- Data Source Debug Indicator -->
+             <div id="dataSourceIndicator" class="text-center text-[10px] text-slate-600 mt-8 font-mono border-t border-slate-800 pt-4">
+                 Initializing...
+             </div>
+        </div>
+
+        <!-- EDIT VIEW (Overlay) -->
+        <div id="editView" class="hidden-section fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm fade-in">
+            <div class="glass-panel w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-slate-700">
+                <div class="flex justify-between items-center p-6 border-b border-slate-700 bg-slate-900/50">
+                    <h2 class="text-lg font-bold text-white">Edit System</h2>
+                    <button onclick="closeEditMode()" class="text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 overflow-y-auto custom-scrollbar flex-grow">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">System Name</label>
+                            <input type="text" id="editAcronym" class="w-full bg-slate-900/50 border border-slate-700 text-white rounded-xl p-3 outline-none focus:border-theme-gold" placeholder="e.g. AFPISH">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Components</label>
+                            <div id="componentEditorList" class="space-y-3">
+                                <!-- Component inputs injected here -->
+                            </div>
+                            <button onclick="addComponentRow()" class="w-full py-3 border border-dashed border-slate-600 text-slate-400 rounded-xl hover:border-theme-gold hover:text-theme-gold transition text-xs flex items-center justify-center gap-1 mt-2">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Add Component
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t border-slate-700 bg-slate-900/50 flex gap-3">
+                    <button onclick="saveSystem()" class="flex-1 bg-gradient-to-r from-theme-gold to-yellow-500 text-slate-900 font-bold py-3 rounded-xl shadow-lg">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Default Data (Fallback if data.json is missing) ---
+        const defaultData = {
+            "systems": [
+                {
+                    "id": 1,
+                    "name": "AFPISH (Life Balance)",
+                    "components": [
+                        { "letter": "A", "label": "Allah", "subItems": "Doha, Fast, Quran", "value": 2, "color": "rgba(251, 191, 36, 0.8)", "borderColor": "#fbbf24" },
+                        { "letter": "F", "label": "Family", "subItems": "Parents, Wife, Kids", "value": 2, "color": "rgba(16, 185, 129, 0.8)", "borderColor": "#10b981" },
+                        { "letter": "P", "label": "Profession", "subItems": "Projects, Learning", "value": 2, "color": "rgba(59, 130, 246, 0.8)", "borderColor": "#3b82f6" },
+                        { "letter": "I", "label": "Independence", "subItems": "Financial, Mental", "value": 2, "color": "rgba(168, 85, 247, 0.8)", "borderColor": "#a855f7" },
+                        { "letter": "S", "label": "Social", "subItems": "Friends, Charity", "value": 2, "color": "rgba(249, 115, 22, 0.8)", "borderColor": "#f97316" },
+                        { "letter": "H", "label": "Health", "subItems": "Gym, Diet, Sleep", "value": 2, "color": "rgba(239, 68, 68, 0.8)", "borderColor": "#ef4444" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "P3N3SLW (Physical)",
+                    "components": [
+                        { "letter": "P3", "label": "P3 Complex", "subItems": "Pushup, Pull up, Plank", "value": 2, "color": "rgba(6, 182, 212, 0.8)", "borderColor": "#06b6d4" }, 
+                        { "letter": "N3", "label": "Knee Rotations", "subItems": "Mobility Flow", "value": 2, "color": "rgba(99, 102, 241, 0.8)", "borderColor": "#6366f1" }, 
+                        { "letter": "S", "label": "Squats", "subItems": "Legs, Glutes", "value": 2, "color": "rgba(139, 92, 246, 0.8)", "borderColor": "#8b5cf6" }, 
+                        { "letter": "L", "label": "Lunges", "subItems": "Balance, Legs", "value": 2, "color": "rgba(168, 85, 247, 0.8)", "borderColor": "#a855f7" }, 
+                        { "letter": "W", "label": "Wall Stand", "subItems": "Posture, Endurance", "value": 2, "color": "rgba(217, 70, 239, 0.8)", "borderColor": "#d946ef" } 
+                    ]
+                }
+            ]
+        };
+
+        // --- State Management ---
+        let systems = []; 
+        let chartInstances = {};
+        let editingSystemIndex = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        // --- Login Logic ---
+        function attemptLogin() {
+            const user = document.getElementById('usernameInput').value;
+            const pass = document.getElementById('passwordInput').value;
+            if (user.toLowerCase() === 'ibrahim' && pass === 'ibrahimwin') {
+                document.getElementById('loginView').classList.add('hidden-section');
+                document.getElementById('appContainer').classList.remove('hidden-section');
+                document.getElementById('appContainer').classList.add('fade-in');
+                initApp();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function logout() { location.reload(); }
+
+        // --- App Logic ---
+        async function initApp() {
+            await loadSystems();
+            renderSystems();
+        }
+
+        // --- DATA FETCHING ---
+        async function loadSystems() {
+            const statusEl = document.getElementById('dataSourceIndicator');
+            try {
+                // Try to fetch data.json with Cache-Control headers to prevent stale data
+                // Note: File protocol (file://) usually blocks fetch, causing a jump to catch block.
+                const response = await fetch('data.json', { cache: "no-store" });
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load data.json (Status: ${response.status})`);
+                }
+                const data = await response.json();
+                systems = data.systems;
+                
+                // Success feedback
+                statusEl.innerHTML = `<span class="text-emerald-500">●</span> Source: External (data.json)`;
+                console.log("Loaded from data.json");
+            } catch (error) {
+                console.warn(error.message);
+                // Fallback to embedded defaultData
+                systems = defaultData.systems;
+                
+                // Error feedback
+                let errorMsg = error.message;
+                if(error.message.includes("NetworkError")) errorMsg = "File not found or Blocked (CORS)";
+                
+                statusEl.innerHTML = `<span class="text-amber-500">●</span> Source: Embedded Default <br><span class="text-[9px] opacity-70">(${errorMsg})</span>`;
+                console.log("Loaded default fallback data");
+            }
+        }
+
+        function renderSystems() {
+            const container = document.getElementById('systemsContainer');
+            container.innerHTML = ''; 
+
+            systems.forEach((system, index) => {
+                const total = system.components.reduce((sum, c) => sum + c.value, 0);
+                const max = system.components.length * 10;
+                const percentage = Math.round((total / max) * 100);
+
+                const card = document.createElement('div');
+                card.className = 'glass-panel p-6 rounded-2xl relative overflow-hidden transition-all hover:border-slate-600';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white tracking-widest flex items-center gap-2">
+                                ${system.name}
+                            </h2>
+                            <span class="text-xs text-emerald-400 font-mono">Score: <span id="score-${index}">${percentage}</span>%</span>
+                        </div>
+                        <button onclick="openEditMode(${index})" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1 text-slate-300">
+                            <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                        </button>
+                    </div>
+                    <div class="chart-container mb-2 cursor-pointer relative" title="Tap chart to adjust values">
+                        <canvas id="chart-${index}"></canvas>
+                    </div>
+                    <div class="text-center mt-2">
+                         <p class="text-[9px] text-slate-500 mt-1 uppercase tracking-widest">Tap segments to update</p>
+                    </div>
+                `;
+                container.appendChild(card);
+                
+                initChart(index, system);
+            });
+            lucide.createIcons();
+        }
+
+        function initChart(index, systemData) {
+            const ctx = document.getElementById(`chart-${index}`).getContext('2d');
+            
+            if (chartInstances[index]) {
+                chartInstances[index].destroy();
+            }
+
+            const labels = systemData.components.map(c => c.label);
+            const data = systemData.components.map(c => c.value);
+            const bgColors = systemData.components.map(c => c.color);
+
+            chartInstances[index] = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderColor: '#0f172a',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 10 },
+                    onClick: (e) => handleChartClick(e, index),
+                    onHover: (e, activeElements) => {
+                        e.native.target.style.cursor = activeElements.length ? 'pointer' : 'default';
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: {
+                                display: true,
+                                centerPointLabels: true,
+                                color: '#fbbf24',
+                                font: { size: 10, family: "'Inter', sans-serif", weight: 'bold' }
+                            },
+                            ticks: { display: false, backdropColor: 'transparent' },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `Score: ${context.raw}/10`,
+                                afterLabel: (context) => {
+                                    const i = context.dataIndex;
+                                    const sub = systemData.components[i].subItems;
+                                    return sub ? sub.split(',').map(s => `• ${s.trim()}`) : [];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function handleChartClick(e, sysIndex) {
+            const chart = chartInstances[sysIndex];
+            const elements = chart.getElementsAtEventForMode(e, 'nearest', { intersect: false, axis: 'r' }, true);
+
+            if (elements.length > 0) {
+                const dataIndex = elements[0].index;
+                const scale = chart.scales.r;
+                const dist = Math.sqrt(Math.pow(e.x - scale.xCenter, 2) + Math.pow(e.y - scale.yCenter, 2));
+                let newValue = (dist / scale.drawingArea) * 10;
+                newValue = Math.max(0, Math.min(10, Math.round(newValue)));
+                
+                // Update Data
+                systems[sysIndex].components[dataIndex].value = newValue;
+                chart.data.datasets[0].data[dataIndex] = newValue;
+                
+                // Update chart without triggering a full re-render loop
+                chart.update('active');
+                
+                // Update Score Text
+                const total = systems[sysIndex].components.reduce((sum, c) => sum + c.value, 0);
+                const max = systems[sysIndex].components.length * 10;
+                document.getElementById(`score-${sysIndex}`).innerText = Math.round((total / max) * 100);
+            }
+        }
+
+        // --- Editing Logic ---
+        function openEditMode(index) {
+            editingSystemIndex = index;
+            document.getElementById('editView').classList.remove('hidden-section');
+            loadEditForm();
+        }
+
+        function closeEditMode() {
+            document.getElementById('editView').classList.add('hidden-section');
+            editingSystemIndex = null;
+        }
+
+        function loadEditForm() {
+            const system = systems[editingSystemIndex];
+            document.getElementById('editAcronym').value = system.name;
+            const list = document.getElementById('componentEditorList');
+            list.innerHTML = '';
+            
+            system.components.forEach((comp) => addComponentRow(comp));
+        }
+
+        function addComponentRow(data = {letter: '', label: '', subItems: '', color: '#fbbf24'}) {
+            const list = document.getElementById('componentEditorList');
+            const div = document.createElement('div');
+            div.className = 'bg-slate-800/40 border border-slate-700/50 rounded-xl p-3 animate-pulse-once';
+            
+            const hexColor = data.color.includes('#') ? data.color : data.borderColor; 
+
+            div.innerHTML = `
+                <div class="grid grid-cols-12 gap-2 items-center mb-2">
+                    <div class="col-span-2">
+                        <label class="block text-[8px] text-slate-500 uppercase font-bold mb-1 text-center">Icon</label>
+                        <input type="text" value="${data.letter}" maxlength="2" class="edit-letter w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-center text-white uppercase font-bold focus:border-theme-gold outline-none" placeholder="A">
+                    </div>
+                    <div class="col-span-8">
+                        <label class="block text-[8px] text-slate-500 uppercase font-bold mb-1">Label</label>
+                        <input type="text" value="${data.label}" class="edit-label w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white text-sm focus:border-theme-gold outline-none" placeholder="Category Name">
+                    </div>
+                     <div class="col-span-2 flex flex-col items-end">
+                        <label class="block text-[8px] text-slate-500 uppercase font-bold mb-1 text-center w-full">Color</label>
+                        <input type="color" value="${hexColor}" class="edit-color w-full h-9 bg-transparent rounded cursor-pointer">
+                    </div>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <input type="text" value="${data.subItems || ''}" class="edit-subitems w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-400 text-xs focus:text-white focus:border-theme-gold outline-none" placeholder="Sub-tasks">
+                    <button onclick="this.closest('.animate-pulse-once').remove()" class="p-2 text-slate-500 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+            `;
+            list.appendChild(div);
+            lucide.createIcons();
+        }
+
+        function saveSystem() {
+            if (editingSystemIndex === null) return;
+            
+            const newName = document.getElementById('editAcronym').value;
+            const rows = document.querySelectorAll('#componentEditorList > .animate-pulse-once');
+            const newComponents = [];
+
+            rows.forEach(row => {
+                const letter = row.querySelector('.edit-letter').value;
+                const label = row.querySelector('.edit-label').value;
+                const subItems = row.querySelector('.edit-subitems').value;
+                const colorHex = row.querySelector('.edit-color').value;
+                
+                if(letter && label) {
+                    const r = parseInt(colorHex.slice(1, 3), 16);
+                    const g = parseInt(colorHex.slice(3, 5), 16);
+                    const b = parseInt(colorHex.slice(5, 7), 16);
+                    
+                    // Maintain existing value if label matches
+                    const existing = systems[editingSystemIndex].components.find(c => c.label === label);
+                    
+                    newComponents.push({
+                        letter: letter.toUpperCase(),
+                        label: label,
+                        subItems: subItems,
+                        value: existing ? existing.value : 5, 
+                        color: `rgba(${r}, ${g}, ${b}, 0.8)`,
+                        borderColor: colorHex
+                    });
+                }
+            });
+
+            if(newComponents.length < 3) return alert("System needs at least 3 components");
+
+            systems[editingSystemIndex].name = newName;
+            systems[editingSystemIndex].components = newComponents;
+
+            renderSystems();
+            closeEditMode();
+        }
+    </script>
+</body>
+</html>
