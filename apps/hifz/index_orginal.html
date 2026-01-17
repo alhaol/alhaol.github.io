@@ -111,98 +111,15 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
         }
 
-        /* Bubble Visualization Styles */
-        .bubble-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            width: 100%;
-            max-width: 320px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .bubble-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.1s;
-        }
-
-        .bubble {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            /* Gold Gradient for Quran Theme */
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.4) 20%, #fbbf24 60%, #b45309 100%);
-            box-shadow: 
-                inset -2px -2px 4px rgba(0,0,0,0.3),
-                inset 2px 2px 4px rgba(255,255,255,0.5),
-                0 0 8px rgba(251, 191, 36, 0.3);
-            position: absolute;
-            top: 0; left: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            color: #78350f;
-            font-size: 0.7rem;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
-        }
-
-        .bubble::after {
-            content: '';
-            position: absolute;
-            top: 15%; left: 15%;
-            width: 25%; height: 15%;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
-            transform: rotate(-45deg);
-            filter: blur(0.5px);
-        }
-
-        .placeholder {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px dashed #475569;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #475569;
-            font-size: 0.7rem;
-            position: absolute;
-            z-index: 1;
-            background: rgba(30, 41, 59, 0.3);
-        }
-
-        .popped .bubble {
-            transform: scale(0);
-            opacity: 0;
-        }
-
-        .popped .placeholder {
-            border: 2px solid #10b981;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            animation: pulse-green 0.3s ease-out;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        /* Progress Bar Animation */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.1s linear; 
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
         }
         
-        .popped .placeholder::before {
-            content: '✓';
-            font-weight: 900;
-        }
-
-        @keyframes pulse-green {
-            0% { transform: scale(0.8); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .progress-glow {
+            filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
         }
 
         /* Audio Wave Animation bars */
@@ -390,12 +307,20 @@
                     </div>
                 </div>
 
-                <!-- Counter UI (BUBBLES) -->
-                <div id="counterUI" class="mt-auto w-full z-10 pb-4">
-                    <div id="bubbleGrid" class="bubble-grid">
-                        <!-- Bubbles injected by JS -->
+                <!-- Counter UI (Visible during repetition) -->
+                <div id="counterUI" class="mt-auto flex flex-col items-center justify-end pb-4 z-10">
+                    <div class="relative w-28 h-28 flex items-center justify-center mb-2 group">
+                        <svg class="absolute top-0 left-0 w-full h-full drop-shadow-lg" width="112" height="112" viewBox="0 0 120 120">
+                            <circle stroke="rgba(255,255,255,0.05)" stroke-width="6" fill="transparent" r="54" cx="60" cy="60" />
+                            <circle id="progressRing" class="progress-ring__circle" stroke="#fbbf24" stroke-width="6" fill="rgba(0,0,0,0.2)" r="54" cx="60" cy="60" stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round" />
+                        </svg>
+                        
+                        <div class="text-center relative select-none">
+                            <span id="counterDisplay" class="text-5xl font-bold text-slate-200 transition-colors duration-300 font-sans">0</span>
+                            <span class="text-[10px] text-slate-500 block uppercase tracking-wider mt-1 font-semibold">/ 21</span>
+                        </div>
                     </div>
-                    <p class="text-slate-500 text-center text-[10px] uppercase tracking-widest tap-hint mt-2">Tap screen to count</p>
+                    <p class="text-slate-500 text-[10px] uppercase tracking-widest tap-hint mt-2">Tap screen to count</p>
                 </div>
 
                 <!-- Audio Player UI (Visible during recitation) -->
@@ -510,29 +435,21 @@
             }
         }
 
-        // --- Audio Logic (Pop Sound) ---
-        function playPopSound() {
+        // --- Audio Logic (Click Sound) ---
+        function playClickSound() {
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            // Pop sound synthesis
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-
             oscillator.type = 'sine';
-            // Sweep frequency for a "pop" effect
-            oscillator.frequency.setValueAtTime(500, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-
-            // Envelope
-            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-
             oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.1);
+            oscillator.stop(audioCtx.currentTime + 0.05);
         }
 
         // --- Audio Logic (Recitation) ---
@@ -560,6 +477,9 @@
             // Update UI status
             document.getElementById('audioStatusText').textContent = `Playing Verse ${verseNum}...`;
             
+            // Highlight current verse logic could go here if text was split, 
+            // but we show full block.
+
             currentAudio = new Audio(url);
             
             currentAudio.onended = () => {
@@ -578,6 +498,7 @@
                 updateAudioUI(true);
             }).catch(e => {
                 console.error("Playback failed", e);
+                // might need user interaction if autoplay blocked
             });
         }
 
@@ -821,40 +742,6 @@
                 handleTap();
             }
         }
-        
-        // --- Bubble Logic ---
-        function initBubbleGrid() {
-            const grid = document.getElementById('bubbleGrid');
-            grid.innerHTML = '';
-            for (let i = 1; i <= TARGET_REPS; i++) {
-                const container = document.createElement('div');
-                container.className = 'bubble-container';
-                container.id = 'bubble-container-' + i;
-                
-                const placeholder = document.createElement('div');
-                placeholder.className = 'placeholder';
-                
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.innerText = i;
-                
-                container.appendChild(placeholder);
-                container.appendChild(bubble);
-                grid.appendChild(container);
-            }
-        }
-        
-        function updateBubbleState(count) {
-             // Loop through all bubbles and set state based on count
-             for (let i = 1; i <= TARGET_REPS; i++) {
-                 const container = document.getElementById('bubble-container-' + i);
-                 if (i <= count) {
-                     container.classList.add('popped');
-                 } else {
-                     container.classList.remove('popped');
-                 }
-             }
-        }
 
         function renderStep() {
             const step = sessionData.sequence[sessionData.currentStepIndex];
@@ -892,25 +779,44 @@
                 
                 document.getElementById('counterUI').classList.remove('hidden');
                 document.getElementById('audioUI').classList.add('hidden');
-                
-                // Reset bubbles for new step
                 sessionData.currentRepCount = 0;
-                initBubbleGrid();
+                updateCounterUI();
             }
         }
 
         function handleTap() {
             if (sessionData.currentRepCount < TARGET_REPS) {
                 sessionData.currentRepCount++;
-                updateBubbleState(sessionData.currentRepCount);
-                
-                playPopSound(); 
-                if (navigator.vibrate) navigator.vibrate(20);
-                
+                updateCounterUI();
+                playClickSound(); 
+                if (navigator.vibrate) navigator.vibrate(40);
                 if (sessionData.currentRepCount === TARGET_REPS) {
                     if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-                    setTimeout(() => { nextStep(); }, 600); 
+                    setTimeout(() => { nextStep(); }, 400); 
                 }
+            }
+        }
+
+        function updateCounterUI() {
+            const count = sessionData.currentRepCount;
+            document.getElementById('counterDisplay').textContent = count;
+            const circle = document.getElementById('progressRing');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (count / TARGET_REPS) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            const counterEl = document.getElementById('counterDisplay');
+            const circleEl = document.getElementById('progressRing');
+
+            if (count === TARGET_REPS) {
+                counterEl.classList.add('text-quran-gold', 'drop-shadow-lg');
+                circleEl.classList.add('progress-glow');
+                circleEl.setAttribute('stroke', '#fbbf24');
+            } else {
+                counterEl.classList.remove('text-quran-gold', 'drop-shadow-lg');
+                circleEl.classList.remove('progress-glow');
+                circleEl.setAttribute('stroke', '#fbbf24');
             }
         }
 
