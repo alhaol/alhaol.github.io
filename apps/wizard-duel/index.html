@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wizard Duel ⚡</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+  #ui {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 900px;
+    padding: 12px 0 8px;
+    gap: 20px;
+  }
+  .player-card {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 10px 14px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .player-card.p1 { border-color: rgba(100,180,255,0.4); }
+  .player-card.p2 { border-color: rgba(255,100,100,0.4); }
+  .player-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .p1 .player-name { color: #64b4ff; }
+  .p2 .player-name { color: #ff6464; }
+  .controls-hint {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .hearts {
+    font-size: 20px;
+    letter-spacing: 2px;
+    min-height: 24px;
+  }
+  #score-box {
+    text-align: center;
+    min-width: 120px;
+  }
+  #score-box h1 {
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  #score-display {
+    font-size: 36px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 8px;
+  }
+  canvas {
+    display: block;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 60px rgba(80, 40, 160, 0.4);
+  }
+  #overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.85);
+    z-index: 10;
+  }
+  #overlay h2 {
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  #overlay h1 {
+    font-size: 52px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    text-shadow: 0 0 30px currentColor;
+  }
+  #overlay .subtitle {
+    font-size: 16px;
+    color: #aaa;
+    margin-bottom: 32px;
+  }
+  #overlay button {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 36px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.5);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  #overlay button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 28px rgba(124,58,237,0.7);
+  }
+  #round-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 30px #fff;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 9;
+    white-space: nowrap;
+  }
+  #bottom-tip {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div id="ui">
+  <div class="player-card p1">
+    <div class="player-name">⚡ PLAYER 1</div>
+    <div class="controls-hint">WASD move · F shoot · W/↑ jump</div>
+    <div class="hearts" id="hearts1">❤️❤️❤️❤️❤️</div>
+  </div>
+  <div id="score-box">
+    <h1>Wins</h1>
+    <div id="score-display">0 — 0</div>
+  </div>
+  <div class="player-card p2" style="text-align:right">
+    <div class="player-name">🔥 PLAYER 2</div>
+    <div class="controls-hint">shoot L · jump ↑ · move ←→</div>
+    <div class="hearts" id="hearts2">❤️❤️❤️❤️❤️</div>
+  </div>
+</div>
+
+<canvas id="c" width="900" height="500"></canvas>
+<div id="bottom-tip">First to win 3 rounds claims the crown 👑 &nbsp;|&nbsp; Watch out for monsters — they attack BOTH players!</div>
+<div style="margin-top:6px;font-size:11px;color:#333;letter-spacing:1px;">Made by Ahmad AbuAlhaol</div>
+
+<div id="overlay">
+  <h2>⚔️ Wizard Duel ⚔️</h2>
+  <h1 style="color:#a78bfa">READY?</h1>
+  <div class="subtitle">Two wizards. One arena. Monsters everywhere. No mercy.</div>
+  <button onclick="startGame()">BEGIN DUEL</button>
+</div>
+
+<div id="round-banner"></div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 900, H = 500;
+
+// ─── Constants ───────────────────────────────────────────────
+const GRAVITY = 0.55;
+const FRICTION = 0.82;
+const MAX_HP = 5;
+const WIN_ROUNDS = 3;
+const FIREBALL_SPEED = 9;
+const SHOOT_COOLDOWN = 400; // ms
+const KNOCKBACK = 7;
+
+// ─── State ───────────────────────────────────────────────────
+let keys = {};
+let particles = [];
+let fireballs = [];
+let monsters = [];
+let p1, p2;
+let scores = [0, 0];
+let gameRunning = false;
+let roundPause = false;
+let monsterSpawnTimer = 0;
+let roundTime = 0;
+
+// ─── Monster types ───────────────────────────────────────────
+const MONSTER_TYPES = [
+  {
+    name: 'Skull',
+    color: '#c0c0c0', glow: '#ffffff',
+    w: 32, h: 32, hp: 2, speed: 1.8, bouncy: false,
+    shootInterval: 0, // melee only
+    draw(ctx, m) {
+      const { x, y, w, h, isHurt } = m;
+      const t = Date.now() * 0.003;
+      ctx.save();
+      ctx.translate(x + w/2, y + h/2);
+      ctx.rotate(Math.sin(t + m.seed) * 0.15);
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = isHurt ? 20 : 8;
+      // skull head
+      ctx.fillStyle = isHurt ? '#ff4444' : '#d0d0d0';
+      ctx.beginPath();
+      ctx.ellipse(0, -2, w/2, h/2 - 2, 0, 0, Math.PI*2);
+      ctx.fill();
+      // jaw
+      ctx.fillStyle = isHurt ? '#cc2222' : '#b0b0b0';
+      ctx.fillRect(-w/2 + 6, h/2 - 10, w - 12, 8);
+      // teeth
+      ctx.fillStyle = '#fff';
+      for (let t2 = 0; t2 < 3; t2++) {
+        ctx.fillRect(-8 + t2 * 8, h/2 - 10, 5, 5);
+      }
+      // eye sockets
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.ellipse(-7, -4, 6, 7, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(7, -4, 6, 7, 0, 0, Math.PI*2); ctx.fill();
+      // red glowing pupils
+      ctx.fillStyle = '#ff2222';
+      ctx.shadowColor = '#ff0000';
+      ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(-7, -4, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(7, -4, 3, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  },
+  {
+    name: 'Bat',
+    color: '#8b5cf6', glow: '#a78bfa',
+    w: 40, h: 28, hp: 1, speed: 2.8, bouncy: true,
+    shootInterval: 0,
+    draw(ctx, m) {
+      const { x, y, w, h, isHurt } = m;
+      const flap = Math.sin(Date.now() * 0.015 + m.seed) * 0.5;
+      ctx.save();
+      ctx.translate(x + w/2, y + h/2);
+      ctx.shadowColor = '#a78bfa';
+      ctx.shadowBlur = isHurt ? 24 : 10;
+      ctx.fillStyle = isHurt ? '#ff4444' : '#6d28d9';
+      // left wing
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-w/2, -h/2 - flap*12, -w/2 - 4, h/4);
+      ctx.quadraticCurveTo(-w/4, h/4, 0, 0);
+      ctx.fill();
+      // right wing
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(w/2, -h/2 - flap*12, w/2 + 4, h/4);
+      ctx.quadraticCurveTo(w/4, h/4, 0, 0);
+      ctx.fill();
+      // body
+      ctx.fillStyle = isHurt ? '#ff6666' : '#4c1d95';
+      ctx.beginPath();
+      ctx.ellipse(0, 2, 9, 11, 0, 0, Math.PI*2);
+      ctx.fill();
+      // eyes
+      ctx.fillStyle = '#f87171';
+      ctx.shadowColor = '#ff0000'; ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(-4, -2, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(4, -2, 3, 0, Math.PI*2); ctx.fill();
+      // fangs
+      ctx.fillStyle = '#fff'; ctx.shadowBlur = 0;
+      ctx.fillRect(-5, 8, 3, 5);
+      ctx.fillRect(2, 8, 3, 5);
+      ctx.restore();
+    }
+  },
+  {
+    name: 'Slime',
+    color: '#22c55e', glow: '#4ade80',
+    w: 38, h: 30, hp: 3, speed: 1.2, bouncy: false,
+    shootInterval: 240, // spits acid
+    draw(ctx, m) {
+      const { x, y, w, h, isHurt } = m;
+      const bob = Math.sin(Date.now() * 0.005 + m.seed) * 3;
+      const squish = Math.cos(Date.now() * 0.01 + m.seed) * 0.08;
+      ctx.save();
+      ctx.translate(x + w/2, y + h/2 + bob);
+      ctx.scale(1 + squish, 1 - squish);
+      ctx.shadowColor = '#4ade80';
+      ctx.shadowBlur = isHurt ? 24 : 12;
+      ctx.fillStyle = isHurt ? '#ff4444' : '#16a34a';
+      ctx.beginPath();
+      ctx.ellipse(0, 4, w/2, h/2, 0, 0, Math.PI*2);
+      ctx.fill();
+      // shine
+      ctx.fillStyle = 'rgba(134,239,172,0.5)';
+      ctx.beginPath();
+      ctx.ellipse(-6, -2, 7, 5, -0.4, 0, Math.PI*2);
+      ctx.fill();
+      // eyes
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.ellipse(-8, -2, 5, 6, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(8, -2, 5, 6, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#000';
+      ctx.beginPath(); ctx.arc(-8, 0, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, 0, 3, 0, Math.PI*2); ctx.fill();
+      // smile
+      ctx.strokeStyle = '#166534';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 6, 8, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+      ctx.restore();
+    }
+  },
+  {
+    name: 'Ghost',
+    color: '#e0e7ff', glow: '#c7d2fe',
+    w: 36, h: 44, hp: 2, speed: 2.0, bouncy: false,
+    shootInterval: 180, // haunts players
+    flying: true,
+    draw(ctx, m) {
+      const { x, y, w, h, isHurt } = m;
+      const bob = Math.sin(Date.now() * 0.004 + m.seed) * 5;
+      ctx.save();
+      ctx.translate(x + w/2, y + h/2 + bob);
+      ctx.globalAlpha = 0.82;
+      ctx.shadowColor = '#c7d2fe';
+      ctx.shadowBlur = isHurt ? 30 : 16;
+      ctx.fillStyle = isHurt ? 'rgba(255,100,100,0.8)' : 'rgba(224,231,255,0.85)';
+      // body
+      ctx.beginPath();
+      ctx.arc(0, -h/4, w/2, Math.PI, 0);
+      ctx.lineTo(w/2, h/4);
+      // wavy bottom
+      const segs = 4;
+      for (let s = 0; s < segs; s++) {
+        const px = w/2 - (w/segs) * (s + 0.5);
+        const dir = s % 2 === 0 ? 1 : -1;
+        ctx.quadraticCurveTo(px + (w/segs)*0.3, h/4 + dir*10, px - (w/segs)*0.3, h/4);
+      }
+      ctx.lineTo(-w/2, h/4);
+      ctx.closePath();
+      ctx.fill();
+      // eyes
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#312e81';
+      ctx.beginPath(); ctx.ellipse(-9, -h/4, 5, 7, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(9, -h/4, 5, 7, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#6366f1';
+      ctx.shadowColor = '#818cf8'; ctx.shadowBlur = 6;
+      ctx.beginPath(); ctx.arc(-9, -h/4, 2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(9, -h/4, 2, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  },
+];
+
+// ─── Platforms ───────────────────────────────────────────────
+const platforms = [
+  { x: 0,   y: 460, w: 900, h: 40 },   // floor
+  { x: 120, y: 330, w: 180, h: 18 },   // left platform
+  { x: 600, y: 330, w: 180, h: 18 },   // right platform
+  { x: 355, y: 230, w: 190, h: 18 },   // center top
+  { x: 50,  y: 200, w: 100, h: 18 },   // far left
+  { x: 750, y: 200, w: 100, h: 18 },   // far right
+];
+
+// ─── Player factory ──────────────────────────────────────────
+function makePlayer(x, color, glowColor, controls, facing) {
+  return {
+    x, y: 380, w: 36, h: 48,
+    vx: 0, vy: 0,
+    onGround: false,
+    hp: MAX_HP,
+    color, glowColor,
+    controls, facing,
+    lastShot: 0,
+    jumpCount: 0,
+    isHurt: 0,
+    casting: 0,
+    name: color === '#64b4ff' ? 'P1' : 'P2',
+  };
+}
+
+function resetPlayers() {
+  p1 = makePlayer(120, '#64b4ff', '#3b82f6',
+    { left: 'KeyA', right: 'KeyD', up: 'KeyW', shoot: 'KeyF' }, 1);
+  p2 = makePlayer(740, '#ff7070', '#ef4444',
+    { left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', shoot: 'KeyL' }, -1);
+  fireballs = [];
+  particles = [];
+  monsters = [];
+  monsterSpawnTimer = 180; // first spawn after 3s
+  roundTime = 0;
+}
+
+// ─── Monster spawning & logic ────────────────────────────────
+function spawnMonster() {
+  const typeIdx = Math.floor(Math.random() * MONSTER_TYPES.length);
+  const type = MONSTER_TYPES[typeIdx];
+  const side = Math.random() < 0.5 ? 0 : 1;
+  const x = side === 0 ? -type.w - 10 : W + 10;
+  monsters.push({
+    ...type,
+    x, y: 400,
+    vx: 0, vy: 0,
+    onGround: false,
+    jumpCount: 0,
+    isHurt: 0,
+    maxHp: type.hp,
+    hp: type.hp,
+    seed: Math.random() * 10,
+    shootTimer: Math.floor(Math.random() * (type.shootInterval || 999)),
+    facing: side === 0 ? 1 : -1,
+    wobble: 0,
+    typeIdx,
+  });
+}
+
+function updateMonsters() {
+  roundTime++;
+  monsterSpawnTimer--;
+  // spawn rate increases as round goes on, max 4 monsters
+  if (monsterSpawnTimer <= 0 && monsters.length < 4) {
+    spawnMonster();
+    const interval = Math.max(180, 360 - Math.floor(roundTime / 120) * 20);
+    monsterSpawnTimer = interval + Math.floor(Math.random() * 60);
+  }
+
+  for (let i = monsters.length - 1; i >= 0; i--) {
+    const m = monsters[i];
+
+    // choose nearest player to chase
+    const d1 = Math.abs(m.x - p1.x);
+    const d2 = Math.abs(m.x - p2.x);
+    const target = d1 < d2 ? p1 : p2;
+    const dx = (target.x + target.w/2) - (m.x + m.w/2);
+    const dy = (target.y + target.h/2) - (m.y + m.h/2);
+
+    if (m.flying || MONSTER_TYPES[m.typeIdx].bouncy) {
+      // flying/bat: move freely toward player
+      m.vx += Math.sign(dx) * 0.25;
+      m.vy += Math.sign(dy) * 0.18;
+      m.vx *= 0.92;
+      m.vy *= 0.92;
+      const spd = Math.sqrt(m.vx*m.vx + m.vy*m.vy);
+      if (spd > m.speed) { m.vx = m.vx/spd*m.speed; m.vy = m.vy/spd*m.speed; }
+    } else {
+      // ground: walk toward player
+      m.vx += Math.sign(dx) * 0.35;
+      m.vx *= 0.88;
+      if (Math.abs(m.vx) > m.speed) m.vx = Math.sign(m.vx) * m.speed;
+      // jump to reach player on higher platform
+      if (m.onGround && dy < -50 && Math.random() < 0.02) {
+        m.vy = -12;
+        m.jumpCount = 1;
+      }
+      m.vy += GRAVITY;
+    }
+
+    m.facing = m.vx >= 0 ? 1 : -1;
+    m.x += m.vx;
+    m.y += m.vy;
+
+    if (!m.flying) {
+      m.onGround = false;
+      for (const pl of platforms) {
+        if (m.x + m.w > pl.x && m.x < pl.x + pl.w) {
+          if (m.y + m.h > pl.y && m.y + m.h < pl.y + pl.h + 16 && m.vy >= 0) {
+            m.y = pl.y - m.h;
+            m.vy = 0;
+            m.onGround = true;
+            m.jumpCount = 0;
+          }
+        }
+      }
+    }
+
+    // walls
+    if (m.x < -60) m.x = -60;
+    if (m.x + m.w > W + 60) m.x = W + 60 - m.w;
+
+    // fell off
+    if (m.y > H + 80) {
+      monsters.splice(i, 1);
+      continue;
+    }
+
+    if (m.isHurt > 0) m.isHurt--;
+
+    // shoot acid/haunt projectile
+    if (m.shootInterval > 0) {
+      m.shootTimer--;
+      if (m.shootTimer <= 0) {
+        m.shootTimer = m.shootInterval + Math.floor(Math.random() * 60);
+        const ang = Math.atan2(dy, dx);
+        const spd2 = 4.5;
+        fireballs.push({
+          x: m.x + m.w/2, y: m.y + m.h/2,
+          vx: Math.cos(ang) * spd2,
+          vy: Math.sin(ang) * spd2,
+          owner: m,   // monster-owned bolt
+          color: m.color, glow: m.glow,
+          life: 130, r: 8,
+          isMonsterBolt: true,
+        });
+      }
+    }
+
+    // melee contact damage
+    for (const p of [p1, p2]) {
+      if (p.isHurt === 0 && rectsOverlap(m.x, m.y, m.w, m.h, p.x, p.y, p.w, p.h)) {
+        const dir = p.x > m.x ? 1 : -1;
+        takeDamage(p, 1, dir);
+        m.vx = -dir * 3; // bounce back
+      }
+    }
+  }
+}
+
+function damageMonster(m, idx) {
+  m.hp--;
+  m.isHurt = 30;
+  spawnParticles(m.x + m.w/2, m.y + m.h/2, m.color, 10, 'hit');
+  screenShake(3);
+  if (m.hp <= 0) {
+    hitEffect(m.x + m.w/2, m.y + m.h/2, m.color);
+    spawnParticles(m.x + m.w/2, m.y + m.h/2, '#fbbf24', 16, 'hit');
+    monsters.splice(idx, 1);
+  }
+}
+
+// ─── Input ───────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (!keys[e.code]) {
+    keys[e.code] = true;
+    if (gameRunning && !roundPause) handlePress(e.code);
+  }
+  // prevent scroll
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
+});
+document.addEventListener('keyup', e => { keys[e.code] = false; });
+
+function handlePress(code) {
+  for (const p of [p1, p2]) {
+    if (code === p.controls.up && p.jumpCount < 2) {
+      p.vy = p.jumpCount === 0 ? -13 : -11;
+      p.jumpCount++;
+      spawnParticles(p.x + p.w/2, p.y + p.h, p.color, 6, 'jump');
+    }
+    if (code === p.controls.shoot) tryShoot(p);
+  }
+}
+
+function tryShoot(p) {
+  const now = Date.now();
+  if (now - p.lastShot < SHOOT_COOLDOWN) return;
+  p.lastShot = now;
+  p.casting = 12;
+
+  const dir = p.facing;
+  fireballs.push({
+    x: p.x + (dir === 1 ? p.w : 0),
+    y: p.y + p.h/2 - 8,
+    vx: FIREBALL_SPEED * dir,
+    vy: (Math.random() - 0.5) * 0.5,
+    owner: p,
+    color: p.color,
+    glow: p.glowColor,
+    life: 120,
+    r: 9,
+  });
+  spawnParticles(p.x + p.w/2, p.y + p.h/2, p.color, 8, 'shoot');
+}
+
+// ─── Physics ─────────────────────────────────────────────────
+function updatePlayer(p) {
+  if (keys[p.controls.left])  { p.vx -= 1.2; p.facing = -1; }
+  if (keys[p.controls.right]) { p.vx += 1.2; p.facing =  1; }
+
+  p.vx *= FRICTION;
+  p.vy += GRAVITY;
+  p.x += p.vx;
+  p.y += p.vy;
+
+  p.onGround = false;
+  for (const pl of platforms) {
+    if (p.x + p.w > pl.x && p.x < pl.x + pl.w) {
+      if (p.y + p.h > pl.y && p.y + p.h < pl.y + pl.h + 16 && p.vy >= 0) {
+        p.y = pl.y - p.h;
+        p.vy = 0;
+        p.onGround = true;
+        p.jumpCount = 0;
+      }
+    }
+  }
+
+  // walls
+  if (p.x < 0) { p.x = 0; p.vx = 0; }
+  if (p.x + p.w > W) { p.x = W - p.w; p.vx = 0; }
+
+  // fell off bottom
+  if (p.y > H + 100) {
+    p.y = 380; p.x = p === p1 ? 120 : 740;
+    p.vx = 0; p.vy = 0;
+    takeDamage(p, 1, 0);
+  }
+
+  if (p.isHurt > 0) p.isHurt--;
+  if (p.casting > 0) p.casting--;
+}
+
+function updateFireballs() {
+  for (let i = fireballs.length - 1; i >= 0; i--) {
+    const fb = fireballs[i];
+    fb.x += fb.vx;
+    fb.y += fb.vy;
+    fb.vy += GRAVITY * 0.08;
+    fb.life--;
+
+    // trail particles
+    if (Math.random() < 0.6) {
+      particles.push({
+        x: fb.x, y: fb.y,
+        vx: (Math.random()-0.5)*2 - fb.vx*0.2,
+        vy: (Math.random()-0.5)*2,
+        life: 18 + Math.random()*12,
+        maxLife: 30,
+        color: fb.color,
+        r: 3 + Math.random()*3,
+        type: 'trail'
+      });
+    }
+
+    // monster bolts hit players
+    if (fb.isMonsterBolt) {
+      let hitPlayer = false;
+      for (const p of [p1, p2]) {
+        if (rectsOverlap(fb.x - fb.r, fb.y - fb.r, fb.r*2, fb.r*2, p.x, p.y, p.w, p.h)) {
+          hitEffect(fb.x, fb.y, fb.color);
+          takeDamage(p, 1, fb.vx > 0 ? 1 : -1);
+          fireballs.splice(i, 1);
+          hitPlayer = true; break;
+        }
+      }
+      if (hitPlayer) continue;
+    } else {
+      // player fireballs hit target player
+      const target = fb.owner === p1 ? p2 : p1;
+      if (rectsOverlap(fb.x - fb.r, fb.y - fb.r, fb.r*2, fb.r*2,
+                       target.x, target.y, target.w, target.h)) {
+        hitEffect(fb.x, fb.y, fb.color);
+        takeDamage(target, 1, fb.vx > 0 ? 1 : -1);
+        fireballs.splice(i, 1);
+        continue;
+      }
+      // player fireballs hit monsters
+      let hitMonster = false;
+      for (let mi = monsters.length - 1; mi >= 0; mi--) {
+        const m = monsters[mi];
+        if (m.isHurt > 0) continue;
+        if (rectsOverlap(fb.x - fb.r, fb.y - fb.r, fb.r*2, fb.r*2, m.x, m.y, m.w, m.h)) {
+          hitEffect(fb.x, fb.y, fb.color);
+          damageMonster(m, mi);
+          fireballs.splice(i, 1);
+          hitMonster = true; break;
+        }
+      }
+      if (hitMonster) continue;
+    }
+
+    // hit platform
+    let hitWall = false;
+    for (const pl of platforms) {
+      if (fb.x > pl.x && fb.x < pl.x + pl.w && fb.y > pl.y && fb.y < pl.y + pl.h + 4) {
+        hitEffect(fb.x, fb.y, fb.color);
+        fireballs.splice(i, 1);
+        hitWall = true; break;
+      }
+    }
+    if (hitWall) continue;
+
+    // out of bounds
+    if (fb.x < -20 || fb.x > W + 20 || fb.y > H + 20 || fb.life <= 0) {
+      fireballs.splice(i, 1);
+    }
+  }
+}
+
+function takeDamage(p, amount, dir) {
+  if (p.isHurt > 0) return;
+  p.hp -= amount;
+  p.isHurt = 40;
+  p.vx += KNOCKBACK * dir;
+  p.vy -= 3;
+  screenShake(6);
+  updateHearts();
+  if (p.hp <= 0) endRound();
+}
+
+function rectsOverlap(ax,ay,aw,ah, bx,by,bw,bh) {
+  return ax < bx+bw && ax+aw > bx && ay < by+bh && ay+ah > by;
+}
+
+// ─── Particles ───────────────────────────────────────────────
+function spawnParticles(x, y, color, n, type) {
+  for (let i = 0; i < n; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1.5 + Math.random() * 4;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      life: 25 + Math.random() * 20,
+      maxLife: 45,
+      color,
+      r: 3 + Math.random() * 4,
+      type
+    });
+  }
+}
+
+function hitEffect(x, y, color) {
+  spawnParticles(x, y, color, 18, 'hit');
+  spawnParticles(x, y, '#ffffff', 8, 'hit');
+  screenShake(4);
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.15;
+    p.vx *= 0.92;
+    p.life--;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+// ─── Screen shake ────────────────────────────────────────────
+let shakeAmt = 0;
+function screenShake(amt) { shakeAmt = Math.max(shakeAmt, amt); }
+
+// ─── Drawing ─────────────────────────────────────────────────
+function drawBackground() {
+  // sky gradient
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0, '#0a0820');
+  grad.addColorStop(1, '#1a0a30');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // stars
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  for (let i = 0; i < 80; i++) {
+    const sx = ((i * 137 + 50) % W);
+    const sy = ((i * 89 + 20) % (H * 0.7));
+    const sr = 0.5 + (i % 3) * 0.5;
+    ctx.beginPath();
+    ctx.arc(sx, sy, sr, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function drawPlatforms() {
+  for (const pl of platforms) {
+    // glow
+    ctx.shadowColor = '#7c3aed';
+    ctx.shadowBlur = 12;
+    const g = ctx.createLinearGradient(pl.x, pl.y, pl.x, pl.y + pl.h);
+    g.addColorStop(0, '#5b21b6');
+    g.addColorStop(1, '#3b0764');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.roundRect(pl.x, pl.y, pl.w, pl.h, 6);
+    ctx.fill();
+
+    // top highlight
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(167,139,250,0.4)';
+    ctx.fillRect(pl.x + 4, pl.y, pl.w - 8, 2);
+    ctx.shadowBlur = 0;
+  }
+  ctx.shadowBlur = 0;
+}
+
+function drawWizard(p) {
+  const { x, y, w, h, color, glowColor, isHurt, facing, casting } = p;
+  const cx = x + w/2, cy = y;
+  const flicker = isHurt > 0 && Math.floor(Date.now()/60) % 2 === 0;
+  if (flicker) return;
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  if (facing === -1) ctx.scale(-1, 1);
+
+  const alpha = 1;
+  ctx.globalAlpha = alpha;
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = casting > 0 ? 30 : 12;
+
+  // robe
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(-w/2 + 2, h);
+  ctx.lineTo(-w/2 + 2, h*0.35);
+  ctx.quadraticCurveTo(-w/2, h*0.2, 0, h*0.15);
+  ctx.quadraticCurveTo(w/2, h*0.2, w/2 - 2, h*0.35);
+  ctx.lineTo(w/2 - 2, h);
+  ctx.closePath();
+  ctx.fill();
+
+  // robe trim
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.fillRect(-w/2 + 2, h * 0.35, w - 4, 3);
+
+  // hat body
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(-w/2 + 2, h*0.35);
+  ctx.lineTo(-w/2 + 6, 0);
+  ctx.lineTo(w/2 - 6, 0);
+  ctx.lineTo(w/2 - 2, h*0.35);
+  ctx.closePath();
+  ctx.fill();
+
+  // hat brim
+  ctx.beginPath();
+  ctx.ellipse(0, 0, w/2 + 2, 5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // hat tip
+  ctx.beginPath();
+  ctx.moveTo(-4, -2);
+  ctx.lineTo(4, -2);
+  ctx.lineTo(1, -h*0.4);
+  ctx.lineTo(-1, -h*0.4);
+  ctx.closePath();
+  ctx.fill();
+
+  // star on hat
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = '#fbbf24';
+  drawStar(ctx, 0, -h*0.2, 5, 5, 2.5);
+
+  // face
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#fde68a';
+  ctx.beginPath();
+  ctx.ellipse(2, h*0.23, 8, 9, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // eyes
+  ctx.fillStyle = '#1e1b4b';
+  ctx.beginPath(); ctx.arc(0, h*0.20, 2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(5, h*0.20, 2, 0, Math.PI*2); ctx.fill();
+
+  // casting glow hands
+  if (casting > 0) {
+    ctx.globalAlpha = casting / 12;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(w/2, h*0.5, 8, 0, Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.restore();
+}
+
+function drawStar(ctx, cx, cy, spikes, outerR, innerR) {
+  ctx.beginPath();
+  let rot = Math.PI / 2 * 3;
+  const step = Math.PI / spikes;
+  ctx.moveTo(cx, cy - outerR);
+  for (let i = 0; i < spikes; i++) {
+    ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+    rot += step;
+    ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+    rot += step;
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawFireball(fb) {
+  const pulse = 1 + Math.sin(Date.now() * 0.02) * 0.15;
+  ctx.save();
+  ctx.shadowColor = fb.glow;
+  ctx.shadowBlur = 20;
+  const grad = ctx.createRadialGradient(fb.x, fb.y, 0, fb.x, fb.y, fb.r * pulse);
+  grad.addColorStop(0, '#ffffff');
+  grad.addColorStop(0.3, fb.color);
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(fb.x, fb.y, fb.r * pulse, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawParticle(p) {
+  const t = p.life / p.maxLife;
+  ctx.globalAlpha = t * 0.85;
+  ctx.fillStyle = p.color;
+  ctx.shadowColor = p.color;
+  ctx.shadowBlur = 6;
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, p.r * t, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// ─── HUD hearts ──────────────────────────────────────────────
+function updateHearts() {
+  document.getElementById('hearts1').textContent =
+    '❤️'.repeat(Math.max(0, p1.hp)) + '🖤'.repeat(Math.max(0, MAX_HP - p1.hp));
+  document.getElementById('hearts2').textContent =
+    '❤️'.repeat(Math.max(0, p2.hp)) + '🖤'.repeat(Math.max(0, MAX_HP - p2.hp));
+}
+
+function updateScoreDisplay() {
+  document.getElementById('score-display').textContent = `${scores[0]} — ${scores[1]}`;
+}
+
+// ─── Round/Game logic ────────────────────────────────────────
+function endRound() {
+  roundPause = true;
+  const winner = p1.hp <= 0 ? p2 : p1;
+  const winnerIdx = winner === p1 ? 0 : 1;
+  scores[winnerIdx]++;
+  updateScoreDisplay();
+
+  const banner = document.getElementById('round-banner');
+  banner.style.color = winner.color;
+  banner.style.textShadow = `0 0 30px ${winner.glow}`;
+
+  if (scores[winnerIdx] >= WIN_ROUNDS) {
+    showWinner(winnerIdx + 1, winner.color);
+    return;
+  }
+
+  banner.textContent = `Player ${winnerIdx + 1} wins the round!`;
+  banner.style.opacity = '1';
+  setTimeout(() => {
+    banner.style.transition = 'opacity 0.5s';
+    banner.style.opacity = '0';
+    setTimeout(() => {
+      banner.style.transition = '';
+      resetPlayers();
+      updateHearts();
+      roundPause = false;
+    }, 600);
+  }, 2000);
+}
+
+function showWinner(playerNum, color) {
+  gameRunning = false;
+  const ov = document.getElementById('overlay');
+  ov.innerHTML = `
+    <h2>🏆 Game Over 🏆</h2>
+    <h1 style="color:${color}">PLAYER ${playerNum} WINS!</h1>
+    <div class="subtitle">Champion of the arena!</div>
+    <button onclick="startGame()">PLAY AGAIN</button>
+  `;
+  ov.style.display = 'flex';
+}
+
+function startGame() {
+  scores = [0, 0];
+  updateScoreDisplay();
+  resetPlayers();
+  updateHearts();
+  roundPause = false;
+  gameRunning = true;
+  document.getElementById('overlay').style.display = 'none';
+  const banner = document.getElementById('round-banner');
+  banner.textContent = 'FIGHT!';
+  banner.style.color = '#fff';
+  banner.style.textShadow = '0 0 30px #fff';
+  banner.style.opacity = '1';
+  setTimeout(() => {
+    banner.style.transition = 'opacity 0.5s';
+    banner.style.opacity = '0';
+    setTimeout(() => { banner.style.transition = ''; }, 500);
+  }, 1200);
+}
+
+// ─── Main loop ───────────────────────────────────────────────
+let lastTime = 0;
+function loop(ts) {
+  requestAnimationFrame(loop);
+
+  const sx = shakeAmt > 0 ? (Math.random()-0.5)*shakeAmt : 0;
+  const sy = shakeAmt > 0 ? (Math.random()-0.5)*shakeAmt : 0;
+  shakeAmt *= 0.7;
+
+  ctx.save();
+  ctx.translate(sx, sy);
+
+  drawBackground();
+  drawPlatforms();
+
+  if (gameRunning && !roundPause) {
+    updatePlayer(p1);
+    updatePlayer(p2);
+    updateFireballs();
+    updateMonsters();
+  }
+
+  updateParticles();
+
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  for (const part of particles) drawParticle(part);
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+
+  for (const fb of fireballs) drawFireball(fb);
+  ctx.shadowBlur = 0;
+
+  if (gameRunning || roundPause) {
+    // draw monsters with HP bar
+    for (const m of monsters) {
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      m.draw(ctx, m);
+      // HP bar above monster
+      const bw = m.w + 8, bh = 5;
+      const bx = m.x + m.w/2 - bw/2, by = m.y - 12;
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = '#1f2937';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = m.color;
+      ctx.fillRect(bx, by, bw * (m.hp / m.maxHp), bh);
+      ctx.globalAlpha = 1;
+    }
+    ctx.shadowBlur = 0;
+    drawWizard(p1);
+    drawWizard(p2);
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
