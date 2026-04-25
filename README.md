@@ -48,7 +48,8 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
     ├── tasfeer-alsadi/ # Tafseer Al-Sadi — full 114-surah Arabic video series
     ├── tier-lists/     # Exercise tier-list video playlist (7 videos)
     ├── todo/           # TaskMaster Pro — focus-mode task manager
-    └── warmup/         # Warmup & core workout playlist (25 videos)
+    ├── warmup/         # Warmup & core workout playlist (25 videos)
+    └── wizard-duel/    # Wizard Duel — 2-player turn-based battle game with monsters
 ```
 
 ## Pages & Apps
@@ -75,6 +76,7 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 | Tier Lists | `/apps/tier-lists/` | Science-ranked exercise tier-list video playlist (7 videos) |
 | TaskMaster Pro | `/apps/todo/` | Focus-mode task manager with active-task hero view |
 | Warmup | `/apps/warmup/` | Daily warmup and core workout video playlist (25 videos) |
+| Wizard Duel | `/apps/wizard-duel/` | 2-player turn-based wizard battle game with monsters |
 
 ## Updating Content
 
