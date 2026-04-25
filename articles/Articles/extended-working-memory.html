@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extended Working Memory | alhaol.github.io</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #f9fafb; --text-main: #1f2937; --text-muted: #4b5563; --primary-color: #2563eb; --card-bg: #ffffff; --border-color: #e5e7eb; }
+        body.theme-cybersecurity { --bg-color: #050505; --text-main: #ffffff; --text-muted: #b3b3b3; --primary-color: #00ff41; --card-bg: #111111; --border-color: #333333; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .prose { color: var(--text-muted); } .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; transition: opacity 0.2s; }
+        .prose a:hover { opacity: 0.8; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .related-article-card a:hover { text-decoration: underline; }
+        .reference-list { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_04.png" alt="Extended Working Memory" class="hero-image">
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Architecture</span>
+                        <span class="category-badge category-engineering">Integration</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Extended Working Memory</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Model Context Protocol as External Cognition: Bridging Ephemeral and Persistent State</p>
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);"><span>Published: June 2, 2025</span><span class="mx-2">|</span><span>Reading Time: ~11 min</span></div>
+                </header>
+                <div class="prose prose-lg max-w-none">
+                    <h2>The Token Budget Bottleneck</h2>
+                    <p>A Claude model's context window is finite—100K tokens for Claude 3.5 Sonnet, 200K for Claude 3 Opus. Within that window, the model must hold:</p>
+                    <ul>
+                        <li>System instructions and task context</li>
+                        <li>Conversation history</li>
+                        <li>Current codebase context (read files, grep results)</li>
+                        <li>Project documentation</li>
+                        <li>Test outputs and error messages</li>
+                    </ul>
+                    <p>As a session grows, context fills up. The model must choose: either forget old context (losing continuity) or compress current context (losing fidelity). This is the fundamental tradeoff of attention-based models: depth of knowledge vs. token budget.</p>
+                    <blockquote>"The solution is not a bigger window—it's offloading knowledge to external systems where the model can fetch only what it needs, when it needs it."</blockquote>
+
+                    <h2>Model Context Protocol: The External Cognition Layer</h2>
+                    <p>The Model Context Protocol (MCP) is Anthropic's framework for connecting language models to external data sources and tools. Rather than embedding all context into the token budget, MCP lets the model:</p>
+                    <ul>
+                        <li><strong>Query external services:</strong> Ask a database for the schema of a specific table, not store the entire schema in context</li>
+                        <li><strong>Invoke specialized tools:</strong> Call a vector search service to retrieve semantically similar code examples</li>
+                        <li><strong>Access files on-demand:</strong> Read specific files from a knowledge base without pre-loading the entire base</li>
+                        <li><strong>Maintain persistent state:</strong> Store session context, decisions, and patterns in external memory without burning tokens</li>
+                    </ul>
+                    <p>This transforms the model from a single-shot reasoner to a multi-step agent. It doesn't "think harder"—it thinks smarter by delegating knowledge retrieval to systems optimized for that task.</p>
+
+                    <h2>Real-World MCP Architecture</h2>
+                    <p>A practical example: an engineering team using Claude Code for architecture design.</p>
+                    <h3>Without MCP (Token Bottleneck):</h3>
+                    <ul>
+                        <li>Load entire architecture documentation into context: 5K tokens</li>
+                        <li>Load all service schemas: 8K tokens</li>
+                        <li>Load deployment configs: 3K tokens</li>
+                        <li>Total: 16K tokens just for context, leaving 84K for reasoning and response</li>
+                    </ul>
+                    <h3>With MCP (Efficient Knowledge Access):</h3>
+                    <ul>
+                        <li>Register an MCP service for architecture docs (indexed, searchable)</li>
+                        <li>Register an MCP service for service discovery (queries live state)</li>
+                        <li>Register an MCP service for deployment metadata</li>
+                        <li>The model fetches only relevant information on-demand: "What services depend on the auth service?" queries the knowledge base instead of loading it all</li>
+                        <li>Token savings: 10K+ tokens freed for deeper reasoning</li>
+                    </ul>
+
+                    <h2>MCP in Practice: Integration Patterns</h2>
+                    <p>Three patterns emerge in production deployments:</p>
+                    <h3>Pattern 1: Knowledge Base as MCP Server</h3>
+                    <p>A vector database (Pinecone, Weaviate) indexed with company architecture, patterns, and case studies. The MCP server exposes semantic search: the model queries "examples of database migration patterns in our codebase" and gets back relevant code snippets, ranked by relevance.</p>
+                    <h3>Pattern 2: Live System State via MCP</h3>
+                    <p>An MCP server wrapping your observability stack (Prometheus, Datadog, New Relic). The model can ask: "What's the error rate in the checkout service over the last hour?" and get live data without pre-loading metrics into context.</p>
+                    <h3>Pattern 3: Persistent Session Memory via MCP</h3>
+                    <p>An MCP server wrapping a document store (Firebase, Postgres) where the model can persist decisions and patterns. Early sessions store architectural decisions; later sessions retrieve and reference them. This creates a form of institutional memory that survives session boundaries.</p>
+
+                    <h2>The Cognitive Science Angle: Situated Cognition</h2>
+                    <p>Vygotsky's concept of "scaffolding" in learning applies here: people learn better when knowledge is externalized and accessible, not internalized and hidden. MCP is scaffolding for AI: the model's reasoning is enhanced by externalizing knowledge to specialized systems, then accessing it on-demand.</p>
+                    <p>The model doesn't need to memorize your entire architecture—it needs to know how to ask good questions and interpret answers. MCP handles the retrieval; the model handles the reasoning.</p>
+
+                    <h2>Implementation: Building an MCP Service</h2>
+                    <p>A minimal MCP service (pseudocode):</p>
+                    <pre><code>class ArchitectureKnowledgeBase(MCPServer):
+    def __init__(self):
+        self.db = VectorDatabase("company-architecture")
+
+    def query(self, prompt: str) -> List[str]:
+        # Convert prompt to embedding
+        embedding = embed(prompt)
+        # Retrieve top-k relevant documents
+        results = self.db.search(embedding, k=5)
+        return [doc.text for doc in results]
+
+    # Claude Code can now call:
+    # "Search architecture KB for: database scaling patterns"
+    # and get back relevant code, docs, and case studies</code></pre>
+
+                    <h2>Conclusion: Knowledge Density vs. Token Budget</h2>
+                    <p>The future of AI-augmented engineering isn't bigger models or bigger context windows—it's smarter knowledge architectures. MCP servers separate the model's reasoning process from the knowledge base it reasons over, enabling the model to operate at peak efficiency while maintaining access to unlimited external knowledge.</p>
+                    <p>Teams that implement MCP early—treating their documentation, code, and operational state as queryable systems—will see compounding returns: their AI agents get faster, smarter, and more contextually aware with each session.</p>
+                </div>
+            </div>
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Context Management Hygiene</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Maintaining Inference Quality Through Hierarchical Memory</p>
+                        <a href="context-management-hygiene.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Paradigm Shift</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">How Terminal-Native Agentic AI Transforms the Engineer's Workspace</p>
+                        <a href="the-paradigm-shift.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References & Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Anthropic. (2024). <em>"Model Context Protocol Specification."</em> <a href="https://modelcontextprotocol.io" target="_blank">modelcontextprotocol.io</a></li>
+                    <li class="reference-item">Vygotsky, L. S. (1978). <em>"Mind in Society: The Development of Higher Psychological Processes."</em> Harvard University Press.</li>
+                    <li class="reference-item">Bahdanau, D., Cho, K., & Bengio, Y. (2014). <em>"Neural Machine Translation by Jointly Learning to Align and Translate."</em> arXiv:1409.0473. <a href="https://arxiv.org/abs/1409.0473" target="_blank">arXiv</a></li>
+                    <li class="reference-item">Vaswani, A., et al. (2017). <em>"Attention Is All You Need."</em> Proceedings of NIPS 2017. <a href="https://arxiv.org/abs/1706.03762" target="_blank">arXiv:1706.03762</a></li>
+                    <li class="reference-item">Weaviate. (2024). <em>"Vector Search Best Practices for Production."</em> <a href="https://weaviate.io/blog" target="_blank">weaviate.io</a></li>
+                    <li class="reference-item">Pinecone. (2024). <em>"Building Knowledge Bases with Vector Search."</em> <a href="https://www.pinecone.io/learn" target="_blank">pinecone.io/learn</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);"><div class="max-w-4xl mx-auto px-6 text-center text-sm"><p>&copy; 2026 alhaol.github.io</p></div></footer>
+    <script>const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity'; document.body.className = currentTheme;</script>
+</body>
+</html>

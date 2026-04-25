@@ -1,0 +1,3 @@
+Distributed cognition is the next frontier for developers. By running multiple autonomous AI instances in parallel, we can offload different aspects of a complex feature simultaneously. This parallel processing model maintains architectural coherence while drastically accelerating multi-stream workflows. It is a brilliant way to multiply your strategic output. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/parallel-cognitive-processes.html

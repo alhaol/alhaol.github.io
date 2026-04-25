@@ -1,0 +1,3 @@
+Maintaining flow state is the holy grail of software engineering. AI tools can sometimes disrupt this with constant micro-interruptions. Adopting a structured Research-Plan-Implement workflow—researching without coding, planning edge cases, then executing—preserves mental energy and sustains deep work sessions for hours instead of minutes. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/structured-rpi-workflows.html

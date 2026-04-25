@@ -1379,7 +1379,7 @@
 
         // Toggle Function
         window.toggleSection = function(id) {
-            const sections = ['about', 'experience', 'education', 'publications', 'updates'];
+            const sections = ['about', 'experience', 'education', 'publications', 'rdlog', 'updates'];
             
             sections.forEach(key => {
                 const content = document.getElementById(key);
@@ -1691,6 +1691,37 @@
                                         </div>
                                     </div>
                                     <div id="publications" class="grid gap-4 md:grid-cols-2 transition-all duration-300 overflow-hidden hidden">${publicationsHtml}</div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('rdlog')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('bookOpen', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Technical Articles</h2>
+                                        </div>
+                                        <div id="icon-rdlog" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="rdlog" class="transition-all duration-300 overflow-hidden hidden">
+                                        <p class="text-[var(--text-muted)] mb-6">A curated series exploring agentic AI, cognitive systems architecture, and advanced engineering practices. Research and implementation patterns developed through deep engagement with AI-augmented software development.</p>
+                                        <div class="grid gap-4 md:grid-cols-2 mb-6">
+                                            <a href="articles/Articles/the-trust-gradient.html" class="theme-card p-4 rounded-lg hover:shadow-lg transition-shadow group">
+                                                <h3 class="font-semibold mb-2 group-hover:text-[var(--primary-color)] transition-colors">The Trust Gradient</h3>
+                                                <p class="text-xs text-[var(--text-muted)] mb-3">Supervision Theory in Multi-Agent Systems</p>
+                                                <span class="text-xs text-[var(--primary-color)]">Sep 12, 2025</span>
+                                            </a>
+                                            <a href="articles/Articles/structured-rpi-workflows.html" class="theme-card p-4 rounded-lg hover:shadow-lg transition-shadow group">
+                                                <h3 class="font-semibold mb-2 group-hover:text-[var(--primary-color)] transition-colors">Structured RPI Workflows</h3>
+                                                <p class="text-xs text-[var(--text-muted)] mb-3">Research → Plan → Implement Pattern</p>
+                                                <span class="text-xs text-[var(--primary-color)]">Aug 25, 2025</span>
+                                            </a>
+                                        </div>
+                                        <a href="articles/" class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                                            View All 10 Articles
+                                            <span>${getIcon('arrowRight', 20)}</span>
+                                        </a>
+                                    </div>
                                 </section>
 
                                 <section>

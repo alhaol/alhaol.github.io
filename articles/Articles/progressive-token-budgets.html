@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progressive Token Budgets | alhaol.github.io</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #f9fafb; --text-main: #1f2937; --text-muted: #4b5563; --primary-color: #2563eb; --card-bg: #ffffff; --border-color: #e5e7eb; }
+        body.theme-cybersecurity { --bg-color: #050505; --text-main: #ffffff; --text-muted: #b3b3b3; --primary-color: #00ff41; --card-bg: #111111; --border-color: #333333; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .prose { color: var(--text-muted); } .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; transition: opacity 0.2s; }
+        .prose a:hover { opacity: 0.8; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .related-article-card a:hover { text-decoration: underline; }
+        .reference-list { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_08.png" alt="Progressive Token Budgets" class="hero-image">
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">Model Optimization</span>
+                        <span class="category-badge category-architecture">Economics</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Progressive Token Budgets</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">The Non-Linearity of Extended Thinking: When and How to Allocate Deep Compute for Complex Problems</p>
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);"><span>Published: August 8, 2025</span><span class="mx-2">|</span><span>Reading Time: ~12 min</span></div>
+                </header>
+                <div class="prose prose-lg max-w-none">
+                    <h2>The Cost-Accuracy Tradeoff</h2>
+                    <p>Claude's extended thinking feature allocates additional tokens to internal reasoning before generating an answer. More thinking tokens = deeper analysis, higher first-pass accuracy, fewer iterations needed. But there's a cost: compute time and API expense scale with thinking token allocation.</p>
+                    <p>The question: which problems deserve deep thinking, and how much thinking is "enough"?</p>
+                    <blockquote>"The secret to efficient AI use isn't always more compute—it's knowing which problems are worth thinking hard about."</blockquote>
+
+                    <h2>Understanding Token Allocation Strategies</h2>
+                    <p>Three categories of problems require different token budgets:</p>
+                    <h3>Category 1: Deterministic/Well-Defined Problems</h3>
+                    <p>Examples: code formatting, text summarization, template filling, data extraction.</p>
+                    <ul>
+                        <li>Expected accuracy: High, even at default token budget</li>
+                        <li>Problem: Variance is low. The answer is usually obvious.</li>
+                        <li>Token allocation: Minimal. Use default reasoning tokens.</li>
+                        <li>Cost efficiency: ~90% cheaper than extended thinking</li>
+                    </ul>
+                    <h3>Category 2: Moderately Complex Problems</h3>
+                    <p>Examples: code review, architectural suggestions, bug diagnosis, performance optimization ideas.</p>
+                    <ul>
+                        <li>Expected accuracy: Medium. Single-pass reasoning may miss edge cases.</li>
+                        <li>Problem: Variance is medium. Better thinking helps but isn't critical.</li>
+                        <li>Token allocation: Moderate. Allocate 10K–20K thinking tokens.</li>
+                        <li>Cost efficiency: Trade 2x cost for ~30% accuracy improvement</li>
+                    </ul>
+                    <h3>Category 3: Complex, Ambiguous Problems</h3>
+                    <p>Examples: architectural design from requirements, security threat modeling, large refactors, novel problem decomposition.</p>
+                    <ul>
+                        <li>Expected accuracy: Variable. Single-pass reasoning often generates suboptimal solutions.</li>
+                        <li>Problem: Variance is high. Better thinking dramatically improves outcomes.</li>
+                        <li>Token allocation: Aggressive. Allocate 40K–60K thinking tokens.</li>
+                        <li>Cost efficiency: Trade 4x cost for ~60% accuracy improvement and dramatic reduction in iteration cycles</li>
+                    </ul>
+
+                    <h2>The Non-Linearity Principle</h2>
+                    <p>Accuracy improvement doesn't scale linearly with thinking tokens. There's a characteristic curve:</p>
+                    <ul>
+                        <li><strong>0K–5K thinking tokens:</strong> Steep improvement. Each additional token helps significantly.</li>
+                        <li><strong>5K–25K thinking tokens:</strong> Moderate improvement. Diminishing returns start appearing.</li>
+                        <li><strong>25K–60K thinking tokens:</strong> Shallow improvement. Each token adds less incremental value.</li>
+                        <li><strong>60K+ thinking tokens:</strong> Flat. You're optimizing for the 1% edge case at high cost.</li>
+                    </ul>
+                    <p>The implication: there's a "sweet spot" for most problems (typically 20K–30K tokens for complex architectural problems). Beyond that, cost grows faster than accuracy benefit.</p>
+
+                    <h2>Decision Framework: When to Use Extended Thinking</h2>
+                    <p>Use this heuristic before allocating tokens:</p>
+                    <ol>
+                        <li><strong>Can I verify the answer easily?</strong> Yes → Use default tokens. (You'll catch errors quickly.)</li>
+                        <li><strong>Is the cost of being wrong high?</strong> Yes → Allocate extended thinking. (Better to pay for compute now than fix bugs later.)</li>
+                        <li><strong>Is the problem novel or ambiguous?</strong> Yes → Allocate extended thinking. (No shortcut heuristics available.)</li>
+                        <li><strong>Is the answer deterministic?</strong> Yes → Use default tokens. (No amount of thinking changes the answer.)</li>
+                    </ol>
+
+                    <h2>Real-World Examples with Token Budgets</h2>
+                    <h3>Example 1: Add a New API Endpoint</h3>
+                    <p><strong>Problem:</strong> "Add a new /reports endpoint that aggregates user activity from the last 30 days, caches results for 1 hour, and has rate-limiting."</p>
+                    <ul>
+                        <li><strong>Default tokens:</strong> The model generates a working endpoint. But it might not cache optimally or handle edge cases (concurrent cache writes, cache invalidation on data changes).</li>
+                        <li><strong>Extended thinking (20K tokens):</strong> The model explicitly reasons about cache coherence, race conditions, and cache-busting strategies. Higher quality first-pass implementation.</li>
+                        <li><strong>Recommendation:</strong> Use extended thinking. The cost of shipping a buggy caching layer (investigation + fixes + redeploy) is higher than 4x compute cost.</li>
+                    </ul>
+                    <h3>Example 2: Fix a Failing Test</h3>
+                    <p><strong>Problem:</strong> "This Jest test is flaky. It fails 30% of the time. Debug and fix."</p>
+                    <ul>
+                        <li><strong>Default tokens:</strong> The model reads the test, spots an obvious race condition, suggests a fix. Likely correct.</li>
+                        <li><strong>Extended thinking:</strong> The model spends extra tokens verifying the hypothesis, but the answer is the same. Wasted compute.</li>
+                        <li><strong>Recommendation:</strong> Use default tokens. The problem is straightforward; thinking doesn't help.</li>
+                    </ul>
+                    <h3>Example 3: Security Threat Modeling</h3>
+                    <p><strong>Problem:</strong> "We're building a payment service. What are the top 10 security threats specific to our architecture?"</p>
+                    <ul>
+                        <li><strong>Default tokens:</strong> Generic threats (SQL injection, XSS, CSRF). Missing architecture-specific risks (dual-write problems, idempotency key collisions, webhook replay attacks).</li>
+                        <li><strong>Extended thinking (40K tokens):</strong> Deep reasoning about your specific flows (payment capture, refunds, webhooks). Catches threat categories others miss.</li>
+                        <li><strong>Recommendation:</strong> Use extended thinking. The cost of a security breach far exceeds compute cost. This is a high-variance problem where thinking dramatically improves outcomes.</li>
+                    </ul>
+
+                    <h2>Cost Optimization: The Progressive Budget Strategy</h2>
+                    <p>Don't allocate all tokens upfront. Use a progressive strategy:</p>
+                    <ol>
+                        <li><strong>Attempt 1 (default tokens):</strong> Run the model with no extended thinking. Generate a solution.</li>
+                        <li><strong>Self-evaluation:</strong> Ask the model: "Rate your confidence in this solution on a scale of 1–10. What aspects feel uncertain?"</li>
+                        <li><strong>Conditional escalation:</strong> If confidence < 7 and the problem is high-stakes, re-run with 20K thinking tokens. Otherwise, accept the solution.</li>
+                        <li><strong>Cost result:</strong> 80% of problems run at default cost. 20% (the actually hard ones) get extended thinking. Overall efficiency is maximized.</li>
+                    </ol>
+
+                    <h2>The Dark Side: When Extended Thinking Fails</h2>
+                    <p>Extended thinking is not a silver bullet. Failure cases:</p>
+                    <ul>
+                        <li><strong>Garbage in, garbage out:</strong> If your prompt is unclear, more thinking just generates more elaborate confusion.</li>
+                        <li><strong>Hallucination at scale:</strong> More tokens can mean more opportunity to go wrong on unfamiliar territory (e.g., asking about internal systems the model doesn't know).</li>
+                        <li><strong>Over-optimization:</strong> The model thinks itself into a corner, over-engineering a simple solution.</li>
+                    </ul>
+                    <p>Guardrail: Use extended thinking only for well-scoped problems with clear success criteria. Avoid it for exploration or open-ended questions.</p>
+
+                    <h2>Conclusion: Thinking as a Resource</h2>
+                    <p>Treat thinking tokens like any other resource: allocate where impact is highest. Not every problem deserves extended thinking. But the problems that do—architectural decisions, security-critical designs, novel technical challenges—benefit disproportionately from deep reasoning.</p>
+                    <p>The future of AI-augmented engineering is not "more compute for everyone." It's "the right compute for the right problem." Learning to classify problems and allocate tokens accordingly is the path to both better quality and better economics.</p>
+                </div>
+            </div>
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Structured RPI Workflows</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Research → Plan → Implement Pattern</p>
+                        <a href="structured-rpi-workflows.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Trust Gradient</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Calibrating Autonomy to Risk and Confidence</p>
+                        <a href="the-trust-gradient.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References & Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Anthropic. (2024). <em>"Extended Thinking: Allocating Compute to Reasoning."</em> <a href="https://www.anthropic.com" target="_blank">anthropic.com</a></li>
+                    <li class="reference-item">Kahneman, D. (2011). <em>"Thinking, Fast and Slow."</em> Farrar, Straus and Giroux.</li>
+                    <li class="reference-item">Gilovich, T., Griffin, D., & Kahneman, D. (2002). <em>"Heuristics and Biases: The Psychology of Intuitive Judgment."</em> Cambridge University Press.</li>
+                    <li class="reference-item">Wei, J., et al. (2022). <em>"Chain-of-Thought Prompting Elicits Reasoning in Large Language Models."</em> arXiv:2201.11903. <a href="https://arxiv.org/abs/2201.11903" target="_blank">arXiv</a></li>
+                    <li class="reference-item">Anthropic. (2023). <em>"Constitutional AI: Harmlessness from AI Feedback."</em> arXiv:2212.08073. <a href="https://arxiv.org/abs/2212.08073" target="_blank">arXiv</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);"><div class="max-w-4xl mx-auto px-6 text-center text-sm"><p>&copy; 2026 alhaol.github.io</p></div></footer>
+    <script>const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity'; document.body.className = currentTheme;</script>
+</body>
+</html>

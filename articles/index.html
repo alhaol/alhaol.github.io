@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Articles | alhaol.github.io</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --header-bg-start: #0f172a;
+            --header-bg-end: #1e293b;
+        }
+
+        /* Cybersecurity theme (default) */
+        body.theme-cybersecurity {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --primary-color: #00ff41;
+            --secondary-color: #00cc33;
+            --card-bg: #111111;
+            --border-color: #333333;
+            --header-bg-start: #000000;
+            --header-bg-end: #0a0a0a;
+        }
+
+        /* AI theme */
+        body.theme-ai {
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #334155;
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .prose {
+            color: var(--text-main);
+        }
+
+        .prose h2 {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .prose h3 {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .prose p {
+            color: var(--text-muted);
+            line-height: 1.75;
+        }
+
+        .prose blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .prose a {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .prose a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+        }
+
+        .category-cognitive {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .category-engineering {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .category-architecture {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .category-workflow {
+            background-color: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .category-ai {
+            background-color: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+
+        .article-card {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .read-time {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .article-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s;
+        }
+
+        .article-link:hover {
+            gap: 0.75rem;
+        }
+
+        .published-date {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .article-card img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <header class="py-6 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="nav-link text-sm" style="color: white;">← Back to Portfolio</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold mb-4">Technical Articles</h1>
+            <p class="text-lg prose">A curated series exploring agentic AI, cognitive systems architecture, and advanced engineering practices. These articles document research and implementation patterns developed through deep engagement with AI-augmented software development.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 1. The Paradigm Shift -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_01.png" alt="The Paradigm Shift">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-engineering">Architecture</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">The Paradigm Shift</h3>
+                    <p class="text-sm mb-4">Beyond Autocomplete: How Terminal-Native Agentic AI Fundamentally Transforms the Senior Engineer's Workspace</p>
+                    <p class="text-sm prose mb-4 flex-grow">The transition from IDE autocomplete to agentic terminal workflows enables senior engineers to operate purely at the architectural abstraction layer, delegating implementation to capable AI systems.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">May 1, 2025</p>
+                            <p class="read-time">~12 min read</p>
+                        </div>
+                        <a href="Articles/the-paradigm-shift.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2. Cognitive Shortcuts -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_02.png" alt="Cognitive Shortcuts">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-cognitive">Cognitive Systems</span>
+                        <span class="category-badge category-workflow">Design</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Cognitive Shortcuts</h3>
+                    <p class="text-sm mb-4">How Declarative Interfaces Reduce Decision Fatigue in AI-Augmented Development</p>
+                    <p class="text-sm prose mb-4 flex-grow">Slash commands and encoded prompt patterns transform cognitive burden by abstracting imperative instruction sequences into declarative, composable outcomes.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">May 3, 2025</p>
+                            <p class="read-time">~10 min read</p>
+                        </div>
+                        <a href="Articles/cognitive-shortcuts.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3. Context Management Hygiene -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_03.png" alt="Context Management Hygiene">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-engineering">Engineering</span>
+                        <span class="category-badge category-architecture">Systems</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Context Management Hygiene</h3>
+                    <p class="text-sm mb-4">Maintaining Inference Quality Through Hierarchical Memory and Aggressive Context Boundaries</p>
+                    <p class="text-sm prose mb-4 flex-grow">Strategic use of CLAUDE.md files as persistent memory anchors combined with deliberate context window management preserves model reasoning quality across extended sessions.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">May 18, 2025</p>
+                            <p class="read-time">~11 min read</p>
+                        </div>
+                        <a href="Articles/context-management-hygiene.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4. Extended Working Memory -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_04.png" alt="Extended Working Memory">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-ai">AI Architecture</span>
+                        <span class="category-badge category-engineering">Integration</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Extended Working Memory</h3>
+                    <p class="text-sm mb-4">Model Context Protocol as External Cognition: Bridging Ephemeral and Persistent State</p>
+                    <p class="text-sm prose mb-4 flex-grow">MCP integrations act as extended cognitive substrates, offloading information retrieval and state management from the model's token budget to specialized external services.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">June 2, 2025</p>
+                            <p class="read-time">~11 min read</p>
+                        </div>
+                        <a href="Articles/extended-working-memory.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 5. Headless Automation -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_05.png" alt="Headless Automation">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-workflow">DevOps</span>
+                        <span class="category-badge category-ai">Automation</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Headless Automation</h3>
+                    <p class="text-sm mb-4">Zero Cognitive Overhead: Embedding LLMs in CI/CD Pipelines for Autonomous Code Maintenance</p>
+                    <p class="text-sm prose mb-4 flex-grow">LLM-powered CI/CD semantically resolves code quality flags, dependency updates, and breaking-change refactors without human intervention or local build cycles.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">June 20, 2025</p>
+                            <p class="read-time">~10 min read</p>
+                        </div>
+                        <a href="Articles/headless-automation.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 6. Multi-Agent Orchestration -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_06.png" alt="Multi-Agent Orchestration">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-ai">Agent Systems</span>
+                        <span class="category-badge category-architecture">Design</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Multi-Agent Orchestration</h3>
+                    <p class="text-sm mb-4">Ensemble Methods in Software Architecture: How Parallel Agent Synthesis Improves Design Quality</p>
+                    <p class="text-sm prose mb-4 flex-grow">Borrowing ensemble methods from machine learning, running multiple independent agents in parallel and synthesizing their outputs produces superior architectural decisions.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">July 5, 2025</p>
+                            <p class="read-time">~12 min read</p>
+                        </div>
+                        <a href="Articles/multi-agent-orchestration.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 7. Parallel Cognitive Processes -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_07.png" alt="Parallel Cognitive Processes">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-workflow">Workflow</span>
+                        <span class="category-badge category-engineering">DevTools</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Parallel Cognitive Processes</h3>
+                    <p class="text-sm mb-4">Distributed Cognition via Git Worktrees: How One Engineer Becomes a Force Multiplier</p>
+                    <p class="text-sm prose mb-4 flex-grow">Git worktrees combined with multiple AI instances enable parallel execution across authentication, database, and frontend streams simultaneously, amplifying individual engineer capacity.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">July 22, 2025</p>
+                            <p class="read-time">~11 min read</p>
+                        </div>
+                        <a href="Articles/parallel-cognitive-processes.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 8. Progressive Token Budgets -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_08.png" alt="Progressive Token Budgets">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-ai">Model Optimization</span>
+                        <span class="category-badge category-architecture">Economics</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Progressive Token Budgets</h3>
+                    <p class="text-sm mb-4">The Non-Linearity of Extended Thinking: When and How to Allocate Deep Compute for Complex Problems</p>
+                    <p class="text-sm prose mb-4 flex-grow">Dynamically scaling reasoning token allocations improves first-pass success rates on complex architectural and debugging problems while maintaining cost efficiency.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">August 8, 2025</p>
+                            <p class="read-time">~12 min read</p>
+                        </div>
+                        <a href="Articles/progressive-token-budgets.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 9. Structured RPI Workflows -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_09.png" alt="Structured RPI Workflows">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-workflow">Methodology</span>
+                        <span class="category-badge category-engineering">Process</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Structured RPI Workflows</h3>
+                    <p class="text-sm mb-4">Research → Plan → Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors</p>
+                    <p class="text-sm prose mb-4 flex-grow">A strict three-phase workflow (Research with no code, Plan as documentation, Implement with deliberate action) reduces error rates and preserves deep-work flow states.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">August 25, 2025</p>
+                            <p class="read-time">~11 min read</p>
+                        </div>
+                        <a href="Articles/structured-rpi-workflows.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 10. The Trust Gradient -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_10.png" alt="The Trust Gradient">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-engineering">Safety</span>
+                        <span class="category-badge category-ai">Governance</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">The Trust Gradient</h3>
+                    <p class="text-sm mb-4">Supervision Theory in Multi-Agent Systems: Calibrating Autonomy to Risk and Stakeholder Confidence</p>
+                    <p class="text-sm prose mb-4 flex-grow">AI delegation should follow a risk-calibrated trust gradient: high supervision for security and architectural decisions, low supervision for documentation and styling.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">September 12, 2025</p>
+                            <p class="read-time">~10 min read</p>
+                        </div>
+                        <a href="Articles/the-trust-gradient.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-7xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+            <p class="mt-2">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme management
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>

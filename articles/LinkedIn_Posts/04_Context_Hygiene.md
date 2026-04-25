@@ -1,0 +1,3 @@
+Aggressive context management is essential for mental clarity in engineering. I constantly emphasize that clearing the noise and creating hierarchical memory structures between tasks reduces our cognitive burden. When we stop maintaining endless context in our heads, we can focus entirely on high-level strategic problem-solving. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/context-management-hygiene.html

@@ -1,0 +1,3 @@
+Imagine extending your working memory directly into your development environment. By leveraging external tool integrations and model context protocols, we can connect persistent knowledge and databases seamlessly. This creates a cognitive environment where vast contextual data is accessible without overwhelming our mental models. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/extended-working-memory.html

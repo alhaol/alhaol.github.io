@@ -1,0 +1,3 @@
+Not all technical problems require the same computational—or cognitive—budget. I've found that utilizing progressive 'thinking budgets' for AI (allocating vastly different processing limits based on problem complexity) yields significantly better architectural decisions. It is fundamentally about giving the AI the necessary space to analyze deeply, mirroring how we allocate our own deep-focus time. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/progressive-token-budgets.html

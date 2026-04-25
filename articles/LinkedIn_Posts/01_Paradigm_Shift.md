@@ -1,0 +1,3 @@
+We are witnessing a paradigm shift in how we interact with AI in software engineering. Moving away from standard autocomplete, terminal-native agentic workflows act more like autonomous colleagues than mere tools. In my experience, treating AI as a collaborative partner rather than a prompt-responder fundamentally changes our mental efficiency. It significantly reduces context switching and frees up our cognitive load for high-level architectural thinking. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/the-paradigm-shift.html

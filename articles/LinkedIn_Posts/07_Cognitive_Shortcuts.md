@@ -1,0 +1,3 @@
+Efficiency isn't just about typing faster; it's about eliminating micro-decisions. Encoding complex, repetitive workflows into simple cognitive shortcuts preserves immense mental energy. This practice allows engineering teams to reserve their highest-value creative thinking for the architectural problems that truly matter. #iwork4dell
+
+Extended Reading: http://alhaol.github.io/articles/cognitive-shortcuts.html
