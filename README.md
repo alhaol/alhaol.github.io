@@ -16,8 +16,9 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 ├── imgs/               # Profile images
 ├── pdfs/               # PDF documents
 ├── articles/           # Technical Articles series
-│   ├── index.html      # Articles landing page (10 articles grid)
-│   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_10.png)
+│   ├── index.html      # Articles landing page (11 articles grid)
+│   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
+│   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       ├── the-paradigm-shift.html
 │       ├── cognitive-shortcuts.html
@@ -28,7 +29,8 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 │       ├── parallel-cognitive-processes.html
 │       ├── progressive-token-budgets.html
 │       ├── structured-rpi-workflows.html
-│       └── the-trust-gradient.html
+│       ├── the-trust-gradient.html
+│       └── small-model-efficiency.html
 ├── links/
 │   └── index.html      # Resource Hub — searchable, filterable link collection
 └── apps/
@@ -57,7 +59,7 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 | App | URL | Description |
 |-----|-----|-------------|
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, featured articles, recent activity |
-| Technical Articles | `/articles/` | 10-article series on agentic AI, cognitive systems, and advanced engineering practices |
+| Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices |
 | Resource Hub | `/links/` | Curated, searchable resource links with grid / list toggle |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
