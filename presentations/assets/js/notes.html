@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaker Notes — alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --primary-color: #00ff41;
+            --card-bg: #111111;
+            --border-color: #333333;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0;
+            height: 100%;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            padding: 18px 22px;
+            gap: 14px;
+        }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .top .title { color: var(--primary-color); }
+        .clock { font-size: 14px; color: var(--text-main); }
+        .slide-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 6px 0 0 0;
+        }
+        .notes {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-main);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-color);
+            border-radius: 6px;
+            padding: 18px 22px;
+            overflow: auto;
+        }
+        .notes:empty::before {
+            content: "// no notes for this slide";
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }
+        .next {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+        .next strong { color: var(--primary-color); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <span class="title" id="deck-title">// speaker notes</span>
+                <span id="counter" style="margin-left: 12px;">— / —</span>
+            </div>
+            <div class="clock" id="clock">00:00</div>
+        </div>
+        <div>
+            <div class="slide-title" id="slide-title">Waiting for deck…</div>
+            <div class="notes" id="notes"></div>
+        </div>
+        <div class="next">next: <strong id="next-title">—</strong></div>
+    </div>
+    <script>
+        const slug = decodeURIComponent((location.hash || '').slice(1)) || 'untitled';
+        const channel = ('BroadcastChannel' in window) ? new BroadcastChannel('deck-' + slug) : null;
+        document.getElementById('deck-title').textContent = '// notes · ' + slug;
+
+        const counter = document.getElementById('counter');
+        const slideTitle = document.getElementById('slide-title');
+        const notes = document.getElementById('notes');
+        const nextTitle = document.getElementById('next-title');
+
+        if (channel) {
+            channel.addEventListener('message', (ev) => {
+                const d = ev.data || {};
+                if (d.type !== 'slide') return;
+                counter.textContent = (d.index + 1) + ' / ' + d.total;
+                slideTitle.textContent = d.title || 'Slide ' + (d.index + 1);
+                notes.innerHTML = d.notes || '';
+                nextTitle.textContent = d.nextTitle || '—';
+            });
+            // ask the deck for current state
+            channel.postMessage({ type: 'request-state' });
+        } else {
+            slideTitle.textContent = 'BroadcastChannel unavailable';
+            notes.textContent = 'Open this from a deck via the N key on a modern browser.';
+        }
+
+        // wall clock + elapsed
+        const startedAt = Date.now();
+        function tick() {
+            const sec = Math.floor((Date.now() - startedAt) / 1000);
+            const mm = String(Math.floor(sec / 60)).padStart(2, '0');
+            const ss = String(sec % 60).padStart(2, '0');
+            document.getElementById('clock').textContent = mm + ':' + ss;
+        }
+        setInterval(tick, 1000); tick();
+    </script>
+</body>
+</html>

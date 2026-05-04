@@ -1,0 +1,1159 @@
+/* ==========================================================================
+   deck.css — Cyber-themed HTML presentation engine for alhaol.github.io
+   Designed by Ibrahim AbuAlhaol
+   Palette mirrors conf/style.json :: cybersecurity theme.
+   16:9 logical canvas (1280x720) scaled to fit the viewport.
+   ========================================================================== */
+
+:root {
+    /* Default: dark cyber theme */
+    --bg-color: #050505;
+    --text-main: #ffffff;
+    --text-muted: #b3b3b3;
+    --primary-color: #00ff41;
+    --secondary-color: #00cc33;
+    --card-bg: #111111;
+    --border-color: #333333;
+    --accent-glow: rgba(0, 255, 65, 0.18);
+
+    /* Surfaces that need a different value per mode */
+    --stage-bg-start: #0a0a0a;
+    --stage-bg-end: #020202;
+    --grid-line: rgba(0, 255, 65, 0.025);
+    --code-bg: #0a0a0a;
+    --gradient-text-start: #ffffff;
+    --help-overlay: rgba(0, 0, 0, 0.92);
+    --kbd-bg: #000000;
+    --dot-upcoming: rgba(255, 255, 255, 0.18);
+    --dot-visited: rgba(255, 255, 255, 0.55);
+
+    /* Logical slide canvas */
+    --slide-w: 1280px;
+    --slide-h: 720px;
+}
+
+/* Light / "presentation" mode — clean, ink-friendly, retains green accent */
+:root[data-theme="light"] {
+    --bg-color: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --primary-color: #15803d;       /* green-700 — readable on white */
+    --secondary-color: #16a34a;     /* green-600 */
+    --card-bg: #f8fafc;
+    --border-color: #e2e8f0;
+    --accent-glow: rgba(21, 128, 61, 0.18);
+
+    --stage-bg-start: #f8fafc;
+    --stage-bg-end: #eef2f6;
+    --grid-line: rgba(21, 128, 61, 0.06);
+    --code-bg: #f1f5f9;
+    --gradient-text-start: #0f172a;
+    --help-overlay: rgba(255, 255, 255, 0.94);
+    --kbd-bg: #f1f5f9;
+    --dot-upcoming: rgba(15, 23, 42, 0.22);
+    --dot-visited: rgba(15, 23, 42, 0.55);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+a { color: var(--primary-color); text-decoration: none; }
+a:hover { color: var(--secondary-color); }
+
+/* --------------------------------------------------------------------------
+   Stage + slide scaling
+   -------------------------------------------------------------------------- */
+.deck-stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 50%, var(--stage-bg-start) 0%, var(--stage-bg-end) 80%);
+    transition: background 0.3s ease;
+}
+
+/* Subtle scanline overlay — nods to the terminal aesthetic */
+.deck-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px, 40px 40px;
+    opacity: 0.6;
+    z-index: 0;
+}
+:root[data-theme="light"] .deck-stage::before { mix-blend-mode: multiply; opacity: 0.8; }
+:root:not([data-theme="light"]) .deck-stage::before { mix-blend-mode: screen; }
+
+.deck-canvas {
+    position: relative;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    transform-origin: center center;
+    z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Slide base
+   -------------------------------------------------------------------------- */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 70px 90px;
+    display: none;
+    flex-direction: column;
+    background: var(--bg-color);
+    color: var(--text-main);
+    overflow: hidden;
+}
+
+.slide.active {
+    display: flex;
+    animation: slide-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slide-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Direction-aware variant — JS toggles a class on the canvas */
+.deck-canvas.going-back .slide.active { animation-name: slide-in-back; }
+@keyframes slide-in-back {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fragments — start hidden, fade in on reveal */
+.slide [data-fragment] {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.slide [data-fragment].fragment-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Special-cased reveal style: highlight (briefly pulses on appear) */
+.slide [data-fragment="highlight"].fragment-visible {
+    animation: fragment-pulse 0.7s ease-out;
+}
+@keyframes fragment-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.4); }
+    50%  { box-shadow: 0 0 0 8px rgba(0, 255, 65, 0.15); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
+}
+
+.slide h1, .slide h2, .slide h3 { font-weight: 600; line-height: 1.15; margin: 0; }
+.slide h1 { font-size: 64px; letter-spacing: -0.02em; }
+.slide h2 { font-size: 44px; letter-spacing: -0.01em; }
+.slide h3 { font-size: 28px; color: var(--primary-color); }
+.slide p { font-size: 22px; line-height: 1.55; color: var(--text-muted); margin: 0 0 0.8em 0; }
+.slide ul, .slide ol { font-size: 22px; line-height: 1.65; color: var(--text-main); padding-left: 1.4em; }
+.slide ul li::marker { color: var(--primary-color); }
+.slide strong { color: var(--text-main); }
+.slide em { color: var(--primary-color); font-style: normal; }
+
+.slide .eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--primary-color);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: block;
+}
+
+.slide .accent-rule {
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: var(--primary-color);
+    margin: 24px 0;
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Cover slide
+   -------------------------------------------------------------------------- */
+.slide-cover {
+    background:
+        radial-gradient(ellipse at 30% 30%, rgba(0, 255, 65, 0.08) 0%, transparent 50%),
+        var(--bg-color);
+    justify-content: center;
+}
+
+.slide-cover .cover-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: center;
+}
+
+.slide-cover .cover-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--primary-color);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.slide-cover h1 {
+    font-size: 72px;
+    background: linear-gradient(90deg, var(--gradient-text-start) 0%, var(--primary-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+}
+
+.slide-cover .cover-meta::after {
+    content: "▌";
+    display: inline-block;
+    margin-left: 6px;
+    color: var(--primary-color);
+    animation: cursor-blink 1.1s steps(2) infinite;
+}
+@keyframes cursor-blink { 50% { opacity: 0; } }
+
+.slide-cover .cover-subtitle {
+    font-size: 26px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+}
+
+.slide-cover .cover-author {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.slide-cover .cover-author img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.slide-cover .author-block {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.slide-cover .author-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.slide-cover .author-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.slide-cover .cover-footer {
+    position: absolute;
+    bottom: 70px;
+    left: 90px;
+    right: 90px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Hook slide — single big idea / stat / question to earn attention
+   -------------------------------------------------------------------------- */
+.slide-hook {
+    justify-content: center;
+    align-items: flex-start;
+    background:
+        radial-gradient(ellipse at 80% 20%, rgba(0, 255, 65, 0.06) 0%, transparent 60%),
+        var(--bg-color);
+}
+
+.slide-hook .hook-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--primary-color);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+}
+
+.slide-hook .hook-statement {
+    font-size: 64px;
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    max-width: 1000px;
+    margin: 0;
+}
+
+.slide-hook .hook-statement em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-shadow: 0 0 24px rgba(0, 255, 65, 0.25);
+}
+
+.slide-hook .hook-stat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 220px;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 60px rgba(0, 255, 65, 0.25);
+}
+
+.slide-hook .hook-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 12px;
+}
+
+.slide-hook .hook-byline {
+    margin-top: 30px;
+    font-size: 22px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+/* --------------------------------------------------------------------------
+   Section divider slide
+   -------------------------------------------------------------------------- */
+.slide-section {
+    justify-content: center;
+    background:
+        linear-gradient(135deg, var(--bg-color) 0%, var(--card-bg) 100%);
+}
+
+.slide-section .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--primary-color);
+    letter-spacing: 0.4em;
+    margin-bottom: 30px;
+}
+
+.slide-section h1 {
+    font-size: 88px;
+    color: var(--text-main);
+}
+
+.slide-section .accent-rule { width: 160px; height: 4px; }
+
+/* --------------------------------------------------------------------------
+   Two-column layout
+   -------------------------------------------------------------------------- */
+.slide-two-col .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    flex: 1;
+    align-items: start;
+    margin-top: 30px;
+}
+
+.slide-two-col .two-col.split-60-40 { grid-template-columns: 3fr 2fr; }
+.slide-two-col .two-col.split-40-60 { grid-template-columns: 2fr 3fr; }
+
+/* --------------------------------------------------------------------------
+   Quote slide
+   -------------------------------------------------------------------------- */
+.slide-quote {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.slide-quote blockquote {
+    margin: 0;
+    padding: 30px 40px;
+    border-left: 4px solid var(--primary-color);
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.4;
+    font-style: italic;
+    color: var(--text-main);
+    text-align: left;
+    max-width: 900px;
+    background: rgba(0, 255, 65, 0.03);
+}
+
+.slide-quote cite {
+    display: block;
+    margin-top: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: var(--primary-color);
+    font-style: normal;
+    letter-spacing: 0.1em;
+}
+
+/* --------------------------------------------------------------------------
+   Code slide
+   -------------------------------------------------------------------------- */
+.slide-code pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 20px 0 0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    line-height: 1.55;
+    overflow: auto;
+    flex: 1;
+}
+
+.slide-code code { font-family: inherit; color: var(--text-main); }
+
+/* highlight.js sensible defaults — dark mode (default) */
+.hljs { background: transparent !important; color: var(--text-main) !important; padding: 0 !important; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in { color: var(--primary-color); }
+.hljs-string, .hljs-attr { color: #a6e22e; }
+.hljs-number, .hljs-literal { color: #f5a623; }
+.hljs-comment { color: #6c7a6c; font-style: italic; }
+.hljs-title, .hljs-name, .hljs-section { color: #66d9ef; }
+.hljs-variable, .hljs-template-variable { color: #fd971f; }
+
+/* highlight.js — light mode overrides */
+:root[data-theme="light"] .hljs-keyword,
+:root[data-theme="light"] .hljs-selector-tag,
+:root[data-theme="light"] .hljs-built_in { color: #15803d; }
+:root[data-theme="light"] .hljs-string,
+:root[data-theme="light"] .hljs-attr     { color: #166534; }
+:root[data-theme="light"] .hljs-number,
+:root[data-theme="light"] .hljs-literal  { color: #b45309; }
+:root[data-theme="light"] .hljs-comment  { color: #64748b; }
+:root[data-theme="light"] .hljs-title,
+:root[data-theme="light"] .hljs-name,
+:root[data-theme="light"] .hljs-section  { color: #1d4ed8; }
+:root[data-theme="light"] .hljs-variable,
+:root[data-theme="light"] .hljs-template-variable { color: #c2410c; }
+
+/* --------------------------------------------------------------------------
+   Diagram slide (mermaid)
+   -------------------------------------------------------------------------- */
+.slide-diagram .mermaid {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.slide-diagram .mermaid svg { max-width: 100%; max-height: 100%; }
+
+/* --------------------------------------------------------------------------
+   Image / Video / Embed slides
+   -------------------------------------------------------------------------- */
+.slide-image, .slide-video, .slide-embed {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.slide-image img,
+.slide-image picture,
+.slide-image .slide-media {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.slide-image .slide-caption,
+.slide-video .slide-caption,
+.slide-embed .slide-caption {
+    position: absolute;
+    bottom: 24px;
+    left: 90px;
+    right: 90px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.65);
+    padding: 8px 14px;
+    border-left: 3px solid var(--primary-color);
+    backdrop-filter: blur(4px);
+}
+
+.slide-video video,
+.slide-video iframe {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border: 0;
+}
+
+.slide-embed iframe,
+.slide-embed .embed-pdf {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+}
+
+/* Image-with-text variant: keep padding, image fills available space */
+.slide-content .inline-figure {
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    max-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.slide-content .inline-figure img,
+.slide-content .inline-figure video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------
+   Closing slide
+   -------------------------------------------------------------------------- */
+.slide-end {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(0, 255, 65, 0.12) 0%, transparent 60%),
+        var(--bg-color);
+}
+
+.slide-end h1 {
+    font-size: 96px;
+    color: var(--primary-color);
+    text-shadow: 0 0 30px var(--accent-glow);
+    margin-bottom: 24px;
+}
+
+.slide-end .end-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+}
+
+.slide-end .end-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+.slide-end .end-contact a { color: var(--primary-color); }
+
+/* --------------------------------------------------------------------------
+   Tables, pills, callouts (general utilities)
+   -------------------------------------------------------------------------- */
+.slide table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.slide th, .slide td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.slide th {
+    color: var(--primary-color);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.slide .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(0, 255, 65, 0.1);
+    border: 1px solid rgba(0, 255, 65, 0.35);
+    color: var(--primary-color);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    margin: 0 6px 6px 0;
+}
+
+.slide .callout {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--card-bg);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.slide .callout strong { color: var(--text-main); }
+
+.slide .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.slide .stat {
+    padding: 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: border-color 0.2s ease;
+}
+
+.slide .stat:hover { border-color: var(--primary-color); }
+
+.slide .stat .stat-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+}
+
+.slide .stat .stat-label {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Persistent chrome
+   -------------------------------------------------------------------------- */
+.deck-chrome {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.deck-progress {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.deck-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+/* Section progress strip — sits just below the progress bar.
+   States per dot:
+     .upcoming  outlined   (not yet visited)
+     .visited   filled mid (already passed)
+     .active    filled +   (current section)
+   Plus an inline label that spells out the current section's name. */
+.deck-sections {
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: auto;
+    max-width: 70vw;
+}
+.deck-sections .section-dot-row {
+    display: flex;
+    gap: 7px;
+}
+.deck-sections .section-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid var(--dot-upcoming);
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    box-sizing: border-box;
+}
+.deck-sections .section-dot.visited {
+    background: var(--dot-visited);
+    border-color: var(--dot-visited);
+}
+.deck-sections .section-dot.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+    transform: scale(1.15);
+}
+.deck-sections .section-dot:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.25);
+}
+.deck-sections .section-dot.active:hover { transform: scale(1.25); }
+.deck-sections .section-dot .section-tip {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 4px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 5;
+}
+.deck-sections .section-dot:hover .section-tip { opacity: 1; }
+
+.deck-sections .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50vw;
+}
+.deck-sections .section-label .section-num-prefix { color: var(--primary-color); margin-right: 6px; }
+.deck-sections .section-label .section-name {
+    color: var(--text-main);
+    font-weight: 500;
+    text-transform: lowercase;
+}
+
+.deck-tag {
+    position: absolute;
+    bottom: 14px;
+    left: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    pointer-events: auto;
+}
+
+.deck-tag a { color: var(--text-muted); }
+.deck-tag a:hover { color: var(--primary-color); }
+
+.deck-counter {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+}
+
+.deck-counter .current { color: var(--primary-color); }
+
+.deck-back {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    pointer-events: auto;
+    opacity: 0.4;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.deck-back:hover { opacity: 1; color: var(--primary-color); }
+
+.deck-tools {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.deck-tool-btn {
+    height: 24px;
+    min-width: 24px;
+    padding: 0 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.deck-tool-btn:hover { opacity: 1; color: var(--primary-color); border-color: var(--primary-color); }
+
+.deck-tool-btn.is-busy {
+    opacity: 1;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    pointer-events: none;
+}
+.deck-tool-btn.is-busy::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 50%;
+    border: 1.5px solid var(--primary-color);
+    border-top-color: transparent;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --------------------------------------------------------------------------
+   Help overlay
+   -------------------------------------------------------------------------- */
+.deck-help {
+    position: fixed;
+    inset: 0;
+    background: var(--help-overlay);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.deck-help.visible { display: flex; }
+
+.deck-help-content {
+    background: var(--card-bg);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 40px 50px;
+    max-width: 540px;
+    box-shadow: 0 0 60px var(--accent-glow);
+}
+
+.deck-help-content h3 {
+    color: var(--primary-color);
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 24px 0;
+}
+
+.deck-help kbd {
+    display: inline-block;
+    min-width: 28px;
+    padding: 3px 8px;
+    background: var(--kbd-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--primary-color);
+    font-family: inherit;
+    font-size: 12px;
+    text-align: center;
+}
+
+.deck-help table { width: 100%; border-collapse: collapse; }
+.deck-help td { padding: 8px 0; font-size: 13px; color: var(--text-muted); }
+.deck-help td:first-child { width: 40%; }
+
+/* --------------------------------------------------------------------------
+   Overview mode (press O)
+   -------------------------------------------------------------------------- */
+body.deck-overview { overflow: auto !important; }
+body.deck-overview .deck-stage { position: relative; min-height: 100vh; padding: 40px; align-items: flex-start; }
+body.deck-overview .deck-canvas {
+    width: 100%;
+    height: auto;
+    transform: none !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+body.deck-overview .slide {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: flex !important;
+    transform: scale(0.999); /* force layout containment */
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    padding: 20px 28px;
+    overflow: hidden;
+    animation: none;
+    /* shrink content */
+    font-size: 8px;
+}
+body.deck-overview .slide.active { border-color: var(--primary-color); box-shadow: 0 0 20px var(--accent-glow); }
+body.deck-overview .slide h1 { font-size: 28px; }
+body.deck-overview .slide h2 { font-size: 20px; }
+body.deck-overview .slide h3 { font-size: 14px; }
+body.deck-overview .slide p,
+body.deck-overview .slide ul,
+body.deck-overview .slide ol { font-size: 10px; }
+body.deck-overview .slide pre { font-size: 8px; padding: 8px; }
+body.deck-overview .slide-cover h1 { font-size: 26px; }
+body.deck-overview .slide-section h1 { font-size: 32px; }
+body.deck-overview .slide-end h1 { font-size: 36px; }
+body.deck-overview .slide-cover .cover-author img { width: 24px; height: 24px; }
+body.deck-overview .slide-cover .cover-footer { display: none; }
+body.deck-overview .deck-chrome { display: none; }
+
+body.deck-overview .slide-overview-num {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--primary-color);
+}
+
+/* The per-slide overlay number is hidden in normal viewing and only
+   appears as a small badge when the deck is in overview mode (press O). */
+.slide-overview-num { display: none; }
+body.deck-overview .slide-overview-num { display: block; }
+
+/* --------------------------------------------------------------------------
+   Speaker notes
+   -------------------------------------------------------------------------- */
+.speaker-notes { display: none; }
+
+/* --------------------------------------------------------------------------
+   Print / PDF export
+   16:9 deck @ 96dpi → 1280×720 px → 13.333in × 7.5in landscape.
+   The layout is identical for both pathways:
+     (a) @media print           — fires on Ctrl+P
+     (b) body.is-printing class — set by the Export PDF button before
+         calling window.print(), so Mermaid SVG / iframe placeholders are
+         laid out visibly before the browser snapshots.
+   The shared print layout below is wrapped in a single selector list so
+   the rules apply in both contexts (you cannot mix @media into a comma
+   selector list — that's invalid CSS — so we duplicate via :is()).
+   -------------------------------------------------------------------------- */
+@page { size: 13.333in 7.5in; margin: 0; }
+
+/* By default the iframe-replacement placeholders are hidden on screen */
+.print-fallback { display: none; }
+
+/* ---- Screen "is-printing" preview (set by Export button) ---- */
+body.is-printing { overflow: visible !important; height: auto !important; }
+body.is-printing .deck-stage {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    background: var(--bg-color) !important;
+}
+body.is-printing .deck-stage::before { display: none !important; }
+body.is-printing .deck-canvas {
+    width: 1280px !important;
+    height: auto !important;
+    transform: none !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+body.is-printing .slide {
+    position: relative !important;
+    inset: auto !important;
+    display: flex !important;
+    width: 1280px !important;
+    height: 720px !important;
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+body.is-printing .slide:last-child { page-break-after: auto; break-after: auto; }
+body.is-printing .slide [data-fragment] { opacity: 1 !important; transform: none !important; }
+body.is-printing .deck-chrome,
+body.is-printing .deck-help,
+body.is-printing .deck-back,
+body.is-printing .deck-tools,
+body.is-printing .slide-overview-num { display: none !important; }
+body.is-printing .slide-video iframe,
+body.is-printing .slide-embed iframe { display: none !important; }
+body.is-printing .print-fallback {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+    padding: 40px 80px;
+    background: var(--card-bg);
+    border: 1px dashed var(--primary-color);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    height: 100%;
+}
+body.is-printing .print-fallback .pf-label {
+    color: var(--primary-color);
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+body.is-printing .print-fallback .pf-url {
+    color: var(--text-main);
+    font-size: 16px;
+    word-break: break-all;
+    max-width: 90%;
+}
+
+/* ---- Browser print (Ctrl+P direct) — same rules as is-printing ---- */
+@media print {
+    html, body {
+        width: 1280px !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: var(--bg-color) !important;
+        color: var(--text-main) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .deck-stage {
+        position: static !important;
+        inset: auto !important;
+        display: block !important;
+        background: var(--bg-color) !important;
+    }
+    .deck-stage::before { display: none !important; }
+    .deck-canvas {
+        width: 1280px !important;
+        height: auto !important;
+        transform: none !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+    .slide {
+        position: relative !important;
+        inset: auto !important;
+        display: flex !important;
+        width: 1280px !important;
+        height: 720px !important;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .slide:last-child { page-break-after: auto; break-after: auto; }
+    .slide [data-fragment] { opacity: 1 !important; transform: none !important; }
+    .deck-chrome,
+    .deck-help,
+    .deck-back,
+    .deck-tools,
+    .slide-overview-num,
+    .deck-help-toggle { display: none !important; }
+    .slide-video iframe,
+    .slide-embed iframe { display: none !important; }
+    .print-fallback {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+        padding: 40px 80px;
+        background: var(--card-bg);
+        border: 1px dashed var(--primary-color);
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--text-muted);
+        height: 100%;
+    }
+    .print-fallback .pf-label {
+        color: var(--primary-color);
+        font-size: 14px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+    }
+    .print-fallback .pf-url {
+        color: var(--text-main);
+        font-size: 16px;
+        word-break: break-all;
+        max-width: 90%;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Small viewports — let the JS handle scale, but ensure chrome is readable
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .deck-tag, .deck-counter, .deck-back { font-size: 10px; }
+}

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<!--
+    ============================================================================
+    Presentation Template — alhaol.github.io
+    Author: Ibrahim AbuAlhaol  |  AI Technical Lead, PhD, PEng, SMIEEE
+
+    HOW TO USE
+    1. Duplicate this folder:  Presentations/_template  →  Presentations/<your-slug>
+    2. Edit <title>, the data-deck-slug attribute on <body>, and fill in slides.
+    3. Drop images / videos / PDFs / GIFs into  presentations/assets/{images,pdfs,artifacts}/
+       and reference them with paths like  ../../assets/images/foo.png
+    4. Append a card entry in  presentations/presentations.json  to surface this deck.
+
+    NARRATIVE ARC  (move slides around, but keep the rhythm)
+       1.  Cover            — who, what, when
+       2.  Hook             — one provocative idea, stat, or question
+       3.  Promise          — what the audience walks away with
+       4.  Agenda           — the road map, 3-4 beats
+       5.  Section divider  — "// 02 · Background"
+       6+  Body             — content / two-col / quote / code / diagram / image / video / embed / table
+       N-1 Wrap             — single-slide takeaway
+       N   Q & A / closing  — contact + thanks
+
+    SLIDE VARIANTS
+      .slide-cover       Title slide
+      .slide-hook        Big stat or question — earns attention
+      .slide-section     Section divider
+      .slide-content     Default — H2 + body
+      .slide-two-col     Two-column (.split-60-40, .split-40-60)
+      .slide-quote       Pull-quote
+      .slide-code        <pre><code class="language-…"> — auto-highlighted
+      .slide-diagram     .mermaid block — auto-rendered
+      .slide-image       Full-bleed image / GIF
+      .slide-video       Self-hosted MP4 or YouTube/Vimeo iframe
+      .slide-embed       Iframe for PDFs or live demos
+      .slide-end         Closing / Q&A
+
+    FRAGMENT REVEALS
+      Add  data-fragment  to any element to make it appear only when the
+      presenter advances inside the slide. Add  data-fragment="highlight"
+      for a brief green-pulse animation on reveal. Order is DOM order.
+
+    KEYBOARD
+      ← →  Space  PgUp/PgDn   navigate (also reveals fragments)
+      Home / End                jump first / last
+      F                         fullscreen
+      O                         overview grid
+      N                         speaker notes window
+      E  /  P                   export PDF
+      ?                         keyboard help
+
+    EXPORT PDF
+      Click the "↓ pdf" button (top-right) or press E. The engine pre-renders
+      Mermaid diagrams, swaps live iframes for printable placeholders, and
+      opens the browser print dialog at 16:9 (13.333in × 7.5in landscape).
+      In the dialog, set "Save as PDF" and "Margins: None".
+    ============================================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Template — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="template" data-back-href="../../index.html">
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- ================================================================
+                 1 · COVER
+                 ================================================================ -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Technical Presentation</div>
+                <h1>Your Deck Title<br>Goes Here</h1>
+                <p class="cover-subtitle">A concise subtitle that sets context for the talk.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// Venue · Conference Name</span>
+                    <span>// 2026-05-04</span>
+                </div>
+                <aside class="speaker-notes">
+                    Greet the audience. State the talk's promise in one sentence.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 2 · HOOK — earn attention with one strong idea
+                 Pick ONE of the two patterns below, delete the other.
+                 ================================================================ -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// the question</div>
+                <p class="hook-statement">
+                    What if every <em>agentic system</em> we ship today is built<br>
+                    on the wrong abstraction?
+                </p>
+                <p class="hook-byline" data-fragment>
+                    The next 25 minutes argue it is — and show what to do about it.
+                </p>
+                <aside class="speaker-notes">
+                    Pause for two beats after the question. Don't rush to the answer.
+                </aside>
+            </section>
+
+            <!-- Alternate hook pattern: a single dominant statistic
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// the gap</div>
+                <div class="hook-stat">42×</div>
+                <div class="hook-stat-label">slower than humans on this task — today</div>
+                <p class="hook-byline">By the end of this talk that gap collapses to 1.4×.</p>
+            </section>
+            -->
+
+            <!-- ================================================================
+                 3 · PROMISE — what the audience walks away with
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>Three things, in order</h2>
+                <span class="accent-rule"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>A <strong>vocabulary</strong> for thinking about the problem precisely</li>
+                    <li data-fragment>A <strong>reference architecture</strong> you can adopt this quarter</li>
+                    <li data-fragment>The <strong>three failure modes</strong> we hit so you don't have to</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Reveal the three bullets one at a time. Re-state each before moving on.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 4 · AGENDA
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// agenda</span>
+                <h2>Where we're going</h2>
+                <span class="accent-rule"></span>
+                <div class="stat-grid" style="margin-top: 30px;">
+                    <div class="stat"><div class="stat-value">01</div><div class="stat-label">Background</div></div>
+                    <div class="stat"><div class="stat-value">02</div><div class="stat-label">Architecture</div></div>
+                    <div class="stat"><div class="stat-value">03</div><div class="stat-label">Demo</div></div>
+                    <div class="stat"><div class="stat-value">04</div><div class="stat-label">Results</div></div>
+                </div>
+            </section>
+
+            <!-- ================================================================
+                 5 · SECTION DIVIDER
+                 ================================================================ -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>Background</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- ================================================================
+                 6 · TWO-COLUMN
+                 ================================================================ -->
+            <section class="slide slide-two-col">
+                <span class="eyebrow">// problem space</span>
+                <h2>The gap, in two views</h2>
+                <span class="accent-rule"></span>
+                <div class="two-col split-60-40">
+                    <div>
+                        <h3>What's broken today</h3>
+                        <p>Describe the status-quo failure mode. Use one short paragraph; expand verbally.</p>
+                        <ul>
+                            <li data-fragment>Painful constraint #1</li>
+                            <li data-fragment>Painful constraint #2</li>
+                            <li data-fragment>Painful constraint #3</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="callout" data-fragment="highlight">
+                            <strong>Why now:</strong> the enabling shift that makes this solvable in 2026.
+                        </div>
+                        <div class="stat-grid" style="margin-top: 20px;">
+                            <div class="stat" data-fragment>
+                                <div class="stat-value">10×</div>
+                                <div class="stat-label">improvement</div>
+                            </div>
+                            <div class="stat" data-fragment>
+                                <div class="stat-value">42%</div>
+                                <div class="stat-label">cost ↓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================================
+                 7 · QUOTE — a beat to breathe and frame
+                 ================================================================ -->
+            <section class="slide slide-quote">
+                <blockquote>
+                    "Architecture is the decisions you wish you could get right early
+                    in a project, but that you are not necessarily more likely to get
+                    right than any other."
+                </blockquote>
+                <cite>— Ralph Johnson</cite>
+            </section>
+
+            <!-- ================================================================
+                 8 · SECTION DIVIDER
+                 ================================================================ -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>Architecture</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- ================================================================
+                 9 · DIAGRAM (mermaid, auto-rendered, included in PDF export)
+                 ================================================================ -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// reference architecture</span>
+                <h2>End-to-end flow</h2>
+                <span class="accent-rule"></span>
+                <div class="mermaid">
+graph LR
+    U[User] --> A[Agent Orchestrator]
+    A --> K[(Knowledge Graph)]
+    A --> M[Tool Registry]
+    M --> R[Retrieval]
+    M --> X[Execution]
+    R --> A
+    X --> A
+    A --> O[Response]
+    style A fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style K fill:#0a1f0a,stroke:#00cc33,color:#fff
+                </div>
+            </section>
+
+            <!-- ================================================================
+                 10 · CODE (highlight.js, auto-loaded)
+                 ================================================================ -->
+            <section class="slide slide-code">
+                <span class="eyebrow">// implementation</span>
+                <h2>Agent loop, in 14 lines</h2>
+                <span class="accent-rule"></span>
+<pre><code class="language-python">from anthropic import Anthropic
+
+client = Anthropic()
+
+def run_agent(task: str) -> str:
+    messages = [{"role": "user", "content": task}]
+    while True:
+        resp = client.messages.create(
+            model="claude-opus-4-7",
+            max_tokens=4096,
+            tools=TOOLS,
+            messages=messages,
+        )
+        if resp.stop_reason == "end_turn":
+            return resp.content[-1].text
+        messages.append({"role": "assistant", "content": resp.content})
+        messages.append({"role": "user", "content": run_tools(resp)})
+</code></pre>
+            </section>
+
+            <!-- ================================================================
+                 11 · SECTION DIVIDER
+                 ================================================================ -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>Demo &amp; Results</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- ================================================================
+                 12 · IMAGE  (full-bleed)
+                 Replace src with  ../../assets/images/<your-image>.png
+                 ================================================================ -->
+            <section class="slide slide-image">
+                <img class="slide-media" src="../../../assets/ibrahim-image-circle.png" alt="Replace with your hero image">
+                <div class="slide-caption">// caption: replace with your image at ../../assets/images/your-file.png</div>
+            </section>
+
+            <!-- ================================================================
+                 13 · VIDEO  (self-hosted MP4 or YouTube iframe)
+                 Self-host:    <video controls preload="metadata" src="../../assets/video.mp4">
+                 YouTube:      <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen>
+                 In PDF export, iframes are replaced with a printable placeholder.
+                 ================================================================ -->
+            <section class="slide slide-video">
+                <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="Replace with your video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                <div class="slide-caption">// replace iframe src with your video URL, or use a &lt;video&gt; tag for self-hosted MP4</div>
+            </section>
+
+            <!-- ================================================================
+                 14 · PDF / LIVE EMBED
+                 PDF:          <iframe src="../../assets/pdfs/foo.pdf#toolbar=0&view=FitH" class="embed-pdf">
+                 Live demo:    <iframe src="https://your-demo.example/">
+                 ================================================================ -->
+            <section class="slide slide-embed">
+                <iframe class="embed-pdf"
+                    src="about:blank"
+                    title="Embedded PDF or live demo"></iframe>
+                <div class="slide-caption">// drop a PDF in assets/pdfs/, then point this iframe to ../../assets/pdfs/your-file.pdf#view=FitH</div>
+            </section>
+
+            <!-- ================================================================
+                 15 · TABLE / RESULTS
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// results</span>
+                <h2>Benchmark, side-by-side</h2>
+                <span class="accent-rule"></span>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Configuration</th>
+                            <th>Latency (ms)</th>
+                            <th>Accuracy</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Baseline</td><td>340</td><td>0.71</td><td>Reference run</td></tr>
+                        <tr data-fragment><td>+ Knowledge Graph</td><td>290</td><td>0.84</td><td>+13 pts accuracy</td></tr>
+                        <tr data-fragment><td>+ Agentic loop</td><td>410</td><td><strong>0.92</strong></td><td>Best result</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 30px;" data-fragment="highlight">
+                    <strong>Takeaway:</strong> the knowledge graph carries most of the accuracy gain;
+                    the agentic loop closes the last 8 points but trades latency.
+                </div>
+            </section>
+
+            <!-- ================================================================
+                 16 · WRAP — the single thing to remember
+                 ================================================================ -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    Pick the abstraction <em>before</em> the framework.<br>
+                    Everything else is replaceable.
+                </p>
+                <p class="hook-byline">If you take one thing from today, take that.</p>
+            </section>
+
+            <!-- ================================================================
+                 17 · CLOSING / Q&A
+                 ================================================================ -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thanks for listening</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io" target="_blank" rel="noopener">alhaol.github.io</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+</body>
+</html>

@@ -6,11 +6,19 @@ Personal portfolio and tools website for **Ibrahim AbuAlhaol** — AI Technical 
 
 A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwindcss.com/), and vanilla JavaScript. The main portfolio is data-driven: content is loaded from `conf/profile.json` and styled via `conf/style.json`, making it easy to update without touching HTML.
 
+## Run locally
+
+```bash
+python -m http.server 8000   # then open http://localhost:8000/
+```
+
+No build step, no package manager.
+
 ## Structure
 
 ```
 .
-├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-right → Articles)
+├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-center → Presentations, bottom-right → Articles)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -18,6 +26,13 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 ├── links/
 │   ├── index.html      # Apps Hub — searchable, category-filtered card grid (data-driven)
 │   └── links.json      # App registry (edit this to add / update / remove apps)
+├── presentations/      # Browser-native HTML decks
+│   ├── index.html      # Presentations Hub landing page (data-driven)
+│   ├── presentations.json   # Deck registry (edit to surface a new deck)
+│   ├── assets/         # Shared deck engine: css/, js/, images/, pdfs/, artifacts/
+│   └── Presentations/
+│       ├── _template/  # Reusable HTML deck template — duplicate per new deck
+│       └── <slug>/     # Each deck lives in its own folder
 ├── articles/           # Technical Articles series
 │   ├── index.html      # Articles landing page (11 articles grid)
 │   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
@@ -59,9 +74,10 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Two floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Three floating circle FABs: bottom-left → Apps Hub, bottom-center → Presentations, bottom-right → Articles |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
+| Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo + The Efficiency Trilemma |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |

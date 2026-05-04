@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!--
+    The Efficiency Trilemma — generated from source.md by the create-presentation skill.
+    Source: ../../articles/Articles/small-model-efficiency.html
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Efficiency Trilemma — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="the-efficiency-trilemma" data-back-href="../../index.html">
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Technical Presentation</div>
+                <h1>The Efficiency<br>Trilemma</h1>
+                <p class="cover-subtitle">Why the most accurate SLM is rarely the right choice for production.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// alhaol.github.io · technical talk</span>
+                    <span>// 2026-04-28</span>
+                </div>
+                <aside class="speaker-notes">
+                    Greet the audience. Set up the talk in one sentence: "We pick the wrong small models for production because we measure the wrong thing."
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK (stat) -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// the gap</div>
+                <div class="hook-stat">3×</div>
+                <div class="hook-stat-label">more energy used by the most accurate SLM than by the most efficient one</div>
+                <p class="hook-byline" data-fragment>
+                    We're optimizing for one axis of a three-axis problem.
+                </p>
+                <aside class="speaker-notes">
+                    Pause for two beats after the 3×. Don't rush. The number does the work.
+                </aside>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>Three things, in order</h2>
+                <span class="accent-rule"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>A <strong>vocabulary</strong> — correctness, computation, consumption</li>
+                    <li data-fragment>A <strong>selection matrix</strong> — which model for which workload</li>
+                    <li data-fragment>A <strong>deployment principle</strong> — hardware-aware, sustainability-conscious</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Reveal each bullet on press. Restate each in your own words before moving on.
+                </aside>
+            </section>
+
+            <!-- 4 · SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>The Three Axes</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- 5 · TWO-COL — define the trilemma -->
+            <section class="slide slide-two-col">
+                <span class="eyebrow">// the trilemma</span>
+                <h2>One question, three answers</h2>
+                <span class="accent-rule"></span>
+                <div class="two-col split-40-60">
+                    <div>
+                        <h3>Three dimensions</h3>
+                        <ul>
+                            <li><strong>Correctness</strong> — accuracy, F1, BLEU</li>
+                            <li><strong>Computation</strong> — runtime, FLOPs</li>
+                            <li><strong>Consumption</strong> — kWh, CO₂, $</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="callout">
+                            Optimizing for a single dimension produces systems that are <strong>expensive to run</strong>, <strong>slow to respond</strong>, or <strong>environmentally indefensible at scale</strong>.
+                        </div>
+                        <p style="margin-top: 18px; font-size: 16px;">
+                            <em>SLM-Bench</em> (Pham et al., EMNLP 2025) measures all three across <strong>15 models</strong>, <strong>23 datasets</strong>, <strong>4 hardware configurations</strong>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6 · CONTENT — who wins what -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the surprise</span>
+                <h2>Who wins on which axis</h2>
+                <span class="accent-rule"></span>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Axis</th>
+                            <th>Winner</th>
+                            <th>Energy (kWh / 1k tokens)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Correctness</td><td><strong>Llama-3.2-1B</strong></td><td>0.0362  ⚠ highest</td></tr>
+                        <tr data-fragment><td>Computation</td><td><strong>GPT-Neo-1.3B</strong></td><td>mid</td></tr>
+                        <tr data-fragment><td>Consumption</td><td><strong>Phi-1.5B</strong></td><td><strong>0.0136</strong>  ★</td></tr>
+                        <tr data-fragment><td>Balanced</td><td><strong>Mistral-7B</strong></td><td>0.0351</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 26px;" data-fragment="highlight">
+                    The most accurate model is the worst on energy. <strong>Architecture matters as much as scale</strong> — Phi-1.5B (smaller) and Mistral-7B (bigger) draw similar energy.
+                </div>
+                <aside class="speaker-notes">
+                    Reveal the table row by row. The Phi vs Mistral parity at very different sizes is the punchline — read it aloud.
+                </aside>
+            </section>
+
+            <!-- 7 · QUOTE -->
+            <section class="slide slide-quote">
+                <blockquote>
+                    "Although computation and energy consumption are often correlated, they are not equivalent. Some models use more energy to achieve faster runtimes."
+                </blockquote>
+                <cite>— SLM-Bench, Pham et al. (EMNLP 2025)</cite>
+            </section>
+
+            <!-- 8 · SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>Hardware Changes Everything</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- 9 · DIAGRAM (mermaid) -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// the selection flow</span>
+                <h2>Pick the model for the workload <em>and</em> the hardware</h2>
+                <span class="accent-rule"></span>
+                <div class="mermaid">
+flowchart TD
+    Start[Pick an SLM for production] --> Q1{What's critical?}
+    Q1 -->|Latency| Comp[Optimize Computation<br/>GPT-Neo-1.3B]
+    Q1 -->|Accuracy| Corr[Optimize Correctness<br/>Llama-3.2-1B]
+    Q1 -->|Cost / sustainability| Cons[Optimize Consumption<br/>Phi-1.5B]
+    Q1 -->|Balanced agentic| Bal[Mistral-7B]
+    Comp --> H{Where does it run?}
+    Corr --> H
+    Cons --> H
+    Bal --> H
+    H -->|Cloud GPU| C[Benchmark on L4 / A10]
+    H -->|Edge| E[Benchmark on Jetson Orin AGX]
+    style Start fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style Bal fill:#0a1f0a,stroke:#00ff41,color:#fff
+                </div>
+            </section>
+
+            <!-- 10 · CONTENT — selection matrix table -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the selection matrix</span>
+                <h2>Which model for which workload</h2>
+                <span class="accent-rule"></span>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Workload</th>
+                            <th>Priority</th>
+                            <th>Candidate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Latency-critical (UX agents, real-time)</td><td>Computation</td><td>GPT-Neo-1.3B</td></tr>
+                        <tr><td>Accuracy-critical (QA, NER, classification)</td><td>Correctness</td><td>Llama-3.2-1B</td></tr>
+                        <tr><td>Cost / sustainability (batch, background)</td><td>Consumption</td><td><strong>Phi-1.5B</strong></td></tr>
+                        <tr><td>General agentic orchestration</td><td>Balance</td><td>Mistral-7B</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 30px;">
+                    <strong>Don't pick from a leaderboard.</strong> Benchmark on the hardware where the model will actually run — a 2× efficiency gap between cloud and edge measurements is common.
+                </div>
+            </section>
+
+            <!-- 11 · SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>Sustainability Is Not Optional</h1>
+                <span class="accent-rule"></span>
+            </section>
+
+            <!-- 12 · CONTENT — Strubell stat + tools -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// inference dominates training, eventually</span>
+                <h2>The carbon math, in two facts</h2>
+                <span class="accent-rule"></span>
+                <div class="stat-grid" style="margin-top: 24px;">
+                    <div class="stat">
+                        <div class="stat-value">5 cars</div>
+                        <div class="stat-label">CO₂ from training one large NLP model — over their lifetimes (Strubell et al. 2019)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">months</div>
+                        <div class="stat-label">until inference dominates training, for an always-on agentic system</div>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; font-size: 20px;">The tools to measure already exist:</p>
+                <ul style="font-size: 20px;">
+                    <li><code>ML-CO2 Impact</code> — per-inference carbon estimates</li>
+                    <li><code>Zeus</code> — GPU-level energy monitoring</li>
+                    <li><code>LLMCarbon</code> (Faiz et al., ICLR 2024) — end-to-end footprint modeling</li>
+                </ul>
+                <p style="margin-top: 18px;">Measurement is reproducible. <strong>Using it is professional responsibility.</strong></p>
+            </section>
+
+            <!-- 13 · WRAP -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    Measure <em>all three</em> axes — <strong>before</strong> you commit.<br>
+                    The trilemma doesn't disappear by ignoring two of them.
+                </p>
+                <p class="hook-byline">If you take one thing from today, take that.</p>
+            </section>
+
+            <!-- 14 · CLOSING / Q&A -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thanks for listening</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io" target="_blank" rel="noopener">alhaol.github.io</a></div>
+                    <div style="margin-top: 18px; font-size: 14px; opacity: 0.7;">// full article: <a href="../../../articles/Articles/small-model-efficiency.html" target="_blank">small-model-efficiency</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+</body>
+</html>
