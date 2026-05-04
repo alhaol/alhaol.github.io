@@ -10,7 +10,7 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 
 ```
 .
-├── index.html          # Main portfolio / CV page (bottom-left circle FAB → Apps Hub)
+├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-right → Articles)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -59,9 +59,9 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, featured articles, recent activity |
-| Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`; also reachable via the floating circle on `/`) |
-| Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Two floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles |
+| Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
+| Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
