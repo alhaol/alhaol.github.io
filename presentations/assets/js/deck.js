@@ -32,7 +32,7 @@
         const chrome = document.createElement('div');
         chrome.className = 'deck-chrome';
         chrome.innerHTML = `
-            <div class="deck-progress"><div class="deck-progress-bar"></div></div>
+            <div class="deck-progress" aria-hidden="true"><div class="deck-progress-bar"></div></div>
             <div class="deck-sections" role="navigation" aria-label="Sections"></div>
             <a class="deck-back" href="${document.body.dataset.backHref || '../../index.html'}" title="Back to presentations hub">← // back</a>
             <div class="deck-tools">
@@ -41,7 +41,7 @@
                 <button class="deck-tool-btn deck-help-toggle" type="button" aria-label="Keyboard shortcuts">?</button>
             </div>
             <div class="deck-tag">// Ibrahim AbuAlhaol</div>
-            <div class="deck-counter"><span class="current">01</span> / <span class="total">${String(slides.length).padStart(2, '0')}</span></div>
+            <div class="deck-counter" aria-live="polite" aria-atomic="true" aria-label="Slide"><span class="current">01</span> / <span class="total">${String(slides.length).padStart(2, '0')}</span></div>
         `;
         document.body.appendChild(chrome);
 
@@ -198,6 +198,8 @@
 
         const label = document.createElement('div');
         label.className = 'section-label';
+        label.setAttribute('aria-live', 'polite');
+        label.setAttribute('aria-atomic', 'true');
         label.innerHTML = `<span class="section-num-prefix">//</span><span class="section-name"></span>`;
         container.appendChild(label);
     }
@@ -210,9 +212,12 @@
             if (currentIndex >= sections[i].index) activeIdx = i;
         }
         dots.forEach((d, i) => {
-            d.classList.toggle('active', i === activeIdx);
+            const isActive = i === activeIdx;
+            d.classList.toggle('active', isActive);
             d.classList.toggle('visited', i < activeIdx);
             d.classList.toggle('upcoming', i > activeIdx);
+            if (isActive) d.setAttribute('aria-current', 'step');
+            else d.removeAttribute('aria-current');
         });
         const labelEl = document.querySelector('.deck-sections .section-name');
         const numEl = document.querySelector('.deck-sections .section-num-prefix');
@@ -302,9 +307,11 @@
         if (i < 0 || i >= slides.length) return;
         const direction = i < currentIndex ? 'back' : 'forward';
         slides[currentIndex].classList.remove('active');
+        slides[currentIndex].removeAttribute('aria-current');
         currentIndex = i;
         canvas.classList.toggle('going-back', direction === 'back');
         slides[currentIndex].classList.add('active');
+        slides[currentIndex].setAttribute('aria-current', 'true');
 
         // Fragments policy:
         //  - opts.entryMode === 'reveal-all'  → e.g. Home/End/section dot/hash
@@ -610,6 +617,7 @@
         decorateSlides();
         currentIndex = readHash();
         slides[currentIndex].classList.add('active');
+        slides[currentIndex].setAttribute('aria-current', 'true');
         if (currentIndex === 0) {
             // Cold start on slide 1: leave fragments hidden so they can build up
             resetFragments(slides[0]);

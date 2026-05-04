@@ -987,9 +987,25 @@ body.deck-overview .slide-overview-num {
 body.deck-overview .slide-overview-num { display: block; }
 
 /* --------------------------------------------------------------------------
-   Speaker notes
+   Speaker notes — visually hidden but exposed to screen readers and to the
+   notes-window broadcast (deck.js reads .innerHTML, so the element must
+   stay in the DOM). Hidden from print via the @media print / is-printing
+   blocks above (which remove .deck-chrome — speaker-notes inherit clip).
    -------------------------------------------------------------------------- */
-.speaker-notes { display: none; }
+.speaker-notes {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+body.is-printing .speaker-notes { display: none !important; }
+@media print { .speaker-notes { display: none !important; } }
 
 /* --------------------------------------------------------------------------
    Print / PDF export
@@ -1149,6 +1165,50 @@ body.is-printing .print-fallback .pf-url {
         word-break: break-all;
         max-width: 90%;
     }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility — keyboard focus rings on every interactive control.
+   Uses :focus-visible so mouse clicks stay clean while keyboard nav is
+   clearly indicated.
+   -------------------------------------------------------------------------- */
+.deck-sections .section-dot:focus-visible,
+.deck-tool-btn:focus-visible,
+.deck-back:focus-visible,
+.slide a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility — honor prefers-reduced-motion. Fragments still appear
+   (they are functional reveals, not decorative); they just stop animating.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .slide.active,
+    .deck-canvas.going-back .slide.active {
+        animation: none !important;
+    }
+    .slide [data-fragment] {
+        transition: none !important;
+    }
+    .slide [data-fragment="highlight"].fragment-visible {
+        animation: none !important;
+    }
+    .slide-cover .cover-meta::after {
+        animation: none !important;
+    }
+    .deck-tool-btn.is-busy::before {
+        animation: none !important;
+        border-top-color: var(--primary-color);
+    }
+    .deck-progress-bar { transition: none !important; }
+    .deck-stage { transition: none !important; }
+    .deck-sections .section-dot { transition: none !important; }
+    .deck-back,
+    .deck-tool-btn,
+    .slide .stat { transition: none !important; }
 }
 
 /* --------------------------------------------------------------------------
