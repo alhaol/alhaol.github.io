@@ -10,7 +10,8 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 
 ```
 .
-├── index.html          # Main portfolio / CV page
+├── index.html          # Main portfolio / CV page (bottom-left circle FAB → Apps Hub)
+├── links.html          # Apps Hub — landing page for all /apps with search + category filters
 ├── profile.json        # Portfolio data (bio, experience, publications, patents…)
 ├── style.json          # Theme / colour-scheme configuration
 ├── imgs/               # Profile images
@@ -59,6 +60,7 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 | App | URL | Description |
 |-----|-----|-------------|
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, featured articles, recent activity |
+| Apps Hub | `/links.html` | Landing page for all apps below — searchable, category-filtered card grid (also reachable via the floating circle on `/`) |
 | Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices |
 | Resource Hub | `/links/` | Curated, searchable resource links with grid / list toggle |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
