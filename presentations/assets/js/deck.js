@@ -127,6 +127,7 @@
                 mermaid.render(id, n.dataset.source).then(({ svg }) => {
                     n.innerHTML = svg;
                     n.dataset.rendered = '1';
+                    normalizeMermaidSvg(n);
                 }).catch(err => console.error('[deck] mermaid re-render failed', err));
             });
         });
@@ -438,6 +439,27 @@
         });
     }
 
+    // Strip the inline style="max-width:<intrinsic>px" mermaid emits so the
+    // CSS sizing rules (.slide-diagram .mermaid svg { width/height: 100% })
+    // can take effect. Pin preserveAspectRatio so the viewBox scales the
+    // diagram down to fit; backfill a viewBox if mermaid omitted one.
+    function normalizeMermaidSvg(root) {
+        const scope = root || document;
+        scope.querySelectorAll('.mermaid svg').forEach(svg => {
+            svg.removeAttribute('style');
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            if (!svg.getAttribute('viewBox') && typeof svg.getBBox === 'function') {
+                try {
+                    const b = svg.getBBox();
+                    if (b.width && b.height) {
+                        svg.setAttribute('viewBox',
+                            `${b.x} ${b.y} ${b.width} ${b.height}`);
+                    }
+                } catch (_) { /* SVG not yet laid out; harmless */ }
+            }
+        });
+    }
+
     let mermaidPromise = null;
     function loadMermaid() {
         if (mermaidPromise) return mermaidPromise;
@@ -472,6 +494,7 @@
                 return mermaid.render(id, src).then(({ svg }) => {
                     n.innerHTML = svg;
                     n.dataset.rendered = '1';
+                    normalizeMermaidSvg(n);
                 }).catch(err => {
                     console.error('[deck] mermaid render failed', err);
                 });

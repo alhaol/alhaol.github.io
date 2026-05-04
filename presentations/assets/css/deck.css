@@ -470,6 +470,12 @@ a:hover { color: var(--secondary-color); }
    -------------------------------------------------------------------------- */
 .slide-diagram .mermaid {
     flex: 1;
+    /* min-*: 0 lets the flex child shrink below its intrinsic size so the
+       SVG's viewBox can scale down instead of overflowing the slide.
+       overflow: hidden is the last-resort clip if anything escapes. */
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -480,7 +486,36 @@ a:hover { color: var(--secondary-color); }
     margin-top: 20px;
 }
 
-.slide-diagram .mermaid svg { max-width: 100%; max-height: 100%; }
+/* !important defeats the inline style="max-width:<intrinsic>px" mermaid emits */
+.slide-diagram .mermaid svg {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block;
+}
+
+/* Inline mermaid inside content slides — bounded like .inline-figure */
+.slide-content .mermaid {
+    max-height: 420px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.slide-content .mermaid svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Universal containment — any visualization stays inside the slide */
+.slide svg,
+.slide canvas,
+.slide iframe,
+.slide .embed-container {
+    max-width: 100%;
+    max-height: 100%;
+}
 
 /* --------------------------------------------------------------------------
    Image / Video / Embed slides

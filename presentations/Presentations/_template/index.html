@@ -220,6 +220,12 @@
 
             <!-- ================================================================
                  9 · DIAGRAM (mermaid, auto-rendered, included in PDF export)
+                 Diagram body is ~1100×400px. The shared engine clamps the SVG
+                 (width/height 100% + viewBox scaling), but dense graphs scale
+                 down to illegibility — keep ≤ 15 nodes, ≤ 25-char labels. Use
+                 `flowchart TD` for tall flows, `flowchart LR` for wide ones.
+                 If a graph is genuinely too dense, split across two slides
+                 or pre-render to SVG/PNG and use `slide-image`.
                  ================================================================ -->
             <section class="slide slide-diagram">
                 <span class="eyebrow">// reference architecture</span>
