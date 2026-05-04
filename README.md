@@ -62,6 +62,7 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, featured articles, recent activity |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`; also reachable via the floating circle on `/`) |
 | Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices |
+| InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
 | Build System | `/apps/build-system/` | Curated self-improvement & productivity video playlist (14 videos) |
