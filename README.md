@@ -4,18 +4,20 @@ Personal portfolio and tools website for **Ibrahim AbuAlhaol** — AI Technical 
 
 ## Overview
 
-A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwindcss.com/), and vanilla JavaScript. The main portfolio is data-driven: content is loaded from `profile.json` and styled via `style.json`, making it easy to update without touching HTML.
+A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwindcss.com/), and vanilla JavaScript. The main portfolio is data-driven: content is loaded from `conf/profile.json` and styled via `conf/style.json`, making it easy to update without touching HTML.
 
 ## Structure
 
 ```
 .
 ├── index.html          # Main portfolio / CV page (bottom-left circle FAB → Apps Hub)
-├── links.html          # Apps Hub — landing page for all /apps with search + category filters
-├── profile.json        # Portfolio data (bio, experience, publications, patents…)
-├── style.json          # Theme / colour-scheme configuration
-├── imgs/               # Profile images
-├── pdfs/               # PDF documents
+├── conf/
+│   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
+│   └── style.json      # Theme / colour-scheme configuration
+├── assets/             # Shared static assets (profile image; also used as site-wide favicon)
+├── links/
+│   ├── index.html      # Apps Hub — searchable, category-filtered card grid (data-driven)
+│   └── links.json      # App registry (edit this to add / update / remove apps)
 ├── articles/           # Technical Articles series
 │   ├── index.html      # Articles landing page (11 articles grid)
 │   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
@@ -32,8 +34,6 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 │       ├── structured-rpi-workflows.html
 │       ├── the-trust-gradient.html
 │       └── small-model-efficiency.html
-├── links/
-│   └── index.html      # Resource Hub — searchable, filterable link collection
 └── apps/
     ├── 21/             # 21 Repetitions tracker
     ├── books/          # Neural Archive — AI & data science e-book library
@@ -60,9 +60,8 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 | App | URL | Description |
 |-----|-----|-------------|
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, featured articles, recent activity |
-| Apps Hub | `/links.html` | Landing page for all apps below — searchable, category-filtered card grid (also reachable via the floating circle on `/`) |
+| Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`; also reachable via the floating circle on `/`) |
 | Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices |
-| Resource Hub | `/links/` | Curated, searchable resource links with grid / list toggle |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
 | Build System | `/apps/build-system/` | Curated self-improvement & productivity video playlist (14 videos) |
@@ -84,14 +83,14 @@ A static GitHub Pages site built with plain HTML, [Tailwind CSS](https://tailwin
 
 ## Updating Content
 
-All portfolio content lives in `profile.json`. Edit that file to update:
+All portfolio content lives in `conf/profile.json`. Edit that file to update:
 
 - Personal info, summary, and stats (citations, patents, journals)
 - Work experience and education
 - Publications, patents, and patent applications
 - Recent activities / highlights
 
-Theme colours and display preferences are controlled by `style.json`.
+Theme colours and display preferences are controlled by `conf/style.json`.
 
 Each playlist app reads its own `data.json` in the same folder — update that file to add or remove videos.
 
