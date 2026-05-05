@@ -31,8 +31,9 @@ No build step, no package manager.
 │   ├── presentations.json   # Deck registry (edit to surface a new deck)
 │   ├── assets/         # Shared deck engine: css/, js/, images/, pdfs/, artifacts/
 │   └── Presentations/
-│       ├── _template/  # Reusable HTML deck template — duplicate per new deck
-│       └── <slug>/     # Each deck lives in its own folder
+│       ├── _template/      # Reusable HTML deck template — duplicate per new deck
+│       ├── _not_approved/  # Gitignored: draft decks live here until approved
+│       └── <slug>/         # Approved decks live one level up; listed in presentations.json
 ├── articles/           # Technical Articles series
 │   ├── index.html      # Articles landing page (11 articles grid)
 │   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
