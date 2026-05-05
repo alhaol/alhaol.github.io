@@ -39,6 +39,7 @@ No build step, no package manager.
 │   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
+│       └── _not_approved/  # Gitignored: draft articles staged here until approved
 │       ├── the-paradigm-shift.html
 │       ├── cognitive-shortcuts.html
 │       ├── context-management-hygiene.html
@@ -51,6 +52,7 @@ No build step, no package manager.
 │       ├── the-trust-gradient.html
 │       └── small-model-efficiency.html
 └── apps/
+    ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker
     ├── books/          # Neural Archive — AI & data science e-book library
     ├── build-system/   # Build System playlist (14 self-improvement videos)
