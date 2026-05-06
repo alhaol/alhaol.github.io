@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-right → Articles; Presentations FAB temporarily hidden)
+├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-center → Presentations, bottom-right → Articles)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -77,7 +77,7 @@ No build step, no package manager.
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles. (The bottom-center Presentations FAB is commented out for now in `index.html`.) |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub, bottom-center → Presentations, bottom-right → Articles. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo + The Efficiency Trilemma |
