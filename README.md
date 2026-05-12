@@ -35,8 +35,8 @@ No build step, no package manager.
 │       ├── _not_approved/  # Gitignored: draft decks live here until approved
 │       └── <slug>/         # Approved decks live one level up; listed in presentations.json
 ├── articles/           # Technical Articles series
-│   ├── index.html      # Articles landing page (11 articles grid)
-│   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_11.png)
+│   ├── index.html      # Articles landing page (12 articles grid)
+│   ├── Post_Images/    # Hero images for articles (Image_01.png through Image_12.png)
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
@@ -50,7 +50,8 @@ No build step, no package manager.
 │       ├── progressive-token-budgets.html
 │       ├── structured-rpi-workflows.html
 │       ├── the-trust-gradient.html
-│       └── small-model-efficiency.html
+│       ├── small-model-efficiency.html
+│       └── agentic-cli-context-patterns.html
 └── apps/
     ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker
@@ -79,7 +80,7 @@ No build step, no package manager.
 |-----|-----|-------------|
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles. Presentations FAB is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
-| Technical Articles | `/articles/` | 11-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
+| Technical Articles | `/articles/` | 12-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo + The Efficiency Trilemma |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
