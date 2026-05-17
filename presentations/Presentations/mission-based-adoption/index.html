@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mission-Based Adoption Playbook — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="mission-based-adoption" data-back-href="../../index.html">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Presentation</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Talk · Provosts · Deans · CIOs</div>
+                <h1>The Mission-Based<br>Adoption Playbook</h1>
+                <p class="cover-subtitle">Five moves that turn AI procurement into compounding institutional advantage — the constructive companion to <em>The Augmentation Trap</em>.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// EdTech 2026 · Higher-Ed Track</span>
+                    <span>// 2026-05-17</span>
+                </div>
+                <aside class="speaker-notes">
+                    Pace fast — board-room audience. Promise five moves and a price tag in the first 90 seconds.
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// same SKU. different architecture.</div>
+                <p class="hook-statement">
+                    Two peer R1s sign the same <em>Microsoft Copilot Education</em> enterprise license<br>
+                    in January 2024. Three years later, one has shifted faculty composition<br>
+                    and rewritten three program rubrics. The other is renewing<br>
+                    because cancellation is harder than continuing.
+                </p>
+                <p class="hook-byline" data-fragment>
+                    Same contract. Same vendor. Same year. Different architecture around it.
+                </p>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the playbook</span>
+                <h2>Five moves · 18-month sequence · ~$340K incremental</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 24px; line-height: 1.7; margin-top: 20px;">
+                    <li data-fragment><strong>01 · Baselines</strong> — measure critical thinking, writing capacity, originality <em>before</em> deployment</li>
+                    <li data-fragment><strong>02 · Faculty development</strong> — funded and completed <em>before</em> tools land</li>
+                    <li data-fragment><strong>03 · Procurement</strong> — four contract clauses that protect academic function</li>
+                    <li data-fragment><strong>04 · Equity audit</strong> — three measured tests, ongoing</li>
+                    <li data-fragment><strong>05 · Outcome monitoring</strong> — 18-month loop against the baseline</li>
+                </ul>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    Defensible mid-R1 incremental spend: faculty dev (~$180K) + governance (~$60K) + audit tooling (~$80K) + baselines (~$20K). Recoverable in Year 2 against avoided lock-in and Title VI exposure.
+                </div>
+                <aside class="speaker-notes">
+                    The price tag is the credibility move. Acknowledge it as defensible-estimate, not gospel.
+                </aside>
+            </section>
+
+            <!-- 4 · AGENDA -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the spine</span>
+                <h2>Baselines → Faculty Dev → Procurement → Equity → Monitoring</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 40px;">
+                    <div class="stat"><div class="stat-value">01</div><div class="stat-label">Baselines</div></div>
+                    <div class="stat"><div class="stat-value">02</div><div class="stat-label">Faculty</div></div>
+                    <div class="stat"><div class="stat-value">03</div><div class="stat-label">Procurement</div></div>
+                    <div class="stat"><div class="stat-value">04</div><div class="stat-label">Equity</div></div>
+                    <div class="stat"><div class="stat-value">05</div><div class="stat-label">Monitoring</div></div>
+                </div>
+            </section>
+
+            <!-- 5 · // 01 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>Baselines — measure before you deploy</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 6 · Baselines -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the four instruments</span>
+                <h2>What to baseline — and run in parallel, not series</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Domain</th><th>Instrument</th><th>Cadence</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>Critical thinking</td><td>CCTST or HCTA, validated instruments</td><td>Annual cohort</td></tr>
+                        <tr data-fragment><td>Writing capacity</td><td>Unaided in-class essay, rubric-blinded</td><td>Course entry + exit</td></tr>
+                        <tr data-fragment><td>Originality</td><td>Capstone artifact diversity scoring (lexical + structural)</td><td>Program review cycle</td></tr>
+                        <tr data-fragment><td>Research integrity</td><td>Fabricated-citation random audit; submission-pattern anomalies</td><td>Quarterly</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 25px;" data-fragment="highlight">
+                    <strong>Sequencing answer to the CIO:</strong> Baseline cohort A in parallel while you pilot cohort B. You do not wait six months.
+                </div>
+            </section>
+
+            <!-- 7 · // 02 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>Faculty development — before tools, not after</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 8 · Faculty -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the order matters</span>
+                <h2>Trained faculty + AI = gain. Untrained faculty + AI = tax.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Funded:</strong> stipend or course-release. Unpaid PD does not happen. Plan for <strong>~30 hours per participating faculty member</strong> in Year 1.</li>
+                    <li data-fragment><strong>Before deployment:</strong> tools land in classrooms where rubric redesign has already happened. Otherwise you ship maximum disruption, minimum pedagogy.</li>
+                    <li data-fragment><strong>Union dynamics:</strong> in 31 US states, faculty workload changes tied to AI are mandatory bargaining subjects. Engage the union <em>before</em> the pilot, not after the grievance.</li>
+                    <li data-fragment><strong>UNESCO AI Competency Framework for Teachers (2024)</strong> — adopt the framework verbatim; do not invent your own.</li>
+                </ul>
+            </section>
+
+            <!-- 9 · Governance (added per critique) -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// who decides · governance</span>
+                <h2>The AI Steering Committee — eight seats, quarterly cadence</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Seat</th><th>Role on the committee</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>Provost (chair)</strong></td><td>Academic-mission alignment; final vote</td></tr>
+                        <tr data-fragment><td><strong>CIO</strong></td><td>Technical feasibility, security, integration</td></tr>
+                        <tr data-fragment><td><strong>CFO</strong></td><td>Total cost of ownership, exit cost</td></tr>
+                        <tr data-fragment><td><strong>Faculty senate rep</strong></td><td>Pedagogical and academic-freedom review</td></tr>
+                        <tr data-fragment><td><strong>General counsel</strong></td><td>Data, FERPA, Title VI, contract terms</td></tr>
+                        <tr data-fragment><td><strong>Student rep</strong></td><td>Equity and access voice</td></tr>
+                        <tr data-fragment><td><strong>IR director</strong></td><td>Baselines and outcome data</td></tr>
+                        <tr data-fragment><td><strong>External advisor</strong></td><td>Peer-institution practice; rotates yearly</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    <strong>Authority:</strong> veto on procurement &gt; $250K; mandatory consult on any tool touching student work or research integrity.
+                </div>
+            </section>
+
+            <!-- 10 · // 03 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>Procurement — the four contract clauses</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 11 · Procurement -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// real clause language</span>
+                <h2>Four clauses that turn a procurement into architecture</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Clause</th><th>Sample language (defensible starting point)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>Audit rights</strong></td><td>"Customer retains right to third-party algorithmic audit at vendor expense if disparate-impact threshold of 0.8 is breached on any protected class."</td></tr>
+                        <tr data-fragment><td><strong>Data sovereignty</strong></td><td>"All student work and prompt data remain customer property; no use for model training without per-cohort opt-in; deletion on request within 30 days."</td></tr>
+                        <tr data-fragment><td><strong>Model behavior</strong></td><td>"Vendor provides written behavior spec; material changes require 90 days notice and renegotiation; customer may suspend usage during transition."</td></tr>
+                        <tr data-fragment><td><strong>Exit terms</strong></td><td>"Full export of student artifacts and configuration in non-proprietary format; 12-month transition assistance; no exit fee beyond pro-rated license."</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    EDUCAUSE 2025: 94% of IT involved in procurement, only 58% teaching-and-learning. That gap is what these clauses close.
+                </aside>
+            </section>
+
+            <!-- 12 · // 04 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 04</div>
+                <h1>Equity — audit as you go</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 13 · Equity -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// three measurable tests</span>
+                <h2>Three equity audits, every term</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Paid-tier vs. free-tier outcomes</strong> — measure assignment-level performance by reported tool access. Site licenses with paid-tier parity close this directly.</li>
+                    <li data-fragment><strong>ESL student gain/loss</strong> — measure unaided writing trajectory for ESL cohort vs. domestic. <em>ScienceDirect</em> 2025 meta-analysis: AI produces large EFL gains when scaffolded; harms when unstructured.</li>
+                    <li data-fragment><strong>Training-access gap</strong> — only ~36% of students report formal AI training. Measure it. Close it as a graduation requirement, not an extracurricular.</li>
+                </ul>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    <strong>Counter to the "AI widens gaps" narrative:</strong> Stanford Tutor CoPilot showed +9pp gains for students of <em>lowest-rated</em> tutors. Structured deployment closes gaps. Default deployment widens them. The choice is yours.
+                </div>
+            </section>
+
+            <!-- 14 · // 05 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 05</div>
+                <h1>Outcome monitoring — close the loop</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 15 · Monitoring -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// 18-month cycle</span>
+                <h2>Baseline → Deploy → Measure → Adjust</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Month</th><th>Activity</th><th>Decision gate</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>0–3</td><td>Baselines + faculty PD start</td><td>—</td></tr>
+                        <tr data-fragment><td>4–9</td><td>Cohort B pilot; cohort A continues baseline</td><td>Mid-term equity audit</td></tr>
+                        <tr data-fragment><td>10–15</td><td>Outcome measurement against baseline</td><td>Steering committee renewal vote</td></tr>
+                        <tr data-fragment><td>16–18</td><td>Adjust scope, contract renegotiation, publish results</td><td>Continue / pivot / exit</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    <strong>Honest disclosure:</strong> No institution has yet published results from all five moves over a full cycle. We can show what each single-move institution missed.
+                </div>
+                <aside class="speaker-notes">
+                    Counterfactual honesty buys credibility with this audience. Don't pretend to a longitudinal study that doesn't exist.
+                </aside>
+            </section>
+
+            <!-- 16 · WRAP -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    <em>Architecture compounds.<br>Contracts expire.</em>
+                </p>
+                <p class="hook-byline">Buy the contract you must. Build the architecture you own.</p>
+            </section>
+
+            <!-- 17 · Q&A -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thank you</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io/articles/Articles/the-augmentation-trap.html" target="_blank" rel="noopener">Companion article — The Augmentation Trap</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+    <script>
+    function _login() {
+      var u = document.getElementById('loginUsername').value;
+      var p = document.getElementById('loginPassword').value;
+      if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+        document.getElementById('loginView').style.display = 'none';
+      } else {
+        var err = document.getElementById('loginError');
+        err.style.display = 'block';
+        var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+        inputs.forEach(function(el) {
+          el.style.borderColor = '#ef4444';
+          setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+        });
+      }
+    }
+    document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') _login();
+    });
+    </script>
+</body>
+</html>

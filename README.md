@@ -83,7 +83,7 @@ No build step, no package manager.
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles. Presentations FAB is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 14-article series on agentic AI, cognitive systems, and advanced engineering practices (dark-blue theme) |
-| Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo + The Efficiency Trilemma |
+| Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: 6 (including the EdTech 2026 trilogy: Designing for Effort, Mission-Based Adoption, AI for Learning Engineering) |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |

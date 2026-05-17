@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designing for Effort — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="designing-for-effort" data-back-href="../../index.html">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Presentation</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Talk · Faculty + Instructional Designers</div>
+                <h1>Designing for Effort</h1>
+                <p class="cover-subtitle">Assessment redesign in the AI era — three patterns you can adopt next semester, plus the rubric retrofit that makes them work.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// EdTech 2026 · Higher-Ed Track</span>
+                    <span>// 2026-05-17</span>
+                </div>
+                <aside class="speaker-notes">
+                    Open at pace. Don't oversell the redesign — promise three concrete patterns and a Monday-morning verb.
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// Sunday afternoon</div>
+                <p class="hook-statement">
+                    You graded 40 essays last week. Eight were excellent.<br>
+                    You can't tell which eight the student actually wrote.<br>
+                    <em>That isn't a detection problem. That's a rubric problem.</em>
+                </p>
+                <p class="hook-byline" data-fragment>
+                    AI didn't break grading. It exposed what the rubric was really measuring.
+                </p>
+                <aside class="speaker-notes">
+                    Land the line, then pause. Don't apologize. The room is with you.
+                </aside>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>Three patterns + one rubric retrofit</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>Three <strong>assessment patterns</strong> that are AI-resilient and substitution-neutral (no extra grading hours)</li>
+                    <li data-fragment>A <strong>rubric retrofit</strong> that shifts weight from polish to reasoning</li>
+                    <li data-fragment>One <strong>verb</strong> to try Monday morning — on one assignment, in one course</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Substitution-neutral is the magic word. Repeat it before slide 9.
+                </aside>
+            </section>
+
+            <!-- 4 · AGENDA -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the spine</span>
+                <h2>What broke → What works → Rubric retrofit</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 40px;">
+                    <div class="stat"><div class="stat-value">01</div><div class="stat-label">What broke</div></div>
+                    <div class="stat"><div class="stat-value">02</div><div class="stat-label">Three patterns</div></div>
+                    <div class="stat"><div class="stat-value">03</div><div class="stat-label">Rubric retrofit</div></div>
+                    <div class="stat"><div class="stat-value">04</div><div class="stat-label">Cases &amp; close</div></div>
+                </div>
+            </section>
+
+            <!-- 5 · // 01 SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>What broke — the deliverable-only assessment</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 6 · The polish ceiling -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the polish ceiling</span>
+                <h2>AI raises the floor of fluency. Floor-calibrated rubrics stop discriminating.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment>The C-student now writes like a B+. The B+ student writes like an A−. The A student writes like the A− student. The top of the distribution <em>collapses</em>.</li>
+                    <li data-fragment>Rubrics that score grammar, structure, citation format, and surface coherence are now measuring the tool, not the learner.</li>
+                    <li data-fragment><strong>Bastani et al., <em>PNAS</em> 2025 (N≈1,000):</strong> GPT Base raised practice scores +48% — and <em>lowered</em> unaided exam scores −17%. Same students. Same content. The deliverable lied.</li>
+                </ul>
+                <aside class="speaker-notes">
+                    The Bastani number is the single most useful thing in this talk. Repeat it.
+                </aside>
+            </section>
+
+            <!-- 7 · Detection mirage -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the detection mirage</span>
+                <h2>You can't grade your way out of this with detection</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>What it means</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>~47%</strong> use LLMs for coursework</td><td>The base rate is too high for individual enforcement</td><td>Beale, arXiv:2506.22231</td></tr>
+                        <tr data-fragment><td><strong>~88%</strong> detection accuracy</td><td>12% false-positive on a population that large = thousands of wrongly-accused students</td><td>Beale 2025</td></tr>
+                        <tr data-fragment><td><strong>~1%</strong> Turnitin published FP rate</td><td>1% × 20M papers ≈ 200,000 wrongly flagged students per year</td><td>Turnitin disclosure, 2024</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 25px;" data-fragment="highlight">
+                    <strong>Bottom line:</strong> detection penalizes rule-abiders disproportionately and never reaches population coverage. Redesign is the only durable path.
+                </div>
+            </section>
+
+            <!-- 8 · // 02 SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>What actually works — three patterns</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 9 · Pattern 1 — Oral defense -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// pattern 1 · oral defense</span>
+                <h2>The 3-minute viva — substitution, not addition</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="two-col split-60-40">
+                    <div>
+                        <h3>How it works</h3>
+                        <ul>
+                            <li>Student submits the paper as normal</li>
+                            <li>3-minute structured viva on <em>one randomly-drawn claim</em> from their paper</li>
+                            <li>Two questions: <em>"Defend this claim"</em> and <em>"What would falsify it?"</em></li>
+                            <li><strong>Replaces</strong> the final-exam grading slot — does not add to it</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="callout" data-fragment="highlight">
+                            <strong>Load math:</strong> 3 min × 80 students = <strong>4 hours</strong>. Less than grading 80 finals.
+                        </div>
+                        <div class="stat-grid" style="margin-top: 20px;">
+                            <div class="stat" data-fragment>
+                                <div class="stat-value">+0.73</div>
+                                <div class="stat-label">SD vs. written-only (verbal-exam pilot)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Lead with the load math. If you can't sell the time substitution, the rest of the pattern doesn't matter.
+                </aside>
+            </section>
+
+            <!-- 10 · Pattern 2 — Process portfolios -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// pattern 2 · process portfolio</span>
+                <h2>Grade the work <em>of</em> learning, not the artifact</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Required deliverables:</strong> drafts (≥2), AI-use log with prompts and edits, 200-word reflection on what AI helped with and where it misled</li>
+                    <li data-fragment><strong>Verification:</strong> one 10-minute mid-term checkpoint conversation. The log is verified by spot-check, not trusted blind.</li>
+                    <li data-fragment><strong>What gets graded:</strong> reasoning quality, revision decisions, AI-disagreement instances. Not the final polished page.</li>
+                    <li data-fragment><strong>Kofinas et al., <em>BJET</em> 2025</strong> — process portfolios + prompt logs reduced undetected AI submissions in a UK business-school case.</li>
+                </ul>
+                <div class="callout" style="margin-top: 25px;" data-fragment="highlight">
+                    <strong>Honesty mechanism:</strong> students fabricate logs only when nobody reads them. The 10-minute checkpoint is the cost of trust.
+                </div>
+            </section>
+
+            <!-- 11 · Pattern 3 — In-class synthesis -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// pattern 3 · in-class synthesis</span>
+                <h2>Frequent, low-stakes, closed-resource — the equity backstop</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Format:</strong> 15-minute in-class synthesis, weekly or biweekly, handwritten or laptop-with-LockDown. Prompt is a transfer item from prior week's material.</li>
+                    <li data-fragment><strong>What it measures:</strong> unaided cognitive transfer — the gap Bastani's PNAS study quantified at −17%.</li>
+                    <li data-fragment><strong>Why it's the equity backstop:</strong> portfolios reward students with time to iterate. In-class synthesis rewards no one's schedule — only the learning.</li>
+                    <li data-fragment><strong>Humanities variant:</strong> Socratic discussion grading or collaborative annotation — same principle, different surface.</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Surface the equity argument explicitly. It pre-empts the strongest objection to portfolios.
+                </aside>
+            </section>
+
+            <!-- 12 · // 03 SECTION -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>The AI-transparent rubric</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 13 · Rubric retrofit table -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// three rubric retrofits</span>
+                <h2>Shift weight from polish to reasoning</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Retrofit</th>
+                            <th>Old rubric</th>
+                            <th>Retrofitted rubric</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>AI-use disclosure</strong></td><td>Implicit / dishonor-coded</td><td>Required block at end of submission: what tool, what prompt, what edits</td></tr>
+                        <tr data-fragment><td><strong>Reasoning ≥ artifact</strong></td><td>30% structure + 30% language + 40% argument</td><td>20% structure + 10% language + <strong>70% reasoning + sourcing</strong></td></tr>
+                        <tr data-fragment><td><strong>Iteration trail</strong></td><td>Final paper only</td><td>Final paper + draft history + one paragraph on what changed and why</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 25px;" data-fragment="highlight">
+                    <strong>The shift:</strong> polish becomes a hygiene threshold, not a discriminator. Reasoning becomes the load-bearing scoring axis.
+                </div>
+            </section>
+
+            <!-- 14 · Cases — named -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// real cases · 2024–2026</span>
+                <h2>Institutions that did this and measured it</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>What they did</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>University of Sydney</strong></td><td>"Two-lane" framework: Lane 1 secure in-person, Lane 2 AI-permitted with disclosure. Institution-wide rollout.</td><td>S2 2025</td></tr>
+                        <tr data-fragment><td><strong>UK business school (Kofinas et al.)</strong></td><td>Process portfolios with prompt logs; measured drop in undetected AI submissions.</td><td><em>BJET</em> 2025</td></tr>
+                        <tr data-fragment><td><strong>UCL / UK Higher-Ed survey</strong></td><td>Sector-wide shift toward authentic and oral assessment documented across 50+ programs.</td><td>2025</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    Sydney's two-lane is the cleanest reference. If you only remember one, remember Sydney.
+                </aside>
+            </section>
+
+            <!-- 15 · WRAP -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// Monday morning</div>
+                <p class="hook-statement">
+                    Pick one assignment this week.<br>
+                    Add a <em>3-minute viva</em>.<br>
+                    That's the experiment.
+                </p>
+                <p class="hook-byline">Don't redesign the program. Redesign one assignment. The rest follows.</p>
+                <aside class="speaker-notes">
+                    One verb. One timebox. End there.
+                </aside>
+            </section>
+
+            <!-- 16 · Q&A -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thank you</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io/articles/Articles/the-augmentation-trap.html" target="_blank" rel="noopener">Companion article — The Augmentation Trap</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+    <script>
+    function _login() {
+      var u = document.getElementById('loginUsername').value;
+      var p = document.getElementById('loginPassword').value;
+      if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+        document.getElementById('loginView').style.display = 'none';
+      } else {
+        var err = document.getElementById('loginError');
+        err.style.display = 'block';
+        var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+        inputs.forEach(function(el) {
+          el.style.borderColor = '#ef4444';
+          setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+        });
+      }
+    }
+    document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') _login();
+    });
+    </script>
+</body>
+</html>

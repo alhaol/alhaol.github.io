@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Learning Engineering — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="ai-for-learning-engineering" data-back-href="../../index.html">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Presentation</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Talk · Ed-Tech Researchers + Engineers</div>
+                <h1>AI for Learning<br>Engineering</h1>
+                <p class="cover-subtitle">What 2025–26 evidence shows works — four design principles, a reference architecture, and the evaluation harness most teams skip.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// EdTech 2026 · Higher-Ed Track</span>
+                    <span>// 2026-05-17</span>
+                </div>
+                <aside class="speaker-notes">
+                    Engineering audience. Skip the moralizing. Give them principles, architecture, metrics.
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// same technology · opposite outcomes</div>
+                <p class="hook-statement">
+                    Harvard PS2 RCT: AI tutor <em>+0.73 to +1.3 SD</em> vs. active learning (Kestin, 2025).<br>
+                    Wharton HS math RCT: ChatGPT Base <em>−17%</em> on the unaided post-test (Bastani, <em>PNAS</em> 2025).<br>
+                </p>
+                <p class="hook-byline" data-fragment>
+                    Same technology. Opposite outcomes. The difference is in the <em>design</em>.
+                </p>
+                <aside class="speaker-notes">
+                    Cite Bastani by construct: delayed post-test, AI removed. The durability test is the entire load-bearing claim.
+                </aside>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>Four design principles + a reference architecture + a benchmark</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>Four <strong>design principles</strong> separating durable-learning tools from completion-optimized tools</li>
+                    <li data-fragment>One <strong>reference architecture</strong> (state estimator → policy → scheduler → durability probe) you can map onto your team's roadmap</li>
+                    <li data-fragment>One <strong>evaluation harness</strong> for measuring durability — the metric most teams aren't shipping</li>
+                </ul>
+            </section>
+
+            <!-- 4 · AGENDA -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the spine</span>
+                <h2>Purpose → Load → Feedback → Durability</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 40px;">
+                    <div class="stat"><div class="stat-value">01</div><div class="stat-label">Purpose</div></div>
+                    <div class="stat"><div class="stat-value">02</div><div class="stat-label">Load</div></div>
+                    <div class="stat"><div class="stat-value">03</div><div class="stat-label">Feedback</div></div>
+                    <div class="stat"><div class="stat-value">04</div><div class="stat-label">Durability</div></div>
+                </div>
+            </section>
+
+            <!-- 5 · // 01 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>Intentional pedagogical purpose</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 6 · Purpose -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what the OECD finding actually says</span>
+                <h2>Tools designed <em>with</em> a pedagogical purpose produce sustained learning. General-purpose chatbots do not.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Tool</th><th>Pedagogical purpose baked in?</th><th>Outcome signal</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>Khanmigo</strong></td><td>Socratic-only policy: never reveals the answer</td><td>Vendor-reported gains; independent RCT pending</td></tr>
+                        <tr data-fragment><td><strong>ASSISTments / Tutored Problem Solving</strong></td><td>Step-by-step prompts, hint cascades</td><td>Replicated efficacy gains, peer-reviewed</td></tr>
+                        <tr data-fragment><td><strong>LearnLM (Google)</strong></td><td>Trained for tutoring objectives; alignment via educator preference</td><td>≥ human tutors in N=165 UK RCT (Nov 2025)</td></tr>
+                        <tr data-fragment><td><strong>General ChatGPT (no scaffolding)</strong></td><td>None — optimizes for completion</td><td>Bastani PNAS: −17% on unaided exam</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    The vendor name comparison is the leverage. Engineers building thin wrappers see the gradient.
+                </aside>
+            </section>
+
+            <!-- 7 · // 02 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>Cognitive load — instrument it, don't theorize about it</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 8 · Load instrumentation -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// from concept to metric</span>
+                <h2>Lodge &amp; Loble's distinction needs an operationalization</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Beneficial offloading:</strong> free working memory for the <em>intrinsic load</em> — the hard thinking the learner is supposed to do.</li>
+                    <li data-fragment><strong>Detrimental offloading:</strong> outsource the intrinsic load itself — student never engages.</li>
+                    <li data-fragment><strong>The shipping question:</strong> how do you measure which kind your tool is producing?</li>
+                </ul>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Instrument</th><th>What it captures</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>Hint-request rate vs. attempt rate</td><td>Proxy for delegated reasoning</td></tr>
+                        <tr data-fragment><td>Self-explanation token count</td><td>Did the learner articulate <em>why</em>?</td></tr>
+                        <tr data-fragment><td>Response latency deltas</td><td>Engagement vs. autopilot</td></tr>
+                        <tr data-fragment><td>NASA-TLX micro-survey</td><td>Subjective load, sampled mid-session</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 9 · // 03 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>Formative feedback over completion</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 10 · Feedback -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the completion trap</span>
+                <h2>Hand the student the answer = the wrong metric won</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>What completion optimizes:</strong> session length, perceived helpfulness, NPS. None of these correlate with learning.</li>
+                    <li data-fragment><strong>What learning optimizes:</strong> delayed retention, transfer to novel items, unaided performance.</li>
+                    <li data-fragment><strong>The design move:</strong> withhold solutions; scaffold steps; require the learner to articulate reasoning before the tool advances.</li>
+                </ul>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    <strong>Encoding into weights, not prompts:</strong> RLHF / DPO with educator-labeled preferences that rank <em>scaffolded-incorrect</em> above <em>direct-correct</em>. This is how LearnLM does it. This is the alignment work most teams skip.
+                </div>
+            </section>
+
+            <!-- 11 · Counter-evidence -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the steelman shelf</span>
+                <h2>Where the "always withhold" rule breaks</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>Wang &amp; Zhang, <em>Frontiers in Psychology</em> 2026 (N=912, 3-wave):</strong> full-task delegation <em>can</em> outperform scattered offloading — when AI is framed as a <em>collaborator</em> on a complex authentic task.</li>
+                    <li data-fragment><strong>Stanford Tutor CoPilot (Wang &amp; Demszky, 2024):</strong> AI supports the <em>tutor</em>, not the student. +9pp math mastery for students of lowest-rated tutors.</li>
+                    <li data-fragment><strong>Implication for design:</strong> the unit of optimization matters. Don't optimize the learner-tool interaction in isolation. Sometimes the right intervention is upstream of the learner.</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Give Wang & Zhang 90 seconds. It is the strongest counter to the deck's thesis.
+                </aside>
+            </section>
+
+            <!-- 12 · // 04 -->
+            <section class="slide slide-section">
+                <div class="section-num">// 04</div>
+                <h1>Durability — the metric most teams aren't shipping</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 13 · Durability metric -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// concrete metric · concrete protocol</span>
+                <h2>Normalized Learning Gain on a transfer item set</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr><th>Dimension</th><th>Specification</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>Probe</td><td>Transfer items (not training items) — IRT-calibrated bank, held-out</td></tr>
+                        <tr data-fragment><td>Delay</td><td>≥ 7 days post-session (Barcaui-style; not in-session)</td></tr>
+                        <tr data-fragment><td>Condition</td><td>AI disabled. No fallback. No exception.</td></tr>
+                        <tr data-fragment><td>Metric</td><td>NLG = (post − pre) / (max − pre); report by item-difficulty stratum</td></tr>
+                        <tr data-fragment><td>Reporting cadence</td><td>Every release; regression alerts ≥ 0.05 NLG drop</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    "Build for the test the learner takes alone." That's the metric. Repeat it.
+                </aside>
+            </section>
+
+            <!-- 14 · Reference architecture (loop, not pipeline) -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// reference architecture</span>
+                <h2>The loop, not the pipeline</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="mermaid">
+flowchart LR
+    L[Learner] --> S[State Estimator<br>BKT / DKT]
+    S --> P[Policy<br>scaffold · hint · withhold]
+    P --> T[Tutor Turn<br>aligned via DPO]
+    T --> R[Response Classifier<br>reasoning · correctness]
+    R --> Q[Spaced Scheduler<br>FSRS / SM-2]
+    Q --> D[Delayed Probe<br>N&ge;7d · AI-disabled]
+    D --> S
+    style S fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style P fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style D fill:#0a1f0a,stroke:#00cc33,stroke-width:2px,color:#fff
+                </div>
+                <aside class="speaker-notes">
+                    The state estimator and the delayed probe are the load-bearing parts. Most teams have neither.
+                </aside>
+            </section>
+
+            <!-- 15 · Evaluation harness -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what to benchmark against</span>
+                <h2>The evaluation harness most teams skip</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.75; margin-top: 20px;">
+                    <li data-fragment><strong>IRT-calibrated item banks</strong> per subject — held-out probes that don't leak into training</li>
+                    <li data-fragment><strong>Public benchmarks worth wiring up:</strong> LearningQ, MMLU-Ed, MATH (transfer subset), MathDial</li>
+                    <li data-fragment><strong>Counterfactual cohort:</strong> active-learning baseline classroom, same content, same time horizon</li>
+                    <li data-fragment><strong>Drift alarms:</strong> NLG regression ≥ 0.05; hint-rate spike ≥ 30%; self-explanation token drop ≥ 25%</li>
+                </ul>
+                <div class="callout" style="margin-top: 20px;" data-fragment="highlight">
+                    <strong>Honest framing:</strong> if your team can't name the held-out probe set, you do not yet have a learning-engineering product. You have a chatbot with a school logo.
+                </div>
+            </section>
+
+            <!-- 16 · WRAP -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    Build for the test the learner takes <em>alone</em>.
+                </p>
+                <p class="hook-byline">Everything else is engagement metrics in disguise.</p>
+                <aside class="speaker-notes">
+                    Land and stop.
+                </aside>
+            </section>
+
+            <!-- 17 · Q&A -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thank you</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io/articles/Articles/the-augmentation-trap.html" target="_blank" rel="noopener">Companion article — The Augmentation Trap</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+    <script>
+    function _login() {
+      var u = document.getElementById('loginUsername').value;
+      var p = document.getElementById('loginPassword').value;
+      if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+        document.getElementById('loginView').style.display = 'none';
+      } else {
+        var err = document.getElementById('loginError');
+        err.style.display = 'block';
+        var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+        inputs.forEach(function(el) {
+          el.style.borderColor = '#ef4444';
+          setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+        });
+      }
+    }
+    document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') _login();
+    });
+    </script>
+</body>
+</html>

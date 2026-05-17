@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaling AI vs. Scaling Judgment — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="scaling-ai-vs-judgment" data-back-href="../../index.html">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Presentation</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// Keynote · Higher Education</div>
+                <h1>Scaling AI vs.<br>Scaling Judgment</h1>
+                <p class="cover-subtitle">The augmentation trap — and a five-question audit for the next vendor contract.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// EdTech 2026 · Higher-Ed Track</span>
+                    <span>// 2026-05-16</span>
+                </div>
+                <aside class="speaker-notes">
+                    Open at pace. Don't introduce the topic — let the hook do it. Two-beat pause before slide 2.
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK — caveated single stat -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// the finding nobody is putting on a procurement slide</div>
+                <div class="hook-stat">r = −0.68</div>
+                <div class="hook-stat-label">correlation between frequent AI use and critical thinking — Gerlich, <em>Societies</em>, 2025 (N=666)</div>
+                <p class="hook-byline" data-fragment>
+                    Cross-sectional, self-report, correlational — <em>not</em> causal. But the direction has replicated. And the youngest users showed the strongest dependence.
+                </p>
+                <aside class="speaker-notes">
+                    Lead with the number. Concede the methodological caveat *immediately* — provosts respect it. Then pivot: direction, not magnitude, is what's load-bearing.
+                </aside>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>By the end of this talk</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>A <strong>vocabulary</strong> — <em>the augmentation trap</em> — for what is actually being traded</li>
+                    <li data-fragment>The <strong>five-question audit</strong> for the next vendor contract</li>
+                    <li data-fragment>The <strong>2×2</strong> you can put in front of your board this quarter</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Reveal one at a time. The five-question audit is the deck's commercial hook — name it twice.
+                </aside>
+            </section>
+
+            <!-- 4 · AGENDA SPINE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the spine</span>
+                <h2>Speed → Mirage → Trade → Crisis → Architecture</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 40px;">
+                    <div class="stat"><div class="stat-value">01</div><div class="stat-label">Speed of adoption</div></div>
+                    <div class="stat"><div class="stat-value">02</div><div class="stat-label">The mirage</div></div>
+                    <div class="stat"><div class="stat-value">03</div><div class="stat-label">The teaching trade</div></div>
+                    <div class="stat"><div class="stat-value">04</div><div class="stat-label">Research integrity</div></div>
+                    <div class="stat"><div class="stat-value">05</div><div class="stat-label">Architecture</div></div>
+                </div>
+                <aside class="speaker-notes">
+                    Five seconds. Don't read the cards.
+                </aside>
+            </section>
+
+            <!-- 5 · // 01 SECTION DIVIDER -->
+            <section class="slide slide-section">
+                <div class="section-num">// 01</div>
+                <h1>Infrastructure decisions, taken at speed</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 6 · TWO-COL: cases + steelman -->
+            <section class="slide slide-two-col">
+                <span class="eyebrow">// where we actually are</span>
+                <h2>This is not a pilot. It is the rails.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="two-col split-60-40">
+                    <div>
+                        <h3>2025–2026 commitments</h3>
+                        <ul>
+                            <li data-fragment><strong>California State University</strong> — 23 campuses, ~500K students, enterprise deal with Microsoft + OpenAI + Google (Feb 2025)</li>
+                            <li data-fragment><strong>Ohio State</strong> — campus-wide AI fluency mandate; every graduate AI-literate (Fall 2025)</li>
+                            <li data-fragment><strong>Canvas LMS</strong> — OpenAI agents embedded in the platform used by thousands of universities</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="callout" data-fragment="highlight">
+                            <strong>And the upside is real:</strong> Kestin et al., Harvard, <em>Scientific Reports</em> 2025 (N=194 RCT) — AI tutor +0.73 to +1.3 SD vs. active learning, in less time on task.
+                        </div>
+                        <div class="stat-grid" style="margin-top: 20px;">
+                            <div class="stat" data-fragment>
+                                <div class="stat-value">~92%</div>
+                                <div class="stat-label">student adoption (2026)</div>
+                            </div>
+                            <div class="stat" data-fragment>
+                                <div class="stat-value">~79%</div>
+                                <div class="stat-label">faculty adoption</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Steelman the case for moving fast *before* you puncture it. Kestin Harvard is the strongest pro-AI RCT — concede it, then note durability was not measured.
+                </aside>
+            </section>
+
+            <!-- 7 · QUOTE — pivot -->
+            <section class="slide slide-quote">
+                <blockquote>
+                    Adoption is racing ahead of evidence.<br>
+                    Procurement is racing ahead of pedagogy.<br>
+                    <em>The institutions most equipped to think slowly about a fast technology are moving the fastest.</em>
+                </blockquote>
+                <cite>— the augmentation trap</cite>
+            </section>
+
+            <!-- 8 · // 02 SECTION DIVIDER -->
+            <section class="slide slide-section">
+                <div class="section-num">// 02</div>
+                <h1>The mirage of "enhanced outcomes"</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 9 · 62% lift unpacked -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// construct validity</span>
+                <h2>"62% lift" measures task completion. Not transferable competence.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th style="text-align:right;">With AI</th>
+                            <th style="text-align:right;">Unaided</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Task completion (in-session)</td><td style="text-align:right;"><strong>↑↑</strong></td><td style="text-align:right;">baseline</td><td>vendor decks</td></tr>
+                        <tr data-fragment><td>Retention without AI access (post-test)</td><td style="text-align:right;">57.5%</td><td style="text-align:right;"><strong>68.5%</strong></td><td>Barcaui RCT (2025)</td></tr>
+                        <tr data-fragment><td>Critical-thinking score (cross-sectional)</td><td style="text-align:right;">↓</td><td style="text-align:right;"><strong>↑</strong></td><td>Gerlich 2025</td></tr>
+                        <tr data-fragment><td>Linguistic / reasoning diversity</td><td style="text-align:right;">↓</td><td style="text-align:right;"><strong>↑</strong></td><td>Sourati, <em>TiCS</em> 2026</td></tr>
+                    </tbody>
+                </table>
+                <div class="callout" style="margin-top: 30px;" data-fragment="highlight">
+                    <strong>The trade:</strong> +X percentage points on the deliverable. −11 percentage points on what the student can do unaided in five years.
+                </div>
+                <aside class="speaker-notes">
+                    The Barcaui −11pp is the single most useful number for a provost. Repeat it.
+                </aside>
+            </section>
+
+            <!-- 10 · Cognitive offloading -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// from the cognitive science</span>
+                <h2>Offloading is a metacognitive choice, not a passive harm</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <blockquote style="margin-top: 20px;">
+                    "Students decide what to think about and what to delegate. That choice is shaped by the tools they are given, the assessments they face, and the norms their institutions model."
+                </blockquote>
+                <cite style="display:block; margin-top: 10px;">— Lodge &amp; Loble, UTS / UQ, March 2026</cite>
+                <div class="callout" style="margin-top: 30px;" data-fragment="highlight">
+                    <strong>Implication:</strong> this is precisely the domain in which <em>administrative design</em> determines outcomes. The choice is yours, not the student's.
+                </div>
+            </section>
+
+            <!-- 11 · // 03 SECTION DIVIDER -->
+            <section class="slide slide-section">
+                <div class="section-num">// 03</div>
+                <h1>The teaching trade</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 12 · Three patterns -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// three patterns from current research</span>
+                <h2>What the trade actually looks like</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>The finding</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment>
+                            <td><strong>Connection cost</strong></td>
+                            <td>~7 in 10 teachers worry AI weakens critical thinking; &gt;½ of students feel <em>less</em> connected to teachers when AI is in class.</td>
+                            <td>CDT survey, early 2026</td>
+                        </tr>
+                        <tr data-fragment>
+                            <td><strong>Gray-zone</strong></td>
+                            <td>~47% of students using LLMs for coursework; detection ~88% accurate. Arithmetic doesn't favor enforcement; rule-abiders are penalized most.</td>
+                            <td>Beale, arXiv 2025</td>
+                        </tr>
+                        <tr data-fragment>
+                            <td><strong>Homogenization</strong></td>
+                            <td>Prolonged LLM exposure produces measurable convergence in expression and thought. Students start to think like LLMs.</td>
+                            <td>Sourati et al., <em>TiCS</em> 2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    Walk one row at a time. After the third, pause. This is where the room shifts.
+                </aside>
+            </section>
+
+            <!-- 13 · Pull quote — Sourati -->
+            <section class="slide slide-quote">
+                <blockquote>
+                    "LLMs reflect and reinforce dominant styles while marginalizing alternative voices and reasoning strategies — producing standardized expressions and thoughts across users."
+                </blockquote>
+                <cite>— Sourati, Ziabari, Dehghani · <em>Trends in Cognitive Sciences</em>, Jan 2026</cite>
+            </section>
+
+            <!-- 14 · // 04 SECTION DIVIDER -->
+            <section class="slide slide-section">
+                <div class="section-num">// 04</div>
+                <h1>The quieter crisis — research integrity</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 15 · Hero stat — paper mills -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// fabricated references in published PubMed papers</div>
+                <div class="hook-stat">1 in 277</div>
+                <div class="hook-stat-label">early 2026 — up from <strong>1 in 2,828</strong> in 2023</div>
+                <p class="hook-byline" data-fragment>
+                    Wiley flags ~<em>1 in 7</em> submissions for paper-mill characteristics. The reproducibility tail is just starting.
+                </p>
+                <aside class="speaker-notes">
+                    Read both numbers slowly. Let the magnitude sit.
+                </aside>
+            </section>
+
+            <!-- 16 · Reputational asymmetry -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the asymmetry your board needs to understand</span>
+                <h2>The institutions with the most to lose are moving the fastest</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.7; margin-top: 20px;">
+                    <li data-fragment><strong>Faculty productivity dashboards</strong> show throughput gains. They do not show fabricated citations, smoothed-over disconfirming evidence, or unverified synthesis.</li>
+                    <li data-fragment><strong>A decade of AI-assisted shortcuts</strong> produces a decade of retraction-prone literature. The lag between adoption and reputational damage is structural.</li>
+                    <li data-fragment><strong>Reputational capital is asymmetric:</strong> a single named retraction at a research-intensive university is a multi-year story. At a teaching-focused institution, it is a paragraph.</li>
+                </ul>
+                <div class="callout" style="margin-top: 25px;" data-fragment="highlight">
+                    <strong>Bottom line:</strong> the universities racing fastest to capture productivity gains are the ones with the most reputational capital at stake.
+                </div>
+            </section>
+
+            <!-- 17 · // 05 SECTION DIVIDER -->
+            <section class="slide slide-section">
+                <div class="section-num">// 05</div>
+                <h1>Architecture, not assurance</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+            </section>
+
+            <!-- 18 · Compliance vs Mission table — rubber-stamp framing -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// human-in-the-loop is necessary, not sufficient</span>
+                <h2>2025 was compliance-based. 2026 has to be mission-based.</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Dimension</th>
+                            <th>Compliance-based adoption (2025)</th>
+                            <th>Mission-based adoption (2026)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td><strong>Trigger</strong></td><td>Peer pressure, headlines, vendor calendar</td><td>Institutional mission, baseline evidence</td></tr>
+                        <tr data-fragment><td><strong>Faculty role</strong></td><td>Reviewer of AI output (rubber stamp)</td><td>Designer of the assessment + the rubric</td></tr>
+                        <tr data-fragment><td><strong>Procurement</strong></td><td>Speed, feature parity, brand</td><td>Audit rights, data terms, model behavior</td></tr>
+                        <tr data-fragment><td><strong>Measurement</strong></td><td>Engagement, throughput</td><td>Pre-AI baselines of critical thinking + originality</td></tr>
+                        <tr data-fragment><td><strong>Equity</strong></td><td>Implicit</td><td>Audited (paid-tier divide, ESL gap, training access)</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    This is the slide they will photograph. Slow down.
+                </aside>
+            </section>
+
+            <!-- 19 · 2x2 — adoption speed vs judgment investment -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// the board-room 2×2</span>
+                <h2>Where is your institution?</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="mermaid">
+quadrantChart
+    title Adoption speed vs Judgment-formation investment
+    x-axis "Slow adoption" --> "Fast adoption"
+    y-axis "Low investment in judgment" --> "High investment in judgment"
+    quadrant-1 "Architects (sustainable)"
+    quadrant-2 "Holdouts (deferring the trade)"
+    quadrant-3 "Drifters (passive risk)"
+    quadrant-4 "Augmentation trap"
+    "CSU / Ohio State (typical 2025)": [0.85, 0.30]
+    "Cautious peer (mission-based)": [0.55, 0.80]
+    "Holdout institution": [0.25, 0.55]
+    "Where you want to be in 2027": [0.70, 0.85]
+                </div>
+                <aside class="speaker-notes">
+                    Don't explain every quadrant. Point at "Architects" and "Augmentation trap" only. Ask: where would your board place you?
+                </aside>
+            </section>
+
+            <!-- 20 · The Five Questions table -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// the audit · printable</span>
+                <h2>Five questions before the next contract is signed</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>If you can't answer it…</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>1</td><td>What pre-AI baselines have you established?</td><td>You can't tell if AI is helping or eroding outcomes.</td></tr>
+                        <tr data-fragment><td>2</td><td>Is faculty development funded <em>before</em> deployment, or after?</td><td>You ship maximum disruption, minimum pedagogy.</td></tr>
+                        <tr data-fragment><td>3</td><td>Have you redesigned assessment, or invested in detection?</td><td>Detection arms races are unwinnable.</td></tr>
+                        <tr data-fragment><td>4</td><td>What does the contract say about transparency, data, and model behavior?</td><td>You've outsourced a core academic function to a black box.</td></tr>
+                        <tr data-fragment><td>5</td><td>Where is the equity audit?</td><td>AI integration is widening the gap you claim to close.</td></tr>
+                    </tbody>
+                </table>
+                <aside class="speaker-notes">
+                    Tell the room this slide is in the appendix PDF. The CIOs will photograph it.
+                </aside>
+            </section>
+
+            <!-- 21 · WRAP -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    Scaling AI faster than judgment is not innovation.<br>
+                    It is the <em>abdication</em> of the function universities exist to perform.
+                </p>
+                <p class="hook-byline">If you take one sentence from today, take that.</p>
+                <aside class="speaker-notes">
+                    Do not soften. Land the line and stop.
+                </aside>
+            </section>
+
+            <!-- 22 · Q&A / closing -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thank you</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io/articles/Articles/the-augmentation-trap.html" target="_blank" rel="noopener">Companion article + 12 verified references</a></div>
+                </div>
+            </section>
+
+            <!-- 23 · APPENDIX — anticipated pushback -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// appendix · anticipated pushback</span>
+                <h2>Three rebuttals the room will raise</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Pushback</th>
+                            <th>Short rebuttal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-fragment><td>"Refusing AI cedes ground to competitors."</td><td>Mission-based adoption is not refusal. It is the difference between buying and architecting.</td></tr>
+                        <tr data-fragment><td>"Students will use it anyway."</td><td>That is the assessment-design argument — not the procurement argument. Both still need answers.</td></tr>
+                        <tr data-fragment><td>"Where's the equity data?"</td><td>Only ~36% of students receive formal AI training. Paid-tier access correlates with depth-of-use. The gap is widening, not closing.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 24 · APPENDIX — counter-evidence shelf -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// appendix · steelman shelf</span>
+                <h2>Strongest counter-evidence (for honest Q&amp;A)</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 22px; line-height: 1.7; margin-top: 20px;">
+                    <li><strong>Kestin et al., Harvard, <em>Scientific Reports</em> 2025 (N=194 RCT):</strong> AI tutor +0.73 to +1.3 SD vs. active learning. <em>Caveat:</em> durability beyond the session was not measured.</li>
+                    <li><strong>Wang &amp; Zhang, <em>Frontiers in Psychology</em> 2026 (N=912, 3-wave):</strong> full-task delegation can outperform scattered offloading <em>when AI is framed as a collaborator</em> — a design variable, not a tool property.</li>
+                    <li><strong>Gerlich correction, Sept 2025:</strong> a table duplication was corrected; the r=−0.68 finding stands. Sample is UK convenience (N=666), self-report HCTA. Treat as direction, not magnitude.</li>
+                    <li><strong>OECD Digital Education Outlook 2026:</strong> intentional pedagogical purpose tracks sustained gains; general-purpose chatbots produce metacognitive laziness.</li>
+                </ul>
+                <aside class="speaker-notes">
+                    Don't surface this slide unless asked. Have it ready.
+                </aside>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+    <script>
+    function _login() {
+      var u = document.getElementById('loginUsername').value;
+      var p = document.getElementById('loginPassword').value;
+      if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+        document.getElementById('loginView').style.display = 'none';
+      } else {
+        var err = document.getElementById('loginError');
+        err.style.display = 'block';
+        var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+        inputs.forEach(function(el) {
+          el.style.borderColor = '#ef4444';
+          setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+        });
+      }
+    }
+    document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') _login();
+    });
+    </script>
+</body>
+</html>
