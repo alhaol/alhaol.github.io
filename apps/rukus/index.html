@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #050505;
@@ -19,30 +19,15 @@
 
         .arabic { font-family: 'Amiri', serif; }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        /* Loader */
-        .audio-wave {
-            display: flex;
-            align-items: flex-end;
-            height: 15px;
-            gap: 2px;
-        }
-        .audio-wave div {
-            width: 3px;
-            background: #10b981;
-            animation: wave 1s infinite ease-in-out;
-        }
+        .audio-wave { display: flex; align-items: flex-end; height: 15px; gap: 2px; }
+        .audio-wave div { width: 3px; background: #10b981; animation: wave 1s infinite ease-in-out; }
         .audio-wave div:nth-child(2) { animation-delay: 0.1s; height: 60%; }
         .audio-wave div:nth-child(3) { animation-delay: 0.2s; height: 30%; }
-        
-        @keyframes wave {
-            0%, 100% { height: 30%; }
-            50% { height: 100%; }
-        }
+        @keyframes wave { 0%, 100% { height: 30%; } 50% { height: 100%; } }
 
         .accordion-content {
             transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -50,11 +35,162 @@
             overflow: hidden;
         }
 
-        /* Glass Player */
         .glass-player {
             background: rgba(20, 20, 20, 0.98);
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* === Verse reading panel === */
+        .uthmani {
+            font-family: 'Scheherazade New', 'Amiri', serif;
+            font-size: 1.85rem;
+            line-height: 2.0;
+            direction: rtl;
+            text-align: right;
+        }
+        .verse-row {
+            padding: 0.6rem 0.9rem;
+            margin-bottom: 0.35rem;
+            border-radius: 0.6rem;
+            border: 1px solid transparent;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .verse-row.ayah-active {
+            background: rgba(16, 185, 129, 0.10);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        .ayah-marker {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.7em;
+            height: 1.7em;
+            margin: 0 0.2em;
+            padding: 0 0.35em;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            direction: ltr;
+        }
+        .bismillah {
+            font-family: 'Scheherazade New', 'Amiri', serif;
+            font-size: 2.1rem;
+            line-height: 1.6;
+            text-align: center;
+            color: #d1fae5;
+            padding: 0.5rem 0 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 0.75rem;
+            direction: rtl;
+        }
+        .verse-fallback {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.75rem;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        /* === Mode picker === */
+        .mode-overlay {
+            position: fixed; inset: 0; z-index: 60;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 1rem;
+        }
+        .mode-overlay.open { display: flex; }
+        .mode-card {
+            width: 100%; max-width: 380px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        .mode-btn {
+            display: flex; align-items: center; gap: 0.85rem;
+            width: 100%; padding: 0.85rem 1rem;
+            background: #161616;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            color: #e5e7eb; text-align: left;
+            cursor: pointer; transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        .mode-btn:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.35);
+            color: white;
+        }
+        .mode-btn-icon {
+            width: 2.25rem; height: 2.25rem;
+            border-radius: 0.5rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            display: flex; align-items: center; justify-content: center;
+            flex: none;
+        }
+        .mode-btn-sub { color: #6b7280; font-size: 0.7rem; margin-top: 0.15rem; }
+
+        /* === 21-bubble grid === */
+        .bubble-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 0.4rem;
+        }
+        .bubble {
+            aspect-ratio: 1 / 1;
+            border-radius: 9999px;
+            background: radial-gradient(circle at 30% 30%, #1f2937, #0a0a0a 70%);
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: #4b5563;
+            transition: transform 0.25s, background 0.25s, border-color 0.25s;
+        }
+        .bubble.popped {
+            background: radial-gradient(circle at 30% 30%, #34d399, #047857 70%);
+            border-color: rgba(16, 185, 129, 0.5);
+            color: #022c22;
+            transform: scale(1.05);
+        }
+        .bubble.popped::after { content: '✓'; font-weight: 700; }
+        .bubble.popped > span { display: none; }
+        .rep-count {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            color: #34d399;
+        }
+
+        /* === Completion modal === */
+        .completion-overlay {
+            position: fixed; inset: 0; z-index: 70;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 1rem;
+        }
+        .completion-overlay.open { display: flex; }
+        .completion-card {
+            width: 100%; max-width: 360px;
+            background: #0f0f0f;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            text-align: center;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .verse-row, .bubble, .accordion-content { transition: none; }
         }
     </style>
 </head>
@@ -100,25 +236,109 @@
             <div class="flex justify-between items-center mb-4">
                 <div>
                     <h1 class="text-xl font-bold text-white tracking-tight">Quran Ruku Ultimate</h1>
-                    <p class="text-[10px] text-emerald-500 font-mono mt-1">FIXED DATASET • V5</p>
+                    <p class="text-[10px] text-emerald-500 font-mono mt-1">READ • LISTEN • REPEAT 21</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
-                    <i class="fas fa-cube text-emerald-500"></i>
+                <div class="flex items-center gap-2">
+                    <button id="soundToggle" onclick="toggleSound()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5 text-gray-400 hover:text-emerald-400" title="Toggle sound">
+                        <i id="soundIcon" class="fas fa-volume-up"></i>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+                        <i class="fas fa-cube text-emerald-500"></i>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="relative group">
                 <i class="fas fa-search absolute left-3 top-3 text-gray-600"></i>
-                <input type="text" id="searchInput" placeholder="Search Surah..." 
+                <input type="text" id="searchInput" placeholder="Search Surah..."
                     class="w-full bg-gray-900 border border-gray-800 text-white text-sm rounded-lg py-2.5 pl-10 pr-4 focus:outline-none focus:border-emerald-500 transition-colors placeholder-gray-700">
             </div>
         </div>
     </header>
 
-    <!-- Main List -->
+    <!-- Main: surah list OR reading session -->
     <main class="flex-1 overflow-y-auto scroll-smooth" id="mainContainer">
         <div id="surahList" class="max-w-xl mx-auto pb-40 px-2 pt-2"></div>
+
+        <!-- Reading session (hidden until a ruku is opened) -->
+        <div id="readingView" class="hidden max-w-xl mx-auto pb-60 px-3 pt-3">
+            <div class="flex items-center justify-between mb-3">
+                <button onclick="exitSession()" class="text-gray-400 hover:text-white text-sm flex items-center gap-2">
+                    <i class="fas fa-chevron-left text-xs"></i> Back to surahs
+                </button>
+                <div class="text-right">
+                    <div id="sessionTitle" class="text-white font-bold text-base leading-none"></div>
+                    <div id="sessionMeta" class="text-xs text-gray-500 font-mono mt-1"></div>
+                </div>
+            </div>
+
+            <!-- Repeat-mode bubble grid (hidden in read-along mode) -->
+            <div id="repeatPanel" class="hidden bg-[#0f0f0f] border border-white/5 rounded-xl p-4 mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="text-xs text-gray-400">
+                        <span id="repModeLabel">Repeat ayah</span> · <span id="repCountLabel" class="rep-count">0</span> / 21
+                    </div>
+                    <div id="repTargetLabel" class="text-[10px] text-gray-500 font-mono"></div>
+                </div>
+                <div id="bubbleGrid" class="bubble-grid"></div>
+            </div>
+
+            <!-- Verse fallback notice (shown if api.quran.com fails) -->
+            <div id="verseFallback" class="verse-fallback hidden">
+                Verses unavailable — playing audio only.
+            </div>
+
+            <!-- Verse reading panel -->
+            <div id="versePanel" class="bg-[#0f0f0f] border border-white/5 rounded-xl p-4"></div>
+        </div>
     </main>
+
+    <!-- Mode Picker Overlay -->
+    <div id="modeOverlay" class="mode-overlay">
+        <div class="mode-card">
+            <div class="text-center mb-4">
+                <div class="text-white font-bold text-lg" id="modeTitle">Choose mode</div>
+                <div class="text-gray-500 text-xs mt-1" id="modeSubtitle"></div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <button class="mode-btn" onclick="selectMode('read')">
+                    <div class="mode-btn-icon"><i class="fas fa-book-open"></i></div>
+                    <div>
+                        <div class="font-semibold">Read along</div>
+                        <div class="mode-btn-sub">Play once, follow the verses</div>
+                    </div>
+                </button>
+                <button class="mode-btn" onclick="selectMode('repeat-ayah')">
+                    <div class="mode-btn-icon"><i class="fas fa-redo"></i></div>
+                    <div>
+                        <div class="font-semibold">Repeat ayah 21×</div>
+                        <div class="mode-btn-sub">Loop each verse 21 times, then advance</div>
+                    </div>
+                </button>
+                <button class="mode-btn" onclick="selectMode('repeat-ruku')">
+                    <div class="mode-btn-icon"><i class="fas fa-sync"></i></div>
+                    <div>
+                        <div class="font-semibold">Repeat ruku 21×</div>
+                        <div class="mode-btn-sub">Loop the whole section 21 times</div>
+                    </div>
+                </button>
+            </div>
+            <button onclick="closeModePicker()" class="w-full mt-4 text-gray-500 hover:text-white text-xs">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Completion Modal -->
+    <div id="completionOverlay" class="completion-overlay">
+        <div class="completion-card">
+            <div class="text-4xl mb-3">🎉</div>
+            <div class="text-white font-bold text-lg mb-1">21 complete</div>
+            <div id="completionMeta" class="text-gray-400 text-sm mb-5"></div>
+            <div class="flex flex-col gap-2">
+                <button onclick="closeCompletion(true)" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-lg text-sm">Run another 21</button>
+                <button onclick="closeCompletion(false)" class="w-full bg-transparent border border-white/10 text-gray-300 hover:bg-white/5 py-2.5 rounded-lg text-sm">Done</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Player Bar -->
     <div id="playerBar" class="fixed bottom-0 left-0 right-0 glass-player transform translate-y-full transition-transform duration-300 z-40">
@@ -158,7 +378,6 @@
     <script>
         // --- THE MASTER DATABASE (Corrected & Explicit) ---
         // Format: [id, "English Name", "Arabic Name", [Stop Verse for Ruku 1, Stop Verse for Ruku 2...]]
-        // Surah 56 (Al-Waqi'ah) is explicitly fixed at index 55.
         const db = [
             [1, "Al-Fatiha", "الفاتحة", [7]],
             [2, "Al-Baqarah", "البقرة", [7,20,29,39,46,59,61,71,82,86,96,103,112,121,129,141,147,152,163,167,176,182,188,196,210,216,221,228,231,235,242,248,253,257,260,266,273,281,283,286]],
@@ -215,7 +434,7 @@
             [53, "An-Najm", "النجم", [25,42,62]],
             [54, "Al-Qamar", "القمر", [22,40,55]],
             [55, "Ar-Rahman", "الرحمن", [25,45,78]],
-            [56, "Al-Waqi'ah", "الواقعة", [38,74,96]], // FIXED: Explicitly 3 Sections
+            [56, "Al-Waqi'ah", "الواقعة", [38,74,96]],
             [57, "Al-Hadid", "الحديد", [10,19,25,29]],
             [58, "Al-Mujadila", "المجادلة", [6,13,22]],
             [59, "Al-Hashr", "الحشر", [10,17,24]],
@@ -276,12 +495,20 @@
             [114, "An-Nas", "الناس", [6]]
         ];
 
+        // --- CONSTANTS ---
+        const TARGET_REPS = 21;
+        const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         // --- APP STATE ---
-        let currentPlaylist = [];
+        let currentPlaylist = [];          // audio track objects from alquran.cloud
         let currentTrackIndex = 0;
         let activeRetryData = null;
-        let isPlaying = false;
         let activeGlobalId = null;
+        let pendingRuku = null;            // ruku params after sidebar click, before mode chosen
+        let session = null;                // active session — see startSession()
+        const verseCache = {};             // surahId -> [{verse_number, text_uthmani}, ...]
+        let soundEnabled = localStorage.getItem('rukus-sound') !== '0';
+        let audioCtx = null;
 
         // --- DOM ---
         const audio = document.getElementById('audio');
@@ -290,12 +517,19 @@
         const progressBar = document.getElementById('progressBar');
         const playerBar = document.getElementById('playerBar');
         const retryBtn = document.getElementById('retryBtn');
+        const surahListEl = document.getElementById('surahList');
+        const readingView = document.getElementById('readingView');
+        const versePanel = document.getElementById('versePanel');
+        const verseFallback = document.getElementById('verseFallback');
+        const repeatPanel = document.getElementById('repeatPanel');
+        const bubbleGrid = document.getElementById('bubbleGrid');
+        const modeOverlay = document.getElementById('modeOverlay');
+        const completionOverlay = document.getElementById('completionOverlay');
+        const soundIcon = document.getElementById('soundIcon');
 
-        // --- RENDER LOGIC ---
+        // --- RENDER LIST (unchanged from prior behavior) ---
         function renderList(filter = '') {
-            const container = document.getElementById('surahList');
-            container.innerHTML = '';
-            
+            surahListEl.innerHTML = '';
             let globalRukuCount = 1;
 
             db.forEach(surah => {
@@ -303,51 +537,40 @@
                 const startRuku = globalRukuCount;
                 globalRukuCount += stops.length;
 
-                // Filter logic
-                if (filter && !enName.toLowerCase().includes(filter) && id.toString() !== filter) {
-                    return;
-                }
+                if (filter && !enName.toLowerCase().includes(filter) && id.toString() !== filter) return;
 
                 const card = document.createElement('div');
                 card.className = "bg-[#0f0f0f] border border-white/5 rounded-xl mb-3 overflow-hidden";
-                
-                // Card Header
+
                 const header = document.createElement('div');
                 header.className = "p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors";
                 header.onclick = () => toggleAccordion(id);
                 header.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-9 h-9 rounded-lg bg-gray-900 border border-white/10 flex items-center justify-center text-sm font-bold text-emerald-600 font-mono">
-                            ${id}
-                        </div>
+                        <div class="w-9 h-9 rounded-lg bg-gray-900 border border-white/10 flex items-center justify-center text-sm font-bold text-emerald-600 font-mono">${id}</div>
                         <div>
                             <div class="font-bold text-gray-200 text-base leading-none mb-1.5 flex items-center gap-2">
                                 ${enName} <span class="font-normal text-emerald-900/50 text-xs bg-emerald-900/10 px-1 rounded font-mono">V${stops[stops.length-1]}</span>
                             </div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">
-                                ${stops.length} Sections
-                            </div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">${stops.length} Sections</div>
                         </div>
                     </div>
                     <i class="fas fa-chevron-down text-gray-700 transition-transform duration-300" id="chevron-${id}"></i>
                 `;
 
-                // Card Body
                 const body = document.createElement('div');
                 body.id = `body-${id}`;
                 body.className = "accordion-content bg-black";
-                
+
                 let prevStop = 0;
                 let rows = '';
-                
                 stops.forEach((stop, idx) => {
                     const startV = prevStop + 1;
                     const rukuNum = idx + 1;
                     const gId = startRuku + idx;
-                    
                     rows += `
                         <div class="surah-item p-3 pl-5 flex justify-between items-center cursor-pointer hover:bg-emerald-900/10 group"
-                             onclick="prepareAudio(${id}, '${enName}', ${rukuNum}, ${startV}, ${stop}, ${gId})">
+                             onclick="openRuku(${id}, '${enName.replace(/'/g, "\\'")}', ${rukuNum}, ${startV}, ${stop}, ${gId})">
                             <div class="flex items-center gap-4">
                                 <span class="text-xs text-gray-600 font-mono w-6 text-center">${rukuNum}</span>
                                 <div>
@@ -366,7 +589,7 @@
                 body.innerHTML = rows;
                 card.appendChild(header);
                 card.appendChild(body);
-                container.appendChild(card);
+                surahListEl.appendChild(card);
             });
         }
 
@@ -374,115 +597,347 @@
             const body = document.getElementById(`body-${id}`);
             const chev = document.getElementById(`chevron-${id}`);
             const isOpen = body.style.maxHeight;
-
-            // Close others
             document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
             document.querySelectorAll('.fa-chevron-down').forEach(el => el.style.transform = 'rotate(0deg)');
-
-            if(!isOpen) {
+            if (!isOpen) {
                 body.style.maxHeight = body.scrollHeight + "px";
                 chev.style.transform = 'rotate(180deg)';
             }
         }
 
-        // --- AUDIO ENGINE v2 (Robust) ---
-        async function prepareAudio(surahId, name, rukuNum, startV, endV, gId) {
-            // UI Reset
-            activeRetryData = { surahId, name, rukuNum, startV, endV, gId };
+        // --- SESSION ENTRY: clicking a ruku opens the mode picker ---
+        function openRuku(surahId, name, rukuNum, startV, endV, gId) {
+            pendingRuku = { surahId, name, rukuNum, startV, endV, gId };
+            document.getElementById('modeTitle').innerText = `${name} · Section ${rukuNum}`;
+            document.getElementById('modeSubtitle').innerText = `Verses ${startV}-${endV}`;
+            modeOverlay.classList.add('open');
+        }
+
+        function closeModePicker() {
+            modeOverlay.classList.remove('open');
+            pendingRuku = null;
+        }
+
+        function selectMode(mode) {
+            if (!pendingRuku) return;
+            modeOverlay.classList.remove('open');
+            const params = pendingRuku;
+            pendingRuku = null;
+            startSession(params, mode);
+        }
+
+        // --- SESSION START: fetch audio + verses, render reading view, begin playback ---
+        async function startSession(params, mode) {
+            const { surahId, name, rukuNum, startV, endV, gId } = params;
+
+            session = {
+                surahId, rukuIndex: rukuNum, startV, endV, name, gId,
+                mode,
+                ayahs: [],
+                currentAyahIdx: 0,
+                repCount: 0,
+                startTime: Date.now(),
+            };
+            activeRetryData = params;
             activeGlobalId = gId;
+            verseFallback.classList.add('hidden');
+
+            // Swap to reading view
+            surahListEl.classList.add('hidden');
+            readingView.classList.remove('hidden');
+            document.getElementById('sessionTitle').innerText = `${name} · Section ${rukuNum}`;
+            document.getElementById('sessionMeta').innerText = `Verses ${startV}-${endV} · ${modeLabel(mode)}`;
+
+            // Player UI
             playerBar.classList.remove('translate-y-full');
             document.getElementById('playerTitle').innerText = `${name} - Section ${rukuNum}`;
             document.getElementById('playerMeta').innerText = `Verses ${startV}-${endV}`;
             document.getElementById('playerStatus').innerText = "LOADING...";
             document.getElementById('playerStatus').className = "text-[9px] font-bold text-yellow-500 bg-yellow-900/30 px-1.5 py-0.5 rounded border border-yellow-900/50";
             retryBtn.classList.add('hidden');
-            
-            // Icons Reset
-            document.querySelectorAll('[id^="status-"]').forEach(el => el.innerHTML = '<i class="fas fa-play text-[10px]"></i>');
-            const statusEl = document.getElementById(`status-${gId}`);
-            if(statusEl) statusEl.innerHTML = '<div class="loader"></div>';
-
             playBtn.disabled = true;
 
+            // Sidebar status reset
+            document.querySelectorAll('[id^="status-"]').forEach(el => el.innerHTML = '<i class="fas fa-play text-[10px]"></i>');
+            const statusEl = document.getElementById(`status-${gId}`);
+            if (statusEl) statusEl.innerHTML = '<div class="audio-wave"><div></div><div></div><div></div></div>';
+
+            // Repeat panel
+            if (mode === 'read') {
+                repeatPanel.classList.add('hidden');
+            } else {
+                repeatPanel.classList.remove('hidden');
+                document.getElementById('repModeLabel').innerText = mode === 'repeat-ayah' ? 'Repeat ayah' : 'Repeat ruku';
+                renderBubbleGrid();
+            }
+
+            // Kick off audio + verses in parallel
+            const [audioOk] = await Promise.all([
+                fetchAudio(surahId, startV, endV),
+                fetchVerses(surahId, startV, endV),
+            ]);
+
+            // Render verses (or fallback notice) and start playback
+            renderVersePanel();
+            updateRepLabels();
+
+            if (audioOk) {
+                document.getElementById('playerStatus').innerText = mode === 'read' ? "PLAYING" : "REPEATING";
+                document.getElementById('playerStatus').className = "text-[9px] font-bold text-emerald-500 bg-emerald-900/30 px-1.5 py-0.5 rounded border border-emerald-900/50";
+                session.currentAyahIdx = 0;
+                session.repCount = 0;
+                playTrack(0);
+            } else {
+                document.getElementById('playerStatus').innerText = "ERROR";
+                document.getElementById('playerStatus').className = "text-[9px] font-bold text-red-500 bg-red-900/30 px-1.5 py-0.5 rounded border border-red-900/50";
+                retryBtn.classList.remove('hidden');
+                if (statusEl) statusEl.innerHTML = '<i class="fas fa-exclamation text-red-500"></i>';
+            }
+        }
+
+        function modeLabel(mode) {
+            if (mode === 'repeat-ayah') return 'Repeat ayah 21×';
+            if (mode === 'repeat-ruku') return 'Repeat ruku 21×';
+            return 'Read along';
+        }
+
+        // --- AUDIO FETCH (existing alquran.cloud logic, lifted into its own fn) ---
+        async function fetchAudio(surahId, startV, endV) {
+            const offset = startV - 1;
+            const limit = (endV - startV) + 1;
             try {
-                // Fetch Logic: Offset is 0-based index
-                // Surah 56, Ruku 1 (1-38) -> Offset 0, Limit 38
-                // Surah 56, Ruku 2 (39-74) -> Offset 38, Limit 36
-                const offset = startV - 1;
-                const limit = (endV - startV) + 1;
-                
-                // Attempt Primary (Alafasy)
                 let url = `https://api.alquran.cloud/v1/surah/${surahId}/ar.alafasy?offset=${offset}&limit=${limit}`;
                 let res = await fetch(url);
                 let json = await res.json();
-
-                // Fallback (Abdul Basit) if primary empty or error
                 if (json.code !== 200 || !json.data.ayahs.length) {
-                    console.warn("Primary reciter failed, trying fallback...");
                     url = `https://api.alquran.cloud/v1/surah/${surahId}/ar.abdulbasitmurattal?offset=${offset}&limit=${limit}`;
                     res = await fetch(url);
                     json = await res.json();
                 }
-
                 if (json.code === 200 && json.data.ayahs.length > 0) {
                     currentPlaylist = json.data.ayahs;
                     currentTrackIndex = 0;
-                    playTrack(0);
-                    
-                    // Success UI
-                    document.getElementById('playerStatus').innerText = "PLAYING";
-                    document.getElementById('playerStatus').className = "text-[9px] font-bold text-emerald-500 bg-emerald-900/30 px-1.5 py-0.5 rounded border border-emerald-900/50";
-                    if(statusEl) statusEl.innerHTML = '<div class="audio-wave"><div></div><div></div><div></div></div>';
-                } else {
-                    throw new Error("No Audio Data");
+                    return true;
                 }
-
             } catch (e) {
-                console.error(e);
-                document.getElementById('playerStatus').innerText = "ERROR";
-                document.getElementById('playerStatus').className = "text-[9px] font-bold text-red-500 bg-red-900/30 px-1.5 py-0.5 rounded border border-red-900/50";
-                retryBtn.classList.remove('hidden');
-                if(statusEl) statusEl.innerHTML = '<i class="fas fa-exclamation text-red-500"></i>';
+                console.error('Audio fetch failed:', e);
+            }
+            currentPlaylist = [];
+            return false;
+        }
+
+        // --- VERSE FETCH from api.quran.com (matches /apps/hifz/) ---
+        // The /quran/verses/uthmani endpoint returns objects with `verse_key` (e.g. "56:7")
+        // and `text_uthmani` — there is no `verse_number` field. We parse the key like hifz does.
+        async function fetchVerses(surahId, startV, endV) {
+            if (verseCache[surahId]) {
+                session.ayahs = sliceVerses(verseCache[surahId], startV, endV);
+                return true;
+            }
+            try {
+                const url = `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${surahId}`;
+                const res = await fetch(url);
+                const json = await res.json();
+                const verses = (json.verses || []).map(v => ({
+                    verse_number: parseInt(v.verse_key.split(':')[1], 10),
+                    text_uthmani: v.text_uthmani,
+                })).filter(v => Number.isFinite(v.verse_number) && v.text_uthmani);
+                if (!verses.length) throw new Error('Empty verse list');
+                verseCache[surahId] = verses;
+                session.ayahs = sliceVerses(verses, startV, endV);
+                return true;
+            } catch (e) {
+                console.warn('Verse fetch failed:', e);
+                session.ayahs = [];
+                verseFallback.classList.remove('hidden');
+                return false;
             }
         }
 
+        function sliceVerses(allVerses, startV, endV) {
+            return allVerses.filter(v => v.verse_number >= startV && v.verse_number <= endV);
+        }
+
+        // --- VERSE PANEL RENDER ---
+        function renderVersePanel() {
+            if (!session) return;
+            versePanel.innerHTML = '';
+
+            // Bismillah header rule (matches hifz): show when ruku starts at ayah 1 and surah ≠ 9
+            if (session.startV === 1 && session.surahId !== 9) {
+                const b = document.createElement('div');
+                b.className = 'bismillah';
+                b.textContent = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+                versePanel.appendChild(b);
+            }
+
+            if (!session.ayahs.length) {
+                // verseFallback is already shown by fetchVerses(); also leave a small placeholder
+                const p = document.createElement('div');
+                p.className = 'text-gray-500 text-sm italic';
+                p.textContent = 'Audio-only mode — verse text unavailable.';
+                versePanel.appendChild(p);
+                return;
+            }
+
+            session.ayahs.forEach(v => {
+                const row = document.createElement('div');
+                row.className = 'verse-row uthmani';
+                row.id = `ayah-${v.verse_number}`;
+                row.innerHTML = `${v.text_uthmani} <span class="ayah-marker">${toArabicDigits(v.verse_number)}</span>`;
+                versePanel.appendChild(row);
+            });
+        }
+
+        function toArabicDigits(n) {
+            const map = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+            return String(n).split('').map(d => map[+d] ?? d).join('');
+        }
+
+        // --- HIGHLIGHT / SCROLL on track change ---
+        function highlightAyah(verseNumber) {
+            versePanel.querySelectorAll('.verse-row').forEach(el => el.classList.remove('ayah-active'));
+            const el = versePanel.querySelector(`#ayah-${verseNumber}`);
+            if (el) {
+                el.classList.add('ayah-active');
+                el.scrollIntoView({
+                    behavior: REDUCED_MOTION ? 'auto' : 'smooth',
+                    block: 'center',
+                });
+            }
+        }
+
+        // --- BUBBLE GRID ---
+        function renderBubbleGrid() {
+            bubbleGrid.innerHTML = '';
+            for (let i = 0; i < TARGET_REPS; i++) {
+                const b = document.createElement('div');
+                b.className = 'bubble';
+                b.innerHTML = `<span>${i + 1}</span>`;
+                bubbleGrid.appendChild(b);
+            }
+        }
+
+        function popBubble(n) {
+            const bubbles = bubbleGrid.querySelectorAll('.bubble');
+            for (let i = 0; i < n; i++) {
+                if (bubbles[i]) bubbles[i].classList.add('popped');
+            }
+        }
+
+        function updateRepLabels() {
+            if (!session) return;
+            document.getElementById('repCountLabel').innerText = session.repCount;
+            const t = document.getElementById('repTargetLabel');
+            if (session.mode === 'repeat-ayah' && session.ayahs.length) {
+                const v = currentPlaylist[session.currentAyahIdx]?.numberInSurah ?? '?';
+                t.innerText = `Ayah ${v}`;
+            } else if (session.mode === 'repeat-ruku') {
+                t.innerText = `Pass ${session.repCount + 1} of 21`;
+            } else {
+                t.innerText = '';
+            }
+        }
+
+        // --- PLAYBACK ---
         function playTrack(index) {
-            if(index >= currentPlaylist.length) {
-                // End of Ruku
-                document.getElementById('playerStatus').innerText = "COMPLETED";
-                playIcon.className = "fas fa-check";
-                if(activeGlobalId) {
-                    document.getElementById(`status-${activeGlobalId}`).innerHTML = '<i class="fas fa-check text-emerald-500"></i>';
+            if (!currentPlaylist.length) return;
+            if (index >= currentPlaylist.length) {
+                // We hit the end of the playlist. In read mode this ends the session.
+                // In repeat-ruku mode the audio-ended handler intercepts before this is called.
+                if (!session || session.mode === 'read') {
+                    onSessionFinishedReadMode();
                 }
                 return;
             }
 
             currentTrackIndex = index;
+            if (session) session.currentAyahIdx = index;
+
             const track = currentPlaylist[index];
             audio.src = track.audio;
-            audio.play().catch(e => console.log("Auto-play prevented"));
-            
+            audio.play().catch(e => console.log('Auto-play prevented:', e));
             updatePlayBtn(true);
             document.getElementById('totalVersesDisplay').innerText = `Ayah ${track.numberInSurah}`;
+            highlightAyah(track.numberInSurah);
+            updateRepLabels();
         }
 
-        function retryLoad() {
-            if(activeRetryData) {
-                prepareAudio(
-                    activeRetryData.surahId, 
-                    activeRetryData.name, 
-                    activeRetryData.rukuNum, 
-                    activeRetryData.startV, 
-                    activeRetryData.endV, 
-                    activeRetryData.gId
-                );
+        function onSessionFinishedReadMode() {
+            document.getElementById('playerStatus').innerText = "COMPLETED";
+            playIcon.className = "fas fa-check";
+            if (activeGlobalId) {
+                const sb = document.getElementById(`status-${activeGlobalId}`);
+                if (sb) sb.innerHTML = '<i class="fas fa-check text-emerald-500"></i>';
             }
         }
 
-        // Standard Player Controls
-        audio.addEventListener('ended', () => playTrack(currentTrackIndex + 1));
+        // --- MODE-AWARE END-OF-TRACK HANDLER ---
+        audio.addEventListener('ended', () => {
+            if (!session) {
+                playTrack(currentTrackIndex + 1);
+                return;
+            }
+
+            if (session.mode === 'read') {
+                playTrack(currentTrackIndex + 1);
+                return;
+            }
+
+            if (session.mode === 'repeat-ayah') {
+                session.repCount += 1;
+                popBubble(session.repCount);
+                playPopSound();
+                vibrate();
+                updateRepLabels();
+
+                if (session.repCount < TARGET_REPS) {
+                    // Replay the same track
+                    audio.currentTime = 0;
+                    audio.play().catch(() => {});
+                } else {
+                    // Done with this ayah — advance, reset bubbles
+                    session.repCount = 0;
+                    renderBubbleGrid();
+                    const nextIdx = currentTrackIndex + 1;
+                    if (nextIdx >= currentPlaylist.length) {
+                        // End of ruku — finish session
+                        showCompletion();
+                    } else {
+                        playTrack(nextIdx);
+                    }
+                }
+                return;
+            }
+
+            if (session.mode === 'repeat-ruku') {
+                const nextIdx = currentTrackIndex + 1;
+                if (nextIdx < currentPlaylist.length) {
+                    playTrack(nextIdx);
+                } else {
+                    // Completed one full pass of the ruku
+                    session.repCount += 1;
+                    popBubble(session.repCount);
+                    playPopSound();
+                    vibrate();
+                    updateRepLabels();
+
+                    if (session.repCount < TARGET_REPS) {
+                        renderBubbleGrid();
+                        popBubble(session.repCount);  // visual carryover so progress is visible briefly
+                        // Actually, easier: keep grid filled to repCount, reset only on completion.
+                        // Restart from track 0.
+                        playTrack(0);
+                    } else {
+                        showCompletion();
+                    }
+                }
+                return;
+            }
+        });
+
         audio.addEventListener('timeupdate', () => {
-            if(audio.duration) {
+            if (audio.duration) {
                 const pct = (audio.currentTime / audio.duration) * 100;
                 progressBar.style.width = `${pct}%`;
                 const m = Math.floor(audio.currentTime / 60);
@@ -492,7 +947,7 @@
         });
 
         function togglePlay() {
-            if(audio.paused) { audio.play(); updatePlayBtn(true); } 
+            if (audio.paused) { audio.play(); updatePlayBtn(true); }
             else { audio.pause(); updatePlayBtn(false); }
         }
 
@@ -504,14 +959,100 @@
         function closePlayer() {
             audio.pause();
             playerBar.classList.add('translate-y-full');
-            if(activeGlobalId) {
-                document.getElementById(`status-${activeGlobalId}`).innerHTML = '<i class="fas fa-play text-[10px]"></i>';
+            if (activeGlobalId) {
+                const sb = document.getElementById(`status-${activeGlobalId}`);
+                if (sb) sb.innerHTML = '<i class="fas fa-play text-[10px]"></i>';
             }
         }
 
+        function retryLoad() {
+            if (activeRetryData && session) {
+                startSession(activeRetryData, session.mode);
+            }
+        }
+
+        function exitSession() {
+            audio.pause();
+            playerBar.classList.add('translate-y-full');
+            readingView.classList.add('hidden');
+            surahListEl.classList.remove('hidden');
+            if (activeGlobalId) {
+                const sb = document.getElementById(`status-${activeGlobalId}`);
+                if (sb) sb.innerHTML = '<i class="fas fa-play text-[10px]"></i>';
+            }
+            session = null;
+            activeGlobalId = null;
+        }
+
+        // --- COMPLETION ---
+        function showCompletion() {
+            audio.pause();
+            const elapsedSec = Math.round((Date.now() - session.startTime) / 1000);
+            const m = Math.floor(elapsedSec / 60);
+            const s = elapsedSec % 60;
+            const label = session.mode === 'repeat-ayah'
+                ? `Finished all ${session.ayahs.length || currentPlaylist.length} ayahs × 21`
+                : `Completed 21 passes of the ruku`;
+            document.getElementById('completionMeta').innerText = `${label}\n${m}m ${s}s elapsed`;
+            completionOverlay.classList.add('open');
+        }
+
+        function closeCompletion(restart) {
+            completionOverlay.classList.remove('open');
+            if (restart && session) {
+                session.repCount = 0;
+                session.currentAyahIdx = 0;
+                session.startTime = Date.now();
+                renderBubbleGrid();
+                updateRepLabels();
+                playTrack(0);
+            } else {
+                exitSession();
+            }
+        }
+
+        // --- SOUND + HAPTICS (oscillator pop, adapted from /apps/21/) ---
+        function ensureAudioCtx() {
+            if (!soundEnabled) return null;
+            if (!audioCtx) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                catch (e) { return null; }
+            }
+            return audioCtx;
+        }
+
+        function playPopSound() {
+            const ctx = ensureAudioCtx();
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(500, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.18, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.15);
+        }
+
+        function vibrate() {
+            if (soundEnabled && navigator.vibrate) navigator.vibrate(40);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('rukus-sound', soundEnabled ? '1' : '0');
+            soundIcon.className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+        }
+
+        soundIcon.className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+
+        // --- SEARCH ---
         document.getElementById('searchInput').addEventListener('input', (e) => renderList(e.target.value.toLowerCase()));
-        
-        // Boot
+
+        // --- BOOT ---
         renderList();
 
     </script>
