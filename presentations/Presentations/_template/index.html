@@ -381,6 +381,267 @@ def run_agent(task: str) -> str:
             </section>
 
             <!-- ================================================================
+                 15.5 · SECTION — visualization library (appendix examples)
+                 Below are the new component examples the deck engine supports.
+                 Copy any of them into your own deck; each carries a speaker
+                 note explaining when to reach for it.
+                 ================================================================ -->
+            <section class="slide slide-section">
+                <div class="section-num">// 04</div>
+                <h1>Visualization Library</h1>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <p>Examples of every supported slide component.</p>
+            </section>
+
+            <!-- ================================================================
+                 V1 · BAR CHART — comparing N items on 1–2 metrics
+                 ================================================================ -->
+            <section class="slide slide-chart">
+                <div class="slide-body">
+                    <span class="eyebrow">// visualization · chart.js</span>
+                    <h2>Model accuracy comparison</h2>
+                    <span class="accent-rule" aria-hidden="true"></span>
+                    <canvas data-chart='{
+                        "type": "bar",
+                        "data": {
+                            "labels": ["GPT-4o", "Llama-3.1-8B", "Mistral-7B", "Phi-3-mini"],
+                            "datasets": [{
+                                "label": "Top-1 Accuracy (%)",
+                                "data": [87.3, 79.1, 76.8, 71.2],
+                                "backgroundColor": ["rgba(0,255,65,0.75)", "rgba(0,204,51,0.55)", "rgba(0,153,38,0.45)", "rgba(0,102,25,0.4)"],
+                                "borderColor": "#00ff41",
+                                "borderWidth": 1
+                            }]
+                        },
+                        "options": {
+                            "scales": { "y": { "beginAtZero": true, "max": 100 } }
+                        }
+                    }'></canvas>
+                </div>
+                <aside class="speaker-notes">
+                    Use a bar chart whenever you're comparing 2–5 items on 1 or 2 metrics.
+                    It beats a table for showing magnitude differences at a glance.
+                    Replace the labels and data arrays; the deck engine themes the axes automatically.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V2 · RADAR CHART — multi-dimensional comparison
+                 ================================================================ -->
+            <section class="slide slide-chart">
+                <div class="slide-body">
+                    <span class="eyebrow">// visualization · chart.js</span>
+                    <h2>Multi-axis model tradeoffs</h2>
+                    <span class="accent-rule" aria-hidden="true"></span>
+                    <canvas data-chart='{
+                        "type": "radar",
+                        "data": {
+                            "labels": ["Accuracy", "Speed", "Energy", "Memory", "Cost"],
+                            "datasets": [
+                                {
+                                    "label": "GPT-4o", "data": [87, 62, 45, 40, 30],
+                                    "borderColor": "#00ff41",
+                                    "backgroundColor": "rgba(0,255,65,0.15)",
+                                    "pointBackgroundColor": "#00ff41"
+                                },
+                                {
+                                    "label": "Llama-3.1-8B", "data": [79, 88, 82, 75, 90],
+                                    "borderColor": "#00cc33",
+                                    "backgroundColor": "rgba(0,204,51,0.1)",
+                                    "pointBackgroundColor": "#00cc33"
+                                }
+                            ]
+                        },
+                        "options": {
+                            "scales": { "r": { "suggestedMin": 0, "suggestedMax": 100 } }
+                        }
+                    }'></canvas>
+                </div>
+                <aside class="speaker-notes">
+                    Reach for a radar chart when 4 or more axes share the same scale (0–100,
+                    normalized scores). Avoid it for &lt;4 axes — a bar chart reads better.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V3 · SEQUENCE DIAGRAM — agent ↔ tool ↔ LLM flow
+                 ================================================================ -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// visualization · mermaid</span>
+                <h2>Agent interaction sequence</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <pre class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as Agent
+    participant T as Tool
+    participant L as LLM
+    U->>A: Task prompt
+    A->>L: Plan request
+    L-->>A: Tool call (search)
+    A->>T: Execute search
+    T-->>A: Results
+    A->>L: Synthesize
+    L-->>A: Final answer
+    A-->>U: Response + citations
+                </pre>
+                <aside class="speaker-notes">
+                    Sequence diagrams beat flowcharts for explaining API call orders,
+                    protocol handshakes, and agent/tool/LLM interactions. Use when the
+                    point is "who calls whom, in what order" rather than branching logic.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V4 · QUADRANT CHART — strategic 2-axis positioning
+                 ================================================================ -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// visualization · mermaid</span>
+                <h2>Strategic positioning: accuracy vs cost</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <pre class="mermaid">
+quadrantChart
+    title Accuracy vs inference cost
+    x-axis Low cost --> High cost
+    y-axis Low accuracy --> High accuracy
+    quadrant-1 Premium
+    quadrant-2 Sweet spot
+    quadrant-3 Avoid
+    quadrant-4 Niche
+    GPT-4o: [0.85, 0.92]
+    Llama-3.1-70B: [0.35, 0.84]
+    Mistral-7B: [0.25, 0.72]
+    Phi-3-mini: [0.10, 0.65]
+                </pre>
+                <aside class="speaker-notes">
+                    Quadrant charts shine when the message is a strategic tradeoff on
+                    exactly two axes (cost vs accuracy, risk vs impact). The four named
+                    quadrants do half the storytelling for you.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V5 · TIMELINE — year-by-year milestones
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// visualization · timeline</span>
+                <h2>How we got here</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="timeline">
+                    <div class="timeline-item" data-fragment>
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-content">
+                            <h4>Baseline RNN published</h4>
+                            <p>First end-to-end network model — 71% F1.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item" data-fragment>
+                        <div class="timeline-year">2022</div>
+                        <div class="timeline-content">
+                            <h4>Graph extension</h4>
+                            <p>+12 points by switching to graph-neural backbone.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item" data-fragment>
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-content">
+                            <h4>O-RAN alliance demo</h4>
+                            <p>First multi-vendor deployment.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item" data-fragment>
+                        <div class="timeline-year">2026</div>
+                        <div class="timeline-content">
+                            <h4>Commercial rollout</h4>
+                            <p>4 carriers, 28 markets, sub-50ms p99.</p>
+                        </div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Timelines beat tables for chronologies — the eye walks them naturally.
+                    Each item carries data-fragment so they build top-to-bottom on Space.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V6 · PROCESS STEPS — sequential methodology pipeline
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// visualization · process</span>
+                <h2>Methodology pipeline</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="process-steps">
+                    <div class="process-step" data-fragment>
+                        <div class="step-num">// 01</div>
+                        <div class="step-label">Collect</div>
+                        <div class="step-detail">Network traces from 4 production carriers.</div>
+                    </div>
+                    <div class="process-step" data-fragment>
+                        <div class="step-num">// 02</div>
+                        <div class="step-label">Preprocess</div>
+                        <div class="step-detail">Normalize, window, balance per-class.</div>
+                    </div>
+                    <div class="process-step" data-fragment>
+                        <div class="step-num">// 03</div>
+                        <div class="step-label">Train</div>
+                        <div class="step-detail">GNN on graph snapshots, 5 folds.</div>
+                    </div>
+                    <div class="process-step" data-fragment>
+                        <div class="step-num">// 04</div>
+                        <div class="step-label">Evaluate</div>
+                        <div class="step-detail">Held-out topology + adversarial probes.</div>
+                    </div>
+                    <div class="process-step" data-fragment>
+                        <div class="step-num">// 05</div>
+                        <div class="step-label">Deploy</div>
+                        <div class="step-detail">As O-RAN xApp with online fallback.</div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Process-steps replaces a bullet list whenever the order matters and
+                    you want the audience to see a pipeline. Each step reveals on Space
+                    so you can pace your explanation per stage.
+                </aside>
+            </section>
+
+            <!-- ================================================================
+                 V7 · COMPARISON GRID — side-by-side options + recommendation
+                 ================================================================ -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// visualization · comparison</span>
+                <h2>Which model fits your latency budget?</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="comparison-grid">
+                    <div class="comparison-card" data-fragment>
+                        <div class="comparison-tag">// option a</div>
+                        <h4>GPT-4o</h4>
+                        <p>87% accuracy · 120ms · $$$$</p>
+                        <div class="score-label"><span>Fit score</span><span class="score-value">62%</span></div>
+                        <div class="score-bar"><div class="score-bar-fill" style="width: 62%;"></div></div>
+                    </div>
+                    <div class="comparison-card" data-fragment>
+                        <div class="comparison-tag">// option b</div>
+                        <h4>Mistral-7B</h4>
+                        <p>77% accuracy · 38ms · $</p>
+                        <div class="score-label"><span>Fit score</span><span class="score-value">71%</span></div>
+                        <div class="score-bar"><div class="score-bar-fill" style="width: 71%;"></div></div>
+                    </div>
+                    <div class="comparison-card highlight" data-fragment="highlight">
+                        <div class="comparison-tag">// recommended</div>
+                        <h4>Llama-3.1-8B</h4>
+                        <p>79% accuracy · 42ms · $$</p>
+                        <div class="score-label"><span>Fit score</span><span class="score-value">88%</span></div>
+                        <div class="score-bar"><div class="score-bar-fill" style="width: 88%;"></div></div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Use the comparison-grid when you're presenting 3–4 options and one is
+                    the recommended pick. The .highlight card with data-fragment="highlight"
+                    pulses on reveal to draw the eye to the winner.
+                </aside>
+            </section>
+
+            <!-- ================================================================
                  16 · WRAP — the single thing to remember
                  ================================================================ -->
             <section class="slide slide-hook">

@@ -158,6 +158,131 @@ def run_agent(task: str) -> str:
 | + Agentic loop      | 410          | **0.92** | Best result        |
 
 <!-- ============================================================================
+     5+ · NEW VISUAL COMPONENTS
+     The engine supports five additional component types for richer decks.
+     Pick the one that fits the content shape — see the selection heuristics
+     in SKILL.md (Step 6).
+     ============================================================================ -->
+
+# Visualization Library
+
+<!-- ----- Bar chart (Chart.js, .slide-chart) -----
+     Use when comparing 2–5 items on 1–2 metrics. JSON config goes in
+     data-chart. Engine themes ticks/grid/legend automatically — only set
+     dataset borderColor / backgroundColor by hand. -->
+
+::: chart type=bar title=Model accuracy comparison
+{
+  "labels": ["GPT-4o", "Llama-3.1-8B", "Mistral-7B", "Phi-3-mini"],
+  "datasets": [{
+    "label": "Top-1 Accuracy (%)",
+    "data": [87.3, 79.1, 76.8, 71.2],
+    "backgroundColor": ["rgba(0,255,65,0.75)", "rgba(0,204,51,0.55)", "rgba(0,153,38,0.45)", "rgba(0,102,25,0.4)"],
+    "borderColor": "#00ff41",
+    "borderWidth": 1
+  }],
+  "options": { "scales": { "y": { "beginAtZero": true, "max": 100 } } }
+}
+:::
+
+<!-- ----- Radar chart (Chart.js) -----
+     Use when comparing items on 4+ axes that share the same scale. -->
+
+::: chart type=radar title=Multi-axis model tradeoffs
+{
+  "labels": ["Accuracy", "Speed", "Energy", "Memory", "Cost"],
+  "datasets": [
+    { "label": "GPT-4o", "data": [87, 62, 45, 40, 30],
+      "borderColor": "#00ff41", "backgroundColor": "rgba(0,255,65,0.15)" },
+    { "label": "Llama-3.1-8B", "data": [79, 88, 82, 75, 90],
+      "borderColor": "#00cc33", "backgroundColor": "rgba(0,204,51,0.1)" }
+  ],
+  "options": { "scales": { "r": { "suggestedMin": 0, "suggestedMax": 100 } } }
+}
+:::
+
+<!-- ----- Sequence diagram (Mermaid) -----
+     Use for agent↔tool↔LLM flows, API call sequences, protocol handshakes.
+     Always preferred over a flowchart when the message is "who calls whom". -->
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant A as Agent
+    participant T as Tool
+    U->>A: Task prompt
+    A->>T: Tool call
+    T-->>A: Result
+    A-->>U: Response
+```
+
+<!-- ----- Quadrant chart (Mermaid) -----
+     Use for 2-axis strategic positioning (accuracy vs cost, risk vs impact). -->
+
+```mermaid
+quadrantChart
+    title Accuracy vs inference cost
+    x-axis Low cost --> High cost
+    y-axis Low accuracy --> High accuracy
+    quadrant-1 Premium
+    quadrant-2 Sweet spot
+    quadrant-3 Avoid
+    quadrant-4 Niche
+    GPT-4o: [0.85, 0.92]
+    Llama-3.1-70B: [0.35, 0.84]
+    Phi-3-mini: [0.10, 0.65]
+```
+
+<!-- ----- Timeline (CSS) -----
+     Use for year-by-year milestones / paper history / adoption roadmap.
+     Each item carries [fragment] so the timeline builds top-to-bottom. -->
+
+::: timeline
+- [fragment] 2020 — Baseline RNN published. 71% F1.
+- [fragment] 2022 — Graph extension. +12 F1 points.
+- [fragment] 2024 — O-RAN alliance demo. Multi-vendor.
+- [fragment] 2026 — Commercial rollout. 4 carriers, sub-50ms p99.
+:::
+
+<!-- ----- Process steps (CSS) -----
+     Use for sequential methodology (collect → train → evaluate → deploy).
+     Each step carries [fragment] so the pipeline builds left-to-right. -->
+
+::: process-steps
+- [fragment] **01 · Collect** — Production traces from 4 carriers.
+- [fragment] **02 · Preprocess** — Normalize, window, balance per-class.
+- [fragment] **03 · Train** — GNN on graph snapshots, 5 folds.
+- [fragment] **04 · Evaluate** — Held-out topology + adversarial probes.
+- [fragment] **05 · Deploy** — O-RAN xApp with online fallback.
+:::
+
+<!-- ----- Comparison grid (CSS) -----
+     Use when 3–4 options are evaluated side-by-side and one is recommended.
+     Mark the recommended card with `highlight` so it glows green. -->
+
+::: comparison-grid
+- [fragment]                 **GPT-4o**       · 87% acc · 120ms · $$$$ · fit 62%
+- [fragment]                 **Mistral-7B**   · 77% acc ·  38ms · $    · fit 71%
+- [fragment-highlight]       **Llama-3.1-8B** · 79% acc ·  42ms · $$   · fit 88%  (recommended)
+:::
+
+<!-- ----- Score bar (inline) -----
+     Slim horizontal % fill. Drop inside a card / table cell / stat:
+
+     <div class="score-bar"><div class="score-bar-fill" style="width: 72%;"></div></div>
+-->
+
+<!-- ----- Architecture zones (CSS) -----
+     Stacked layered system diagram (hardware → firmware → app → cloud). -->
+
+::: arch-zones
+- **HARDWARE**  — Edge SoC, on-chip NPU
+- **FIRMWARE**  — Runtime, scheduler, OTA channel
+- **APPLICATION** — Model + RAG + safety filters
+- **CLOUD**     — Telemetry, retraining, eval pipeline
+:::
+
+<!-- ============================================================================
      N-1 · WRAP — the single thing to remember.
      Uses the hook style for visual symmetry with the opening.
      ============================================================================ -->
@@ -184,7 +309,11 @@ Everything else is replaceable.
      Slide blocks         ::: hook | ::: hook stat=42× | ::: promise |
                           ::: two-col [split=60-40|split=40-60] |
                           ::: quote | ::: image | ::: video | ::: embed |
+                          ::: chart type={bar|radar|line} title=… |
+                          ::: timeline | ::: process-steps |
+                          ::: comparison-grid | ::: arch-zones |
                           ::: wrap | ::: end
+     Mermaid types        graph | sequenceDiagram | quadrantChart | mindmap
      Section divider      A standalone H1 line          # Background
      Content slide        Anything outside a typed block (auto-split on H2)
      Fragments            Prefix bullet/block with [fragment] or [fragment-highlight]

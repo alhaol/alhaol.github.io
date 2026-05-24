@@ -102,6 +102,7 @@
         }
         updateThemeButton();
         rerenderMermaid();
+        rerenderCharts();
     }
     function updateThemeButton() {
         const btn = document.querySelector('.deck-theme-btn');
@@ -328,6 +329,7 @@
         updateHash();
         broadcast();
         renderMermaidIfNeeded(slides[currentIndex]);
+        renderChartsIfNeeded(slides[currentIndex]);
         highlightIfNeeded(slides[currentIndex]);
     }
 
@@ -506,6 +508,112 @@
         return Promise.all(slides.map(s => renderMermaidIfNeeded(s) || Promise.resolve()));
     }
 
+    // ----- Chart.js lazy loader (mirrors loadMermaid pattern) --------------
+    let chartPromise = null;
+    function loadCharts() {
+        if (chartPromise) return chartPromise;
+        // Skip work if the deck has no chart canvases at all
+        if (!document.querySelector('.slide-chart canvas[data-chart]')) {
+            chartPromise = Promise.resolve(null);
+            return chartPromise;
+        }
+        chartPromise = new Promise((resolve) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js';
+            s.onload = () => resolve(window.Chart || null);
+            s.onerror = () => resolve(null);
+            document.head.appendChild(s);
+        });
+        return chartPromise;
+    }
+
+    function chartThemeColors() {
+        const light = currentTheme() === 'light';
+        return {
+            text: light ? '#0f172a' : '#ffffff',
+            muted: light ? '#475569' : '#b3b3b3',
+            grid: light ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.06)',
+            primary: light ? '#15803d' : '#00ff41'
+        };
+    }
+
+    // Walk a chart config and overlay theme-derived colors on top of any
+    // colors the deck author left to defaults. We deliberately only touch
+    // tick / grid / legend / pointLabel / title colors — anything the author
+    // set explicitly on dataset borderColor / backgroundColor is preserved.
+    function applyChartTheme(config) {
+        const c = chartThemeColors();
+        config.options = config.options || {};
+        config.options.responsive = true;
+        config.options.maintainAspectRatio = false;
+
+        const plugins = config.options.plugins = config.options.plugins || {};
+        plugins.legend = plugins.legend || {};
+        plugins.legend.labels = plugins.legend.labels || {};
+        plugins.legend.labels.color = c.text;
+        if (plugins.title) {
+            plugins.title.color = plugins.title.color || c.text;
+        }
+        if (plugins.tooltip) {
+            plugins.tooltip.bodyColor = plugins.tooltip.bodyColor || c.text;
+            plugins.tooltip.titleColor = plugins.tooltip.titleColor || c.primary;
+        }
+
+        const scales = config.options.scales = config.options.scales || {};
+        Object.keys(scales).forEach(k => {
+            const ax = scales[k] = scales[k] || {};
+            ax.ticks = ax.ticks || {};
+            ax.ticks.color = c.muted;
+            ax.ticks.backdropColor = 'transparent';
+            ax.grid = ax.grid || {};
+            ax.grid.color = c.grid;
+            if (ax.pointLabels) {
+                ax.pointLabels.color = ax.pointLabels.color || c.text;
+            } else if (k === 'r') {
+                ax.pointLabels = { color: c.text };
+            }
+            if (ax.title) ax.title.color = ax.title.color || c.muted;
+        });
+
+        return config;
+    }
+
+    function renderChartsIfNeeded(slide) {
+        if (!slide || !slide.classList.contains('slide-chart')) return Promise.resolve();
+        const canvases = slide.querySelectorAll('canvas[data-chart]');
+        if (!canvases.length) return Promise.resolve();
+        return loadCharts().then(Chart => {
+            if (!Chart) return;
+            canvases.forEach(canvas => {
+                if (canvas._chartInstance) return;
+                let cfg;
+                try {
+                    cfg = JSON.parse(canvas.getAttribute('data-chart'));
+                } catch (err) {
+                    console.error('[deck] chart JSON parse failed', err, canvas);
+                    return;
+                }
+                applyChartTheme(cfg);
+                canvas._chartInstance = new Chart(canvas, cfg);
+            });
+        });
+    }
+
+    function renderAllCharts() {
+        return Promise.all(slides.map(s => renderChartsIfNeeded(s) || Promise.resolve()));
+    }
+
+    function rerenderCharts() {
+        // Destroy + rebuild so axis / legend / tick colors pick up the new theme
+        document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+            if (canvas._chartInstance) {
+                canvas._chartInstance.destroy();
+                canvas._chartInstance = null;
+            }
+        });
+        renderChartsIfNeeded(slides[currentIndex]);
+    }
+
     function highlightAll() {
         return loadHighlight().then(hljs => {
             if (!hljs) return;
@@ -546,7 +654,7 @@
             swapped.push({ frame, fallback });
         });
 
-        Promise.all([renderAllMermaid(), highlightAll()]).then(() => {
+        Promise.all([renderAllMermaid(), renderAllCharts(), highlightAll()]).then(() => {
             // Give layout/paint a moment to settle
             return new Promise(r => setTimeout(r, 200));
         }).then(() => {
@@ -651,6 +759,7 @@
         updateChrome();
         fitCanvas();
         renderMermaidIfNeeded(slides[currentIndex]);
+        renderChartsIfNeeded(slides[currentIndex]);
         highlightIfNeeded(slides[currentIndex]);
 
         window.addEventListener('resize', fitCanvas);
