@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--
+    Predicting the Network — public explainer for US Patent 12,302,162 B2
+    Author: Ibrahim AbuAlhaol  |  AI Technical Lead, PhD, PEng, SMIEEE
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting the Network — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/deck.css">
+</head>
+<body data-deck-slug="predicting-the-network" data-back-href="../../index.html">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Presentation</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+    <div class="deck-stage">
+        <div class="deck-canvas">
+
+            <!-- 1 · COVER -->
+            <section class="slide slide-cover">
+                <div class="cover-meta">// US Patent 12,302,162 B2 · Public Explainer</div>
+                <h1>Predicting the Network</h1>
+                <p class="cover-subtitle">How AI is teaching cell towers to see the future — the story behind a granted patent.</p>
+                <div class="cover-author">
+                    <img src="../../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                    <div class="author-block">
+                        <div class="author-name">Ibrahim AbuAlhaol</div>
+                        <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                    </div>
+                </div>
+                <div class="cover-footer">
+                    <span>// alhaol.github.io · public explainer</span>
+                    <span>// 2026-05-14</span>
+                </div>
+                <aside class="speaker-notes">
+                    Granted May 13, 2025 to Dell Products LP. Co-inventors: Javad Mirzaei, Gwenael Poitau.
+                    Today is a 6-minute walkthrough for non-specialists. Open with a felt moment, not a definition.
+                </aside>
+            </section>
+
+            <!-- 2 · HOOK — frozen video call -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// a felt moment</div>
+                <p class="hook-statement">
+                    You're on a video call. It <em>freezes</em>.<br>
+                    Somewhere, a tower already knew.
+                </p>
+                <p class="hook-byline" data-fragment>
+                    The next six minutes are about teaching the network to act on what it knows — before you see the spinner.
+                </p>
+                <aside class="speaker-notes">
+                    Pause for two beats. Don't explain the hook — let the room sit with it.
+                </aside>
+            </section>
+
+            <!-- 3 · PROMISE -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// what you'll leave with</span>
+                <h2>Three things, in plain language</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <ul style="font-size: 26px; line-height: 1.8; margin-top: 20px;">
+                    <li data-fragment>What a <strong>network digital twin</strong> actually is — and why it's not a 3D model.</li>
+                    <li data-fragment>Why combining <strong>time + space + odds</strong> is the unlock the patent claims.</li>
+                    <li data-fragment>What changes for <strong>you</strong>: fewer dead zones, longer battery, lower-carbon gigabytes.</li>
+                </ul>
+                <aside class="speaker-notes">
+                    These three bullets mirror the wrap slide. Reveal them one at a time.
+                </aside>
+            </section>
+
+            <!-- 4 · ANALOGY — weather forecast -->
+            <section class="slide slide-two-col">
+                <span class="eyebrow">// the right analogy</span>
+                <h2>A weather forecast — for your signal</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="two-col split-60-40">
+                    <div>
+                        <p style="font-size: 22px; line-height: 1.55;">
+                            Meteorologists don't fix the weather — they <strong>see it coming</strong>
+                            so the rest of us can plan around it. A <em>network digital twin</em>
+                            does the same thing for the invisible cellular network humming around you:
+                            a live software replica that mirrors every tower, second by second,
+                            and forecasts where the storms will hit.
+                        </p>
+                        <p style="font-size: 20px; line-height: 1.6; margin-top: 16px; color:#94a3b8;">
+                            ITU-T and NVIDIA both lean on this analogy for a reason —
+                            weather already implies <em>probability</em>, and that's exactly what the patent encodes.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="callout" data-fragment="highlight">
+                            <strong>Digital twin =</strong> a live software replica of the real network,
+                            kept in sync second by second.
+                        </div>
+                        <div class="callout" style="margin-top:16px;" data-fragment>
+                            <strong>O-RAN =</strong> the LEGO-block standard replacing proprietary
+                            cell-tower gear — open interfaces between radio, distributed, and central units.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5 · PROBLEM — why old models can't keep up -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// why this is hard</span>
+                <h2>The network changes every second</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 24px;">
+                    <div class="stat">
+                        <div class="stat-value">~73%</div>
+                        <div class="stat-label">of a mobile operator's total energy use sits inside the Radio Access Network</div>
+                    </div>
+                    <div class="stat" data-fragment>
+                        <div class="stat-value">2–3×</div>
+                        <div class="stat-label">mobile traffic doubles roughly every 2–3 years — the load keeps climbing</div>
+                    </div>
+                    <div class="stat" data-fragment>
+                        <div class="stat-value">&gt;$100k</div>
+                        <div class="stat-label">half of operator outages cost more than this; 1 in 6 exceed $1M (Uptime Institute, 2024)</div>
+                    </div>
+                </div>
+                <div class="callout" style="margin-top: 28px;" data-fragment="highlight">
+                    Old physics-based simulators are too slow. Old statistical models miss the <strong>topology</strong>
+                    — who is connected to whom, and how that connection shifts with weather, crowds, interference.
+                </div>
+                <aside class="speaker-notes">
+                    GSMA Going Green (2024) for the 73% number. Ericsson Mobility Report (Nov 2024) for traffic growth.
+                    Soften the outage figure verbally — it's data-centre weighted, but illustrates magnitude.
+                </aside>
+            </section>
+
+            <!-- 6 · THE PATENT — mermaid diagram -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// the patent, in one picture</span>
+                <h2>Time + Space + Odds</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="mermaid">
+flowchart LR
+    L[Live O-RAN<br/>RUs · DUs · CUs] -->|telemetry| RNN[RNN<br/>time-pattern brain]
+    L -->|topology| GNN[GNN<br/>map-pattern brain]
+    RNN --> PGM[Probabilistic Graph<br/>odds, not certainties]
+    GNN --> PGM
+    PGM --> F[Forecast<br/>latency · throughput · energy]
+    F -->|act before users notice| L
+    style L fill:#0a1f0a,stroke:#00cc33,color:#fff
+    style RNN fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style GNN fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style PGM fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style F fill:#0a1f0a,stroke:#00ff41,color:#fff
+                </div>
+                <div class="slide-caption">
+                    // time-pattern brain (RNN) + map-pattern brain (GNN) + a sense of "maybe" (PGM) = a network that plans ahead
+                </div>
+            </section>
+
+            <!-- 7 · WHY PGM IS THE NOVEL PART -->
+            <section class="slide slide-quote">
+                <blockquote>
+                    The links between cell towers aren't certainties —<br>
+                    they're <em>odds that shift with weather, crowds, interference</em>.<br>
+                    Treat them that way, and the forecast finally matches reality.
+                </blockquote>
+                <cite>— the central idea of US 12,302,162 B2</cite>
+                <aside class="speaker-notes">
+                    Earlier digital twins assumed the graph of who-talks-to-whom was fixed. The patent makes those edges
+                    probability distributions — that's the unlock and the headline contribution.
+                </aside>
+            </section>
+
+            <!-- 8 · SO WHAT FOR ME -->
+            <section class="slide slide-content">
+                <span class="eyebrow">// so what — for you</span>
+                <h2>What this changes the day it ships</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="stat-grid" style="margin-top: 24px;">
+                    <div class="stat">
+                        <div class="stat-value">📶</div>
+                        <div class="stat-label"><strong>Fewer frozen video calls</strong> — most congestion-related drops are predictable, and the network reroutes before you see the spinner</div>
+                    </div>
+                    <div class="stat" data-fragment>
+                        <div class="stat-value">🔋</div>
+                        <div class="stat-label"><strong>Longer battery in crowds</strong> — your phone hunts less when the tower already knows what's coming</div>
+                    </div>
+                    <div class="stat" data-fragment>
+                        <div class="stat-value">🌍</div>
+                        <div class="stat-label"><strong>Lower-carbon gigabytes</strong> — published AI-RAN pilots show double-digit % cell-level energy savings, and twins compound those gains</div>
+                    </div>
+                </div>
+                <aside class="speaker-notes">
+                    Avoid claiming "50% energy savings" — no peer-reviewed study supports it. Stick to "double-digit %" at the cell level.
+                    Mention Nokia's claim of ~50% faster planning/optimization cycles (process gain, not energy).
+                </aside>
+            </section>
+
+            <!-- 9 · PDF EMBED — the granted patent -->
+            <section class="slide slide-embed">
+                <iframe class="embed-pdf"
+                    src="../../../assets/pdfs/granted_patents/US12302162B2_granted.pdf#toolbar=0&view=FitH"
+                    title="US Patent 12,302,162 B2 — granted PDF"></iframe>
+                <div class="slide-caption">
+                    // US 12,302,162 B2 · Methods and processes to enable RNN-GNN-based network digital twin for O-RAN · granted 13 May 2025
+                </div>
+            </section>
+
+            <!-- 10 · WRAP — the one repeatable line -->
+            <section class="slide slide-hook">
+                <div class="hook-eyebrow">// remember this</div>
+                <p class="hook-statement">
+                    We taught the network to <em>forecast itself</em>.
+                </p>
+                <p class="hook-byline">If you text one sentence to a friend after this talk, text that one.</p>
+                <aside class="speaker-notes">
+                    Land it slowly. Don't add a second sentence on the slide. The whole talk earns this one line.
+                </aside>
+            </section>
+
+            <!-- 11 · CLOSING / Q&A -->
+            <section class="slide slide-end">
+                <h1>Q &amp; A</h1>
+                <div class="end-tagline">// thanks for listening</div>
+                <div class="end-contact">
+                    <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                    <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                    <div>// <a href="https://alhaol.github.io" target="_blank" rel="noopener">alhaol.github.io</a></div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../../assets/js/deck.js"></script>
+    <script>
+    function _login() {
+      var u = document.getElementById('loginUsername').value;
+      var p = document.getElementById('loginPassword').value;
+      if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+        document.getElementById('loginView').style.display = 'none';
+      } else {
+        var err = document.getElementById('loginError');
+        err.style.display = 'block';
+        var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+        inputs.forEach(function(el) {
+          el.style.borderColor = '#ef4444';
+          setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+        });
+      }
+    }
+    document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') _login();
+    });
+    </script>
+</body>
+</html>
