@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Self-Allocating Mind | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_16.png" alt="The Self-Allocating Mind" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">Frontier AI</span>
+                        <span class="category-badge category-cognitive">Reasoning</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Self-Allocating Mind</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Why the next step toward general intelligence is not a bigger model, but one that decides for itself how hard to think on each problem.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: May 31, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~9 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>For three years the industry measured progress in one direction: bigger. More parameters, more training data, more cost. The assumption was simple. A larger model is a smarter model. That assumption is now quietly breaking down, and the change matters for anyone planning where to spend an AI budget over the next two years.</p>
+
+                    <p>In May 2026, OpenAI shipped something that looks small on a feature list but is large in its implications. Its workspace agents now expose a setting called <strong>reasoning effort</strong>, with levels that run from none to extra high. The model is no longer a fixed product with a fixed speed. The buyer, and increasingly the model itself, can choose how much thinking each task deserves. Anthropic, Google, and OpenAI all now compete primarily on reasoning quality rather than raw size. The frontier moved from how big the brain is to how well it spends its attention.</p>
+
+                    <blockquote>General intelligence will not arrive as a single enormous model. It will arrive when a model learns to budget its own thinking, spending deep effort on hard problems and almost none on easy ones, without being told which is which.</blockquote>
+
+                    <h2>The Problem With One Speed</h2>
+                    <p>Imagine a consultant who charges the same and takes the same time on every question, whether you ask for the date or for a restructuring plan. You would not hire that person. Yet that is how language models worked until recently. Every prompt, trivial or profound, received the same fixed amount of computation. This is wasteful on the easy questions and dangerously shallow on the hard ones.</p>
+
+                    <p>The cost of this is real and measurable. Easy tasks were overpriced because they paid for thinking they did not need. Hard tasks failed quietly because the model was not allowed to think long enough to get them right. For a business, both failures are expensive. One inflates the bill. The other produces confident, wrong answers that a human only catches later, if at all.</p>
+
+                    <h2>Thinking Became a Dial</h2>
+                    <p>The breakthrough of the past year is that <strong>test-time compute</strong>, the effort a model spends after you press send, became something you can turn up or down. Researchers found that letting a model reason longer on a hard problem often beats training a larger model in the first place. Effort, not size, became the cheaper path to better answers.</p>
+
+                    <p>Today that dial is mostly set by a human. A builder picks low effort for a chatbot reply and high effort for a contract analysis. This is already a meaningful advance. It turns a fixed cost into a managed one, the same way cloud computing turned servers from a purchase into a tap you open and close. But a human setting the dial is a temporary arrangement. The interesting question is what happens when the model sets it.</p>
+
+                    <h3>What changes when the model decides</h3>
+                    <ul>
+                        <li><strong>Cost follows difficulty.</strong> Spend is matched to the value of each task rather than averaged across all of them.</li>
+                        <li><strong>Hard problems stop failing silently.</strong> The model recognizes when a question needs more thought and gives it more thought.</li>
+                        <li><strong>The human stops micromanaging.</strong> You describe the goal, not the amount of effort it should take.</li>
+                    </ul>
+
+                    <h2>Why This Is The AGI Bridge</h2>
+                    <p>Knowing how hard to think is not a minor convenience. It is one of the defining traits of general intelligence. A capable human does not consciously decide to think harder about a merger than about lunch. The allocation is automatic, and it is most of what we mean when we call someone sharp. A system that lacks this sense is brilliant in flashes and foolish at random, because it cannot tell its own easy problems from its own hard ones.</p>
+
+                    <p>This is why the reasoning-effort dial is more than a pricing feature. It is the first commercial appearance of <strong>metacognition</strong>, the ability of a system to reason about its own reasoning. Once a model can estimate the difficulty of a task before solving it, and then commit the right amount of effort, it has the core control loop that separates a tool from an agent that can be trusted with open-ended work.</p>
+
+                    <p>The signal that this is real arrived the same month. An OpenAI reasoning model, given enough room to think, disproved a mathematical conjecture that had stood for eighty years. That result did not come from a bigger model. It came from a model allowed to spend deep effort on a single hard problem. The lesson is direct: the payoff from self-directed thinking is not incremental. On the right problem it is the difference between no answer and a genuinely new one.</p>
+
+                    <h2>What Leaders Should Do Now</h2>
+                    <p>This shift is not a research curiosity. It changes how an organization should buy, budget, and govern AI over the next two years. The companies that benefit will be the ones that stop treating a model as a single fixed thing and start treating thinking as a resource to be allocated.</p>
+
+                    <ol>
+                        <li><strong>Stop buying one tier of intelligence.</strong> Match the depth of reasoning to the stakes of the task. Customer chat and legal review should not run at the same setting.</li>
+                        <li><strong>Budget compute like a portfolio.</strong> Track where deep effort is spent and what it returns, the same way you track any other operating expense.</li>
+                        <li><strong>Reserve human review for high-effort outputs.</strong> When a system spends its maximum effort, the result is usually high stakes. That is exactly where a person should still sign off.</li>
+                        <li><strong>Ask vendors how effort is set.</strong> Is it fixed, set by you, or chosen by the model? The answer tells you how mature, and how predictable, the system really is.</li>
+                    </ol>
+
+                    <h2>The Wider Picture</h2>
+                    <p>For most of the modern AI era, the story was about scale, and scale was something only the largest labs could buy. The story is now shifting to judgment, and judgment is something an organization can manage, govern, and put to work without owning a giant model. A system that allocates its own thinking is cheaper on the routine, deeper on the difficult, and far closer to a colleague than a calculator.</p>
+
+                    <p>The mind we are building is not defined by how much it knows. It is defined by how well it decides where to look. The first models that truly master that decision will not just be more useful. They will be the clearest sign yet that the path to general intelligence runs through self-allocation, not sheer size.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Progressive Token Budgets</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">The non-linearity of extended thinking: when and how to allocate deep compute for complex problems.</p>
+                        <a href="progressive-token-budgets.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Discovery Threshold</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why verifiable new knowledge, not benchmark scores, is the real test of general intelligence.</p>
+                        <a href="the-discovery-threshold.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Orchestrated Mind</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why general intelligence will emerge from coordinated fleets of agents, not one ever-larger model.</p>
+                        <a href="the-orchestrated-mind.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        OpenAI (2026). <em>"Introducing Workspace Agents in ChatGPT."</em> Reasoning-effort controls for GPT-5.5.
+                        <a href="https://openai.com/index/introducing-workspace-agents-in-chatgpt/" target="_blank">openai.com</a>
+                    </li>
+                    <li class="reference-item">
+                        OpenAI (2026). <em>"An OpenAI Model Has Disproved a Central Conjecture in Discrete Geometry."</em>
+                        <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/" target="_blank">openai.com</a>
+                    </li>
+                    <li class="reference-item">
+                        Anthropic (2026). <em>"Introducing Claude Opus 4.8."</em> Newsroom.
+                        <a href="https://www.anthropic.com/news" target="_blank">anthropic.com</a>
+                    </li>
+                    <li class="reference-item">
+                        Google (2026). <em>"Gemini 3.5: Frontier Intelligence With Action."</em>
+                        <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/" target="_blank">blog.google</a>
+                    </li>
+                    <li class="reference-item">
+                        Snell, C., et al. (2024). <em>"Scaling LLM Test-Time Compute Optimally Can Be More Effective Than Scaling Model Parameters."</em>
+                        <a href="https://arxiv.org/abs/2408.03314" target="_blank">arXiv:2408.03314</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
