@@ -101,6 +101,7 @@ No build step, no package manager.
 | TaskMaster Pro | `/apps/todo/` | Focus-mode task manager with active-task hero view |
 | Warmup | `/apps/warmup/` | Daily warmup and core workout video playlist (25 videos) |
 | Wizard Duel | `/apps/wizard-duel/` | 2-player turn-based wizard battle game with monsters |
+| theMITmonk Vault | `/apps/mitmonk/` | Searchable explorer for Sandeep Swadia's videos — filter by topic/year/value, AI concept summaries, in-page playback, and a paste-a-URL watchlist |
 
 ## Updating Content
 
