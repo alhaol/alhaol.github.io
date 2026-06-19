@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Cards</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: #fbbf24; }
+    .btn-accent {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #fbbf24; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-3xl mx-auto relative z-10">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Habit Cards</h1>
+      <p class="text-slate-400 text-sm mt-1">Memorize the 9 micro-habits for attention, energy &amp; happiness</p>
+    </div>
+    <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
+  </header>
+
+  <main id="habitApp" class="glass-panel p-6">
+    <style>
+      .seg { display:flex; gap:6px; flex-wrap:wrap; }
+      .seg button { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#cbd5e1;
+        padding:7px 13px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; }
+      .seg button:hover { background:rgba(255,255,255,0.09); }
+      .seg button.on { color:#020617; border-color:transparent; }
+      .flip-wrap { perspective:1400px; }
+      .flip-inner { position:relative; width:100%; min-height:280px; transform-style:preserve-3d;
+        transition:transform .5s cubic-bezier(.4,.2,.2,1); }
+      .flip-inner.flipped { transform:rotateY(180deg); }
+      .flip-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+        display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+        padding:30px 24px; border-radius:16px; border:1px solid rgba(255,255,255,0.08);
+        background:rgba(15,23,42,0.7); }
+      .flip-back { transform:rotateY(180deg); }
+      .pill { display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+        padding:4px 11px; border-radius:999px; margin-bottom:14px; }
+      .rate-btn { flex:1; min-width:70px; padding:12px 8px; border-radius:11px; border:1px solid rgba(255,255,255,0.1);
+        background:rgba(255,255,255,0.04); color:#e2e8f0; font-weight:700; font-size:13px; cursor:pointer; transition:all .15s; }
+      .rate-btn:hover { transform:translateY(-1px); }
+      .rate-btn small { display:block; font-weight:500; font-size:10px; color:#94a3b8; margin-top:2px; }
+      .dot { width:7px; height:7px; border-radius:999px; display:inline-block; background:rgba(255,255,255,0.12); }
+    </style>
+
+    <div id="pillarFilter" class="seg mb-4"></div>
+
+    <div class="flex items-center justify-between mb-5">
+      <div id="viewToggle" class="seg"></div>
+      <button id="resetBtn" class="text-slate-500 hover:text-rose-300 text-xs flex items-center gap-1">
+        <i data-lucide="rotate-ccw" style="width:13px;height:13px"></i> Reset progress
+      </button>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between text-xs text-slate-400 mb-1.5">
+        <span id="masteryLabel">0 / 9 mastered</span>
+        <span id="streakLabel">0 day streak</span>
+      </div>
+      <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden">
+        <div id="masteryBar" style="height:100%;width:0%;background:linear-gradient(90deg,#fbbf24,#f59e0b);transition:width .45s"></div>
+      </div>
+    </div>
+
+    <div id="studyView"></div>
+    <div id="browseView" class="hidden"></div>
+  </main>
+</div>
+
+<script>
+// === App logic ===
+const HABITS = [
+  { id:'click', pillar:'attention', name:'Correct After the Click',
+    cue:'What do you do the moment you catch yourself slipping into a bad habit?',
+    back:'Stop trying to block the reflex before it fires. The instant you notice you have already acted (opened the app, grabbed the snack), attach one small good action right after: stand up, drink a glass of water, take three breaths. You interrupt the interruption.',
+    example:'You open Instagram on autopilot, notice it, close it, and refill your water bottle.' },
+  { id:'input', pillar:'attention', name:'Control Your Input',
+    cue:'How do you stop email and messages from draining your attention all day?',
+    back:'Batch inputs into a few fixed windows (for example 9am, 1pm, 4:30pm). Touch each item once with the 4D rule: Do it, Delegate it, Date it, or Delete it. Open loops keep draining you in the background (the Zeigarnik effect) until they are closed.',
+    example:'Check email only at set times; every message gets one of Do / Delegate / Date / Delete.' },
+  { id:'write', pillar:'attention', name:'Write to Think',
+    cue:'What is the fastest way to clear a foggy decision?',
+    back:'Write by hand before any hard conversation or decision. Answer three questions: What do I know? What am I assuming? What is the next honest action? Handwriting forces one thought to connect to the next.',
+    example:'Stuck on a choice: hand-write the three questions before you decide.' },
+
+  { id:'quantize', pillar:'energy', name:'Quantize the Action',
+    cue:'What is the trick to actually starting a habit?',
+    back:'Shrink it to its smallest possible packet, because the hardest part of any habit is starting. Write one line, do half a push-up, walk for one minute. Reduce the force required to begin and consistency follows.',
+    example:'Want to write a book? Commit to one sentence.' },
+  { id:'caffeine', pillar:'energy', name:'Cut Caffeine 6 Hours Before Bed',
+    cue:'Why does your 4pm coffee wreck your sleep?',
+    back:'Caffeine has a half-life of about six hours, so a cup at 4pm still leaves roughly a quarter of the dose in your system near midnight. Set a hard caffeine cutoff at least six hours before bed to protect deep sleep.',
+    example:'Bed at 10pm means last coffee by 4pm.' },
+  { id:'waves', pillar:'energy', name:'Ride the Waves',
+    cue:'What should you do when the 3:30pm crash hits?',
+    back:'Your brain runs in 80 to 120 minute ultradian cycles of focus and fatigue. The crash is a signal, not a failure. Take a real recovery break with no new input (walk, breathe, rest), then ride the next wave.',
+    example:'90-minute focus block, then a 15-minute break with no screen, then the next block.' },
+
+  { id:'lookup', pillar:'happiness', name:'Look Up (Awe)',
+    cue:'The tiny habit for when life feels heavy?',
+    back:'Go outside at night and look up. The light from many of those stars left them thousands of years ago, and some are already gone. You are surrounded by millions of miracles. This produces awe.',
+    example:'Heavy day: step outside and look at the night sky for a minute.' },
+  { id:'mirror', pillar:'happiness', name:'Look in the Mirror (Gratitude)',
+    cue:'After awe, where do you point that same attention?',
+    back:'Really look at yourself. The same atoms that made the stars made you, and there is exactly one version of you. You are one of those miracles. This produces gratitude.',
+    example:'Look in the mirror and name one thing you are grateful to be or have.' },
+  { id:'forgive', pillar:'happiness', name:'Forgive Yourself',
+    cue:'What is the habit for the days when every other habit breaks?',
+    back:'Your systems will break, and that is inevitable. Do not spiral into shame, because self-prosecution is more exhausting than a missed habit. You do not have to be your best self on your worst day.',
+    example:'Missed your routine? Note it, forgive yourself, restart tomorrow. No spiral.' }
+];
+
+const PILLARS = {
+  attention: { label:'Attention', color:'#60a5fa' },
+  energy:    { label:'Energy',    color:'#fbbf24' },
+  happiness: { label:'Happiness', color:'#a78bfa' }
+};
+const BOX_DAYS = { 1:0, 2:1, 3:3, 4:7, 5:16 };
+const DAY = 86400000;
+const MASTER_BOX = 5;
+const KEY = 'habitCardsState_v1';
+
+let state = load();
+let filter = 'all';
+let view = 'study';
+let queue = [];
+let current = null;
+let revealed = false;
+
+function load() {
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { s = {}; }
+  s.box = s.box || {};
+  s.due = s.due || {};
+  s.lastStudyDate = s.lastStudyDate || null;
+  s.streak = s.streak || 0;
+  s.reviews = s.reviews || 0;
+  HABITS.forEach(function(h){
+    if (!s.box[h.id]) s.box[h.id] = 1;
+    if (!(h.id in s.due)) s.due[h.id] = 0;
+  });
+  return s;
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function dateStr(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function todayStr(){ return dateStr(new Date()); }
+function yesterdayStr(){ var d=new Date(); d.setDate(d.getDate()-1); return dateStr(d); }
+
+function inFilter(h){ return filter==='all' || h.pillar===filter; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function pillHtml(pillar){
+  const p = PILLARS[pillar];
+  return '<span class="pill" style="color:'+p.color+';background:'+p.color+'22;border:1px solid '+p.color+'55">'+p.label+'</span>';
+}
+
+// ---------- top chrome ----------
+function renderPillarFilter(){
+  const el = document.getElementById('pillarFilter');
+  const opts = [['all','All']].concat(Object.keys(PILLARS).map(function(k){ return [k, PILLARS[k].label]; }));
+  el.innerHTML = opts.map(function(o){
+    const on = filter===o[0];
+    const color = o[0]==='all' ? '#fbbf24' : PILLARS[o[0]].color;
+    return '<button data-f="'+o[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:'+color:'')+'">'+o[1]+'</button>';
+  }).join('');
+  el.querySelectorAll('button').forEach(function(b){
+    b.onclick = function(){ filter=b.dataset.f; renderPillarFilter(); if(view==='study'){ startStudy(false); } else { renderBrowse(); } };
+  });
+}
+function renderViewToggle(){
+  const el = document.getElementById('viewToggle');
+  const views = [['study','Study'],['browse','Browse all']];
+  el.innerHTML = views.map(function(v){
+    const on = view===v[0];
+    return '<button data-v="'+v[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:#fbbf24':'')+'">'+v[1]+'</button>';
+  }).join('');
+  el.querySelectorAll('button').forEach(function(b){
+    b.onclick = function(){ switchView(b.dataset.v); };
+  });
+}
+function renderProgress(){
+  const total = HABITS.length;
+  const mastered = HABITS.filter(function(h){ return state.box[h.id] >= MASTER_BOX; }).length;
+  let pts = 0; HABITS.forEach(function(h){ pts += (state.box[h.id]-1); });
+  const pct = Math.round(pts/(total*(MASTER_BOX-1))*100);
+  document.getElementById('masteryLabel').textContent = mastered+' / '+total+' mastered';
+  document.getElementById('masteryBar').style.width = pct+'%';
+  const s = state.streak||0;
+  document.getElementById('streakLabel').textContent = (s>0?'🔥 ':'')+s+' day streak';
+}
+
+// ---------- study ----------
+function switchView(v){
+  view = v;
+  renderViewToggle();
+  document.getElementById('studyView').classList.toggle('hidden', v!=='study');
+  document.getElementById('browseView').classList.toggle('hidden', v!=='browse');
+  if (v==='study') startStudy(false); else renderBrowse();
+}
+
+function startStudy(includeAll){
+  const now = Date.now();
+  let pool = HABITS.filter(inFilter).filter(function(h){ return includeAll || state.due[h.id] <= now; });
+  queue = shuffle(pool.map(function(h){ return h.id; }));
+  revealed = false;
+  if (queue.length === 0){ renderCaughtUp(); return; }
+  current = HABITS.find(function(h){ return h.id===queue.shift(); });
+  showCurrent();
+}
+
+function showCurrent(){
+  revealed = false;
+  const h = current;
+  const dueCount = queue.length + 1;
+  const sv = document.getElementById('studyView');
+  sv.innerHTML =
+    '<div class="text-center text-xs uppercase tracking-wider mb-3" style="color:#fbbf24">'+dueCount+' card'+(dueCount>1?'s':'')+' in this round · level '+state.box[h.id]+'/5</div>'+
+    '<div class="flip-wrap"><div class="flip-inner" id="flipInner">'+
+      '<div class="flip-face flip-front">'+
+        pillHtml(h.pillar)+
+        '<h2 class="text-2xl font-bold text-white mb-3">'+h.name+'</h2>'+
+        '<p class="text-slate-300 text-sm mb-6" style="max-width:30rem">'+h.cue+'</p>'+
+        '<button class="btn-accent" id="showBtn">Show answer <span style="opacity:.6">(Space)</span></button>'+
+      '</div>'+
+      '<div class="flip-face flip-back">'+
+        pillHtml(h.pillar)+
+        '<h3 class="text-lg font-bold text-white mb-2">'+h.name+'</h3>'+
+        '<p class="text-slate-200 text-sm mb-3" style="max-width:32rem;line-height:1.6">'+h.back+'</p>'+
+        '<p class="text-xs" style="color:#fbbf24;max-width:32rem"><strong>Example:</strong> '+h.example+'</p>'+
+      '</div>'+
+    '</div></div>'+
+    '<div id="rateRow" class="hidden mt-5">'+
+      '<p class="text-center text-xs text-slate-500 mb-2">How well did you recall it?</p>'+
+      '<div style="display:flex;gap:8px">'+
+        '<button class="rate-btn" data-rate="again" style="border-color:#f8717155">Again<small>&lt;1 day</small></button>'+
+        '<button class="rate-btn" data-rate="hard" style="border-color:#fbbf2455">Hard<small>same level</small></button>'+
+        '<button class="rate-btn" data-rate="good" style="border-color:#60a5fa55">Good<small>level up</small></button>'+
+        '<button class="rate-btn" data-rate="easy" style="border-color:#34d39955">Easy<small>+2 levels</small></button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById('showBtn').onclick = reveal;
+  sv.querySelectorAll('[data-rate]').forEach(function(b){ b.onclick = function(){ rate(b.dataset.rate); }; });
+  lucide.createIcons();
+}
+
+function reveal(){
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('flipInner').classList.add('flipped');
+  document.getElementById('rateRow').classList.remove('hidden');
+}
+
+function recordReview(){
+  state.reviews++;
+  const t = todayStr();
+  if (state.lastStudyDate !== t){
+    state.streak = (state.lastStudyDate === yesterdayStr()) ? (state.streak+1) : 1;
+    state.lastStudyDate = t;
+  }
+}
+
+function rate(r){
+  if (!revealed) return;
+  const id = current.id;
+  let box = state.box[id];
+  if (r==='again') box = 1;
+  else if (r==='hard') box = Math.max(1, box);
+  else if (r==='good') box = Math.min(MASTER_BOX, box+1);
+  else if (r==='easy') box = Math.min(MASTER_BOX, box+2);
+  state.box[id] = box;
+  if (r==='again'){ state.due[id] = 0; queue.push(id); }
+  else { state.due[id] = Date.now() + BOX_DAYS[box]*DAY; }
+  recordReview();
+  save();
+  renderProgress();
+  nextCard();
+}
+
+function nextCard(){
+  const nextId = queue.shift();
+  if (!nextId){ renderComplete(); return; }
+  current = HABITS.find(function(h){ return h.id===nextId; });
+  showCurrent();
+}
+
+function renderComplete(){
+  const mastered = HABITS.filter(function(h){ return state.box[h.id]>=MASTER_BOX; }).length;
+  document.getElementById('studyView').innerHTML =
+    '<div class="text-center py-10">'+
+      '<div style="width:60px;height:60px;border-radius:999px;background:#fbbf2422;border:1px solid #fbbf2455;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i data-lucide="check" style="width:28px;height:28px;color:#fbbf24"></i></div>'+
+      '<h2 class="text-xl font-bold text-white mb-1">Round complete</h2>'+
+      '<p class="text-slate-400 text-sm mb-6">'+mastered+' of '+HABITS.length+' habits mastered · '+state.reviews+' total reviews</p>'+
+      '<button class="btn-accent" id="againBtn">Study again</button>'+
+    '</div>';
+  document.getElementById('againBtn').onclick = function(){ startStudy(true); };
+  lucide.createIcons();
+}
+
+function renderCaughtUp(){
+  const now = Date.now();
+  const upcoming = HABITS.filter(inFilter).map(function(h){ return state.due[h.id]; }).filter(function(t){ return t>now; });
+  let when = '';
+  if (upcoming.length){
+    const next = Math.min.apply(null, upcoming);
+    const hrs = Math.round((next-now)/3600000);
+    when = hrs < 24 ? ('Next review in about '+Math.max(1,hrs)+'h.') : ('Next review in about '+Math.round(hrs/24)+' day(s).');
+  }
+  document.getElementById('studyView').innerHTML =
+    '<div class="text-center py-10">'+
+      '<div style="width:60px;height:60px;border-radius:999px;background:#34d39922;border:1px solid #34d39955;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i data-lucide="coffee" style="width:26px;height:26px;color:#34d399"></i></div>'+
+      '<h2 class="text-xl font-bold text-white mb-1">You are all caught up</h2>'+
+      '<p class="text-slate-400 text-sm mb-6">Spaced repetition is working. '+when+'</p>'+
+      '<button class="btn-accent" id="reviewAllBtn">Review all anyway</button>'+
+    '</div>';
+  document.getElementById('reviewAllBtn').onclick = function(){ startStudy(true); };
+  lucide.createIcons();
+}
+
+// ---------- browse ----------
+function renderBrowse(){
+  const bv = document.getElementById('browseView');
+  let html = '';
+  Object.keys(PILLARS).forEach(function(pk){
+    const items = HABITS.filter(function(h){ return h.pillar===pk && inFilter(h); });
+    if (!items.length) return;
+    const p = PILLARS[pk];
+    html += '<h3 class="text-sm font-bold uppercase tracking-wider mb-3 mt-5" style="color:'+p.color+'">'+p.label+'</h3>';
+    items.forEach(function(h){
+      const box = state.box[h.id];
+      let dots = '';
+      for (let i=1;i<=MASTER_BOX;i++){ dots += '<span class="dot" style="'+(i<=box?'background:'+p.color:'')+'"></span>'; }
+      html +=
+        '<div style="border:1px solid rgba(255,255,255,0.08);background:rgba(15,23,42,0.5);border-radius:12px;padding:16px;margin-bottom:12px">'+
+          '<div class="flex items-center justify-between mb-2">'+
+            '<h4 class="font-bold text-white">'+h.name+'</h4>'+
+            '<span style="display:flex;gap:4px;align-items:center">'+dots+'</span>'+
+          '</div>'+
+          '<p class="text-slate-300 text-sm mb-2" style="line-height:1.6">'+h.back+'</p>'+
+          '<p class="text-xs" style="color:'+p.color+'"><strong>Example:</strong> '+h.example+'</p>'+
+        '</div>';
+    });
+  });
+  bv.innerHTML = html;
+  lucide.createIcons();
+}
+
+// ---------- reset ----------
+document.getElementById('resetBtn').onclick = function(){
+  if (!confirm('Reset all habit-card progress (levels, streak, schedule)?')) return;
+  localStorage.removeItem(KEY);
+  state = load();
+  renderProgress();
+  if (view==='study') startStudy(false); else renderBrowse();
+};
+
+// ---------- keyboard ----------
+document.addEventListener('keydown', function(e){
+  if (document.getElementById('loginView').style.display !== 'none') return;
+  if (view!=='study') return;
+  if (e.key === ' '){ if(document.getElementById('showBtn')){ e.preventDefault(); reveal(); } return; }
+  if (revealed){
+    const map = { '1':'again','2':'hard','3':'good','4':'easy' };
+    if (map[e.key]) rate(map[e.key]);
+  }
+});
+
+// ---------- init ----------
+renderPillarFilter();
+renderViewToggle();
+renderProgress();
+startStudy(false);
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>

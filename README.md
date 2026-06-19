@@ -104,6 +104,7 @@ No build step, no package manager.
 | theMITmonk Vault | `/apps/mitmonk/` | Searchable explorer for Sandeep Swadia's videos — filter by topic/year/value, AI concept summaries, in-page playback, and a paste-a-URL watchlist |
 | Yaqeen Vault | `/apps/yaqeen/` | Searchable explorer for Yaqeen Institute lectures (Dr. Omar Suleiman) — seerah, spiritual growth, end-times signs & khutbahs with AI summaries, in-page playback, and a watchlist |
 | Wealth Vault | `/apps/wealth/` | Searchable explorer for Codie Sanchez's videos — buying businesses, money mindset, wealth habits, sales & BigDeal interviews with AI summaries, in-page playback, and a watchlist |
+| Habit Cards | `/apps/habit-cards/` | Spaced-repetition flashcard trainer for theMITmonk's nine micro-habits (attention, energy, happiness) with level tracking and a study streak; companion to the article The Smallest Lever |
 
 ## Updating Content
 
