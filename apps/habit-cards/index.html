@@ -121,6 +121,76 @@
       .rate-btn:hover { transform:translateY(-1px); }
       .rate-btn small { display:block; font-weight:500; font-size:10px; color:#94a3b8; margin-top:2px; }
       .dot { width:7px; height:7px; border-radius:999px; display:inline-block; background:rgba(255,255,255,0.12); }
+
+      /* ---- taxonomy / dendrogram map ---- */
+      .map-scroll { overflow-x:auto; padding:6px 2px 10px; -webkit-overflow-scrolling:touch; }
+      .org { display:flex; min-width:max-content; }
+      .org ul { display:flex; flex-direction:column; justify-content:center;
+        padding-left:34px; margin:0; list-style:none; position:relative; }
+      .org li { display:flex; flex-direction:row; align-items:center; position:relative; padding:5px 0; }
+      /* horizontal stub: from the vertical spine to each node */
+      .org ul ul > li::before { content:''; position:absolute; top:50%; left:-34px; width:34px;
+        border-top:1.5px solid rgba(255,255,255,0.16); }
+      /* vertical spine, assembled from per-child segments (no bg erase needed) */
+      .org ul ul > li::after { content:''; position:absolute; left:-34px; width:1.5px;
+        top:0; bottom:0; background:rgba(255,255,255,0.16); }
+      .org ul ul > li:first-child::after { top:50%; bottom:0; }
+      .org ul ul > li:last-child::after  { top:0; bottom:50%; }
+      .org ul ul > li:only-child::after  { display:none; }
+
+      .node { display:flex; flex-direction:column; gap:1px; background:rgba(15,23,42,0.75);
+        border:1px solid rgba(255,255,255,0.10); border-radius:11px; padding:9px 13px; min-width:120px;
+        position:relative; z-index:1; }
+      .node-root { align-items:center; text-align:center; background:linear-gradient(135deg,#fbbf24,#f59e0b);
+        border:none; min-width:96px; }
+      .node-root .nk { color:#020617; font-weight:800; font-size:15px; }
+      .node-root .nn { color:#3b2f04; font-size:10px; font-weight:600; }
+      .node .nk { font-weight:800; font-size:13px; letter-spacing:.04em; }
+      .node .nn { color:#cbd5e1; font-size:11px; font-weight:600; line-height:1.25; }
+      .node .ng { color:#7e8aa0; font-size:10px; line-height:1.3; margin-top:2px; }
+      .node-pillar { align-items:flex-start; }
+      .node-pillar .nk { font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
+      .node-pillar .nn { font-size:10px; color:#94a3b8; }
+      .node-leaf { cursor:pointer; transition:transform .15s, border-color .15s; }
+      .node-leaf:hover { transform:translateX(2px); }
+
+      .mnemonic { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:18px; }
+      @media (max-width:640px){ .mnemonic { grid-template-columns:1fr; } }
+      .mn-card { border-radius:11px; padding:12px 14px; border:1px solid rgba(255,255,255,0.08);
+        background:rgba(15,23,42,0.5); }
+      .mn-card h5 { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; margin-bottom:6px; }
+      .mn-card .word { font-size:13px; font-weight:800; letter-spacing:.05em; }
+      .mn-card p { color:#94a3b8; font-size:11px; margin-top:7px; line-height:1.5; }
+
+      /* ---- knowledge graph ---- */
+      .kg-wrap { position:relative; border:1px solid rgba(255,255,255,0.07); border-radius:14px;
+        background:radial-gradient(circle at 50% 40%, rgba(30,41,59,0.45), rgba(2,6,23,0.2)); overflow:hidden; }
+      #kg { width:100%; height:auto; display:block; touch-action:none; user-select:none; cursor:grab; }
+      .glink { stroke:rgba(255,255,255,0.16); stroke-width:1.5; }
+      .glink-cross { stroke:rgba(94,234,212,0.42); stroke-width:1.3; stroke-dasharray:5 5; }
+      .glabel { fill:#5eead4; font-size:8.5px; opacity:.7; paint-order:stroke; stroke:#020617;
+        stroke-width:2.5px; stroke-linejoin:round; pointer-events:none; }
+      .gnode { cursor:pointer; }
+      .gnode text { pointer-events:none; }
+      .gnode .body { transition:stroke-width .12s, filter .12s; }
+      .gnode:hover .body { stroke-width:3.5; }
+      /* zoom / pan / expand controls */
+      .kg-ctrl { position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:6px; z-index:5; }
+      .kg-ctrl button { width:32px; height:32px; border-radius:9px; border:1px solid rgba(255,255,255,0.12);
+        background:rgba(2,6,23,0.78); color:#cbd5e1; font-size:16px; font-weight:700; line-height:1; cursor:pointer;
+        display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px); transition:all .15s; }
+      .kg-ctrl button:hover { background:rgba(15,23,42,0.95); color:#fbbf24; border-color:rgba(251,191,36,0.4); }
+      .kg-wrap:fullscreen { width:100vw; height:100vh; border-radius:0; background:#020617; }
+      .kg-wrap:fullscreen #kg { height:100vh; }
+      .kg-wrap:-webkit-full-screen { width:100vw; height:100vh; background:#020617; }
+      .kg-wrap:-webkit-full-screen #kg { height:100vh; }
+      .kg-legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:11px; color:#94a3b8; }
+      .kg-legend span { display:inline-flex; align-items:center; gap:6px; }
+      .kg-tip { position:fixed; z-index:60; pointer-events:none; background:rgba(2,6,23,0.96);
+        border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:9px 12px; max-width:240px;
+        box-shadow:0 12px 34px rgba(0,0,0,0.55); transform:translate(-50%, calc(-100% - 14px)); }
+      .kg-tip h6 { font-size:12px; font-weight:800; margin-bottom:3px; }
+      .kg-tip p { font-size:11px; color:#94a3b8; line-height:1.45; margin:0; }
     </style>
 
     <div id="pillarFilter" class="seg mb-4"></div>
@@ -144,47 +214,49 @@
 
     <div id="studyView"></div>
     <div id="browseView" class="hidden"></div>
+    <div id="mapView" class="hidden"></div>
+    <div id="graphView" class="hidden"></div>
   </main>
 </div>
 
 <script>
 // === App logic ===
 const HABITS = [
-  { id:'click', pillar:'attention', name:'Correct After the Click',
+  { id:'click', pillar:'attention', name:'Correct After the Click', key:'CATCH', gist:'Slip happens → attach a good action right after',
     cue:'What do you do the moment you catch yourself slipping into a bad habit?',
     back:'Stop trying to block the reflex before it fires. The instant you notice you have already acted (opened the app, grabbed the snack), attach one small good action right after: stand up, drink a glass of water, take three breaths. You interrupt the interruption.',
     example:'You open Instagram on autopilot, notice it, close it, and refill your water bottle.' },
-  { id:'input', pillar:'attention', name:'Control Your Input',
+  { id:'input', pillar:'attention', name:'Control Your Input', key:'BATCH', gist:'Batch inputs into windows; touch once (4D)',
     cue:'How do you stop email and messages from draining your attention all day?',
     back:'Batch inputs into a few fixed windows (for example 9am, 1pm, 4:30pm). Touch each item once with the 4D rule: Do it, Delegate it, Date it, or Delete it. Open loops keep draining you in the background (the Zeigarnik effect) until they are closed.',
     example:'Check email only at set times; every message gets one of Do / Delegate / Date / Delete.' },
-  { id:'write', pillar:'attention', name:'Write to Think',
+  { id:'write', pillar:'attention', name:'Write to Think', key:'INK', gist:'Hand-write 3 questions before any hard call',
     cue:'What is the fastest way to clear a foggy decision?',
     back:'Write by hand before any hard conversation or decision. Answer three questions: What do I know? What am I assuming? What is the next honest action? Handwriting forces one thought to connect to the next.',
     example:'Stuck on a choice: hand-write the three questions before you decide.' },
 
-  { id:'quantize', pillar:'energy', name:'Quantize the Action',
+  { id:'quantize', pillar:'energy', name:'Quantize the Action', key:'SHRINK', gist:'Shrink it to the smallest possible start',
     cue:'What is the trick to actually starting a habit?',
     back:'Shrink it to its smallest possible packet, because the hardest part of any habit is starting. Write one line, do half a push-up, walk for one minute. Reduce the force required to begin and consistency follows.',
     example:'Want to write a book? Commit to one sentence.' },
-  { id:'caffeine', pillar:'energy', name:'Cut Caffeine 6 Hours Before Bed',
+  { id:'caffeine', pillar:'energy', name:'Cut Caffeine 6 Hours Before Bed', key:'CUTOFF', gist:'Last coffee ≥ 6h before bed',
     cue:'Why does your 4pm coffee wreck your sleep?',
     back:'Caffeine has a half-life of about six hours, so a cup at 4pm still leaves roughly a quarter of the dose in your system near midnight. Set a hard caffeine cutoff at least six hours before bed to protect deep sleep.',
     example:'Bed at 10pm means last coffee by 4pm.' },
-  { id:'waves', pillar:'energy', name:'Ride the Waves',
+  { id:'waves', pillar:'energy', name:'Ride the Waves', key:'WAVE', gist:'Focus ~90m, then a real no-input break',
     cue:'What should you do when the 3:30pm crash hits?',
     back:'Your brain runs in 80 to 120 minute ultradian cycles of focus and fatigue. The crash is a signal, not a failure. Take a real recovery break with no new input (walk, breathe, rest), then ride the next wave.',
     example:'90-minute focus block, then a 15-minute break with no screen, then the next block.' },
 
-  { id:'lookup', pillar:'happiness', name:'Look Up (Awe)',
+  { id:'lookup', pillar:'happiness', name:'Look Up (Awe)', key:'SKY', gist:'Look up at the night sky → awe',
     cue:'The tiny habit for when life feels heavy?',
     back:'Go outside at night and look up. The light from many of those stars left them thousands of years ago, and some are already gone. You are surrounded by millions of miracles. This produces awe.',
     example:'Heavy day: step outside and look at the night sky for a minute.' },
-  { id:'mirror', pillar:'happiness', name:'Look in the Mirror (Gratitude)',
+  { id:'mirror', pillar:'happiness', name:'Look in the Mirror (Gratitude)', key:'MIRROR', gist:'Look in the mirror → gratitude',
     cue:'After awe, where do you point that same attention?',
     back:'Really look at yourself. The same atoms that made the stars made you, and there is exactly one version of you. You are one of those miracles. This produces gratitude.',
     example:'Look in the mirror and name one thing you are grateful to be or have.' },
-  { id:'forgive', pillar:'happiness', name:'Forgive Yourself',
+  { id:'forgive', pillar:'happiness', name:'Forgive Yourself', key:'FORGIVE', gist:'Streak breaks? Note it, no shame spiral',
     cue:'What is the habit for the days when every other habit breaks?',
     back:'Your systems will break, and that is inevitable. Do not spiral into shame, because self-prosecution is more exhausting than a missed habit. You do not have to be your best self on your worst day.',
     example:'Missed your routine? Note it, forgive yourself, restart tomorrow. No spiral.' }
@@ -245,12 +317,12 @@ function renderPillarFilter(){
     return '<button data-f="'+o[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:'+color:'')+'">'+o[1]+'</button>';
   }).join('');
   el.querySelectorAll('button').forEach(function(b){
-    b.onclick = function(){ filter=b.dataset.f; renderPillarFilter(); if(view==='study'){ startStudy(false); } else { renderBrowse(); } };
+    b.onclick = function(){ filter=b.dataset.f; renderPillarFilter(); rerenderCurrent(); };
   });
 }
 function renderViewToggle(){
   const el = document.getElementById('viewToggle');
-  const views = [['study','Study'],['browse','Browse all']];
+  const views = [['study','Study'],['browse','Browse all'],['map','Map'],['graph','Graph']];
   el.innerHTML = views.map(function(v){
     const on = view===v[0];
     return '<button data-v="'+v[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:#fbbf24':'')+'">'+v[1]+'</button>';
@@ -271,12 +343,20 @@ function renderProgress(){
 }
 
 // ---------- study ----------
+function rerenderCurrent(){
+  if (view==='study') startStudy(false);
+  else if (view==='browse') renderBrowse();
+  else if (view==='map') renderMap();
+  else renderGraph();
+}
 function switchView(v){
   view = v;
   renderViewToggle();
   document.getElementById('studyView').classList.toggle('hidden', v!=='study');
   document.getElementById('browseView').classList.toggle('hidden', v!=='browse');
-  if (v==='study') startStudy(false); else renderBrowse();
+  document.getElementById('mapView').classList.toggle('hidden', v!=='map');
+  document.getElementById('graphView').classList.toggle('hidden', v!=='graph');
+  rerenderCurrent();
 }
 
 function startStudy(includeAll){
@@ -425,13 +505,360 @@ function renderBrowse(){
   lucide.createIcons();
 }
 
+// ---------- taxonomy map ----------
+function renderMap(){
+  const mv = document.getElementById('mapView');
+  const pillarKeys = Object.keys(PILLARS).filter(function(pk){ return filter==='all' || filter===pk; });
+
+  // build the dendrogram: root -> pillars -> leaf habits
+  let branches = '';
+  pillarKeys.forEach(function(pk){
+    const p = PILLARS[pk];
+    const items = HABITS.filter(function(h){ return h.pillar===pk; });
+    let leaves = '';
+    items.forEach(function(h){
+      const box = state.box[h.id];
+      const mastered = box >= MASTER_BOX;
+      leaves +=
+        '<li><div class="node node-leaf" data-pillar="'+pk+'" title="'+h.name+' — '+h.gist.replace(/"/g,'&quot;')+'" '+
+          'style="border-left:3px solid '+p.color+(mastered?'':'88')+'">'+
+          '<span class="nk" style="color:'+p.color+'">'+h.key+(mastered?' <span style=\'color:'+p.color+'\'>✓</span>':'')+'</span>'+
+          '<span class="nn">'+h.name+'</span>'+
+          '<span class="ng">'+h.gist+'</span>'+
+        '</div></li>';
+    });
+    branches +=
+      '<li><div class="node node-pillar" style="border-color:'+p.color+'55;background:'+p.color+'14">'+
+        '<span class="nk" style="color:'+p.color+'">'+p.label+'</span>'+
+        '<span class="nn">3 habits</span>'+
+      '</div><ul>'+leaves+'</ul></li>';
+  });
+
+  const tree =
+    '<div class="map-scroll"><div class="org"><ul><li>'+
+      '<div class="node node-root"><span class="nk">9</span><span class="nn">MICRO-HABITS</span></div>'+
+      '<ul>'+branches+'</ul>'+
+    '</li></ul></div></div>';
+
+  // memory aids
+  const legend =
+    '<div class="mnemonic">'+
+      Object.keys(PILLARS).map(function(pk){
+        const p = PILLARS[pk];
+        const words = HABITS.filter(function(h){ return h.pillar===pk; })
+          .map(function(h){ return '<span class="word" style="color:'+p.color+'">'+h.key+'</span>'; }).join(' · ');
+        return '<div class="mn-card" style="border-color:'+p.color+'33">'+
+          '<h5 style="color:'+p.color+'">'+p.label+'</h5>'+words+'</div>';
+      }).join('')+
+    '</div>';
+
+  mv.innerHTML =
+    '<p class="text-slate-400 text-xs mb-3" style="line-height:1.6">One root, three pillars, nine habits. '+
+      'Remember the system by its keywords — '+
+      '<strong style="color:#60a5fa">Attention:</strong> Catch · Batch · Ink &nbsp;|&nbsp; '+
+      '<strong style="color:#fbbf24">Energy:</strong> Shrink · Cutoff · Wave &nbsp;|&nbsp; '+
+      '<strong style="color:#a78bfa">Happiness:</strong> Sky · Mirror · Forgive. '+
+      '<span style="color:#64748b">Tap any leaf to study that pillar.</span></p>'+
+    tree + legend;
+
+  mv.querySelectorAll('.node-leaf').forEach(function(n){
+    n.onclick = function(){ filter = n.dataset.pillar; renderPillarFilter(); switchView('study'); };
+  });
+  lucide.createIcons();
+}
+
+// ---------- knowledge graph (force-directed) ----------
+var graphToken = 0;
+// named conceptual relationships between habits (the "knowledge" edges)
+const GRAPH_CROSS = [
+  ['click','quantize','smallest action'],
+  ['caffeine','waves','protect energy'],
+  ['lookup','mirror','awe → gratitude'],
+  ['input','write','manage the signal'],
+  ['forgive','waves','recover, don’t force'],
+  ['mirror','forgive','self-compassion']
+];
+
+function renderGraph(){
+  const gv = document.getElementById('graphView');
+  const W = 820, H = 580, CX = W/2, CY = H/2;
+  const showP = function(pk){ return filter==='all' || filter===pk; };
+
+  // ---- build nodes ----
+  const nodes = [];
+  const idx = {};
+  function add(n){ idx[n.id] = nodes.length; nodes.push(n); }
+  add({ id:'root', type:'root', label:'9', name:'9 Micro-Habits',
+        gist:'One root, three pillars, nine habits.', color:'#fbbf24' });
+  Object.keys(PILLARS).forEach(function(pk){
+    if (!showP(pk)) return;
+    add({ id:pk, type:'pillar', pillar:pk, label:PILLARS[pk].label, name:PILLARS[pk].label,
+          gist:'Pillar · 3 habits', color:PILLARS[pk].color });
+  });
+  HABITS.forEach(function(h){
+    if (!showP(h.pillar)) return;
+    add({ id:h.id, type:'habit', pillar:h.pillar, label:h.key, name:h.name, gist:h.gist,
+          color:PILLARS[h.pillar].color, mastered:state.box[h.id] >= MASTER_BOX });
+  });
+  // provisional radius (refined after text is measured) so warm-up has bounds
+  nodes.forEach(function(n){ n.hw = n.type==='root'?34:(28+n.label.length*4); n.hh = n.type==='root'?34:15; n.r = Math.max(n.hw,n.hh); });
+
+  // ---- build edges ----
+  const edges = [];
+  Object.keys(PILLARS).forEach(function(pk){ if (showP(pk)) edges.push({ a:'root', b:pk, type:'h', len:160 }); });
+  HABITS.forEach(function(h){ if (showP(h.pillar)) edges.push({ a:h.pillar, b:h.id, type:'h', len:108 }); });
+  GRAPH_CROSS.forEach(function(c){ edges.push({ a:c[0], b:c[1], type:'c', len:165, label:c[2] }); });
+  const E = edges.filter(function(e){ return idx[e.a]!=null && idx[e.b]!=null; });
+
+  // ---- seed positions (radial) for fast convergence ----
+  nodes.forEach(function(n){ if (n.type==='root'){ n.x=CX; n.y=CY; n.fx=CX; n.fy=CY; } });
+  const pillars = nodes.filter(function(n){ return n.type==='pillar'; });
+  pillars.forEach(function(n,i){
+    const ang = (-90 + i*(360/pillars.length)) * Math.PI/180;
+    n.x = CX + Math.cos(ang)*160; n.y = CY + Math.sin(ang)*160; n.seedAng = ang;
+  });
+  const pByPillar = {}; pillars.forEach(function(n){ pByPillar[n.pillar] = n; });
+  const cnt = {};
+  nodes.filter(function(n){ return n.type==='habit'; }).forEach(function(n){
+    const p = pByPillar[n.pillar] || { x:CX, y:CY, seedAng:Math.random()*6.28 };
+    const k = (cnt[n.pillar]||0); cnt[n.pillar] = k+1;
+    const a = (p.seedAng||0) + (k-1)*0.55;
+    n.x = (p.x||CX) + Math.cos(a)*105 + (Math.random()*8-4);
+    n.y = (p.y||CY) + Math.sin(a)*105 + (Math.random()*8-4);
+  });
+  nodes.forEach(function(n){ n.vx=0; n.vy=0; if (n.x==null){ n.x=CX+(Math.random()*40-20); n.y=CY+(Math.random()*40-20); } });
+
+  // ---- markup ----
+  let linksHtml = '';
+  E.forEach(function(e,i){ linksHtml += '<line id="ge'+i+'" class="'+(e.type==='c'?'glink-cross':'glink')+'"></line>'; });
+  let labelsHtml = '';
+  E.forEach(function(e,i){ if (e.label) labelsHtml += '<text id="gl'+i+'" class="glabel" text-anchor="middle">'+e.label+'</text>'; });
+  let nodesHtml = '';
+  nodes.forEach(function(n,i){
+    let inner;
+    if (n.type==='root'){
+      inner = '<circle class="body" r="34" fill="url(#kgRoot)" filter="url(#kgShadow)"></circle>'+
+        '<text class="lbl" text-anchor="middle" dy=".1em" style="font-weight:800;font-size:19px;fill:#06121f">9</text>';
+    } else {
+      const isP = n.type==='pillar';
+      const fill = isP ? n.color : '#0b1220';
+      const txtFill = isP ? '#06121f' : n.color;
+      const label = isP ? n.label.toUpperCase() : n.label;
+      const halo = n.mastered ? '<rect class="halo" fill="none" stroke="'+n.color+'" stroke-opacity="0.45" stroke-width="2"></rect>' : '';
+      const strokeAttr = isP ? '' : ' stroke="'+n.color+'" stroke-width="2"';
+      inner = halo +
+        '<rect class="body" fill="'+fill+'"'+strokeAttr+' filter="url(#kgShadow)"></rect>'+
+        '<text class="lbl" text-anchor="middle" dy=".32em" style="font-weight:800;font-size:11.5px;fill:'+txtFill+';letter-spacing:.04em">'+label+'</text>';
+    }
+    nodesHtml += '<g class="gnode" data-i="'+i+'">'+inner+'</g>';
+  });
+
+  gv.innerHTML =
+    '<p class="text-slate-400 text-xs mb-3" style="line-height:1.6">A living map of the system. '+
+      'Solid lines are the hierarchy; <span style="color:#5eead4">dashed teal links</span> name the ideas that connect habits across pillars. '+
+      '<span style="color:#64748b">Drag nodes · scroll or use +/− to zoom · drag the background to pan · ⛶ expands to full screen.</span></p>'+
+    '<div class="kg-wrap">'+
+      '<svg id="kg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+
+        '<defs>'+
+          '<linearGradient id="kgRoot" x1="0" y1="0" x2="1" y2="1">'+
+            '<stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>'+
+          '<filter id="kgShadow" x="-40%" y="-40%" width="180%" height="180%">'+
+            '<feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/></filter>'+
+        '</defs>'+
+        '<g id="kgCamera">'+
+          '<g id="kgLinks">'+linksHtml+'</g>'+
+          '<g id="kgLabels">'+labelsHtml+'</g>'+
+          '<g id="kgNodes">'+nodesHtml+'</g>'+
+        '</g>'+
+      '</svg>'+
+      '<div class="kg-ctrl">'+
+        '<button data-z="in" title="Zoom in">+</button>'+
+        '<button data-z="out" title="Zoom out">−</button>'+
+        '<button data-z="reset" title="Reset view">↻</button>'+
+        '<button data-z="expand" title="Expand / full screen">⛶</button>'+
+      '</div>'+
+      '<div id="kgTip" class="kg-tip" style="display:none"></div>'+
+    '</div>'+
+    '<div class="kg-legend">'+
+      Object.keys(PILLARS).map(function(pk){
+        return '<span><i style="width:10px;height:10px;border-radius:999px;background:'+PILLARS[pk].color+';display:inline-block"></i>'+PILLARS[pk].label+'</span>';
+      }).join('')+
+      '<span><i style="width:14px;height:0;border-top:2px dashed #5eead4;display:inline-block"></i>concept link</span>'+
+      '<span><i style="width:10px;height:10px;border-radius:999px;border:2px solid #fbbf24;display:inline-block"></i>mastered</span>'+
+    '</div>';
+
+  // ---- references ----
+  const svg = document.getElementById('kg');
+  const camera = document.getElementById('kgCamera');
+  const tip = document.getElementById('kgTip');
+  const nodeEls = Array.prototype.slice.call(svg.querySelectorAll('.gnode'));
+  const lineEls = E.map(function(e,i){ return document.getElementById('ge'+i); });
+  const labelEls = E.map(function(e,i){ return e.label ? document.getElementById('gl'+i) : null; });
+
+  // ---- size each pill to fit its measured text ----
+  nodeEls.forEach(function(g,i){
+    const n = nodes[i];
+    if (n.type==='root'){ n.hw=34; n.hh=34; n.r=34; return; }
+    const t = g.querySelector('.lbl');
+    let tw = 0; try { tw = t.getComputedTextLength(); } catch(e){ tw = n.label.length*7.5; }
+    if (!tw) tw = n.label.length*7.5;
+    const h = 30, w = Math.max(h, tw + 28);
+    const body = g.querySelector('.body');
+    body.setAttribute('x', -w/2); body.setAttribute('y', -h/2);
+    body.setAttribute('width', w); body.setAttribute('height', h); body.setAttribute('rx', h/2);
+    const halo = g.querySelector('.halo');
+    if (halo){ halo.setAttribute('x', -w/2-4); halo.setAttribute('y', -h/2-4);
+      halo.setAttribute('width', w+8); halo.setAttribute('height', h+8); halo.setAttribute('rx', (h+8)/2); }
+    n.hw = w/2; n.hh = h/2; n.r = Math.max(n.hw, n.hh);
+  });
+
+  // ---- simulation ----
+  const REP = 42000, SPRING = 0.05, CENTER = 0.013, DAMP = 0.86, MAXV = 12;
+  function step(){
+    for (let i=0;i<nodes.length;i++){
+      for (let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        let dx=a.x-b.x, dy=a.y-b.y, d2=dx*dx+dy*dy; if (d2<1) d2=1;
+        const d=Math.sqrt(d2), f=REP/d2, fx=dx/d*f, fy=dy/d*f;
+        a.vx+=fx; a.vy+=fy; b.vx-=fx; b.vy-=fy;
+      }
+    }
+    E.forEach(function(e){
+      const a=nodes[idx[e.a]], b=nodes[idx[e.b]];
+      let dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||0.01;
+      const f=SPRING*(d-e.len), fx=dx/d*f, fy=dy/d*f;
+      a.vx+=fx; a.vy+=fy; b.vx-=fx; b.vy-=fy;
+    });
+    nodes.forEach(function(n){
+      if (n.fx!=null){ n.x=n.fx; n.y=n.fy; n.vx=0; n.vy=0; return; }
+      n.vx += (CX-n.x)*CENTER; n.vy += (CY-n.y)*CENTER;
+      n.vx *= DAMP; n.vy *= DAMP;
+      const sp=Math.sqrt(n.vx*n.vx+n.vy*n.vy); if (sp>MAXV){ n.vx*=MAXV/sp; n.vy*=MAXV/sp; }
+      n.x += n.vx; n.y += n.vy;
+      n.x = Math.max(n.hw+6, Math.min(W-n.hw-6, n.x));
+      n.y = Math.max(n.hh+6, Math.min(H-n.hh-6, n.y));
+    });
+  }
+  function draw(){
+    E.forEach(function(e,i){
+      const a=nodes[idx[e.a]], b=nodes[idx[e.b]], ln=lineEls[i];
+      ln.setAttribute('x1',a.x); ln.setAttribute('y1',a.y); ln.setAttribute('x2',b.x); ln.setAttribute('y2',b.y);
+      if (labelEls[i]){ labelEls[i].setAttribute('x',(a.x+b.x)/2); labelEls[i].setAttribute('y',(a.y+b.y)/2 - 2); }
+    });
+    nodeEls.forEach(function(g,i){ g.setAttribute('transform','translate('+nodes[i].x+','+nodes[i].y+')'); });
+  }
+
+  for (let s=0;s<280;s++) step();   // warm up so it opens settled
+  draw();
+
+  const myToken = ++graphToken;
+  (function frame(){
+    if (myToken!==graphToken) return;
+    if (document.getElementById('graphView').classList.contains('hidden')) return;
+    step(); draw();
+    requestAnimationFrame(frame);
+  })();
+
+  // ---- camera (zoom + pan) ----
+  const cam = { k:1, x:0, y:0 };
+  function applyCam(){ camera.setAttribute('transform','translate('+cam.x+','+cam.y+') scale('+cam.k+')'); }
+  function clampK(k){ return Math.max(0.5, Math.min(3.5, k)); }
+  function toView(clientX, clientY){
+    const pt = svg.createSVGPoint(); pt.x=clientX; pt.y=clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());   // viewBox units, pre-camera
+  }
+  function toWorld(clientX, clientY){
+    const v = toView(clientX, clientY);
+    return { x:(v.x-cam.x)/cam.k, y:(v.y-cam.y)/cam.k };        // node space
+  }
+  function zoomAt(clientX, clientY, factor){
+    const v = toView(clientX, clientY);
+    const wx = (v.x-cam.x)/cam.k, wy = (v.y-cam.y)/cam.k;
+    cam.k = clampK(cam.k*factor);
+    cam.x = v.x - wx*cam.k; cam.y = v.y - wy*cam.k;
+    applyCam();
+  }
+  svg.addEventListener('wheel', function(ev){ ev.preventDefault(); zoomAt(ev.clientX, ev.clientY, ev.deltaY<0?1.12:1/1.12); }, { passive:false });
+
+  // ---- interaction: node drag / tooltip / click + background pan ----
+  let drag = null, moved = false, pan = null;
+  function showTip(n, ev){
+    tip.innerHTML = '<h6 style="color:'+n.color+'">'+n.name+'</h6><p>'+n.gist+'</p>';
+    tip.style.display='block'; tip.style.left=ev.clientX+'px'; tip.style.top=ev.clientY+'px';
+  }
+  nodeEls.forEach(function(g,i){
+    const n = nodes[i];
+    g.addEventListener('pointerdown', function(ev){
+      ev.preventDefault(); ev.stopPropagation(); drag=n; moved=false; svg.style.cursor='grabbing'; tip.style.display='none';
+      try { g.setPointerCapture(ev.pointerId); } catch(e){}
+    });
+    g.addEventListener('pointerenter', function(ev){ if (!drag && !pan) showTip(n, ev); });
+    g.addEventListener('pointermove', function(ev){
+      if (drag===n){
+        moved = true;
+        const p = toWorld(ev.clientX, ev.clientY);
+        n.fx = Math.max(n.hw+6, Math.min(W-n.hw-6, p.x));
+        n.fy = Math.max(n.hh+6, Math.min(H-n.hh-6, p.y));
+      } else if (!drag){ tip.style.left=ev.clientX+'px'; tip.style.top=ev.clientY+'px'; }
+    });
+    g.addEventListener('pointerleave', function(){ if (!drag) tip.style.display='none'; });
+    g.addEventListener('pointerup', function(ev){
+      try { g.releasePointerCapture(ev.pointerId); } catch(e){}
+      svg.style.cursor='grab';
+      const wasClick = (drag===n && !moved);
+      if (drag===n && n.type!=='root'){ n.fx=null; n.fy=null; }
+      drag=null;
+      if (wasClick){
+        if (n.type==='root'){ filter='all'; renderPillarFilter(); renderGraph(); }
+        else { filter=n.pillar; renderPillarFilter(); switchView('study'); }
+      }
+    });
+  });
+
+  // background drag = pan
+  svg.addEventListener('pointerdown', function(ev){
+    if (ev.target.closest('.gnode')) return;       // nodes handle themselves
+    pan = { x:ev.clientX, y:ev.clientY, cx:cam.x, cy:cam.y }; svg.style.cursor='grabbing'; tip.style.display='none';
+    try { svg.setPointerCapture(ev.pointerId); } catch(e){}
+  });
+  svg.addEventListener('pointermove', function(ev){
+    if (!pan) return;
+    const ctm = svg.getScreenCTM(); if (!ctm) return;
+    cam.x = pan.cx + (ev.clientX-pan.x)/ctm.a;
+    cam.y = pan.cy + (ev.clientY-pan.y)/ctm.d;
+    applyCam();
+  });
+  svg.addEventListener('pointerup', function(ev){
+    if (pan){ pan=null; svg.style.cursor='grab'; try { svg.releasePointerCapture(ev.pointerId); } catch(e){} }
+  });
+
+  // ---- control buttons ----
+  function toggleExpand(){
+    const wrap = gv.querySelector('.kg-wrap');
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fsEl){ (wrap.requestFullscreen || wrap.webkitRequestFullscreen || function(){}).call(wrap); }
+    else { (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document); }
+  }
+  gv.querySelectorAll('.kg-ctrl button').forEach(function(b){
+    b.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      const r = svg.getBoundingClientRect(), midX = r.left+r.width/2, midY = r.top+r.height/2;
+      const z = b.dataset.z;
+      if (z==='in') zoomAt(midX, midY, 1.25);
+      else if (z==='out') zoomAt(midX, midY, 1/1.25);
+      else if (z==='reset'){ cam.k=1; cam.x=0; cam.y=0; applyCam(); }
+      else if (z==='expand') toggleExpand();
+    });
+  });
+}
+
 // ---------- reset ----------
 document.getElementById('resetBtn').onclick = function(){
   if (!confirm('Reset all habit-card progress (levels, streak, schedule)?')) return;
   localStorage.removeItem(KEY);
   state = load();
   renderProgress();
-  if (view==='study') startStudy(false); else renderBrowse();
+  rerenderCurrent();
 };
 
 // ---------- keyboard ----------
