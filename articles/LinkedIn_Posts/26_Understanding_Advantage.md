@@ -1,14 +1,14 @@
-Andrej Karpathy said it plainly: you can outsource thinking, but you cannot outsource understanding.
+Back in 2014, during a business development class at Carleton University, my mentor Dr. Tony Bailetti told me something that stayed with me. He argued that while you can outsource tasks or general thinking in business, you can never outsource understanding. He saw understanding as the core driver of critical thinking and real value creation.
 
-Most people heard a warning. I heard an opportunity.
+Tony passed away this past February, but his insight feels more urgent than ever.
 
-If understanding is the one thing AI cannot do for you, then every AI tool should be evaluated by a single question: does it make understanding easier, or does it let you skip understanding entirely? The difference between those two outcomes is the difference between a team that gets stronger over time and one that becomes dependent.
+A decade later, Andrej Karpathy put nearly the same idea in front of a much larger audience: you can outsource thinking to AI, but you cannot outsource understanding.
 
-The engineers I see getting the most from AI are not the ones who generate the most code. They are the ones who use AI to interrogate their own assumptions, stress-test their designs from multiple perspectives, and compress weeks of codebase exploration into a few hours of directed questions. They still read the code. They still build the mental model. But they get there faster because the AI shortened the path.
+If understanding is the one thing AI cannot do for you, then every tool should be evaluated by whether it helps you understand or just helps you skip the work.
 
-The ones who worry me accept the output without verifying it. They close tickets faster, but six months later, when something breaks in a new way, nobody on the team can explain why.
+The engineers who get the most from AI use it to interrogate assumptions and stress test designs. They still read the code and build the mental model, but they get there faster. The ones who accept output without verifying it close tickets quickly, but they end up dependent.
 
-Understanding is the competitive advantage that compounds. If your AI workflow builds it, you win. If your AI workflow erodes it, you are borrowing time.
+Understanding is the competitive advantage that compounds. If your workflow builds it, you win. If it erodes it, you are borrowing time.
 
 #AI #MachineLearning #Leadership #ContinuousLearning #Engineering #iwork4dell
 
