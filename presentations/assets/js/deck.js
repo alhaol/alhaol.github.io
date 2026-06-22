@@ -23,6 +23,7 @@
     // ----- State ------------------------------------------------------------
     let currentIndex = 0;
     let overviewMode = false;
+    let inited = false;
     const channel = ('BroadcastChannel' in window)
         ? new BroadcastChannel('deck-' + deckMeta.slug)
         : null;
@@ -103,6 +104,7 @@
         updateThemeButton();
         rerenderMermaid();
         rerenderCharts();
+        rerenderConcept();
     }
     function updateThemeButton() {
         const btn = document.querySelector('.deck-theme-btn');
@@ -330,6 +332,7 @@
         broadcast();
         renderMermaidIfNeeded(slides[currentIndex]);
         renderChartsIfNeeded(slides[currentIndex]);
+        renderConceptIfNeeded(slides[currentIndex]);
         highlightIfNeeded(slides[currentIndex]);
     }
 
@@ -625,6 +628,237 @@
         });
     }
 
+    // ----- Concept viz: taxonomy tree + force-directed knowledge graph -----
+    // Renders <div class="concept-map" data-concept='{...}' data-mode="tree|graph">.
+    // Schema (shared with the create-html-app-card DECK; nodes≈cards, links≈cross):
+    //   { "root":"NAME", "rootCount":N?, "groups":{ key:{label,color} },
+    //     "nodes":[{id,group,label,name?,gist?}], "links":[[a,b,"label"]]? }
+    function conceptTheme() {
+        const cs = getComputedStyle(document.documentElement);
+        const g = (n, d) => (cs.getPropertyValue(n).trim() || d);
+        return {
+            bg: g('--bg-color', '#050505'),
+            line: g('--border-color', '#333333'),
+            text: g('--text-main', '#ffffff'),
+            muted: g('--text-muted', '#b3b3b3'),
+            primary: g('--primary-color', '#00ff41'),
+            card: g('--card-bg', '#111111')
+        };
+    }
+    function parseConcept(el) {
+        try { return JSON.parse(el.getAttribute('data-concept')); }
+        catch (e) { console.error('[deck] concept JSON parse failed', e, el); return null; }
+    }
+    function conceptTooltip() {
+        let tip = document.querySelector('.cm-tip');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.className = 'cm-tip';
+            tip.style.display = 'none';
+            document.body.appendChild(tip);
+        }
+        return tip;
+    }
+
+    function buildConceptTree(el, data) {
+        const groups = data.groups || {};
+        const nodes = data.nodes || [];
+        const t = conceptTheme();
+        // In light theme, colored keyword text on the near-white card reads poorly,
+        // so use the theme text color and let the border/stripe carry the group color.
+        const kwColor = g => (currentTheme() === 'light' ? t.text : g.color);
+        let branches = '';
+        Object.keys(groups).forEach(k => {
+            const g = groups[k];
+            const items = nodes.filter(n => n.group === k);
+            let leaves = '';
+            items.forEach(n => {
+                leaves += '<li><div class="cm-node cm-leaf" style="border-left:3px solid ' + g.color + '">'
+                    + '<span class="cm-k" style="color:' + kwColor(g) + '">' + escapeHtml(n.label || n.name || '') + '</span>'
+                    + (n.name && n.label ? '<span class="cm-n">' + escapeHtml(n.name) + '</span>' : '')
+                    + (n.gist ? '<span class="cm-g">' + escapeHtml(n.gist) + '</span>' : '')
+                    + '</div></li>';
+            });
+            branches += '<li><div class="cm-node cm-group" style="border-color:' + g.color + '66;background:' + g.color + '18">'
+                + '<span class="cm-k" style="color:' + kwColor(g) + '">' + escapeHtml(g.label) + '</span>'
+                + '<span class="cm-n">' + items.length + ' ' + (items.length === 1 ? 'item' : 'items') + '</span>'
+                + '</div><ul>' + leaves + '</ul></li>';
+        });
+        el.innerHTML = '<div class="cm-scroll"><div class="cm-org"><ul><li>'
+            + '<div class="cm-node cm-root"><span class="cm-k">' + escapeHtml(String(data.rootCount != null ? data.rootCount : nodes.length)) + '</span>'
+            + '<span class="cm-n">' + escapeHtml(data.root || '') + '</span></div>'
+            + '<ul>' + branches + '</ul></li></ul></div></div>';
+    }
+
+    function buildConceptGraph(el, data, animate) {
+        const t = conceptTheme();
+        const light = currentTheme() === 'light';
+        const groups = data.groups || {};
+        const dataNodes = data.nodes || [];
+        const cross = data.links || [];
+        const W = 1000, H = 560, CX = W / 2, CY = H / 2;
+
+        const nodes = [];
+        const idx = {};
+        function add(n) { idx[n.id] = nodes.length; nodes.push(n); }
+        add({ id: '__root', type: 'root', label: String(data.rootCount != null ? data.rootCount : dataNodes.length), name: data.root || 'Root', gist: data.root || '', color: t.primary });
+        Object.keys(groups).forEach(k => {
+            add({ id: k, type: 'group', group: k, label: groups[k].label, name: groups[k].label, gist: dataNodes.filter(n => n.group === k).length + ' items', color: groups[k].color });
+        });
+        dataNodes.forEach(n => {
+            const col = (groups[n.group] && groups[n.group].color) || t.primary;
+            add({ id: n.id, type: 'leaf', group: n.group, label: n.label || n.name || n.id, name: n.name || n.label || n.id, gist: n.gist || '', color: col });
+        });
+        nodes.forEach(n => { n.hw = n.type === 'root' ? 30 : (24 + n.label.length * 4); n.hh = n.type === 'root' ? 30 : 14; });
+
+        const edges = [];
+        Object.keys(groups).forEach(k => { if (idx[k] != null) edges.push({ a: '__root', b: k, type: 'h', len: 150 }); });
+        dataNodes.forEach(n => { if (idx[n.id] != null && idx[n.group] != null) edges.push({ a: n.group, b: n.id, type: 'h', len: 100 }); });
+        cross.forEach(c => { if (idx[c[0]] != null && idx[c[1]] != null) edges.push({ a: c[0], b: c[1], type: 'c', len: 150, label: c[2] }); });
+
+        nodes.forEach(n => { if (n.type === 'root') { n.x = CX; n.y = CY; n.fx = CX; n.fy = CY; } });
+        const groupNodes = nodes.filter(n => n.type === 'group');
+        groupNodes.forEach((n, i) => { const a = (-90 + i * (360 / groupNodes.length)) * Math.PI / 180; n.x = CX + Math.cos(a) * 150; n.y = CY + Math.sin(a) * 150; n.seedAng = a; });
+        const byG = {}; groupNodes.forEach(n => { byG[n.group] = n; });
+        const cnt = {};
+        nodes.filter(n => n.type === 'leaf').forEach(n => {
+            const p = byG[n.group] || { x: CX, y: CY, seedAng: Math.random() * 6.28 };
+            const k = (cnt[n.group] || 0); cnt[n.group] = k + 1;
+            const a = (p.seedAng || 0) + (k - 1) * 0.5;
+            n.x = (p.x || CX) + Math.cos(a) * 95 + (Math.random() * 8 - 4);
+            n.y = (p.y || CY) + Math.sin(a) * 95 + (Math.random() * 8 - 4);
+        });
+        nodes.forEach(n => { n.vx = 0; n.vy = 0; if (n.x == null) { n.x = CX + (Math.random() * 40 - 20); n.y = CY + (Math.random() * 40 - 20); } });
+
+        let linksHtml = '';
+        edges.forEach((e, i) => { linksHtml += '<line id="cme' + i + '" class="' + (e.type === 'c' ? 'cm-link-cross' : 'cm-link') + '"></line>'; });
+        let labelsHtml = '';
+        edges.forEach((e, i) => { if (e.label) labelsHtml += '<text id="cml' + i + '" class="cm-glabel" text-anchor="middle">' + escapeHtml(e.label) + '</text>'; });
+        let nodesHtml = '';
+        nodes.forEach((n, i) => {
+            let inner;
+            if (n.type === 'root') {
+                inner = '<circle class="cm-body" r="30" fill="' + n.color + '"></circle>'
+                    + '<text class="cm-lbl" text-anchor="middle" dy=".1em" style="font-weight:800;font-size:17px;fill:' + t.bg + '">' + escapeHtml(n.label) + '</text>';
+            } else {
+                const isG = n.type === 'group';
+                const fill = isG ? n.color : t.card;
+                // Group nodes fill with the bright group color (dark text reads on it in
+                // both themes). Leaf labels: group color on dark, theme text on light —
+                // the colored stroke around the leaf carries the group identity in light.
+                const txt = isG ? '#0a0a0a' : (light ? t.text : n.color);
+                inner = '<rect class="cm-body" fill="' + fill + '"' + (isG ? '' : ' stroke="' + n.color + '" stroke-width="2.5"') + '></rect>'
+                    + '<text class="cm-lbl" text-anchor="middle" dy=".32em" style="font-weight:800;font-size:11px;fill:' + txt + '">' + escapeHtml(n.label) + '</text>';
+            }
+            nodesHtml += '<g class="cm-gnode" data-i="' + i + '">' + inner + '</g>';
+        });
+
+        el.innerHTML = '<svg class="cm-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet">'
+            + '<g class="cm-links">' + linksHtml + '</g><g class="cm-labels">' + labelsHtml + '</g><g class="cm-nodes">' + nodesHtml + '</g></svg>';
+
+        const svg = el.querySelector('.cm-svg');
+        const nodeEls = Array.prototype.slice.call(svg.querySelectorAll('.cm-gnode'));
+        const lineEls = edges.map((e, i) => svg.querySelector('#cme' + i));
+        const labelEls = edges.map((e, i) => e.label ? svg.querySelector('#cml' + i) : null);
+        const tip = conceptTooltip();
+
+        nodeEls.forEach((g, i) => {
+            const n = nodes[i];
+            if (n.type === 'root') { n.hw = 30; n.hh = 30; return; }
+            const tx = g.querySelector('.cm-lbl');
+            let tw = 0; try { tw = tx.getComputedTextLength(); } catch (e) { tw = n.label.length * 7; }
+            if (!tw) tw = n.label.length * 7;
+            const h = 28, w = Math.max(h, tw + 26);
+            const body = g.querySelector('.cm-body');
+            body.setAttribute('x', -w / 2); body.setAttribute('y', -h / 2);
+            body.setAttribute('width', w); body.setAttribute('height', h); body.setAttribute('rx', h / 2);
+            n.hw = w / 2; n.hh = h / 2;
+        });
+
+        const REP = 38000, SPRING = 0.05, CENTER = 0.013, DAMP = 0.86, MAXV = 12;
+        function stepSim() {
+            for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+                const a = nodes[i], b = nodes[j];
+                let dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy; if (d2 < 1) d2 = 1;
+                const d = Math.sqrt(d2), f = REP / d2, fx = dx / d * f, fy = dy / d * f;
+                a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy;
+            }
+            edges.forEach(e => {
+                const a = nodes[idx[e.a]], b = nodes[idx[e.b]];
+                let dx = b.x - a.x, dy = b.y - a.y, d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+                const f = SPRING * (d - e.len), fx = dx / d * f, fy = dy / d * f;
+                a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy;
+            });
+            nodes.forEach(n => {
+                if (n.fx != null) { n.x = n.fx; n.y = n.fy; n.vx = 0; n.vy = 0; return; }
+                n.vx += (CX - n.x) * CENTER; n.vy += (CY - n.y) * CENTER;
+                n.vx *= DAMP; n.vy *= DAMP;
+                const sp = Math.sqrt(n.vx * n.vx + n.vy * n.vy); if (sp > MAXV) { n.vx *= MAXV / sp; n.vy *= MAXV / sp; }
+                n.x += n.vx; n.y += n.vy;
+                n.x = Math.max(n.hw + 4, Math.min(W - n.hw - 4, n.x));
+                n.y = Math.max(n.hh + 4, Math.min(H - n.hh - 4, n.y));
+            });
+        }
+        function draw() {
+            edges.forEach((e, i) => {
+                const a = nodes[idx[e.a]], b = nodes[idx[e.b]], ln = lineEls[i];
+                ln.setAttribute('x1', a.x); ln.setAttribute('y1', a.y); ln.setAttribute('x2', b.x); ln.setAttribute('y2', b.y);
+                if (labelEls[i]) { labelEls[i].setAttribute('x', (a.x + b.x) / 2); labelEls[i].setAttribute('y', (a.y + b.y) / 2 - 2); }
+            });
+            nodeEls.forEach((g, i) => g.setAttribute('transform', 'translate(' + nodes[i].x + ',' + nodes[i].y + ')'));
+        }
+        for (let s = 0; s < 280; s++) stepSim();
+        draw();
+
+        function toWorld(cx, cy) { const pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy; return pt.matrixTransform(svg.getScreenCTM().inverse()); }
+        let drag = null;
+        nodeEls.forEach((g, i) => {
+            const n = nodes[i];
+            g.addEventListener('pointerdown', ev => { ev.preventDefault(); ev.stopPropagation(); drag = n; tip.style.display = 'none'; try { g.setPointerCapture(ev.pointerId); } catch (e) {} });
+            g.addEventListener('pointerenter', ev => { if (!drag) { tip.innerHTML = '<h6 style="color:' + n.color + '">' + escapeHtml(n.name) + '</h6>' + (n.gist ? '<p>' + escapeHtml(n.gist) + '</p>' : ''); tip.style.display = 'block'; tip.style.left = ev.clientX + 'px'; tip.style.top = ev.clientY + 'px'; } });
+            g.addEventListener('pointermove', ev => { if (drag === n) { const p = toWorld(ev.clientX, ev.clientY); n.fx = Math.max(n.hw + 4, Math.min(W - n.hw - 4, p.x)); n.fy = Math.max(n.hh + 4, Math.min(H - n.hh - 4, p.y)); } else if (!drag) { tip.style.left = ev.clientX + 'px'; tip.style.top = ev.clientY + 'px'; } });
+            g.addEventListener('pointerleave', () => { if (!drag) tip.style.display = 'none'; });
+            g.addEventListener('pointerup', ev => { try { g.releasePointerCapture(ev.pointerId); } catch (e) {} if (drag === n && n.type !== 'root') { n.fx = null; n.fy = null; } drag = null; });
+        });
+
+        if (animate) {
+            const token = (el._cmToken = (el._cmToken || 0) + 1);
+            (function frame() {
+                if (token !== el._cmToken) return;
+                const slide = el.closest('.slide');
+                if (!el.isConnected || !slide || !slide.classList.contains('active')) return;
+                stepSim(); draw();
+                requestAnimationFrame(frame);
+            })();
+        }
+    }
+
+    function buildConcept(el, animate) {
+        const data = parseConcept(el);
+        if (!data) return;
+        const mode = (el.getAttribute('data-mode') || 'graph').toLowerCase();
+        if (mode === 'tree') buildConceptTree(el, data);
+        else buildConceptGraph(el, data, animate);
+        el.dataset.cmRendered = '1';
+    }
+
+    function renderConceptIfNeeded(slide) {
+        if (!slide) return;
+        slide.querySelectorAll('.concept-map[data-concept]').forEach(el => {
+            const mode = (el.getAttribute('data-mode') || 'graph').toLowerCase();
+            if (mode === 'tree') { if (!el.dataset.cmRendered) buildConcept(el, false); }
+            else buildConcept(el, true); // rebuild graph each activation so the sim restarts cleanly
+        });
+    }
+    function renderAllConcept() {
+        slides.forEach(s => s.querySelectorAll('.concept-map[data-concept]').forEach(el => buildConcept(el, false)));
+    }
+    function rerenderConcept() {
+        if (!inited) return;
+        document.querySelectorAll('.concept-map[data-concept]').forEach(el => { el.dataset.cmRendered = ''; });
+        renderConceptIfNeeded(slides[currentIndex]);
+    }
+
     // ----- PDF export ------------------------------------------------------
     // Strategy: pre-render every Mermaid diagram, swap iframes for printable
     // placeholders, paint the body in is-printing mode (so the user sees the
@@ -654,6 +888,7 @@
             swapped.push({ frame, fallback });
         });
 
+        renderAllConcept();
         Promise.all([renderAllMermaid(), renderAllCharts(), highlightAll()]).then(() => {
             // Give layout/paint a moment to settle
             return new Promise(r => setTimeout(r, 200));
@@ -760,7 +995,9 @@
         fitCanvas();
         renderMermaidIfNeeded(slides[currentIndex]);
         renderChartsIfNeeded(slides[currentIndex]);
+        renderConceptIfNeeded(slides[currentIndex]);
         highlightIfNeeded(slides[currentIndex]);
+        inited = true;
 
         window.addEventListener('resize', fitCanvas);
         window.addEventListener('keydown', onKey);

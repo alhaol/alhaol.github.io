@@ -29,7 +29,8 @@
       .slide-two-col     Two-column (.split-60-40, .split-40-60)
       .slide-quote       Pull-quote
       .slide-code        <pre><code class="language-…"> — auto-highlighted
-      .slide-diagram     .mermaid block — auto-rendered
+      .slide-diagram     .mermaid block — OR a .concept-map (taxonomy tree /
+                         force-directed knowledge graph) — auto-rendered
       .slide-image       Full-bleed image / GIF
       .slide-video       Self-hosted MP4 or YouTube/Vimeo iframe
       .slide-embed       Iframe for PDFs or live demos
@@ -278,6 +279,31 @@ graph LR
     style A fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
     style K fill:#0a1f0a,stroke:#00cc33,color:#fff
                 </div>
+            </section>
+
+            <!-- ================================================================
+                 09b · CONCEPT GRAPH (force-directed knowledge graph)
+                 A div.concept-map with data-mode="graph" + a data-concept JSON,
+                 auto-rendered by deck.js. Schema: root / groups / nodes / links.
+                 Group colors live in the JSON; the rest tracks the theme.
+                 Drag nodes; hover for the full name.
+                 ================================================================ -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// concept graph</span>
+                <h2>How the pieces connect</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="concept-map" data-mode="graph" data-concept='{"root":"3C PROTOCOL","rootCount":9,"groups":{"compress":{"label":"Compress","color":"#fbbf24"},"compile":{"label":"Compile","color":"#34d399"},"consolidate":{"label":"Consolidate","color":"#f87171"}},"nodes":[{"id":"pareto","group":"compress","label":"PARETO","name":"Select the vital 20%","gist":"keep the core 20%"},{"id":"link","group":"compress","label":"LINK","name":"Anchor to the known","gist":"connect new to known"},{"id":"chunk","group":"compress","label":"CHUNK","name":"Chunk into models","gist":"package into patterns"},{"id":"rhythm","group":"compile","label":"90/20","name":"Ride 90/20 cycles","gist":"90 focus, 20 rest"},{"id":"loop","group":"compile","label":"LOOP","name":"Learn-test loops","gist":"test continuously"},{"id":"tools","group":"compile","label":"TOOLS","name":"Slow, real, teach","gist":"practice that bites"},{"id":"micro","group":"consolidate","label":"MICRO","name":"Micro-breaks","gist":"10-20s replay"},{"id":"nsdr","group":"consolidate","label":"NSDR","name":"Rest with NSDR","gist":"no new input"},{"id":"sleep","group":"consolidate","label":"SLEEP","name":"Sleep locks it in","gist":"replay in reverse"}],"links":[["pareto","chunk","compress to patterns"],["loop","micro","test then rest"],["rhythm","nsdr","90 focus, 20 rest"],["micro","sleep","replay rewires"]]}'></div>
+            </section>
+
+            <!-- ================================================================
+                 09c · TAXONOMY TREE (same data, data-mode="tree")
+                 A dendrogram: root → groups → keyword leaves. Pure CSS layout.
+                 ================================================================ -->
+            <section class="slide slide-diagram">
+                <span class="eyebrow">// taxonomy</span>
+                <h2>One system, three branches</h2>
+                <span class="accent-rule" aria-hidden="true"></span>
+                <div class="concept-map" data-mode="tree" data-concept='{"root":"3C PROTOCOL","rootCount":9,"groups":{"compress":{"label":"Compress","color":"#fbbf24"},"compile":{"label":"Compile","color":"#34d399"},"consolidate":{"label":"Consolidate","color":"#f87171"}},"nodes":[{"id":"pareto","group":"compress","label":"PARETO","name":"Select the vital 20%","gist":"keep the core 20%"},{"id":"link","group":"compress","label":"LINK","name":"Anchor to the known","gist":"connect new to known"},{"id":"chunk","group":"compress","label":"CHUNK","name":"Chunk into models","gist":"package into patterns"},{"id":"rhythm","group":"compile","label":"90/20","name":"Ride 90/20 cycles","gist":"90 focus, 20 rest"},{"id":"loop","group":"compile","label":"LOOP","name":"Learn-test loops","gist":"test continuously"},{"id":"tools","group":"compile","label":"TOOLS","name":"Slow, real, teach","gist":"practice that bites"},{"id":"micro","group":"consolidate","label":"MICRO","name":"Micro-breaks","gist":"10-20s replay"},{"id":"nsdr","group":"consolidate","label":"NSDR","name":"Rest with NSDR","gist":"no new input"},{"id":"sleep","group":"consolidate","label":"SLEEP","name":"Sleep locks it in","gist":"replay in reverse"}]}'></div>
             </section>
 
             <!-- ================================================================
