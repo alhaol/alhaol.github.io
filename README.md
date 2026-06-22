@@ -106,6 +106,8 @@ No build step, no package manager.
 | Wealth Vault | `/apps/wealth/` | Searchable explorer for Codie Sanchez's videos — buying businesses, money mindset, wealth habits, sales & BigDeal interviews with AI summaries, in-page playback, and a watchlist |
 | Habit Cards | `/apps/habit-cards/` | Spaced-repetition flashcard trainer for theMITmonk's nine micro-habits (attention, energy, happiness) with level tracking and a study streak; companion to the article The Smallest Lever |
 | The 3C Protocol | `/apps/learn-fast/` | Spaced-repetition flashcard trainer for Sandeep Swadia's 3C Protocol (Compress, Compile, Consolidate) with a taxonomy map and knowledge graph; based on theMITmonk's video How To Learn So Fast It's Almost Unfair |
+| Systems Thinking | `/apps/systems-thinking/` | Spaced-repetition flashcard trainer for Sandeep Swadia's framework for systems thinking (Clear, Complicated, Complex, Chaotic, and the DART framework) with a taxonomy map and knowledge graph; based on theMITmonk's video How To Think SO CLEARLY People Assume You're A Genius |
+
 
 ## Updating Content
 

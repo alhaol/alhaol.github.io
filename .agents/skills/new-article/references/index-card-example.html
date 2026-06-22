@@ -1,0 +1,58 @@
+<!--
+  EXAMPLE: Exact card format used in articles/index.html
+  Copy this pattern for each new article. Insert inside the grid div.
+  The grid div ends just before </main>.
+-->
+
+            <!-- 1. The Paradigm Shift -->
+            <article class="theme-card article-card rounded-xl overflow-hidden">
+                <img src="Post_Images/Image_01.png" alt="The Paradigm Shift">
+                <div class="article-card-content">
+                    <div class="mb-3">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-engineering">Architecture</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">The Paradigm Shift</h3>
+                    <p class="text-sm mb-4">Beyond Autocomplete: How Terminal-Native Agentic AI Fundamentally Transforms the Senior Engineer's Workspace</p>
+                    <p class="text-sm prose mb-4 flex-grow">The transition from IDE autocomplete to agentic terminal workflows enables senior engineers to operate purely at the architectural abstraction layer, delegating implementation to capable AI systems.</p>
+                    <div class="article-card-footer">
+                        <div>
+                            <p class="published-date">January 5, 2026</p>
+                            <p class="read-time">~12 min read</p>
+                        </div>
+                        <a href="Articles/the-paradigm-shift.html" class="article-link">Read →</a>
+                    </div>
+                </div>
+            </article>
+
+<!--
+  AVAILABLE CATEGORY BADGE CLASSES (pick 2 per card):
+  category-ai         → pink   — AI/ML topics
+  category-engineering → green  — Engineering, DevOps, tooling
+  category-cognitive   → blue   — Cognitive systems, UX, mental models
+  category-workflow    → orange — Process, methodology, workflow
+  category-architecture → purple — Systems architecture, design patterns
+
+  RELATED ARTICLE CARD (used inside article HTML files):
+-->
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Article Title Here</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Article subtitle or tagline here</p>
+                        <a href="article-slug.html">Read Article →</a>
+                    </div>
+
+<!--
+  REFERENCE ITEM (used in references section of article HTML):
+-->
+                    <li class="reference-item">
+                        Author, A. (Year). <em>"Title of Work."</em> Publisher.
+                        <a href="https://real-url.example.com" target="_blank">https://real-url.example.com</a>
+                    </li>
+
+<!--
+  EXISTING ARTICLES (for related articles and internal links):
+  Do NOT rely on a frozen list here. Enumerate the current articles at runtime with the
+  Glob tool on `articles/Articles/*.html`, then pick 2-3 relevant ones (by filename and title)
+  for the Related Articles section. The set grows every time this skill runs, so any hardcoded
+  list goes stale immediately.
+-->
