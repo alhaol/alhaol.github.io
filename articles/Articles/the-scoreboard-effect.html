@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Scoreboard Effect | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_33.png" alt="The Scoreboard Effect" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI/ML</span>
+                        <span class="category-badge category-engineering">Engineering/DevOps</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Scoreboard Effect</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Why the benchmarks you choose quietly decide what kind of AI system you end up building.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: July 3, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Every AI team keeps score. Some keep it with a versioned evaluation suite that runs on every change. Most keep it with a demo that impressed someone last Tuesday. Both kinds of teams believe they are making progress. Only one of them can prove it.</p>
+
+                    <p>The claim of this article is simple: evaluation drives everything in applied AI. Without rigorous measurement, from reward model validation to agent task success rates, from contamination detection to judge calibration, progress is unmeasurable and regressions are invisible. Worse, the benchmarks you choose are not a neutral report card. They are a design decision that shapes the system you end up with.</p>
+
+                    <blockquote>A team plays whatever game its scoreboard rewards. An AI system becomes whatever its evaluation measures. Pick the scoreboard carelessly and you will build the wrong system with great confidence.</blockquote>
+
+                    <h2>Progress you cannot measure is a rumor</h2>
+
+                    <p>AI systems fail differently than normal software. A broken function throws an error you can see. A degraded language model keeps returning fluent, confident text; it is simply wrong more often, in places nobody happens to check. So when a team swaps a model version, rewrites a prompt, or rebuilds its retrieval index, the honest answer to "did it get better?" is usually an anecdote.</p>
+
+                    <p>Anecdotes carry a built-in bias. A demo is a highlight reel: it samples the best runs and hides the fumbles. Meanwhile regressions travel silently, because the prompt tweak that fixed the case in the demo can break twelve cases nobody retried. Anthropic's engineering post on this problem describes how much work it takes to make even a single evaluation trustworthy, and how fragile the popular public benchmarks turn out to be once you look closely (see reference 5). If a well-funded frontier lab finds measurement hard, a product team running on vibes is not measuring at all.</p>
+
+                    <h2>The four dials that matter</h2>
+
+                    <p>Different parts of a modern AI stack need different scoreboards. Four matter most right now.</p>
+
+                    <h3>Reward model validation</h3>
+                    <p>When a model is tuned with reinforcement learning, a <code>reward model</code> acts as the judge of every training step. It scores millions of candidate answers, and the model in training bends toward whatever that judge prefers. If the judge is miscalibrated, training optimizes toward the wrong target at industrial scale. RewardBench, the first public benchmark built to test reward models directly, found wide gaps between them, including failures on subtle but decisive cases where a confident wrong answer beats a careful right one. Validate the judge before you let it train anything.</p>
+
+                    <h3>Agent task success rates</h3>
+                    <p>Agents plan, call tools, and take many steps, so per-answer quality scores miss the point. The unit of measurement is the completed task. The tau-bench benchmark tested agents on realistic airline and retail customer-service work and found that even leading models completed fewer than half the tasks, with success dropping further when the same task was retried several times. That second number is the one that matters for anyone putting agents in front of customers: an agent that succeeds once is a demo. An agent that succeeds eight times out of eight is a product.</p>
+
+                    <h3>Contamination detection</h3>
+                    <p>A benchmark score means nothing if the test questions leaked into the training data. This happens constantly, because models train on web-scale text and popular benchmarks live on the web. A 2024 survey of <code>benchmark data contamination</code> catalogs dozens of documented cases along with methods to detect them. The symptom is a model that aces the public test and stumbles on your real workload. The defense is a private test set built from your own cases: never published, never pasted into prompts, never shipped to a fine-tuning job.</p>
+
+                    <h3>LLM-as-Judge calibration</h3>
+                    <p>Human grading does not scale, so teams increasingly use one model to grade another. This works, but only if the judge itself gets measured. The MT-Bench study that popularized the approach also documented its failure modes: model judges favor answers shown in a particular position, favor longer answers, and favor their own outputs. With those biases controlled, strong judges agreed with human experts more than 80 percent of the time, roughly the rate at which humans agree with each other. The practice that makes this safe is plain: calibrate the judge against a human-labeled sample, then re-check the agreement on a schedule.</p>
+
+                    <h2>The scoreboard shapes the play</h2>
+
+                    <p>Goodhart's law says that when a measure becomes a target, it stops being a good measure. In AI development the effect is stronger, because the optimization is automated and tireless. Whatever your evaluation rewards, gradient descent and prompt iteration will find, including the loopholes.</p>
+
+                    <p>Choose a multiple-choice exam as your benchmark and you will build an excellent exam-taker that struggles to draft an email. Reward helpfulness ratings alone and you will train a flatterer, because agreeable answers rate better than correct ones. Stanford's HELM project made this argument at field scale: benchmarks are the incentive structure of AI research, and whatever they leave unmeasured tends to be exactly what fails in production.</p>
+
+                    <p>This is why benchmark selection is a leadership decision, not a technical detail. The moment you publish a scoreboard, your engineers, your vendors, and your models start optimizing toward it. Choose measures that look like your real work, or accept that you are funding progress on someone else's problem.</p>
+
+                    <h2>Building the practice</h2>
+
+                    <p>An evaluation practice does not need to start big. It needs to start real.</p>
+
+                    <p>Begin with 30 to 50 cases pulled from actual usage: real tickets, real documents, real questions, each with a clear definition of what a good answer contains. Version this set like code. Then wire it into the same gate that protects the rest of your software:</p>
+
+                    <pre><code># runs on every change to a prompt, model version, or retrieval index
+run-evals --suite real_cases_v7 --trials 5
+block-merge if pass_rate &lt; baseline - 2%</code></pre>
+
+                    <p>From there, grow along the four dials. Keep a held-out set private for contamination safety. Track agent success as a pass rate across repeated trials, never a single lucky run. If a model acts as your judge, grade a sample by hand every month and record the agreement rate. None of this is glamorous. All of it is the difference between knowing and guessing.</p>
+
+                    <h2>The scoreboard is the strategy</h2>
+
+                    <p>Teams rarely skip evaluation because they think it is unimportant. They skip it because the output looks good, the demo went well, and there is pressure to ship. But "looks good" is exactly the signal modern models are trained to produce. Fluency stopped being evidence of correctness, which means the eye test stopped working. Measurement is the only sense organ left.</p>
+
+                    <p>The teams that treat evaluation as infrastructure, funded and versioned like the product itself, get more than quality control. They get compounding speed: they can change models, prompts, and architectures aggressively because the scoreboard reports within minutes whether the change helped. Everyone else is flying at night and calling it progress.</p>
+
+                    <h2>What leaders should do</h2>
+                    <ol>
+                        <li>Ask every AI team to show the evaluation suite before the demo. If there is no suite, treat the demo as an anecdote, not evidence.</li>
+                        <li>Fund a private test set built from your own real cases, refresh it quarterly, and never let it leak into prompts, fine-tuning data, or public repositories.</li>
+                        <li>Make evaluation a release gate: no prompt, model, or retrieval change ships unless the score holds or someone senior signs off on the drop.</li>
+                        <li>Audit automated judges every quarter by comparing a sample of their grades against human grades, and share the agreement rate internally.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Alignment Tradeoff</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">PPO, DPO, and GRPO each solve the same problem differently, and picking the wrong one costs months.</p>
+                        <a href="rlhf-alignment-tradeoffs.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Self-Correcting Agent</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Agents that verify their own work close the loop between doing and knowing whether it worked.</p>
+                        <a href="the-self-correcting-agent.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Taste Gap</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">When AI can produce anything, knowing what is good becomes the scarce human skill.</p>
+                        <a href="the-taste-gap.html">Read →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Zheng, L., et al. (2023). "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena." NeurIPS 2023. <a href="https://arxiv.org/abs/2306.05685" target="_blank">arXiv:2306.05685</a></li>
+                    <li class="reference-item">Lambert, N., et al. (2024). "RewardBench: Evaluating Reward Models for Language Modeling." <a href="https://arxiv.org/abs/2403.13787" target="_blank">arXiv:2403.13787</a></li>
+                    <li class="reference-item">Yao, S., Shinn, N., Razavi, P., &amp; Narasimhan, K. (2024). "τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains." <a href="https://arxiv.org/abs/2406.12045" target="_blank">arXiv:2406.12045</a></li>
+                    <li class="reference-item">Xu, C., et al. (2024). "Benchmark Data Contamination of Large Language Models: A Survey." <a href="https://arxiv.org/abs/2406.04244" target="_blank">arXiv:2406.04244</a></li>
+                    <li class="reference-item">Anthropic (2023). "Challenges in evaluating AI systems." <a href="https://www.anthropic.com/news/evaluating-ai-systems" target="_blank">anthropic.com/news/evaluating-ai-systems</a></li>
+                    <li class="reference-item">Liang, P., et al. (2022). "Holistic Evaluation of Language Models (HELM)." <a href="https://arxiv.org/abs/2211.09110" target="_blank">arXiv:2211.09110</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
