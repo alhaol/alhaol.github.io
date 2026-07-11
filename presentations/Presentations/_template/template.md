@@ -160,8 +160,8 @@ def run_agent(task: str) -> str:
 <!-- ============================================================================
      5+ · NEW VISUAL COMPONENTS
      The engine supports five additional component types for richer decks.
-     Pick the one that fits the content shape — see the selection heuristics
-     in SKILL.md (Step 6).
+     Pick the one that fits the content shape — see the component selection
+     heuristics in SKILL.md (Step 5, "Generate the deck").
      ============================================================================ -->
 
 # Visualization Library
