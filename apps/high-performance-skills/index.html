@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Performance Skills</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root { --accent: #f87171; --accent-soft: #ef4444; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: var(--accent); }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: var(--accent); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-3xl mx-auto relative z-10">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">High-Performance Skills</h1>
+      <p class="text-slate-400 text-sm mt-1">7 skills, 3 relationships - with yourself, with others, with reality</p>
+    </div>
+    <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
+  </header>
+
+  <main id="cardApp" class="glass-panel p-6">
+    <style>
+      .seg { display:flex; gap:6px; flex-wrap:wrap; }
+      .seg button { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#cbd5e1;
+        padding:7px 13px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; }
+      .seg button:hover { background:rgba(255,255,255,0.09); }
+      .seg button.on { color:#020617; border-color:transparent; }
+      .flip-wrap { perspective:1400px; }
+      .flip-inner { position:relative; width:100%; min-height:280px; transform-style:preserve-3d;
+        transition:transform .5s cubic-bezier(.4,.2,.2,1); }
+      .flip-inner.flipped { transform:rotateY(180deg); }
+      .flip-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+        display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+        padding:30px 24px; border-radius:16px; border:1px solid rgba(255,255,255,0.08);
+        background:rgba(15,23,42,0.7); }
+      .flip-back { transform:rotateY(180deg); }
+      .pill { display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+        padding:4px 11px; border-radius:999px; margin-bottom:14px; }
+      .rate-btn { flex:1; min-width:70px; padding:12px 8px; border-radius:11px; border:1px solid rgba(255,255,255,0.1);
+        background:rgba(255,255,255,0.04); color:#e2e8f0; font-weight:700; font-size:13px; cursor:pointer; transition:all .15s; }
+      .rate-btn:hover { transform:translateY(-1px); }
+      .rate-btn small { display:block; font-weight:500; font-size:10px; color:#94a3b8; margin-top:2px; }
+      .dot { width:7px; height:7px; border-radius:999px; display:inline-block; background:rgba(255,255,255,0.12); }
+
+      /* ---- taxonomy / dendrogram map ---- */
+      .map-scroll { overflow-x:auto; padding:6px 2px 10px; -webkit-overflow-scrolling:touch; }
+      .org { display:flex; min-width:max-content; }
+      .org ul { display:flex; flex-direction:column; justify-content:center;
+        padding-left:34px; margin:0; list-style:none; position:relative; }
+      .org li { display:flex; flex-direction:row; align-items:center; position:relative; padding:5px 0; }
+      /* horizontal stub: from the vertical spine to each node */
+      .org ul ul > li::before { content:''; position:absolute; top:50%; left:-34px; width:34px;
+        border-top:1.5px solid rgba(255,255,255,0.16); }
+      /* vertical spine, assembled from per-child segments (no bg erase needed) */
+      .org ul ul > li::after { content:''; position:absolute; left:-34px; width:1.5px;
+        top:0; bottom:0; background:rgba(255,255,255,0.16); }
+      .org ul ul > li:first-child::after { top:50%; bottom:0; }
+      .org ul ul > li:last-child::after  { top:0; bottom:50%; }
+      .org ul ul > li:only-child::after  { display:none; }
+
+      .node { display:flex; flex-direction:column; gap:1px; background:rgba(15,23,42,0.75);
+        border:1px solid rgba(255,255,255,0.10); border-radius:11px; padding:9px 13px; min-width:120px;
+        position:relative; z-index:1; }
+      .node-root { align-items:center; text-align:center; background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+        border:none; min-width:96px; }
+      .node-root .nk { color:#020617; font-weight:800; font-size:15px; }
+      .node-root .nn { color:#3b2f04; font-size:10px; font-weight:600; }
+      .node .nk { font-weight:800; font-size:13px; letter-spacing:.04em; }
+      .node .nn { color:#cbd5e1; font-size:11px; font-weight:600; line-height:1.25; }
+      .node .ng { color:#7e8aa0; font-size:10px; line-height:1.3; margin-top:2px; }
+      .node-group { align-items:flex-start; }
+      .node-group .nk { font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
+      .node-group .nn { font-size:10px; color:#94a3b8; }
+      .node-leaf { cursor:pointer; transition:transform .15s, border-color .15s; }
+      .node-leaf:hover { transform:translateX(2px); }
+
+      .mnemonic { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:18px; }
+      @media (max-width:640px){ .mnemonic { grid-template-columns:1fr; } }
+      .mn-card { border-radius:11px; padding:12px 14px; border:1px solid rgba(255,255,255,0.08);
+        background:rgba(15,23,42,0.5); }
+      .mn-card h5 { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; margin-bottom:6px; }
+      .mn-card .word { font-size:13px; font-weight:800; letter-spacing:.05em; }
+      .mn-card p { color:#94a3b8; font-size:11px; margin-top:7px; line-height:1.5; }
+
+      /* ---- knowledge graph ---- */
+      .kg-wrap { position:relative; border:1px solid rgba(255,255,255,0.07); border-radius:14px;
+        background:radial-gradient(circle at 50% 40%, rgba(30,41,59,0.45), rgba(2,6,23,0.2)); overflow:hidden; }
+      #kg { width:100%; height:auto; display:block; touch-action:none; user-select:none; cursor:grab; }
+      .glink { stroke:rgba(255,255,255,0.16); stroke-width:1.5; }
+      .glink-cross { stroke:rgba(94,234,212,0.42); stroke-width:1.3; stroke-dasharray:5 5; }
+      .glabel { fill:#5eead4; font-size:8.5px; opacity:.7; paint-order:stroke; stroke:#020617;
+        stroke-width:2.5px; stroke-linejoin:round; pointer-events:none; }
+      .gnode { cursor:pointer; }
+      .gnode text { pointer-events:none; }
+      .gnode .body { transition:stroke-width .12s, filter .12s; }
+      .gnode:hover .body { stroke-width:3.5; }
+      /* zoom / pan / expand controls */
+      .kg-ctrl { position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:6px; z-index:5; }
+      .kg-ctrl button { width:32px; height:32px; border-radius:9px; border:1px solid rgba(255,255,255,0.12);
+        background:rgba(2,6,23,0.78); color:#cbd5e1; font-size:16px; font-weight:700; line-height:1; cursor:pointer;
+        display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px); transition:all .15s; }
+      .kg-ctrl button:hover { background:rgba(15,23,42,0.95); color:var(--accent); border-color:var(--accent); }
+      .kg-wrap:fullscreen { width:100vw; height:100vh; border-radius:0; background:#020617; }
+      .kg-wrap:fullscreen #kg { height:100vh; }
+      .kg-wrap:-webkit-full-screen { width:100vw; height:100vh; background:#020617; }
+      .kg-wrap:-webkit-full-screen #kg { height:100vh; }
+      .kg-legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:11px; color:#94a3b8; }
+      .kg-legend span { display:inline-flex; align-items:center; gap:6px; }
+      .kg-tip { position:fixed; z-index:60; pointer-events:none; background:rgba(2,6,23,0.96);
+        border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:9px 12px; max-width:240px;
+        box-shadow:0 12px 34px rgba(0,0,0,0.55); transform:translate(-50%, calc(-100% - 14px)); }
+      .kg-tip h6 { font-size:12px; font-weight:800; margin-bottom:3px; }
+      .kg-tip p { font-size:11px; color:#94a3b8; line-height:1.45; margin:0; }
+    </style>
+
+    <div id="groupFilter" class="seg mb-4"></div>
+
+    <div class="flex items-center justify-between mb-5">
+      <div id="viewToggle" class="seg"></div>
+      <button id="resetBtn" class="text-slate-500 hover:text-rose-300 text-xs flex items-center gap-1">
+        <i data-lucide="rotate-ccw" style="width:13px;height:13px"></i> Reset progress
+      </button>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between text-xs text-slate-400 mb-1.5">
+        <span id="masteryLabel">0 mastered</span>
+        <span id="streakLabel">0 day streak</span>
+      </div>
+      <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden">
+        <div id="masteryBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent-soft));transition:width .45s"></div>
+      </div>
+    </div>
+
+    <div id="studyView"></div>
+    <div id="browseView" class="hidden"></div>
+    <div id="mapView" class="hidden"></div>
+    <div id="graphView" class="hidden"></div>
+  </main>
+</div>
+
+<script>
+// === DECK DATA — the only part that changes per app ============================
+// Generated by the create-html-app-card skill from the source content.
+//   groups : taxonomy buckets (the "branches"). Each has a label + color.
+//   cards  : one idea each. `key` is a short uppercase recall keyword (the hook
+//            you memorize), `gist` a 3–6 word compression, `cue` the question on
+//            the card front, `back` the full lesson, `example` a concrete instance.
+//   cross  : named conceptual links across groups (the dashed "knowledge" edges).
+const DECK = {
+  stateKey: "cardDeck_high-performance-skills_v1",
+  rootName: "3 RELATIONSHIPS",
+  groups: {
+    self:    { label: "With Yourself", color: "#60a5fa" },
+    others:  { label: "With Others",   color: "#fbbf24" },
+    reality: { label: "With Reality",  color: "#a78bfa" },
+    meta:    { label: "The Meta-Skill", color: "#34d399" }
+  },
+  cards: [
+    { id:"snake-proof", group:"self", name:"Confidence Is Built, Not Found", key:"SNAKE",
+      gist:"small brave acts spread",
+      cue:"Serena Williams still has self-doubt after 23 Grand Slams. So where does real confidence actually come from?",
+      back:"Confidence is not waiting on the other side of success - Serena Williams and Paul McCartney both admit to self-doubt and insecurity. In Bandura's Stanford study, people with deep snake phobia overcame it in hours through step-by-step exposure, and the confidence spread: they spoke up more, stopped dreading hard conversations, and took actions they had been avoiding. Do one hard thing and survive it, and your brain files it as proof.",
+      example:"Terrified of presenting? Give one two-minute update in a small meeting. The survival gets filed as proof - and starts spreading to other corners of your life." },
+    { id:"proof-pyramid", group:"self", name:"The Proof Pyramid", key:"PYRAMID",
+      gist:"action, integrity, recovery",
+      cue:"What three proofs, from base to top, build self-trust?",
+      back:"Base: proof of action - do one small hard thing you have been avoiding. Middle: proof of integrity - make one small promise to yourself and keep it every day. Top: proof of recovery - come back after failure, rejection, or embarrassment. Confidence is a feeling about the outcome and swings with results; self-trust says \"I may not know the answers, but I trust myself to figure it out\" - stronger, and it lasts longer.",
+      example:"Send the email you have avoided for a week (action), keep a daily ten-minute walk promise (integrity), and re-apply right after a rejection (recovery)." },
+    { id:"three-ps", group:"self", name:"The 3 P's of Failure", key:"3P",
+      gist:"personal, permanent, pervasive",
+      cue:"After a failure, what three lies does the voice in your head tell (Seligman)?",
+      back:"Our brain explains failure as Personal (\"something is wrong with me\"), Permanent (\"this will never change - I am doomed\"), and Pervasive (\"I failed here, so I will fail everywhere\"). Seligman's pattern is why the half-life of failure is so long and why it makes you feel small and alone. Once you can name the three P's, you see that none of them is true - it is just the voice in your head playing tricks.",
+      example:"Swadia was fired three times - once walked straight to the elevator - and spent ten months unemployed. The next role became a stepping stone to CEO." },
+    { id:"cheat-codes", group:"self", name:"Three Failure Cheat Codes", key:"CHEAT",
+      gist:"useful mistakes, portfolio, death",
+      cue:"What three cheat codes change your relationship with failure?",
+      back:"One: make useful mistakes - if your rejection rate is too low, you are not swinging the bat enough. Ed Sheeran was rejected by every label and booed live, but each failure was feedback that refined his act; now he sells out stadiums. Two: portfolio thinking - like venture capitalists, take risks but size, limit, and diversify them so you can survive being wrong. Three: death - it ends the same way for all of us, which refocuses you on what matters beyond superficial success and failure.",
+      example:"Track your rejection rate on pitches or applications. If it is near zero, you are playing too safe to learn anything." },
+
+    { id:"credibility-sells", group:"others", name:"Selling Is Credibility, Not Tactics", key:"BELIEVE",
+      gist:"believable people move people",
+      cue:"Everything in life is selling. What actually closes a deal - and what do people really buy?",
+      back:"The biggest misconception about selling is that it is about tactics. The best salespeople spend years becoming believable, then simply say what they believe - that is what closes. Humans are hardwired to resist being sold to: the moment they sense a trick, defenses go up. People do not buy products; they buy better versions of themselves - which is why Nike, Apple, and Harley-Davidson ads sell feelings, not specs.",
+      example:"A job interview, a first date, raising money, negotiating with your teenage daughter about Instagram - all selling, all influence." },
+    { id:"care-frame", group:"others", name:"The CARE Framework", key:"CARE",
+      gist:"curiosity, alignment, reliability, emotion",
+      cue:"Spell out C-A-R-E - the four skills of influence.",
+      back:"Curiosity: dig for what people truly want - someone chasing a promotion really wants recognition and financial safety. Alignment: connect the dots between what you have and what they want; that matching takes empathy. Reliability: just tell the truth - including what your product cannot do, or they will not believe what it can. Emotion: make them feel the future version of themselves.",
+      example:"Steve Jobs said \"a thousand songs in your pocket\" - no gigabytes, no storage specs. Facts make you nod; feelings make you move." },
+    { id:"campbell-effect", group:"others", name:"Build People, Not Just Products", key:"COACH",
+      gist:"people-builders outlast geniuses",
+      cue:"Why was a football coach fired at 39 the most valuable person in Silicon Valley history?",
+      back:"Bill Campbell could not build software, but he could build people - and he became the mentor behind Google, Apple, Amazon, Meta, Twitter, eBay, Yahoo, and Intuit. Contrast the genius CEO who delivered huge revenue but made his people feel small: the stock plummeted and the executives left one by one. You can have a great mission and a great balance sheet, but if your people do not feel valued, you lose all three.",
+      example:"In your next one-on-one, coach the person, not the project status." },
+    { id:"psych-safety", group:"others", name:"Safety Beats IQ", key:"SAFE",
+      gist:"safe teams beat smart teams",
+      cue:"Google studied 180 internal teams to find what the best ones share. What was it?",
+      back:"Not the highest IQs. The best teams were the ones where people could speak their minds - psychological safety. Teams that felt safe delivered far more than teams with much higher raw IQ. It has nothing to do with being nice: creating it is one of the most important career moves in your life.",
+      example:"In a meeting you run, ask the quietest person for their take - and thank them specifically when they disagree with you." },
+    { id:"three-gives", group:"others", name:"The Three Gives", key:"GIVE",
+      gist:"attention, credit, ownership",
+      cue:"What three things do you give away to build the people around you?",
+      back:"Give attention - the rarest resource anyone has today; full focus on someone even for a minute makes them feel fully seen. Give credit - when things go well, find the person responsible and thank them, naming the specific thing they did well. Give ownership - let a teammate present your joint work, let teams own their outcomes; make people feel like owners, not helpers. When they grow, you grow faster.",
+      example:"After a launch, credit the engineer by name for the specific fix that saved it - then let her demo it to leadership." },
+
+    { id:"compound-late", group:"reality", name:"Compounding Beats Brilliance", key:"SNOWBALL",
+      gist:"98% came after 65",
+      cue:"What percentage of Warren Buffett's wealth came after his 65th birthday?",
+      back:"98 percent. At 65 he was worth about 3 billion dollars; at 94, around 160 billion. He says it himself: \"My life has been a product of compound interest.\" Our brains are simply incapable of intuiting compounding - which is why the greatest investor alive made almost all his money after the age most people retire. Patience is the edge.",
+      example:"Starting to invest at 25 instead of 35 can matter more than doubling your contributions later - the extra decade compounds." },
+    { id:"big-three", group:"reality", name:"The Big Three Money Questions", key:"EXAM",
+      gist:"interest, inflation, diversification",
+      cue:"Three simple questions measure financial literacy. What are they - and what does each teach?",
+      back:"One: 100 dollars at 2 percent interest - more or less than 102 dollars after five years? (Money compounds over the long term; be patient.) Two: savings earn 1 percent, inflation is 2 percent - can you buy more or less in a year? (Inflation eats your money unless you invest ahead of it.) Three: is a single stock safer than a mutual fund? (Diversification always beats concentration.) Over 85 percent of US adults under 35 got at least one wrong - the most expensive ignorance they cannot afford.",
+      example:"Cash sitting in a 1 percent account during 2 percent inflation buys less every single year, guaranteed." },
+    { id:"out-judge", group:"reality", name:"Out-Judge the Machines", key:"JUDGE",
+      gist:"taste picks the lines",
+      cue:"AI made intelligence a commodity. What is your edge - and what are AI's three traps?",
+      back:"When machines can out-think you, you have to out-judge them: AI can generate millions of lines in minutes, but your judgment and taste decide which lines to pick. Three traps of using AI without judgment: it fakes deep fluency (sounds right when it is wrong), it drives you to the average of what everyone thinks, and it seeks confirmation - it wants to please you, so it agrees with you at any cost.",
+      example:"AI drafts your essay in minutes. Everything that differentiates you is in which lines you keep, cut, and sharpen." },
+    { id:"gut-feedback", group:"reality", name:"When to Trust Your Gut", key:"FIRE",
+      gist:"fast honest feedback only",
+      cue:"When is your gut feeling actually trustworthy?",
+      back:"Trust intuition only in domains where you get fast, honest feedback on your decisions. A firefighter builds real judgment because fire gives feedback in real time. The more reps you get with clear, quick feedback, the better your judgment becomes - without that loop, a gut feeling is just a guess.",
+      example:"A chess player's instinct is trained by instant consequences; a pundit's ten-year prediction never gets that feedback loop." },
+
+    { id:"restless-chickens", group:"meta", name:"Chase the Restless Chickens", key:"CHICKENS",
+      gist:"skills decay; keep chasing",
+      cue:"What do all six skills have in common - and what is the one skill that rules them all?",
+      back:"Every skill is like a restless chicken running around your barn: stop chasing it and it runs away. The world ahead will force pivot after pivot - the hills you want to climb change shape right under your feet while you are busy studying the map. So the meta-skill is learning how to learn, and there is real joy in being a student again: empty your cup so a fresh brew can fill it.",
+      example:"Block a weekly student hour to re-drill one of the six skills - they rust without reps." },
+    { id:"remembered", group:"meta", name:"Remembered, Not Taught", key:"QUIET",
+      gist:"quiet the noise; it surfaces",
+      cue:"Which things \"cannot be taught - they must be remembered\"?",
+      back:"The most important things - your judgment, your empathy, your genuine character - cannot be handed to you by a teacher, a book, or a guide. Some things cannot be taught; they must be remembered. You have to quiet the noise so they can rise to the surface. Nobody can give you what is already yours.",
+      example:"A silent walk after a hard decision often surfaces what you already knew before anyone's advice." }
+  ],
+  cross: [
+    ["proof-pyramid","three-ps","recovery proof answers the 3 P's"],
+    ["cheat-codes","big-three","portfolio thinking = diversify"],
+    ["snake-proof","gut-feedback","reps + feedback build capacity"],
+    ["care-frame","three-gives","genuine attention comes first"],
+    ["compound-late","restless-chickens","learning compounds too"],
+    ["out-judge","remembered","judgment must be remembered"],
+    ["credibility-sells","psych-safety","trust is the currency"]
+  ]
+};
+// ==============================================================================
+
+const ACCENT = '#f87171';
+const ACCENT_SOFT = '#ef4444';
+
+const CARDS  = DECK.cards;
+const GROUPS = DECK.groups;
+const CROSS  = DECK.cross || [];
+
+const BOX_DAYS = { 1:0, 2:1, 3:3, 4:7, 5:16 };
+const DAY = 86400000;
+const MASTER_BOX = 5;
+const KEY = DECK.stateKey;
+
+let state = load();
+let filter = 'all';
+let view = 'study';
+let queue = [];
+let current = null;
+let revealed = false;
+
+function load() {
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { s = {}; }
+  s.box = s.box || {};
+  s.due = s.due || {};
+  s.lastStudyDate = s.lastStudyDate || null;
+  s.streak = s.streak || 0;
+  s.reviews = s.reviews || 0;
+  CARDS.forEach(function(c){
+    if (!s.box[c.id]) s.box[c.id] = 1;
+    if (!(c.id in s.due)) s.due[c.id] = 0;
+  });
+  return s;
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function dateStr(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function todayStr(){ return dateStr(new Date()); }
+function yesterdayStr(){ var d=new Date(); d.setDate(d.getDate()-1); return dateStr(d); }
+
+function inFilter(c){ return filter==='all' || c.group===filter; }
+function groupCount(gk){ return CARDS.filter(function(c){ return c.group===gk; }).length; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function pillHtml(group){
+  const g = GROUPS[group];
+  return '<span class="pill" style="color:'+g.color+';background:'+g.color+'22;border:1px solid '+g.color+'55">'+g.label+'</span>';
+}
+
+// ---------- top chrome ----------
+function renderGroupFilter(){
+  const el = document.getElementById('groupFilter');
+  const opts = [['all','All']].concat(Object.keys(GROUPS).map(function(k){ return [k, GROUPS[k].label]; }));
+  el.innerHTML = opts.map(function(o){
+    const on = filter===o[0];
+    const color = o[0]==='all' ? ACCENT : GROUPS[o[0]].color;
+    return '<button data-f="'+o[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:'+color:'')+'">'+o[1]+'</button>';
+  }).join('');
+  el.querySelectorAll('button').forEach(function(b){
+    b.onclick = function(){ filter=b.dataset.f; renderGroupFilter(); rerenderCurrent(); };
+  });
+}
+function renderViewToggle(){
+  const el = document.getElementById('viewToggle');
+  const views = [['study','Study'],['browse','Browse all'],['map','Map'],['graph','Graph']];
+  el.innerHTML = views.map(function(v){
+    const on = view===v[0];
+    return '<button data-v="'+v[0]+'" class="'+(on?'on':'')+'" style="'+(on?'background:'+ACCENT:'')+'">'+v[1]+'</button>';
+  }).join('');
+  el.querySelectorAll('button').forEach(function(b){
+    b.onclick = function(){ switchView(b.dataset.v); };
+  });
+}
+function renderProgress(){
+  const total = CARDS.length;
+  const mastered = CARDS.filter(function(c){ return state.box[c.id] >= MASTER_BOX; }).length;
+  let pts = 0; CARDS.forEach(function(c){ pts += (state.box[c.id]-1); });
+  const pct = Math.round(pts/(total*(MASTER_BOX-1))*100);
+  document.getElementById('masteryLabel').textContent = mastered+' / '+total+' mastered';
+  document.getElementById('masteryBar').style.width = pct+'%';
+  const s = state.streak||0;
+  document.getElementById('streakLabel').textContent = (s>0?'🔥 ':'')+s+' day streak';
+}
+
+// ---------- study ----------
+function rerenderCurrent(){
+  if (view==='study') startStudy(false);
+  else if (view==='browse') renderBrowse();
+  else if (view==='map') renderMap();
+  else renderGraph();
+}
+function switchView(v){
+  view = v;
+  renderViewToggle();
+  document.getElementById('studyView').classList.toggle('hidden', v!=='study');
+  document.getElementById('browseView').classList.toggle('hidden', v!=='browse');
+  document.getElementById('mapView').classList.toggle('hidden', v!=='map');
+  document.getElementById('graphView').classList.toggle('hidden', v!=='graph');
+  rerenderCurrent();
+}
+
+function startStudy(includeAll){
+  const now = Date.now();
+  let pool = CARDS.filter(inFilter).filter(function(c){ return includeAll || state.due[c.id] <= now; });
+  queue = shuffle(pool.map(function(c){ return c.id; }));
+  revealed = false;
+  if (queue.length === 0){ renderCaughtUp(); return; }
+  current = CARDS.find(function(c){ return c.id===queue.shift(); });
+  showCurrent();
+}
+
+function showCurrent(){
+  revealed = false;
+  const c = current;
+  const dueCount = queue.length + 1;
+  const sv = document.getElementById('studyView');
+  sv.innerHTML =
+    '<div class="text-center text-xs uppercase tracking-wider mb-3" style="color:'+ACCENT+'">'+dueCount+' card'+(dueCount>1?'s':'')+' in this round · level '+state.box[c.id]+'/5</div>'+
+    '<div class="flip-wrap"><div class="flip-inner" id="flipInner">'+
+      '<div class="flip-face flip-front">'+
+        pillHtml(c.group)+
+        '<h2 class="text-2xl font-bold text-white mb-3">'+c.name+'</h2>'+
+        '<p class="text-slate-300 text-sm mb-6" style="max-width:30rem">'+c.cue+'</p>'+
+        '<button class="btn-accent" id="showBtn">Show answer <span style="opacity:.6">(Space)</span></button>'+
+      '</div>'+
+      '<div class="flip-face flip-back">'+
+        pillHtml(c.group)+
+        '<h3 class="text-lg font-bold text-white mb-2">'+c.name+'</h3>'+
+        '<p class="text-slate-200 text-sm mb-3" style="max-width:32rem;line-height:1.6">'+c.back+'</p>'+
+        '<p class="text-xs" style="color:'+ACCENT+';max-width:32rem"><strong>Example:</strong> '+c.example+'</p>'+
+      '</div>'+
+    '</div></div>'+
+    '<div id="rateRow" class="hidden mt-5">'+
+      '<p class="text-center text-xs text-slate-500 mb-2">How well did you recall it?</p>'+
+      '<div style="display:flex;gap:8px">'+
+        '<button class="rate-btn" data-rate="again" style="border-color:#f8717155">Again<small>&lt;1 day</small></button>'+
+        '<button class="rate-btn" data-rate="hard" style="border-color:#fbbf2455">Hard<small>same level</small></button>'+
+        '<button class="rate-btn" data-rate="good" style="border-color:#60a5fa55">Good<small>level up</small></button>'+
+        '<button class="rate-btn" data-rate="easy" style="border-color:#34d39955">Easy<small>+2 levels</small></button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById('showBtn').onclick = reveal;
+  sv.querySelectorAll('[data-rate]').forEach(function(b){ b.onclick = function(){ rate(b.dataset.rate); }; });
+  lucide.createIcons();
+}
+
+function reveal(){
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('flipInner').classList.add('flipped');
+  document.getElementById('rateRow').classList.remove('hidden');
+}
+
+function recordReview(){
+  state.reviews++;
+  const t = todayStr();
+  if (state.lastStudyDate !== t){
+    state.streak = (state.lastStudyDate === yesterdayStr()) ? (state.streak+1) : 1;
+    state.lastStudyDate = t;
+  }
+}
+
+function rate(r){
+  if (!revealed) return;
+  const id = current.id;
+  let box = state.box[id];
+  if (r==='again') box = 1;
+  else if (r==='hard') box = Math.max(1, box);
+  else if (r==='good') box = Math.min(MASTER_BOX, box+1);
+  else if (r==='easy') box = Math.min(MASTER_BOX, box+2);
+  state.box[id] = box;
+  if (r==='again'){ state.due[id] = 0; queue.push(id); }
+  else { state.due[id] = Date.now() + BOX_DAYS[box]*DAY; }
+  recordReview();
+  save();
+  renderProgress();
+  nextCard();
+}
+
+function nextCard(){
+  const nextId = queue.shift();
+  if (!nextId){ renderComplete(); return; }
+  current = CARDS.find(function(c){ return c.id===nextId; });
+  showCurrent();
+}
+
+function renderComplete(){
+  const mastered = CARDS.filter(function(c){ return state.box[c.id]>=MASTER_BOX; }).length;
+  document.getElementById('studyView').innerHTML =
+    '<div class="text-center py-10">'+
+      '<div style="width:60px;height:60px;border-radius:999px;background:'+ACCENT+'22;border:1px solid '+ACCENT+'55;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i data-lucide="check" style="width:28px;height:28px;color:'+ACCENT+'"></i></div>'+
+      '<h2 class="text-xl font-bold text-white mb-1">Round complete</h2>'+
+      '<p class="text-slate-400 text-sm mb-6">'+mastered+' of '+CARDS.length+' cards mastered · '+state.reviews+' total reviews</p>'+
+      '<button class="btn-accent" id="againBtn">Study again</button>'+
+    '</div>';
+  document.getElementById('againBtn').onclick = function(){ startStudy(true); };
+  lucide.createIcons();
+}
+
+function renderCaughtUp(){
+  const now = Date.now();
+  const upcoming = CARDS.filter(inFilter).map(function(c){ return state.due[c.id]; }).filter(function(t){ return t>now; });
+  let when = '';
+  if (upcoming.length){
+    const next = Math.min.apply(null, upcoming);
+    const hrs = Math.round((next-now)/3600000);
+    when = hrs < 24 ? ('Next review in about '+Math.max(1,hrs)+'h.') : ('Next review in about '+Math.round(hrs/24)+' day(s).');
+  }
+  document.getElementById('studyView').innerHTML =
+    '<div class="text-center py-10">'+
+      '<div style="width:60px;height:60px;border-radius:999px;background:#34d39922;border:1px solid #34d39955;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i data-lucide="coffee" style="width:26px;height:26px;color:#34d399"></i></div>'+
+      '<h2 class="text-xl font-bold text-white mb-1">You are all caught up</h2>'+
+      '<p class="text-slate-400 text-sm mb-6">Spaced repetition is working. '+when+'</p>'+
+      '<button class="btn-accent" id="reviewAllBtn">Review all anyway</button>'+
+    '</div>';
+  document.getElementById('reviewAllBtn').onclick = function(){ startStudy(true); };
+  lucide.createIcons();
+}
+
+// ---------- browse ----------
+function renderBrowse(){
+  const bv = document.getElementById('browseView');
+  let html = '';
+  Object.keys(GROUPS).forEach(function(gk){
+    const items = CARDS.filter(function(c){ return c.group===gk && inFilter(c); });
+    if (!items.length) return;
+    const g = GROUPS[gk];
+    html += '<h3 class="text-sm font-bold uppercase tracking-wider mb-3 mt-5" style="color:'+g.color+'">'+g.label+'</h3>';
+    items.forEach(function(c){
+      const box = state.box[c.id];
+      let dots = '';
+      for (let i=1;i<=MASTER_BOX;i++){ dots += '<span class="dot" style="'+(i<=box?'background:'+g.color:'')+'"></span>'; }
+      html +=
+        '<div style="border:1px solid rgba(255,255,255,0.08);background:rgba(15,23,42,0.5);border-radius:12px;padding:16px;margin-bottom:12px">'+
+          '<div class="flex items-center justify-between mb-2">'+
+            '<h4 class="font-bold text-white">'+c.name+'</h4>'+
+            '<span style="display:flex;gap:4px;align-items:center">'+dots+'</span>'+
+          '</div>'+
+          '<p class="text-slate-300 text-sm mb-2" style="line-height:1.6">'+c.back+'</p>'+
+          '<p class="text-xs" style="color:'+g.color+'"><strong>Example:</strong> '+c.example+'</p>'+
+        '</div>';
+    });
+  });
+  bv.innerHTML = html;
+  lucide.createIcons();
+}
+
+// ---------- taxonomy map ----------
+function renderMap(){
+  const mv = document.getElementById('mapView');
+  const groupKeys = Object.keys(GROUPS).filter(function(gk){ return filter==='all' || filter===gk; });
+
+  // build the dendrogram: root -> groups -> leaf cards
+  let branches = '';
+  groupKeys.forEach(function(gk){
+    const g = GROUPS[gk];
+    const items = CARDS.filter(function(c){ return c.group===gk; });
+    let leaves = '';
+    items.forEach(function(c){
+      const box = state.box[c.id];
+      const mastered = box >= MASTER_BOX;
+      leaves +=
+        '<li><div class="node node-leaf" data-group="'+gk+'" title="'+c.name+' — '+c.gist.replace(/"/g,'&quot;')+'" '+
+          'style="border-left:3px solid '+g.color+(mastered?'':'88')+'">'+
+          '<span class="nk" style="color:'+g.color+'">'+c.key+(mastered?' <span style=\'color:'+g.color+'\'>✓</span>':'')+'</span>'+
+          '<span class="nn">'+c.name+'</span>'+
+          '<span class="ng">'+c.gist+'</span>'+
+        '</div></li>';
+    });
+    branches +=
+      '<li><div class="node node-group" style="border-color:'+g.color+'55;background:'+g.color+'14">'+
+        '<span class="nk" style="color:'+g.color+'">'+g.label+'</span>'+
+        '<span class="nn">'+items.length+' '+(items.length===1?'card':'cards')+'</span>'+
+      '</div><ul>'+leaves+'</ul></li>';
+  });
+
+  const tree =
+    '<div class="map-scroll"><div class="org"><ul><li>'+
+      '<div class="node node-root"><span class="nk">'+CARDS.length+'</span><span class="nn">'+DECK.rootName+'</span></div>'+
+      '<ul>'+branches+'</ul>'+
+    '</li></ul></div></div>';
+
+  // memory aids — the keyword spine per group
+  const legend =
+    '<div class="mnemonic">'+
+      Object.keys(GROUPS).map(function(gk){
+        const g = GROUPS[gk];
+        const words = CARDS.filter(function(c){ return c.group===gk; })
+          .map(function(c){ return '<span class="word" style="color:'+g.color+'">'+c.key+'</span>'; }).join(' · ');
+        return '<div class="mn-card" style="border-color:'+g.color+'33">'+
+          '<h5 style="color:'+g.color+'">'+g.label+'</h5>'+words+'</div>';
+      }).join('')+
+    '</div>';
+
+  const kwLine = Object.keys(GROUPS).map(function(gk){
+    const g = GROUPS[gk];
+    const words = CARDS.filter(function(c){ return c.group===gk; }).map(function(c){ return c.key; }).join(' · ');
+    return '<strong style="color:'+g.color+'">'+g.label+':</strong> '+words;
+  }).join(' &nbsp;|&nbsp; ');
+
+  mv.innerHTML =
+    '<p class="text-slate-400 text-xs mb-3" style="line-height:1.6">One root, '+Object.keys(GROUPS).length+' groups, '+CARDS.length+' cards. '+
+      'Remember the system by its keywords — '+kwLine+'. '+
+      '<span style="color:#64748b">Tap any leaf to study that group.</span></p>'+
+    tree + legend;
+
+  mv.querySelectorAll('.node-leaf').forEach(function(n){
+    n.onclick = function(){ filter = n.dataset.group; renderGroupFilter(); switchView('study'); };
+  });
+  lucide.createIcons();
+}
+
+// ---------- knowledge graph (force-directed) ----------
+var graphToken = 0;
+
+function renderGraph(){
+  const gv = document.getElementById('graphView');
+  const W = 820, H = 580, CX = W/2, CY = H/2;
+  const showG = function(gk){ return filter==='all' || filter===gk; };
+
+  // ---- build nodes ----
+  const nodes = [];
+  const idx = {};
+  function add(n){ idx[n.id] = nodes.length; nodes.push(n); }
+  add({ id:'root', type:'root', label:String(CARDS.length), name:DECK.rootName,
+        gist:'One root, '+Object.keys(GROUPS).length+' groups, '+CARDS.length+' cards.', color:ACCENT });
+  Object.keys(GROUPS).forEach(function(gk){
+    if (!showG(gk)) return;
+    add({ id:gk, type:'group', group:gk, label:GROUPS[gk].label, name:GROUPS[gk].label,
+          gist:'Group · '+groupCount(gk)+' cards', color:GROUPS[gk].color });
+  });
+  CARDS.forEach(function(c){
+    if (!showG(c.group)) return;
+    add({ id:c.id, type:'card', group:c.group, label:c.key, name:c.name, gist:c.gist,
+          color:GROUPS[c.group].color, mastered:state.box[c.id] >= MASTER_BOX });
+  });
+  // provisional radius (refined after text is measured) so warm-up has bounds
+  nodes.forEach(function(n){ n.hw = n.type==='root'?34:(28+n.label.length*4); n.hh = n.type==='root'?34:15; n.r = Math.max(n.hw,n.hh); });
+
+  // ---- build edges ----
+  const edges = [];
+  Object.keys(GROUPS).forEach(function(gk){ if (showG(gk)) edges.push({ a:'root', b:gk, type:'h', len:160 }); });
+  CARDS.forEach(function(c){ if (showG(c.group)) edges.push({ a:c.group, b:c.id, type:'h', len:108 }); });
+  CROSS.forEach(function(x){ edges.push({ a:x[0], b:x[1], type:'c', len:165, label:x[2] }); });
+  const E = edges.filter(function(e){ return idx[e.a]!=null && idx[e.b]!=null; });
+
+  // ---- seed positions (radial) for fast convergence ----
+  nodes.forEach(function(n){ if (n.type==='root'){ n.x=CX; n.y=CY; n.fx=CX; n.fy=CY; } });
+  const groupNodes = nodes.filter(function(n){ return n.type==='group'; });
+  groupNodes.forEach(function(n,i){
+    const ang = (-90 + i*(360/groupNodes.length)) * Math.PI/180;
+    n.x = CX + Math.cos(ang)*160; n.y = CY + Math.sin(ang)*160; n.seedAng = ang;
+  });
+  const byGroup = {}; groupNodes.forEach(function(n){ byGroup[n.group] = n; });
+  const cnt = {};
+  nodes.filter(function(n){ return n.type==='card'; }).forEach(function(n){
+    const p = byGroup[n.group] || { x:CX, y:CY, seedAng:Math.random()*6.28 };
+    const k = (cnt[n.group]||0); cnt[n.group] = k+1;
+    const a = (p.seedAng||0) + (k-1)*0.55;
+    n.x = (p.x||CX) + Math.cos(a)*105 + (Math.random()*8-4);
+    n.y = (p.y||CY) + Math.sin(a)*105 + (Math.random()*8-4);
+  });
+  nodes.forEach(function(n){ n.vx=0; n.vy=0; if (n.x==null){ n.x=CX+(Math.random()*40-20); n.y=CY+(Math.random()*40-20); } });
+
+  // ---- markup ----
+  let linksHtml = '';
+  E.forEach(function(e,i){ linksHtml += '<line id="ge'+i+'" class="'+(e.type==='c'?'glink-cross':'glink')+'"></line>'; });
+  let labelsHtml = '';
+  E.forEach(function(e,i){ if (e.label) labelsHtml += '<text id="gl'+i+'" class="glabel" text-anchor="middle">'+e.label+'</text>'; });
+  let nodesHtml = '';
+  nodes.forEach(function(n,i){
+    let inner;
+    if (n.type==='root'){
+      inner = '<circle class="body" r="34" fill="url(#kgRoot)" filter="url(#kgShadow)"></circle>'+
+        '<text class="lbl" text-anchor="middle" dy=".1em" style="font-weight:800;font-size:19px;fill:#06121f">'+n.label+'</text>';
+    } else {
+      const isG = n.type==='group';
+      const fill = isG ? n.color : '#0b1220';
+      const txtFill = isG ? '#06121f' : n.color;
+      const label = isG ? n.label.toUpperCase() : n.label;
+      const halo = n.mastered ? '<rect class="halo" fill="none" stroke="'+n.color+'" stroke-opacity="0.45" stroke-width="2"></rect>' : '';
+      const strokeAttr = isG ? '' : ' stroke="'+n.color+'" stroke-width="2"';
+      inner = halo +
+        '<rect class="body" fill="'+fill+'"'+strokeAttr+' filter="url(#kgShadow)"></rect>'+
+        '<text class="lbl" text-anchor="middle" dy=".32em" style="font-weight:800;font-size:11.5px;fill:'+txtFill+';letter-spacing:.04em">'+label+'</text>';
+    }
+    nodesHtml += '<g class="gnode" data-i="'+i+'">'+inner+'</g>';
+  });
+
+  gv.innerHTML =
+    '<p class="text-slate-400 text-xs mb-3" style="line-height:1.6">A living map of the system. '+
+      'Solid lines are the hierarchy; <span style="color:#5eead4">dashed teal links</span> name the ideas that connect cards across groups. '+
+      '<span style="color:#64748b">Drag nodes · scroll or use +/− to zoom · drag the background to pan · ⛶ expands to full screen.</span></p>'+
+    '<div class="kg-wrap">'+
+      '<svg id="kg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+
+        '<defs>'+
+          '<linearGradient id="kgRoot" x1="0" y1="0" x2="1" y2="1">'+
+            '<stop offset="0" stop-color="'+ACCENT+'"/><stop offset="1" stop-color="'+ACCENT_SOFT+'"/></linearGradient>'+
+          '<filter id="kgShadow" x="-40%" y="-40%" width="180%" height="180%">'+
+            '<feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/></filter>'+
+        '</defs>'+
+        '<g id="kgCamera">'+
+          '<g id="kgLinks">'+linksHtml+'</g>'+
+          '<g id="kgLabels">'+labelsHtml+'</g>'+
+          '<g id="kgNodes">'+nodesHtml+'</g>'+
+        '</g>'+
+      '</svg>'+
+      '<div class="kg-ctrl">'+
+        '<button data-z="in" title="Zoom in">+</button>'+
+        '<button data-z="out" title="Zoom out">−</button>'+
+        '<button data-z="reset" title="Reset view">↻</button>'+
+        '<button data-z="expand" title="Expand / full screen">⛶</button>'+
+      '</div>'+
+      '<div id="kgTip" class="kg-tip" style="display:none"></div>'+
+    '</div>'+
+    '<div class="kg-legend">'+
+      Object.keys(GROUPS).map(function(gk){
+        return '<span><i style="width:10px;height:10px;border-radius:999px;background:'+GROUPS[gk].color+';display:inline-block"></i>'+GROUPS[gk].label+'</span>';
+      }).join('')+
+      '<span><i style="width:14px;height:0;border-top:2px dashed #5eead4;display:inline-block"></i>concept link</span>'+
+      '<span><i style="width:10px;height:10px;border-radius:999px;border:2px solid '+ACCENT+';display:inline-block"></i>mastered</span>'+
+    '</div>';
+
+  // ---- references ----
+  const svg = document.getElementById('kg');
+  const camera = document.getElementById('kgCamera');
+  const tip = document.getElementById('kgTip');
+  const nodeEls = Array.prototype.slice.call(svg.querySelectorAll('.gnode'));
+  const lineEls = E.map(function(e,i){ return document.getElementById('ge'+i); });
+  const labelEls = E.map(function(e,i){ return e.label ? document.getElementById('gl'+i) : null; });
+
+  // ---- size each pill to fit its measured text ----
+  nodeEls.forEach(function(g,i){
+    const n = nodes[i];
+    if (n.type==='root'){ n.hw=34; n.hh=34; n.r=34; return; }
+    const t = g.querySelector('.lbl');
+    let tw = 0; try { tw = t.getComputedTextLength(); } catch(e){ tw = n.label.length*7.5; }
+    if (!tw) tw = n.label.length*7.5;
+    const h = 30, w = Math.max(h, tw + 28);
+    const body = g.querySelector('.body');
+    body.setAttribute('x', -w/2); body.setAttribute('y', -h/2);
+    body.setAttribute('width', w); body.setAttribute('height', h); body.setAttribute('rx', h/2);
+    const halo = g.querySelector('.halo');
+    if (halo){ halo.setAttribute('x', -w/2-4); halo.setAttribute('y', -h/2-4);
+      halo.setAttribute('width', w+8); halo.setAttribute('height', h+8); halo.setAttribute('rx', (h+8)/2); }
+    n.hw = w/2; n.hh = h/2; n.r = Math.max(n.hw, n.hh);
+  });
+
+  // ---- simulation ----
+  const REP = 42000, SPRING = 0.05, CENTER = 0.013, DAMP = 0.86, MAXV = 12;
+  function step(){
+    for (let i=0;i<nodes.length;i++){
+      for (let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        let dx=a.x-b.x, dy=a.y-b.y, d2=dx*dx+dy*dy; if (d2<1) d2=1;
+        const d=Math.sqrt(d2), f=REP/d2, fx=dx/d*f, fy=dy/d*f;
+        a.vx+=fx; a.vy+=fy; b.vx-=fx; b.vy-=fy;
+      }
+    }
+    E.forEach(function(e){
+      const a=nodes[idx[e.a]], b=nodes[idx[e.b]];
+      let dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||0.01;
+      const f=SPRING*(d-e.len), fx=dx/d*f, fy=dy/d*f;
+      a.vx+=fx; a.vy+=fy; b.vx-=fx; b.vy-=fy;
+    });
+    nodes.forEach(function(n){
+      if (n.fx!=null){ n.x=n.fx; n.y=n.fy; n.vx=0; n.vy=0; return; }
+      n.vx += (CX-n.x)*CENTER; n.vy += (CY-n.y)*CENTER;
+      n.vx *= DAMP; n.vy *= DAMP;
+      const sp=Math.sqrt(n.vx*n.vx+n.vy*n.vy); if (sp>MAXV){ n.vx*=MAXV/sp; n.vy*=MAXV/sp; }
+      n.x += n.vx; n.y += n.vy;
+      n.x = Math.max(n.hw+6, Math.min(W-n.hw-6, n.x));
+      n.y = Math.max(n.hh+6, Math.min(H-n.hh-6, n.y));
+    });
+  }
+  function draw(){
+    E.forEach(function(e,i){
+      const a=nodes[idx[e.a]], b=nodes[idx[e.b]], ln=lineEls[i];
+      ln.setAttribute('x1',a.x); ln.setAttribute('y1',a.y); ln.setAttribute('x2',b.x); ln.setAttribute('y2',b.y);
+      if (labelEls[i]){ labelEls[i].setAttribute('x',(a.x+b.x)/2); labelEls[i].setAttribute('y',(a.y+b.y)/2 - 2); }
+    });
+    nodeEls.forEach(function(g,i){ g.setAttribute('transform','translate('+nodes[i].x+','+nodes[i].y+')'); });
+  }
+
+  for (let s=0;s<280;s++) step();   // warm up so it opens settled
+  draw();
+
+  const myToken = ++graphToken;
+  (function frame(){
+    if (myToken!==graphToken) return;
+    if (document.getElementById('graphView').classList.contains('hidden')) return;
+    step(); draw();
+    requestAnimationFrame(frame);
+  })();
+
+  // ---- camera (zoom + pan) ----
+  const cam = { k:1, x:0, y:0 };
+  function applyCam(){ camera.setAttribute('transform','translate('+cam.x+','+cam.y+') scale('+cam.k+')'); }
+  function clampK(k){ return Math.max(0.5, Math.min(3.5, k)); }
+  function toView(clientX, clientY){
+    const pt = svg.createSVGPoint(); pt.x=clientX; pt.y=clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());   // viewBox units, pre-camera
+  }
+  function toWorld(clientX, clientY){
+    const v = toView(clientX, clientY);
+    return { x:(v.x-cam.x)/cam.k, y:(v.y-cam.y)/cam.k };        // node space
+  }
+  function zoomAt(clientX, clientY, factor){
+    const v = toView(clientX, clientY);
+    const wx = (v.x-cam.x)/cam.k, wy = (v.y-cam.y)/cam.k;
+    cam.k = clampK(cam.k*factor);
+    cam.x = v.x - wx*cam.k; cam.y = v.y - wy*cam.k;
+    applyCam();
+  }
+  svg.addEventListener('wheel', function(ev){ ev.preventDefault(); zoomAt(ev.clientX, ev.clientY, ev.deltaY<0?1.12:1/1.12); }, { passive:false });
+
+  // ---- interaction: node drag / tooltip / click + background pan ----
+  let drag = null, moved = false, pan = null;
+  function showTip(n, ev){
+    tip.innerHTML = '<h6 style="color:'+n.color+'">'+n.name+'</h6><p>'+n.gist+'</p>';
+    tip.style.display='block'; tip.style.left=ev.clientX+'px'; tip.style.top=ev.clientY+'px';
+  }
+  nodeEls.forEach(function(g,i){
+    const n = nodes[i];
+    g.addEventListener('pointerdown', function(ev){
+      ev.preventDefault(); ev.stopPropagation(); drag=n; moved=false; svg.style.cursor='grabbing'; tip.style.display='none';
+      try { g.setPointerCapture(ev.pointerId); } catch(e){}
+    });
+    g.addEventListener('pointerenter', function(ev){ if (!drag && !pan) showTip(n, ev); });
+    g.addEventListener('pointermove', function(ev){
+      if (drag===n){
+        moved = true;
+        const p = toWorld(ev.clientX, ev.clientY);
+        n.fx = Math.max(n.hw+6, Math.min(W-n.hw-6, p.x));
+        n.fy = Math.max(n.hh+6, Math.min(H-n.hh-6, p.y));
+      } else if (!drag){ tip.style.left=ev.clientX+'px'; tip.style.top=ev.clientY+'px'; }
+    });
+    g.addEventListener('pointerleave', function(){ if (!drag) tip.style.display='none'; });
+    g.addEventListener('pointerup', function(ev){
+      try { g.releasePointerCapture(ev.pointerId); } catch(e){}
+      svg.style.cursor='grab';
+      const wasClick = (drag===n && !moved);
+      if (drag===n && n.type!=='root'){ n.fx=null; n.fy=null; }
+      drag=null;
+      if (wasClick){
+        if (n.type==='root'){ filter='all'; renderGroupFilter(); renderGraph(); }
+        else { filter=n.group; renderGroupFilter(); switchView('study'); }
+      }
+    });
+  });
+
+  // background drag = pan
+  svg.addEventListener('pointerdown', function(ev){
+    if (ev.target.closest('.gnode')) return;       // nodes handle themselves
+    pan = { x:ev.clientX, y:ev.clientY, cx:cam.x, cy:cam.y }; svg.style.cursor='grabbing'; tip.style.display='none';
+    try { svg.setPointerCapture(ev.pointerId); } catch(e){}
+  });
+  svg.addEventListener('pointermove', function(ev){
+    if (!pan) return;
+    const ctm = svg.getScreenCTM(); if (!ctm) return;
+    cam.x = pan.cx + (ev.clientX-pan.x)/ctm.a;
+    cam.y = pan.cy + (ev.clientY-pan.y)/ctm.d;
+    applyCam();
+  });
+  svg.addEventListener('pointerup', function(ev){
+    if (pan){ pan=null; svg.style.cursor='grab'; try { svg.releasePointerCapture(ev.pointerId); } catch(e){} }
+  });
+
+  // ---- control buttons ----
+  function toggleExpand(){
+    const wrap = gv.querySelector('.kg-wrap');
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fsEl){ (wrap.requestFullscreen || wrap.webkitRequestFullscreen || function(){}).call(wrap); }
+    else { (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document); }
+  }
+  gv.querySelectorAll('.kg-ctrl button').forEach(function(b){
+    b.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      const r = svg.getBoundingClientRect(), midX = r.left+r.width/2, midY = r.top+r.height/2;
+      const z = b.dataset.z;
+      if (z==='in') zoomAt(midX, midY, 1.25);
+      else if (z==='out') zoomAt(midX, midY, 1/1.25);
+      else if (z==='reset'){ cam.k=1; cam.x=0; cam.y=0; applyCam(); }
+      else if (z==='expand') toggleExpand();
+    });
+  });
+}
+
+// ---------- reset ----------
+document.getElementById('resetBtn').onclick = function(){
+  if (!confirm('Reset all card progress (levels, streak, schedule)?')) return;
+  localStorage.removeItem(KEY);
+  state = load();
+  renderProgress();
+  rerenderCurrent();
+};
+
+// ---------- keyboard ----------
+document.addEventListener('keydown', function(e){
+  if (document.getElementById('loginView').style.display !== 'none') return;
+  if (view!=='study') return;
+  if (e.key === ' '){ if(document.getElementById('showBtn')){ e.preventDefault(); reveal(); } return; }
+  if (revealed){
+    const map = { '1':'again','2':'hard','3':'good','4':'easy' };
+    if (map[e.key]) rate(map[e.key]);
+  }
+});
+
+// ---------- init ----------
+renderGroupFilter();
+renderViewToggle();
+renderProgress();
+startStudy(false);
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>

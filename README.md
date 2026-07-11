@@ -96,6 +96,7 @@ No build step, no package manager.
 | Habit Cards | `/apps/habit-cards/` | Spaced-repetition flashcard trainer for theMITmonk's nine micro-habits (attention, energy, happiness) with level tracking and a study streak; companion to the article The Smallest Lever |
 | The 3C Protocol | `/apps/learn-fast/` | Spaced-repetition flashcard trainer for Sandeep Swadia's 3C Protocol (Compress, Compile, Consolidate) with a taxonomy map and knowledge graph; based on theMITmonk's video How To Learn So Fast It's Almost Unfair |
 | Systems Thinking | `/apps/systems-thinking/` | Spaced-repetition flashcard trainer for Sandeep Swadia's framework for systems thinking (Clear, Complicated, Complex, Chaotic, and the DART framework) with a taxonomy map and knowledge graph; based on theMITmonk's video How To Think SO CLEARLY People Assume You're A Genius |
+| High-Performance Skills | `/apps/high-performance-skills/` | Spaced-repetition flashcard trainer for Sandeep Swadia's seven high-performance skills across three relationships (with yourself, with others, with reality) with a taxonomy map and knowledge graph; based on his video 7 Skills That Will Be Worth Twice As Much By 2030 |
 
 
 ## Updating Content
