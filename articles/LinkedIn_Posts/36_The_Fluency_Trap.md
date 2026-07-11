@@ -12,4 +12,4 @@ Explanation is input. Retrieval is learning. AI made the first one free. The sec
 
 #Learning #AI #Engineering #ContinuousLearning #TechLeadership #iwork4dell
 
-Extended Reading: https://alhaol.github.io/articles/Articles/learning-velocity-edge.html
+Extended Reading: https://alhaol.github.io/articles/Articles/the-fluency-trap.html

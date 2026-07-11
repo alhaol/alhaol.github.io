@@ -40,7 +40,7 @@ No build step, no package manager.
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
-│       └── # 36 article pages, the-paradigm-shift.html … learning-velocity-edge.html
+│       └── # 36 article pages, the-paradigm-shift.html … the-fluency-trap.html
 └── apps/
     ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker
