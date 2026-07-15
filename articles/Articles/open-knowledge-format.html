@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge as Plain Files | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        /* Concept diagrams (see skill references/diagrams.md) */
+        .diagram { margin: 2rem 0; padding: 1.5rem 1.25rem 1rem; background-color: rgba(10, 16, 30, 0.55); border: 1px solid var(--border-color); border-radius: 0.5rem; }
+        .diagram figcaption { margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; font-style: italic; }
+        .diagram svg { width: 100%; height: auto; display: block; }
+        .diagram .flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 0.5rem; }
+        .diagram .flow-step { flex: 1 1 130px; max-width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-top: 3px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .flow-step .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .flow-step .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        .diagram .flow-arrow { align-self: center; color: var(--primary-color); font-weight: 700; font-size: 1.1rem; }
+        .diagram .levels { display: flex; flex-direction: column; gap: 0.5rem; max-width: 560px; margin: 0 auto; }
+        .diagram .level { border: 1px solid var(--border-color); border-left: 4px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem 1rem; background-color: var(--card-bg); }
+        .diagram .level .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .level .d { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.5; }
+        .diagram .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .diagram .panel { border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem; background-color: var(--card-bg); }
+        .diagram .panel .panel-title { font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .diagram .panel ul { list-style: disc; padding-left: 1.1rem; margin: 0; }
+        .diagram .panel li { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.45; }
+        .diagram .keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+        .diagram .key-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .key-card .k { display: block; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.08em; color: var(--primary-color); }
+        .diagram .key-card .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } .diagram .flow-arrow { transform: rotate(90deg); flex-basis: 100%; text-align: center; } }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_38.png" alt="Knowledge as Plain Files" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI / ML</span>
+                        <span class="category-badge category-architecture">Architecture / Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Knowledge as Plain Files</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Google's Open Knowledge Format bets that markdown files, not proprietary catalogs, will become the memory of AI agents.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: July 15, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>The most consequential AI release from Google this summer has no model weights, no API, and no benchmark scores. It is a folder of markdown files.</p>
+
+                    <p>On June 12, 2026, Google Cloud introduced the <strong>Open Knowledge Format</strong> (OKF), an open specification for packaging the context that AI agents depend on: what your tables mean, how your metrics are defined, which systems talk to each other, and why. Every team building agents has hit the same wall. The agent is only as capable as the context it receives, and that context is scattered across metadata catalogs with proprietary APIs, wiki pages nobody updates, code comments, and the heads of a few senior engineers. When an agent needs to know what <code>orders.customer_id</code> joins to, none of those places is reachable.</p>
+
+                    <p>OKF's answer is almost provocatively boring. Version 0.1 of the spec defines a knowledge base as a directory of markdown files with a small block of YAML metadata (called frontmatter) at the top of each one. Google's own summary of the design is the best one:</p>
+
+                    <blockquote>The context your agents depend on should not be locked inside a proprietary catalog. It should be just markdown, just files, just YAML frontmatter: portable, readable by people, and parseable by machines, with no SDK and no runtime required.</blockquote>
+
+                    <h2>What Google actually shipped</h2>
+
+                    <p>An OKF bundle is a folder. Each concept worth knowing about (a table, a dataset, a metric, a runbook, an API) gets one file, and the file path is its identity. Concepts point at each other with ordinary markdown links, so a consistent bundle forms a navigable knowledge graph without any graph database. An optional <code>index.md</code> per folder gives an agent a summary before it drills into details, and an optional <code>log.md</code> records change history.</p>
+
+                    <p>The metadata layer is deliberately thin. Only one frontmatter field, <code>type</code>, is required. Five more are reserved but optional: <code>title</code>, <code>description</code>, <code>resource</code>, <code>tags</code>, and <code>timestamp</code>. A table description looks like this:</p>
+
+                    <pre><code>---
+type: BigQuery Table
+title: Orders
+description: One row per completed customer order.
+tags: [sales, revenue]
+timestamp: 2026-05-28T14:30:00Z
+---
+
+# Joins
+Joined with [customers](/tables/customers.md) on customer_id.</code></pre>
+
+                    <p>Three principles hold the spec together. It is minimally opinionated: the spec defines interoperability, not your content model. Producers and consumers are independent: the format is the contract, so a bundle written by a human, a pipeline, or an LLM can be read by any tool that understands markdown. And it is a format, not a platform: nothing in it requires a particular cloud, database, or model provider. Google shipped reference implementations alongside the spec, including an enrichment agent that walks a BigQuery dataset and drafts concept documents, a static HTML visualizer that renders any bundle as an interactive graph, and three sample bundles built from the GA4 e-commerce, Stack Overflow, and Bitcoin public datasets.</p>
+
+                    <h2>The wiki that finally maintains itself</h2>
+
+                    <p>The idea OKF formalizes has been circulating for a year under the name "LLM-wiki," and its logic traces back to an observation by Andrej Karpathy: language models do not get bored, do not forget to update a cross-reference, and can edit fifteen files in one pass. The bookkeeping that makes humans abandon every wiki they start is precisely the work LLMs do well. That inverts the economics of documentation. A knowledge base that decayed under human maintenance can now improve under machine maintenance, provided the knowledge lives somewhere an agent can both read and write.</p>
+
+                    <figure class="diagram">
+                        <div class="flow">
+                            <div class="flow-step"><span class="k">READ</span><span class="d">Agent loads the concept files relevant to its task</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">WORK</span><span class="d">Agent answers the question or runs the job</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">LEARN</span><span class="d">Along the way it discovers a gap or a stale fact</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">WRITE</span><span class="d">It edits the files and commits, so the next read is smarter</span></div>
+                        </div>
+                        <figcaption>The LLM-wiki loop that OKF standardizes: WRITE feeds the next READ, so the knowledge base compounds instead of decaying.</figcaption>
+                    </figure>
+
+                    <p>Plain files are what make the loop practical. A markdown bundle lives in git, so every machine edit gets a diff, a review, and a rollback path. It ships as a tarball. It renders on GitHub. Any editor opens it. None of that is true of knowledge locked behind a catalog API.</p>
+
+                    <h2>Files versus pipelines</h2>
+
+                    <p>The obvious question is how this differs from retrieval-augmented generation (RAG), the standard technique of fetching relevant text chunks into a model's context at query time. The difference is where the understanding lives. A RAG pipeline re-derives meaning on every query from raw fragments, and it forgets what it derived the moment the query ends. An OKF bundle stores conclusions that were already curated: this table joins to that one, this metric excludes refunds, this pipeline is deprecated. The agent reads settled knowledge instead of reconstructing it, and when it learns something new it writes the conclusion back.</p>
+
+                    <figure class="diagram">
+                        <div class="compare">
+                            <div class="panel" style="border-top:3px solid #f87171;">
+                                <p class="panel-title" style="color:#f87171;">RAG PIPELINE</p>
+                                <ul><li>Retrieves raw chunks at query time</li><li>Re-derives meaning on every question</li><li>Insights evaporate after each query</li><li>Quality depends on the retriever</li></ul>
+                            </div>
+                            <div class="panel" style="border-top:3px solid #34d399;">
+                                <p class="panel-title" style="color:#34d399;">OKF BUNDLE</p>
+                                <ul><li>Stores curated, cross-linked concepts</li><li>Agent reads settled conclusions directly</li><li>New insights are written back as files</li><li>Quality compounds in version control</li></ul>
+                            </div>
+                        </div>
+                        <figcaption>RAG reconstructs knowledge per query; an OKF bundle accumulates it as files the agent maintains.</figcaption>
+                    </figure>
+
+                    <p>The two are complements, not rivals. RAG still wins for large, fast-moving corpora nobody will curate. OKF targets the stable, high-value core: the few hundred concepts an organization keeps re-explaining to every new hire and now to every new agent.</p>
+
+                    <h2>A standard or a folder?</h2>
+
+                    <p>Skeptics have a fair critique: OKF standardizes the container, not the meaning. The spec has no type registry, so one producer writes <code>type: BigQuery Table</code> while another writes <code>type: table</code>, and both bundles are compliant. Links assert that two concepts relate but never say how. Two conformant bundles can share zero common vocabulary, which means conformance guarantees structural interoperability (any tool can find and parse the files) but not semantic interoperability (any tool can understand them the same way). For a v0.1 draft that invites community extension, this is a reasonable starting point, but treat conformance claims accordingly.</p>
+
+                    <p>It is also worth being precise about what OKF does not replace. A semantic layer still defines your metrics with executable rigor. dbt still documents your transformations. Data catalogs still handle access control and lineage at scale, and several can now ingest OKF rather than compete with it. Repository conventions like <code>AGENTS.md</code> and website conventions like <code>llms.txt</code> tell agents how to behave in a codebase or on a site; OKF describes a body of knowledge. The new thing is the layer in between: a portable context package you can hand to any agent without building a custom integration.</p>
+
+                    <h2>How to try it this week</h2>
+
+                    <p>The barrier to entry is a text editor. A practical first pass looks like this: pick one domain your team explains constantly, perhaps ten or twenty tables and a handful of metrics. Write one markdown file per concept with a <code>type</code> and a <code>description</code>, link them where they join, and add an <code>index.md</code> that summarizes the domain in a paragraph. Put the folder in git. Then point your existing agent at it, either by mounting the folder into its workspace or by listing it in the agent's context configuration, and compare answer quality on real questions against your current setup. If the results hold, close the loop: permit the agent to propose edits to the bundle as pull requests, so human review guards every change while the bundle keeps improving.</p>
+
+                    <h2>Conclusion</h2>
+
+                    <p>Strip away the announcement and OKF is a bet about substrate. For decades the industry assumed organizational knowledge needed heavy machinery: databases, ontologies, catalog platforms. OKF argues the opposite, that once machines can maintain prose, the humblest format wins, because plain files are the only representation every tool, every model, and every human already shares. Whether this particular spec becomes the standard matters less than the pattern it names. Some format for portable, file-based agent context will win, for the same reason markdown itself won.</p>
+
+                    <p>The strategic implication is uncomfortable for anyone whose moat is a proprietary metadata store. If context becomes files, context becomes portable, and switching agent vendors becomes as easy as pointing a new agent at the same folder. That is exactly the leverage buyers should want.</p>
+
+                    <h3>What leaders should do</h3>
+
+                    <ol>
+                        <li>Inventory where your agent-critical context lives today. Anything reachable only through a proprietary API or a person's memory is a single point of failure; list the top ten concepts and who owns them.</li>
+                        <li>Run a two-week OKF pilot on one data domain. Have one engineer draft the bundle (or run Google's enrichment agent against a BigQuery dataset) and measure agent answer quality before and after.</li>
+                        <li>Set a write-back policy now. Decide whether agents may edit knowledge files directly or only via pull request, and who reviews. The maintenance loop is where the value compounds, and where the risk lives.</li>
+                        <li>Add format portability to your AI vendor checklist. Ask every catalog and agent vendor whether they can export and ingest OKF or an equivalent open format, and treat a refusal as a lock-in signal.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Extended Working Memory</h4>
+                        <p class="text-sm mb-3">Using the filesystem as durable memory that survives beyond a single context window.</p>
+                        <a href="extended-working-memory.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Harness Advantage</h4>
+                        <p class="text-sm mb-3">Why durable artifacts and cached knowledge beat re-deriving answers on every run.</p>
+                        <a href="the-harness-advantage.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Context Management Hygiene</h4>
+                        <p class="text-sm mb-3">Practical rules for deciding what belongs in an agent's context and what does not.</p>
+                        <a href="context-management-hygiene.html">Read →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Google Cloud (2026). "How the Open Knowledge Format Can Improve Data Sharing." Official announcement of OKF v0.1. <a href="https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing" target="_blank">cloud.google.com</a></li>
+                    <li class="reference-item">Google Cloud Platform (2026). "Open Knowledge Format specification and reference implementations." GitHub repository with the spec, the BigQuery enrichment agent, the graph visualizer, and sample bundles. <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf" target="_blank">github.com/GoogleCloudPlatform/knowledge-catalog</a></li>
+                    <li class="reference-item">MarkTechPost (2026). "Google Cloud Introduces Open Knowledge Format (OKF): A Vendor-Neutral Markdown Spec for Giving AI Agents Curated Context." <a href="https://www.marktechpost.com/2026/06/16/google-cloud-introduces-open-knowledge-format-okf-a-vendor-neutral-markdown-spec-for-giving-ai-agents-curated-context/" target="_blank">marktechpost.com</a></li>
+                    <li class="reference-item">Bara, M. (2026). "Google's New Format for Agent Context: A Standard, or Just a Folder?" A critical analysis of OKF's structural versus semantic interoperability. <a href="https://medium.com/@marc.bara.iniesta/googles-new-format-for-agent-context-a-standard-or-just-a-folder-82fb21d92041" target="_blank">medium.com</a></li>
+                    <li class="reference-item">Howard, J. (2024). "The /llms.txt file." An earlier file-based convention for giving language models curated website context. <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
