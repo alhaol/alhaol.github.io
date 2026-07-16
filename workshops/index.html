@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshops | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --primary-color: #00ff41;
+            --secondary-color: #00cc33;
+            --card-bg: #111111;
+            --border-color: #333333;
+            --header-bg-start: #000000;
+            --header-bg-end: #0a0a0a;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        .theme-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.08);
+        }
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-link { color: white; text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+
+        .deck-card { display: flex; flex-direction: column; height: 100%; border-radius: 0.75rem; overflow: hidden; }
+        .deck-cover {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #0a0a0a 0%, #050505 100%);
+            display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .deck-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .deck-cover-fallback {
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+            background-image:
+                linear-gradient(rgba(0, 255, 65, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.04) 1px, transparent 1px);
+            background-size: 20px 20px;
+            width: 100%; height: 100%;
+        }
+        .level-chip {
+            position: absolute; top: 0.6rem; left: 0.6rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            background: rgba(0,0,0,0.7); border: 1px solid var(--primary-color);
+            color: var(--primary-color); border-radius: 999px; padding: 0.2rem 0.6rem;
+        }
+        .deck-card-body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+        .deck-meta {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .tag-pill {
+            display: inline-block; padding: 0.25rem 0.55rem; border-radius: 999px;
+            background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.3);
+            color: var(--primary-color); font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 0.05em; margin: 0 0.35rem 0.35rem 0;
+        }
+        .deck-link {
+            color: var(--primary-color); font-weight: 600;
+            display: inline-flex; align-items: center; gap: 0.5rem; transition: gap 0.2s;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+        }
+        .deck-link:hover { gap: 0.75rem; }
+        .pdf-link { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-left: 0.75rem; }
+        .pdf-link:hover { color: var(--primary-color); }
+        .filter-btn {
+            padding: 0.4rem 0.85rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500;
+            border: 1px solid var(--border-color); background-color: transparent; color: var(--text-muted);
+            cursor: pointer; transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
+        }
+        .filter-btn:hover { color: var(--text-main); border-color: var(--primary-color); }
+        .filter-btn.active { background-color: var(--primary-color); color: #000; border-color: var(--primary-color); }
+        #search-input { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        #search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.15); }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body>
+    <header class="py-6">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="nav-link text-sm">← Back to Portfolio</a>
+            <div class="flex gap-6">
+                <a href="../presentations/" class="nav-link text-sm">Presentations →</a>
+                <a href="../articles/" class="nav-link text-sm">Articles →</a>
+                <a href="../links/" class="nav-link text-sm">Apps →</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12 md:py-16">
+        <div class="mb-10">
+            <p class="mono text-xs uppercase tracking-[0.2em]" style="color: var(--primary-color);">// workshops</p>
+            <h1 class="text-4xl md:text-5xl font-bold mt-2 mb-4">Hands-On Workshops</h1>
+            <p class="text-lg max-w-3xl" style="color: var(--text-muted);">
+                Browser-native, code-first workshop decks: build something real, module by module.
+                Each runs in your browser — arrow keys to navigate,
+                <span class="mono" style="color: var(--primary-color);">F</span> for fullscreen,
+                <span class="mono" style="color: var(--primary-color);">O</span> for the module overview,
+                <span class="mono" style="color: var(--primary-color);">P</span> to save as PDF.
+            </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div class="relative flex-1 max-w-md">
+                <input id="search-input" type="text" placeholder="Filter workshops..." class="w-full pl-4 pr-4 py-2.5 rounded-lg text-sm" />
+            </div>
+            <div id="filters" class="flex flex-wrap gap-2">
+                <button class="filter-btn active" data-filter="all">All</button>
+            </div>
+        </div>
+
+        <div id="decks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+        <div id="empty-state" class="hidden text-center py-16 border border-dashed rounded-xl mt-6" style="border-color: var(--border-color);">
+            <p style="color: var(--text-muted);">No workshops match your filter.</p>
+        </div>
+
+        <section class="mt-20 pt-10" style="border-top: 1px solid var(--border-color);">
+            <p class="mono text-xs uppercase tracking-[0.2em]" style="color: var(--primary-color);">// for authors</p>
+            <h2 class="text-2xl font-bold mt-2 mb-3">Building a new workshop</h2>
+            <p class="text-base max-w-3xl mb-4" style="color: var(--text-muted);">
+                Use the <span class="mono" style="color: var(--primary-color);">create-workshop-presentation-html</span> skill.
+                It scaffolds <span class="mono" style="color: var(--primary-color);">workshops/&lt;slug&gt;/</span> from the bundled template,
+                harnesses image fetching and code embedding as local scripts, validates the deck, and appends an entry to
+                <span class="mono" style="color: var(--primary-color);">workshops.json</span>. Workshop decks reuse the shared
+                deck engine in <span class="mono" style="color: var(--primary-color);">presentations/assets/</span>.
+            </p>
+        </section>
+    </main>
+
+    <footer class="border-t mt-16 py-8" style="border-color: var(--border-color);">
+        <div class="max-w-7xl mx-auto px-6 text-center text-sm" style="color: var(--text-muted);">
+            <p class="mono">// alhaol.github.io · workshops</p>
+        </div>
+    </footer>
+
+    <script>
+        const grid = document.getElementById('decks-grid');
+        const emptyState = document.getElementById('empty-state');
+        const searchInput = document.getElementById('search-input');
+        const filtersContainer = document.getElementById('filters');
+
+        let DECKS = [];
+        let activeFilter = 'all';
+        let activeSearch = '';
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function buildFilters() {
+            const tagSet = new Set();
+            DECKS.forEach(d => (d.tags || []).forEach(t => tagSet.add(t)));
+            const tags = Array.from(tagSet).sort();
+            tags.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.filter = tag;
+                btn.textContent = tag;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeFilter = tag;
+                    render();
+                });
+                filtersContainer.appendChild(btn);
+            });
+            document.querySelector('.filter-btn[data-filter="all"]').addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+                activeFilter = 'all';
+                render();
+            });
+        }
+
+        function render() {
+            const items = DECKS.filter(d => {
+                const matchesFilter = activeFilter === 'all' || (d.tags || []).includes(activeFilter);
+                const q = activeSearch.toLowerCase();
+                const hay = [d.title, d.abstract, d.venue, d.level, ...(d.tags || [])].join(' ').toLowerCase();
+                const matchesSearch = !q || hay.includes(q);
+                return matchesFilter && matchesSearch;
+            });
+
+            grid.innerHTML = '';
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            items.forEach(d => {
+                const card = document.createElement('div');
+                card.className = 'theme-card deck-card';
+
+                const tagsHtml = (d.tags || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('');
+                const levelChip = d.level ? `<span class="level-chip">${escapeHtml(d.level)}</span>` : '';
+                const cover = d.cover
+                    ? `<img src="${escapeHtml(d.cover)}" alt="${escapeHtml(d.title)} cover">${levelChip}`
+                    : `<div class="deck-cover-fallback">// ${escapeHtml(d.slug)}</div>${levelChip}`;
+                const modulesStr = d.modules ? `${d.modules} modules` : '';
+                const meta = [d.date, d.duration, modulesStr].filter(Boolean).map(escapeHtml).join(' · ');
+                const pdf = d.pdf
+                    ? `<a class="pdf-link" href="${escapeHtml(d.pdf)}" target="_blank" rel="noopener" title="Download PDF">[ pdf ↓ ]</a>`
+                    : '';
+
+                card.innerHTML = `
+                    <a href="${escapeHtml(d.slug)}/" class="deck-cover" aria-label="Open ${escapeHtml(d.title)}">
+                        ${cover}
+                    </a>
+                    <div class="deck-card-body">
+                        <div class="deck-meta">${meta}</div>
+                        <h3 class="text-xl font-bold mb-2">${escapeHtml(d.title)}</h3>
+                        <p class="text-sm mb-4 flex-grow" style="color: var(--text-muted); line-height: 1.6;">${escapeHtml(d.abstract || '')}</p>
+                        <div class="mb-4">${tagsHtml}</div>
+                        <div class="flex items-center justify-between" style="border-top: 1px solid var(--border-color); padding-top: 0.85rem;">
+                            <a href="${escapeHtml(d.slug)}/" class="deck-link">Open workshop →</a>
+                            ${pdf}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', e => {
+            activeSearch = e.target.value;
+            render();
+        });
+
+        async function loadDecks() {
+            try {
+                const res = await fetch('./workshops.json');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                DECKS = await res.json();
+                buildFilters();
+                render();
+            } catch (err) {
+                console.error('Failed to load workshops.json:', err);
+                emptyState.classList.remove('hidden');
+                emptyState.querySelector('p').textContent = 'Failed to load workshops. Check workshops.json.';
+            }
+        }
+
+        loadDecks();
+    </script>
+</body>
+</html>

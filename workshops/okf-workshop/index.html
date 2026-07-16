@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build an Open Knowledge Format Bundle — Workshop — Ibrahim AbuAlhaol</title>
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../presentations/assets/css/deck.css">
+    <link rel="stylesheet" href="../assets/workshop.css">
+</head>
+<body data-deck-slug="okf-workshop" data-back-href="../index.html">
+
+<!-- LOGIN OVERLAY (site-wide, non-optional) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private Workshop</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="deck-stage">
+    <div class="deck-canvas">
+
+        <!-- 1 · COVER -->
+        <section class="slide slide-cover">
+            <div class="cover-meta">// Hands-On Workshop</div>
+            <h1>Build an Open Knowledge<br>Format Bundle</h1>
+            <p class="cover-subtitle rise">Give an AI agent curated context with nothing but markdown, files, and YAML.</p>
+            <div class="cover-author">
+                <img src="../../assets/ibrahim-image-circle.png" alt="Ibrahim AbuAlhaol">
+                <div class="author-block">
+                    <div class="author-name">Ibrahim AbuAlhaol</div>
+                    <div class="author-title">AI Technical Lead · PhD, PEng, SMIEEE</div>
+                </div>
+            </div>
+            <div class="cover-footer">
+                <span>// Workshop · 90 min · 4 modules</span>
+                <span>// 2026-07-15</span>
+            </div>
+            <aside class="speaker-notes">
+                Welcome. By the end everyone will have a working OKF bundle and a 20-line parser that reads it. Only prerequisite: Python 3 and a text editor.
+            </aside>
+        </section>
+
+        <!-- 2 · OBJECTIVES -->
+        <section class="slide slide-content">
+            <span class="eyebrow">// by the end you will</span>
+            <h2>What you will build</h2>
+            <span class="accent-rule" aria-hidden="true"></span>
+            <ul class="objectives">
+                <li data-fragment>A valid OKF bundle: one markdown file per concept, YAML frontmatter on top</li>
+                <li data-fragment>A 20-line parser that reads the bundle with only the standard library</li>
+                <li data-fragment>A knowledge graph that emerges from plain markdown links</li>
+                <li data-fragment>A write-back habit that lets an agent keep the bundle current</li>
+            </ul>
+            <aside class="speaker-notes">These four promises map to the four modules. Everything serves one of them.</aside>
+        </section>
+
+        <!-- 3 · HOOK -->
+        <section class="slide slide-hook">
+            <div class="hook-eyebrow">// the premise</div>
+            <p class="hook-statement rise">The most portable format for agent context is the one <em>every tool already reads</em>.</p>
+            <p class="hook-byline" data-fragment>No SDK. No runtime. Just markdown, files, and YAML frontmatter.</p>
+            <aside class="speaker-notes">This is the OKF bet Google shipped in June 2026. We are going to build one from scratch.</aside>
+        </section>
+
+        <!-- ===================== MODULE 01 ===================== -->
+        <section class="slide slide-section">
+            <span class="module-badge">module <span class="cur">01</span> / 04</span>
+            <div class="section-num">// 01</div>
+            <h2>One concept, one file</h2>
+        </section>
+
+        <section class="slide slide-content">
+            <span class="eyebrow">// the format</span>
+            <h2>The whole spec fits on a slide</h2>
+            <span class="accent-rule" aria-hidden="true"></span>
+            <p style="font-size:1.5rem;line-height:1.7;margin-top:1rem;">Each concept you want an agent to understand (a table, a dataset, a metric, a runbook) becomes one markdown file. The file path is its identity. Only one frontmatter field, <code>type</code>, is required.</p>
+            <div class="callout tip" data-fragment>
+                <span class="callout-title">// tip</span>
+                Reserved optional fields are <code>title</code>, <code>description</code>, <code>resource</code>, <code>tags</code>, and <code>timestamp</code>. Everything else is yours.
+            </div>
+            <aside class="speaker-notes">Minimally opinionated by design: the spec defines interoperability, not your content model.</aside>
+        </section>
+
+        <section class="slide slide-code">
+            <div class="slide-body">
+                <h2>One concept, one file</h2>
+                <div class="code-filename">tables/orders.md <span class="code-range">L1-8</span></div>
+<pre class="rise-left"><code class="language-markdown">---
+type: BigQuery Table
+title: Orders
+description: One row per completed customer order.
+tags: [sales, revenue]
+timestamp: 2026-05-28T14:30:00Z
+---</code></pre>
+                <aside class="speaker-notes">This block was pasted from embed_code.py, so the frontmatter is escaped and safe.</aside>
+            </div>
+        </section>
+
+        <section class="slide slide-exercise">
+            <div class="exercise-eyebrow">// your turn</div>
+            <h2>Write your first concept file</h2>
+            <ol class="exercise-steps">
+                <li data-fragment>Create <code>okf_sample/tables/customers.md</code></li>
+                <li data-fragment>Give it a <code>type</code> and a one-line <code>description</code> in the frontmatter</li>
+                <li data-fragment>Add a <code>customer_id</code> row to a small schema table in the body</li>
+            </ol>
+            <span class="exercise-est">⏱ ~10 min</span>
+            <aside class="speaker-notes">Walk the room. Most people forget the closing --- on the frontmatter; watch for it.</aside>
+        </section>
+
+        <!-- ===================== MODULE 02 ===================== -->
+        <section class="slide slide-section">
+            <span class="module-badge">module <span class="cur">02</span> / 04</span>
+            <div class="section-num">// 02</div>
+            <h2>Parse a bundle</h2>
+        </section>
+
+        <section class="slide slide-content">
+            <span class="eyebrow">// the reader</span>
+            <h2>Reading OKF needs no library</h2>
+            <span class="accent-rule" aria-hidden="true"></span>
+            <p style="font-size:1.5rem;line-height:1.7;margin-top:1rem;">A consumer splits each file into its YAML frontmatter and its markdown body, then keeps the fields it cares about. Because it is just text, the whole reader is a few lines of standard library.</p>
+            <aside class="speaker-notes">Contrast with a catalog API you would have to authenticate against and learn.</aside>
+        </section>
+
+        <section class="slide slide-code">
+            <div class="slide-body">
+                <h2>Split frontmatter from body</h2>
+                <div class="code-filename">parser.py <span class="code-range">L12-24</span></div>
+<pre class="rise-left"><code class="language-python">text = path.read_text(encoding="utf-8")
+meta: dict[str, str] = {}
+body = text
+if text.startswith("---"):
+    _, fm, body = text.split("---", 2)
+    for line in fm.strip().splitlines():
+        if ":" in line:
+            key, val = line.split(":", 1)
+            meta[key.strip()] = val.strip()
+links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", body)  # [label](target.md)
+return {"path": str(path), "type": meta.get("type", "?"), "links": links}</code></pre>
+                <aside class="speaker-notes">The regex pulls every markdown link target out of the body; those become graph edges in module 3.</aside>
+            </div>
+        </section>
+
+        <section class="slide slide-exercise">
+            <div class="exercise-eyebrow">// your turn</div>
+            <h2>Run the parser</h2>
+            <ol class="exercise-steps">
+                <li data-fragment>Save <code>parser.py</code> next to your <code>okf_sample/</code> folder</li>
+                <li data-fragment>Run <code>python parser.py okf_sample</code></li>
+                <li data-fragment>Confirm each file prints its <code>type</code> and the links it points to</li>
+            </ol>
+            <span class="exercise-est">⏱ ~10 min</span>
+            <aside class="speaker-notes">If a file prints type "?", the frontmatter did not parse. Usually a missing colon or dash.</aside>
+        </section>
+
+        <!-- ===================== MODULE 03 ===================== -->
+        <section class="slide slide-section">
+            <span class="module-badge">module <span class="cur">03</span> / 04</span>
+            <div class="section-num">// 03</div>
+            <h2>Links become a graph</h2>
+        </section>
+
+        <section class="slide slide-diagram">
+            <div class="slide-body">
+                <h2>No graph database required</h2>
+<pre class="mermaid">graph LR
+    O["orders.md · type Table"] -->|customer_id| C["customers.md · type Table"]
+    O -->|belongs to| D["sales/index.md · type Dataset"]
+    C -->|belongs to| D
+    style O fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style C fill:#111,stroke:#00ff41,stroke-width:2px,color:#fff
+    style D fill:#111,stroke:#00cc33,stroke-width:2px,color:#fff</pre>
+                <aside class="speaker-notes">Every markdown link is an edge. A consistent bundle is already a knowledge graph.</aside>
+            </div>
+        </section>
+
+        <section class="slide slide-code">
+            <div class="slide-body">
+                <h2>Walk the bundle</h2>
+                <div class="code-filename">parser.py <span class="code-range">L27-33</span></div>
+<pre class="rise-left"><code class="language-python">    return [load_concept(p) for p in sorted(Path(root).rglob("*.md"))]
+
+
+if __name__ == "__main__":
+    import sys
+    for concept in load_bundle(sys.argv[1] if len(sys.argv) &gt; 1 else "okf_sample"):
+        print(f"{concept['type']:&lt;16} {concept['path']}  -&gt;  {concept['links']}")</code></pre>
+                <aside class="speaker-notes">rglob finds every concept; the path is its identity. The links list is your edge set.</aside>
+            </div>
+        </section>
+
+        <section class="slide slide-image">
+            <img class="slide-media rise-scale" src="images/cover.png" alt="A knowledge graph of linked markdown documents">
+            <div class="slide-caption">// the same bundle, seen as the graph its links describe</div>
+        </section>
+
+        <section class="slide slide-exercise">
+            <div class="exercise-eyebrow">// your turn</div>
+            <h2>Add an edge</h2>
+            <ol class="exercise-steps">
+                <li data-fragment>In <code>orders.md</code>, add a markdown link to your new <code>customers.md</code></li>
+                <li data-fragment>Re-run the parser and find the new target in the links column</li>
+                <li data-fragment>Print the full edge list: for each file, its links</li>
+            </ol>
+            <span class="exercise-est">⏱ ~15 min</span>
+            <aside class="speaker-notes">This is the payoff: they changed prose and the graph changed. No database migration.</aside>
+        </section>
+
+        <!-- ===================== MODULE 04 ===================== -->
+        <section class="slide slide-section">
+            <span class="module-badge">module <span class="cur">04</span> / 04</span>
+            <div class="section-num">// 04</div>
+            <h2>Make it self-maintaining</h2>
+        </section>
+
+        <section class="slide slide-content">
+            <span class="eyebrow">// the llm-wiki loop</span>
+            <h2>The bookkeeping humans hate, machines do well</h2>
+            <span class="accent-rule" aria-hidden="true"></span>
+            <p style="font-size:1.5rem;line-height:1.7;margin-top:1rem;">A wiki decays because nobody updates cross-references. An agent does not get bored doing exactly that. Let it read the bundle, and let it write changes back as files in version control.</p>
+            <div class="callout warn" data-fragment>
+                <span class="callout-title">// guardrail</span>
+                Let agents propose edits as pull requests, not silent commits. Human review guards every change while the bundle keeps improving.
+            </div>
+            <aside class="speaker-notes">This inverts the economics of documentation: it can now improve under machine maintenance.</aside>
+        </section>
+
+        <section class="slide slide-exercise">
+            <div class="exercise-eyebrow">// your turn</div>
+            <h2>Close the loop</h2>
+            <ol class="exercise-steps">
+                <li data-fragment>Add a <code>log.md</code> to the bundle recording today's change</li>
+                <li data-fragment>Write the one-line prompt you would give an agent to keep the bundle current</li>
+                <li data-fragment>Decide your write-back policy: direct edits, or pull requests only</li>
+            </ol>
+            <span class="exercise-est">⏱ ~10 min</span>
+            <aside class="speaker-notes">End on policy, because the maintenance loop is where the value and the risk both live.</aside>
+        </section>
+
+        <!-- WRAP -->
+        <section class="slide slide-hook">
+            <div class="hook-eyebrow">// takeaway</div>
+            <p class="hook-statement">If context becomes <em>files</em>, context becomes portable.</p>
+            <aside class="speaker-notes">One sentence. The bundle they just built is theirs, in git, readable by any tool.</aside>
+        </section>
+
+        <!-- END / Q&A -->
+        <section class="slide slide-end">
+            <h1>Q &amp; A</h1>
+            <div class="end-tagline">// thanks for building along</div>
+            <div class="end-contact">
+                <div>// <a href="mailto:iabualhaol@gmail.com">iabualhaol@gmail.com</a></div>
+                <div>// <a href="https://linkedin.com/in/abualhaol/" target="_blank" rel="noopener">linkedin.com/in/abualhaol</a></div>
+                <div>// <a href="https://alhaol.github.io" target="_blank" rel="noopener">alhaol.github.io</a></div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script src="../../presentations/assets/js/deck.js"></script>
+<script>
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>

@@ -61,6 +61,11 @@ No build step, no package manager.
     ├── todo/           # TaskMaster Pro — focus-mode task manager
     ├── warmup/         # Warmup & core workout playlist (25 videos)
     └── wizard-duel/    # Wizard Duel — 2-player turn-based battle game with monsters
+├── workshops/          # Hands-on, code-first workshop decks (reuse the presentations deck engine)
+│   ├── index.html      # Workshops hub (data-driven from workshops.json)
+│   ├── workshops.json  # Workshop registry
+│   ├── assets/         # workshop.css — workshop-only components (exercises, callouts, motion)
+│   └── <slug>/         # One folder per workshop: index.html + images/
 ```
 
 ## Pages & Apps
@@ -71,6 +76,7 @@ No build step, no package manager.
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 38-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme) |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
+| Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
