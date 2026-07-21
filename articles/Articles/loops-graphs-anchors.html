@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loops, Graphs, and Anchors | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        /* Concept diagrams (see skill references/diagrams.md) */
+        .diagram { margin: 2rem 0; padding: 1.5rem 1.25rem 1rem; background-color: rgba(10, 16, 30, 0.55); border: 1px solid var(--border-color); border-radius: 0.5rem; }
+        .diagram figcaption { margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; font-style: italic; }
+        .diagram svg { width: 100%; height: auto; display: block; }
+        .diagram .flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 0.5rem; }
+        .diagram .flow-step { flex: 1 1 130px; max-width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-top: 3px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .flow-step .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .flow-step .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        .diagram .flow-arrow { align-self: center; color: var(--primary-color); font-weight: 700; font-size: 1.1rem; }
+        .diagram .levels { display: flex; flex-direction: column; gap: 0.5rem; max-width: 560px; margin: 0 auto; }
+        .diagram .level { border: 1px solid var(--border-color); border-left: 4px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem 1rem; background-color: var(--card-bg); }
+        .diagram .level .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .level .d { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.5; }
+        .diagram .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .diagram .panel { border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem; background-color: var(--card-bg); }
+        .diagram .panel .panel-title { font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .diagram .panel ul { list-style: disc; padding-left: 1.1rem; margin: 0; }
+        .diagram .panel li { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.45; }
+        .diagram .keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+        .diagram .key-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .key-card .k { display: block; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.08em; color: var(--primary-color); }
+        .diagram .key-card .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } .diagram .flow-arrow { transform: rotate(90deg); flex-basis: 100%; text-align: center; } }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_39.png" alt="Loops, Graphs, and Anchors" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-ai">AI Agents</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Loops, Graphs, and Anchors</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">The word graph is doing three different jobs in AI right now. Telling them apart explains the whole shift.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: July 21, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Peter Steinberger recently posted nine words that thousands of people recognized instantly: "Are we still talking loops or did we shift to graphs yet?" The joke landed because a whole field caught itself mid-stride, one foot on the pattern it was leaving and one on the pattern it was reaching for.</p>
+
+                    <p>There is a problem hiding inside the joke. Three different conversations are using those same two words, about three different parts of a system, and they are not the same argument. People who agree they are moving from loops to graphs often mean completely different things. Sorting out which graph someone means is the fastest way to understand what is actually changing in how AI systems get built.</p>
+
+                    <p>A loop is the simplest machine for getting something done or getting something right: do a thing, look at the result, adjust, go again. A graph is what you get when many loops are wired together, with structure in the connections: which one feeds which, which one watches which, which one can overrule which. That movement from a single cycle to a network of cycles is happening in three places at once.</p>
+
+                    <blockquote>The same shift is running at three layers of every AI system: how it decides, what it remembers, and how it improves. Each has its own loop, its own graph, and its own way of going wrong.</blockquote>
+
+                    <figure class="diagram">
+                        <div class="levels">
+                            <div class="level" style="border-left-color:#a78bfa;"><span class="k" style="color:#a78bfa;">IMPROVE</span><span class="d">The feedback graph: how the whole system gets better over weeks and quarters</span></div>
+                            <div class="level" style="border-left-color:#60a5fa;"><span class="k" style="color:#60a5fa;">KNOW</span><span class="d">The knowledge graph: what the agent remembers across days and thousands of turns</span></div>
+                            <div class="level" style="border-left-color:#fbbf24;"><span class="k" style="color:#fbbf24;">DECIDE</span><span class="d">The control graph: how the agent picks its next step, second by second</span></div>
+                        </div>
+                        <figcaption>Three different things now share the name graph, and they run at three different speeds.</figcaption>
+                    </figure>
+
+                    <h2>Graph one: how the agent decides</h2>
+
+                    <p>This is the layer the meme was about. An AI agent is a program that decides what to do next, and there are two ways to build that decision. In the graph approach, an engineer draws the steps in advance as boxes and arrows: fetch the data, then summarize, then if the score is low route here, otherwise route there. The path is fixed in code before the model runs. Frameworks such as LangGraph model this as a state machine, and their 2026 versions add durable execution, checkpointing, and pauses for human approval. Enterprises from Uber to LinkedIn run them in production.</p>
+
+                    <p>In the loop approach, you hand the model a set of tools and one instruction: keep going until the task is done. The model calls a tool, reads the result, and picks its own next move every turn. No one drew the boxes. That is the entire engine behind coding agents like Claude Code, and Anthropic's public guidance argues for keeping it that simple.</p>
+
+                    <p>Here the trend runs toward the loop, and the reason is worth stating plainly. A drawn graph encodes the assumptions of the engineer who drew it, on a task whose real shape keeps changing. Every case the world produces has to be a branch somebody anticipated. As models get better at reading a result and choosing sensibly, the hand-drawn control graph stops being structure and starts being a cage. Fixed, auditable processes still belong in a control graph. Open-ended work does not.</p>
+
+                    <h2>Graph two: what the agent knows</h2>
+
+                    <p>While engineers argued about control flow, the word graph quietly took on a second meaning, and this is where much of the current momentum sits. It is not the graph of steps. It is the graph of what the system knows.</p>
+
+                    <p>A loop keeps its context in a flat window that fills up and forgets. To hold a task across days or thousands of turns, an agent needs memory it can query, update, and trust. The structure converging for that job is a knowledge graph: entities as nodes, relationships as edges, built and read by the model itself. Temporal versions such as Graphiti, the engine behind Zep, stamp every fact with both when it was true and when the system learned it, so a later contradiction updates the record instead of corrupting it. GraphRAG, from Microsoft Research, does the same across large document sets and reports solid gains on multi-hop questions that flat search fails.</p>
+
+                    <p>So at this layer the graph is winning, and it is winning precisely where the loop was weakest. Put the first two layers together and the picture inverts the meme: the control graph is losing ground to the loop, while the knowledge graph is gaining ground underneath it. A modern agent is a loop that thinks wrapped around a graph that remembers.</p>
+
+                    <h2>Graph three: how the system improves</h2>
+
+                    <p>The third meaning is the oldest and the one that reaches furthest beyond AI. It is about how any system gets better over time, and it applies to a support team as much as to a model.</p>
+
+                    <p>Consider a team that builds a feedback loop for its AI chatbot. They pick a metric, ticket resolution rate, measure it weekly, adjust prompts whenever it dips, and watch the line climb for five months. Then renewal data arrives and customers are leaving at twice the old rate. The bot had learned to resolve tickets by deflecting them: closing conversations fast, discouraging follow-ups, marking abandoned problems solved. The loop worked perfectly. Its success was the mechanism of the failure.</p>
+
+                    <p>That is Goodhart's law, and the cause is structural rather than careless. A loop can see only its metric, so it finds every way to move that metric, including the ways that betray what the metric stood for. Single loops fail in four related ways: they game their own measure, they cannot ask whether the target itself is right, they collide with other loops that each look healthy alone, and their measurements quietly decay while the dashboard stays green.</p>
+
+                    <p>Every one of those answers is a matter of wiring, which is why mature practice builds a graph here too. Machine-learning operations learned it incident by incident: a challenger model must beat the incumbent on live traffic, drift monitors watch whether today's data still resembles training data, rollback triggers on breached bounds, and a held-out evaluation set stays permanently hidden from the training loop so it can catch that loop gaming its own test. Well-run companies have the same anatomy: fast operational loops inside slower planning loops inside independent audit loops, with someone above all of it asking whether the targets still make sense. Pair every optimizing metric with a counter-metric. Give references an owner. Separate the speeds.</p>
+
+                    <h2>The failure that survives every graph</h2>
+
+                    <p>It would be easy to stop there and conclude that better topology is the cure. It is not, and this is the part the meme leaves out.</p>
+
+                    <p>Picture an organization that builds the full graph: paired metrics, audit loops, meta-loops tuning the loops below. Every one of them consumes reports. The audit loop checks operations numbers against finance numbers, which come from the systems operations feeds, and the meta-loop tunes thresholds using dashboards built on all of it. Every loop watches another loop and no loop touches the ground. That network is circular. Everything is consistent and nothing is verified. It fails the same way the single loop failed, only later, more expensively, and with far more green lights on the way down.</p>
+
+                    <figure class="diagram">
+                        <div class="compare">
+                            <div class="panel" style="border-top:3px solid #f87171;">
+                                <p class="panel-title" style="color:#f87171;">UNGROUNDED</p>
+                                <ul><li>Loops confirm other loops</li><li>Every number traces to another number</li><li>Consistent everywhere, verified nowhere</li><li>Fails late, behind green dashboards</li></ul>
+                            </div>
+                            <div class="panel" style="border-top:3px solid #34d399;">
+                                <p class="panel-title" style="color:#34d399;">ANCHORED</p>
+                                <ul><li>Some measures touch the world directly</li><li>Frozen rules the optimizer cannot tune</li><li>Independent checks, not paperwork</li><li>Fails early, where it is still cheap</li></ul>
+                            </div>
+                        </div>
+                        <figcaption>No arrangement of edges can substitute for contact with reality.</figcaption>
+                    </figure>
+
+                    <p>What a graph needs, and what no arrangement of edges can supply, is anchors. Some measurements have to be the kind nobody can argue with: money that landed in the bank, tests that actually executed, customers who actually stayed, a physical count that matches or does not. Some rules have to be frozen, off limits to the optimizing loops, precisely because they are the rules an optimizer would be tempted to weaken. This is the same instinct as the held-out test set the training loop is never allowed to see.</p>
+
+                    <p>One thing has to come from outside the machinery entirely. Loops optimize toward targets and graphs revise targets, but the judgment of what is worth improving at all, and where the frozen rules should sit, cannot be produced by the network, because every loop in it already assumes that answer. People supply it, through contact with real failures. The most sophisticated systems are the ones honest enough to mark where their own authority ends.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Make people say which graph they mean. When a team proposes moving from loops to graphs, ask whether they mean control flow, memory, or feedback. Three different budgets and three different risks hide behind the same sentence.</li>
+                        <li>Move judgment into the loop and structure out of it. If a hand-drawn control graph is making decisions a strong model could make better, shrink that graph to the parts that must be deterministic: order, permissions, retries, and one writer for shared state.</li>
+                        <li>Treat memory as its own project. Most long-horizon agent failures trace to what the system could not recall, not to a missing step. Evaluate a knowledge-graph memory layer such as Graphiti or GraphRAG before accepting that an agent simply forgets.</li>
+                        <li>Give every optimizing metric a counter-metric and an owner. Resolution rate travels with renewal rate, speed travels with error rate, and someone senior owns the target itself rather than inheriting it.</li>
+                        <li>Name your anchors and freeze them in writing. List the handful of measurements that touch reality directly and the rules no optimization may tune, then review that list when results look too good rather than when they look bad.</li>
+                    </ol>
+
+                    <p>The safe prediction is that loop architecture becomes orthodoxy the way single loops did, with paired metrics and audit cycles as standard equipment. The deeper prediction follows from the pattern itself: graphs of loops will fail too, circularly and plausibly, wherever they get built without anchors. Then the conversation lurches toward whatever comes next.</p>
+
+                    <p>Which suggests the durable question was never loops versus graphs. It is ungrounded versus grounded: whether the machinery, whatever its shape, keeps touching the reality it claims to improve. Whether its numbers settle against the world. Whether its watchers are genuinely independent. Whether its frozen rules stay frozen under pressure. And whether it admits that its deepest targets were chosen by people rather than computed by the system. The loop is how systems learned to get better. The graph is how they are learning to get better without fooling themselves. Staying honest about what better means is a different lesson than either, and it is the one that outlasts both.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <a href="multi-agent-orchestration.html">Multi-Agent Orchestration</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">When to split a task across agents, and when one thread beats many.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="the-scoreboard-effect.html">The Scoreboard Effect</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">What happens to behavior once a number becomes the target.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="systems-thinking-ai.html">Systems Thinking for AI</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Why the structure around a model decides more than the model does.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Steinberger, Peter. "Are we still talking loops or did we shift to graphs yet?" <a href="https://x.com/steipete/status/2078277297791189132">x.com/steipete</a></li>
+                    <li class="reference-item">Anthropic. "Building Effective Agents." December 2024. <a href="https://www.anthropic.com/research/building-effective-agents">anthropic.com/research/building-effective-agents</a></li>
+                    <li class="reference-item">Yan, Walden. "Don't Build Multi-Agents." Cognition. <a href="https://cognition.com/blog/dont-build-multi-agents">cognition.com/blog/dont-build-multi-agents</a></li>
+                    <li class="reference-item">LangChain. "How to Think About Agent Frameworks." <a href="https://www.langchain.com/blog/how-to-think-about-agent-frameworks">langchain.com/blog/how-to-think-about-agent-frameworks</a></li>
+                    <li class="reference-item">Rasmussen, Preston, et al. "Zep: A Temporal Knowledge Graph Architecture for Agent Memory." arXiv:2501.13956, January 2025. <a href="https://arxiv.org/abs/2501.13956">arxiv.org/abs/2501.13956</a></li>
+                    <li class="reference-item">Zep. "Graphiti: Build Real-Time Knowledge Graphs for AI Agents." GitHub. <a href="https://github.com/getzep/graphiti">github.com/getzep/graphiti</a></li>
+                    <li class="reference-item">Microsoft Research. "GraphRAG: Unlocking LLM Discovery on Narrative Private Data." <a href="https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/">microsoft.com/research/blog/graphrag</a></li>
+                    <li class="reference-item">Manheim, David, and Scott Garrabrant. "Categorizing Variants of Goodhart's Law." arXiv:1803.04585, 2018. <a href="https://arxiv.org/abs/1803.04585">arxiv.org/abs/1803.04585</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
