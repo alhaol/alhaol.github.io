@@ -35,12 +35,12 @@ No build step, no package manager.
 │       ├── _not_approved/  # Gitignored: draft decks live here until approved
 │       └── <slug>/         # Approved decks live one level up; listed in presentations.json
 ├── articles/           # Technical Articles series
-│   ├── index.html      # Articles landing page (39 articles grid)
-│   ├── Post_Images/    # Hero images for articles (Image_01 through Image_39, .png/.jpg)
+│   ├── index.html      # Articles landing page (40 articles grid)
+│   ├── Post_Images/    # Hero images for articles (Image_01 through Image_40, .png/.jpg)
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
-│       └── # 39 article pages, the-paradigm-shift.html … loops-graphs-anchors.html
+│       └── # 40 article pages, the-paradigm-shift.html … the-portable-harness.html
 └── apps/
     ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Portable Harness | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        /* Concept diagrams (see skill references/diagrams.md) */
+        .diagram { margin: 2rem 0; padding: 1.5rem 1.25rem 1rem; background-color: rgba(10, 16, 30, 0.55); border: 1px solid var(--border-color); border-radius: 0.5rem; }
+        .diagram figcaption { margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; font-style: italic; }
+        .diagram svg { width: 100%; height: auto; display: block; }
+        .diagram .flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 0.5rem; }
+        .diagram .flow-step { flex: 1 1 130px; max-width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-top: 3px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .flow-step .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .flow-step .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        .diagram .flow-arrow { align-self: center; color: var(--primary-color); font-weight: 700; font-size: 1.1rem; }
+        .diagram .levels { display: flex; flex-direction: column; gap: 0.5rem; max-width: 560px; margin: 0 auto; }
+        .diagram .level { border: 1px solid var(--border-color); border-left: 4px solid var(--primary-color); border-radius: 0.5rem; padding: 0.75rem 1rem; background-color: var(--card-bg); }
+        .diagram .level .k { display: block; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--primary-color); }
+        .diagram .level .d { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.5; }
+        .diagram .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .diagram .panel { border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem; background-color: var(--card-bg); }
+        .diagram .panel .panel-title { font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .diagram .panel ul { list-style: disc; padding-left: 1.1rem; margin: 0; }
+        .diagram .panel li { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.45; }
+        .diagram .keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+        .diagram .key-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.75rem; text-align: center; }
+        .diagram .key-card .k { display: block; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.08em; color: var(--primary-color); }
+        .diagram .key-card .d { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; line-height: 1.45; }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } .diagram .flow-arrow { transform: rotate(90deg); flex-basis: 100%; text-align: center; } }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_40.png" alt="The Portable Harness" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-engineering">Engineering</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Portable Harness</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Why open-source, terminal-native coding agents are the cheapest insurance a secure workflow can buy against vendor lock-in.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: July 22, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>The riskiest dependency in an AI workflow is not the model. It is the harness wrapped around it: the program that reads files, runs commands, applies edits, and decides what the model is even allowed to touch. When that harness belongs to a vendor, its behavior can change without notice. A UI is redesigned, a permission default flips, an execution boundary moves, and a pipeline that passed every test last week now fails in production for reasons that live on someone else's roadmap.</p>
+
+                    <p>For a system architect responsible for secure workflows, that exposure is the whole problem. The value of a coding agent is not measured only by how fast it scaffolds a project or automates a data pipeline. It is measured by whether the same agent will behave the same way in six months, inside the same restricted sandbox, under the same rules. Terminal-native, open-source agents are worth attention precisely because they let that guarantee be owned rather than rented.</p>
+
+                    <blockquote>A harness you can read, pin, and rebuild is insurance. A harness you can only accept is a liability that compounds every time it changes underneath you.</blockquote>
+
+                    <h2>The harness is the surface that moves</h2>
+
+                    <p>Two projects illustrate how small a dependable harness can be. <code>pi</code>, released by Mario Zechner in August 2025, is a deliberately minimal coding agent. Its instruction prompt is kept under a thousand tokens, it ships with roughly four built-in tools (read, bash, edit, write), and everything else is added through TypeScript extensions. The design bet is that a capable model needs little scaffolding, so the core stays small enough to audit in an afternoon.</p>
+
+                    <p><code>oh-my-pi</code> (invoked as <code>omp</code>) is a fork of that core by Can Boluk, rewritten in roughly 27,000 lines of Rust under an MIT license. It keeps the minimal spirit but wires in the parts a working engineer misses: hash-anchored edits that refuse to apply when the target text has drifted, Language Server Protocol diagnostics so the agent sees the same type errors an IDE would, Debug Adapter Protocol support for stepping through failures, and subagents for parallel work. Both are installed and run from the terminal, and both keep their state on the local machine.</p>
+
+                    <p>The point is not that either tool is the correct choice for every team. The point is that their behavior is legible. The prompt, the tool list, and the permission model are files that can be read, forked, and pinned to a known commit. Nothing about them shifts unless the version is changed on purpose.</p>
+
+                    <h2>Open source is not the same as unmanaged</h2>
+
+                    <p>It helps to separate two axes that often get collapsed. One axis is proprietary versus open source. The other is managed for you versus self-hosted by you. Claude Code, for example, is a proprietary agent, while OpenCode is open source. Both are excellent, and neither claim here is that they are unsafe. The argument is narrower: control over the harness follows the second axis, and a self-hosted open-source agent is the only combination that puts the execution boundary fully in the operator's hands.</p>
+
+                    <figure class="diagram">
+                        <div class="compare">
+                            <div class="panel" style="border-top:3px solid #f87171;">
+                                <p class="panel-title" style="color:#f87171;">RENTED HARNESS</p>
+                                <ul><li>Behavior set by a vendor roadmap</li><li>Defaults and UI can change without notice</li><li>Execution boundary owned elsewhere</li><li>Portability limited to what is exported</li></ul>
+                            </div>
+                            <div class="panel" style="border-top:3px solid #34d399;">
+                                <p class="panel-title" style="color:#34d399;">OWNED HARNESS</p>
+                                <ul><li>Behavior pinned to a known commit</li><li>Prompt and tool list are auditable files</li><li>Sandbox rules written by the operator</li><li>Same agent runs anywhere the terminal runs</li></ul>
+                            </div>
+                        </div>
+                        <figcaption>Control over the execution boundary is what separates insurance from exposure.</figcaption>
+                    </figure>
+
+                    <p>A managed platform can still be the right default for most work. Speed, polish, and a maintained update path are real benefits. The case for keeping an open agent in reserve is a hedge, not a rejection: when a critical workflow must not move, it should sit on a foundation the operator can freeze.</p>
+
+                    <h2>Building a restricted harness around an open core</h2>
+
+                    <p>The practical move is to treat an open agent as a component, not a product, and to wrap it in a thin harness that encodes local security policy. Because the core is small and its tools are explicit, the wrapper can be small too.</p>
+
+                    <p>A restricted harness usually does a few concrete things. It pins the agent to an exact version so no upstream change lands unreviewed. It narrows the tool set to only what the task needs, removing anything that can reach the network or the wider filesystem. It runs the whole thing inside an isolated sandbox, a container or a locked-down user account, so the blast radius of any command is bounded. And it logs every tool call so the run can be audited after the fact.</p>
+
+                    <pre><code># pin the agent, then run it under a locked-down policy
+npm i -g @oh-my-pi/pi-coding-agent@&lt;pinned-version&gt;
+
+# isolated, no network, read-only except one work dir
+docker run --rm --network none \
+  --read-only -v "$PWD/work:/work:rw" \
+  omp-sandbox omp --allow read,edit,bash --cwd /work</code></pre>
+
+                    <p>The specifics vary by environment, and the commands above are only a sketch. What matters is the shape: the agent is a pinned dependency, the permissions are declared by the operator, and the isolation is enforced by infrastructure the operator already trusts. None of that is available when the harness is a remote service whose internals cannot be seen.</p>
+
+                    <figure class="diagram">
+                        <div class="flow">
+                            <div class="flow-step"><span class="k">PIN</span><span class="d">Lock the agent to an exact, reviewed version</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">RESTRICT</span><span class="d">Expose only the tools the task requires</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">ISOLATE</span><span class="d">Run inside a sandbox with a bounded blast radius</span></div>
+                            <div class="flow-arrow">&rarr;</div>
+                            <div class="flow-step"><span class="k">AUDIT</span><span class="d">Log every tool call for later review</span></div>
+                        </div>
+                        <figcaption>Four steps that turn an open agent into a harness an operator can trust and freeze.</figcaption>
+                    </figure>
+
+                    <h2>Portability is the real payoff</h2>
+
+                    <p>Because the agent talks to any model provider and keeps no hidden state in the cloud, the same wrapped harness runs on a laptop, a build server, or an air-gapped machine with only a configuration change. A workflow validated once can be reproduced anywhere the terminal runs. That is what makes the setup a genuine hedge: if a provider raises prices, changes terms, or deprecates a feature, the harness stays put and only the model behind it needs swapping.</p>
+
+                    <p>The trade is real and worth stating plainly. Owning the harness means owning its maintenance: security patches, upstream fork merges, and the discipline to review each version before pinning it. For a throwaway script that cost is not worth paying. For the small number of workflows that must stay stable, isolated, and portable, it is the cheapest insurance on offer, and it is paid once rather than every time a vendor decides to move.</p>
+
+                    <h3>What leaders should do</h3>
+                    <ol>
+                        <li>Identify the two or three workflows that genuinely cannot tolerate an unannounced harness change, and treat only those as candidates for a self-hosted agent.</li>
+                        <li>Pin any open agent to an exact reviewed version and run it inside an isolated sandbox with the tool set narrowed to what the task needs.</li>
+                        <li>Keep a managed platform as the default for everyday work, and reserve the owned harness as a tested fallback rather than a wholesale replacement.</li>
+                        <li>Budget for the maintenance the choice creates: assign an owner for upstream reviews, patches, and the periodic re-validation of the pinned build.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <a href="the-harness-advantage.html">The Harness Advantage</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Why the scaffolding around a model often matters more than the model itself.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="simplicity-scales.html">Simplicity Scales</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">The case for a small, auditable core over a feature-heavy platform.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="the-unpatchable-boundary.html">The Unpatchable Boundary</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Where execution boundaries live, and why owning them matters for security.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Zechner, M. <em>pi-coding-agent</em> (minimal terminal coding agent). npm. <a href="https://www.npmjs.com/package/@mariozechner/pi-coding-agent" target="_blank" rel="noopener">npmjs.com/package/@mariozechner/pi-coding-agent</a></li>
+                    <li class="reference-item">Boluk, C. <em>oh-my-pi (omp)</em>: AI coding agent for the terminal, hash-anchored edits, LSP, debuggers, subagents. GitHub. <a href="https://github.com/can1357/oh-my-pi" target="_blank" rel="noopener">github.com/can1357/oh-my-pi</a></li>
+                    <li class="reference-item">SST. <em>OpenCode</em>: open-source terminal AI coding agent. GitHub. <a href="https://github.com/sst/opencode" target="_blank" rel="noopener">github.com/sst/opencode</a></li>
+                    <li class="reference-item">Microsoft. <em>Language Server Protocol Specification</em>. <a href="https://microsoft.github.io/language-server-protocol/" target="_blank" rel="noopener">microsoft.github.io/language-server-protocol</a></li>
+                    <li class="reference-item">Microsoft. <em>Debug Adapter Protocol</em>. <a href="https://microsoft.github.io/debug-adapter-protocol/" target="_blank" rel="noopener">microsoft.github.io/debug-adapter-protocol</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>

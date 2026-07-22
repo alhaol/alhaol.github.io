@@ -1,3 +1,5 @@
+Loops, Graphs, and Anchors
+
 Peter Steinberger posted nine words that thousands of people recognized instantly: "Are we still talking loops or did we shift to graphs yet?"
 
 The joke landed because a whole field caught itself mid-stride. But there is a problem hiding inside it.
