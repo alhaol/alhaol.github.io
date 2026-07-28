@@ -1,3 +1,6 @@
+The Portable Harness
+
+
 The riskiest dependency in an AI workflow is not the model. It is the harness wrapped around it.
 
 The harness is the program that reads your files, runs your commands, and decides what the model is allowed to touch. When it belongs to a vendor, its behavior can change without notice, and a pipeline that passed every test last week can fail for reasons that live on someone else's roadmap.
