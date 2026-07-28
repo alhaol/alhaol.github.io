@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<title>Betting on Light · Bloom Class</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- typography plugin: the level sections use `prose dark:prose-invert`, which is a no-op without it -->
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'Noto Sans Arabic', 'ui-sans-serif', 'system-ui'],
+          mono: ['Fira Code', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  html { scroll-behavior: smooth; }
+  /* Inter covers Latin glyphs; the browser falls back to Noto Sans Arabic per-glyph for Arabic
+     text in the same stack — no language branching needed for the font itself. */
+  body { font-family: 'Inter', 'Noto Sans Arabic', ui-sans-serif, system-ui; }
+  code, pre, .font-mono { font-family: 'Fira Code', ui-monospace, monospace; }
+
+  /*
+   * Validated 6-slot categorical palette (first 6 of the 8-hue reference order —
+   * blue/orange/aqua/yellow/magenta/green). Slot index == Bloom level number, so
+   * the pyramid band, that level's .level-note badge, and its leader line/dot all
+   * share one hue. Checked with the dataviz skill's validator: adjacent-pair CVD
+   * ΔE 9.1 light / 8.4 dark, normal-vision floor 19.6 light / 19.3 dark — both
+   * clear the ≥8 / ≥15 targets. Light-mode aqua/yellow/magenta fall under 3:1
+   * against the page surface (expected — relief rule), which is why every band
+   * carries a same-ink external label rather than relying on the fill alone.
+   */
+  :root {
+    --lvl-1: #2a78d6; --lvl-1-rgb: 42, 120, 214;   /* blue    · Remember */
+    --lvl-2: #eb6834; --lvl-2-rgb: 235, 104, 52;   /* orange  · Understand */
+    --lvl-3: #1baf7a; --lvl-3-rgb: 27, 175, 122;   /* aqua    · Apply */
+    --lvl-4: #eda100; --lvl-4-rgb: 237, 161, 0;    /* yellow  · Analyze */
+    --lvl-5: #e87ba4; --lvl-5-rgb: 232, 123, 164;  /* magenta · Evaluate */
+    --lvl-6: #008300; --lvl-6-rgb: 0, 131, 0;      /* green   · Create */
+  }
+  .dark {
+    --lvl-1: #3987e5; --lvl-1-rgb: 57, 135, 229;
+    --lvl-2: #d95926; --lvl-2-rgb: 217, 89, 38;
+    --lvl-3: #199e70; --lvl-3-rgb: 25, 158, 112;
+    --lvl-4: #c98500; --lvl-4-rgb: 201, 133, 0;
+    --lvl-5: #d55181; --lvl-5-rgb: 213, 81, 129;
+    --lvl-6: #008300; --lvl-6-rgb: 0, 131, 0;
+  }
+
+  /* border-inline-start (not border-left) so the accent bar sits on the correct
+     reading-start edge in both LTR and RTL without any dir-specific override. */
+  .level-note {
+    border-inline-start-width: 4px;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+  }
+  .source-note {
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgb(148 163 184 / 0.4);
+    font-size: 0.8rem;
+    color: rgb(100 116 139);
+  }
+  .dark .source-note { color: rgb(148 163 184); }
+
+  .lvl-1 { border-color: var(--lvl-1); background: rgba(var(--lvl-1-rgb), 0.08); }
+  .lvl-2 { border-color: var(--lvl-2); background: rgba(var(--lvl-2-rgb), 0.08); }
+  .lvl-3 { border-color: var(--lvl-3); background: rgba(var(--lvl-3-rgb), 0.08); }
+  .lvl-4 { border-color: var(--lvl-4); background: rgba(var(--lvl-4-rgb), 0.08); }
+  .lvl-5 { border-color: var(--lvl-5); background: rgba(var(--lvl-5-rgb), 0.08); }
+  .lvl-6 { border-color: var(--lvl-6); background: rgba(var(--lvl-6-rgb), 0.08); }
+  .dark .lvl-1 { background-color: rgba(var(--lvl-1-rgb), 0.14); }
+  .dark .lvl-2 { background-color: rgba(var(--lvl-2-rgb), 0.14); }
+  .dark .lvl-3 { background-color: rgba(var(--lvl-3-rgb), 0.14); }
+  .dark .lvl-4 { background-color: rgba(var(--lvl-4-rgb), 0.16); }
+  .dark .lvl-5 { background-color: rgba(var(--lvl-5-rgb), 0.14); }
+  .dark .lvl-6 { background-color: rgba(var(--lvl-6-rgb), 0.16); }
+
+  /* Pyramid bands, keyed by data-level so each shares its level's hue with the badge above */
+  .pyramid-band[data-level="1"] { fill: var(--lvl-1); }
+  .pyramid-band[data-level="2"] { fill: var(--lvl-2); }
+  .pyramid-band[data-level="3"] { fill: var(--lvl-3); }
+  .pyramid-band[data-level="4"] { fill: var(--lvl-4); }
+  .pyramid-band[data-level="5"] { fill: var(--lvl-5); }
+  .pyramid-band[data-level="6"] { fill: var(--lvl-6); }
+  .pyramid-band { transition: opacity 0.2s ease, filter 0.2s ease; opacity: 0.55; cursor: pointer; }
+  .pyramid-band.active { opacity: 1; filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.25)); }
+  .dark .pyramid-band.active { filter: drop-shadow(0 0 6px rgb(255 255 255 / 0.2)); }
+
+  /* In-band digit ink, chosen per band for contrast against that band's fill (computed, not eyeballed) */
+  .pyramid-digit[data-level="1"] { fill: #ffffff; }
+  .pyramid-digit[data-level="2"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="3"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="4"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="5"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="6"] { fill: #ffffff; }
+
+  /* External label leader lines/dots share the same band hue. The pyramid diagram itself is
+     NOT mirrored for RTL (see methodology.md) — legend text still reads correctly since it's
+     ordinary inline text inside an SVG <text>, which respects dir on its own. */
+  .pyramid-leader[data-level="1"] { stroke: var(--lvl-1); }
+  .pyramid-leader[data-level="2"] { stroke: var(--lvl-2); }
+  .pyramid-leader[data-level="3"] { stroke: var(--lvl-3); }
+  .pyramid-leader[data-level="4"] { stroke: var(--lvl-4); }
+  .pyramid-leader[data-level="5"] { stroke: var(--lvl-5); }
+  .pyramid-leader[data-level="6"] { stroke: var(--lvl-6); }
+  .pyramid-dot[data-level="1"] { fill: var(--lvl-1); }
+  .pyramid-dot[data-level="2"] { fill: var(--lvl-2); }
+  .pyramid-dot[data-level="3"] { fill: var(--lvl-3); }
+  .pyramid-dot[data-level="4"] { fill: var(--lvl-4); }
+  .pyramid-dot[data-level="5"] { fill: var(--lvl-5); }
+  .pyramid-dot[data-level="6"] { fill: var(--lvl-6); }
+
+  .nav-chip, .sidebar-link { transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .nav-chip.active { background: rgb(99 102 241); color: white; }
+  .sidebar-link.active {
+    background: rgb(99 102 241 / 0.12);
+    border-color: #6366f1;
+    color: #4338ca;
+  }
+  .dark .sidebar-link.active { color: #a5b4fc; }
+</style>
+</head>
+
+<body class="bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors">
+  <!-- Sticky nav -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2 min-w-0">
+        <a href="../index.html" class="text-xs font-semibold whitespace-nowrap no-underline text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">← Blooms</a><span class="text-slate-300 dark:text-slate-700">/</span><span class="text-xs font-semibold tracking-wide uppercase text-indigo-600 dark:text-indigo-400 whitespace-nowrap">Bloom Class</span>
+        <span class="text-slate-300 dark:text-slate-700">/</span>
+        <span class="text-sm font-medium truncate">Betting on Light</span>
+      </div>
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="shrink-0 rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+      >
+        <svg id="icon-sun" class="w-5 h-5 hidden dark:block" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="icon-moon" class="w-5 h-5 block dark:hidden" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row gap-8 lg:gap-10">
+    <!-- Sticky level sidebar: primary navigation for the 6-level structure.
+         flex-row/flex-col direction and this whole layout mirror automatically under dir="rtl"
+         (flexbox's main axis follows the inline/reading direction) — no lg:flex-row-reverse needed. -->
+    <aside class="hidden lg:block w-56 shrink-0" aria-label="Bloom level navigation">
+      <div id="level-sidebar" class="sticky top-20 py-10 flex flex-col gap-1.5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-600 mb-1 px-3">
+          Bloom Levels
+        </p>
+        <a href="#level-5" data-level="5" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">5 · Evaluate</span>
+          <span class="block text-xs text-slate-400 dark:text-slate-500">start · the hook</span>
+        </a>
+        <a href="#level-4" data-level="4" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">4 · Analyze</span>
+        </a>
+        <a href="#level-3" data-level="3" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">3 · Apply</span>
+        </a>
+        <a href="#level-2" data-level="2" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">2 · Understand</span>
+        </a>
+        <a href="#level-1" data-level="1" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">1 · Remember</span>
+        </a>
+        <a href="#level-6" data-level="6" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">6 · Create</span>
+          <span class="block text-xs text-slate-400 dark:text-slate-500">capstone · resolves the hook</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="flex-1 min-w-0 py-10">
+      <!-- Title -->
+      <section class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Betting on Light</h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">Take a million-times speed claim apart before you fund it: which half is physics, which half is an assumption, and what would kill the bet.</p>
+        <p class="mt-3 text-xs uppercase tracking-wide text-slate-400 dark:text-slate-600">
+          A Bloom Class · walked 5 → 4 → 3 → 2 → 1 → 6, not in numeric order
+        </p>
+      </section>
+
+      <!-- Geometric pyramid. Deliberately NOT mirrored for RTL — see methodology.md's
+           "Bilingual pages" section for why. -->
+      <section class="mb-14" aria-label="Six-level Bloom's Taxonomy pyramid: 5 Evaluate, 4 Analyze, 3 Apply, 2 Understand, 1 Remember, 6 Create">
+        <div class="flex flex-col items-center gap-6">
+          <svg viewBox="0 0 640 400" class="w-full max-w-2xl mx-auto" role="img" aria-label="Six-level Bloom's Taxonomy pyramid: 5 Evaluate, 4 Analyze, 3 Apply, 2 Understand, 1 Remember, 6 Create">
+            <polygon id="pyramid-band-1" class="pyramid-band" data-level="1" points="95,320 345,320 370,380 70,380" fill="#2a78d6" />
+            <polygon id="pyramid-band-2" class="pyramid-band" data-level="2" points="120,260 320,260 345,320 95,320" fill="#eb6834" />
+            <polygon id="pyramid-band-3" class="pyramid-band" data-level="3" points="145,200 295,200 320,260 120,260" fill="#1baf7a" />
+            <polygon id="pyramid-band-4" class="pyramid-band" data-level="4" points="170,140 270,140 295,200 145,200" fill="#eda100" />
+            <polygon id="pyramid-band-5" class="pyramid-band" data-level="5" points="195,80 245,80 270,140 170,140" fill="#e87ba4" />
+            <polygon id="pyramid-band-6" class="pyramid-band" data-level="6" points="220,20 245,80 195,80" fill="#008300" />
+
+            <!-- In-band digit, always narrow enough to fit even the apex band -->
+            <g font-size="16" font-weight="700" text-anchor="middle" style="pointer-events:none">
+              <text class="pyramid-digit" data-level="1" x="220" y="356">1</text>
+              <text class="pyramid-digit" data-level="2" x="220" y="296">2</text>
+              <text class="pyramid-digit" data-level="3" x="220" y="236">3</text>
+              <text class="pyramid-digit" data-level="4" x="220" y="176">4</text>
+              <text class="pyramid-digit" data-level="5" x="220" y="116">5</text>
+              <text class="pyramid-digit" data-level="6" x="220" y="56" font-size="14">6</text>
+            </g>
+
+            <!-- Full level labels sit outside the pyramid so long text never clips against a narrow band.
+                 Left in place (not mirrored) in RTL mode; direction="ltr" pins their layout so the leader
+                 lines/dots stay visually attached to the geometry regardless of page dir. -->
+            <g font-size="13" font-weight="600" direction="ltr" style="pointer-events:none">
+              <line class="pyramid-leader" data-level="6" x1="232.5" y1="50" x2="400" y2="50" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="6" cx="400" cy="50" r="4" />
+              <text x="412" y="46" class="fill-slate-700 dark:fill-slate-200">6 · Create</text>
+              <text x="412" y="62" font-size="11" font-weight="400" class="fill-slate-400 dark:fill-slate-500">capstone · resolves the hook</text>
+
+              <line class="pyramid-leader" data-level="5" x1="257.5" y1="110" x2="400" y2="110" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="5" cx="400" cy="110" r="4" />
+              <text x="412" y="106" class="fill-slate-700 dark:fill-slate-200">5 · Evaluate</text>
+              <text x="412" y="122" font-size="11" font-weight="400" class="fill-slate-400 dark:fill-slate-500">start · the hook</text>
+
+              <line class="pyramid-leader" data-level="4" x1="282.5" y1="170" x2="400" y2="170" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="4" cx="400" cy="170" r="4" />
+              <text x="412" y="175" class="fill-slate-700 dark:fill-slate-200">4 · Analyze</text>
+
+              <line class="pyramid-leader" data-level="3" x1="307.5" y1="230" x2="400" y2="230" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="3" cx="400" cy="230" r="4" />
+              <text x="412" y="235" class="fill-slate-700 dark:fill-slate-200">3 · Apply</text>
+
+              <line class="pyramid-leader" data-level="2" x1="332.5" y1="290" x2="400" y2="290" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="2" cx="400" cy="290" r="4" />
+              <text x="412" y="295" class="fill-slate-700 dark:fill-slate-200">2 · Understand</text>
+
+              <line class="pyramid-leader" data-level="1" x1="357.5" y1="350" x2="400" y2="350" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="1" cx="400" cy="350" r="4" />
+              <text x="412" y="355" class="fill-slate-700 dark:fill-slate-200">1 · Remember</text>
+            </g>
+          </svg>
+          <!-- Mobile/tablet fallback nav — the sidebar is the primary nav on lg+ screens -->
+          <nav aria-label="Jump to Bloom level" class="lg:hidden flex flex-wrap gap-2 justify-center">
+            <a href="#level-5" data-level="5" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">5 · Evaluate (start)</a>
+            <a href="#level-4" data-level="4" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">4 · Analyze</a>
+            <a href="#level-3" data-level="3" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">3 · Apply</a>
+            <a href="#level-2" data-level="2" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">2 · Understand</a>
+            <a href="#level-1" data-level="1" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">1 · Remember</a>
+            <a href="#level-6" data-level="6" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">6 · Create (capstone)</a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Level 5: Evaluate (hook) -->
+      <section id="level-5" data-level="5" data-role="hook" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-5"><strong>Level 5 · Evaluate.</strong> judge · critique · defend · rank · recommend · justify — the cold open. No answer here yet.</div>
+        <h2 class="text-xl font-bold mb-3">A funding call you cannot yet defend</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>You sit on an investment committee with one long-horizon quantum computing bet to place. Two proposals are in front of you.</p>
+
+<p><strong>Team Photon</strong> wants to build an optical quantum computer. Their case: light oscillates far faster than the microwave electronics everyone else uses, so the clock runs roughly <strong>10,000 times faster</strong>. Each operation costs so little energy that you can run perhaps <strong>100 times more processors</strong> than a current supercomputer. Multiply those and you get a machine around <strong>a million times faster</strong>. Light already carries the data, so nothing has to be converted between a transport medium and a processing medium. They have a peer-reviewed teleportation result behind them, a national Moonshot programme targeting a fault-tolerant machine by 2050, and a cloud product planned for next year.</p>
+
+<p><strong>Team Supercon</strong> proposes superconducting qubits. Their case is duller: this approach has, in the words of the same source, &ldquo;got off to a flying start&rdquo; and underpins the largest quantum computers built so far.</p>
+
+<p>Two more facts sit on the table. Team Photon concedes that the hardest unsolved problem in their approach is <strong>nonlinearity</strong>, and that it is the thing that makes a quantum computer able to attack real-world problems at all. And the document making the strongest case for light carries a line in its footer: <em>&ldquo;Advertiser retains sole responsibility for content.&rdquo;</em></p>
+
+<p><strong>Which team do you fund, and what would have to be true for that to be the wrong call?</strong></p>
+
+<p>Do not resolve it yet. Notice first that you have been handed a number, a blocker, and a disclosure, and that you currently have no way to weigh them against each other.</p>
+</div>
+        <p class="source-note">Scenario constructed for this page from the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021).</p>
+      </section>
+
+      <!-- Level 4: Analyze -->
+      <section id="level-4" data-level="4" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-4"><strong>Level 4 · Analyze.</strong> compare · differentiate · deconstruct · categorize · attribute</div>
+        <h2 class="text-xl font-bold mb-3">Four things the pitch bundled together</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>The proposal arrives as a single confident story. It is actually four separate claims with four different risk profiles, and they were never independent enough to just add up.</p>
+
+<table>
+<thead><tr><th>Claim</th><th>What it rests on</th><th>What could break it</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>1. Speed multiplier</strong><br>~10,000&times; clock, ~100&times; processors, so ~1,000,000&times;</td>
+  <td>Optical carrier frequencies are far above microwave; per-operation energy cost is tiny, so many processors are affordable</td>
+  <td>It is a <em>product of two multipliers</em>. Each is conditional, and the second assumes the workload actually splits across processors. Level 3 tests exactly this.</td>
+</tr>
+<tr>
+  <td><strong>2. One medium throughout</strong><br>No conversion between transport and processing</td>
+  <td>Light already carries the data, and here it also does the computing</td>
+  <td>The strongest and least contested of the four. It removes an entire component class rather than making one faster.</td>
+</tr>
+<tr>
+  <td><strong>3. Scaling path</strong><br>Multiplexing in time, not in space</td>
+  <td>Signals are sliced and combined in time, so scale does not require fabricating more chip area</td>
+  <td>Shifts the scaling burden from fabrication to timing precision and loss. A different problem, not an absent one.</td>
+</tr>
+<tr>
+  <td><strong>4. The blocker</strong><br>Nonlinearity</td>
+  <td>Currently pursued by injecting special quantum states made with photon detectors</td>
+  <td>Conceded by the team as &ldquo;the most difficult part&rdquo;. Unlike the others this is not an engineering slope, it is a physics obstacle.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Sitting underneath all four is a fifth item that is not a technical claim at all: who wrote the document. A promotional feature is not evidence of fraud, and the underlying physics result is real and peer-reviewed. But it does tell you which claims were selected for you, and it explains why claim 1 leads and claim 4 arrives late and briefly.</p>
+</div>
+        <p class="source-note">Decomposition written for this page from the Level 5 scenario. All four claims and the nonlinearity concession are stated in the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021).</p>
+      </section>
+
+      <!-- Level 3: Apply -->
+      <section id="level-3" data-level="3" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-3"><strong>Level 3 · Apply.</strong> implement · use · execute · demonstrate · solve</div>
+        <h2 class="text-xl font-bold mb-3">Testing the million-times number</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Take claim 1 and actually work it. The pitch is a product of two factors:</p>
+
+<pre><code>speedup = clock_gain &times; processor_gain
+        = 10,000 &times; 100
+        = 1,000,000</code></pre>
+
+<p>The first factor is physics and it is roughly right: optical carriers sit near 10<sup>14</sup> Hz while superconducting control runs near 10<sup>10</sup> Hz, which is where a four-order-of-magnitude ratio comes from.</p>
+
+<p>The second factor is not physics. It is an assumption about your workload, and there is a standard tool for it. Amdahl's law says that if a fraction <em>s</em> of the work is inherently serial, then no matter how many processors <em>N</em> you add:</p>
+
+<pre><code>speedup = 1 / ( s + (1 - s) / N )</code></pre>
+
+<p>Run it for 100 processors at three levels of serial fraction:</p>
+
+<ol>
+  <li><strong>s = 0</strong> (perfectly parallel): 1 / (0 + 1/100) = <strong>100&times;</strong>. The pitch's number, and it requires a workload with literally no serial part.</li>
+  <li><strong>s = 0.01</strong> (1% serial): 1 / (0.01 + 0.0099) = <strong>50&times;</strong>. Half the claimed gain, from one percent.</li>
+  <li><strong>s = 0.10</strong> (10% serial): 1 / (0.10 + 0.009) = <strong>9.2&times;</strong>. An order of magnitude gone.</li>
+</ol>
+
+<p>So the honest range for the headline is not one number:</p>
+
+<pre><code>10,000 &times; 100  = 1,000,000&times;   (s = 0)
+10,000 &times; 50   =   500,000&times;   (s = 0.01)
+10,000 &times; 9.2  =    92,000&times;   (s = 0.10)</code></pre>
+
+<p>Every one of those is still an enormous number, which is the point worth holding onto: the claim survives the stress test, it just stops being a single figure and becomes a figure with a stated condition attached. That is the difference between a marketing number and an engineering number, and you can do the conversion yourself in about ninety seconds.</p>
+</div>
+        <p class="source-note">Worked for this page. The 10,000&times; and 100&times; figures are quoted from the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021). Amdahl’s law is standard parallel-computing theory; the arithmetic here was computed for this page.</p>
+      </section>
+
+      <!-- Level 2: Understand -->
+      <section id="level-2" data-level="2" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-2"><strong>Level 2 · Understand.</strong> explain · summarize · interpret · paraphrase · classify</div>
+        <h2 class="text-xl font-bold mb-3">Why light is fast to move and hard to compute with</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Claims 1 and 4 look unrelated. They are the same property of light, seen from two sides, and once you see that the whole pitch reorganises itself.</p>
+
+<p><strong>Where the speed comes from.</strong> A clock rate is bounded by the frequency of whatever carries the signal. Microwave control electronics operate around 10<sup>10</sup> Hz. Optical carriers sit around 10<sup>14</sup> Hz. That ratio is the 10,000, and nobody disputes it.</p>
+
+<p><strong>Where the blocker comes from.</strong> A quantum computer needs its qubits to interact. Two photons crossing the same patch of empty space at ordinary intensity pass straight through each other and carry on unchanged. Light is <em>linear</em> at low intensity, which is a precise way of saying photons ignore each other.</p>
+
+<p>Now put those together:</p>
+
+<ul>
+  <li>Photons ignore their surroundings, so they travel a long way without being disturbed. That is exactly what makes light the world's transport medium, and it is why claim 2 is strong. Nothing has to be converted, because the carrier is already the computer.</li>
+  <li>Photons also ignore <em>each other</em>. So the property that makes light an outstanding courier is the same property that makes it a reluctant processor. Superconducting circuits have the mirror-image profile: they interact readily, which is why nonlinearity is easy there and isolation is the constant fight.</li>
+</ul>
+
+<p>This is why injecting nonlinearity is described as the hardest part rather than a scheduled milestone. The team's approach is to import it from outside, using special quantum states prepared with photon detectors, rather than expecting the medium to supply it. And it reframes the funding question. You are not choosing which team is more capable. You are choosing <strong>which half of a physical trade-off you would rather spend a decade fighting</strong>: isolation with easy interaction, or interaction with easy isolation.</p>
+
+<p>Time-domain multiplexing follows the same economy. Instead of fabricating many copies of a circuit side by side, one physical setup is reused across successive time slots. Since light's natural axis is time, scale gets bought with timing precision rather than chip area.</p>
+</div>
+        <p class="source-note">Explanation written for this page. The nonlinearity concession, the photon-detector approach and the time-multiplexing description come from the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021). The carrier-frequency and linearity physics is standard optics.</p>
+      </section>
+
+      <!-- Level 1: Remember -->
+      <section id="level-1" data-level="1" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-1"><strong>Level 1 · Remember.</strong> define · list · recall · name · identify — compact reference, not a starting point.</div>
+        <h2 class="text-xl font-bold mb-3">The terms this page used</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>You have already used all of these. Named precisely, and no earlier than necessary.</p>
+
+<dl>
+  <dt><strong>Optical qubit (travelling wave)</strong></dt>
+  <dd>A quantum bit encoded in light that is moving. Contrasted in the source with standing-wave qubits held in a fixed structure, as superconducting designs use.</dd>
+
+  <dt><strong>Nonlinearity</strong></dt>
+  <dd>Interaction between signals, so that combining them produces something other than their sum. Required for quantum computers to attack the nonlinear behaviour of real systems, and scarce in light at low intensity.</dd>
+
+  <dt><strong>Quantum teleportation</strong></dt>
+  <dd>Transferring a quantum state between entangled qubits using a measurement plus classical correction, rather than physically moving the carrier.</dd>
+
+  <dt><strong>Feedforward</strong></dt>
+  <dd>The correction step. Measurement outcomes are random, so the result is fed forward to cancel that randomness and leave a deterministic operation.</dd>
+
+  <dt><strong>Time-domain multiplexing</strong></dt>
+  <dd>Combining many signals through one physical path by separating them in time instead of in space. Buys scale without extra chip area.</dd>
+
+  <dt><strong>Fault tolerance</strong></dt>
+  <dd>Continuing to compute correctly despite component errors. The stated target of the Moonshot programme, and the bar a 2024 cloud demonstrator does not clear.</dd>
+</dl>
+</div>
+        <p class="source-note">Definitions consolidated for this page from the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021). and standard quantum-computing usage.</p>
+      </section>
+
+      <!-- Level 6: Create (capstone) -->
+      <section id="level-6" data-level="6" data-role="capstone" data-resolves="hook" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-6"><strong>Level 6 · Create.</strong> design · construct · produce · propose · compose · formulate — the capstone. Resolves the Level 5 scenario.</div>
+        <h2 class="text-xl font-bold mb-3">Now place the bet</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Back to <strong>&ldquo;A funding call you cannot yet defend&rdquo;</strong>: Team Photon with a million-times claim and a conceded physics blocker, or Team Supercon with a flying start and the largest machines built to date.</p>
+
+<h3>Your task</h3>
+<p>Write the <strong>decision memo</strong>. Not a preference: a recommendation with an explicit kill criterion, in the form <em>&ldquo;we fund X, and we stop if Y is not demonstrated by Z.&rdquo;</em> A memo with no condition that could end the funding is an opinion, not a decision.</p>
+
+<h3>A worked resolution</h3>
+<p>The opening scenario is built to look like a contest between two teams. It is really a choice between two <em>shapes of risk</em>, which is what Level 2 exposed.</p>
+
+<ul>
+  <li><strong>Optical risk is concentrated.</strong> One physics obstacle, nonlinearity, gates almost everything else. If it is solved at usable fidelity, claims 1 to 3 largely follow. If it is not, the million-times number never arrives, because the algorithms that need it cannot run.</li>
+  <li><strong>Superconducting risk is diffuse.</strong> No single blocker of that kind, but a long list of compounding costs: error-correction overhead, cryogenics, wiring density. Less likely to fail outright, less likely to leap.</li>
+</ul>
+
+<p>So the rule is not &ldquo;which is better&rdquo;. It is <strong>which failure shape your portfolio can absorb</strong>. A fund that can carry one binary outcome for a decade should back Photon, because a concentrated risk with a large payoff is precisely what a long-horizon bet is for. A fund that needs continuous progress should back Supercon and treat optical as a watch item.</p>
+
+<p><strong>And what would make backing Photon wrong?</strong> Not slow progress. It is wrong if injected nonlinearity plateaus below the fidelity fault tolerance requires. That is the kill criterion, and it is why the 2024 cloud machine is not evidence for the 2050 goal: a neural-network demonstrator does not have to be fault tolerant, so shipping it tells you nothing about the blocker. Watch the fidelity number, not the launch.</p>
+
+<h3>A due-diligence list that could actually fail a pitch</h3>
+<ol>
+  <li><strong>Split the multiplier.</strong> Require the clock gain and the processor gain to be stated and evidenced separately, with the assumed serial fraction named. One combined figure is not reviewable.</li>
+  <li><strong>Name the kill criterion.</strong> A nonlinearity fidelity threshold and a date. Absent that, the blocker can be deferred indefinitely.</li>
+  <li><strong>Separate the demo from the goal.</strong> Ask explicitly which milestones require fault tolerance and which do not.</li>
+  <li><strong>Follow the scaling cost.</strong> Time multiplexing moves the burden to timing precision and loss. Ask for those budgets, not just the absence of a chip-area limit.</li>
+  <li><strong>Check who wrote the claim.</strong> Peer-reviewed result, vendor white paper, or advertisement feature. All three can be true; only one was reviewed by someone with no stake.</li>
+</ol>
+
+<p>Write yours before comparing. Then notice that item 5 would have caught the framing of the opening scenario before you read a single number, and that this is the cheapest of the five to apply.</p>
+</div>
+        <p class="source-note">Capstone constructed for this page. The Moonshot 2050 target, the 2024 cloud plan and the nonlinearity concession are from the Nature advertisement feature <em>&ldquo;Quantum computers move into the light&rdquo;</em> (d42473-023-00436-7, December 2023), sponsored by the University of Tokyo. Its own footer states &ldquo;Advertiser retains sole responsibility for content&rdquo;, so it is a promotional piece, not peer-reviewed Nature research. Its single peer-reviewed anchor is Asavanant et al., <em>Phys. Rev. Applied</em> <strong>16</strong>, 034005 (2021). The risk-shape framing and the due-diligence list are this page’s own synthesis.</p>
+      </section>
+
+      <!-- Test Yourself: retrieval-practice quiz (required on every generated page) -->
+      <section id="quiz-section" class="mt-4 mb-14 scroll-mt-24">
+        <div class="rounded-xl border-2 border-indigo-200 dark:border-indigo-900 bg-indigo-50/40 dark:bg-indigo-950/20 p-6">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.633.307-1.451.831-1.451 1.827v.5M12 17.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <h2 class="text-lg font-bold">Test Yourself</h2>
+            <span class="ms-auto text-xs font-semibold uppercase tracking-wide text-indigo-500 dark:text-indigo-400">Retrieval practice · not one of the 6 levels</span>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mb-5">Four quick questions pulled from what you just read. Answering — even wrong — helps this stick better than re-reading does. Anything you miss gets shown first next time you open this page.</p>
+          <div id="quiz-recap-banner" class="hidden mb-5 text-sm rounded-lg bg-amber-100 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 px-4 py-2"></div>
+          <div id="quiz-questions" class="space-y-5"></div>
+          <div id="quiz-score" class="hidden mt-6 pt-4 border-t border-indigo-200 dark:border-indigo-900 text-sm font-semibold"></div>
+        </div>
+      </section>
+
+      <!-- Footer: path summary -->
+      <footer class="mt-16 pt-6 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-500">
+        <p class="mb-3 font-semibold text-slate-600 dark:text-slate-400">Path walked:</p>
+        <ol class="flex flex-wrap gap-2">
+          <li><a href="#level-5" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">1. 5 · Evaluate (start)</a></li>
+          <li><a href="#level-4" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">2. 4 · Analyze</a></li>
+          <li><a href="#level-3" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">3. 3 · Apply</a></li>
+          <li><a href="#level-2" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">4. 2 · Understand</a></li>
+          <li><a href="#level-1" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">5. 1 · Remember</a></li>
+          <li><a href="#level-6" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">6. 6 · Create (capstone)</a></li>
+        </ol>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle, persisted to localStorage — matches the create-master-class template convention.
+    const root = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    }
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Scroll-spy: link the in-view level section to its pyramid band, sidebar link, and mobile nav chip.
+    const bands = document.querySelectorAll('.pyramid-band');
+    const navTargets = document.querySelectorAll('.nav-chip, .sidebar-link');
+    const sections = document.querySelectorAll('.level-section');
+
+    function setActive(level) {
+      bands.forEach((b) => b.classList.toggle('active', b.dataset.level === level));
+      navTargets.forEach((n) => n.classList.toggle('active', n.dataset.level === level));
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.dataset.level);
+        });
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => observer.observe(s));
+
+    bands.forEach((b) => {
+      b.addEventListener('click', () => {
+        document.getElementById(`level-${b.dataset.level}`).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    setActive('5');
+  </script>
+
+  <!-- Test Yourself: retrieval-practice quiz logic. 
+      { id: 'q1', prompt: "The pitch's million-times figure is a product of two separate factors. Which one is an assumption about your workload rather than about physics?",
+        options: [
+          "The 10,000x clock gain, since carrier frequency depends on the algorithm",
+          "The 100x processor gain, since it assumes the work actually splits across processors",
+          "Both are pure physics and neither depends on the workload",
+          "Neither; the figure was measured end to end on a real machine"
+        ], correct: 1,
+        why: "Carrier frequency is fixed physics; the processor multiplier only pays off if the workload parallelises, which is what Amdahl's law tests. See Levels 3 and 4." },
+
+      { id: 'q2', prompt: "Why is nonlinearity hard to achieve in light but easy in superconducting circuits?",
+        options: [
+          "Photons are too fast for current detectors to measure precisely",
+          "Optical components cannot be cooled to the required temperature",
+          "Photons barely interact with each other at low intensity, while superconducting circuits interact readily",
+          "Light loses too much energy travelling through optical fibre"
+        ], correct: 2,
+        why: "Light is linear at low intensity, meaning photons ignore each other. That same indifference is what makes light an excellent transport medium. See Level 2." },
+
+      { id: 'q3', prompt: "In this page's glossary, what does feedforward do?",
+        options: [
+          "Combines multiple signals into one path by separating them in time",
+          "Uses the random measurement outcome to apply a correction, removing the randomness",
+          "Cools the optical components before a computation begins",
+          "Detects errors and discards the affected qubit"
+        ], correct: 1,
+        why: "Measurement results are random, so feedforward applies a correction that leaves a deterministic operation. See Level 1." },
+
+      { id: 'q4', prompt: "By the capstone's reasoning, why is the planned 2024 cloud machine weak evidence for the 2050 fault-tolerant goal?",
+        options: [
+          "It runs on superconducting hardware rather than optical",
+          "It was announced in an advertisement feature, so it may not exist",
+          "A neural-network demonstrator does not need fault tolerance, so shipping it says nothing about the blocker",
+          "Cloud access prevents anyone from measuring its real speed"
+        ], correct: 2,
+        why: "The kill criterion is nonlinearity fidelity for fault tolerance; a demonstrator that never needs fault tolerance cannot test it. See Level 6." }
+ is a comma-separated list of
+       { id, prompt, options: [4 strings], correct: <index 0-3>, why } object literals — see SKILL.md.
+       QUESTION TEXT is per-page content (write it in the page's language); the UI strings below
+       (feedback, banner, score line) are bilingual EN/AR pairs baked into the template itself, picked
+       by LANG — never per-generation translation work for these. -->
+  <script>
+    (function () {
+      var LANG = 'en';
+      var T = LANG === 'ar' ? {
+        missed: function (n) { return 'فاتتك ' + n + (n === 1 ? ' سؤال' : ' أسئلة') + ' آخر مرة — تظهر أولاً أدناه.'; },
+        missedBadge: 'فاتك آخر مرة',
+        correct: 'إجابة صحيحة. ',
+        incorrect: 'ليست صحيحة. ',
+        score: function (right, total) {
+          return right + ' / ' + total + ' صحيحة — ' + (right === total ? 'تم مسح الأسئلة الفائتة للزيارة القادمة.' : (total - right) + ' سيُعاد عرضها في الزيارة القادمة.');
+        },
+      } : {
+        missed: function (n) { return 'You missed ' + n + ' question' + (n > 1 ? 's' : '') + ' last time — shown first below.'; },
+        missedBadge: 'missed last time',
+        correct: 'Correct. ',
+        incorrect: 'Not quite. ',
+        score: function (right, total) {
+          return right + ' / ' + total + ' correct — ' + (right === total ? 'missed items cleared for next visit.' : (total - right) + ' flagged to resurface next time.');
+        },
+      };
+
+      var QUIZ_KEY = 'quiz:' + location.pathname;
+      var QUESTIONS = [
+
+      { id: 'q1', prompt: "The pitch's million-times figure is a product of two separate factors. Which one is an assumption about your workload rather than about physics?",
+        options: [
+          "The 10,000x clock gain, since carrier frequency depends on the algorithm",
+          "The 100x processor gain, since it assumes the work actually splits across processors",
+          "Both are pure physics and neither depends on the workload",
+          "Neither; the figure was measured end to end on a real machine"
+        ], correct: 1,
+        why: "Carrier frequency is fixed physics; the processor multiplier only pays off if the workload parallelises, which is what Amdahl's law tests. See Levels 3 and 4." },
+
+      { id: 'q2', prompt: "Why is nonlinearity hard to achieve in light but easy in superconducting circuits?",
+        options: [
+          "Photons are too fast for current detectors to measure precisely",
+          "Optical components cannot be cooled to the required temperature",
+          "Photons barely interact with each other at low intensity, while superconducting circuits interact readily",
+          "Light loses too much energy travelling through optical fibre"
+        ], correct: 2,
+        why: "Light is linear at low intensity, meaning photons ignore each other. That same indifference is what makes light an excellent transport medium. See Level 2." },
+
+      { id: 'q3', prompt: "In this page's glossary, what does feedforward do?",
+        options: [
+          "Combines multiple signals into one path by separating them in time",
+          "Uses the random measurement outcome to apply a correction, removing the randomness",
+          "Cools the optical components before a computation begins",
+          "Detects errors and discards the affected qubit"
+        ], correct: 1,
+        why: "Measurement results are random, so feedforward applies a correction that leaves a deterministic operation. See Level 1." },
+
+      { id: 'q4', prompt: "By the capstone's reasoning, why is the planned 2024 cloud machine weak evidence for the 2050 fault-tolerant goal?",
+        options: [
+          "It runs on superconducting hardware rather than optical",
+          "It was announced in an advertisement feature, so it may not exist",
+          "A neural-network demonstrator does not need fault tolerance, so shipping it says nothing about the blocker",
+          "Cloud access prevents anyone from measuring its real speed"
+        ], correct: 2,
+        why: "The kill criterion is nonlinearity fidelity for fault tolerance; a demonstrator that never needs fault tolerance cannot test it. See Level 6." }
+
+      ];
+
+      var state = {};
+      try { state = JSON.parse(localStorage.getItem(QUIZ_KEY) || '{}'); } catch (e) { state = {}; }
+
+      var missedIds = Object.keys(state).filter(function (id) { return state[id] === false; });
+      var banner = document.getElementById('quiz-recap-banner');
+      if (missedIds.length) {
+        banner.classList.remove('hidden');
+        banner.textContent = T.missed(missedIds.length);
+      }
+
+      var ordered = QUESTIONS.slice().sort(function (a, b) {
+        var aMissed = missedIds.indexOf(a.id) !== -1 ? 0 : 1;
+        var bMissed = missedIds.indexOf(b.id) !== -1 ? 0 : 1;
+        return aMissed - bMissed;
+      });
+
+      var container = document.getElementById('quiz-questions');
+      var answered = {};
+
+      ordered.forEach(function (q, idx) {
+        var card = document.createElement('div');
+        card.className = 'bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-800';
+        var flaggedBadge = missedIds.indexOf(q.id) !== -1
+          ? '<span class="ms-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400">' + T.missedBadge + '</span>'
+          : '';
+        card.innerHTML =
+          '<p class="font-medium mb-3">' + (idx + 1) + '. ' + q.prompt + flaggedBadge + '</p>' +
+          '<div class="grid sm:grid-cols-2 gap-2" data-options></div>' +
+          '<p class="mt-3 text-sm hidden" data-explain></p>';
+
+        var optsWrap = card.querySelector('[data-options]');
+        q.options.forEach(function (opt, oi) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'text-start text-sm px-3 py-2 rounded-md border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 transition';
+          btn.textContent = opt;
+          btn.addEventListener('click', function () {
+            if (answered[q.id] !== undefined) return;
+            var correct = oi === q.correct;
+            answered[q.id] = correct;
+            state[q.id] = correct;
+            try { localStorage.setItem(QUIZ_KEY, JSON.stringify(state)); } catch (e) {}
+
+            Array.prototype.forEach.call(optsWrap.children, function (b, bi) {
+              b.disabled = true;
+              if (bi === q.correct) b.className += ' !border-green-500 !bg-green-50 dark:!bg-green-950/40 !text-green-700 dark:!text-green-400';
+              else if (bi === oi) b.className += ' !border-red-500 !bg-red-50 dark:!bg-red-950/40 !text-red-700 dark:!text-red-400';
+            });
+            var explain = card.querySelector('[data-explain]');
+            explain.classList.remove('hidden');
+            explain.textContent = (correct ? T.correct : T.incorrect) + q.why;
+            explain.className = 'mt-3 text-sm ' + (correct ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400');
+            maybeShowScore();
+          });
+          optsWrap.appendChild(btn);
+        });
+        container.appendChild(card);
+      });
+
+      function maybeShowScore() {
+        if (Object.keys(answered).length < QUESTIONS.length) return;
+        var right = Object.values(answered).filter(Boolean).length;
+        var scoreEl = document.getElementById('quiz-score');
+        scoreEl.classList.remove('hidden');
+        scoreEl.textContent = T.score(right, QUESTIONS.length);
+      }
+    })();
+  </script>
+
+  <!-- Sketchpad: a screen-anchored scratch layer for cognitive offloading while reading — freehand notes
+       over the current view. inset-inline-end (not right) so the FAB/toolbar sit on the correct edge in
+       both LTR and RTL without a dir-specific override. -->
+  <style>
+    #sketch-toggle {
+      position: fixed; inset-inline-end: 1.25rem; bottom: 1.25rem; z-index: 60;
+      width: 3rem; height: 3rem; border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center;
+      background: #4338ca; color: #fff; border: none; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    #sketch-toggle:hover { transform: scale(1.06); }
+    #sketch-toggle.active { background: #dc2626; }
+    .dark #sketch-toggle { background: #6366f1; }
+    .dark #sketch-toggle.active { background: #f87171; }
+
+    #sketch-overlay { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
+    #sketch-overlay.drawing { pointer-events: auto; }
+    #sketch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+    #sketch-overlay.drawing #sketch-canvas { cursor: crosshair; }
+
+    #sketch-toolbar {
+      position: fixed; inset-inline-end: 1.25rem; bottom: 5rem; z-index: 61;
+      display: none; flex-direction: column; gap: 0.5rem; align-items: center;
+      background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0.75rem; padding: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    #sketch-toolbar.open { display: flex; }
+    .dark #sketch-toolbar { background: rgba(15,15,17,0.96); border-color: rgba(255,255,255,0.12); }
+    .sketch-swatch { width: 1.75rem; height: 1.75rem; border-radius: 9999px; border: 2px solid transparent; cursor: pointer; padding: 0; }
+    .sketch-swatch.selected { border-color: #4338ca; }
+    .dark .sketch-swatch.selected { border-color: #a5b4fc; }
+    .sketch-swatch[data-color="ink"] { background: #111827; }
+    .dark .sketch-swatch[data-color="ink"] { background: #f3f4f6; }
+    .sketch-btn {
+      font-size: 0.65rem; font-weight: 700; padding: 0.35rem 0.4rem; border-radius: 0.375rem;
+      background: rgba(0,0,0,0.06); color: inherit; border: none; cursor: pointer; white-space: nowrap;
+    }
+    .dark .sketch-btn { background: rgba(255,255,255,0.12); color: #e5e7eb; }
+    .sketch-btn:hover { background: rgba(0,0,0,0.12); }
+    .dark .sketch-btn:hover { background: rgba(255,255,255,0.2); }
+    .sketch-btn.active-tool { outline: 2px solid currentColor; }
+  </style>
+
+  <button id="sketch-toggle" type="button" aria-label="Toggle sketchpad: draw freehand notes over the page while you read" aria-pressed="false">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 19.5H4.5" />
+    </svg>
+  </button>
+
+  <div id="sketch-toolbar" role="toolbar" aria-label="Sketchpad tools">
+    <button type="button" class="sketch-swatch selected" data-color="ink" aria-label="Pen"></button>
+    <button type="button" class="sketch-swatch" data-color="#ef4444" style="background:#ef4444" aria-label="Red pen"></button>
+    <button type="button" class="sketch-swatch" data-color="#3b82f6" style="background:#3b82f6" aria-label="Blue pen"></button>
+    <button type="button" id="sketch-erase" class="sketch-btn" aria-label="Erase">Erase</button>
+    <button type="button" id="sketch-clear" class="sketch-btn" aria-label="Clear">Clear</button>
+  </div>
+
+  <div id="sketch-overlay" aria-hidden="true">
+    <canvas id="sketch-canvas"></canvas>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('sketch-toggle');
+      var overlay = document.getElementById('sketch-overlay');
+      var toolbar = document.getElementById('sketch-toolbar');
+      var canvas = document.getElementById('sketch-canvas');
+      var ctx = canvas.getContext('2d');
+      var eraseBtn = document.getElementById('sketch-erase');
+      var clearBtn = document.getElementById('sketch-clear');
+      var swatches = document.querySelectorAll('.sketch-swatch');
+
+      var STORAGE_KEY = 'sketch:' + location.pathname;
+      var drawing = false;
+      var erasing = false;
+      var currentColor = 'ink';
+      var lastSnapshot = (function () {
+        try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+      })();
+      var lastX = 0, lastY = 0;
+
+      function inkColor() {
+        return document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827';
+      }
+      function strokeColor() {
+        return currentColor === 'ink' ? inkColor() : currentColor;
+      }
+
+      function sizeCanvas(preserve) {
+        var ratio = window.devicePixelRatio || 1;
+        var w = window.innerWidth, h = window.innerHeight;
+        if (preserve && canvas.width) lastSnapshot = canvas.toDataURL('image/png');
+        canvas.width = w * ratio;
+        canvas.height = h * ratio;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (lastSnapshot) {
+          var img = new Image();
+          img.onload = function () { ctx.drawImage(img, 0, 0, w, h); };
+          img.src = lastSnapshot;
+        }
+      }
+      sizeCanvas(false);
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () { sizeCanvas(true); }, 150);
+      });
+
+      function saveSnapshot() {
+        lastSnapshot = canvas.toDataURL('image/png');
+        try { localStorage.setItem(STORAGE_KEY, lastSnapshot); } catch (e) {}
+      }
+
+      function strokeAt(x, y) {
+        ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = strokeColor();
+        ctx.lineWidth = erasing ? 18 : 3;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x; lastY = y;
+      }
+
+      canvas.addEventListener('pointerdown', function (e) {
+        if (!overlay.classList.contains('drawing')) return;
+        drawing = true;
+        lastX = e.clientX; lastY = e.clientY;
+        strokeAt(e.clientX, e.clientY);
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener('pointermove', function (e) {
+        if (!drawing) return;
+        strokeAt(e.clientX, e.clientY);
+      });
+      function endStroke() {
+        if (!drawing) return;
+        drawing = false;
+        saveSnapshot();
+      }
+      canvas.addEventListener('pointerup', endStroke);
+      canvas.addEventListener('pointercancel', endStroke);
+      canvas.addEventListener('pointerleave', endStroke);
+
+      toggle.addEventListener('click', function () {
+        var open = !overlay.classList.contains('drawing');
+        overlay.classList.toggle('drawing', open);
+        overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+        toolbar.classList.toggle('open', open);
+        toggle.classList.toggle('active', open);
+        toggle.setAttribute('aria-pressed', open ? 'true' : 'false');
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('drawing')) toggle.click();
+      });
+
+      swatches.forEach(function (sw) {
+        sw.addEventListener('click', function () {
+          swatches.forEach(function (s) { s.classList.remove('selected'); });
+          sw.classList.add('selected');
+          currentColor = sw.dataset.color;
+          erasing = false;
+          eraseBtn.classList.remove('active-tool');
+        });
+      });
+      eraseBtn.addEventListener('click', function () {
+        erasing = !erasing;
+        eraseBtn.classList.toggle('active-tool', erasing);
+      });
+      clearBtn.addEventListener('click', function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        lastSnapshot = null;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<title>The Plausibility Trap · Bloom Class</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- typography plugin: the level sections use `prose dark:prose-invert`, which is a no-op without it -->
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'Noto Sans Arabic', 'ui-sans-serif', 'system-ui'],
+          mono: ['Fira Code', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  html { scroll-behavior: smooth; }
+  /* Inter covers Latin glyphs; the browser falls back to Noto Sans Arabic per-glyph for Arabic
+     text in the same stack — no language branching needed for the font itself. */
+  body { font-family: 'Inter', 'Noto Sans Arabic', ui-sans-serif, system-ui; }
+  code, pre, .font-mono { font-family: 'Fira Code', ui-monospace, monospace; }
+
+  /*
+   * Validated 6-slot categorical palette (first 6 of the 8-hue reference order —
+   * blue/orange/aqua/yellow/magenta/green). Slot index == Bloom level number, so
+   * the pyramid band, that level's .level-note badge, and its leader line/dot all
+   * share one hue. Checked with the dataviz skill's validator: adjacent-pair CVD
+   * ΔE 9.1 light / 8.4 dark, normal-vision floor 19.6 light / 19.3 dark — both
+   * clear the ≥8 / ≥15 targets. Light-mode aqua/yellow/magenta fall under 3:1
+   * against the page surface (expected — relief rule), which is why every band
+   * carries a same-ink external label rather than relying on the fill alone.
+   */
+  :root {
+    --lvl-1: #2a78d6; --lvl-1-rgb: 42, 120, 214;   /* blue    · Remember */
+    --lvl-2: #eb6834; --lvl-2-rgb: 235, 104, 52;   /* orange  · Understand */
+    --lvl-3: #1baf7a; --lvl-3-rgb: 27, 175, 122;   /* aqua    · Apply */
+    --lvl-4: #eda100; --lvl-4-rgb: 237, 161, 0;    /* yellow  · Analyze */
+    --lvl-5: #e87ba4; --lvl-5-rgb: 232, 123, 164;  /* magenta · Evaluate */
+    --lvl-6: #008300; --lvl-6-rgb: 0, 131, 0;      /* green   · Create */
+  }
+  .dark {
+    --lvl-1: #3987e5; --lvl-1-rgb: 57, 135, 229;
+    --lvl-2: #d95926; --lvl-2-rgb: 217, 89, 38;
+    --lvl-3: #199e70; --lvl-3-rgb: 25, 158, 112;
+    --lvl-4: #c98500; --lvl-4-rgb: 201, 133, 0;
+    --lvl-5: #d55181; --lvl-5-rgb: 213, 81, 129;
+    --lvl-6: #008300; --lvl-6-rgb: 0, 131, 0;
+  }
+
+  /* border-inline-start (not border-left) so the accent bar sits on the correct
+     reading-start edge in both LTR and RTL without any dir-specific override. */
+  .level-note {
+    border-inline-start-width: 4px;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+  }
+  .source-note {
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgb(148 163 184 / 0.4);
+    font-size: 0.8rem;
+    color: rgb(100 116 139);
+  }
+  .dark .source-note { color: rgb(148 163 184); }
+
+  .lvl-1 { border-color: var(--lvl-1); background: rgba(var(--lvl-1-rgb), 0.08); }
+  .lvl-2 { border-color: var(--lvl-2); background: rgba(var(--lvl-2-rgb), 0.08); }
+  .lvl-3 { border-color: var(--lvl-3); background: rgba(var(--lvl-3-rgb), 0.08); }
+  .lvl-4 { border-color: var(--lvl-4); background: rgba(var(--lvl-4-rgb), 0.08); }
+  .lvl-5 { border-color: var(--lvl-5); background: rgba(var(--lvl-5-rgb), 0.08); }
+  .lvl-6 { border-color: var(--lvl-6); background: rgba(var(--lvl-6-rgb), 0.08); }
+  .dark .lvl-1 { background-color: rgba(var(--lvl-1-rgb), 0.14); }
+  .dark .lvl-2 { background-color: rgba(var(--lvl-2-rgb), 0.14); }
+  .dark .lvl-3 { background-color: rgba(var(--lvl-3-rgb), 0.14); }
+  .dark .lvl-4 { background-color: rgba(var(--lvl-4-rgb), 0.16); }
+  .dark .lvl-5 { background-color: rgba(var(--lvl-5-rgb), 0.14); }
+  .dark .lvl-6 { background-color: rgba(var(--lvl-6-rgb), 0.16); }
+
+  /* Pyramid bands, keyed by data-level so each shares its level's hue with the badge above */
+  .pyramid-band[data-level="1"] { fill: var(--lvl-1); }
+  .pyramid-band[data-level="2"] { fill: var(--lvl-2); }
+  .pyramid-band[data-level="3"] { fill: var(--lvl-3); }
+  .pyramid-band[data-level="4"] { fill: var(--lvl-4); }
+  .pyramid-band[data-level="5"] { fill: var(--lvl-5); }
+  .pyramid-band[data-level="6"] { fill: var(--lvl-6); }
+  .pyramid-band { transition: opacity 0.2s ease, filter 0.2s ease; opacity: 0.55; cursor: pointer; }
+  .pyramid-band.active { opacity: 1; filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.25)); }
+  .dark .pyramid-band.active { filter: drop-shadow(0 0 6px rgb(255 255 255 / 0.2)); }
+
+  /* In-band digit ink, chosen per band for contrast against that band's fill (computed, not eyeballed) */
+  .pyramid-digit[data-level="1"] { fill: #ffffff; }
+  .pyramid-digit[data-level="2"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="3"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="4"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="5"] { fill: #0b0b0b; }
+  .pyramid-digit[data-level="6"] { fill: #ffffff; }
+
+  /* External label leader lines/dots share the same band hue. The pyramid diagram itself is
+     NOT mirrored for RTL (see methodology.md) — legend text still reads correctly since it's
+     ordinary inline text inside an SVG <text>, which respects dir on its own. */
+  .pyramid-leader[data-level="1"] { stroke: var(--lvl-1); }
+  .pyramid-leader[data-level="2"] { stroke: var(--lvl-2); }
+  .pyramid-leader[data-level="3"] { stroke: var(--lvl-3); }
+  .pyramid-leader[data-level="4"] { stroke: var(--lvl-4); }
+  .pyramid-leader[data-level="5"] { stroke: var(--lvl-5); }
+  .pyramid-leader[data-level="6"] { stroke: var(--lvl-6); }
+  .pyramid-dot[data-level="1"] { fill: var(--lvl-1); }
+  .pyramid-dot[data-level="2"] { fill: var(--lvl-2); }
+  .pyramid-dot[data-level="3"] { fill: var(--lvl-3); }
+  .pyramid-dot[data-level="4"] { fill: var(--lvl-4); }
+  .pyramid-dot[data-level="5"] { fill: var(--lvl-5); }
+  .pyramid-dot[data-level="6"] { fill: var(--lvl-6); }
+
+  .nav-chip, .sidebar-link { transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .nav-chip.active { background: rgb(99 102 241); color: white; }
+  .sidebar-link.active {
+    background: rgb(99 102 241 / 0.12);
+    border-color: #6366f1;
+    color: #4338ca;
+  }
+  .dark .sidebar-link.active { color: #a5b4fc; }
+</style>
+</head>
+
+<body class="bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors">
+  <!-- Sticky nav -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2 min-w-0">
+        <a href="../index.html" class="text-xs font-semibold whitespace-nowrap no-underline text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">← Blooms</a><span class="text-slate-300 dark:text-slate-700">/</span><span class="text-xs font-semibold tracking-wide uppercase text-indigo-600 dark:text-indigo-400 whitespace-nowrap">Bloom Class</span>
+        <span class="text-slate-300 dark:text-slate-700">/</span>
+        <span class="text-sm font-medium truncate">The Plausibility Trap</span>
+      </div>
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        class="shrink-0 rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+      >
+        <svg id="icon-sun" class="w-5 h-5 hidden dark:block" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="icon-moon" class="w-5 h-5 block dark:hidden" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row gap-8 lg:gap-10">
+    <!-- Sticky level sidebar: primary navigation for the 6-level structure.
+         flex-row/flex-col direction and this whole layout mirror automatically under dir="rtl"
+         (flexbox's main axis follows the inline/reading direction) — no lg:flex-row-reverse needed. -->
+    <aside class="hidden lg:block w-56 shrink-0" aria-label="Bloom level navigation">
+      <div id="level-sidebar" class="sticky top-20 py-10 flex flex-col gap-1.5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-600 mb-1 px-3">
+          Bloom Levels
+        </p>
+        <a href="#level-5" data-level="5" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">5 · Evaluate</span>
+          <span class="block text-xs text-slate-400 dark:text-slate-500">start · the hook</span>
+        </a>
+        <a href="#level-4" data-level="4" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">4 · Analyze</span>
+        </a>
+        <a href="#level-3" data-level="3" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">3 · Apply</span>
+        </a>
+        <a href="#level-2" data-level="2" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">2 · Understand</span>
+        </a>
+        <a href="#level-1" data-level="1" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">1 · Remember</span>
+        </a>
+        <a href="#level-6" data-level="6" class="sidebar-link border-s-2 border-transparent rounded px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="font-semibold">6 · Create</span>
+          <span class="block text-xs text-slate-400 dark:text-slate-500">capstone · resolves the hook</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="flex-1 min-w-0 py-10">
+      <!-- Title -->
+      <section class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">The Plausibility Trap</h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">A robot can practise on generated video that looks perfect and still learn the wrong physics.</p>
+        <p class="mt-3 text-xs uppercase tracking-wide text-slate-400 dark:text-slate-600">
+          A Bloom Class · walked 5 → 4 → 3 → 2 → 1 → 6, not in numeric order
+        </p>
+      </section>
+
+      <!-- Geometric pyramid. Deliberately NOT mirrored for RTL — see methodology.md's
+           "Bilingual pages" section for why. -->
+      <section class="mb-14" aria-label="Six-level Bloom's Taxonomy pyramid: 5 Evaluate, 4 Analyze, 3 Apply, 2 Understand, 1 Remember, 6 Create">
+        <div class="flex flex-col items-center gap-6">
+          <svg viewBox="0 0 640 400" class="w-full max-w-2xl mx-auto" role="img" aria-label="Six-level Bloom's Taxonomy pyramid: 5 Evaluate, 4 Analyze, 3 Apply, 2 Understand, 1 Remember, 6 Create">
+            <polygon id="pyramid-band-1" class="pyramid-band" data-level="1" points="95,320 345,320 370,380 70,380" fill="#2a78d6" />
+            <polygon id="pyramid-band-2" class="pyramid-band" data-level="2" points="120,260 320,260 345,320 95,320" fill="#eb6834" />
+            <polygon id="pyramid-band-3" class="pyramid-band" data-level="3" points="145,200 295,200 320,260 120,260" fill="#1baf7a" />
+            <polygon id="pyramid-band-4" class="pyramid-band" data-level="4" points="170,140 270,140 295,200 145,200" fill="#eda100" />
+            <polygon id="pyramid-band-5" class="pyramid-band" data-level="5" points="195,80 245,80 270,140 170,140" fill="#e87ba4" />
+            <polygon id="pyramid-band-6" class="pyramid-band" data-level="6" points="220,20 245,80 195,80" fill="#008300" />
+
+            <!-- In-band digit, always narrow enough to fit even the apex band -->
+            <g font-size="16" font-weight="700" text-anchor="middle" style="pointer-events:none">
+              <text class="pyramid-digit" data-level="1" x="220" y="356">1</text>
+              <text class="pyramid-digit" data-level="2" x="220" y="296">2</text>
+              <text class="pyramid-digit" data-level="3" x="220" y="236">3</text>
+              <text class="pyramid-digit" data-level="4" x="220" y="176">4</text>
+              <text class="pyramid-digit" data-level="5" x="220" y="116">5</text>
+              <text class="pyramid-digit" data-level="6" x="220" y="56" font-size="14">6</text>
+            </g>
+
+            <!-- Full level labels sit outside the pyramid so long text never clips against a narrow band.
+                 Left in place (not mirrored) in RTL mode; direction="ltr" pins their layout so the leader
+                 lines/dots stay visually attached to the geometry regardless of page dir. -->
+            <g font-size="13" font-weight="600" direction="ltr" style="pointer-events:none">
+              <line class="pyramid-leader" data-level="6" x1="232.5" y1="50" x2="400" y2="50" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="6" cx="400" cy="50" r="4" />
+              <text x="412" y="46" class="fill-slate-700 dark:fill-slate-200">6 · Create</text>
+              <text x="412" y="62" font-size="11" font-weight="400" class="fill-slate-400 dark:fill-slate-500">capstone · resolves the hook</text>
+
+              <line class="pyramid-leader" data-level="5" x1="257.5" y1="110" x2="400" y2="110" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="5" cx="400" cy="110" r="4" />
+              <text x="412" y="106" class="fill-slate-700 dark:fill-slate-200">5 · Evaluate</text>
+              <text x="412" y="122" font-size="11" font-weight="400" class="fill-slate-400 dark:fill-slate-500">start · the hook</text>
+
+              <line class="pyramid-leader" data-level="4" x1="282.5" y1="170" x2="400" y2="170" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="4" cx="400" cy="170" r="4" />
+              <text x="412" y="175" class="fill-slate-700 dark:fill-slate-200">4 · Analyze</text>
+
+              <line class="pyramid-leader" data-level="3" x1="307.5" y1="230" x2="400" y2="230" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="3" cx="400" cy="230" r="4" />
+              <text x="412" y="235" class="fill-slate-700 dark:fill-slate-200">3 · Apply</text>
+
+              <line class="pyramid-leader" data-level="2" x1="332.5" y1="290" x2="400" y2="290" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="2" cx="400" cy="290" r="4" />
+              <text x="412" y="295" class="fill-slate-700 dark:fill-slate-200">2 · Understand</text>
+
+              <line class="pyramid-leader" data-level="1" x1="357.5" y1="350" x2="400" y2="350" stroke-width="1.5" stroke-dasharray="2,2" />
+              <circle class="pyramid-dot" data-level="1" cx="400" cy="350" r="4" />
+              <text x="412" y="355" class="fill-slate-700 dark:fill-slate-200">1 · Remember</text>
+            </g>
+          </svg>
+          <!-- Mobile/tablet fallback nav — the sidebar is the primary nav on lg+ screens -->
+          <nav aria-label="Jump to Bloom level" class="lg:hidden flex flex-wrap gap-2 justify-center">
+            <a href="#level-5" data-level="5" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">5 · Evaluate (start)</a>
+            <a href="#level-4" data-level="4" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">4 · Analyze</a>
+            <a href="#level-3" data-level="3" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">3 · Apply</a>
+            <a href="#level-2" data-level="2" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">2 · Understand</a>
+            <a href="#level-1" data-level="1" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">1 · Remember</a>
+            <a href="#level-6" data-level="6" class="nav-chip text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">6 · Create (capstone)</a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Level 5: Evaluate (hook) -->
+      <section id="level-5" data-level="5" data-role="hook" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-5"><strong>Level 5 · Evaluate.</strong> judge · critique · defend · rank · recommend · justify — the cold open. No answer here yet.</div>
+        <h2 class="text-xl font-bold mb-3">Two robotics vendors, one pilot budget</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>You run automation for a warehouse operator. You have budget for exactly one robotics pilot this year, and two vendors have just finished pitching.</p>
+
+<p><strong>Vendor A</strong> shows generated practice footage of an arm unloading mixed cartons. It is beautiful. Shadows fall correctly, cardboard creases where it should, fast reaches carry motion blur. Their headline number: in a blind test, 92% of human reviewers could not tell it from real camera footage. They have generated 40,000 hours of it, and the pilot can start next month.</p>
+
+<p><strong>Vendor B</strong> shows something that looks worse. Flat lighting, blocky textures, an arm that visibly jitters. Their headline number is a different kind of number: on an instrumented rig, their simulator predicts contact force within 8% of measured values and slip onset within 30 milliseconds. They have 900 hours of it, plus 40 recordings of the real arm failing. They want six more months and a force-sensor budget.</p>
+
+<p>Procurement likes Vendor A. The demo is stronger, the corpus is forty times larger, and it is cheaper.</p>
+
+<p><strong>Which pilot do you fund, and what would have to be true for that choice to be the wrong one?</strong></p>
+
+<p>Sit with the second half of that question before scrolling. It is the half that decides the answer.</p>
+</div>
+        <p class="source-note">Scenario constructed for this page. The vendor tension, the 92%-realism framing and the force-and-slip alternative are drawn from the article <em>The Plausibility Trap</em> (alhaol.github.io, July 2026), sections “Why the video can lie” and “What good practice looks like”.</p>
+      </section>
+
+      <!-- Level 4: Analyze -->
+      <section id="level-4" data-level="4" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-4"><strong>Level 4 · Analyze.</strong> compare · differentiate · deconstruct · categorize · attribute</div>
+        <h2 class="text-xl font-bold mb-3">What was actually in tension</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Nothing in the pitch was false. Both numbers are real measurements. The difficulty is that they measure different things, and only one of them is the thing a robot needs. Four factors were pulling against each other:</p>
+
+<table>
+<thead><tr><th>Factor</th><th>Vendor A</th><th>Vendor B</th><th>Why they pull apart</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>What the headline number grades</strong></td>
+  <td>Whether a person believes the footage</td>
+  <td>Force error and slip timing against a rig</td>
+  <td>A human reviewer can see lighting and motion. No reviewer can see friction, so a perceptual score is blind to it by construction.</td>
+</tr>
+<tr>
+  <td><strong>Volume against grounding</strong></td>
+  <td>40,000 generated hours</td>
+  <td>900 hours plus 40 real failures</td>
+  <td>Generated hours are cheap and unlimited; measured hours are expensive and finite. Volume only helps if the thing being multiplied is correct.</td>
+</tr>
+<tr>
+  <td><strong>One frame or a whole sequence</strong></td>
+  <td>Frames judged individually</td>
+  <td>Slip onset judged over time</td>
+  <td>A per-frame score can stay high while a systematic bias accumulates across the sequence. Level 3 puts a number on this.</td>
+</tr>
+<tr>
+  <td><strong>Traceability after an incident</strong></td>
+  <td>Raw generated video, no labels</td>
+  <td>Logged rig conditions and recorded failures</td>
+  <td>Video records what was shown, not what was assumed. If an investigation opens a year later, only one of these can be reconstructed.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Notice that none of these are arguments about which company is more competent. They are arguments about which quantity was measured, and that is a choice you make in the contract rather than something you discover in the demo.</p>
+</div>
+        <p class="source-note">Decomposition written for this page from the Level 5 scenario. The traceability factor follows the supply-chain argument in <em>The Plausibility Trap</em>, section “Who made your robot’s training data?”.</p>
+      </section>
+
+      <!-- Level 3: Apply -->
+      <section id="level-3" data-level="3" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-3"><strong>Level 3 · Apply.</strong> implement · use · execute · demonstrate · solve</div>
+        <h2 class="text-xl font-bold mb-3">Putting a number on the third factor</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Take the factor that is hardest to see in a demo: a small bias that accumulates across a sequence. Work it through with the crudest possible model, a fixed heading error.</p>
+
+<p>Suppose the world model predicts direction with a systematic bias of <strong>1 degree</strong>. That is small enough that no reviewer would ever flag a frame. Lateral drift after travelling a distance <em>d</em> is:</p>
+
+<pre><code>drift = d &times; tan(1&deg;)
+      = d &times; 0.01746</code></pre>
+
+<p>Now apply it at two scales that both appear in a warehouse:</p>
+
+<ol>
+  <li><strong>A 0.5 m reach to a carton.</strong><br>
+      drift = 0.5 &times; 0.01746 = <strong>8.7 mm</strong>. The gripper still closes on the box. Nobody notices, and the footage looks correct because it <em>is</em> correct at this scale.</li>
+  <li><strong>A 30 m traverse down an aisle.</strong><br>
+      drift = 30 &times; 0.01746 = <strong>0.52 m</strong>. Half a metre. That is a different pallet.</li>
+</ol>
+
+<p>The error never changed. Only the distance did. This is why a system can pass every frame-level check a reviewer can perform and still be unusable for the long-horizon task, and why <em>&ldquo;our footage is indistinguishable from real&rdquo;</em> is not a claim about the quantity that hurts you.</p>
+
+<p>Now turn the same procedure on Vendor A&rsquo;s headline. 92% indistinguishable leaves 8% that reviewers <em>did</em> catch. But the reviewers were grading appearance. The residual tells you how often the renderer slipped visually. It tells you nothing at all about the heading bias above, because that bias is invisible in any single frame. The number is real, carefully measured, and about the wrong variable.</p>
+</div>
+        <p class="source-note">Worked for this page from the “compass off by one degree” analogy in <em>The Plausibility Trap</em>, section “Why the video can lie”. The arithmetic (tan 1° ≈ 0.01746) is standard trigonometry.</p>
+      </section>
+
+      <!-- Level 2: Understand -->
+      <section id="level-2" data-level="2" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-2"><strong>Level 2 · Understand.</strong> explain · summarize · interpret · paraphrase · classify</div>
+        <h2 class="text-xl font-bold mb-3">Why a perfect-looking frame can carry wrong physics</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>The drift number above is a symptom. The cause is what the model was rewarded for during training.</p>
+
+<p>A learned model improves only what its scoring function measures. Optimisation is not curiosity; it is hill-climbing on one number. Most video world models are scored, directly or through a human preference signal, on <strong>perceptual similarity</strong> to real footage. So that is the hill they climb.</p>
+
+<p>Then ask the awkward question: what does friction look like? Photograph a floor that has just been mopped and a floor that is bone dry. The two images can be pixel-for-pixel identical. Friction has no visual signature, which means a model that gets it badly wrong pays <em>no penalty at all</em> during training. There is no gradient pushing it toward the right answer, because nothing in the loss can tell the two floors apart. The same holds for mass, compliance, and the exact moment static friction gives way.</p>
+
+<p>Two consequences follow, and they are the two things that made the vendor choice hard:</p>
+
+<ul>
+  <li><strong>The error is systematic, not random.</strong> Random noise cancels as it accumulates. A bias does not. Because generation is sequential, with each predicted frame conditioning the next, a consistent physical misconception integrates across the rollout instead of averaging out. That is the 0.52 m.</li>
+  <li><strong>The failure is silent.</strong> When a language model invents a citation, the link does not resolve and anyone can catch it in seconds. When a world model gets a friction coefficient wrong, it produces beautiful video and a robot that misjudges a grip months later, in a warehouse, with nothing connecting the incident back to the training data.</li>
+</ul>
+
+<p>So the honest summary is narrower than &ldquo;world models do not work&rdquo;. They work, and the shortage of real robot practice data is severe enough that generated practice is the only way to get enough of it. The claim is smaller and sharper: <strong>looking real and being right are different skills, and only one of them is being graded.</strong></p>
+</div>
+        <p class="source-note">Explanation for this page. The mopped-floor argument and the silent-failure contrast are from <em>The Plausibility Trap</em>, sections “Why the video can lie” and “Who made your robot’s training data?”; the loss-function framing is standard supervised-learning practice.</p>
+      </section>
+
+      <!-- Level 1: Remember -->
+      <section id="level-1" data-level="1" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-1"><strong>Level 1 · Remember.</strong> define · list · recall · name · identify — compact reference, not a starting point.</div>
+        <h2 class="text-xl font-bold mb-3">The six terms this page used</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>You have already used every one of these. Here they are named precisely.</p>
+
+<dl>
+  <dt><strong>World model</strong></dt>
+  <dd>A program that predicts what happens next in the physical world. In practice, a video-game-style engine a robot can practise inside without breaking anything real.</dd>
+
+  <dt><strong>Plausibility</strong></dt>
+  <dd>The property of looking believable. Distinct from correctness, and the only one of the two that a human reviewer can grade from a picture.</dd>
+
+  <dt><strong>Rollout</strong></dt>
+  <dd>One generated sequence run forward step by step, where each predicted moment becomes the input to the next.</dd>
+
+  <dt><strong>Compounding error</strong></dt>
+  <dd>A small systematic bias that grows with the length of a rollout because it is re-applied at every step rather than cancelling out.</dd>
+
+  <dt><strong>Sim-to-real gap</strong></dt>
+  <dd>The performance drop when behaviour trained in simulation is moved onto real hardware.</dd>
+
+  <dt><strong>Contact dynamics</strong></dt>
+  <dd>The physics of things touching: friction, normal force, deformation, and the moment a grip begins to slip. The part of the world with no reliable appearance.</dd>
+</dl>
+</div>
+        <p class="source-note">Definitions consolidated for this page from <em>The Plausibility Trap</em> and standard robotics and machine-learning usage.</p>
+      </section>
+
+      <!-- Level 6: Create (capstone) -->
+      <section id="level-6" data-level="6" data-role="capstone" data-resolves="hook" class="level-section mb-14 scroll-mt-24">
+        <div class="level-note lvl-6"><strong>Level 6 · Create.</strong> design · construct · produce · propose · compose · formulate — the capstone. Resolves the Level 5 scenario.</div>
+        <h2 class="text-xl font-bold mb-3">Now settle Vendor A against Vendor B</h2>
+        <div class="prose dark:prose-invert max-w-none">
+<p>Back to <strong>&ldquo;Two robotics vendors, one pilot budget&rdquo;</strong>. You have one pilot to fund: the beautiful 40,000-hour corpus, or the ugly 900-hour one with force error inside 8%.</p>
+
+<h3>Your task</h3>
+<p>Do not pick a company. Write the <strong>acceptance gate</strong> the winner has to pass before any generated data is allowed to train a robot you deploy. Five clauses, each one naming a measurement and a threshold that a vendor could fail. If a clause cannot be failed, it is marketing, not a gate.</p>
+
+<h3>A worked resolution</h3>
+<p>The trap in the opening scenario is that it presents as a vendor choice when it is a <em>measurement</em> choice. Vendor A&rsquo;s 92% and Vendor B&rsquo;s 8% are not competing answers to one question. They answer different questions, and only your task decides which question matters.</p>
+
+<p>So the decision rule is one line: <strong>does this pilot involve contact?</strong></p>
+
+<ul>
+  <li><strong>If the pilot is contact-rich</strong> (grasping, stacking, unloading mixed cartons, anything where a grip can slip), fund Vendor B. Vendor A optimised a quantity that is blind to the failure mode that will actually stop the line, and no amount of extra generated hours fixes a blind spot.</li>
+  <li><strong>If the pilot is navigation or inspection</strong> where the robot never touches anything under load, fund Vendor A. Appearance really is the governing variable, Vendor B&rsquo;s force fidelity is expensive irrelevance, and the 40,000 hours are a genuine advantage.</li>
+</ul>
+
+<p>Which answers the second half of the opening question directly. <strong>What would make funding Vendor B wrong?</strong> A pilot with no contact in it. That is the condition, and it is the one procurement never asks about because it is not visible in either demo.</p>
+
+<h3>A gate that could actually be failed</h3>
+<ol>
+  <li><strong>Provenance.</strong> State the share of practice data that came from real measurement against model generation, per task, in writing before deployment.</li>
+  <li><strong>Physical fidelity, not appearance.</strong> Contact force within a stated percentage of rig measurement, and slip onset within a stated millisecond window. A perceptual realism score does not satisfy this clause.</li>
+  <li><strong>Horizon test.</strong> Report error at the longest rollout the deployed task actually uses, not at one frame. Level 3 is the reason: the per-frame number is not the number that hurts.</li>
+  <li><strong>Hardware decides.</strong> Go or no-go rests on physical robots under varied, messy conditions. Generated video is never the final test.</li>
+  <li><strong>Reconstructability.</strong> Model versions and their assumptions are retained alongside the robots they trained, so training conditions can be rebuilt a year later during an investigation.</li>
+</ol>
+
+<p>Write your five before comparing. If yours are stricter, use yours, and notice that every clause you wrote is a question a vendor can answer in a contract but not in a demo reel.</p>
+</div>
+        <p class="source-note">Capstone constructed for this page. The five acceptance clauses adapt the “What leaders should do” list from <em>The Plausibility Trap</em>; the contact-or-not decision rule is this page’s own synthesis.</p>
+      </section>
+
+      <!-- Test Yourself: retrieval-practice quiz (required on every generated page) -->
+      <section id="quiz-section" class="mt-4 mb-14 scroll-mt-24">
+        <div class="rounded-xl border-2 border-indigo-200 dark:border-indigo-900 bg-indigo-50/40 dark:bg-indigo-950/20 p-6">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.633.307-1.451.831-1.451 1.827v.5M12 17.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <h2 class="text-lg font-bold">Test Yourself</h2>
+            <span class="ms-auto text-xs font-semibold uppercase tracking-wide text-indigo-500 dark:text-indigo-400">Retrieval practice · not one of the 6 levels</span>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mb-5">Four quick questions pulled from what you just read. Answering — even wrong — helps this stick better than re-reading does. Anything you miss gets shown first next time you open this page.</p>
+          <div id="quiz-recap-banner" class="hidden mb-5 text-sm rounded-lg bg-amber-100 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 px-4 py-2"></div>
+          <div id="quiz-questions" class="space-y-5"></div>
+          <div id="quiz-score" class="hidden mt-6 pt-4 border-t border-indigo-200 dark:border-indigo-900 text-sm font-semibold"></div>
+        </div>
+      </section>
+
+      <!-- Footer: path summary -->
+      <footer class="mt-16 pt-6 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-500">
+        <p class="mb-3 font-semibold text-slate-600 dark:text-slate-400">Path walked:</p>
+        <ol class="flex flex-wrap gap-2">
+          <li><a href="#level-5" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">1. 5 · Evaluate (start)</a></li>
+          <li><a href="#level-4" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">2. 4 · Analyze</a></li>
+          <li><a href="#level-3" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">3. 3 · Apply</a></li>
+          <li><a href="#level-2" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">4. 2 · Understand</a></li>
+          <li><a href="#level-1" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">5. 1 · Remember</a></li>
+          <li><a href="#level-6" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800">6. 6 · Create (capstone)</a></li>
+        </ol>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle, persisted to localStorage — matches the create-master-class template convention.
+    const root = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    }
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Scroll-spy: link the in-view level section to its pyramid band, sidebar link, and mobile nav chip.
+    const bands = document.querySelectorAll('.pyramid-band');
+    const navTargets = document.querySelectorAll('.nav-chip, .sidebar-link');
+    const sections = document.querySelectorAll('.level-section');
+
+    function setActive(level) {
+      bands.forEach((b) => b.classList.toggle('active', b.dataset.level === level));
+      navTargets.forEach((n) => n.classList.toggle('active', n.dataset.level === level));
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.dataset.level);
+        });
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => observer.observe(s));
+
+    bands.forEach((b) => {
+      b.addEventListener('click', () => {
+        document.getElementById(`level-${b.dataset.level}`).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    setActive('5');
+  </script>
+
+  <!-- Test Yourself: retrieval-practice quiz logic. 
+      { id: 'q1', prompt: "What separated Vendor B's headline number from Vendor A's?",
+        options: [
+          "Vendor B tested on more hours of footage",
+          "Vendor B measured physical quantities (force error, slip timing) rather than how convincing the footage looked",
+          "Vendor B used real cameras and Vendor A used synthetic ones",
+          "Vendor B's reviewers were robotics engineers rather than the general public"
+        ], correct: 1,
+        why: "Both numbers were real measurements, but they graded different things: appearance versus contact physics. See Level 4." },
+
+      { id: 'q2', prompt: "Why does training on perceptual realism fail to teach a model about friction?",
+        options: [
+          "Friction is too computationally expensive to simulate at video frame rates",
+          "Video datasets are usually recorded on surfaces with the same friction",
+          "Friction has no visual signature, so a wrong value costs the model nothing in its training score",
+          "Friction only matters at speeds higher than those shown in training footage"
+        ], correct: 2,
+        why: "A mopped floor and a dry floor can be pixel-identical, so no gradient ever pushes the model toward the right value. See Level 2." },
+
+      { id: 'q3', prompt: "In this page's glossary, what is a rollout?",
+        options: [
+          "The process of deploying a trained robot into production",
+          "One generated sequence run forward step by step, each predicted moment feeding the next",
+          "The gap between simulated and real-world performance",
+          "A single frame sampled from a world model for review"
+        ], correct: 1,
+        why: "Rollout is the sequential generation itself, which is exactly why a per-step bias compounds. See Level 1." },
+
+      { id: 'q4', prompt: "By the capstone's decision rule, when is Vendor A's perceptual-realism approach the right choice?",
+        options: [
+          "When the budget rules out force sensors",
+          "When the corpus is large enough to average out physical errors",
+          "When the pilot is navigation or inspection, where the robot never touches anything under load",
+          "When human reviewers score above 90% indistinguishability"
+        ], correct: 2,
+        why: "The rule is whether the task involves contact; with no contact, appearance really is the governing variable. See Level 6." }
+ is a comma-separated list of
+       { id, prompt, options: [4 strings], correct: <index 0-3>, why } object literals — see SKILL.md.
+       QUESTION TEXT is per-page content (write it in the page's language); the UI strings below
+       (feedback, banner, score line) are bilingual EN/AR pairs baked into the template itself, picked
+       by LANG — never per-generation translation work for these. -->
+  <script>
+    (function () {
+      var LANG = 'en';
+      var T = LANG === 'ar' ? {
+        missed: function (n) { return 'فاتتك ' + n + (n === 1 ? ' سؤال' : ' أسئلة') + ' آخر مرة — تظهر أولاً أدناه.'; },
+        missedBadge: 'فاتك آخر مرة',
+        correct: 'إجابة صحيحة. ',
+        incorrect: 'ليست صحيحة. ',
+        score: function (right, total) {
+          return right + ' / ' + total + ' صحيحة — ' + (right === total ? 'تم مسح الأسئلة الفائتة للزيارة القادمة.' : (total - right) + ' سيُعاد عرضها في الزيارة القادمة.');
+        },
+      } : {
+        missed: function (n) { return 'You missed ' + n + ' question' + (n > 1 ? 's' : '') + ' last time — shown first below.'; },
+        missedBadge: 'missed last time',
+        correct: 'Correct. ',
+        incorrect: 'Not quite. ',
+        score: function (right, total) {
+          return right + ' / ' + total + ' correct — ' + (right === total ? 'missed items cleared for next visit.' : (total - right) + ' flagged to resurface next time.');
+        },
+      };
+
+      var QUIZ_KEY = 'quiz:' + location.pathname;
+      var QUESTIONS = [
+
+      { id: 'q1', prompt: "What separated Vendor B's headline number from Vendor A's?",
+        options: [
+          "Vendor B tested on more hours of footage",
+          "Vendor B measured physical quantities (force error, slip timing) rather than how convincing the footage looked",
+          "Vendor B used real cameras and Vendor A used synthetic ones",
+          "Vendor B's reviewers were robotics engineers rather than the general public"
+        ], correct: 1,
+        why: "Both numbers were real measurements, but they graded different things: appearance versus contact physics. See Level 4." },
+
+      { id: 'q2', prompt: "Why does training on perceptual realism fail to teach a model about friction?",
+        options: [
+          "Friction is too computationally expensive to simulate at video frame rates",
+          "Video datasets are usually recorded on surfaces with the same friction",
+          "Friction has no visual signature, so a wrong value costs the model nothing in its training score",
+          "Friction only matters at speeds higher than those shown in training footage"
+        ], correct: 2,
+        why: "A mopped floor and a dry floor can be pixel-identical, so no gradient ever pushes the model toward the right value. See Level 2." },
+
+      { id: 'q3', prompt: "In this page's glossary, what is a rollout?",
+        options: [
+          "The process of deploying a trained robot into production",
+          "One generated sequence run forward step by step, each predicted moment feeding the next",
+          "The gap between simulated and real-world performance",
+          "A single frame sampled from a world model for review"
+        ], correct: 1,
+        why: "Rollout is the sequential generation itself, which is exactly why a per-step bias compounds. See Level 1." },
+
+      { id: 'q4', prompt: "By the capstone's decision rule, when is Vendor A's perceptual-realism approach the right choice?",
+        options: [
+          "When the budget rules out force sensors",
+          "When the corpus is large enough to average out physical errors",
+          "When the pilot is navigation or inspection, where the robot never touches anything under load",
+          "When human reviewers score above 90% indistinguishability"
+        ], correct: 2,
+        why: "The rule is whether the task involves contact; with no contact, appearance really is the governing variable. See Level 6." }
+
+      ];
+
+      var state = {};
+      try { state = JSON.parse(localStorage.getItem(QUIZ_KEY) || '{}'); } catch (e) { state = {}; }
+
+      var missedIds = Object.keys(state).filter(function (id) { return state[id] === false; });
+      var banner = document.getElementById('quiz-recap-banner');
+      if (missedIds.length) {
+        banner.classList.remove('hidden');
+        banner.textContent = T.missed(missedIds.length);
+      }
+
+      var ordered = QUESTIONS.slice().sort(function (a, b) {
+        var aMissed = missedIds.indexOf(a.id) !== -1 ? 0 : 1;
+        var bMissed = missedIds.indexOf(b.id) !== -1 ? 0 : 1;
+        return aMissed - bMissed;
+      });
+
+      var container = document.getElementById('quiz-questions');
+      var answered = {};
+
+      ordered.forEach(function (q, idx) {
+        var card = document.createElement('div');
+        card.className = 'bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-800';
+        var flaggedBadge = missedIds.indexOf(q.id) !== -1
+          ? '<span class="ms-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400">' + T.missedBadge + '</span>'
+          : '';
+        card.innerHTML =
+          '<p class="font-medium mb-3">' + (idx + 1) + '. ' + q.prompt + flaggedBadge + '</p>' +
+          '<div class="grid sm:grid-cols-2 gap-2" data-options></div>' +
+          '<p class="mt-3 text-sm hidden" data-explain></p>';
+
+        var optsWrap = card.querySelector('[data-options]');
+        q.options.forEach(function (opt, oi) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'text-start text-sm px-3 py-2 rounded-md border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 transition';
+          btn.textContent = opt;
+          btn.addEventListener('click', function () {
+            if (answered[q.id] !== undefined) return;
+            var correct = oi === q.correct;
+            answered[q.id] = correct;
+            state[q.id] = correct;
+            try { localStorage.setItem(QUIZ_KEY, JSON.stringify(state)); } catch (e) {}
+
+            Array.prototype.forEach.call(optsWrap.children, function (b, bi) {
+              b.disabled = true;
+              if (bi === q.correct) b.className += ' !border-green-500 !bg-green-50 dark:!bg-green-950/40 !text-green-700 dark:!text-green-400';
+              else if (bi === oi) b.className += ' !border-red-500 !bg-red-50 dark:!bg-red-950/40 !text-red-700 dark:!text-red-400';
+            });
+            var explain = card.querySelector('[data-explain]');
+            explain.classList.remove('hidden');
+            explain.textContent = (correct ? T.correct : T.incorrect) + q.why;
+            explain.className = 'mt-3 text-sm ' + (correct ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400');
+            maybeShowScore();
+          });
+          optsWrap.appendChild(btn);
+        });
+        container.appendChild(card);
+      });
+
+      function maybeShowScore() {
+        if (Object.keys(answered).length < QUESTIONS.length) return;
+        var right = Object.values(answered).filter(Boolean).length;
+        var scoreEl = document.getElementById('quiz-score');
+        scoreEl.classList.remove('hidden');
+        scoreEl.textContent = T.score(right, QUESTIONS.length);
+      }
+    })();
+  </script>
+
+  <!-- Sketchpad: a screen-anchored scratch layer for cognitive offloading while reading — freehand notes
+       over the current view. inset-inline-end (not right) so the FAB/toolbar sit on the correct edge in
+       both LTR and RTL without a dir-specific override. -->
+  <style>
+    #sketch-toggle {
+      position: fixed; inset-inline-end: 1.25rem; bottom: 1.25rem; z-index: 60;
+      width: 3rem; height: 3rem; border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center;
+      background: #4338ca; color: #fff; border: none; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    #sketch-toggle:hover { transform: scale(1.06); }
+    #sketch-toggle.active { background: #dc2626; }
+    .dark #sketch-toggle { background: #6366f1; }
+    .dark #sketch-toggle.active { background: #f87171; }
+
+    #sketch-overlay { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
+    #sketch-overlay.drawing { pointer-events: auto; }
+    #sketch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+    #sketch-overlay.drawing #sketch-canvas { cursor: crosshair; }
+
+    #sketch-toolbar {
+      position: fixed; inset-inline-end: 1.25rem; bottom: 5rem; z-index: 61;
+      display: none; flex-direction: column; gap: 0.5rem; align-items: center;
+      background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0.75rem; padding: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    #sketch-toolbar.open { display: flex; }
+    .dark #sketch-toolbar { background: rgba(15,15,17,0.96); border-color: rgba(255,255,255,0.12); }
+    .sketch-swatch { width: 1.75rem; height: 1.75rem; border-radius: 9999px; border: 2px solid transparent; cursor: pointer; padding: 0; }
+    .sketch-swatch.selected { border-color: #4338ca; }
+    .dark .sketch-swatch.selected { border-color: #a5b4fc; }
+    .sketch-swatch[data-color="ink"] { background: #111827; }
+    .dark .sketch-swatch[data-color="ink"] { background: #f3f4f6; }
+    .sketch-btn {
+      font-size: 0.65rem; font-weight: 700; padding: 0.35rem 0.4rem; border-radius: 0.375rem;
+      background: rgba(0,0,0,0.06); color: inherit; border: none; cursor: pointer; white-space: nowrap;
+    }
+    .dark .sketch-btn { background: rgba(255,255,255,0.12); color: #e5e7eb; }
+    .sketch-btn:hover { background: rgba(0,0,0,0.12); }
+    .dark .sketch-btn:hover { background: rgba(255,255,255,0.2); }
+    .sketch-btn.active-tool { outline: 2px solid currentColor; }
+  </style>
+
+  <button id="sketch-toggle" type="button" aria-label="Toggle sketchpad: draw freehand notes over the page while you read" aria-pressed="false">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 19.5H4.5" />
+    </svg>
+  </button>
+
+  <div id="sketch-toolbar" role="toolbar" aria-label="Sketchpad tools">
+    <button type="button" class="sketch-swatch selected" data-color="ink" aria-label="Pen"></button>
+    <button type="button" class="sketch-swatch" data-color="#ef4444" style="background:#ef4444" aria-label="Red pen"></button>
+    <button type="button" class="sketch-swatch" data-color="#3b82f6" style="background:#3b82f6" aria-label="Blue pen"></button>
+    <button type="button" id="sketch-erase" class="sketch-btn" aria-label="Erase">Erase</button>
+    <button type="button" id="sketch-clear" class="sketch-btn" aria-label="Clear">Clear</button>
+  </div>
+
+  <div id="sketch-overlay" aria-hidden="true">
+    <canvas id="sketch-canvas"></canvas>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('sketch-toggle');
+      var overlay = document.getElementById('sketch-overlay');
+      var toolbar = document.getElementById('sketch-toolbar');
+      var canvas = document.getElementById('sketch-canvas');
+      var ctx = canvas.getContext('2d');
+      var eraseBtn = document.getElementById('sketch-erase');
+      var clearBtn = document.getElementById('sketch-clear');
+      var swatches = document.querySelectorAll('.sketch-swatch');
+
+      var STORAGE_KEY = 'sketch:' + location.pathname;
+      var drawing = false;
+      var erasing = false;
+      var currentColor = 'ink';
+      var lastSnapshot = (function () {
+        try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+      })();
+      var lastX = 0, lastY = 0;
+
+      function inkColor() {
+        return document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827';
+      }
+      function strokeColor() {
+        return currentColor === 'ink' ? inkColor() : currentColor;
+      }
+
+      function sizeCanvas(preserve) {
+        var ratio = window.devicePixelRatio || 1;
+        var w = window.innerWidth, h = window.innerHeight;
+        if (preserve && canvas.width) lastSnapshot = canvas.toDataURL('image/png');
+        canvas.width = w * ratio;
+        canvas.height = h * ratio;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (lastSnapshot) {
+          var img = new Image();
+          img.onload = function () { ctx.drawImage(img, 0, 0, w, h); };
+          img.src = lastSnapshot;
+        }
+      }
+      sizeCanvas(false);
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () { sizeCanvas(true); }, 150);
+      });
+
+      function saveSnapshot() {
+        lastSnapshot = canvas.toDataURL('image/png');
+        try { localStorage.setItem(STORAGE_KEY, lastSnapshot); } catch (e) {}
+      }
+
+      function strokeAt(x, y) {
+        ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = strokeColor();
+        ctx.lineWidth = erasing ? 18 : 3;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x; lastY = y;
+      }
+
+      canvas.addEventListener('pointerdown', function (e) {
+        if (!overlay.classList.contains('drawing')) return;
+        drawing = true;
+        lastX = e.clientX; lastY = e.clientY;
+        strokeAt(e.clientX, e.clientY);
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener('pointermove', function (e) {
+        if (!drawing) return;
+        strokeAt(e.clientX, e.clientY);
+      });
+      function endStroke() {
+        if (!drawing) return;
+        drawing = false;
+        saveSnapshot();
+      }
+      canvas.addEventListener('pointerup', endStroke);
+      canvas.addEventListener('pointercancel', endStroke);
+      canvas.addEventListener('pointerleave', endStroke);
+
+      toggle.addEventListener('click', function () {
+        var open = !overlay.classList.contains('drawing');
+        overlay.classList.toggle('drawing', open);
+        overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+        toolbar.classList.toggle('open', open);
+        toggle.classList.toggle('active', open);
+        toggle.setAttribute('aria-pressed', open ? 'true' : 'false');
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('drawing')) toggle.click();
+      });
+
+      swatches.forEach(function (sw) {
+        sw.addEventListener('click', function () {
+          swatches.forEach(function (s) { s.classList.remove('selected'); });
+          sw.classList.add('selected');
+          currentColor = sw.dataset.color;
+          erasing = false;
+          eraseBtn.classList.remove('active-tool');
+        });
+      });
+      eraseBtn.addEventListener('click', function () {
+        erasing = !erasing;
+        eraseBtn.classList.toggle('active-tool', erasing);
+      });
+      clearBtn.addEventListener('click', function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        lastSnapshot = null;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

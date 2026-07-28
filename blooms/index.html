@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom Classes | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+            --header-bg-start: #020617;
+            --header-bg-end: #0f172a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.15);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .prose { color: var(--text-main); }
+        .prose p { color: var(--text-muted); line-height: 1.75; }
+
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+        }
+
+        .nav-link { color: var(--text-main); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+            margin-bottom: 0.35rem;
+            background-color: rgba(96, 165, 250, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .bloom-card {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /* The card's left edge carries the Bloom palette instead of a hero image. */
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .bloom-card-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+
+        .bloom-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .bloom-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s;
+        }
+        .bloom-link:hover { gap: 0.75rem; }
+
+        .published-date { font-size: 0.875rem; color: var(--text-muted); }
+
+        .bloom-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .lang-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* The 6 Bloom hues, matching the generated pages' pyramid palette. */
+        .lvl-1 { border-left-color: #4e79a7; }
+        .lvl-2 { border-left-color: #f28e2b; }
+        .lvl-3 { border-left-color: #76b7b2; }
+        .lvl-4 { border-left-color: #e15759; }
+        .lvl-5 { border-left-color: #b07aa1; }
+        .lvl-6 { border-left-color: #59a14f; }
+
+        .search-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.7rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary-color); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .tag-chip {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 999px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .tag-chip:hover { color: var(--text-main); border-color: var(--primary-color); }
+        .tag-chip.on {
+            background-color: rgba(96, 165, 250, 0.12);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <header class="py-6 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="nav-link text-sm" style="color: white;">← Back to Portfolio</a>
+            <a href="../articles/" class="nav-link text-sm" style="color: white;">Articles →</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div class="mb-10">
+            <h1 class="text-4xl font-bold mb-4">Bloom Classes</h1>
+            <p class="text-lg prose">Single-topic learning pages built on Bloom's Taxonomy, walked in Peak Preview order: you meet a judgment call you cannot yet defend, build the missing foundation underneath it, then climb back up and resolve it. Every page carries a sketchpad for your own notes and a short retrieval quiz that remembers what you missed.</p>
+        </div>
+
+        <div class="mb-8 flex flex-col gap-4">
+            <input id="search" class="search-input" type="search" placeholder="Search bloom classes…" aria-label="Search bloom classes">
+            <div id="tags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <p id="empty" class="prose hidden py-16 text-center"></p>
+    </main>
+
+    <script>
+    (function () {
+        var all = [], activeTag = null, q = '';
+        var grid = document.getElementById('grid');
+        var empty = document.getElementById('empty');
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+
+        function prettyDate(iso) {
+            var p = String(iso || '').split('-');
+            if (p.length !== 3) return iso || '';
+            var months = ['January','February','March','April','May','June',
+                          'July','August','September','October','November','December'];
+            return months[Number(p[1]) - 1] + ' ' + Number(p[2]) + ', ' + p[0];
+        }
+
+        function card(b) {
+            var file = b.num + '_' + b.slug + '_' + b.date + '.html';
+            var lvl = 'lvl-' + ((Number(b.num) % 6) + 1);   // rotate the Bloom hues across cards
+            return '' +
+            '<article class="theme-card bloom-card ' + lvl + ' rounded-xl overflow-hidden">' +
+              '<div class="bloom-card-content">' +
+                '<div class="flex items-center justify-between mb-3">' +
+                  '<span class="bloom-num">BLOOM ' + esc(b.num) + '</span>' +
+                  '<span class="lang-badge">' + esc((b.lang || 'en').toUpperCase()) + '</span>' +
+                '</div>' +
+                '<div class="mb-3">' +
+                  (b.tags || []).map(function (t) {
+                    return '<span class="category-badge">' + esc(t) + '</span>';
+                  }).join('') +
+                '</div>' +
+                '<h3 class="text-xl font-bold mb-2">' + esc(b.title) + '</h3>' +
+                '<p class="text-sm mb-4">' + esc(b.tagline || '') + '</p>' +
+                '<p class="text-sm prose mb-4 flex-grow">' + esc(b.description || '') + '</p>' +
+                '<div class="bloom-card-footer">' +
+                  '<div>' +
+                    '<p class="published-date">' + esc(prettyDate(b.date)) + '</p>' +
+                  '</div>' +
+                  '<a href="Blooms/' + esc(file) + '" class="bloom-link">Open →</a>' +
+                '</div>' +
+              '</div>' +
+            '</article>';
+        }
+
+        function matches(b) {
+            if (activeTag && (b.tags || []).indexOf(activeTag) < 0) return false;
+            if (!q) return true;
+            var hay = [b.title, b.tagline, b.description, b.slug].concat(b.tags || []).join(' ').toLowerCase();
+            return hay.indexOf(q) >= 0;
+        }
+
+        function render() {
+            var list = all.filter(matches);
+            grid.innerHTML = list.map(card).join('');
+            if (!list.length) {
+                empty.classList.remove('hidden');
+                empty.textContent = all.length
+                    ? 'No bloom classes match that filter.'
+                    : 'No bloom classes published yet.';
+            } else {
+                empty.classList.add('hidden');
+            }
+        }
+
+        function renderTags() {
+            var seen = [];
+            all.forEach(function (b) {
+                (b.tags || []).forEach(function (t) { if (seen.indexOf(t) < 0) seen.push(t); });
+            });
+            document.getElementById('tags').innerHTML = seen.map(function (t) {
+                return '<button class="tag-chip" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+            }).join('');
+        }
+
+        document.getElementById('tags').addEventListener('click', function (e) {
+            var b = e.target.closest('button[data-tag]');
+            if (!b) return;
+            activeTag = (activeTag === b.dataset.tag) ? null : b.dataset.tag;
+            var chips = this.querySelectorAll('.tag-chip');
+            for (var i = 0; i < chips.length; i++) {
+                chips[i].classList.toggle('on', chips[i].dataset.tag === activeTag);
+            }
+            render();
+        });
+
+        document.getElementById('search').addEventListener('input', function () {
+            q = this.value.trim().toLowerCase();
+            render();
+        });
+
+        fetch('blooms.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                // Newest first, by number.
+                all = (d || []).slice().sort(function (a, b) { return Number(b.num) - Number(a.num); });
+                renderTags();
+                render();
+            })
+            .catch(function () {
+                empty.classList.remove('hidden');
+                empty.textContent = 'Could not load blooms.json.';
+            });
+    })();
+    </script>
+</body>
+</html>

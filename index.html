@@ -162,6 +162,49 @@
             transform: translateX(0);
         }
 
+        /* Floating blooms launcher (right column, stacked above articles) */
+        .blooms-fab {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 5.25rem;
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-color, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+        .blooms-fab:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12);
+        }
+        .blooms-fab .blooms-fab-tooltip {
+            position: absolute;
+            right: 64px;
+            white-space: nowrap;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            padding: 0.4rem 0.7rem;
+            border-radius: 0.4rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .blooms-fab:hover .blooms-fab-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
         /* Floating presentations launcher (bottom-center circle) */
         .presentations-fab {
             position: fixed;
@@ -226,6 +269,15 @@
             <path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"></path>
         </svg>
         <span class="articles-fab-tooltip">// articles</span>
+    </a>
+
+    <a href="blooms/" class="blooms-fab" aria-label="Open bloom classes" title="Bloom Classes">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3 L21 20 L3 20 Z"></path>
+            <line x1="8.8" y1="9" x2="15.2" y2="9"></line>
+            <line x1="6.2" y1="14" x2="17.8" y2="14"></line>
+        </svg>
+        <span class="blooms-fab-tooltip">// blooms</span>
     </a>
 
     <!-- <a href="presentations/" class="presentations-fab" aria-label="Open technical presentations" title="Technical Presentations">
