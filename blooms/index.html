@@ -77,6 +77,27 @@
 
         .bloom-card-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
 
+        /* Per-bloom icon. Icons are picked on https://icons0.dev/ (a search front-end over
+           Iconify) and embedded from Iconify's CDN, which is the data source icons0 indexes.
+           The registry stores the icons0 name verbatim, e.g. "ph:robot-duotone". */
+        .bloom-icon {
+            flex: 0 0 auto;
+            width: 46px;
+            height: 46px;
+            border-radius: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .theme-card:hover .bloom-icon {
+            background-color: rgba(96, 165, 250, 0.18);
+            border-color: var(--primary-color);
+        }
+        .bloom-icon img { width: 26px; height: 26px; display: block; }
+
         .bloom-card-footer {
             display: flex;
             justify-content: space-between;
@@ -199,24 +220,40 @@
             return months[Number(p[1]) - 1] + ' ' + Number(p[2]) + ', ' + p[0];
         }
 
+        // "collection:name" as shown on icons0.dev, resolved through Iconify's CDN.
+        // Anything that is not a clean collection:name pair falls back to a brain glyph
+        // rather than emitting a broken <img>.
+        var ICON_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        var ICON_FALLBACK = 'ph:brain-duotone';
+
+        function iconUrl(name) {
+            var id = ICON_RE.test(String(name || '')) ? name : ICON_FALLBACK;
+            return 'https://api.iconify.design/' + id.replace(':', '/') +
+                   '.svg?color=%2360a5fa&width=26&height=26';
+        }
+
         function card(b) {
             var file = b.num + '_' + b.slug + '_' + b.date + '.html';
             var lvl = 'lvl-' + ((Number(b.num) % 6) + 1);   // rotate the Bloom hues across cards
             return '' +
             '<article class="theme-card bloom-card ' + lvl + ' rounded-xl overflow-hidden">' +
               '<div class="bloom-card-content">' +
-                '<div class="flex items-center justify-between mb-3">' +
-                  '<span class="bloom-num">BLOOM ' + esc(b.num) + '</span>' +
-                  '<span class="lang-badge">' + esc((b.lang || 'en').toUpperCase()) + '</span>' +
+                '<div class="flex items-start gap-3 mb-3">' +
+                  '<span class="bloom-icon"><img src="' + esc(iconUrl(b.icon)) + '" alt="" loading="lazy" aria-hidden="true"></span>' +
+                  '<div class="flex-1 min-w-0 flex items-center justify-between">' +
+                    '<span class="bloom-num">BLOOM ' + esc(b.num) + '</span>' +
+                    '<span class="lang-badge">' + esc((b.lang || 'en').toUpperCase()) + '</span>' +
+                  '</div>' +
                 '</div>' +
                 '<div class="mb-3">' +
                   (b.tags || []).map(function (t) {
                     return '<span class="category-badge">' + esc(t) + '</span>';
                   }).join('') +
                 '</div>' +
-                '<h3 class="text-xl font-bold mb-2">' + esc(b.title) + '</h3>' +
-                '<p class="text-sm mb-4">' + esc(b.tagline || '') + '</p>' +
-                '<p class="text-sm prose mb-4 flex-grow">' + esc(b.description || '') + '</p>' +
+                // dir="auto" so Arabic entries lay out RTL inside this LTR hub.
+                '<h3 class="text-xl font-bold mb-2" dir="auto">' + esc(b.title) + '</h3>' +
+                '<p class="text-sm mb-4" dir="auto">' + esc(b.tagline || '') + '</p>' +
+                '<p class="text-sm prose mb-4 flex-grow" dir="auto">' + esc(b.description || '') + '</p>' +
                 '<div class="bloom-card-footer">' +
                   '<div>' +
                     '<p class="published-date">' + esc(prettyDate(b.date)) + '</p>' +
