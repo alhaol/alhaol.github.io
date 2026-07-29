@@ -270,9 +270,10 @@
                     return '<span class="category-badge">' + esc(t) + '</span>';
                   }).join('') +
                 '</div>' +
-                '<h3 class="text-xl font-bold mb-2">' + esc(m.title) + '</h3>' +
-                '<p class="text-sm mb-4">' + esc(m.tagline || '') + '</p>' +
-                '<p class="text-sm prose mb-4 flex-grow">' + esc(m.description || '') + '</p>' +
+                // dir="auto" so Arabic entries lay out RTL inside this LTR hub.
+                '<h3 class="text-xl font-bold mb-2" dir="auto">' + esc(m.title) + '</h3>' +
+                '<p class="text-sm mb-4" dir="auto">' + esc(m.tagline || '') + '</p>' +
+                '<p class="text-sm prose mb-4 flex-grow" dir="auto">' + esc(m.description || '') + '</p>' +
                 '<div class="memory-card-footer">' +
                   '<div>' +
                     '<p class="published-date">' + esc(prettyDate(m.date)) + '</p>' +
