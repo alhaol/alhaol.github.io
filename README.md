@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (FABs: bottom-left → Apps Hub, bottom-right → Articles. Presentations FAB is commented out)
+├── index.html          # Main portfolio / CV page (FABs: left column → Apps Hub + Memory Classes, right column → Articles + Blooms. Presentations FAB is commented out)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -61,6 +61,12 @@ No build step, no package manager.
     ├── todo/           # TaskMaster Pro — focus-mode task manager
     ├── warmup/         # Warmup & core workout playlist (25 videos)
     └── wizard-duel/    # Wizard Duel — 2-player turn-based battle game with monsters
+├── memory/             # Memory Classes — cognitive masterclasses built for long-term retention
+│   ├── index.html      # Memory Hub (data-driven from memory.json)
+│   ├── memory.json     # Memory-class registry
+│   ├── Memories/       # Individual class pages (NN_slug_YYYY-MM-DD.html)
+│   ├── LinkedIn_Posts/ # Companion post drafts (one per class)
+│   └── _not_approved/  # Gitignored: drafts staged here until approved
 ├── workshops/          # Hands-on, code-first workshop decks (reuse the presentations deck engine)
 │   ├── index.html      # Workshops hub (data-driven from workshops.json)
 │   ├── workshops.json  # Workshop registry
@@ -72,10 +78,11 @@ No build step, no package manager.
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub, bottom-right → Articles. Presentations FAB is commented out. |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub with Memory Classes stacked above it, bottom-right → Articles with Blooms stacked above it. Presentations FAB is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 42-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
+| Memory Classes | `/memory/` | 1-class series that moves one concept into long-term memory via the 5-step cognitive sequence (chunk, offload to a diagram, spring a trap, scaffold, re-encode in real code). Each page carries a freehand sketchpad, a light/dark toggle and a retrieval quiz that resurfaces what you missed. |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
 | Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
