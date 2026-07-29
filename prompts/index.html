@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <title>Prompts | alhaol.github.io</title>
+    <meta name="description" content="Copy-paste prompts that turn any chat AI into a working partner — fill in the blanks, copy, go.">
+    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            /* Cyan, to sit apart from Blooms (blue) and Memory (indigo). */
+            --primary-color: #22d3ee;
+            --secondary-color: #0891b2;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+            --header-bg-start: #020617;
+            --header-bg-end: #0f172a;
+            --tap: 44px;              /* minimum comfortable touch target */
+        }
+
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+        }
+
+        .nav-link { color: var(--text-main); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+
+        .prose { color: var(--text-main); }
+        .prose p { color: var(--text-muted); line-height: 1.75; }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+        }
+        /* Hover lift only where a real pointer exists — it just causes jank on touch. */
+        @media (hover: hover) {
+            .theme-card:hover {
+                box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15);
+                border-color: var(--primary-color);
+                transform: translateY(-3px);
+            }
+            .theme-card:hover .prompt-icon {
+                background-color: rgba(34, 211, 238, 0.18);
+                border-color: var(--primary-color);
+            }
+            .prompt-card:hover .card-open { gap: 0.75rem; }
+        }
+        .theme-card:active { border-color: var(--primary-color); }
+
+        /* ---------- cards ---------- */
+
+        .prompt-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-left: 3px solid var(--primary-color);
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+        }
+        .prompt-card-content {
+            padding: 1.1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Per-prompt icon. Icons are picked on https://icons0.dev/ (a search front-end over
+           Iconify) and embedded from Iconify's CDN, which is the data source icons0 indexes.
+           The registry stores the icons0 name verbatim, e.g. "ph:rocket-launch-duotone". */
+        .prompt-icon {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            border-radius: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            transition: background-color 0.25s, border-color 0.25s;
+        }
+        .prompt-icon img { width: 23px; height: 23px; display: block; }
+
+        .prompt-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; color: var(--text-muted); }
+
+        .cat-badge {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            background-color: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            color: var(--primary-color);
+            white-space: nowrap;
+        }
+
+        .tag-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-right: 0.3rem;
+            margin-bottom: 0.3rem;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            transition: color 0.18s, border-color 0.18s;
+        }
+        .tag-badge:hover { color: var(--primary-color); border-color: var(--primary-color); }
+
+        .situation {
+            border-left: 2px solid var(--border-color);
+            padding-left: 0.7rem;
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.83rem;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .card-open {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s;
+            min-height: 2rem;
+            padding: 0 0.25rem;
+        }
+        .card-copy {
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 0.4rem;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            min-height: 2rem;
+            transition: color 0.18s, border-color 0.18s;
+        }
+        .card-copy:hover { color: var(--primary-color); border-color: var(--primary-color); }
+
+        /* ---------- toolbar ---------- */
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--bg-color);
+            padding: 0.75rem 0 0.6rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.65rem 0.9rem;
+            width: 100%;
+            outline: none;
+            /* 16px so iOS Safari does not zoom the page on focus. */
+            font-size: 16px;
+            min-height: var(--tap);
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary-color); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        /* Category pills scroll sideways on narrow screens instead of wrapping into
+           a tall block that pushes the cards off the fold. */
+        .pill-row {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 0.15rem;
+        }
+        .pill-row::-webkit-scrollbar { display: none; }
+
+        .pill {
+            flex: 0 0 auto;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: color 0.18s, border-color 0.18s, background-color 0.18s;
+        }
+        .pill:hover { color: var(--text-main); border-color: var(--primary-color); }
+        .pill.on {
+            background-color: rgba(34, 211, 238, 0.12);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .pill-n { opacity: 0.6; font-size: 0.72rem; margin-left: 0.15rem; }
+
+        /* Hidden by default via its own rule rather than Tailwind's `.hidden`, so the
+           result does not depend on where the CDN injects its stylesheet. */
+        .active-filter {
+            display: none;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .active-filter.on { display: flex; }
+        .chip-clear {
+            background-color: rgba(34, 211, 238, 0.12);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ---------- guide disclosure ---------- */
+
+        .guide-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+        }
+
+        details.guide { margin-bottom: 1.5rem; }
+        details.guide > summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.6rem;
+            background-color: var(--card-bg);
+            font-size: 0.88rem;
+            font-weight: 600;
+            min-height: var(--tap);
+            transition: border-color 0.18s;
+        }
+        details.guide > summary::-webkit-details-marker { display: none; }
+        details.guide > summary:hover { border-color: var(--primary-color); }
+        details.guide > summary .caret {
+            color: var(--primary-color);
+            transition: transform 0.2s;
+            font-size: 0.75rem;
+        }
+        details.guide[open] > summary { border-color: var(--primary-color); border-radius: 0.6rem 0.6rem 0 0; }
+        details.guide[open] > summary .caret { transform: rotate(90deg); }
+        .guide-body {
+            border: 1px solid var(--primary-color);
+            border-top: none;
+            border-radius: 0 0 0.6rem 0.6rem;
+            padding: 1.25rem 1rem;
+        }
+
+        .step-num {
+            flex: 0 0 auto;
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background-color: rgba(34, 211, 238, 0.12);
+            border: 1px solid rgba(34, 211, 238, 0.35);
+            color: var(--primary-color);
+        }
+
+        .chain-step {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.6rem;
+            padding: 0.7rem 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.18s;
+            text-align: left;
+            flex: 1 1 10rem;
+            min-height: var(--tap);
+        }
+        .chain-step:hover { border-color: var(--primary-color); }
+        .chain-arrow { color: var(--text-muted); align-self: center; }
+        /* The arrows only read as a sequence on a wide row; stacked, they are noise. */
+        @media (max-width: 767px) { .chain-arrow { display: none; } }
+
+        .mini-h {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        /* ---------- modal ---------- */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(2, 6, 23, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-backdrop[hidden] { display: none; }
+
+        .modal-panel {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 72rem;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+            min-height: 100%;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            z-index: 2;
+        }
+
+        .icon-btn {
+            flex: 0 0 auto;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 0.5rem;
+            width: var(--tap);
+            height: var(--tap);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.18s, border-color 0.18s;
+        }
+        .icon-btn:hover { color: var(--primary-color); border-color: var(--primary-color); }
+
+        /* On a phone the modal is the page: no backdrop gutter, no rounded corners,
+           and the action bar pins to the bottom so Copy is always in thumb reach. */
+        @media (min-width: 641px) {
+            .modal-backdrop { padding: 2rem 1rem; backdrop-filter: blur(3px); }
+            .modal-panel { border-radius: 0.9rem; min-height: 0; }
+            .modal-head { padding: 1.5rem; border-radius: 0.9rem 0.9rem 0 0; }
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 640px) {
+            .modal-actions {
+                position: sticky;
+                bottom: 0;
+                background-color: var(--bg-color);
+                border-top: 1px solid var(--border-color);
+                padding: 0.75rem 0 calc(0.75rem + env(safe-area-inset-bottom));
+                margin-top: 1rem;
+            }
+            .modal-actions .btn-primary { flex: 1 1 100%; text-align: center; }
+            .modal-actions .btn-ghost { flex: 1 1 calc(50% - 0.25rem); justify-content: center; }
+        }
+
+        .field-label {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+        .field-hint { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem; line-height: 1.5; }
+
+        .field-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.45rem;
+            padding: 0.6rem 0.75rem;
+            width: 100%;
+            outline: none;
+            /* 16px keeps iOS from zooming when a field takes focus. */
+            font-size: 16px;
+            min-height: var(--tap);
+            transition: border-color 0.2s;
+        }
+        .field-input:focus { border-color: var(--primary-color); }
+        textarea.field-input { min-height: 6rem; resize: vertical; line-height: 1.6; }
+        @media (min-width: 641px) { .field-input { font-size: 0.9rem; } }
+
+        .preview {
+            background-color: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 0.6rem;
+            padding: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            color: #cbd5e1;
+            max-height: 16rem;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        @media (min-width: 641px) { .preview { font-size: 0.8rem; padding: 1rem; max-height: 26rem; } }
+
+        .preview .ph {
+            background-color: rgba(251, 191, 36, 0.15);
+            border-bottom: 1px dashed #fbbf24;
+            color: #fbbf24;
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+        .preview .filled { color: var(--primary-color); font-weight: 500; }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #04212b;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            min-height: var(--tap);
+            transition: filter 0.18s;
+        }
+        .btn-primary:hover { filter: brightness(1.1); }
+
+        .btn-ghost {
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1rem;
+            min-height: var(--tap);
+            transition: color 0.18s, border-color 0.18s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-ghost:hover { color: var(--primary-color); border-color: var(--primary-color); }
+
+        .md-body h4 {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .md-body p { color: var(--text-muted); line-height: 1.7; font-size: 0.88rem; }
+        .md-body ul { list-style: disc; padding-left: 1.15rem; }
+        .md-body li { color: var(--text-muted); line-height: 1.7; font-size: 0.88rem; margin-bottom: 0.3rem; }
+        .md-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82em;
+            background-color: rgba(34, 211, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 3px;
+            padding: 0.1rem 0.3rem;
+            overflow-wrap: anywhere;
+        }
+        .md-body .callout { border-left: 2px solid var(--border-color); padding-left: 0.85rem; }
+
+        .toast {
+            position: fixed;
+            bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(1rem);
+            background-color: var(--primary-color);
+            color: #04212b;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 3000;
+            max-width: calc(100vw - 2rem);
+            text-align: center;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="py-4 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center gap-4">
+            <a href="../" class="nav-link text-sm" style="color: white;">← Portfolio</a>
+            <a href="../blooms/" class="nav-link text-sm" style="color: white;">Blooms →</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+
+        <!-- ===== Hero ===== -->
+        <section class="mb-6">
+            <p class="mono text-xs uppercase tracking-[0.2em] mb-2" style="color: var(--primary-color);">// prompts</p>
+            <h1 class="text-3xl sm:text-4xl font-bold mb-3">Prompts</h1>
+            <p class="prose max-w-2xl text-base sm:text-lg" style="color: var(--text-muted);">
+                Copy-paste prompts that make a chat AI work <em>with</em> you rather than at you.
+                Fill in the blanks here, copy, paste into a fresh chat.
+            </p>
+        </section>
+
+        <!-- ===== Guide, folded away by default ===== -->
+        <details class="guide">
+            <summary>
+                <span class="caret">▶</span>
+                <span>How these work — the method, the chain, the tips</span>
+            </summary>
+            <div class="guide-body">
+                <p class="mini-h mb-2">The one idea</p>
+                <p class="prose text-sm mb-6" style="max-width: 60ch;">
+                    A normal AI answer <em>hands you the fish</em>. These prompts make it <em>coach you to fish</em>:
+                    they ask before they tell, wait for your reply, and refuse to hand over the answer until you've
+                    actually tried. <strong style="color: var(--primary-color);">They only work if you reply and wait</strong> —
+                    don't paste one and skim ahead.
+                </p>
+
+                <p class="mini-h mb-3">How to use one</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    <div class="guide-panel p-4 flex gap-3">
+                        <span class="step-num">1</span>
+                        <p class="text-sm prose"><span class="font-semibold" style="color: var(--text-main);">Open a prompt.</span> See what it does and why.</p>
+                    </div>
+                    <div class="guide-panel p-4 flex gap-3">
+                        <span class="step-num">2</span>
+                        <p class="text-sm prose"><span class="font-semibold" style="color: var(--text-main);">Fill the blanks.</span> Vague inputs produce vague sessions.</p>
+                    </div>
+                    <div class="guide-panel p-4 flex gap-3">
+                        <span class="step-num">3</span>
+                        <p class="text-sm prose"><span class="font-semibold" style="color: var(--text-main);">Copy and paste</span> into a fresh chat.</p>
+                    </div>
+                    <div class="guide-panel p-4 flex gap-3">
+                        <span class="step-num">4</span>
+                        <p class="text-sm prose"><span class="font-semibold" style="color: var(--text-main);">Play along.</span> If it starts lecturing: <em>"Follow your own rules — ask me one question and wait."</em></p>
+                    </div>
+                </div>
+
+                <p class="mini-h mb-2">Chain them into a loop</p>
+                <p class="prose text-sm mb-3" style="max-width: 60ch;">
+                    <span class="font-semibold" style="color: var(--primary-color);">plan → focus → practice → verify</span>,
+                    with the Translator on standby. Tap a step to open it.
+                </p>
+                <div class="flex flex-wrap items-stretch gap-2 mb-3">
+                    <button class="chain-step" data-open="personal-learning-path-architect">
+                        <p class="mini-h">Plan</p>
+                        <p class="font-semibold mt-1 text-sm">04 — Path Architect</p>
+                    </button>
+                    <span class="chain-arrow">→</span>
+                    <button class="chain-step" data-open="learning-curve-destroyer">
+                        <p class="mini-h">Focus</p>
+                        <p class="font-semibold mt-1 text-sm">01 — Curve Destroyer</p>
+                    </button>
+                    <span class="chain-arrow">→</span>
+                    <button class="chain-step" data-open="real-error-simulator">
+                        <p class="mini-h">Practice</p>
+                        <p class="font-semibold mt-1 text-sm">02 — Error Simulator</p>
+                    </button>
+                    <span class="chain-arrow">→</span>
+                    <button class="chain-step" data-open="forced-feynman-method">
+                        <p class="mini-h">Verify</p>
+                        <p class="font-semibold mt-1 text-sm">06 — Feynman / 05 — Gaps</p>
+                    </button>
+                </div>
+                <p class="prose text-sm mb-6">
+                    <button class="font-semibold underline underline-offset-2" data-open="impossible-language-translator" style="color: var(--primary-color);">03 — Language Translator</button>
+                    — pull out the moment something refuses to click.
+                </p>
+
+                <p class="mini-h mb-3">Tips for all of them</p>
+                <ul class="text-sm prose grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2" style="list-style: disc; padding-left: 1.15rem; color: var(--text-muted);">
+                    <li><strong style="color: var(--text-main);">Concrete beats broad.</strong> "Build a CLI that scrapes a page to CSV" beats "get better at Python".</li>
+                    <li><strong style="color: var(--text-main);">One session, one topic.</strong> Run it again rather than cramming.</li>
+                    <li><strong style="color: var(--text-main);">Keep the transcript.</strong> Re-run a week later to see what stuck.</li>
+                    <li><strong style="color: var(--text-main);">Fresh chat each time</strong> so old context doesn't leak in.</li>
+                </ul>
+            </div>
+        </details>
+
+        <!-- ===== Toolbar ===== -->
+        <div class="toolbar">
+            <input id="search" class="search-input" type="search" autocomplete="off"
+                   placeholder="Search prompts…" aria-label="Search prompts">
+            <div id="cats" class="pill-row" role="group" aria-label="Filter by category"></div>
+            <div id="active" class="active-filter"></div>
+        </div>
+
+        <!-- ===== Grid ===== -->
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <p id="empty" class="prose hidden py-16 text-center"></p>
+        <p id="count" class="text-xs mt-6" style="color: var(--text-muted);"></p>
+    </main>
+
+    <!-- ===== Detail modal ===== -->
+    <div id="modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="m-title">
+        <div class="modal-panel" id="modal-panel">
+            <div class="modal-head">
+                <span class="prompt-icon"><img id="m-icon" src="" alt="" aria-hidden="true"></span>
+                <div class="flex-1 min-w-0">
+                    <p class="prompt-num mono" id="m-num"></p>
+                    <h2 class="text-lg sm:text-2xl font-bold leading-tight" id="m-title"></h2>
+                    <p class="text-sm prose mt-1 hidden sm:block" id="m-tagline"></p>
+                </div>
+                <button id="m-close" class="icon-btn" aria-label="Close">✕</button>
+            </div>
+            <div id="m-body" class="p-4 sm:p-6"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        var all = [], activeCategory = null, activeTag = null, q = '';
+        var cache = {};                     // slug -> parsed markdown
+        var grid = document.getElementById('grid');
+        var empty = document.getElementById('empty');
+        var modal = document.getElementById('modal');
+        var lastFocus = null;
+        var current = null;                 // { entry, parsed, tokens, values }
+
+        /* ---------------- helpers ---------------- */
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+
+        // "collection:name" as shown on icons0.dev, resolved through Iconify's CDN.
+        // Anything that is not a clean collection:name pair falls back to a sparkle glyph
+        // rather than emitting a broken <img>.
+        var ICON_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        var ICON_FALLBACK = 'ph:sparkle-duotone';
+
+        function iconUrl(name) {
+            var id = ICON_RE.test(String(name || '')) ? name : ICON_FALLBACK;
+            return 'https://api.iconify.design/' + id.replace(':', '/') +
+                   '.svg?color=%2322d3ee&width=26&height=26';
+        }
+
+        // Inline markdown → HTML. Escapes first, so bracketed placeholders survive verbatim.
+        function inline(s) {
+            return esc(s)
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        }
+
+        var toastEl = document.getElementById('toast'), toastTimer = null;
+        function toast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+        }
+
+        function copyText(text, okMsg) {
+            function fallback() {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                ta.setSelectionRange(0, text.length);   // iOS needs an explicit range
+                var ok = false;
+                try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+                document.body.removeChild(ta);
+                toast(ok ? okMsg : 'Copy failed — select the text manually.');
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
+            } else {
+                fallback();
+            }
+        }
+
+        /* ---------------- markdown parsing ----------------
+           Each prompt file follows one shape: an `# N. Title` heading, a run of
+           `**Label:**` sections (some inline, some followed by a bullet list or a
+           blockquote), and exactly one ```text fence holding the prompt itself.   */
+
+        function parseMd(md) {
+            var res = { title: '', prompt: '', sections: {} };
+
+            var fence = md.match(/```text\r?\n([\s\S]*?)```/);
+            if (fence) res.prompt = fence[1].replace(/[ \t\r\n]+$/, '');
+
+            // Blank the fences out so their contents can't be read as sections.
+            var lines = md.replace(/```[\s\S]*?```/g, ' ').split(/\r?\n/);
+            var cur = null;
+
+            function bucket(name) {
+                if (!res.sections[name]) res.sections[name] = { text: '', items: [] };
+                return res.sections[name];
+            }
+            function addText(b, s) { b.text += (b.text ? ' ' : '') + s; }
+
+            for (var i = 0; i < lines.length; i++) {
+                var ln = lines[i];
+
+                var h = ln.match(/^#\s+(.+)$/);
+                if (h) { res.title = h[1].replace(/^\s*\d+\.\s*/, '').trim(); continue; }
+
+                var lab = ln.match(/^\*\*(.+?):\*\*\s*(.*)$/);
+                if (lab) {
+                    cur = lab[1].trim();
+                    var b0 = bucket(cur);
+                    if (lab[2].trim()) addText(b0, lab[2].trim());
+                    continue;
+                }
+
+                if (!cur) continue;
+                var b = bucket(cur);
+
+                var li = ln.match(/^[-*]\s+(.+)$/);
+                if (li) { b.items.push(li[1].trim()); continue; }
+
+                var bq = ln.match(/^>\s?(.*)$/);
+                if (bq) { if (bq[1].trim()) addText(b, bq[1].trim()); continue; }
+
+                // Plain continuation line; blanked-out fences collapse to whitespace here.
+                if (ln.trim()) addText(b, ln.trim());
+            }
+            return res;
+        }
+
+        /* ---------------- placeholders ----------------
+           Tokens are read from the prompt body (not the "Fill in first" list) so that
+           what you fill in is exactly what gets substituted — file 03 lists
+           `[PASTE CONTENT]` but the prompt actually says `[PASTE CONTENT HERE]`.     */
+
+        var TOKEN_RE = /\[[A-Z][A-Z0-9 _\/-]*\]/g;
+
+        function tokensOf(prompt) {
+            var seen = [], m;
+            TOKEN_RE.lastIndex = 0;
+            while ((m = TOKEN_RE.exec(prompt)) !== null) {
+                if (seen.indexOf(m[0]) < 0) seen.push(m[0]);
+            }
+            return seen;
+        }
+
+        // "`[SKILL]` — the exact skill…" / "`[LEVEL]` *(optional)* — your level…"
+        function hintsOf(items) {
+            var map = {};
+            (items || []).forEach(function (it) {
+                var m = it.match(/^`?\[([^\]]+)\]`?\s*(?:\*\([^)]*\)\*\s*)?[—–-]\s*([\s\S]+)$/);
+                if (m) map['[' + m[1].trim() + ']'] = m[2].trim();
+            });
+            return map;
+        }
+
+        function hintFor(token, hints) {
+            if (hints[token]) return hints[token];
+            var bare = token.slice(1, -1);
+            for (var k in hints) {
+                if (!Object.prototype.hasOwnProperty.call(hints, k)) continue;
+                var kb = k.slice(1, -1);
+                if (bare.indexOf(kb) === 0 || kb.indexOf(bare) === 0) return hints[k];
+            }
+            return '';
+        }
+
+        // "…(default: 4 hours)." → "4 hours", so the field starts usable.
+        function defaultFor(hint) {
+            var m = String(hint || '').match(/\(default:\s*([^)]+)\)/i);
+            return m ? m[1].trim() : '';
+        }
+
+        // Blanks that hold a paragraph or a list get a textarea rather than one line.
+        function isLongField(token) {
+            return /PASTE|CONTENT|KNOW|GOAL|RESULT|DRAFT|TEXT|CODE|LIST|FILES/.test(token);
+        }
+
+        function fillPrompt(prompt, values) {
+            return prompt.replace(TOKEN_RE, function (t) {
+                var v = values[t];
+                return (v && v.trim()) ? v.trim() : t;
+            });
+        }
+
+        // Same substitution, but marks filled values and still-empty placeholders.
+        function previewHtml(prompt, values) {
+            return esc(prompt).replace(TOKEN_RE, function (t) {
+                var v = values[t];
+                return (v && v.trim())
+                    ? '<span class="filled">' + esc(v.trim()) + '</span>'
+                    : '<span class="ph">' + esc(t) + '</span>';
+            });
+        }
+
+        /* ---------------- cards ---------------- */
+
+        function card(p) {
+            return '' +
+            '<article class="theme-card prompt-card rounded-xl" data-slug="' + esc(p.slug) + '">' +
+              '<div class="prompt-card-content">' +
+                '<div class="flex items-center gap-3 mb-3">' +
+                  '<span class="prompt-icon"><img src="' + esc(iconUrl(p.icon)) + '" alt="" loading="lazy" aria-hidden="true"></span>' +
+                  '<div class="flex-1 min-w-0 flex items-center justify-between gap-2">' +
+                    '<span class="prompt-num mono">' + esc(p.num) + '</span>' +
+                    '<span class="cat-badge">' + esc(p.category || 'Uncategorized') + '</span>' +
+                  '</div>' +
+                '</div>' +
+                '<h3 class="text-lg font-bold mb-1.5 leading-snug">' + esc(p.title) + '</h3>' +
+                '<p class="text-sm prose mb-3" style="color: var(--text-muted);">' + esc(p.tagline || '') + '</p>' +
+                '<p class="situation mb-3 flex-grow">&ldquo;' + esc(p.situation || '') + '&rdquo;</p>' +
+                '<div class="mb-1">' +
+                  (p.tags || []).map(function (t) {
+                    return '<button class="tag-badge" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+                  }).join('') +
+                '</div>' +
+                '<div class="card-footer">' +
+                  '<button class="card-copy" data-copy="' + esc(p.slug) + '">Copy raw</button>' +
+                  // A real button, so keyboard users reach the card without a role="button" wrapper.
+                  '<button class="card-open" data-slug="' + esc(p.slug) + '">Open →</button>' +
+                '</div>' +
+              '</div>' +
+            '</article>';
+        }
+
+        function matches(p) {
+            if (activeCategory && (p.category || 'Uncategorized') !== activeCategory) return false;
+            if (activeTag && (p.tags || []).indexOf(activeTag) < 0) return false;
+            if (!q) return true;
+            var hay = [p.title, p.tagline, p.situation, p.slug, p.stage, p.category]
+                        .concat(p.tags || []).join(' ').toLowerCase();
+            return hay.indexOf(q) >= 0;
+        }
+
+        function render() {
+            var list = all.filter(matches);
+            grid.innerHTML = list.map(card).join('');
+            document.getElementById('count').textContent =
+                list.length === all.length
+                    ? all.length + ' prompts'
+                    : list.length + ' of ' + all.length + ' prompts';
+            if (!list.length) {
+                empty.classList.remove('hidden');
+                empty.textContent = all.length
+                    ? 'No prompts match that filter.'
+                    : 'No prompts registered yet.';
+            } else {
+                empty.classList.add('hidden');
+            }
+            renderActive();
+        }
+
+        // Categories are derived from the registry, in registry order, so a new
+        // category appears the moment a prompt claiming it is added — no edit here.
+        function renderCats() {
+            var cats = [], counts = {};
+            all.forEach(function (p) {
+                var c = p.category || 'Uncategorized';
+                if (cats.indexOf(c) < 0) cats.push(c);
+                counts[c] = (counts[c] || 0) + 1;
+            });
+            var html = '<button class="pill' + (activeCategory ? '' : ' on') + '" data-cat="">' +
+                       'All <span class="pill-n">' + all.length + '</span></button>';
+            html += cats.map(function (c) {
+                return '<button class="pill' + (activeCategory === c ? ' on' : '') + '" data-cat="' + esc(c) + '">' +
+                       esc(c) + ' <span class="pill-n">' + counts[c] + '</span></button>';
+            }).join('');
+            document.getElementById('cats').innerHTML = html;
+        }
+
+        function renderActive() {
+            var bar = document.getElementById('active');
+            if (!activeTag) { bar.innerHTML = ''; bar.classList.remove('on'); return; }
+            bar.classList.add('on');
+            bar.innerHTML = '<span>Tag</span>' +
+                '<button class="chip-clear" id="clear-tag">' + esc(activeTag) + ' ✕</button>';
+        }
+
+        /* ---------------- markdown fetch ---------------- */
+
+        function load(slug) {
+            var entry = all.filter(function (p) { return p.slug === slug; })[0];
+            if (!entry) return Promise.reject(new Error('unknown prompt'));
+            if (cache[slug]) return Promise.resolve({ entry: entry, parsed: cache[slug] });
+            return fetch(entry.file)
+                .then(function (r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.text();
+                })
+                .then(function (md) {
+                    cache[slug] = parseMd(md);
+                    return { entry: entry, parsed: cache[slug] };
+                });
+        }
+
+        /* ---------------- modal ---------------- */
+
+        function listBlock(heading, items) {
+            if (!items || !items.length) return '';
+            return '<div class="mb-5"><h4>' + esc(heading) + '</h4><ul>' +
+                   items.map(function (i) { return '<li>' + inline(i) + '</li>'; }).join('') +
+                   '</ul></div>';
+        }
+
+        function textBlock(heading, text, cls) {
+            if (!text) return '';
+            return '<div class="mb-5"><h4>' + esc(heading) + '</h4>' +
+                   '<p class="' + (cls || '') + '">' + inline(text) + '</p></div>';
+        }
+
+        function openModal(slug) {
+            lastFocus = document.activeElement;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            document.getElementById('m-body').innerHTML =
+                '<p class="prose text-sm">Loading…</p>';
+
+            load(slug).then(function (d) {
+                current = { entry: d.entry, parsed: d.parsed, values: {} };
+                paintModal();
+                if (location.hash.slice(1) !== slug) {
+                    history.replaceState(null, '', '#' + slug);
+                }
+            }).catch(function (e) {
+                document.getElementById('m-body').innerHTML =
+                    '<p class="prose text-sm">Could not load this prompt (' + esc(e.message) + ').<br>' +
+                    'If you opened this page as a <code>file://</code> URL, run a local server instead: ' +
+                    '<code>python -m http.server 8000</code></p>';
+            });
+        }
+
+        function paintModal() {
+            var entry = current.entry, p = current.parsed;
+            var s = p.sections;
+
+            document.getElementById('m-icon').src = iconUrl(entry.icon);
+            document.getElementById('m-num').textContent =
+                entry.num + ' · ' + (entry.category || '') + (entry.stage ? ' · ' + entry.stage : '');
+            document.getElementById('m-title').textContent = p.title || entry.title;
+            document.getElementById('m-tagline').textContent = entry.tagline || '';
+
+            var fillItems = (s['Fill in first'] || {}).items || [];
+            var hints = hintsOf(fillItems);
+            var tokens = tokensOf(p.prompt);
+            current.tokens = tokens;
+            current.hints = hints;
+
+            // Seed any documented defaults so the prompt is usable before typing.
+            tokens.forEach(function (t) {
+                var d = defaultFor(hintFor(t, hints));
+                if (d) current.values[t] = d;
+            });
+
+            var left = '' +
+                textBlock('Purpose', (s['Purpose'] || {}).text) +
+                listBlock('Use it when', (s['Use it when'] || {}).items) +
+                listBlock('Fill in first', fillItems) +
+                textBlock('Example filled-in', (s['Example filled-in'] || {}).text, 'callout') +
+                textBlock('Tip', (s['Tip'] || {}).text, 'callout');
+
+            var fields = tokens.map(function (t) {
+                var hint = hintFor(t, hints);
+                var id = 'f-' + t.replace(/[^A-Z0-9]/gi, '');
+                var tag = isLongField(t)
+                    ? '<textarea class="field-input" id="' + id + '" data-token="' + esc(t) + '" placeholder="' + esc(t) + '"></textarea>'
+                    : '<input class="field-input" id="' + id + '" data-token="' + esc(t) + '" type="text" placeholder="' + esc(t) + '" value="' + esc(current.values[t] || '') + '">';
+                return '<div class="mb-4">' +
+                       '<label class="field-label mono" for="' + id + '">' + esc(t) + '</label>' +
+                       (hint ? '<p class="field-hint">' + inline(hint) + '</p>' : '') +
+                       tag + '</div>';
+            }).join('');
+
+            var right = '' +
+                (tokens.length
+                    ? '<h4 class="mb-3">Fill in the blanks</h4>' + fields
+                    : '<p class="field-hint mb-4">This prompt has no blanks to fill — copy it as is.</p>') +
+                '<h4 class="mb-2 mt-6">Your prompt</h4>' +
+                '<div class="preview mono" id="m-preview"></div>' +
+                '<div class="modal-actions">' +
+                    '<button class="btn-primary" id="m-copy">Copy prompt</button>' +
+                    '<a class="btn-ghost" id="m-claude" href="#" target="_blank" rel="noopener">Claude ↗</a>' +
+                    '<a class="btn-ghost" id="m-gpt" href="#" target="_blank" rel="noopener">ChatGPT ↗</a>' +
+                '</div>';
+
+            document.getElementById('m-body').innerHTML =
+                '<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">' +
+                    '<div class="md-body order-2 lg:order-1">' + left + '</div>' +
+                    '<div class="md-body order-1 lg:order-2">' + right + '</div>' +
+                '</div>';
+
+            refreshPreview();
+            document.getElementById('m-close').focus();
+        }
+
+        function refreshPreview() {
+            if (!current) return;
+            var p = current.parsed.prompt, v = current.values;
+            document.getElementById('m-preview').innerHTML = previewHtml(p, v);
+            var filled = fillPrompt(p, v);
+            var enc = encodeURIComponent(filled);
+            document.getElementById('m-claude').href = 'https://claude.ai/new?q=' + enc;
+            document.getElementById('m-gpt').href = 'https://chatgpt.com/?q=' + enc;
+        }
+
+        function closeModal() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            current = null;
+            if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+            if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        /* ---------------- events ---------------- */
+
+        document.getElementById('m-close').addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.hidden) closeModal();
+        });
+
+        // Live substitution as the reader types.
+        document.getElementById('m-body').addEventListener('input', function (e) {
+            var el = e.target.closest('[data-token]');
+            if (!el || !current) return;
+            current.values[el.dataset.token] = el.value;
+            refreshPreview();
+        });
+
+        document.getElementById('m-body').addEventListener('click', function (e) {
+            if (!current) return;
+            if (e.target.closest('#m-copy')) {
+                copyText(fillPrompt(current.parsed.prompt, current.values), 'Prompt copied');
+            }
+        });
+
+        grid.addEventListener('click', function (e) {
+            var copyBtn = e.target.closest('[data-copy]');
+            if (copyBtn) {
+                e.stopPropagation();
+                load(copyBtn.dataset.copy).then(function (d) {
+                    copyText(d.parsed.prompt, 'Raw prompt copied (blanks not filled)');
+                }).catch(function () { toast('Could not load that prompt.'); });
+                return;
+            }
+            // Tags on a card double as filters, so there is no permanent chip row.
+            var tagBtn = e.target.closest('[data-tag]');
+            if (tagBtn) {
+                e.stopPropagation();
+                activeTag = (activeTag === tagBtn.dataset.tag) ? null : tagBtn.dataset.tag;
+                render();
+                return;
+            }
+            var c = e.target.closest('[data-slug]');
+            if (c) openModal(c.dataset.slug);
+        });
+
+        document.getElementById('cats').addEventListener('click', function (e) {
+            var b = e.target.closest('button[data-cat]');
+            if (!b) return;
+            var cat = b.dataset.cat;
+            activeCategory = cat === '' ? null : (activeCategory === cat ? null : cat);
+            renderCats();
+            render();
+        });
+
+        document.getElementById('active').addEventListener('click', function (e) {
+            if (e.target.closest('#clear-tag')) { activeTag = null; render(); }
+        });
+
+        // The chain diagram and the inline Translator link both open prompts directly.
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-open]');
+            if (b) openModal(b.dataset.open);
+        });
+
+        document.getElementById('search').addEventListener('input', function () {
+            q = this.value.trim().toLowerCase();
+            render();
+        });
+
+        /* ---------------- boot ---------------- */
+
+        fetch('prompts.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                all = (d || []).slice().sort(function (a, b) { return Number(a.num) - Number(b.num); });
+                renderCats();
+                render();
+                // Deep link: /prompts/#hidden-gap-detector opens that prompt.
+                var h = location.hash.slice(1);
+                if (h && all.some(function (p) { return p.slug === h; })) openModal(h);
+            })
+            .catch(function () {
+                empty.classList.remove('hidden');
+                empty.textContent = 'Could not load prompts.json.';
+            });
+    })();
+    </script>
+</body>
+</html>
