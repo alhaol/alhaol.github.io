@@ -80,8 +80,49 @@
         }
         .dark .highlight-causal { background-image: linear-gradient(120deg, rgba(225, 29, 72, 0.4) 0%, rgba(225, 29, 72, 0.4) 100%); }
 
-        /* Code stays LTR inside an RTL page — syntax is English by convention. */
-        .code-ltr { direction: ltr; text-align: left; }
+        /* Active Re-encoding (step 5) — the production demand. Step 5 is not a fourth exposition:
+           the reader has to produce something. Indigo rather than amber so it reads as an
+           instruction to the reader, not as another methodology label. Logical properties for RTL. */
+        .reencode-do {
+            border: 2px dashed #4f46e5;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: #eef2ff;
+            font-weight: 600;
+        }
+        .dark .reencode-do { background-color: rgba(99, 102, 241, 0.12); border-color: #818cf8; }
+        .reencode-do svg { flex-shrink: 0; margin-top: 0.15rem; }
+
+        /* Decision Card (data-reencode="card") — a program a human runs, away from a screen.
+           The blank column the reader fills in is what makes it generative rather than
+           another table to skim. */
+        .decision-card { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .decision-card th {
+            text-align: start; font-size: 0.72rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #64748b; padding: 0 1rem 0.25rem;
+        }
+        .decision-card td {
+            background-color: #ffffff; padding: 1rem; vertical-align: top;
+            border-block: 1px solid #e2e8f0;
+        }
+        .decision-card td:first-child {
+            border-inline-start: 4px solid #4f46e5;
+            border-start-start-radius: 0.5rem; border-end-start-radius: 0.5rem; font-weight: 700;
+        }
+        .decision-card td:last-child {
+            border-inline-end: 1px solid #e2e8f0;
+            border-start-end-radius: 0.5rem; border-end-end-radius: 0.5rem;
+        }
+        .dark .decision-card td { background-color: #1e293b; border-block-color: #334155; }
+        .dark .decision-card td:last-child { border-inline-end-color: #334155; }
+        /* The reader's blank — dotted so it reads as "write here", not "empty cell". */
+        .decision-card .fill-me {
+            display: block; min-width: 5rem; min-height: 1.75rem; border-bottom: 2px dotted #94a3b8;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -284,46 +325,60 @@
             </p>
         </section>
 
-        <section id="chunk-5" class="mb-16">
+        <section id="chunk-5" class="mb-16" data-reencode="card">
             <div class="methodology-note">الخطوة 5 · إعادة الترميز النشط (Active Re-encoding)</div>
 
-            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">جدول مراجعة يكتب نفسه</h2>
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">بطاقة قرار: متى تصعد، ومتى ترجع إلى أول السلّم</h2>
             <p class="mb-6 text-slate-700 dark:text-slate-300">
-                المباعدة تتحول من فكرة إلى ممارسة حين تصير جدولًا مكتوبًا. هذه سلّم مراجعة في بضعة أسطر: كل تسميع ناجح
-                يدفع الموعد التالي أبعد، وكل تعثر يرجعه إلى أول السلّم. والمقاطع التي فيها متشابهات لا تصعد بعيدًا مهما
-                بدت سهلة. (لغة البرمجة تبقى بالإنجليزية كما هو المتعارف عليه.)
+                المباعدة تتحول من فكرة إلى ممارسة حين تصير قرارًا مكتوبًا تعرف جوابه قبل أن تحتاجه. وأنت لن تكون أمام
+                شاشة حين تحتاج هذا، بل أمام مصحف بعد الفجر — فالصيغة التي تنفعك هناك هي بطاقة تُقرأ في ثلاث ثوان، لا
+                جدول تحسبه. السلّم كله خمس درجات: <strong>1 ← 3 ← 7 ← 21 ← 60</strong> يومًا.
             </p>
 
-            <div class="bg-slate-900 rounded-xl p-6 overflow-x-auto border border-slate-700 code-ltr">
-<pre class="font-mono text-sm text-slate-200"><code>// Spacing, not repetition, is what fixes a portion in memory.
-// Each clean recall pushes the next review further out; a stumble resets it.
-const LADDER_DAYS = [1, 3, 7, 21, 60];
+            <div class="overflow-x-auto">
+                <table class="decision-card">
+                    <thead>
+                        <tr>
+                            <th scope="col">إن حدث هذا</th>
+                            <th scope="col">فهذا قرارك</th>
+                            <th scope="col">موعد مقطعي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>سمّعت المقطع كاملًا بلا مصحف ولا تعثر</td>
+                            <td>اصعد درجة واحدة في السلّم — لا درجتين. الصعود الواحد بعد كل تسميع نظيف، حتى تبلغ الستين.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>تعثرت مرة واحدة، ولو تعثرًا صغيرًا</td>
+                            <td>أرجع المقطع إلى أول السلّم: غدًا. التعثر الواحد معلومة عن حال الأثر، لا حكم على قدرتك.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>في المقطع متشابهات</td>
+                            <td>لا ترفعه فوق ثلاثة أيام أبدًا، وإن جرى على لسانك. المتشابهات هي موضع الكذب لا موضع الطلاقة.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>اجتمعت عليك مواعيد اليوم ولا يكفي الوقت</td>
+                            <td>ابدأ بالمتشابهات وأنت في أول نشاطك. ما يُترك آخرًا يُراجَع بانتباه لا يكفيه.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-function schedule(portion, recalledWithoutMushaf) {
-  portion.step = recalledWithoutMushaf
-    ? Math.min(portion.step + 1, LADDER_DAYS.length - 1)
-    : 0;                                  // one stumble sends it back to day 1
-
-  let gap = LADDER_DAYS[portion.step];
-
-  // Similar passages are exactly where fluency lies to you, so they never
-  // climb past the short end of the ladder however confident the recall felt.
-  if (portion.hasSimilarPassages) gap = Math.min(gap, 3);
-
-  portion.due = addDays(today(), gap);
-  return portion;
-}
-
-// Review the riskiest portions first, while attention is still fresh.
-const dueToday = plan
-  .filter(p =&gt; p.due &lt;= today())
-  .sort((a, b) =&gt; b.hasSimilarPassages - a.hasSimilarPassages);</code></pre>
+            <div class="reencode-do">
+                <svg class="w-5 h-5" style="color:#4f46e5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                <span>دورك الآن: افتح لوحة الرسم في أسفل الصفحة — أو خذ ورقة — واكتب في العمود الأخير تاريخًا حقيقيًا
+                لآخر مقطع حفظته فعلًا، بحسب الصف الذي ينطبق عليه. اكتب التاريخ لا عدد الأيام. المقطع الذي لا يحمل
+                تاريخًا ليس محفوظًا، بل مؤجَّلًا.</span>
             </div>
 
             <p class="mt-6 text-slate-700 dark:text-slate-300">
-                اقرأ السطر الذي يرجع الخطوة إلى الصفر مرة أخرى. هو الترجمة البرمجية لقاعدة الحفظ كلها: التعثر الواحد
-                معلومة عن حال الأثر في ذاكرتك، لا حكم على قدرتك. والجدول يتصرف بناءً عليها فورًا، بينما الحافظ الذي
-                يعتمد على شعوره يؤجل الاعتراف حتى يقف أمام المُسمِّع.
+                اقرأ الصف الثاني مرة أخرى. هو قاعدة الحفظ كلها في سطر: البطاقة تتصرف عند أول تعثر فورًا، بينما الحافظ
+                الذي يعتمد على شعوره يؤجل الاعتراف حتى يقف أمام المُسمِّع.
             </p>
         </section>
 
@@ -349,7 +404,7 @@ const dueToday = plan
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">2. التفريغ المعرفي (دورة الجلسة في مخطط)</span>
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">3. حل التعارض (فخ الطلاقة الزائفة)</span>
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">4. البناء على معلوم (اللغة والتفكير الناقد)</span>
-                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">5. إعادة الترميز النشط (سلّم مراجعة برمجي)</span>
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">5. إعادة الترميز النشط (بطاقة قرار للمراجعة)</span>
             </div>
         </footer>
 
@@ -442,7 +497,7 @@ const dueToday = plan
                 { id: 'q1', prompt: "أي العمليات الثلاث هي التي تبني الحفظ فعلًا، لا مجرد تهيئة له؟", options: ["الترميز: إدخال المقطع أول مرة بالنظر", "الاسترجاع: إخراج المقطع من الذاكرة بلا مصحف", "زيادة عدد مرات التكرار في الجلسة الواحدة", "إطالة زمن الجلسة حتى يجري المقطع على اللسان"], correct: 1, why: "الترميز يهيئ والمباعدة تثبت، لكن الاسترجاع بلا نظر هو التمرين نفسه، وهو أكثر ما يُختصر لأنه متعب." },
                 { id: 'q2', prompt: "في مخطط دورة الجلسة، لماذا يرجع السهم من موضع التعثر إلى التسميع لا إلى بداية المقطع؟", options: ["لأن إعادة المقطع كاملًا تستغرق وقتًا أطول", "لأن إعادة المقطع كله ترسّخ ما تحسنه أصلًا وتترك الموضع الضعيف كما هو", "لأن الترتيب في المصحف يمنع الرجوع إلى الوراء", "لأن التعثر يعني أن المقطع كبير ويجب تقسيمه"], correct: 1, why: "الإصلاح الموضعي يوجّه الجهد إلى الموضع الضعيف وحده، وهو ما يجعل الجلسة تبني شيئًا جديدًا بدل أن تعيد المتقن." },
                 { id: 'q3', prompt: "كررت مقطعًا خمس عشرة مرة فجرى على لسانك بلا تعثر. ما الذي بنيته غالبًا؟", options: ["حفظًا راسخًا يكفي الانتقال بعده إلى مقطع جديد", "سلسلة حركية مدعومة بمنبهات تغيب عند المتشابهات", "فهمًا للمعنى يغني عن ضبط الإعراب", "أثرًا في الذاكرة طويلة المدى بمقدار عدد المرات"], correct: 1, why: "هذا هو فخ الطلاقة الزائفة: أنت تقيس سهولة الأداء المدعوم بالإيقاع وموضع الصفحة، لا قوة الأثر في الذاكرة." },
-                { id: 'q4', prompt: "في سلّم المراجعة البرمجي، لماذا لا تصعد المقاطع التي فيها متشابهات بعيدًا مهما بدا التسميع سهلًا؟", options: ["لأنها أطول من غيرها فتحتاج وقتًا أكثر", "لأن المتشابهات هي بالضبط الموضع الذي يخدعك فيه شعور الطلاقة", "لأن ترتيبها في المصحف متأخر", "لأن الجدول يوزع المراجعات بالتساوي على كل المقاطع"], correct: 1, why: "الشرط الذي يقصر الفاصل عند المتشابهات مكتوب لأن سهولة التسميع فيها أقل دلالة على الرسوخ من غيرها." }
+                { id: 'q4', prompt: "في بطاقة القرار، لماذا لا تصعد المقاطع التي فيها متشابهات فوق ثلاثة أيام مهما بدا التسميع سهلًا؟", options: ["لأنها أطول من غيرها فتحتاج وقتًا أكثر", "لأن المتشابهات هي بالضبط الموضع الذي يخدعك فيه شعور الطلاقة", "لأن ترتيبها في المصحف متأخر", "لأن البطاقة توزع المراجعات بالتساوي على كل المقاطع"], correct: 1, why: "الصف الذي يقصر الفاصل عند المتشابهات مكتوب لأن سهولة التسميع فيها أقل دلالة على الرسوخ من غيرها." }
             ];
 
             var state = {};

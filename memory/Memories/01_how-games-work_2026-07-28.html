@@ -83,6 +83,23 @@
             background-repeat: no-repeat; background-size: 100% 30%; background-position: 0 90%;
         }
         .dark .highlight-causal { background-image: linear-gradient(120deg, rgba(225, 29, 72, 0.4) 0%, rgba(225, 29, 72, 0.4) 100%); }
+
+        /* Active Re-encoding (step 5) — the production demand. Step 5 is not a fourth exposition:
+           the reader has to produce something. Indigo rather than amber so it reads as an
+           instruction to the reader, not as another methodology label. */
+        .reencode-do {
+            border: 2px dashed #4f46e5;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: #eef2ff;
+            font-weight: 600;
+        }
+        .dark .reencode-do { background-color: rgba(99, 102, 241, 0.12); border-color: #818cf8; }
+        .reencode-do svg { flex-shrink: 0; margin-top: 0.15rem; }
     </style>
 </head>
 <body class="antialiased">
@@ -245,7 +262,7 @@
             </p>
         </section>
 
-        <section id="chunk-4" class="mb-16">
+        <section id="chunk-4" class="mb-16" data-reencode="code">
             <div class="methodology-note">Step 4 · Active Re-encoding</div>
 
             <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">The loop that makes a tick</h2>
@@ -288,6 +305,14 @@ requestAnimationFrame(frame);</code></pre>
                 again. It is the reason your 240 FPS buys you a fresher picture and faster reactions but not a single extra
                 vote on what happened. The server ran that same loop, at its own rate, and its answer is the one that counts.
             </p>
+
+            <div class="reencode-do">
+                <svg class="w-5 h-5 text-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                <span>Your turn: cover the comments with your hand and read the loop again. Say out loud what each
+                line inside the <code class="font-mono text-sm px-1 py-0.5 rounded bg-white/60 dark:bg-slate-800">while</code>
+                block guarantees, and what breaks if you delete the <code class="font-mono text-sm px-1 py-0.5 rounded bg-white/60 dark:bg-slate-800">accumulator -= TICK_MS</code>
+                line. If you can't, the tick hasn't landed yet — go back to the diagram above before reading on.</span>
+            </div>
         </section>
 
         <!-- Test Yourself: retrieval-practice quiz (required on every generated page) -->

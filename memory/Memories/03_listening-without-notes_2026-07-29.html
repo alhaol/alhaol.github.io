@@ -55,8 +55,43 @@
         }
         .dark .methodology-note { color: #fbbf24; }
 
-        /* Code stays LTR inside an RTL page — syntax is English by convention. */
-        .code-ltr { direction: ltr; text-align: left; }
+        /* Active Re-encoding (step 5) — the production demand. Step 5 is not a fourth exposition:
+           the reader has to produce something. Indigo rather than amber so it reads as an
+           instruction to the reader, not as another methodology label. Logical properties for RTL. */
+        .reencode-do {
+            border: 2px dashed #4f46e5;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: #eef2ff;
+            font-weight: 600;
+        }
+        .dark .reencode-do { background-color: rgba(99, 102, 241, 0.12); border-color: #818cf8; }
+        .reencode-do svg { flex-shrink: 0; margin-top: 0.15rem; }
+
+        /* The Spoken Rule (data-reencode="script") — one sentence the reader says out loud before
+           pressing play. Sized to dominate the section: this IS the artifact, not a pull-quote
+           decorating prose. */
+        .spoken-rule {
+            font-size: clamp(1.4rem, 4vw, 2.1rem);
+            line-height: 1.5;
+            font-weight: 700;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 0.75rem;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #334155;
+        }
+        /* In dark mode the page background is already #0f172a, so lift the panel or it vanishes. */
+        .dark .spoken-rule { background-color: #1e293b; border-color: #475569; }
+        .spoken-rule .rule-label {
+            display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem;
+        }
 
         /* Graph-paper background reserved for Cognitive Offloading (step 2) diagrams. */
         .thinking-paper {
@@ -304,51 +339,38 @@
             </p>
         </section>
 
-        <section id="chunk-5" class="mb-16">
+        <section id="chunk-5" class="mb-16" data-reencode="script">
             <div class="methodology-note">الخطوة 5 · إعادة الترميز النشط (Active Re-encoding)</div>
 
-            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">بروتوكول استماع في بضعة أسطر</h2>
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">جملة تقولها قبل أن تضغط «تشغيل»</h2>
             <p class="mb-6 text-slate-700 dark:text-slate-300">
-                الفكرة تصير عادة حين تصير قاعدة مكتوبة. هذا بروتوكول لجلسة استماع واحدة: ما قبلها، وما
-                تفعله فيها، والأهم أن نهايتها ليست انتهاء الصوت بل موعد الاسترجاع.
-                (لغة البرمجة تبقى بالإنجليزية كما هو المتعارف عليه.)
+                كل ما سبق يمكن أن يضيع لأنك لن تكون أمام صفحة تقرؤها في اللحظة التي تحتاجه فيها؛ ستكون في
+                السيارة أو في المشي أو أمام حلقة بدأت للتو. فالصيغة التي تصمد في ذلك الموضع ليست جدولًا
+                ولا مخططًا، بل <strong>جملة واحدة تسمعها من نفسك</strong>. هذه هي:
             </p>
 
-            <div class="bg-slate-900 rounded-xl p-6 overflow-x-auto border border-slate-700 code-ltr">
-<pre class="font-mono text-sm text-slate-200"><code>// A listening session does not end when the audio ends.
-// Days until the follow-up, by retrieval mode.
-const RETRIEVAL_DAYS = { teach: 2, test: 3, transform: 7 };
+            <p class="spoken-rule">
+                <span class="rule-label">قلها بصوتك</span>
+                الجلسة لا تنتهي بانتهاء الصوت،<br>بل بموعدٍ للاسترجاع مكتوبٍ بتاريخه.
+            </p>
 
-function pickRetrieval(topic) {
-  // Habit- or perspective-changing material needs "so what now", not recall.
-  // Material you already use at work retrieves itself; just verify it once.
-  const mode = topic.changesHabits ? 'transform'
-             : topic.usedAtWork    ? 'test'
-             : 'teach';
-  return { mode, dueInDays: RETRIEVAL_DAYS[mode] };
-}
+            <p class="mt-6 text-slate-700 dark:text-slate-300">
+                الجملة مبنية على الشكل الذي يثبت في الذاكرة: شرط، ثم قرار، ثم سبب. وهي تحمل أثقل ما في هذه
+                الصفحة، لأن الموعد هو الجزء الوحيد الذي لا ينفع فيه الشعور: تعرف يقينًا إن كنت كتبته أو لم
+                تكتبه. أما نوعه فيتبع المادة — ما يغيّر عادة تسأل عنه «ماذا أفعل مختلفًا» بعد أسبوع، وما
+                تستعمله في عملك تكفيه مراجعة واحدة بعد ثلاثة أيام، وما دون ذلك تحكيه لشخص واحد بعد يومين.
+            </p>
 
-function protocol(topic, canPause) {
-  return {
-    // 45 seconds, before pressing play. The cheapest stage.
-    preflight: {
-      intention: `${topic.what} because ${topic.why}`,
-      prediction: topic.bets,              // being wrong here is still useful
-      owedTakeaway: 'one sentence, to one person, tonight'
-    },
-    // Cannot pause? The break becomes a question you ask, or one you park.
-    inflight: canPause ? 'elaboration break at every concept boundary'
-                       : 'station question at every concept boundary',
-    onOverload: 'stop input, park one station question, re-prime for the next block',
-    // The line everyone skips. Without a date this is a wish, not a plan.
-    retrieval: pickRetrieval(topic)
-  };
-}</code></pre>
+            <div class="reencode-do">
+                <svg class="w-5 h-5" style="color:#4f46e5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0-4a3 3 0 003-3V5a3 3 0 00-6 0v10a3 3 0 003 3z"/></svg>
+                <span>دورك الآن، وقبل أن تنتقل: قل الجملة بصوتٍ مسموع مرتين — لا في رأسك، بصوتك. ثم أنهِ
+                هذه العبارة بلا مساعدة من الصفحة: «آخر شيء استمعت إليه، موعد استرجاعه هو ______، وسأحكيه
+                لـ ______». إن لم تستطع إكمال الفراغين الآن، فالجلسة السابقة لم تنتهِ بعد.</span>
             </div>
 
             <p class="mt-6 text-slate-700 dark:text-slate-300">
-                اقرأ السطر الأخير مرة أخرى. البروتوكول الذي يخلو من تاريخ للاسترجاع هو نفسه سلوك من يشغّل
-                الحلقة بسرعة 1.5 مع خطوات إضافية: شعور بالإنجاز، ثم لا شيء بعد أسبوع.
+                والاستماع الذي يخلو من هذا الموعد هو نفسه سلوك من يشغّل الحلقة بسرعة 1.5 مع خطوات إضافية:
+                شعور بالإنجاز، ثم لا شيء بعد أسبوع.
             </p>
         </section>
 
@@ -375,7 +397,7 @@ function protocol(topic, canPause) {
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">2. التفريغ المعرفي (أين يقع الدفتر بالضبط)</span>
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">3. حل التعارض (فخ زر السرعة)</span>
                 <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">4. البناء على معلوم (ما يقابله في مجلس العلم)</span>
-                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">5. إعادة الترميز النشط (بروتوكول استماع)</span>
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">5. إعادة الترميز النشط (جملة تُقال بصوتك)</span>
             </div>
         </footer>
 
@@ -445,7 +467,7 @@ function protocol(topic, canPause) {
                 { id: 'q1', prompt: "أي المراحل الثلاث هي الأرخص كلفة والأكثر إهمالًا في الوقت نفسه؟", options: ["ما قبل الاستماع: من 45 إلى 60 ثانية من التهيئة", "أثناء الاستماع: الوقفات المتكررة", "بعد الاستماع: جلسة المراجعة الطويلة", "لا فرق بينها، والمهم مجموع الوقت"], correct: 0, why: "التهيئة المسبقة تكلف أقل من دقيقة قبل التشغيل، وهي التي تجعل كل دقيقة بعدها أقل كلفة على الذهن." },
                 { id: 'q2', prompt: "بحسب المخطط، ما وظيفة كتابة الملاحظات بالضبط؟", options: ["أنها تثبت المعلومة في الورق فلا تُنسى", "أنها أداة تفريغ تخفف حمل المعالجة عن الرأس", "أنها ترتب المادة بالترتيب الذي قيلت به", "أنها تبطئ المتحدث فيصير الكلام أوضح"], correct: 1, why: "الملاحظات أحد ثلاثة أسهم داخلة على المعالجة، ودورها تخفيف الحمل. ولهذا يمكن أن تنوب عنها التهيئة المسبقة والوقفات." },
                 { id: 'q3', prompt: "لماذا لا ينفع رفع سرعة التشغيل إلى 1.5 في تحسين ما تخرج به؟", options: ["لأن الصوت يصير غير واضح عند السرعات العالية", "لأن الحلقات القصيرة أقل عمقًا من الطويلة", "لأن زر السرعة يعمل على الوارد وحده، والمعالجة هي الجزء الوحيد الذي لا يملك زر سرعة", "لأن السرعة تمنع استعمال سماعات جيدة"], correct: 2, why: "رفع السرعة يوسّع الفجوة بين ما يدخل وما يستطيع الذهن ربطه، فهو يقصّر الصوت ولا يسرّع التعلم." },
-                { id: 'q4', prompt: "في البروتوكول البرمجي، متى يكون الاسترجاع من نوع transform هو الصحيح؟", options: ["حين تكون المادة تقنية ومليئة بالأرقام", "حين تكون المادة مما يغيّر عادة أو زاوية نظر تملكها أصلًا", "حين تكون المادة قصيرة ولا تستحق جلسة كاملة", "حين تكون المادة مما تستعمله في عملك يوميًا"], correct: 1, why: "المادة التي تغيّر عادة أو موقفًا لا يكفي فيها التذكر، بل السؤال: ماذا سأفعل مختلفًا وكيف أحاسب نفسي عليه." }
+                { id: 'q4', prompt: "الجملة التي تقولها بصوتك تقول إن الجلسة تنتهي بموعد استرجاع مكتوب. فأي مادة يكون موعدها بعد أسبوع بسؤال «ماذا أفعل مختلفًا»؟", options: ["المادة التقنية المليئة بالأرقام", "المادة التي تغيّر عادة أو زاوية نظر تملكها أصلًا", "المادة القصيرة التي لا تستحق جلسة كاملة", "المادة التي تستعملها في عملك يوميًا"], correct: 1, why: "ما يغيّر عادة أو موقفًا لا يكفي فيه التذكر، بل السؤال: ماذا سأفعل مختلفًا وكيف أحاسب نفسي عليه — ولهذا كان موعده الأبعد." }
  is a comma-separated list of
          { id, prompt, options: [4 strings], correct: <index 0-3>, why } object literals — see SKILL.md.
          QUESTION TEXT is per-page content (write it in the page's language); the UI strings below
@@ -478,7 +500,7 @@ function protocol(topic, canPause) {
                 { id: 'q1', prompt: "أي المراحل الثلاث هي الأرخص كلفة والأكثر إهمالًا في الوقت نفسه؟", options: ["ما قبل الاستماع: من 45 إلى 60 ثانية من التهيئة", "أثناء الاستماع: الوقفات المتكررة", "بعد الاستماع: جلسة المراجعة الطويلة", "لا فرق بينها، والمهم مجموع الوقت"], correct: 0, why: "التهيئة المسبقة تكلف أقل من دقيقة قبل التشغيل، وهي التي تجعل كل دقيقة بعدها أقل كلفة على الذهن." },
                 { id: 'q2', prompt: "بحسب المخطط، ما وظيفة كتابة الملاحظات بالضبط؟", options: ["أنها تثبت المعلومة في الورق فلا تُنسى", "أنها أداة تفريغ تخفف حمل المعالجة عن الرأس", "أنها ترتب المادة بالترتيب الذي قيلت به", "أنها تبطئ المتحدث فيصير الكلام أوضح"], correct: 1, why: "الملاحظات أحد ثلاثة أسهم داخلة على المعالجة، ودورها تخفيف الحمل. ولهذا يمكن أن تنوب عنها التهيئة المسبقة والوقفات." },
                 { id: 'q3', prompt: "لماذا لا ينفع رفع سرعة التشغيل إلى 1.5 في تحسين ما تخرج به؟", options: ["لأن الصوت يصير غير واضح عند السرعات العالية", "لأن الحلقات القصيرة أقل عمقًا من الطويلة", "لأن زر السرعة يعمل على الوارد وحده، والمعالجة هي الجزء الوحيد الذي لا يملك زر سرعة", "لأن السرعة تمنع استعمال سماعات جيدة"], correct: 2, why: "رفع السرعة يوسّع الفجوة بين ما يدخل وما يستطيع الذهن ربطه، فهو يقصّر الصوت ولا يسرّع التعلم." },
-                { id: 'q4', prompt: "في البروتوكول البرمجي، متى يكون الاسترجاع من نوع transform هو الصحيح؟", options: ["حين تكون المادة تقنية ومليئة بالأرقام", "حين تكون المادة مما يغيّر عادة أو زاوية نظر تملكها أصلًا", "حين تكون المادة قصيرة ولا تستحق جلسة كاملة", "حين تكون المادة مما تستعمله في عملك يوميًا"], correct: 1, why: "المادة التي تغيّر عادة أو موقفًا لا يكفي فيها التذكر، بل السؤال: ماذا سأفعل مختلفًا وكيف أحاسب نفسي عليه." }
+                { id: 'q4', prompt: "الجملة التي تقولها بصوتك تقول إن الجلسة تنتهي بموعد استرجاع مكتوب. فأي مادة يكون موعدها بعد أسبوع بسؤال «ماذا أفعل مختلفًا»؟", options: ["المادة التقنية المليئة بالأرقام", "المادة التي تغيّر عادة أو زاوية نظر تملكها أصلًا", "المادة القصيرة التي لا تستحق جلسة كاملة", "المادة التي تستعملها في عملك يوميًا"], correct: 1, why: "ما يغيّر عادة أو موقفًا لا يكفي فيه التذكر، بل السؤال: ماذا سأفعل مختلفًا وكيف أحاسب نفسي عليه — ولهذا كان موعده الأبعد." }
 
             ];
 
