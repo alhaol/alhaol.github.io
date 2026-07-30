@@ -41,7 +41,7 @@ No build step, no package manager.
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
 │       └── # 42 article pages, the-paradigm-shift.html … the-plausibility-trap.html
-└── apps/
+└── apps/               # (partial listing — see the Pages & Apps table below for all apps)
     ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker
     ├── books/          # Neural Archive — AI & data science e-book library
@@ -82,7 +82,7 @@ No build step, no package manager.
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 42-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
-| Memory Classes | `/memory/` | 3-class series that moves one concept into long-term memory via the 5-step cognitive sequence (chunk, offload to a diagram, spring a trap, scaffold, re-encode in real code). Each page carries a freehand sketchpad, a light/dark toggle and a retrieval quiz that resurfaces what you missed. |
+| Memory Classes | `/memory/` | 3-class series that moves one concept into long-term memory via the 5-step cognitive sequence (chunk, offload to a diagram, spring a trap, scaffold, then re-encode it into the format you'll actually retrieve it in — a decision card, a rule you say aloud, a diagram you redraw from memory, or real code). Each page carries a freehand sketchpad, a light/dark toggle and a retrieval quiz that resurfaces what you missed. |
 | Learning Prompts | `/prompts/` | 7 copy-paste prompts that turn any chat AI into an active tutor — it asks before it tells and won't hand over the answer until you've tried. Searchable icon card grid; opening a prompt gives you a form for its `[PLACEHOLDER]` blanks with live substitution, a one-click copy, and a hand-off into a fresh chat. Driven by `prompts/prompts.json` over the markdown in `prompts/mds/`. |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
 | Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
@@ -102,6 +102,7 @@ No build step, no package manager.
 | Life Systems | `/apps/systems/` | Multi-system visualiser for AFPISH & P3N3SLW frameworks |
 | Tafseer Al-Sadi | `/apps/tasfeer-alsadi/` | Complete Quran Tafseer Al-Sadi — all 114 surahs (Arabic, 114 videos) |
 | Tier Lists | `/apps/tier-lists/` | Science-ranked exercise tier-list video playlist (7 videos) |
+| Canada Tax Maximizer | `/apps/tax/` | Ontario federal/provincial tax estimator with RRSP/TFSA strategy, deductions and refund optimization |
 | TaskMaster Pro | `/apps/todo/` | Focus-mode task manager with active-task hero view |
 | Warmup | `/apps/warmup/` | Daily warmup and core workout video playlist (25 videos) |
 | Wizard Duel | `/apps/wizard-duel/` | 2-player turn-based wizard battle game with monsters |
