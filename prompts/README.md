@@ -5,7 +5,7 @@ tell, wait for your reply, and won't hand over the answer until you've genuinely
 is a standalone file you can open, fill in the `[BRACKETS]`, and paste into any model.
 
 <!-- PROMPTS:COUNT:START -->
-**7 prompts** across 2 categories: Learning, Workflow.
+**8 prompts** across 2 categories: Learning, Workflow.
 <!-- PROMPTS:COUNT:END -->
 
 **Start at the hub:** [`index.html`](index.html) renders them all from the markdown below, fills in
@@ -33,6 +33,7 @@ to chain them into a full learn → practice → verify loop.
 | 5 | [The Hidden Gap Detector](mds/05-hidden-gap-detector.md) | Learning | Five deceptively simple questions that expose the gaps of someone who never truly went deep. |
 | 6 | [The Forced Feynman Method](mds/06-forced-feynman-method.md) | Learning | Explain it simply while the AI catches every jargon crutch, skipped step and hidden oversimplification. |
 | 7 | [The Claude Code Scaffold](mds/07-claude-code-scaffold.md) | Workflow | Stand up memory, skills and state files in an existing repo — with an audit that stops it overwriting what's already there. |
+| 8 | [The Local-First Harness](mds/08-local-first-harness.md) | Workflow | Force the agent to leave scripts, caches and graphs behind as it builds — so run two is deterministic and nearly free. |
 <!-- PROMPTS:TABLE:END -->
 
 ## Layout

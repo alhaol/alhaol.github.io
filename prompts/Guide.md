@@ -5,7 +5,7 @@ own file under [`mds/`](mds/). This guide explains the shared idea behind them, 
 for, how to fill them in, and how to chain them into a full learning loop.
 
 <!-- PROMPTS:COUNT:START -->
-**7 prompts** across 2 categories: Learning, Workflow.
+**8 prompts** across 2 categories: Learning, Workflow.
 <!-- PROMPTS:COUNT:END -->
 
 > **Use the hub instead of copying by hand.** [`index.html`](index.html) renders every prompt from
@@ -37,6 +37,7 @@ wait.** Don't paste them and then skim ahead; play your part in the back-and-for
 | "I think I know this — check whether my confidence is earned." | [05 — The Hidden Gap Detector](mds/05-hidden-gap-detector.md) |
 | "I just studied this — is my understanding actually solid?" | [06 — The Forced Feynman Method](mds/06-forced-feynman-method.md) |
 | "Every session starts with me re-explaining the project because nothing carries over." | [07 — The Claude Code Scaffold](mds/07-claude-code-scaffold.md) |
+| "I keep re-paying for the same reasoning every time I run this." | [08 — The Local-First Harness](mds/08-local-first-harness.md) |
 <!-- PROMPTS:TABLE:END -->
 
 On the hub these same situations appear on the cards, so you can search by symptom
