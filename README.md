@@ -35,12 +35,12 @@ No build step, no package manager.
 │       ├── _not_approved/  # Gitignored: draft decks live here until approved
 │       └── <slug>/         # Approved decks live one level up; listed in presentations.json
 ├── articles/           # Technical Articles series
-│   ├── index.html      # Articles landing page (42 articles grid)
-│   ├── Post_Images/    # Hero images for articles (Image_01 through Image_42, .png/.jpg; Fig_NN_* for in-article cartoons)
+│   ├── index.html      # Articles landing page (43 articles grid)
+│   ├── Post_Images/    # Hero images for articles (Image_01 through Image_43, .png/.jpg; Fig_NN_* for in-article raster figures)
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
-│       └── # 42 article pages, the-paradigm-shift.html … the-plausibility-trap.html
+│       └── # 43 article pages, the-paradigm-shift.html … the-experience-bottleneck.html
 └── apps/               # (partial listing — see the Pages & Apps table below for all apps)
     ├── _not_approved/  # Gitignored: draft apps staged here until approved
     ├── 21/             # 21 Repetitions tracker
@@ -80,7 +80,7 @@ No build step, no package manager.
 |-----|-----|-------------|
 | Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub with Memory Classes then Prompts stacked above it, bottom-right → Articles with Blooms stacked above it. Presentations FAB is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
-| Technical Articles | `/articles/` | 42-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme) |
+| Technical Articles | `/articles/` | 43-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
 | Memory Classes | `/memory/` | 6-class series that moves one concept into long-term memory via the 5-step cognitive sequence (chunk, offload to a diagram, spring a trap, scaffold, then re-encode it into the format you will actually retrieve it in: a decision card, a rule you say aloud, a diagram you redraw from memory, a causal graph you rebuild edge by edge, a procedure with the decisions blanked out, a letter system you fill in yourself, a metrical rule, or real code). Each page carries a freehand sketchpad, a light/dark toggle and a retrieval quiz that resurfaces what you missed. |
 | Learning Prompts | `/prompts/` | 8 copy-paste prompts that turn any chat AI into an active tutor — it asks before it tells and won't hand over the answer until you've tried. Searchable icon card grid; opening a prompt gives you a form for its `[PLACEHOLDER]` blanks with live substitution, a one-click copy, and a hand-off into a fresh chat. Driven by `prompts/prompts.json` over the markdown in `prompts/mds/`. |

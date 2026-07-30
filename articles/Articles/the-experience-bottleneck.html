@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Experience Bottleneck | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so the labels stay sharp at any
+           width and the palette matches the page theme exactly. The scroll wrapper keeps label
+           text legible on a phone instead of shrinking it to 6px: the figure scrolls inside its
+           own box, and the page body never scrolls sideways. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_43.png" alt="The Experience Bottleneck" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">Physical AI</span>
+                        <span class="category-badge category-architecture">Robotics</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Experience Bottleneck</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Language models inherited a corpus. Robots have to earn every hour of theirs, and that changes the arithmetic behind every AGI forecast.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: July 30, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 8 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+                    <p>Language models learned to write from text that already existed. Nobody had to produce it for them. A robot learning to fold a shirt has no comparable library, and that one asymmetry explains more about the state of physical AI than any argument about model architecture does.</p>
+
+                    <p>The popular framing treats embodiment as the next scaling problem: take the recipe that worked for language, point it at hardware, wait. But scaling laws describe what happens when you add data. They are silent on whether the data can be obtained at all. For text, supply was a stock that human civilization had already written down. Llama 3 was pretrained on more than 15 trillion tokens from public sources, gathered at almost no cost per token. For robots, supply is a flow. Physical Intelligence trained its <code>&#960;0</code> model on over 10,000 hours of data across seven robot configurations, and the Open X-Embodiment collaboration pooled 60 datasets from 34 laboratories to reach roughly a million real trajectories. Every hour inside those numbers was a physical machine moving in real time.</p>
+
+                    <blockquote>Text was a stock that already existed. Embodied experience is a flow you buy in wall-clock time, on hardware you own and maintain. Scaling laws say nothing about the purchase rate.</blockquote>
+
+                    <h2>Two kinds of data, two kinds of cost</h2>
+
+                    <p>Put the two training regimes on the same axis and the distance is easier to accept than to argue with. It is roughly four orders of magnitude, and it is not closing through effort alone.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Recorded training experience for a language model compared with a robot policy, on a logarithmic scale</title>
+                                <desc id="fig1-desc">Llama 3 was trained on about 1.5 times 10 to the 13 tokens. The pi-zero robot policy used about 9 times 10 to the 8 recorded timesteps. The distance between them is about four orders of magnitude.</desc>
+
+                                <text x="30" y="34" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">Recorded training experience, log scale</text>
+                                <text x="30" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Each gridline is a factor of ten</text>
+
+                                <!-- gridlines: decades 10^6 to 10^14 at x = 60 + (d-6)*65 -->
+                                <g stroke="#2a3f5f" stroke-width="1">
+                                    <line x1="60" y1="80" x2="60" y2="228"/>
+                                    <line x1="125" y1="80" x2="125" y2="228"/>
+                                    <line x1="190" y1="80" x2="190" y2="228"/>
+                                    <line x1="255" y1="80" x2="255" y2="228"/>
+                                    <line x1="320" y1="80" x2="320" y2="228"/>
+                                    <line x1="385" y1="80" x2="385" y2="228"/>
+                                    <line x1="450" y1="80" x2="450" y2="228"/>
+                                    <line x1="515" y1="80" x2="515" y2="228"/>
+                                    <line x1="580" y1="80" x2="580" y2="228"/>
+                                </g>
+                                <g fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">
+                                    <text x="60" y="246">10⁶</text>
+                                    <text x="125" y="246">10⁷</text>
+                                    <text x="190" y="246">10⁸</text>
+                                    <text x="255" y="246">10⁹</text>
+                                    <text x="320" y="246">10¹⁰</text>
+                                    <text x="385" y="246">10¹¹</text>
+                                    <text x="450" y="246">10¹²</text>
+                                    <text x="515" y="246">10¹³</text>
+                                    <text x="580" y="246">10¹⁴</text>
+                                </g>
+
+                                <!-- language model bar, ends at 1.5e13 -> x=526 -->
+                                <text x="30" y="104" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="600">Language</text>
+                                <line x1="60" y1="126" x2="526" y2="126" stroke="#60a5fa" stroke-width="8" stroke-linecap="round"/>
+                                <circle cx="526" cy="126" r="8" fill="#60a5fa"/>
+                                <text x="516" y="112" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="end">15T tokens, scraped</text>
+
+                                <!-- robot bar, ends at 9.03e8 -> x=252 -->
+                                <text x="30" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="13" font-weight="600">Embodied</text>
+                                <line x1="60" y1="204" x2="252" y2="204" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
+                                <circle cx="252" cy="204" r="8" fill="#f59e0b"/>
+                                <text x="268" y="209" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">0.9B timesteps, performed</text>
+
+                                <!-- the gap bracket -->
+                                <g stroke="#94a3b8" stroke-width="1.5" fill="none">
+                                    <path d="M252 152 L252 164 L526 164 L526 152"/>
+                                </g>
+                                <text x="389" y="182" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" font-style="italic">about 4 orders of magnitude</text>
+
+                                <text x="30" y="282" fill="#64748b" font-family="Inter, sans-serif" font-size="11">A token and a timestep are different units. The exponent and the cost per unit are the point.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The comparison is deliberately loose about units, because the honest version of this chart cannot be tight: a text token and a robot timestep measure different things. What survives the unit mismatch is the exponent and, more importantly, the price. A token costs a web crawl. A timestep costs a robot, an operator, a reset, and a second of real time that cannot be parallelized away. Sources: Llama 3 model card; <code>&#960;0</code> (arXiv 2410.24164).</figcaption>
+                    </figure>
+
+                    <p>This is why the binding constraint in physical AI is throughput of practice rather than parameter count. You can rent ten thousand accelerators this afternoon. You cannot rent ten thousand robot-years of contact experience, because nobody has it to lend, and generating it consumes calendar time at a fixed exchange rate. A fleet that collects data eight hours a day produces eight hours of data a day, and no amount of capital changes that ratio without more machines and more operators.</p>
+
+                    <h2>What Moravec got right, and where the story is thinner than it looks</h2>
+
+                    <p>The usual explanation reaches for Moravec's paradox. In <em>Mind Children</em> (1988), Hans Moravec observed that it was comparatively easy to get computers to adult-level performance on intelligence tests or checkers, and difficult or impossible to give them the perception and mobility of a one-year-old. The lesson drawn from it is that human-easy implies machine-hard.</p>
+
+                    <p>That lesson deserves more scrutiny than it usually gets. Arvind Narayanan has argued the paradox has never really been fact-checked, and that its apparent support comes from selection bias: the anecdotes always compare chess against laundry and quietly skip the tasks that are easy for both humans and machines, and the tasks that are hard for both. Open-domain reasoning in law or science is difficult for current systems, and Moravec's scheme would have filed it under easy. Once the ignored cells return to the picture, the clean inverse relationship stops being clean.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 400" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">A two-by-two grid of task difficulty for humans and for machines</title>
+                                <desc id="fig2-desc">Moravec's paradox draws on two diagonal cells: easy for humans and hard for machines, such as folding laundry, and hard for humans and easy for machines, such as ten digit multiplication. The other two cells, easy for both and hard for both, are usually left out of the comparison.</desc>
+
+                                <text x="30" y="32" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">The paradox lives on one diagonal</text>
+
+                                <!-- axis labels -->
+                                <text x="200" y="384" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">easy for humans</text>
+                                <text x="470" y="384" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">hard for humans</text>
+                                <text x="24" y="130" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" transform="rotate(-90 24 130)">hard for machines</text>
+                                <text x="24" y="286" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" transform="rotate(-90 24 286)">easy for machines</text>
+
+                                <!-- top-left: easy human, hard machine (cited, amber) -->
+                                <rect x="60" y="56" width="270" height="146" rx="6" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-width="2"/>
+                                <text x="76" y="80" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CITED BY MORAVEC</text>
+                                <text x="76" y="106" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">Folding laundry</text>
+                                <text x="76" y="128" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">Opening an unfamiliar door</text>
+                                <text x="76" y="156" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Continuous control, contact,</text>
+                                <text x="76" y="174" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">recovery from small errors</text>
+
+                                <!-- top-right: hard human, hard machine (ignored) -->
+                                <rect x="340" y="56" width="270" height="146" rx="6" fill="#1a2942" fill-opacity="0.6" stroke="#2a3f5f" stroke-width="1" stroke-dasharray="5 4"/>
+                                <text x="356" y="80" fill="#64748b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">LEFT OUT</text>
+                                <text x="356" y="106" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="600">Open-domain legal and</text>
+                                <text x="356" y="126" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="600">scientific reasoning</text>
+                                <text x="356" y="154" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Moravec&#39;s scheme predicts</text>
+                                <text x="356" y="172" fill="#64748b" font-family="Inter, sans-serif" font-size="12">this should be easy. It is not.</text>
+
+                                <!-- bottom-left: easy human, easy machine (ignored) -->
+                                <rect x="60" y="212" width="270" height="146" rx="6" fill="#1a2942" fill-opacity="0.6" stroke="#2a3f5f" stroke-width="1" stroke-dasharray="5 4"/>
+                                <text x="76" y="236" fill="#64748b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">LEFT OUT</text>
+                                <text x="76" y="262" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="600">Reading printed text</text>
+                                <text x="76" y="290" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Neither side finds this hard,</text>
+                                <text x="76" y="308" fill="#64748b" font-family="Inter, sans-serif" font-size="12">so it never enters the anecdote</text>
+
+                                <!-- bottom-right: hard human, easy machine (cited, blue) -->
+                                <rect x="340" y="212" width="270" height="146" rx="6" fill="#60a5fa" fill-opacity="0.12" stroke="#60a5fa" stroke-width="2"/>
+                                <text x="356" y="236" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CITED BY MORAVEC</text>
+                                <text x="356" y="262" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">Ten-digit multiplication</text>
+                                <text x="356" y="282" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">Checkers, then chess</text>
+                                <text x="356" y="310" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Discrete, closed, fully</text>
+                                <text x="356" y="328" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">specified rules</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> Keep only the two coloured cells and an inverse relationship appears by construction. The dashed cells are the ones the standard telling omits. The usable claim is narrower than the slogan: difficulty tracks whether competence lives in continuous closed-loop control under contact, where the data is expensive, rather than in a closed rule set, where it is cheap. Sources: Moravec, <em>Mind Children</em>; Narayanan, "Fact checking Moravec's paradox".</figcaption>
+                    </figure>
+
+                    <h2>The gap you can randomize away, and the gap you cannot</h2>
+
+                    <p>If real experience is the expensive input, simulation looks like the way out. Simulated robots run faster than real time, in parallel, without maintenance. The standard technique is domain randomization: perturb the simulator's physical parameters during training so the policy learns to work across a distribution of dynamics, and the real world becomes one more sample from that distribution. It works. Legged locomotion and gross manipulation have both crossed from simulation into hardware this way.</p>
+
+                    <p>The limit is specific and worth stating precisely. Domain randomization can only close gaps the simulator represents. Randomizing friction, mass, latency, and lighting covers the parameters someone thought to expose. Sim-to-real surveys point out that it does nothing for the effects the simulator omits entirely: contact and deformation, aerodynamic detail, wear, and response delays that were never in the model. You cannot randomize over a variable that does not exist in your equations.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 348" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig3-title">The reality gap divided into a parameterizable band and a structurally unmodeled band</title>
+                                <desc id="fig3-desc">Domain randomization spans the lower band of the reality gap, which holds parameters the simulator already represents such as friction, mass and latency. The upper band holds effects absent from the simulator such as contact deformation, aerodynamics and wear, which randomization cannot reach.</desc>
+
+                                <defs>
+                                    <marker id="ar-cross" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L8,3 z" fill="#60a5fa"/>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">Randomization reaches only what the simulator already represents</text>
+
+                                <!-- endpoint columns, spanning both bands -->
+                                <rect x="30" y="54" width="96" height="264" rx="6" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <text x="78" y="180" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Simulator</text>
+                                <text x="78" y="202" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">cheap, parallel</text>
+
+                                <rect x="514" y="54" width="96" height="264" rx="6" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <text x="562" y="180" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Reality</text>
+                                <text x="562" y="202" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">slow, serial</text>
+
+                                <!-- upper band: structurally absent from the simulator -->
+                                <rect x="142" y="54" width="328" height="124" rx="6" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4"/>
+                                <text x="158" y="78" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">NOT IN THE MODEL AT ALL</text>
+                                <text x="158" y="102" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Contact and deformation, aerodynamic</text>
+                                <text x="158" y="122" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">detail, wear, unmodeled response delays</text>
+                                <text x="158" y="152" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-style="italic">randomization cannot reach what is absent</text>
+
+                                <!-- blocked verdict glyph -->
+                                <circle cx="492" cy="116" r="15" fill="#f59e0b" fill-opacity="0.14" stroke="#f59e0b" stroke-width="2"/>
+                                <g stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="485" y1="109" x2="499" y2="123"/>
+                                    <line x1="499" y1="109" x2="485" y2="123"/>
+                                </g>
+
+                                <!-- lower band: parameters the simulator exposes -->
+                                <rect x="142" y="194" width="328" height="124" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="2"/>
+                                <text x="158" y="218" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">PARAMETERS THE SIMULATOR EXPOSES</text>
+                                <text x="158" y="242" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Friction, mass, actuator gain, latency,</text>
+                                <text x="158" y="262" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">lighting, sensor noise</text>
+                                <text x="158" y="292" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-style="italic">domain randomization transfers across these</text>
+
+                                <!-- transfers verdict glyph -->
+                                <line x1="478" y1="256" x2="504" y2="256" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#ar-cross)"/>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 3.</b> The practical consequence is a task-selection rule rather than a research agenda. Work whose physics your simulator actually contains can be bought cheaply in simulation. Contact-rich dexterity sits in the upper band, which is why it stays stubbornly expensive and why it still consumes real robot hours. Source: Zhao et al., "Sim-to-Real Transfer in Deep Reinforcement Learning for Robotics: a Survey" (arXiv 2009.13303).</figcaption>
+                    </figure>
+
+                    <h2>Where the opportunity actually sits</h2>
+
+                    <p>The field's most productive response has been to stop paying for what it can inherit. Google DeepMind's RT-2 showed that a vision-language model trained on web data transfers that knowledge into robotic control, so the robot arrives already knowing what a banana is and what "put it in the bowl" means. Physical Intelligence built <code>&#960;0</code> on top of PaliGemma, a 3-billion-parameter vision-language model, and added a flow-matching action head. Open X-Embodiment went further and pooled trajectories across 22 different robot bodies, then found that policies trained on the pool beat policies trained on any single embodiment, including in domains that already had plenty of data.</p>
+
+                    <p>Read together, those results describe a division of labour. Semantics, object knowledge, and language understanding come from data that is already abundant and still growing for free. Scarce robot data gets spent only on the part nothing else can supply: the mapping from intent to actuation on a specific body. That is the opportunity, and it is an engineering strategy rather than a hope.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 340" role="img" aria-labelledby="fig4-title fig4-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig4-title">Two input streams of very different cost feeding a vision-language-action policy</title>
+                                <desc id="fig4-desc">Abundant web text and images train the semantic backbone. Scarce robot trajectories pooled across many embodiments train only the action head that maps intent to actuation.</desc>
+
+                                <text x="30" y="32" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">Spend the scarce data only where nothing else can substitute</text>
+
+                                <defs>
+                                    <marker id="ar-b2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L8,3 z" fill="#60a5fa"/>
+                                    </marker>
+                                    <marker id="ar-a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- abundant source -->
+                                <rect x="30" y="62" width="196" height="94" rx="6" fill="#60a5fa" fill-opacity="0.1" stroke="#60a5fa" stroke-width="2"/>
+                                <text x="46" y="86" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">ABUNDANT, FREE</text>
+                                <text x="46" y="110" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Web text and images</text>
+                                <text x="46" y="132" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">what objects are, what</text>
+                                <text x="46" y="148" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">instructions mean</text>
+
+                                <!-- scarce source -->
+                                <rect x="30" y="196" width="196" height="94" rx="6" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="2"/>
+                                <text x="46" y="220" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">SCARCE, PAID IN HOURS</text>
+                                <text x="46" y="244" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Robot trajectories</text>
+                                <text x="46" y="266" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">1M+ pooled across 22</text>
+                                <text x="46" y="282" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">embodiments</text>
+
+                                <line x1="226" y1="109" x2="292" y2="132" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#ar-b2)"/>
+                                <line x1="226" y1="243" x2="292" y2="220" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#ar-a2)"/>
+
+                                <!-- the model -->
+                                <rect x="302" y="106" width="188" height="140" rx="6" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <rect x="316" y="124" width="160" height="48" rx="4" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="396" y="144" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Vision-language</text>
+                                <text x="396" y="162" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">backbone</text>
+                                <rect x="316" y="182" width="160" height="48" rx="4" fill="#f59e0b" fill-opacity="0.16" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="396" y="202" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Action head</text>
+                                <text x="396" y="220" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">intent to actuation</text>
+                                <text x="396" y="272" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">RT-2, &#960;0, RT-X</text>
+
+                                <line x1="490" y1="176" x2="546" y2="176" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#ar-b2)"/>
+
+                                <!-- output -->
+                                <rect x="556" y="120" width="60" height="112" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="586" y="164" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Policy</text>
+                                <text x="586" y="186" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">on new</text>
+                                <text x="586" y="202" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">tasks</text>
+
+                                <text x="30" y="322" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Pooling across bodies raised performance even where single-embodiment data was already plentiful.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 4.</b> The economics also explain why cross-embodiment pooling matters beyond the accuracy gain: shared data pools are the only mechanism that lets one organization's robot hours reduce another's. Sources: RT-2 (arXiv 2307.15818); <code>&#960;0</code> (arXiv 2410.24164); Open X-Embodiment (arXiv 2310.08864).</figcaption>
+                    </figure>
+
+                    <h2>What this says about AGI</h2>
+
+                    <p>Two camps disagree about whether any of this is on the critical path. One holds that general intelligence requires grounding: that a system with no ability to act on the world and observe the consequences cannot acquire causal understanding, only correlational summaries of someone else's. The other holds that competent physical action is a useful application of general intelligence rather than a precondition for it, and that reasoning can be learned from description alone. The argument is unresolved and will not be settled by assertion.</p>
+
+                    <p>What the data economics settle is narrower and more useful. If grounding is required, then the arrival of general intelligence is governed by an acquisition rate rather than a compute budget, because the necessary experience has to be generated by machines acting in real time. That reframes the forecast from an algorithms question into a question about fleets, operators, and calendar time, which behaves very differently: it is slower, more capital-intensive, and much harder to accelerate with a breakthrough. Anyone quoting an AGI date on the strength of a training-compute curve is answering a question about text and presenting it as an answer about the world.</p>
+
+                    <p>The strategic asymmetry follows from the same arithmetic. Deployment is data collection, so whoever fields machines earliest compounds fastest, and the advantage is cumulative in a way model weights are not. A competitor can match your architecture in a quarter. They cannot retroactively collect the robot hours you started gathering two years ago.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Instrument every deployed machine for data capture before you optimize its autonomy. Deployment is the only faucet you control, and unrecorded operating hours are permanently lost.</li>
+                        <li>Select automation targets by contact complexity rather than by how hard the job looks to a person. Work whose physics your simulator already models is cheap to train. Contact-rich dexterity is not, and no vendor roadmap changes that.</li>
+                        <li>Put teleoperation on the balance sheet with an hourly rate, and track cost per successful trajectory as an operating metric. Teams that do not measure it discover their data cost after committing to it.</li>
+                        <li>Join or fund a cross-embodiment data pool instead of assuming your own fleet will reach useful scale. The Open X-Embodiment result is that pooled data beats private data, including for organizations that already had plenty.</li>
+                    </ol>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Real Scarcity</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">What is actually in short supply once compute stops being the constraint.</p>
+                        <a href="the-real-scarcity.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Intelligence Is Applied Causality</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why acting on the world and modelling cause are the same capability.</p>
+                        <a href="intelligence-is-applied-causality.html">Read →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Plausibility Trap</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Output that reads as correct is not evidence that the model understood.</p>
+                        <a href="the-plausibility-trap.html">Read →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Moravec, H. <em>Mind Children: The Future of Robot and Human Intelligence</em>. Harvard University Press, 1988. Summary of the argument: <a href="https://en.wikipedia.org/wiki/Moravec%27s_paradox" target="_blank" rel="noopener noreferrer">Moravec's paradox</a>.</li>
+                    <li class="reference-item">Narayanan, A. "Fact checking Moravec's paradox." <em>Normal Technology</em>. <a href="https://www.normaltech.ai/p/fact-checking-moravecs-paradox" target="_blank" rel="noopener noreferrer">normaltech.ai/p/fact-checking-moravecs-paradox</a></li>
+                    <li class="reference-item">Open X-Embodiment Collaboration. "Open X-Embodiment: Robotic Learning Datasets and RT-X Models." arXiv:2310.08864. <a href="https://arxiv.org/abs/2310.08864" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2310.08864</a></li>
+                    <li class="reference-item">Black, K. et al. "&#960;0: A Vision-Language-Action Flow Model for General Robot Control." arXiv:2410.24164. <a href="https://arxiv.org/abs/2410.24164" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2410.24164</a></li>
+                    <li class="reference-item">Brohan, A. et al. "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control." arXiv:2307.15818. <a href="https://arxiv.org/abs/2307.15818" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2307.15818</a></li>
+                    <li class="reference-item">Zhao, W., Queralta, J.P., Westerlund, T. "Sim-to-Real Transfer in Deep Reinforcement Learning for Robotics: a Survey." arXiv:2009.13303. <a href="https://arxiv.org/abs/2009.13303" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2009.13303</a></li>
+                    <li class="reference-item">Meta AI. "Llama 3 model card." Pretraining corpus of more than 15 trillion tokens. <a href="https://github.com/meta-llama/llama3/blob/main/MODEL_CARD.md" target="_blank" rel="noopener noreferrer">github.com/meta-llama/llama3</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
