@@ -134,12 +134,19 @@
         }
         .hub-dock-item:focus-visible { outline: none; }
 
-        /* plus -> x */
+        /* plus -> minus: the vertical bar fades out, the glyph spins half a turn */
         .hub-dock-toggle svg {
             transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .hub-dock-toggle .bar-v {
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
         .hub-dock[data-open="true"] .hub-dock-toggle svg {
-            transform: rotate(135deg);
+            transform: rotate(180deg);
+        }
+        .hub-dock[data-open="true"] .hub-dock-toggle .bar-v {
+            opacity: 0;
         }
 
         .hub-dock-item {
@@ -222,7 +229,7 @@
         <button type="button" class="hub-dock-toggle" id="hubDockToggle"
                 aria-expanded="false" aria-controls="hubDock" aria-label="Open site sections">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line class="bar-v" x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
         </button>
@@ -296,8 +303,7 @@
     </nav>
 
     <script>
-        // Hub dock fold/unfold. Unfolded by default on wide screens, folded on phones;
-        // an explicit user choice wins and is remembered.
+        // Hub dock fold/unfold. Always starts folded — the + opens it, the - closes it.
         (function () {
             const dock = document.getElementById('hubDock');
             const toggle = document.getElementById('hubDockToggle');
@@ -309,14 +315,10 @@
                 toggle.setAttribute('aria-label', open ? 'Close site sections' : 'Open site sections');
             };
 
-            let stored = null;
-            try { stored = localStorage.getItem('hubDockOpen'); } catch (e) {}
-            setOpen(stored === null ? window.matchMedia('(min-width: 768px)').matches : stored === 'true');
+            setOpen(false);
 
             toggle.addEventListener('click', () => {
-                const open = dock.dataset.open !== 'true';
-                setOpen(open);
-                try { localStorage.setItem('hubDockOpen', String(open)); } catch (e) {}
+                setOpen(dock.dataset.open !== 'true');
             });
 
             document.addEventListener('keydown', (e) => {
@@ -326,11 +328,10 @@
                 }
             });
 
-            // Tapping elsewhere folds it back on small screens, where it covers content.
+            // Tapping anywhere else folds it back.
             document.addEventListener('click', (e) => {
                 if (dock.dataset.open !== 'true') return;
                 if (dock.contains(e.target)) return;
-                if (window.matchMedia('(min-width: 768px)').matches) return;
                 setOpen(false);
             });
         })();
