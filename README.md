@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (FABs: left column → Apps Hub + Memory Classes, right column → Articles + Blooms. Presentations FAB is commented out)
+├── index.html          # Main portfolio / CV page (foldable hub dock, bottom-right → Apps Hub, Articles, Blooms, Memory, Prompts. Presentations entry is commented out)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -78,7 +78,7 @@ No build step, no package manager.
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. Floating circle FABs: bottom-left → Apps Hub with Memory Classes then Prompts stacked above it, bottom-right → Articles with Blooms stacked above it. Presentations FAB is commented out. |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. A single foldable hub dock at bottom-right: tap the `+` to unfold labelled links to the Apps Hub, Articles, Blooms, Memory and Prompts. Presentations entry is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 43-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
