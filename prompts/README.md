@@ -5,7 +5,7 @@ tell, wait for your reply, and won't hand over the answer until you've genuinely
 is a standalone file you can open, fill in the `[BRACKETS]`, and paste into any model.
 
 <!-- PROMPTS:COUNT:START -->
-**8 prompts** across 2 categories: Learning, Workflow.
+**9 prompts** across 3 categories: Learning, Workflow, Writing.
 <!-- PROMPTS:COUNT:END -->
 
 **Start at the hub:** [`index.html`](index.html) renders them all from the markdown below, fills in
@@ -34,6 +34,7 @@ to chain them into a full learn → practice → verify loop.
 | 6 | [The Forced Feynman Method](mds/06-forced-feynman-method.md) | Learning | Explain it simply while the AI catches every jargon crutch, skipped step and hidden oversimplification. |
 | 7 | [The Claude Code Scaffold](mds/07-claude-code-scaffold.md) | Workflow | Stand up memory, skills and state files in an existing repo — with an audit that stops it overwriting what's already there. |
 | 8 | [The Local-First Harness](mds/08-local-first-harness.md) | Workflow | Force the agent to leave scripts, caches and graphs behind as it builds — so run two is deterministic and nearly free. |
+| 9 | [The Memory-First Editor](mds/09-memory-first-editor.md) | Writing | Seven cognitive passes over your draft — core, load, image, surprise, return, address, bookend — with you doing every rewrite. |
 <!-- PROMPTS:TABLE:END -->
 
 ## Layout
