@@ -10,4 +10,4 @@ New memory class on where the second knot goes. It is one paragraph long, and it
 
 #Writing #Communication #Leadership #Memory #Storytelling #iwork4dell
 
-Extended Reading: https://alhaol.github.io/memory/Memories/07_clarity-is-not-retention_2026-07-31.html
+Extended Reading: https://alhaol.github.io/memory/Memories/01_clarity-is-not-retention_2026-07-31.html
