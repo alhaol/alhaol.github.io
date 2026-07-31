@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Paper You Read Twice | Cognitive Masterclass</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cog: { light: '#e0e7ff', DEFAULT: '#6366f1', dark: '#3730a3' },
+                        causal: { light: '#ffe4e6', DEFAULT: '#e11d48', dark: '#881337' },
+                        memory: { light: '#fef08a', DEFAULT: '#eab308', dark: '#854d0e' },
+                        offload: { light: '#f1f5f9', DEFAULT: '#cbd5e1', dark: '#334155' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Arabic', 'system-ui', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js"></script>
+
+    <style>
+        /* Inter covers Latin glyphs; the browser falls back to Noto Sans Arabic per-glyph for
+           Arabic text in the same stack — no language branching needed for the font itself. */
+        body { font-family: 'Inter', 'Noto Sans Arabic', sans-serif; background-color: #f8fafc; color: #0f172a; transition: all 0.3s ease; }
+        .dark body { background-color: #0f172a; color: #f8fafc; }
+
+        /* Methodology callout — every section opens with one of these, naming its technique.
+           border-inline-start (not border-left) + logical corner radii so the callout shape
+           mirrors correctly under dir="rtl" without a separate override. */
+        .methodology-note {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            border-inline-start: 3px solid #eab308;
+            padding-inline-start: 0.6rem; margin-bottom: 0.85rem;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.09em; color: #a16207;
+        }
+        .dark .methodology-note { background-color: rgba(234, 179, 8, 0.1); color: #fde047; }
+
+        /* Graph-paper background reserved for Cognitive Offloading (step 2) diagrams. */
+        .thinking-paper {
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(#f1f5f9 1px, transparent 1px),
+                linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .dark .thinking-paper {
+            background-color: #1e293b;
+            background-image:
+                linear-gradient(#334155 1px, transparent 1px),
+                linear-gradient(90deg, #334155 1px, transparent 1px);
+        }
+
+        /* Active Re-encoding (step 5) — the production demand. Every step-5 section carries one of
+           these regardless of which data-reencode format it uses: the reader has to draw, say, fill in
+           or run something. Indigo (cog) rather than amber so it reads as an instruction to the reader,
+           not as another methodology label. Logical properties for RTL. */
+        .reencode-do {
+            border: 2px dashed #6366f1;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: #e0e7ff;
+            font-weight: 600;
+        }
+        .dark .reencode-do { background-color: rgba(99, 102, 241, 0.12); border-color: #818cf8; }
+        .reencode-do svg { flex-shrink: 0; margin-top: 0.15rem; }
+
+        /* The Spoken Rule (data-reencode="script") — one sentence the reader says out loud. Sized to
+           dominate the section; this IS the artifact, not a pull-quote decorating prose. */
+        .spoken-rule {
+            font-size: clamp(1.5rem, 4vw, 2.25rem);
+            line-height: 1.35;
+            font-weight: 700;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 0.75rem;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #334155;
+        }
+        /* In dark mode the page background is already #0f172a, so lift the panel or it vanishes. */
+        .dark .spoken-rule { background-color: #1e293b; border-color: #475569; }
+        .spoken-rule .rule-label {
+            display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem;
+        }
+
+        /* Decision Card (data-reencode="card") — a program a human runs. The blank column the reader
+           fills in is what makes it generative rather than another table to skim. */
+        .decision-card { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .decision-card th {
+            text-align: start; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #64748b; padding: 0 1rem;
+        }
+        .decision-card td {
+            background-color: #ffffff; padding: 1rem; vertical-align: top;
+            border-block: 1px solid #e2e8f0;
+        }
+        .decision-card td:first-child {
+            border-inline-start: 4px solid #6366f1;
+            border-start-start-radius: 0.5rem; border-end-start-radius: 0.5rem; font-weight: 700;
+        }
+        .decision-card td:last-child {
+            border-inline-end: 1px solid #e2e8f0;
+            border-start-end-radius: 0.5rem; border-end-end-radius: 0.5rem;
+        }
+        .dark .decision-card td { background-color: #1e293b; border-block-color: #334155; }
+        .dark .decision-card td:last-child { border-inline-end-color: #334155; }
+
+        /* The reader's blank — dotted so it reads as "write here", not "empty cell". One primitive shared
+           by three formats: the Decision Card's last column, a procedure's cloze-deleted lines, and a
+           letter system's item/image slots. Inline-block by default so it can sit mid-line inside a
+           pseudo-code step; the Decision Card stretches it to fill its cell. */
+        .fill-me {
+            display: inline-block; min-width: 6ch; min-height: 1.5rem;
+            border-bottom: 2px dotted #94a3b8; vertical-align: bottom;
+        }
+        .decision-card .fill-me { display: block; min-height: 1.75rem; }
+
+        /* Metrical rule (data-reencode="rhythm") — 2-4 matched lines the reader recites. The beat count
+           is rendered from each line's data-beats attribute rather than duplicated in the markup, so the
+           meter the reader's ear is checking against is visible and cannot drift from the attribute the
+           validator reads. Centered, generous leading: this is meant to be read aloud, not skimmed. */
+        .rhythm-lines {
+            margin: 0;
+            padding: 2rem 3.5rem;
+            border-radius: 0.75rem;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        /* In dark mode the page background is already #0f172a, so lift the panel or it vanishes. */
+        .dark .rhythm-lines { background-color: #1e293b; border-color: #475569; }
+        .rhythm-line {
+            display: block;
+            position: relative;
+            font-size: clamp(1.25rem, 3.2vw, 1.75rem);
+            line-height: 1.9;
+            font-weight: 700;
+        }
+        /* Beat count in the margin — inset-inline-end so it sits outside the line on the correct
+           side under both ltr and rtl without a separate override. */
+        .rhythm-line::after {
+            content: attr(data-beats);
+            position: absolute;
+            inset-inline-end: -2.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: #64748b;
+        }
+        .rhythm-lines .rhythm-label {
+            display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem;
+        }
+
+        /* Mnemonic tiles (data-reencode="mnemonic") — acronym letters, each expanding to its word. */
+        .mnemonic-tile {
+            display: flex; align-items: baseline; gap: 1rem; padding: 0.875rem 1.25rem;
+            border-radius: 0.5rem; background-color: #e0e7ff;
+        }
+        .dark .mnemonic-tile { background-color: rgba(99, 102, 241, 0.12); }
+        .mnemonic-tile .letter {
+            font-size: 2rem; font-weight: 800; line-height: 1;
+            color: #6366f1; min-width: 2ch; text-align: center;
+        }
+        .dark .mnemonic-tile .letter { color: #818cf8; }
+
+        /* Causal-graph rebuild (data-reencode="causal") — nodes are authored, every edge is missing, and
+           the reader supplies the mechanism. Hand-rolled inline SVG rather than D3: on a 4-6 node graph a
+           force simulation drifts and fights the reader, and the page already hand-rolls its sketchpad, so
+           a third CDN would buy nothing. Edge lines and arrowheads are painted by the script at the bottom
+           of the page (theme-aware, so they must never be hardcoded here). */
+        .causal-graph {
+            position: relative; min-height: 20rem; overflow: hidden;
+            border: 1px solid #cbd5e1; border-radius: 0.75rem; background-color: #ffffff;
+        }
+        .dark .causal-graph { background-color: #1e293b; border-color: #334155; }
+        .causal-edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+        /* Physical left/top, NOT logical properties: the graph is deliberately not mirrored under
+           dir="rtl", the same rule Mermaid diagrams follow. Authors set --x/--y as percentages. */
+        .causal-node {
+            position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%);
+            z-index: 2; max-width: 11rem; padding: 0.5rem 0.85rem; cursor: pointer;
+            border: 2px solid #6366f1; border-radius: 0.5rem;
+            background-color: #e0e7ff; color: #1e1b4b;
+            font-size: 0.85rem; font-weight: 600; line-height: 1.3; text-align: center;
+        }
+        .dark .causal-node { background-color: rgba(99, 102, 241, 0.18); color: #e0e7ff; border-color: #818cf8; }
+        /* Rose (the `causal` token) for the in-progress selection, so it never reads as another indigo node. */
+        .causal-node.selected { border-color: #e11d48; box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.25); }
+        .causal-node:focus-visible { outline: 2px solid #e11d48; outline-offset: 2px; }
+        .causal-counter {
+            margin-top: 0.75rem; font-size: 0.8rem; font-weight: 700;
+            color: #64748b; font-variant-numeric: tabular-nums;
+        }
+        .causal-edge-list {
+            list-style: none; margin: 0.75rem 0 0; padding: 0;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        .causal-edge-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .causal-edge-row .pair { font-weight: 700; }
+        .causal-because {
+            flex: 1 1 12rem; min-width: 0; padding: 0.35rem 0.6rem; font: inherit; font-size: 0.85rem;
+            border: 1px solid #cbd5e1; border-radius: 0.375rem; background: transparent; color: inherit;
+        }
+        .dark .causal-because { border-color: #475569; }
+        .causal-drop {
+            border: none; background: none; cursor: pointer; color: #e11d48;
+            font-weight: 700; font-size: 0.9rem; line-height: 1; padding: 0.2rem 0.4rem;
+        }
+
+        /* Procedure with blanks (data-reencode="procedure") — an ordered algorithm the reader executes in
+           their head, with the decisions cloze-deleted. Body font, NOT monospace: this is pseudo-code
+           written as prose in the page's own language, and Fira Code carries no Arabic glyphs. */
+        .procedure-steps {
+            list-style: none; counter-reset: pstep; margin: 0; padding: 0;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        .procedure-step {
+            counter-increment: pstep; position: relative;
+            padding: 0.75rem 1rem; padding-inline-start: 3rem;
+            background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem;
+            font-size: 0.9rem; line-height: 1.8;
+        }
+        .dark .procedure-step { background-color: #1e293b; border-color: #334155; }
+        .procedure-step::before {
+            content: counter(pstep);
+            position: absolute; inset-inline-start: 0.75rem; top: 0.8rem;
+            width: 1.5rem; height: 1.5rem; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            background-color: #6366f1; color: #f8fafc; font-size: 0.7rem; font-weight: 700;
+        }
+        /* Branches and loops are MARKED, not inferred from the wording — the validator requires at least
+           one, because a procedure with no decision point is a Decision Card wearing a number badge. */
+        .procedure-step.procedure-branch { border-inline-start: 4px solid #e11d48; }
+        .procedure-step.procedure-loop { border-inline-start: 4px solid #eab308; }
+        .procedure-step .kw { font-weight: 700; color: #e11d48; }
+        .dark .procedure-step .kw { color: #fb7185; }
+
+        /* Letter system (data-reencode="letters") — the letters and their anchors are given, the mapping
+           is the reader's. Distinct from .mnemonic-tile, which ships a finished acronym for one closed set;
+           this is a set of slots the reader keeps reusing as new items arrive. */
+        .letter-system { display: flex; flex-direction: column; gap: 0.5rem; }
+        .letter-head {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #64748b;
+        }
+        /* FOUR columns, one per cell every row carries: the letter, its given anchor word, and the two
+           blanks the reader fills (item, then concrete image). A 3-column grid silently wraps the
+           fourth cell onto a second line, which renders as a stray dotted blank under the letter. */
+        .letter-row {
+            display: grid; grid-template-columns: auto minmax(5rem, auto) 1fr 1fr;
+            gap: 0.75rem 1rem; align-items: center;
+            padding: 0.75rem 1rem; border-radius: 0.5rem; background-color: #e0e7ff;
+        }
+        .dark .letter-row { background-color: rgba(99, 102, 241, 0.12); }
+        .letter-row .letter-key {
+            font-size: 1.75rem; font-weight: 800; line-height: 1;
+            color: #6366f1; min-width: 2ch; text-align: center;
+        }
+        .dark .letter-row .letter-key { color: #818cf8; }
+        .letter-row .letter-anchor { font-size: 0.9rem; font-weight: 700; }
+        /* On narrow screens fold to two columns, so each row becomes letter+anchor over item+image. */
+        @media (max-width: 640px) {
+            .letter-row { grid-template-columns: auto 1fr; }
+        }
+
+        /* Sketch-from-memory (data-reencode="sketch") — the reveal that must stay shut until the
+           reader has drawn. Styled as a deliberate gate, not an afterthought disclosure.
+           Shared with data-reencode="causal", which gates its reference graph the same way. */
+        .sketch-reveal { border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .dark .sketch-reveal { border-color: #334155; }
+        .sketch-reveal > summary {
+            cursor: pointer; font-weight: 600; color: #6366f1; list-style: none;
+        }
+        .dark .sketch-reveal > summary { color: #818cf8; }
+        .sketch-reveal > summary::-webkit-details-marker { display: none; }
+        .sketch-reveal[open] > summary { margin-bottom: 1.25rem; }
+
+        /* Highlighters for calling out the two sides of a contrast inline in prose. */
+        .highlight-cog {
+            background: linear-gradient(120deg, #e0e7ff 0%, #e0e7ff 100%);
+            background-repeat: no-repeat; background-size: 100% 30%; background-position: 0 90%;
+        }
+        .dark .highlight-cog { background-image: linear-gradient(120deg, rgba(99, 102, 241, 0.4) 0%, rgba(99, 102, 241, 0.4) 100%); }
+        .highlight-causal {
+            background: linear-gradient(120deg, #ffe4e6 0%, #ffe4e6 100%);
+            background-repeat: no-repeat; background-size: 100% 30%; background-position: 0 90%;
+        }
+        .dark .highlight-causal { background-image: linear-gradient(120deg, rgba(225, 29, 72, 0.4) 0%, rgba(225, 29, 72, 0.4) 100%); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="text-xs font-semibold no-underline whitespace-nowrap text-slate-500 hover:text-cog dark:text-slate-400">&larr; Memory</a>
+                <svg class="w-8 h-8 text-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <div>
+                    <div class="font-bold text-lg text-slate-800 dark:text-slate-200">Cognitive Masterclass</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">
+                        Authored by <a href="https://alhaol.github.io/" target="_blank" rel="noopener noreferrer" class="text-cog hover:underline font-semibold">@Ibrahim Abualhaol</a>,
+                        <a href="https://alhaol.github.io/" target="_blank" rel="noopener noreferrer" class="hover:underline">AI Technical Lead</a>
+                    </div>
+                </div>
+            </div>
+            <button id="theme-toggle" aria-label="Toggle dark mode" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                <svg id="icon-dark" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                <svg id="icon-light" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+
+        <header class="mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">The Paper You Read Twice</h1>
+            <p class="text-xl text-slate-600 dark:text-slate-300">You did not forget it. One of six things was never there, it has a name, and you can put it back yourself.</p>
+        </header>
+
+        
+        <section id="chunk-1" class="mb-16">
+            <div class="methodology-note">Step 1 &middot; Managing Working Memory</div>
+
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">The same six gates, walked two ways</h2>
+            <p class="mb-6 text-slate-700 dark:text-slate-300">
+                Think of the last genuinely important thing you read. A paper you needed, a long report, a
+                book everyone told you to finish. Now, without looking it up, say one concrete thing from it
+                out loud. Not the topic. Not whether you agreed. One image, one number with its unit, one
+                scene. If nothing arrives, the usual explanations are waiting for you: you are tired, you read
+                too fast, the author wrote badly. All three let you off, and none of them is actionable. There
+                is a better answer, and it is that something specific was missing, it has a name, and you can
+                put it back yourself.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="rounded-xl border-2 border-cog p-5 bg-cog-light/40 dark:bg-cog-dark/20">
+                    <div class="text-xs font-bold uppercase tracking-widest text-cog mb-2">Forward &middot; when you write</div>
+                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Supply all six</h3>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">
+                        Six things make an idea survive contact with another person: it is
+                        <strong>Simple</strong>, <strong>Unexpected</strong>, <strong>Concrete</strong>,
+                        <strong>Credible</strong>, <strong>Emotional</strong>, and carried by a
+                        <strong>Story</strong>. Writing forward means putting each one on the page on purpose,
+                        because none of them arrives by accident.
+                    </p>
+                </div>
+                <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-5 bg-white dark:bg-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-widest text-cog mb-2">Backward &middot; when you read</div>
+                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Find the one that is absent</h3>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">
+                        The same six, used as a diagnostic on something that failed to land. You are not
+                        grading the author. You are locating the gap so you can fill it yourself, in the
+                        ninety seconds before you close the tab, while you still have the material in front
+                        of you.
+                    </p>
+                </div>
+            </div>
+
+            <p class="text-slate-700 dark:text-slate-300">
+                Hold on to one sentence: <span class="highlight-cog font-semibold">write by supplying the six,
+                read by finding which one is absent.</span> It is one list, and the only thing that changes is
+                the direction you walk it.
+            </p>
+        </section>
+
+        <section id="chunk-2" class="mb-16">
+            <div class="methodology-note">Step 2 &middot; Cognitive Offloading</div>
+
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">One list, two directions</h2>
+            <p class="mb-6 text-slate-700 dark:text-slate-300">
+                Do not try to hold six items and two directions at once. Put the shape outside your head and
+                look at what the two arrows into the middle actually mean.
+            </p>
+
+            <div class="thinking-paper rounded-xl p-6 mb-6">
+                <div class="mermaid-container" data-graph='graph TD
+    W["Writing:<br/>run them forward"] --> G["The six gates:<br/>Simple, Unexpected, Concrete,<br/>Credible, Emotional, Stories"]
+    R["Reading:<br/>run them backward"] --> G
+    G --> WO["Forward output:<br/>a draft that lands"]
+    G --> RO["Backward output:<br/>the name of what is missing"]
+    RO --> S["You supply it yourself,<br/>before you close the tab"]
+    style G fill:#e0e7ff,stroke:#6366f1,stroke-width:3px,color:#0f172a
+    style RO fill:#ffe4e6,stroke:#e11d48,stroke-width:2px,color:#0f172a
+    style S fill:#bae6fd,stroke:#0c4a6e,stroke-width:2px,color:#0f172a'>
+                </div>
+            </div>
+
+            <p class="mb-4 text-slate-700 dark:text-slate-300">
+                The box on the left is the one people already own. Everyone has met these six as writing
+                advice. The arrow coming up from below is the one nobody is taught, and it is the more useful
+                of the two, because you read far more than you write and almost none of it was built to stick.
+            </p>
+            <p class="text-slate-700 dark:text-slate-300">
+                Notice where the backward path ends. It does not end at a verdict about the author. It ends at
+                <span class="highlight-cog font-semibold">you, doing the missing work by hand</span>: inventing
+                the image the writer never gave you, checking the one number they asked you to take on trust,
+                saying out loud who pays when the idea is wrong. That is the whole practice, and it costs about
+                ninety seconds.
+            </p>
+        </section>
+
+        <section id="chunk-3" class="mb-16">
+            <div class="methodology-note">Step 3 &middot; Conflict Resolution</div>
+
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">The Seasoned Cook Trap</h2>
+            <p class="mb-6 text-slate-700 dark:text-slate-300">
+                Here is where the obvious next move fails, and it fails hardest for the people who take the
+                six most seriously.
+            </p>
+
+            <div class="bg-slate-900 text-slate-100 rounded-xl p-6 md:p-8 border border-slate-700">
+                <div class="text-xs font-bold uppercase tracking-widest text-rose-400 mb-3">The trap</div>
+                <p class="mb-4 text-slate-200">
+                    You now have a six-point test, so you do the sensible thing and run it on your own draft.
+                    Simple: yes, there is one idea. Unexpected: yes, the second paragraph turns the assumption
+                    over. Concrete: yes, obviously, you can see the whole thing while you read it. Credible,
+                    Emotional, Story: yes, yes, yes. Six for six. You send it.
+                </p>
+                <p class="mb-4 text-slate-200">
+                    It lands the way everything else you write lands. Polite agreement, no questions, nothing
+                    repeated back to you a week later.
+                </p>
+                <p class="mb-4 text-slate-300">
+                    The available explanations are all wrong again. The test is not too crude. You did not
+                    score yourself dishonestly, and you would not have. You are also not a bad writer, and
+                    that is exactly what makes this so hard to catch.
+                </p>
+                <p class="mb-4 text-slate-300">
+                    Check it yourself in under a minute, on the last thing you wrote that mattered. Do not
+                    read it. Instead, write down the one concrete image you believe it gives the reader. Now
+                    search the document for that image. If the words are not physically there, you scored the
+                    Concrete gate on something that has only ever existed in your head.
+                </p>
+
+                <div class="border-t border-slate-700 pt-4">
+                    <div class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3">What actually happened</div>
+                    <p class="mb-3 text-slate-200">
+                        You are the one reader who arrives already holding all six. The image is vivid to you
+                        because you built it before you wrote the sentence. The stakes are obvious to you
+                        because you have lived them. The surprise is not surprising to you, because you are the
+                        person it stopped being surprising for. Running the test on your own draft, you are not
+                        measuring the page. You are measuring your memory of writing the page.
+                    </p>
+                    <p class="text-slate-200">
+                        Stand in a kitchen for two hours and you stop being able to taste the salt. Everyone
+                        who walks in can. This is not a flaw in your palate, and no amount of tasting more
+                        carefully fixes it.
+                        <span class="highlight-causal font-semibold text-slate-900">The six run honestly in the
+                        backward direction only, on writing you did not produce.</span>
+                    </p>
+                </div>
+            </div>
+
+            <p class="mt-6 text-slate-700 dark:text-slate-300">
+                Which gives the practice its real shape, and it is smaller than a writing course. Run the six
+                backward on other people, constantly, on anything that failed to stick, because that is where
+                the signal is honest and the reps are free. What you get back is not a verdict on their
+                writing. It is calibration: after twenty of these you can feel a missing Concrete from two
+                paragraphs away. Then, on your own draft, stop scoring and hand it to a person, asking them
+                for the image rather than for their opinion. What they produce is the only reading of your
+                page that was not written by you.
+            </p>
+        </section>
+
+        <section id="chunk-4" class="mb-16" data-reencode="card">
+            <div class="methodology-note">Step 5 &middot; Active Re-encoding</div>
+
+            <h2 class="text-3xl font-bold mb-4 text-slate-900 dark:text-white">The card you run after reading</h2>
+            <p class="mb-6 text-slate-700 dark:text-slate-300">
+                You will not be at this page when you need this. You will be at the end of something long, with
+                the tab still open and about ninety seconds of attention left. So here are the six as
+                symptoms rather than as principles, because a symptom is what you actually notice first. Find
+                the row that describes how you feel right now and do the thing in the middle column.
+            </p>
+
+            <div class="overflow-x-auto mb-2">
+                <table class="decision-card">
+                    <thead>
+                        <tr>
+                            <th scope="col">What you notice afterwards</th>
+                            <th scope="col">The gate that was shut, and the repair</th>
+                            <th scope="col">Your move, for what you just read</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>You can state the topic but cannot produce a single image</td>
+                            <td><strong>Concrete.</strong> Invent the image yourself and say it aloud. If you cannot invent one, you did not follow it, you recognised it.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>You believed all of it and can check none of it</td>
+                            <td><strong>Credible.</strong> Pick one number and go verify it now, while the tab is open. One is enough; the habit is the point.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>You can recall the parts but not the point</td>
+                            <td><strong>Simple.</strong> Write the one sentence it was all built to support. If two sentences compete, you have found the actual problem.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>You never once thought wait, really</td>
+                            <td><strong>Unexpected.</strong> Hunt for the claim you would have bet against a week ago. If there is none, this confirmed you rather than taught you.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>You understood it and felt nothing</td>
+                            <td><strong>Emotional.</strong> Name who pays, and what it costs them, when this is got wrong. Use a real person if you have one.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                        <tr>
+                            <td>You cannot walk anyone else through it</td>
+                            <td><strong>Stories.</strong> Retell it as one actor doing one thing in time order. The place you stall is the part you never had.</td>
+                            <td><span class="fill-me"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="reencode-do">
+                <svg class="w-5 h-5 text-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                <span>
+                    Your turn, and do it on this page rather than on some future one: open the sketchpad in the
+                    corner and fill the last column for <em>this class</em>. Six rows, six answers, about
+                    ninety seconds. The row you find hardest to answer is the gate this page left shut on you,
+                    and that is worth more to you than the five you sailed through.
+                </span>
+            </div>
+
+            <p class="mt-8 text-slate-700 dark:text-slate-300">
+                And come back to where this started. You were asked for one concrete image from the last
+                important thing you read, and for most people nothing arrived. Nothing arrived because the
+                Concrete gate was shut and because nobody had ever told you that a shut gate is a thing you
+                can open afterwards, by yourself, from the reader side. That is the whole of it: you did not
+                forget that paper. One of six things was never there, it has a name, and the ninety seconds
+                to put it back are yours.
+            </p>
+        </section>
+
+
+        <!-- Test Yourself: retrieval-practice quiz (required on every generated page) -->
+        <section id="quiz-section" class="mb-12">
+            <div class="rounded-xl border-2 border-cog-light dark:border-cog-dark bg-cog-light/40 dark:bg-cog-dark/20 p-6">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                    <svg class="w-5 h-5 text-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.633.307-1.451.831-1.451 1.827v.5M12 17.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <h3 class="text-lg font-bold">Test Yourself</h3>
+                    <span class="ms-auto text-xs font-semibold uppercase tracking-wide text-cog">Retrieval practice &middot; not one of the 5 techniques</span>
+                </div>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-5">Four quick questions pulled from what you just read. Answering &mdash; even wrong &mdash; helps this stick better than re-reading does. Anything you miss gets shown first next time you open this page.</p>
+                <div id="quiz-recap-banner" class="hidden mb-5 text-sm rounded-lg bg-amber-100 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 px-4 py-2"></div>
+                <div id="quiz-questions" class="space-y-5 text-start"></div>
+                <div id="quiz-score" class="hidden mt-6 pt-4 border-t border-cog-light dark:border-cog-dark text-sm font-semibold"></div>
+            </div>
+        </section>
+
+        <footer class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center">
+            <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-4">Summary of Learning Methodologies Applied:</h3>
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">1. Managing Working Memory (one list, two directions)</span>
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">2. Cognitive Offloading (where the backward path ends)</span>
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">3. Conflict Resolution (the Seasoned Cook Trap)</span>
+                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-600 dark:text-slate-400">5. Active Re-encoding (the card you run after reading)</span>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        const html = document.documentElement;
+        const btnToggle = document.getElementById('theme-toggle');
+        const iconDark = document.getElementById('icon-dark');
+        const iconLight = document.getElementById('icon-light');
+
+        function updateThemeIcon(isDark) {
+            if (isDark) { iconDark.classList.remove('hidden'); iconLight.classList.add('hidden'); }
+            else { iconLight.classList.remove('hidden'); iconDark.classList.add('hidden'); }
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            updateThemeIcon(true);
+        }
+
+        btnToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+            renderMermaid();
+        });
+
+        // --- Mermaid JS Rendering (re-runs on every theme toggle so diagrams repaint) ---
+        async function renderMermaid() {
+            const isDark = html.classList.contains('dark');
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: isDark ? 'dark' : 'default',
+                securityLevel: 'loose',
+                fontFamily: 'Inter, sans-serif'
+            });
+            const containers = document.querySelectorAll('.mermaid-container');
+            for (let i = 0; i < containers.length; i++) {
+                const el = containers[i];
+                const graphDefinition = el.getAttribute('data-graph');
+                try {
+                    el.innerHTML = '';
+                    const { svg } = await mermaid.render(`mermaid-${i}-${isDark ? 'dark' : 'light'}-${Date.now()}`, graphDefinition);
+                    el.innerHTML = svg;
+                } catch (e) {
+                    console.error('Mermaid parsing error', e);
+                }
+            }
+        }
+
+        // Wait for the Inter web font to finish loading before the first render — otherwise
+        // Mermaid measures labels with fallback-font metrics, sizes each node too narrow, and
+        // the real (wider) glyphs get clipped once the font swaps in.
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(renderMermaid);
+            } else {
+                renderMermaid();
+            }
+        });
+    </script>
+
+    <!-- Test Yourself: retrieval-practice quiz logic. { id: 'q1', prompt: "You finish a long report, and you can summarize its argument but cannot picture a single thing from it. Which gate was shut, and what does this page tell you to do?", options: ["Simple: write the one sentence the report was built to support", "Concrete: invent the image yourself and say it aloud before you close the tab", "Credible: go and verify one of the numbers it used", "Stories: retell it as one actor doing one thing in time order"], correct: 1, why: "Being able to state the argument but produce no image is the signature of a missing Concrete. The repair is to build the image yourself, and failing to build one tells you that you recognised the material rather than followed it." },
+        { id: 'q2', prompt: "Why does running the six-point test on your own draft give you a false pass?", options: ["Because six criteria are too many to hold accurately while editing", "Because you arrive already holding all six, so you score your memory of writing it rather than the page", "Because writers are systematically too harsh on their own work", "Because the six were designed for reading and do not apply to drafting"], correct: 1, why: "The image is vivid to you because you built it before the sentence, and the stakes are obvious because you have lived them. Stand in a kitchen for two hours and you stop tasting the salt." },
+        { id: 'q3', prompt: "According to this page, what is the honest way to check your own writing against the six?", options: ["Score it again after leaving it alone for a week", "Hand it to a person and ask them to produce the image, rather than asking their opinion", "Run the six in the forward direction twice and average the result", "Ask a colleague which of the six they would rate lowest"], correct: 1, why: "Opinions are still filtered through politeness and through your framing. Asking someone to produce the image gets you the only reading of your page that you did not write yourself." },
+        { id: 'q4', prompt: "You read something and never once thought wait, really. Which gate does the card say was shut?", options: ["Emotional, since nothing made you feel the cost", "Unexpected, since nothing broke an assumption you were holding", "Simple, since the core idea never surfaced", "Credible, since you were never given anything to check"], correct: 1, why: "That reaction is the felt signature of Unexpected. Its absence means the piece confirmed what you already believed, which is why it passed through without leaving anything behind." } is a comma-separated list of
+         { id, prompt, options: [4 strings], correct: <index 0-3>, why } object literals — see SKILL.md.
+         QUESTION TEXT is per-page content (write it in the page's language); the UI strings below
+         (feedback, banner, score line) are bilingual EN/AR pairs baked into the template itself, picked
+         by LANG — never per-generation translation work for these. -->
+    <script>
+        (function () {
+            var LANG = 'en';
+            var T = LANG === 'ar' ? {
+                missed: function (n) { return 'فاتتك ' + n + (n === 1 ? ' سؤال' : ' أسئلة') + ' آخر مرة — تظهر أولاً أدناه.'; },
+                missedBadge: 'فاتك آخر مرة',
+                correct: 'إجابة صحيحة. ',
+                incorrect: 'ليست صحيحة. ',
+                score: function (right, total) {
+                    return right + ' / ' + total + ' صحيحة — ' + (right === total ? 'تم مسح الأسئلة الفائتة للزيارة القادمة.' : (total - right) + ' سيُعاد عرضها في الزيارة القادمة.');
+                },
+            } : {
+                missed: function (n) { return 'You missed ' + n + ' question' + (n > 1 ? 's' : '') + ' last time — shown first below.'; },
+                missedBadge: 'missed last time',
+                correct: 'Correct. ',
+                incorrect: 'Not quite. ',
+                score: function (right, total) {
+                    return right + ' / ' + total + ' correct — ' + (right === total ? 'missed items cleared for next visit.' : (total - right) + ' flagged to resurface next time.');
+                },
+            };
+
+            var QUIZ_KEY = 'quiz:' + location.pathname;
+            var QUESTIONS = [
+{ id: 'q1', prompt: "You finish a long report, and you can summarize its argument but cannot picture a single thing from it. Which gate was shut, and what does this page tell you to do?", options: ["Simple: write the one sentence the report was built to support", "Concrete: invent the image yourself and say it aloud before you close the tab", "Credible: go and verify one of the numbers it used", "Stories: retell it as one actor doing one thing in time order"], correct: 1, why: "Being able to state the argument but produce no image is the signature of a missing Concrete. The repair is to build the image yourself, and failing to build one tells you that you recognised the material rather than followed it." },
+        { id: 'q2', prompt: "Why does running the six-point test on your own draft give you a false pass?", options: ["Because six criteria are too many to hold accurately while editing", "Because you arrive already holding all six, so you score your memory of writing it rather than the page", "Because writers are systematically too harsh on their own work", "Because the six were designed for reading and do not apply to drafting"], correct: 1, why: "The image is vivid to you because you built it before the sentence, and the stakes are obvious because you have lived them. Stand in a kitchen for two hours and you stop tasting the salt." },
+        { id: 'q3', prompt: "According to this page, what is the honest way to check your own writing against the six?", options: ["Score it again after leaving it alone for a week", "Hand it to a person and ask them to produce the image, rather than asking their opinion", "Run the six in the forward direction twice and average the result", "Ask a colleague which of the six they would rate lowest"], correct: 1, why: "Opinions are still filtered through politeness and through your framing. Asking someone to produce the image gets you the only reading of your page that you did not write yourself." },
+        { id: 'q4', prompt: "You read something and never once thought wait, really. Which gate does the card say was shut?", options: ["Emotional, since nothing made you feel the cost", "Unexpected, since nothing broke an assumption you were holding", "Simple, since the core idea never surfaced", "Credible, since you were never given anything to check"], correct: 1, why: "That reaction is the felt signature of Unexpected. Its absence means the piece confirmed what you already believed, which is why it passed through without leaving anything behind." }
+            ];
+
+            var state = {};
+            try { state = JSON.parse(localStorage.getItem(QUIZ_KEY) || '{}'); } catch (e) { state = {}; }
+
+            var missedIds = Object.keys(state).filter(function (id) { return state[id] === false; });
+            var banner = document.getElementById('quiz-recap-banner');
+            if (missedIds.length) {
+                banner.classList.remove('hidden');
+                banner.textContent = T.missed(missedIds.length);
+            }
+
+            var ordered = QUESTIONS.slice().sort(function (a, b) {
+                var aMissed = missedIds.indexOf(a.id) !== -1 ? 0 : 1;
+                var bMissed = missedIds.indexOf(b.id) !== -1 ? 0 : 1;
+                return aMissed - bMissed;
+            });
+
+            var container = document.getElementById('quiz-questions');
+            var answered = {};
+
+            ordered.forEach(function (q, idx) {
+                var card = document.createElement('div');
+                card.className = 'bg-white dark:bg-slate-900 rounded-lg p-4 border border-slate-200 dark:border-slate-800';
+                var flaggedBadge = missedIds.indexOf(q.id) !== -1
+                    ? '<span class="ms-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400">' + T.missedBadge + '</span>'
+                    : '';
+                card.innerHTML =
+                    '<p class="font-medium mb-3">' + (idx + 1) + '. ' + q.prompt + flaggedBadge + '</p>' +
+                    '<div class="grid sm:grid-cols-2 gap-2" data-options></div>' +
+                    '<p class="mt-3 text-sm hidden" data-explain></p>';
+
+                var optsWrap = card.querySelector('[data-options]');
+                q.options.forEach(function (opt, oi) {
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'text-start text-sm px-3 py-2 rounded-md border border-slate-200 dark:border-slate-700 hover:border-cog transition';
+                    btn.textContent = opt;
+                    btn.addEventListener('click', function () {
+                        if (answered[q.id] !== undefined) return;
+                        var correct = oi === q.correct;
+                        answered[q.id] = correct;
+                        state[q.id] = correct;
+                        try { localStorage.setItem(QUIZ_KEY, JSON.stringify(state)); } catch (e) {}
+
+                        Array.prototype.forEach.call(optsWrap.children, function (b, bi) {
+                            b.disabled = true;
+                            if (bi === q.correct) b.className += ' !border-green-500 !bg-green-50 dark:!bg-green-950/40 !text-green-700 dark:!text-green-400';
+                            else if (bi === oi) b.className += ' !border-red-500 !bg-red-50 dark:!bg-red-950/40 !text-red-700 dark:!text-red-400';
+                        });
+                        var explain = card.querySelector('[data-explain]');
+                        explain.classList.remove('hidden');
+                        explain.textContent = (correct ? T.correct : T.incorrect) + q.why;
+                        explain.className = 'mt-3 text-sm ' + (correct ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400');
+                        maybeShowScore();
+                    });
+                    optsWrap.appendChild(btn);
+                });
+                container.appendChild(card);
+            });
+
+            function maybeShowScore() {
+                if (Object.keys(answered).length < QUESTIONS.length) return;
+                var right = Object.values(answered).filter(Boolean).length;
+                var scoreEl = document.getElementById('quiz-score');
+                scoreEl.classList.remove('hidden');
+                scoreEl.textContent = T.score(right, QUESTIONS.length);
+            }
+        })();
+    </script>
+
+    <!-- Sketchpad: a screen-anchored scratch layer for cognitive offloading while reading — freehand notes
+         over the current view. inset-inline-end (not right) so the FAB/toolbar sit on the correct edge in
+         both LTR and RTL without a dir-specific override. -->
+    <style>
+        #sketch-toggle {
+            position: fixed; inset-inline-end: 1.25rem; bottom: 1.25rem; z-index: 60;
+            width: 3rem; height: 3rem; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            background: #4338ca; color: #fff; border: none; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        #sketch-toggle:hover { transform: scale(1.06); }
+        #sketch-toggle.active { background: #dc2626; }
+        .dark #sketch-toggle { background: #6366f1; }
+        .dark #sketch-toggle.active { background: #f87171; }
+
+        #sketch-overlay { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
+        #sketch-overlay.drawing { pointer-events: auto; }
+        #sketch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+        #sketch-overlay.drawing #sketch-canvas { cursor: crosshair; }
+
+        #sketch-toolbar {
+            position: fixed; inset-inline-end: 1.25rem; bottom: 5rem; z-index: 61;
+            display: none; flex-direction: column; gap: 0.5rem; align-items: center;
+            background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 0.75rem; padding: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        }
+        #sketch-toolbar.open { display: flex; }
+        .dark #sketch-toolbar { background: rgba(15,15,17,0.96); border-color: rgba(255,255,255,0.12); }
+        .sketch-swatch { width: 1.75rem; height: 1.75rem; border-radius: 9999px; border: 2px solid transparent; cursor: pointer; padding: 0; }
+        .sketch-swatch.selected { border-color: #4338ca; }
+        .dark .sketch-swatch.selected { border-color: #a5b4fc; }
+        .sketch-swatch[data-color="ink"] { background: #111827; }
+        .dark .sketch-swatch[data-color="ink"] { background: #f3f4f6; }
+        .sketch-btn {
+            font-size: 0.65rem; font-weight: 700; padding: 0.35rem 0.4rem; border-radius: 0.375rem;
+            background: rgba(0,0,0,0.06); color: inherit; border: none; cursor: pointer; white-space: nowrap;
+        }
+        .dark .sketch-btn { background: rgba(255,255,255,0.12); color: #e5e7eb; }
+        .sketch-btn:hover { background: rgba(0,0,0,0.12); }
+        .dark .sketch-btn:hover { background: rgba(255,255,255,0.2); }
+        .sketch-btn.active-tool { outline: 2px solid currentColor; }
+    </style>
+
+    <button id="sketch-toggle" type="button" aria-label="Toggle sketchpad: draw freehand notes over the page while you read" aria-pressed="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 19.5H4.5" />
+        </svg>
+    </button>
+
+    <div id="sketch-toolbar" role="toolbar" aria-label="Sketchpad tools">
+        <button type="button" class="sketch-swatch selected" data-color="ink" aria-label="Pen"></button>
+        <button type="button" class="sketch-swatch" data-color="#ef4444" style="background:#ef4444" aria-label="Red pen"></button>
+        <button type="button" class="sketch-swatch" data-color="#3b82f6" style="background:#3b82f6" aria-label="Blue pen"></button>
+        <button type="button" id="sketch-erase" class="sketch-btn" aria-label="Erase">Erase</button>
+        <button type="button" id="sketch-clear" class="sketch-btn" aria-label="Clear">Clear</button>
+    </div>
+
+    <div id="sketch-overlay" aria-hidden="true">
+        <canvas id="sketch-canvas"></canvas>
+    </div>
+
+    <script>
+        (function () {
+            var toggle = document.getElementById('sketch-toggle');
+            var overlay = document.getElementById('sketch-overlay');
+            var toolbar = document.getElementById('sketch-toolbar');
+            var canvas = document.getElementById('sketch-canvas');
+            var ctx = canvas.getContext('2d');
+            var eraseBtn = document.getElementById('sketch-erase');
+            var clearBtn = document.getElementById('sketch-clear');
+            var swatches = document.querySelectorAll('.sketch-swatch');
+
+            var STORAGE_KEY = 'sketch:' + location.pathname;
+            var drawing = false;
+            var erasing = false;
+            var currentColor = 'ink';
+            var lastSnapshot = (function () {
+                try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+            })();
+            var lastX = 0, lastY = 0;
+
+            function inkColor() {
+                return document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827';
+            }
+            function strokeColor() {
+                return currentColor === 'ink' ? inkColor() : currentColor;
+            }
+
+            function sizeCanvas(preserve) {
+                var ratio = window.devicePixelRatio || 1;
+                var w = window.innerWidth, h = window.innerHeight;
+                if (preserve && canvas.width) lastSnapshot = canvas.toDataURL('image/png');
+                canvas.width = w * ratio;
+                canvas.height = h * ratio;
+                canvas.style.width = w + 'px';
+                canvas.style.height = h + 'px';
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                if (lastSnapshot) {
+                    var img = new Image();
+                    img.onload = function () { ctx.drawImage(img, 0, 0, w, h); };
+                    img.src = lastSnapshot;
+                }
+            }
+            sizeCanvas(false);
+
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function () { sizeCanvas(true); }, 150);
+            });
+
+            function saveSnapshot() {
+                lastSnapshot = canvas.toDataURL('image/png');
+                try { localStorage.setItem(STORAGE_KEY, lastSnapshot); } catch (e) {}
+            }
+
+            function strokeAt(x, y) {
+                ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+                ctx.strokeStyle = strokeColor();
+                ctx.lineWidth = erasing ? 18 : 3;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                lastX = x; lastY = y;
+            }
+
+            canvas.addEventListener('pointerdown', function (e) {
+                if (!overlay.classList.contains('drawing')) return;
+                drawing = true;
+                lastX = e.clientX; lastY = e.clientY;
+                strokeAt(e.clientX, e.clientY);
+                canvas.setPointerCapture(e.pointerId);
+            });
+            canvas.addEventListener('pointermove', function (e) {
+                if (!drawing) return;
+                strokeAt(e.clientX, e.clientY);
+            });
+            function endStroke() {
+                if (!drawing) return;
+                drawing = false;
+                saveSnapshot();
+            }
+            canvas.addEventListener('pointerup', endStroke);
+            canvas.addEventListener('pointercancel', endStroke);
+            canvas.addEventListener('pointerleave', endStroke);
+
+            toggle.addEventListener('click', function () {
+                var open = !overlay.classList.contains('drawing');
+                overlay.classList.toggle('drawing', open);
+                overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+                toolbar.classList.toggle('open', open);
+                toggle.classList.toggle('active', open);
+                toggle.setAttribute('aria-pressed', open ? 'true' : 'false');
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && overlay.classList.contains('drawing')) toggle.click();
+            });
+
+            swatches.forEach(function (sw) {
+                sw.addEventListener('click', function () {
+                    swatches.forEach(function (s) { s.classList.remove('selected'); });
+                    sw.classList.add('selected');
+                    currentColor = sw.dataset.color;
+                    erasing = false;
+                    eraseBtn.classList.remove('active-tool');
+                });
+            });
+            eraseBtn.addEventListener('click', function () {
+                erasing = !erasing;
+                eraseBtn.classList.toggle('active-tool', erasing);
+            });
+            clearBtn.addEventListener('click', function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                lastSnapshot = null;
+                try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            });
+        })();
+    </script>
+
+    <!-- Causal-graph rebuild: the widget behind data-reencode="causal". Ships on every page and no-ops
+         when the page uses one of the other eight formats — that is deliberate, since gating it behind its
+         own template placeholder would be one more thing to forget. No library: nodes are authored buttons positioned
+         by --x/--y, and this script paints the edge lines and arrowheads into the inline SVG layer.
+         Keep this comment free of literal markup and template-placeholder syntax: validate.py scans the
+         whole file for both, so an example written out longhand here fires on every generated page.
+         Reader's edges persist per-page in localStorage; nothing here is per-page content except the
+         two UI strings, which follow the same bilingual `T` pattern as the quiz. -->
+    <script>
+        (function () {
+            var graph = document.querySelector('.causal-graph');
+            if (!graph) return;
+
+            var svg = graph.querySelector('.causal-edges');
+            var nodes = Array.prototype.slice.call(graph.querySelectorAll('.causal-node'));
+            var list = document.querySelector('.causal-edge-list');
+            var counter = document.querySelector('[data-causal-counter]');
+            if (!svg || !list || !counter || !nodes.length) return;
+
+            var target = parseInt(graph.getAttribute('data-causal-target') || '0', 10);
+            var LANG = 'en';
+            var T = LANG === 'ar' ? {
+                because: 'لأن…',
+                progress: function (n, t) { return n + ' من ' + t + ' سبب مُفسَّر'; },
+                remove: 'حذف الرابط'
+            } : {
+                because: 'because…',
+                progress: function (n, t) { return n + ' of ' + t + ' edges explained'; },
+                remove: 'Remove edge'
+            };
+
+            var KEY = 'causal:' + location.pathname;
+            var edges = [];
+            try { edges = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { edges = []; }
+            if (!Array.isArray(edges)) edges = [];
+            var selected = null;
+
+            function save() { try { localStorage.setItem(KEY, JSON.stringify(edges)); } catch (e) {} }
+            function explained(e) { return !!(e.because && e.because.trim()); }
+            function nodeById(id) { return graph.querySelector('.causal-node[data-id="' + id + '"]'); }
+            function labelOf(id) { var n = nodeById(id); return n ? n.textContent.trim() : id; }
+
+            // Rose once the edge carries a reason, muted grey while it is still just a guess.
+            function strokeFor(isExplained) {
+                var dark = document.documentElement.classList.contains('dark');
+                if (isExplained) return dark ? '#fb7185' : '#e11d48';
+                return dark ? '#64748b' : '#94a3b8';
+            }
+
+            // A node's VISUAL centre is (offsetLeft, offsetTop), not offsetLeft + width/2:
+            // offsetLeft/offsetTop are pre-transform layout values, and .causal-node is centred on its
+            // --x/--y point with translate(-50%, -50%). Adding half the width again shifts every edge
+            // down and to the right by half a node — visible as arrows detached from their source box.
+            function centreOf(node) { return { x: node.offsetLeft, y: node.offsetTop }; }
+
+            // Standard ray/box exit point, so the line stops at the node's border instead of running
+            // under the label — node boxes differ in width, so a fixed inset would look wrong.
+            function boxExit(node, ux, uy) {
+                var c = centreOf(node);
+                var cx = c.x, cy = c.y;
+                var hw = node.offsetWidth / 2 + 4, hh = node.offsetHeight / 2 + 4;
+                var tx = ux !== 0 ? hw / Math.abs(ux) : Infinity;
+                var ty = uy !== 0 ? hh / Math.abs(uy) : Infinity;
+                var t = Math.min(tx, ty);
+                return { x: cx + ux * t, y: cy + uy * t };
+            }
+
+            function drawEdges() {
+                svg.setAttribute('viewBox', '0 0 ' + graph.clientWidth + ' ' + graph.clientHeight);
+                var out = '';
+                edges.forEach(function (e) {
+                    var a = nodeById(e.from), b = nodeById(e.to);
+                    if (!a || !b) return;
+                    var ca = centreOf(a), cb = centreOf(b);
+                    var dx = cb.x - ca.x, dy = cb.y - ca.y;
+                    var len = Math.sqrt(dx * dx + dy * dy) || 1;
+                    var ux = dx / len, uy = dy / len;
+                    var p = boxExit(a, ux, uy), q = boxExit(b, -ux, -uy);
+                    var isExp = explained(e);
+                    var color = strokeFor(isExp);
+                    out += '<line x1="' + p.x + '" y1="' + p.y + '" x2="' + q.x + '" y2="' + q.y +
+                           '" stroke="' + color + '" stroke-width="2"' +
+                           (isExp ? '' : ' stroke-dasharray="6 5"') + ' />';
+                    // Arrowhead as an explicit polygon rather than <marker fill="context-stroke">, which
+                    // is not reliable across browsers — and this one has to change colour per theme.
+                    var ang = Math.atan2(uy, ux), s = 9, spread = 0.4;
+                    out += '<polygon points="' + q.x + ',' + q.y + ' ' +
+                           (q.x - s * Math.cos(ang - spread)) + ',' + (q.y - s * Math.sin(ang - spread)) + ' ' +
+                           (q.x - s * Math.cos(ang + spread)) + ',' + (q.y - s * Math.sin(ang + spread)) +
+                           '" fill="' + color + '" />';
+                });
+                svg.innerHTML = out;
+            }
+
+            function updateCounter() {
+                counter.textContent = T.progress(edges.filter(explained).length, target);
+            }
+
+            function renderList() {
+                list.innerHTML = '';
+                edges.forEach(function (e, i) {
+                    var li = document.createElement('li');
+                    li.className = 'causal-edge-row';
+
+                    var pair = document.createElement('span');
+                    pair.className = 'pair';
+                    // dir="ltr" even on Arabic pages: the graph itself is not mirrored, so the arrow in
+                    // this list has to point the same way as the arrow the reader sees drawn above it.
+                    pair.setAttribute('dir', 'ltr');
+                    pair.textContent = labelOf(e.from) + ' → ' + labelOf(e.to);
+
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'causal-because';
+                    input.placeholder = T.because;
+                    input.value = e.because || '';
+                    input.addEventListener('input', function () {
+                        edges[i].because = input.value;
+                        save(); drawEdges(); updateCounter();
+                    });
+
+                    var drop = document.createElement('button');
+                    drop.type = 'button';
+                    drop.className = 'causal-drop';
+                    drop.setAttribute('aria-label', T.remove);
+                    drop.textContent = '×';
+                    drop.addEventListener('click', function () {
+                        edges.splice(i, 1);
+                        save(); renderList(); drawEdges(); updateCounter();
+                    });
+
+                    li.appendChild(pair);
+                    li.appendChild(input);
+                    li.appendChild(drop);
+                    list.appendChild(li);
+                });
+            }
+
+            function clearSelection() {
+                selected = null;
+                nodes.forEach(function (n) { n.classList.remove('selected'); });
+            }
+
+            // Tap A, tap B — two taps commit an edge, no drag. Touch-first, and it leaves the typed
+            // reason as the only real work: connecting two boxes is recognition, saying why is generation.
+            nodes.forEach(function (node) {
+                node.addEventListener('click', function () {
+                    var id = node.getAttribute('data-id');
+                    if (selected === null) { selected = id; node.classList.add('selected'); return; }
+                    if (selected === id) { clearSelection(); return; }
+                    var from = selected, to = id;
+                    clearSelection();
+                    var exists = edges.some(function (e) { return e.from === from && e.to === to; });
+                    if (exists) return;
+                    edges.push({ from: from, to: to, because: '' });
+                    save(); renderList(); drawEdges(); updateCounter();
+                    var inputs = list.querySelectorAll('.causal-because');
+                    if (inputs.length) inputs[inputs.length - 1].focus();
+                });
+            });
+
+            // Registered after the theme block's own click handler, so the `dark` class has already
+            // flipped by the time this runs — the same ordering renderMermaid() relies on.
+            var themeBtn = document.getElementById('theme-toggle');
+            if (themeBtn) themeBtn.addEventListener('click', drawEdges);
+            window.addEventListener('resize', drawEdges);
+
+            // Node positions are percentages and their box widths depend on Inter, so the first paint
+            // waits on the font — otherwise every arrow stops short of where the node ends up.
+            function paint() { renderList(); drawEdges(); updateCounter(); }
+            if (document.fonts && document.fonts.ready) { document.fonts.ready.then(paint); } else { paint(); }
+        })();
+    </script>
+</body>
+</html>
