@@ -1,0 +1,3230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Decision Book — models for strategic thinking, as an interactive workbook.">
+<title>The Decision Book</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+<script>
+/* Resolve theme before first paint to avoid a flash. Dark is the house default. */
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem('decisionbook.v3') || '{}');
+    document.documentElement.setAttribute('data-theme', s.theme || 'dark');
+  } catch (e) { /* localStorage unavailable — stay dark */ }
+})();
+</script>
+<style>
+/* ============================================================
+   1. TOKENS
+   ============================================================ */
+/* Dark is the default: this page is styled to the alhaol.github.io /apps/ house look
+   (slate-950 base, glass panels, Inter, one gold accent). Every colour below is a token,
+   and every diagram paints from those tokens, so the light theme is a value swap only. */
+:root {
+  color-scheme: dark;
+  --bg: #020617;
+  --bg-grad: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+  /* --surface must stay OPAQUE: SVG knockouts (.s-knock) and the matrix axis labels
+     paint with it, and a translucent fill would let the shape underneath bleed through. */
+  --surface: #0f172a;
+  --surface-2: #16202f;
+  --ink: #f1f5f9;
+  --ink-2: #cbd5e1;
+  --ink-3: #94a3b8;
+  --ink-4: #64748b;
+  --rule: #273449;
+  --rule-2: #475569;
+  --fill: #1e293b;
+  --accent: #fbbf24;
+  --accent-soft: #f59e0b;
+  --accent-ink: #fbbf24;
+  --focus: #60a5fa;
+
+  /* Glass is the decorative layer — used only where a translucent panel is safe. */
+  --glass: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --r-1: 10px;
+  --r-2: 14px;
+
+  --measure: 66ch;
+  --step--2: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0:  0.9375rem;
+  --step-1:  1.0625rem;
+  --step-2:  1.375rem;
+  --step-3:  2rem;
+  --step-4:  2.75rem;
+
+  --sp-1: .25rem; --sp-2: .5rem;  --sp-3: .75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem; --sp-6: 2rem;   --sp-7: 3rem;   --sp-8: 4rem;
+
+  --dur: .35s;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --bg-grad: none;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --ink: #1a202c;
+  --ink-2: #4a5568;
+  --ink-3: #718096;
+  --ink-4: #a0aec0;
+  --rule: #e2e8f0;
+  --rule-2: #cbd5e0;
+  --fill: #f1f5f9;
+  /* Gold at full brightness is unreadable on white, so the light theme drops to amber-600. */
+  --accent: #d97706;
+  --accent-soft: #b45309;
+  --accent-ink: #b45309;
+  --focus: #2b6cb0;
+
+  --glass: #ffffff;
+  --glass-border: #e2e8f0;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0s; }
+  * { animation-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ============================================================
+   2. RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; background: var(--bg); }
+body {
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  background-color: var(--bg);
+  /* Fixed, so the glow stays at the top of the viewport instead of stretching over a
+     page that is ~50 accordions tall. */
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1,h2,h3,h4 { line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+svg { display: block; }
+:where(a) { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.wrap { max-width: 60rem; margin-inline: auto; padding-inline: var(--sp-4); }
+.wrap-narrow { max-width: 52rem; margin-inline: auto; padding-inline: var(--sp-4); }
+.eyebrow {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-4);
+  text-transform: uppercase; letter-spacing: .14em;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--sp-4); top: -3rem; z-index: 100;
+  background: var(--surface); color: var(--ink); padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--rule-2); transition: top .2s;
+}
+.skip-link:focus { top: var(--sp-4); }
+
+/* ============================================================
+   3. HEADER + HERO MATRIX
+   ============================================================ */
+/* Transparent so the fixed radial glow reads through the tallest part of the page. */
+.site-header {
+  background: transparent;
+  border-bottom: 1px solid var(--rule);
+  padding-block: var(--sp-5) var(--sp-7);
+  text-align: center;
+}
+.header-nav {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: var(--sp-3); margin-bottom: var(--sp-6);
+}
+.header-nav a {
+  font-size: var(--step--1); color: var(--ink-3); text-decoration: none;
+  transition: color var(--dur);
+}
+.header-nav a:hover { color: var(--ink); }
+.site-header h1 {
+  font-size: clamp(var(--step-3), 7vw, var(--step-4));
+  margin-block: var(--sp-3) var(--sp-4);
+}
+.lede {
+  font-size: var(--step-1); font-weight: 300; color: var(--ink-3);
+  max-width: 34rem; margin-inline: auto;
+}
+
+.matrix {
+  position: relative; width: 100%; max-width: 30rem;
+  aspect-ratio: 1; margin: var(--sp-8) auto 0;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.matrix-axis-x, .matrix-axis-y { position: absolute; background: var(--ink-4); z-index: 1; }
+/* Inset by 7% so the edge labels clear the axis tips. V4 knocked them out with an opaque
+   background instead, which only worked while the header itself was opaque. */
+.matrix-axis-x { top: 50%; left: 7%; right: 7%; height: 1px; transform: translateY(-50%); }
+.matrix-axis-y { left: 50%; top: 7%; bottom: 7%; width: 1px; transform: translateX(-50%); }
+.matrix-label {
+  position: absolute; font-size: var(--step--2); font-weight: 600; color: var(--ink-3);
+  letter-spacing: .1em; text-transform: uppercase; z-index: 2;
+  padding: 0 .35em;
+}
+/* V4 straddled these on the matrix border, which was fine when the matrix had no bounds.
+   The glass panel clips, so they now sit just inside it. */
+.label-top    { top: var(--sp-2);    left: 50%;  transform: translateX(-50%); }
+.label-bottom { bottom: var(--sp-2); left: 50%;  transform: translateX(-50%); }
+.label-left   { top: 50%; left: 0;   transform: translate(0, -50%) rotate(-90deg); }
+.label-right  { top: 50%; right: 0;  transform: translate(0, -50%) rotate(90deg); }
+
+.quad {
+  position: absolute; width: 50%; height: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: var(--sp-4) var(--sp-3);
+  text-decoration: none; border: 1px solid transparent; transition: background var(--dur);
+}
+.quad:hover, .quad:focus-visible { background: var(--surface-2); z-index: 3; }
+.quad:hover .quad-name { color: var(--accent-ink); }
+.q1 { top: 0; left: 0;     border-right: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); }
+.q2 { top: 0; right: 0;    border-bottom: 1px solid var(--rule-2); }
+.q3 { bottom: 0; left: 0;  border-right: 1px solid var(--rule-2); }
+.q4 { bottom: 0; right: 0; }
+.quad-axis { font-size: var(--step--2); color: var(--ink-4); text-transform: uppercase; letter-spacing: .08em; }
+.quad-name { font-size: var(--step-1); color: var(--ink); margin-block: var(--sp-1); transition: color var(--dur); }
+.quad-progress { font-size: var(--step--2); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.quad-bar { width: 3rem; height: 2px; background: var(--rule); margin-top: var(--sp-1); }
+.quad-bar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width var(--dur); }
+
+@media (max-width: 30rem) {
+  .matrix { aspect-ratio: auto; max-width: none; display: grid; grid-template-columns: 1fr 1fr; }
+  .matrix-axis-x, .matrix-axis-y, .matrix-label { display: none; }
+  .quad { position: static; width: auto; height: auto; border: 1px solid var(--rule); }
+}
+
+/* ============================================================
+   4. TOOLBAR
+   ============================================================ */
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.toolbar-row {
+  display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap;
+  padding-block: var(--sp-3);
+}
+.search-field { position: relative; flex: 1 1 14rem; min-width: 0; }
+.search-field input {
+  width: 100%; padding: var(--sp-2) var(--sp-3) var(--sp-2) 2.1rem;
+  background: var(--surface); border: 1px solid var(--rule-2); border-radius: var(--r-1);
+  font-size: var(--step-0);
+}
+.search-field input::placeholder { color: var(--ink-4); }
+.search-field svg { position: absolute; left: .6rem; top: 50%; transform: translateY(-50%);
+  width: 1rem; height: 1rem; stroke: var(--ink-4); fill: none; stroke-width: 2; }
+.kbd {
+  font-family: var(--mono); font-size: var(--step--2); color: var(--ink-4);
+  border: 1px solid var(--rule-2); border-bottom-width: 2px; border-radius: 3px;
+  padding: 0 .3em; background: var(--surface);
+}
+.search-hint { position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); }
+.tool-btn {
+  padding: var(--sp-2) var(--sp-3); border: 1px solid var(--rule-2); border-radius: var(--r-1);
+  background: var(--surface); font-size: var(--step--1); color: var(--ink-2);
+  white-space: nowrap; transition: border-color var(--dur), color var(--dur);
+}
+.tool-btn:hover { border-color: var(--ink-3); color: var(--ink); }
+.chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; padding-bottom: var(--sp-3); }
+.chip {
+  font-size: var(--step--2); text-transform: uppercase; letter-spacing: .06em;
+  padding: .25rem .6rem; border: 1px solid var(--rule-2); border-radius: 999px;
+  color: var(--ink-3); background: var(--surface); transition: all var(--dur);
+}
+.chip:hover { border-color: var(--ink-3); color: var(--ink); }
+.chip[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: #020617; border-color: transparent; font-weight: 600;
+}
+.chip[aria-pressed="true"] .chip-n { color: #020617; opacity: .55; }
+.chip-quad { border-color: var(--ink-4); color: var(--ink-2); }
+.chip-n { color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.chip-sep { width: 1px; align-self: stretch; background: var(--rule); margin-inline: var(--sp-1); }
+.result-count { font-size: var(--step--1); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.storage-warning {
+  display: none; padding: var(--sp-2) 0; font-size: var(--step--1); color: var(--accent-ink);
+}
+.storage-warning.show { display: block; }
+
+/* ============================================================
+   5. TABLE OF CONTENTS
+   ============================================================ */
+.toc { border-bottom: 1px solid var(--rule); }
+.toc > summary {
+  cursor: pointer; padding-block: var(--sp-4); font-size: var(--step--1);
+  text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600;
+}
+.toc > summary::marker { color: var(--ink-4); }
+.toc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--sp-5); padding-bottom: var(--sp-6);
+}
+.toc-grid h2 { font-size: var(--step--1); text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-4); margin-bottom: var(--sp-2); font-weight: 700; letter-spacing: .08em; }
+.toc-grid ol { list-style: none; padding: 0; }
+.toc-grid a { display: block; padding: .15rem 0; font-size: var(--step--1); color: var(--ink-2);
+  text-decoration: none; }
+.toc-grid a:hover { color: var(--accent-ink); text-decoration: underline; }
+
+/* ============================================================
+   6. MODEL LIST + ACCORDION
+   ============================================================ */
+main { padding-block: var(--sp-7) var(--sp-8); }
+.category { margin-bottom: var(--sp-8); scroll-margin-top: calc(var(--toolbar-h, 5rem) + 1rem); }
+.category-head { margin-bottom: var(--sp-5); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--rule); }
+.category-head h2 { font-size: var(--step-2); margin-top: var(--sp-1); }
+.category-head p { color: var(--ink-3); font-size: var(--step--1); margin-top: var(--sp-2); max-width: var(--measure); }
+.model-list { border-top: 1px solid var(--rule); }
+
+.model { border-bottom: 1px solid var(--rule); scroll-margin-top: calc(var(--toolbar-h, 5rem) + 1rem); }
+.model[hidden] { display: none; }
+.model-btn {
+  width: 100%; display: flex; align-items: baseline; gap: var(--sp-3);
+  padding-block: var(--sp-4); text-align: left; transition: background var(--dur);
+}
+.model-btn:hover { background: var(--surface-2); }
+.model-title { font-size: var(--step-1); font-weight: 500; color: var(--ink); flex: 1; }
+.model-meta { font-size: var(--step--2); color: var(--ink-4); white-space: nowrap; }
+.model-mark {
+  width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent);
+  flex: none; align-self: center; opacity: 0;
+}
+.model[data-used="true"] .model-mark { opacity: 1; }
+.model-icon { flex: none; align-self: center; width: 1rem; height: 1rem; position: relative; }
+.model-icon::before, .model-icon::after {
+  content: ""; position: absolute; inset: 50% 0 auto 0; height: 1.5px; background: var(--ink-3);
+  transition: transform var(--dur);
+}
+.model-icon::after { transform: rotate(90deg); }
+.model[data-open="true"] .model-icon::after { transform: rotate(0deg); }
+
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur) ease; }
+.model[data-open="true"] .panel { grid-template-rows: 1fr; }
+.panel-inner {
+  overflow: hidden; visibility: hidden;
+  transition: visibility 0s linear var(--dur);
+}
+.model[data-open="true"] .panel-inner { visibility: visible; transition-delay: 0s; }
+.panel-body { padding-block: var(--sp-5) var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-6); }
+@media (min-width: 48rem) {
+  .panel-body { flex-direction: row; align-items: flex-start; }
+  /* The side column now holds the diagram AND the pad, so it is too tall to stick. */
+  .panel-side { width: 34%; flex: none; }
+  .panel-text { width: 66%; }
+}
+.panel-side { display: flex; flex-direction: column; gap: var(--sp-4); }
+.panel-figure {
+  border: 1px solid var(--glass-border); background: var(--surface);
+  border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-5); display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+}
+.svg-illustration { width: 100%; max-width: 14rem; height: auto; }
+.figure-origin { font-size: var(--step--2); color: var(--ink-4); text-align: center; }
+/* Fidelity badge: says whether this diagram is the originator's own form or a later
+   common rendering of it. Every model carries the flag, so the reader can tell a
+   sourced framework from a popularisation without leaving the page. */
+.fidelity {
+  display: inline-block; margin-left: .4rem; padding: 0 .35rem;
+  font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--rule-2); border-radius: 3px; vertical-align: .05em;
+}
+.fidelity[data-f="interpreted"] { color: var(--accent-ink); border-color: var(--accent-soft); }
+
+.panel-text { display: grid; gap: var(--sp-5); }
+@media (min-width: 48rem) { .panel-text { grid-template-columns: 1fr 1fr; } }
+.field { min-width: 0; }
+.field.span { grid-column: 1 / -1; }
+.field h4 {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-4);
+  text-transform: uppercase; letter-spacing: .12em; margin-bottom: var(--sp-2);
+}
+.field p { font-size: var(--step-0); color: var(--ink-2); max-width: var(--measure); }
+.field.concept p { color: var(--ink); }
+.field.how p { border-left: 2px solid var(--rule-2); padding: .15rem 0 .15rem var(--sp-4); }
+.field.example p {
+  background: var(--surface-2); border-left: 2px solid var(--accent);
+  padding: var(--sp-3) var(--sp-4); font-size: var(--step--1);
+}
+.field.not p::before {
+  content: "—"; color: var(--ink-4); margin-right: .4em;
+}
+.tag-row { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.tag { font-size: var(--step--2); color: var(--ink-3); background: var(--fill);
+  padding: .1rem .5rem; border-radius: 999px; }
+
+/* ============================================================
+   7. WORKSHEET
+   ============================================================ */
+.worksheet { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding-top: var(--sp-5); }
+.worksheet-head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.worksheet-head h4 { flex: 1; }
+.saved-state { font-size: var(--step--2); color: var(--ink-4); opacity: 0; transition: opacity .3s; }
+.saved-state.show { opacity: 1; }
+.question { margin-bottom: var(--sp-4); }
+.question label { display: block; font-size: var(--step--1); color: var(--ink); margin-bottom: var(--sp-2); }
+.question textarea {
+  width: 100%; min-height: 3.5rem; resize: vertical;
+  padding: var(--sp-3); background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule-2); border-radius: var(--r-1); font-size: var(--step--1); line-height: 1.5;
+}
+.question textarea:focus { border-color: var(--focus); }
+.clear-btn { font-size: var(--step--2); color: var(--ink-4); text-decoration: underline; }
+.clear-btn:hover { color: var(--accent-ink); }
+
+/* ============================================================
+   7b. SORTER — drag items into the model's own zones
+   ============================================================ */
+.sorter { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding-top: var(--sp-5); }
+.sorter-head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-3); flex-wrap: wrap; }
+.sorter-head h4 { flex: 1; }
+.sorter-add { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.sorter-add input {
+  flex: 1; min-width: 0; padding: var(--sp-2) var(--sp-3);
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule-2); border-radius: var(--r-1); font-size: var(--step--1);
+}
+.sorter-add input:focus { border-color: var(--focus); }
+.sorter-hint { font-size: var(--step--2); color: var(--ink-4); margin-bottom: var(--sp-3); }
+
+.zone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: var(--sp-3); }
+.zone {
+  border: 1px dashed var(--rule-2); border-radius: var(--r-1); padding: var(--sp-3);
+  min-height: 5rem; background: var(--surface); transition: border-color .15s, background .15s;
+}
+.zone[data-pool="true"] { border-style: solid; background: var(--surface-2); }
+.zone.drop-target, .zone:focus-visible { border-color: var(--accent); background: var(--surface-2); }
+.zone h5 {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--sp-2);
+  display: flex; justify-content: space-between; gap: var(--sp-2);
+}
+.zone-count { color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.zone-items { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.item {
+  display: flex; align-items: center; gap: var(--sp-2); width: 100%;
+  padding: .3rem .5rem; text-align: left; cursor: grab;
+  background: var(--fill); border: 1px solid transparent; border-radius: 8px;
+  font-size: var(--step--1); color: var(--ink); line-height: 1.35;
+}
+.item:hover { border-color: var(--rule-2); }
+.item[aria-pressed="true"] { border-color: var(--accent); background: var(--surface); }
+.item.dragging { opacity: .4; }
+.item-text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.item-drop { font-size: var(--step--2); color: var(--ink-4); }
+.item-drop:hover { color: var(--accent-ink); }
+.sorter-empty { font-size: var(--step--2); color: var(--ink-4); font-style: italic; }
+.zone-place {
+  margin-top: var(--sp-2); font-size: var(--step--2); color: var(--accent-ink);
+  text-decoration: underline; background: none; border: 0;
+}
+.zone-place[disabled] { color: var(--ink-4); text-decoration: none; opacity: .5; cursor: default; }
+
+/* ============================================================
+   7c. SKETCHPAD
+   ============================================================ */
+.sketch {
+  border: 1px solid var(--glass-border); background: var(--glass);
+  backdrop-filter: blur(12px); border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-4);
+}
+.sketch-head {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--sp-2); margin-bottom: var(--sp-3);
+}
+.sketch-tools { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.sketch-tools .tool-btn { padding: .2rem var(--sp-2); }
+.sketch-hint { font-size: var(--step--2); color: var(--ink-4); margin-top: var(--sp-2); }
+.pen {
+  width: 1.6rem; height: 1.6rem; border: 1px solid var(--rule-2); border-radius: 50%;
+  display: grid; place-items: center; background: var(--surface); flex: none;
+}
+.pen[aria-pressed="true"] { border-color: var(--ink); background: var(--fill); }
+.pen i { display: block; background: var(--ink); border-radius: 50%; }
+.pen[data-w="3"]  i { width: 3px; height: 3px; }
+.pen[data-w="6"]  i { width: 6px; height: 6px; }
+.pen[data-w="12"] i { width: 10px; height: 10px; }
+.pen[data-erase] i { background: none; border: 1.5px solid var(--ink-3); width: 10px; height: 10px; border-radius: 2px; }
+.sketch-wrap {
+  position: relative; border: 1px solid var(--rule-2); background: var(--surface);
+  border-radius: var(--r-1); overflow: hidden;
+}
+.sketch-wrap canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; }
+.sketch-placeholder {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  color: var(--ink-4); font-size: var(--step--1);
+}
+.sketch-wrap[data-drawn="true"] .sketch-placeholder { display: none; }
+
+/* ============================================================
+   8. EMPTY STATE + SHORTCUTS DIALOG
+   ============================================================ */
+.empty-state { display: none; padding: var(--sp-8) 0; text-align: center; color: var(--ink-3); }
+.empty-state.show { display: block; }
+.empty-state strong { display: block; color: var(--ink); font-size: var(--step-2); margin-bottom: var(--sp-2); }
+
+dialog {
+  border: 1px solid var(--glass-border); background: var(--surface); color: var(--ink);
+  border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-6); max-width: 26rem; width: calc(100% - 2rem);
+}
+dialog::backdrop { background: rgba(2,6,23,.7); backdrop-filter: blur(4px); }
+dialog h2 { font-size: var(--step-2); margin-bottom: var(--sp-4); }
+dialog dl { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-3) var(--sp-4); align-items: center; }
+dialog dt { justify-self: start; }
+dialog dd { font-size: var(--step--1); color: var(--ink-2); }
+
+footer {
+  border-top: 1px solid var(--rule); background: transparent;
+  padding-block: var(--sp-7); text-align: center; color: var(--ink-4); font-size: var(--step--1);
+}
+footer p + p { margin-top: var(--sp-2); }
+
+/* ============================================================
+   9. SVG PRIMITIVES — all colour via tokens so diagrams invert
+   ============================================================ */
+.s-line      { stroke: var(--ink-2); stroke-width: 1.2; fill: none; }
+.s-line-b    { stroke: var(--ink);   stroke-width: 2;   fill: none; }
+.s-line-thin { stroke: var(--ink-2); stroke-width: .8;  fill: none; }
+.s-dash      { stroke: var(--rule-2); stroke-width: 1;  fill: none; stroke-dasharray: 2 2; }
+.s-fill      { fill: var(--fill);  stroke: none; }
+.s-fill-2    { fill: var(--rule);  stroke: none; }
+.s-solid     { fill: var(--ink);   stroke: none; }
+.s-dot       { fill: var(--ink);   stroke: none; }
+.s-knock     { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.5; }
+.s-knock-t   { fill: var(--surface); stroke: none; }
+.s-accent    { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+.s-accent-f  { fill: var(--accent); stroke: none; }
+.s-box       { stroke: var(--ink-2); stroke-width: 1.2; fill: none; }
+.t   { font-family: var(--font); font-size: 5px; fill: var(--ink);   font-weight: 700; letter-spacing: .3px; }
+.t-b { font-family: var(--font); font-size: 6px; fill: var(--ink);   font-weight: 800; }
+.t-m { font-family: var(--font); font-size: 4px; fill: var(--ink-2); text-transform: uppercase; letter-spacing: .2px;
+       font-weight: 700; }
+.t-a { fill: var(--accent); }
+.t-k { fill: var(--surface); }
+/* Presentation attributes lose to these class rules, so size overrides need a class. */
+.t-b.t-sm { font-size: 4.6px; }
+.t-b.t-xs { font-size: 4px; }
+/* Dense axis labels on the 2x2s, where two labels share one edge. Bold widened these
+   enough to touch their neighbours, so the tracking comes back off to pay for it. */
+.t-m.t-xs2 { font-size: 3.4px; letter-spacing: -.05px; }
+/* .s-box declares fill:none and is declared after .s-fill, so at equal specificity it
+   won and the shaded cells silently never painted. These compound rules restore them. */
+.s-box.s-fill   { fill: var(--fill); }
+.s-box.s-fill-2 { fill: var(--rule); }
+
+/* ============================================================
+   10. PRINT
+   ============================================================ */
+@media print {
+  :root { --bg: #fff; --surface: #fff; --surface-2: #fff;
+          --ink: #000; --ink-2: #222; --ink-3: #444; --ink-4: #666;
+          --rule: #ccc; --rule-2: #999; --fill: #eee; --accent: #000; --accent-ink: #000; }
+  .toolbar, .toc, .skip-link, .model-icon, .model-mark, .clear-btn,
+  .empty-state, dialog, .quad-bar, .storage-warning,
+  .sorter-add, .sorter-hint, .sketch-tools, .item-drop { display: none !important; }
+  .zone { border: 1px solid #999; min-height: 3.5rem; break-inside: avoid; }
+  .item { background: #fff; border: 1px solid #ccc; }
+  .sketch-wrap { border: 1px solid #999; break-inside: avoid; }
+  body { background: #fff; font-size: 10.5pt; }
+  .site-header { padding-block: 0 var(--sp-5); border-bottom: 1px solid #000; }
+  .matrix { max-width: 18rem; }
+  .model { break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #ccc; }
+  .panel { grid-template-rows: 1fr !important; }
+  .panel-inner { visibility: visible !important; overflow: visible !important; }
+  .panel-figure { position: static; border: 1px solid #ccc; }
+  .question textarea { border: 1px solid #999; min-height: 2.5rem; }
+  .category { break-before: page; }
+  .category:first-of-type { break-before: auto; }
+  a { text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<a class="skip-link" href="#app">Skip to the models</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <nav class="header-nav"><a href="../">&larr; Books</a></nav>
+    <p class="eyebrow">Fifty models &middot; Interactive edition</p>
+    <h1>The Decision Book</h1>
+    <p class="lede">Models for strategic thinking &mdash; write, sort and sketch your way through them.</p>
+
+    <div class="matrix" id="matrix">
+      <div class="matrix-axis-x"></div>
+      <div class="matrix-axis-y"></div>
+      <span class="matrix-label label-top">Me</span>
+      <span class="matrix-label label-bottom">Others</span>
+      <span class="matrix-label label-left">Doing</span>
+      <span class="matrix-label label-right">Thinking</span>
+      <!-- quadrants injected -->
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="toolbar-row">
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <label class="sr-only" for="search">Search the models</label>
+        <input id="search" type="search" placeholder="Search models, tags, or text…" autocomplete="off" spellcheck="false">
+        <span class="search-hint kbd" aria-hidden="true">/</span>
+      </div>
+      <span class="result-count" id="count" role="status" aria-live="polite"></span>
+      <button class="tool-btn" id="theme-btn" aria-pressed="false">Dark</button>
+      <button class="tool-btn" id="export-btn">Export</button>
+      <button class="tool-btn" id="import-btn">Import</button>
+      <button class="tool-btn" id="help-btn" aria-haspopup="dialog">?</button>
+      <input type="file" id="import-file" accept="application/json,.json" class="sr-only" tabindex="-1">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter models"></div>
+    <p class="storage-warning" id="storage-warning">
+      This browser is blocking local storage on <code>file://</code>, so your answers will not
+      be remembered after a reload. Use <strong>Export</strong> to save them to a file.
+    </p>
+  </div>
+</div>
+
+<div class="wrap">
+  <details class="toc" id="toc">
+    <summary>Contents &mdash; all models</summary>
+    <div class="toc-grid" id="toc-grid"></div>
+  </details>
+</div>
+
+<main class="wrap" id="app">
+  <div class="empty-state" id="empty-state">
+    <strong>No models match that search.</strong>
+    <p>Try a broader term, or <button class="clear-btn" id="empty-reset">clear all filters</button>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>An interactive guide based on <em>The Decision Book</em> by Mikael Krogerus and Roman Tschäppeler.</p>
+    <p>Your answers are stored only in this browser. Nothing is sent anywhere.</p>
+  </div>
+</footer>
+
+<dialog id="help-dialog" aria-labelledby="help-title">
+  <h2 id="help-title">Keyboard shortcuts</h2>
+  <dl>
+    <dt><span class="kbd">/</span></dt><dd>Focus search</dd>
+    <dt><span class="kbd">j</span></dt><dd>Next model</dd>
+    <dt><span class="kbd">k</span></dt><dd>Previous model</dd>
+    <dt><span class="kbd">Enter</span></dt><dd>Open or close the focused model</dd>
+    <dt><span class="kbd">Esc</span></dt><dd>Clear search, or close the open model</dd>
+    <dt><span class="kbd">?</span></dt><dd>This panel</dd>
+  </dl>
+  <p style="margin-top:1.5rem"><button class="tool-btn" id="help-close">Close</button></p>
+</dialog>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const svgWrap = (title, desc, content, viewBox = "0 0 100 100") =>
+  `<svg viewBox="${viewBox}" class="svg-illustration" role="img">
+     <title>${title}</title><desc>${desc}</desc>${content}</svg>`;
+
+const database = {
+  "improve-myself": {
+    title: "How to Improve Myself",
+    short: "Improve Myself",
+    axis: "Me + Doing",
+    subtitle: "Action-oriented models for personal productivity, decision-making and execution.",
+    models: [
+      {
+        id: "eisenhower-matrix",
+        name: "The Eisenhower Matrix",
+        origin: "Dwight D. Eisenhower / Stephen Covey",
+        readMinutes: 2,
+        tags: ["prioritisation", "time", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Eisenhower Matrix",
+          "A square divided into four equal quadrants. Columns are urgent and not urgent; rows are important and not important. The cells read Do now, Plan, Delegate and Drop.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="15" class="t-m" text-anchor="middle">Urgent</text>
+          <text x="65" y="15" class="t-m" text-anchor="middle">Not urgent</text>
+          <text x="13" y="35" class="t-m" text-anchor="middle" transform="rotate(-90 13 35)">Important</text>
+          <text x="13" y="65" class="t-m" text-anchor="middle" transform="rotate(-90 13 65)">Not imp.</text>
+          <text x="35" y="38" class="t-b t-sm" text-anchor="middle">DO NOW</text>
+          <text x="65" y="38" class="t-b t-sm" text-anchor="middle">PLAN</text>
+          <text x="35" y="68" class="t-b t-sm" text-anchor="middle">DELEGATE</text>
+          <text x="65" y="68" class="t-b t-sm" text-anchor="middle">DROP</text>`),
+        zones: ["Do now", "Plan", "Delegate", "Drop"],
+        what: "A prioritisation tool that sorts tasks by urgency and importance.",
+        how: "Sort every open task into one of four quadrants: do it, schedule it, delegate it, or delete it.",
+        when: "When you are overwhelmed by tasks.",
+        for: "Time management.",
+        not: "Complex, multi-person project planning.",
+        example: "A team lead starts Monday with 23 open items. Sorting takes eleven minutes. Three are urgent and important — a client escalation, a payroll deadline, a broken build — and get done before noon. Nine are urgent but not important, mostly status pings, and move to a shared channel. Six important-but-not-urgent items finally get calendar slots. Five are dropped outright.",
+        questions: [
+          "Which task have you carried on your list for more than two weeks without doing? Which quadrant does it actually belong in?",
+          "Name one thing that felt urgent this week but was someone else's priority, not yours.",
+          "What sits in 'important, not urgent' that you have never once scheduled?"
+        ]
+      },
+      {
+        id: "consequences-model",
+        name: "The Consequences Model",
+        origin: "Second-order thinking",
+        readMinutes: 2,
+        tags: ["risk", "foresight", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Consequences Model",
+          "A decision on the left branches into two first-order outcomes, each of which branches again into second-order outcomes, showing the cascade.", `
+          <text x="14" y="9" class="t-m" text-anchor="middle">Decision</text>
+          <text x="46" y="9" class="t-m" text-anchor="middle">1st order</text>
+          <text x="79" y="9" class="t-m" text-anchor="middle">2nd order</text>
+          <circle cx="14" cy="50" r="8" class="s-line"/>
+          <path d="M 22 50 L 38 30 M 22 50 L 38 70" class="s-line"/>
+          <rect x="38" y="22" width="16" height="16" class="s-box"/>
+          <rect x="38" y="62" width="16" height="16" class="s-box"/>
+          <path d="M 54 30 L 69 20 M 54 30 L 69 40 M 54 70 L 69 60 M 54 70 L 69 80" class="s-dash"/>
+          <rect x="69" y="14" width="14" height="12" class="s-box"/>
+          <rect x="69" y="34" width="14" height="12" class="s-box"/>
+          <rect x="69" y="54" width="14" height="12" class="s-box"/>
+          <rect x="69" y="74" width="14" height="12" class="s-box"/>`),
+        zones: ["1st order", "2nd order", "3rd order"],
+        what: "A decision tree for anticipating the downstream outcomes of a choice.",
+        how: "Map the initial choice, then branch out its primary consequences, then branch those again.",
+        when: "Before a major decision whose ripples you cannot see.",
+        for: "Risk assessment.",
+        not: "Low-stakes daily tasks.",
+        example: "A founder cuts prices 20% to win share. First order: sales rise 30% in a quarter. Second order: margin drops below what funds support, so response times slip. Third order: the customers won on price churn first, and the brand is now anchored to the lower number.",
+        questions: [
+          "What decision are you weighing where you have only thought as far as the first outcome?",
+          "If that first outcome goes exactly as you hope, what does it then cause?",
+          "Which second-order effect would be hardest to reverse?"
+        ]
+      },
+      {
+        id: "rubber-band-model",
+        name: "The Rubber Band Model",
+        origin: "Krogerus & Tschäppeler",
+        readMinutes: 2,
+        tags: ["change", "career", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Rubber Band Model",
+          "A figure stretched between two anchors: bands from above pull upward, bands from below hold back.", `
+          <text x="50" y="9" class="t-m" text-anchor="middle">Pulling you</text>
+          <rect x="36" y="13" width="28" height="4" class="s-box"/>
+          <path d="M 40 17 L 45 50 M 60 17 L 55 50" class="s-line-thin"/>
+          <circle cx="50" cy="55" r="5" class="s-line"/>
+          <path d="M 50 60 L 50 78 M 50 64 L 41 71 M 50 64 L 59 71 M 50 78 L 43 90 M 50 78 L 57 90" class="s-line"/>
+          <path d="M 43 90 L 42 101 M 57 90 L 58 101" class="s-line-thin"/>
+          <rect x="36" y="101" width="28" height="4" class="s-box"/>
+          <text x="50" y="115" class="t-m" text-anchor="middle">Holding you</text>`,
+          "0 0 100 120"),
+        zones: ["Holding me", "Pulling me"],
+        what: "A framework for choosing between staying and going.",
+        how: "Write two lists: what is holding you where you are, and what is pulling you elsewhere. Compare their weight, not their length.",
+        when: "Facing a dilemma between staying put and changing.",
+        for: "Career or life transitions.",
+        not: "Purely quantitative financial decisions.",
+        example: "A designer eight years at the same studio lists what holds her: a mortgage, a mentor she respects, the fear of starting over at 41. What pulls her: an unfinished furniture line, a city she has visited three times, work she would not have to explain to anyone. She leaves the following spring — the holding list was all fear, the pulling list was all appetite.",
+        questions: [
+          "Write both lists now. Which one was easier to fill?",
+          "How many items on your 'holding' side are real obligations, and how many are fears?",
+          "Which single item on the pulling side would you most regret never trying?"
+        ]
+      },
+      {
+        id: "feedback-analysis",
+        name: "The Feedback Analysis",
+        origin: "Peter Drucker",
+        readMinutes: 2,
+        tags: ["strengths", "review", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Feedback Analysis",
+          "A timeline running from a written expectation on the left to the observed reality on the right, spanning nine to twelve months.", `
+          <line x1="12" y1="50" x2="88" y2="50" class="s-line"/>
+          <polygon points="92,50 86,47 86,53" class="s-dot"/>
+          <path d="M 18 50 Q 52 22 86 50" class="s-dash"/>
+          <circle cx="18" cy="50" r="2.5" class="s-dot"/>
+          <circle cx="86" cy="50" r="2.5" class="s-dot"/>
+          <text x="18" y="60" class="t-m" text-anchor="middle">Expectation</text>
+          <text x="84" y="60" class="t-m" text-anchor="middle">Reality</text>
+          <text x="52" y="32" class="t-m" text-anchor="middle">9–12 months</text>`),
+        zones: ["I expected", "What happened"],
+        what: "A method for finding your real strengths by comparing what you predicted with what happened.",
+        how: "Write down what you expect the outcome to be. Seal it. Nine to twelve months later, compare it against what actually happened.",
+        when: "Whenever you take on something significant.",
+        for: "Discovering where you are genuinely strong.",
+        not: "Immediate, daily course correction.",
+        example: "A consultant writes, before a six-month engagement, that the hard part will be the data migration and the client relationship will be easy. A year later the migration finished early and the relationship nearly collapsed twice. Three more notes show the same shape. She stops describing herself as a people person and starts charging for technical rescue work.",
+        questions: [
+          "What are you starting right now, and what specifically do you expect the outcome to be?",
+          "Look back at something you finished last year — where was your prediction most wrong?",
+          "What do you keep being surprised to be good at?"
+        ]
+      },
+      {
+        id: "stop-rule",
+        name: "The Stop Rule",
+        origin: "Optimal stopping / the secretary problem",
+        readMinutes: 2,
+        tags: ["choice", "search", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Stop Rule",
+          "A rising curve of option quality cut by a vertical line at the 37 per cent mark, after which the next option beating the baseline is taken.", `
+          <path d="M 12 86 Q 42 12 88 10" class="s-line"/>
+          <line x1="12" y1="86" x2="90" y2="86" class="s-dash"/>
+          <line x1="12" y1="10" x2="12" y2="86" class="s-dash"/>
+          <line x1="40" y1="12" x2="40" y2="86" class="s-accent"/>
+          <circle cx="40" cy="40" r="2.5" class="s-dot"/>
+          <text x="40" y="95" class="t-b t-a" text-anchor="middle">37%</text>
+          <text x="56" y="34" class="t-m">Baseline set</text>
+          <text x="56" y="42" class="t-m">Take next best</text>`),
+        zones: ["Seen — sets baseline", "Beats the baseline", "Rejected"],
+        what: "A heuristic for knowing when to stop looking and commit.",
+        how: "Look at the first 37% of options without choosing any. Then take the next one that beats everything you have seen.",
+        when: "Hiring, apartment hunting, or any sequential choice you cannot revisit.",
+        for: "Escaping decision paralysis.",
+        not: "When every option is visible at once and stays available.",
+        example: "A hiring manager has 27 applicants and two weeks. She interviews the first 10 and hires none of them, recording only how strong each was. Candidate 14 is better than all 10, so she makes the offer that afternoon — before the candidate finishes her other interviews, which is exactly the risk the rule is designed around.",
+        questions: [
+          "What are you currently searching for, and roughly how many options exist?",
+          "How many have you already seen — and are you past 37% without committing?",
+          "What is the actual cost to you of one more week of looking?"
+        ]
+      },
+      {
+        id: "bcg-box",
+        name: "The BCG Box",
+        origin: "Boston Consulting Group",
+        readMinutes: 2,
+        tags: ["portfolio", "strategy", "business"],
+        fidelity: "canonical",
+        svg: svgWrap("The BCG Box",
+          "A two-by-two of market growth against relative market share. Share increases to the left, growth increases upward, giving Star, Question mark, Cash cow and Dog.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="38" class="t-b t-sm" text-anchor="middle">STAR</text>
+          <text x="65" y="38" class="t-b t-sm" text-anchor="middle">QUESTION</text>
+          <text x="35" y="68" class="t-b t-sm" text-anchor="middle">CASH COW</text>
+          <text x="65" y="68" class="t-b t-sm" text-anchor="middle">DOG</text>
+          <text x="35" y="88" class="t-m" text-anchor="middle">High share</text>
+          <text x="65" y="88" class="t-m" text-anchor="middle">Low share</text>
+          <text x="13" y="31" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 31)">High growth</text>
+          <text x="13" y="69" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 69)">Low growth</text>`),
+        zones: ["Star", "Question mark", "Cash cow", "Dog"],
+        what: "A portfolio matrix sorting what you own into Stars, Cash Cows, Question Marks and Dogs.",
+        how: "Plot each product — or each of your own skills — by market growth and your relative share of it.",
+        when: "Deciding where to keep investing and where to stop.",
+        for: "Investment and portfolio strategy.",
+        not: "Single-product or single-skill analysis.",
+        example: "A freelance developer maps four services. React work: high demand, and he is well known for it — a Star. Legacy PHP maintenance: no growth, but three retainer clients — a Cash Cow funding everything else. AI integration: booming, but he has no reputation yet — a Question Mark he decides to fund from the PHP money. WordPress themes: dying, no clients — a Dog he stops offering.",
+        questions: [
+          "List four things you sell or four skills you have. Which is the Cash Cow paying for the others?",
+          "Which is your Question Mark, and what would make it a Star?",
+          "What is your Dog, and what is actually stopping you from dropping it?"
+        ]
+      },
+      {
+        id: "swot-analysis",
+        name: "The SWOT Analysis",
+        origin: "Albert Humphrey, Stanford",
+        readMinutes: 2,
+        tags: ["strategy", "planning", "review"],
+        fidelity: "canonical",
+        svg: svgWrap("The SWOT Analysis",
+          "A two-by-two crossing internal and external factors with helpful and harmful ones, giving strengths, weaknesses, opportunities and threats.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="39" class="t-b" text-anchor="middle" style="font-size:9px">S</text>
+          <text x="65" y="39" class="t-b" text-anchor="middle" style="font-size:9px">W</text>
+          <text x="35" y="69" class="t-b" text-anchor="middle" style="font-size:9px">O</text>
+          <text x="65" y="69" class="t-b" text-anchor="middle" style="font-size:9px">T</text>
+          <text x="35" y="15" class="t-m" text-anchor="middle">Helpful</text>
+          <text x="65" y="15" class="t-m" text-anchor="middle">Harmful</text>
+          <text x="13" y="35" class="t-m" text-anchor="middle" transform="rotate(-90 13 35)">Internal</text>
+          <text x="13" y="65" class="t-m" text-anchor="middle" transform="rotate(-90 13 65)">External</text>`),
+        zones: ["Strength", "Weakness", "Opportunity", "Threat"],
+        what: "A stocktake of Strengths, Weaknesses, Opportunities and Threats.",
+        how: "List what is internal and in your control (S, W), then what is external and is not (O, T).",
+        when: "At the start of a planning cycle.",
+        for: "Establishing an honest baseline.",
+        not: "Deciding what to actually do next — it describes, it does not prescribe.",
+        example: "A bookshop owner lists: strong local reputation and a good events space (S); no online sales and one overworked manager (W); a university opening two streets away (O); a chain store signing a lease nearby (T). The pairing that matters is obvious once written — use the events space for the students before the chain opens.",
+        questions: [
+          "Name one strength that is genuinely yours rather than a feature of your market.",
+          "Which weakness would your closest competitor name first?",
+          "Which threat on your list have you known about for over a year and not acted on?"
+        ]
+      },
+      {
+        id: "gap-in-the-market",
+        name: "The Gap-in-the-Market",
+        origin: "Classic market analysis",
+        readMinutes: 2,
+        tags: ["opportunity", "business", "market"],
+        fidelity: "canonical",
+        svg: svgWrap("The Gap-in-the-Market",
+          "Two overlapping circles, what is available and what is wanted. The gap is shaded in the part of what is wanted that lies outside what is available.", `
+          <path d="M 51 30.7 A 24 24 0 1 1 51 73.3 A 24 24 0 0 0 51 30.7 Z" class="s-fill-2"/>
+          <circle cx="40" cy="52" r="24" class="s-line"/>
+          <circle cx="62" cy="52" r="24" class="s-line"/>
+          <text x="26" y="17" class="t-m" text-anchor="middle">Available</text>
+          <text x="76" y="17" class="t-m" text-anchor="middle">Wanted</text>
+          <text x="73" y="54" class="t-b t-sm t-a" text-anchor="middle">GAP</text>`),
+        zones: ["Available", "Wanted", "The gap"],
+        what: "A way of locating needs nobody is currently meeting.",
+        how: "List what customers want. List what is already offered. The gap is what is wanted and absent.",
+        when: "Hunting for a business or career opening.",
+        for: "Entrepreneurship.",
+        not: "Improving the efficiency of something you already run.",
+        example: "In a town with four gyms, all open 6am to 10pm, a trainer notices the hospital three streets away runs twelve-hour shifts ending at 8pm and 8am. Nobody is serving people who finish work at dawn. She opens 24 hours with staffed coaching only between 5am and 9am, and fills it with shift workers.",
+        questions: [
+          "What do people around you complain about that nobody has fixed?",
+          "What do you personally want to buy that does not exist?",
+          "For the gap you just named — is it empty because nobody saw it, or because it does not pay?"
+        ]
+      },
+{
+        id: "smart-goals",
+        name: "The SMART Model",
+        origin: "George T. Doran",
+        readMinutes: 2,
+        tags: ["goals", "planning", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The SMART Model",
+          "Five stacked rows spelling SMART: specific, measurable, achievable, relevant and time-bound.", `
+          <rect x="18" y="16" width="64" height="13" class="s-box"/>
+          <rect x="18" y="29" width="64" height="13" class="s-box"/>
+          <rect x="18" y="42" width="64" height="13" class="s-box"/>
+          <rect x="18" y="55" width="64" height="13" class="s-box"/>
+          <rect x="18" y="68" width="64" height="13" class="s-box"/>
+          <text x="25" y="26" class="t-b t-sm" text-anchor="middle">S</text>
+          <text x="25" y="39" class="t-b t-sm" text-anchor="middle">M</text>
+          <text x="25" y="52" class="t-b t-sm" text-anchor="middle">A</text>
+          <text x="25" y="65" class="t-b t-sm" text-anchor="middle">R</text>
+          <text x="25" y="78" class="t-b t-sm" text-anchor="middle">T</text>
+          <text x="34" y="26" class="t-m">Specific</text>
+          <text x="34" y="39" class="t-m">Measurable</text>
+          <text x="34" y="52" class="t-m">Achievable</text>
+          <text x="34" y="65" class="t-m">Relevant</text>
+          <text x="34" y="78" class="t-m">Time-bound</text>`),
+        zones: ["Specific", "Measurable", "Achievable", "Relevant", "Time-bound"],
+        what: "A five-part test that turns a vague intention into a goal you can actually check.",
+        how: "Rewrite the goal until it passes all five: specific, measurable, achievable, relevant, time-bound.",
+        when: "Whenever a goal has survived a month without progress.",
+        for: "Making commitments testable.",
+        not: "Open-ended creative or exploratory work, where the target moves by design.",
+        example: "'Get fitter' survives untouched for a year. Rewritten, it becomes 'run 5km without stopping by 30 June, three runs a week, logged'. The first version could never be failed, which is exactly why it was never done.",
+        questions: [
+          "Take a goal you have carried for months. Which of the five does it currently fail?",
+          "What number would tell you, without argument, that you had hit it?",
+          "What is the date — and what happens if it passes?"
+        ]
+      },
+      {
+        id: "flow-model",
+        name: "The Flow Model",
+        origin: "Mihaly Csikszentmihalyi",
+        readMinutes: 2,
+        tags: ["focus", "energy", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Flow Model",
+          "Challenge plotted against skill. A diagonal channel between anxiety above and boredom below marks the flow state.", `
+          <path d="M 16 84 L 84 16 L 84 32 L 32 84 Z" class="s-fill"/>
+          <line x1="16" y1="84" x2="90" y2="84" class="s-line"/>
+          <line x1="16" y1="12" x2="16" y2="84" class="s-line"/>
+          <text x="34" y="32" class="t-m">Anxiety</text>
+          <text x="60" y="70" class="t-m">Boredom</text>
+          <text x="52" y="52" class="t-b t-sm" text-anchor="middle" transform="rotate(-45 52 52)">FLOW</text>
+          <text x="53" y="95" class="t-m" text-anchor="middle">Skill</text>
+          <text x="8" y="48" class="t-m" text-anchor="middle" transform="rotate(-90 8 48)">Challenge</text>`),
+        zones: ["Anxiety — too hard", "Flow", "Boredom — too easy"],
+        what: "Absorption happens in a narrow channel where the challenge matches your skill.",
+        how: "When anxious, cut the difficulty or raise the skill. When bored, raise the difficulty.",
+        when: "Work feels either frightening or deadening.",
+        for: "Designing tasks people will actually sink into.",
+        not: "Work that is genuinely routine and simply has to be done.",
+        example: "A junior developer freezes on a payments rewrite — pure anxiety, the challenge is far above her skill. Her lead splits off the refund path, a contained piece she can finish in two days. Same project, right rung. Six weeks later she takes the rewrite and is bored by the refund work.",
+        questions: [
+          "Name a task this week that made you anxious. Was it the difficulty or the stakes?",
+          "Name one that bored you. What would make it harder in an interesting way?",
+          "Which of your responsibilities has stayed the same difficulty for over a year?"
+        ]
+      },
+      {
+        id: "morphological-box",
+        name: "The Morphological Box",
+        origin: "Fritz Zwicky",
+        readMinutes: 3,
+        tags: ["ideas", "options", "planning"],
+        fidelity: "canonical",
+        svg: svgWrap("The Morphological Box",
+          "A grid of parameters against possible options, with one option picked per row and joined into a single combined solution.", `
+          <rect x="24" y="24" width="62" height="54" class="s-box"/>
+          <line x1="24" y1="42" x2="86" y2="42" class="s-line"/>
+          <line x1="24" y1="60" x2="86" y2="60" class="s-line"/>
+          <line x1="39.5" y1="24" x2="39.5" y2="78" class="s-dash"/>
+          <line x1="55" y1="24" x2="55" y2="78" class="s-dash"/>
+          <line x1="70.5" y1="24" x2="70.5" y2="78" class="s-dash"/>
+          <path d="M 47 33 L 78 51 L 32 69" class="s-accent"/>
+          <circle cx="47" cy="33" r="3.4" class="s-knock"/>
+          <circle cx="78" cy="51" r="3.4" class="s-knock"/>
+          <circle cx="32" cy="69" r="3.4" class="s-knock"/>
+          <text x="55" y="18" class="t-m" text-anchor="middle">Options</text>
+          <text x="16" y="51" class="t-m" text-anchor="middle" transform="rotate(-90 16 51)">Parameters</text>`),
+        zones: ["Parameter", "Option A", "Option B", "Option C"],
+        what: "A grid that generates combinations by listing every parameter and every option for each.",
+        how: "List the parameters down the side and their options across. Pick one per row; each path is a candidate solution.",
+        when: "You keep producing variations on the same one idea.",
+        for: "Forcing genuinely new combinations.",
+        not: "Problems with a single correct answer.",
+        example: "A cafe owner lists four parameters — location, opening hours, menu, service style — with four options each. That is 256 combinations. Most are absurd, but 'railway arch, 5am start, three dishes, counter service' is one nobody in the city was running, and it became the business.",
+        questions: [
+          "What are the three or four real parameters of the problem you are stuck on?",
+          "List four options for each — including one that sounds ridiculous.",
+          "Which combination have you never once considered, and why not?"
+        ]
+      },
+      {
+        id: "sunk-cost-trap",
+        name: "The Sunk Cost Trap",
+        origin: "Behavioural economics",
+        readMinutes: 2,
+        tags: ["bias", "choice", "risk"],
+        fidelity: "canonical",
+        svg: svgWrap("The Sunk Cost Trap",
+          "A shaded area of money already spent up to a decision point, from which one path continues to spend and another stops flat.", `
+          <path d="M 14 80 L 50 40 L 50 80 Z" class="s-fill"/>
+          <line x1="14" y1="80" x2="92" y2="80" class="s-line"/>
+          <path d="M 14 80 L 50 40" class="s-line"/>
+          <line x1="50" y1="28" x2="50" y2="80" class="s-dash"/>
+          <path d="M 50 40 L 86 22" class="s-line"/>
+          <path d="M 50 40 L 86 40" class="s-dash"/>
+          <text x="31" y="72" class="t-m t-xs2" text-anchor="middle">Already spent</text>
+          <text x="50" y="22" class="t-m t-a" text-anchor="middle">Decide here</text>
+          <text x="90" y="18" class="t-m" text-anchor="end">Continue</text>
+          <text x="90" y="47" class="t-m" text-anchor="end">Stop</text>`),
+        zones: ["Already spent — ignore", "Cost from here", "Value from here"],
+        what: "Money and time already gone should carry no weight in the next decision, though they always do.",
+        how: "Ask what you would choose if you were arriving fresh today, owning none of the history.",
+        when: "You catch yourself saying you have come too far to stop.",
+        for: "Killing projects that should have died.",
+        not: "Commitments where quitting itself carries a real, separate cost.",
+        example: "A publisher is 14 months and £300,000 into a platform nobody has asked for. The debate is always about the £300,000. Asked instead what they would spend the next £100,000 on if the platform did not exist, nobody names the platform. They stop that quarter.",
+        questions: [
+          "What are you continuing mainly because of what it has already cost?",
+          "If it landed on your desk today, brand new, would you start it?",
+          "What is the honest cost of the next six months, ignoring every month behind you?"
+        ]
+      },
+      {
+        id: "ooda-loop",
+        name: "The OODA Loop",
+        origin: "John Boyd",
+        readMinutes: 2,
+        tags: ["decision", "speed", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The OODA Loop",
+          "Four stages arranged in a cycle — observe, orient, decide and act — with arrows showing the loop repeating.", `
+          <circle cx="50" cy="20" r="12" class="s-line"/>
+          <circle cx="80" cy="50" r="12" class="s-line"/>
+          <circle cx="50" cy="80" r="12" class="s-line"/>
+          <circle cx="20" cy="50" r="12" class="s-line"/>
+          <text x="50" y="21.5" class="t-m t-xs2" text-anchor="middle">Observe</text>
+          <text x="80" y="51.5" class="t-m t-xs2" text-anchor="middle">Orient</text>
+          <text x="50" y="81.5" class="t-m t-xs2" text-anchor="middle">Decide</text>
+          <text x="20" y="51.5" class="t-m t-xs2" text-anchor="middle">Act</text>
+          <path d="M 61 26 A 26 26 0 0 1 74 39" class="s-line"/>
+          <polygon points="76,43 70,40 75,36" class="s-dot"/>
+          <path d="M 74 61 A 26 26 0 0 1 61 74" class="s-line"/>
+          <polygon points="57,76 60,70 64,75" class="s-dot"/>
+          <path d="M 39 74 A 26 26 0 0 1 26 61" class="s-line"/>
+          <polygon points="24,57 30,60 25,64" class="s-dot"/>
+          <path d="M 26 39 A 26 26 0 0 1 39 26" class="s-line"/>
+          <polygon points="43,24 40,30 36,25" class="s-dot"/>`),
+        zones: ["Observe", "Orient", "Decide", "Act"],
+        what: "A four-stage cycle: whoever completes it faster controls the situation.",
+        how: "Observe what is happening, orient it against what you know, decide, act — then loop immediately on the result.",
+        when: "The situation is changing faster than your planning cycle.",
+        for: "Competing under time pressure and incomplete information.",
+        not: "Slow, irreversible decisions that reward deliberation.",
+        example: "Two rival shops react to a supply shortage. One convenes a Monday committee and posts a policy in three weeks. The other reprices daily from what sold yesterday. By the time the policy lands, the second shop has been round the loop twenty times and holds the customers.",
+        questions: [
+          "How long does one full loop take you on a decision that repeats weekly?",
+          "Which of the four stages eats most of that time?",
+          "Where are you orienting on information that is already out of date?"
+        ]
+      }
+    ]
+  },
+
+  "understand-myself": {
+    title: "How to Understand Myself Better",
+    short: "Understand Myself",
+    axis: "Me + Thinking",
+    subtitle: "Reflective models covering psychology, motivation and self-awareness.",
+    models: [
+      {
+        id: "personal-performance",
+        name: "The Personal Performance Model",
+        origin: "Chronobiology / energy tracking",
+        readMinutes: 2,
+        tags: ["energy", "routine", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Personal Performance Model",
+          "A curve of energy plotted against time of day, with the daily peak marked.", `
+          <line x1="14" y1="80" x2="90" y2="80" class="s-line"/>
+          <line x1="14" y1="18" x2="14" y2="80" class="s-line"/>
+          <path d="M 14 70 Q 32 22 50 58 T 88 30" class="s-line"/>
+          <text x="52" y="92" class="t-m" text-anchor="middle">Time of day</text>
+          <text x="7" y="49" class="t-m" text-anchor="middle" transform="rotate(-90 7 49)">Energy</text>
+          <circle cx="31" cy="35" r="2.5" class="s-accent-f"/>
+          <text x="31" y="28" class="t-m t-a" text-anchor="middle">Peak</text>`),
+        zones: ["Peak hours", "Trough hours"],
+        what: "A chart of your own energy and output across the day.",
+        how: "Rate your energy hourly for two weeks. Plot the average. Then move your hardest work to the peak.",
+        when: "When your routine feels wrong but you cannot say why.",
+        for: "Scheduling deep work.",
+        not: "Evaluating a team's output.",
+        example: "A writer assumed she was an evening person because that is when she felt like writing. Two weeks of hourly scores said otherwise: her real peak was 7am to 10am, and the evening feeling was relief, not capacity. She moved drafting to the morning and left email for the 3pm trough.",
+        questions: [
+          "At what hour yesterday did you do your sharpest thinking?",
+          "What is currently occupying that hour on a normal day?",
+          "Which task are you doing during your worst hour that deserves better?"
+        ]
+      },
+      {
+        id: "crossroads-model",
+        name: "The Crossroads Model",
+        origin: "Krogerus & Tschäppeler",
+        readMinutes: 2,
+        tags: ["direction", "life", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Crossroads Model",
+          "A road arrives from below at a junction marked You, from which three onward paths diverge.", `
+          <path d="M 50 92 L 50 52" class="s-line-b"/>
+          <path d="M 50 52 L 22 26 M 50 52 L 78 26 M 50 52 L 84 52" class="s-line-b"/>
+          <circle cx="50" cy="52" r="4.5" class="s-knock"/>
+          <text x="22" y="20" class="t-m" text-anchor="middle">Path A</text>
+          <text x="78" y="20" class="t-m" text-anchor="middle">Path B</text>
+          <text x="82" y="62" class="t-m" text-anchor="middle">Path C</text>
+          <text x="38" y="58" class="t-b t-sm" text-anchor="end">You</text>
+          <text x="50" y="99" class="t-m" text-anchor="middle">Where I come from</text>`),
+        zones: ["Where I came from", "Path A", "Path B", "Path C"],
+        what: "A map of where you have come from and which ways lead on.",
+        how: "Draw the road behind you, mark where you stand, then draw every path you can actually take — including staying still.",
+        when: "At a genuine pivot, not a routine choice.",
+        for: "Life planning.",
+        not: "Daily micro-decisions.",
+        example: "A doctor at 38 draws the road behind: medical school, two specialisms, a fellowship abroad. Three paths lead on — consultant post, research, or public health policy. Drawing it makes the pattern visible: every previous turn was chosen for him by whoever offered first. He applies for the policy role, the only one nobody offered.",
+        questions: [
+          "Draw the road behind you. Who chose each of the last three turns — you or someone else?",
+          "How many paths lead on from where you stand? Name the one you have not admitted to yourself.",
+          "Which path would you take if nobody you know would ever hear about it?"
+        ]
+      },
+      {
+        id: "johari-window",
+        name: "The Johari Window",
+        origin: "Joseph Luft & Harrington Ingham",
+        readMinutes: 2,
+        tags: ["feedback", "self-awareness", "others"],
+        fidelity: "canonical",
+        svg: svgWrap("The Johari Window",
+          "A two-by-two crossing what is known and not known to self against what is known and not known to others, giving the open, blind, hidden and unknown panes.", `
+          <rect x="20" y="20" width="30" height="30" class="s-box"/>
+          <rect x="50" y="20" width="30" height="30" class="s-box s-fill"/>
+          <rect x="20" y="50" width="30" height="30" class="s-box s-fill"/>
+          <rect x="50" y="50" width="30" height="30" class="s-box s-fill-2"/>
+          <text x="35" y="38" class="t-b t-sm" text-anchor="middle">OPEN</text>
+          <text x="65" y="38" class="t-b t-sm" text-anchor="middle">BLIND</text>
+          <text x="35" y="68" class="t-b t-sm" text-anchor="middle">HIDDEN</text>
+          <text x="65" y="68" class="t-b t-sm" text-anchor="middle">UNKNOWN</text>
+          <text x="35" y="11" class="t-m t-xs2" data-ml="ko" text-anchor="middle">Known to</text>
+          <text x="35" y="16" class="t-m t-xs2" data-ml="ko" text-anchor="middle">others</text>
+          <text x="65" y="11" class="t-m t-xs2" data-ml="no" text-anchor="middle">Not known to</text>
+          <text x="65" y="16" class="t-m t-xs2" data-ml="no" text-anchor="middle">others</text>
+          <text x="13" y="31" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 31)">Known to self</text>
+          <text x="13" y="69" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 69)">Not known to self</text>`),
+        zones: ["Open", "Blind", "Hidden", "Unknown"],
+        what: "A grid of what you know about yourself against what others know about you.",
+        how: "Shrink the blind pane by asking for feedback; shrink the hidden pane by disclosing more.",
+        when: "When communication with someone keeps misfiring.",
+        for: "Building trust quickly.",
+        not: "Solo reflection — it needs other people's input to work at all.",
+        example: "A new manager asks three reports what he does that he probably does not notice. All three say he answers his own questions in meetings after about two seconds. He had no idea; it was squarely in the blind pane. He starts counting to five, and his reports start finishing sentences.",
+        questions: [
+          "What do you know about yourself at work that your colleagues do not? Why keep it hidden?",
+          "Who would tell you the truth if you asked what you do not see about yourself?",
+          "Ask them this week. What did they say that surprised you?"
+        ]
+      },
+      {
+        id: "cognitive-dissonance",
+        name: "Cognitive Dissonance",
+        origin: "Leon Festinger",
+        readMinutes: 2,
+        tags: ["psychology", "habits", "bias"],
+        fidelity: "canonical",
+        svg: svgWrap("Cognitive Dissonance",
+          "Two overlapping circles, action and belief, with the clash between them marked at the intersection.", `
+          <circle cx="36" cy="48" r="20" class="s-line"/>
+          <circle cx="64" cy="48" r="20" class="s-dash"/>
+          <text x="26" y="50" class="t-b t-sm" text-anchor="middle">ACTION</text>
+          <text x="74" y="50" class="t-b t-sm" text-anchor="middle">BELIEF</text>
+          <path d="M 46 41 L 54 55 M 54 41 L 46 55" class="s-accent"/>
+          <text x="50" y="80" class="t-m t-a" text-anchor="middle">Dissonance</text>`),
+        zones: ["What I do", "What I believe"],
+        what: "The discomfort of holding a belief and acting against it — and the excuses that follow.",
+        how: "Catch the justification. Then change the action rather than the belief, which is the harder direction.",
+        when: "When you notice yourself explaining why this time is different.",
+        for: "Breaking a habit you have already decided is wrong.",
+        not: "Analysing data or other people's motives.",
+        example: "Someone who describes themselves as environmentally serious flies twice a month for work. The dissonance resolves itself quietly: the trips are essential, the airline offsets carbon, one person changes nothing. Naming the excuse out loud makes it thin enough to act on — he moves four of the twelve annual trips to video calls.",
+        questions: [
+          "Name a value you hold that your calendar or bank statement does not reflect.",
+          "What is the exact sentence you use to explain that gap away?",
+          "Which is easier to change honestly — the action, or the stated value?"
+        ]
+      },
+{
+        id: "uffe-elbaek-model",
+        name: "The Uffe Elbæk Model",
+        origin: "Uffe Elbæk / Kaospilot",
+        readMinutes: 2,
+        tags: ["identity", "self-awareness", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Uffe Elbæk Model",
+          "Four axes radiating from a centre — professional, public, private and personal — with a shape showing how far you extend along each.", `
+          <line x1="50" y1="50" x2="50" y2="22" class="s-dash"/>
+          <line x1="50" y1="50" x2="78" y2="50" class="s-dash"/>
+          <line x1="50" y1="50" x2="50" y2="78" class="s-dash"/>
+          <line x1="50" y1="50" x2="22" y2="50" class="s-dash"/>
+          <polygon points="50,28 72,50 50,66 34,50" class="s-line s-fill"/>
+          <circle cx="50" cy="50" r="2" class="s-dot"/>
+          <text x="50" y="16" class="t-m t-xs2" text-anchor="middle">Professional</text>
+          <text x="86" y="51" class="t-m t-xs2" text-anchor="middle">Public</text>
+          <text x="50" y="88" class="t-m t-xs2" text-anchor="middle">Private</text>
+          <text x="14" y="51" class="t-m t-xs2" text-anchor="middle">Personal</text>`),
+        zones: ["Professional", "Public", "Private", "Personal"],
+        what: "A map of the four selves you carry — professional, public, private and personal.",
+        how: "Plot how much of your week each self actually gets, then compare that against how much you want it to have.",
+        when: "Life feels lopsided but you cannot name which part is starved.",
+        for: "Seeing an imbalance before it becomes a crisis.",
+        not: "Deciding a specific career move — it diagnoses, it does not choose.",
+        example: "A consultant plots the four and finds the professional axis running at nine, the public at seven from conference work, and the private at two. Nothing was wrong at work, which is why the problem stayed invisible for three years. He stops speaking at conferences rather than changing job.",
+        questions: [
+          "Score each of the four out of ten for the past month. Which is lowest?",
+          "Which one has quietly absorbed the hours the lowest one used to have?",
+          "What would a single week look like if the lowest scored a seven?"
+        ]
+      },
+      {
+        id: "making-of-model",
+        name: "The Making-Of Model",
+        origin: "Krogerus & Tschäppeler",
+        readMinutes: 2,
+        tags: ["history", "self-awareness", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Making-Of Model",
+          "A timeline of four turning points, with a dashed line rising above them to show what each one built.", `
+          <line x1="10" y1="72" x2="88" y2="72" class="s-line"/>
+          <polygon points="94,72 88,69 88,75" class="s-dot"/>
+          <path d="M 22 66 L 40 54 L 58 46 L 76 30" class="s-dash"/>
+          <line x1="22" y1="72" x2="22" y2="66" class="s-dash"/>
+          <line x1="40" y1="72" x2="40" y2="54" class="s-dash"/>
+          <line x1="58" y1="72" x2="58" y2="46" class="s-dash"/>
+          <line x1="76" y1="72" x2="76" y2="30" class="s-dash"/>
+          <circle cx="22" cy="72" r="2.5" class="s-dot"/>
+          <circle cx="40" cy="72" r="2.5" class="s-dot"/>
+          <circle cx="58" cy="72" r="2.5" class="s-dot"/>
+          <circle cx="76" cy="72" r="2.5" class="s-dot"/>
+          <text x="22" y="82" class="t-m t-xs2" text-anchor="middle">Event 1</text>
+          <text x="40" y="82" class="t-m t-xs2" text-anchor="middle">Event 2</text>
+          <text x="58" y="82" class="t-m t-xs2" text-anchor="middle">Event 3</text>
+          <text x="76" y="82" class="t-m t-xs2" text-anchor="middle">Event 4</text>
+          <text x="50" y="93" class="t-m" text-anchor="middle">Turning points</text>
+          <text x="50" y="18" class="t-m t-xs2" text-anchor="middle">Who you became</text>`),
+        zones: ["Turning point", "What it gave me", "What it cost me"],
+        what: "The handful of events that actually made you who you are, laid out in order.",
+        how: "Name four or five turning points. For each, write what it gave you and what it took.",
+        when: "Before you explain yourself to anyone — an interview, a pitch, a decision.",
+        for: "Understanding the pattern you keep repeating.",
+        not: "Predicting what you will do next.",
+        example: "A product manager lists four: a father who was made redundant twice, a failed band, an accidental first job in support, a manager who let her run a launch at 26. The pattern is unmistakable once written down — she has always chosen security over ambition, and calls it pragmatism.",
+        questions: [
+          "Name the four events without which you would be doing something else today.",
+          "For each, what did it give you and what did it cost?",
+          "What pattern runs through all four that you have never said out loud?"
+        ]
+      },
+      {
+        id: "superficial-knowledge-model",
+        name: "The Superficial Knowledge Model",
+        origin: "Krogerus & Tschäppeler",
+        readMinutes: 2,
+        tags: ["knowledge", "bias", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Superficial Knowledge Model",
+          "A wide shallow band of what you can talk about sitting above a narrow deep column of what you actually know.", `
+          <rect x="12" y="26" width="76" height="14" class="s-box s-fill"/>
+          <rect x="38" y="40" width="24" height="38" class="s-box"/>
+          <text x="50" y="34.5" class="t-m t-xs2" text-anchor="middle">What you can discuss</text>
+          <text x="50" y="56" class="t-m t-xs2" data-ml="tk" text-anchor="middle">What you</text>
+          <text x="50" y="61" class="t-m t-xs2" data-ml="tk" text-anchor="middle">truly know</text>
+          <text x="50" y="90" class="t-m" text-anchor="middle">Depth</text>`),
+        zones: ["I can discuss it", "I truly know it", "I only think I know it"],
+        what: "The gap between the breadth you can hold a conversation about and the narrow column you actually understand.",
+        how: "For any topic, ask whether you could still answer after three follow-up questions. If not, it is breadth.",
+        when: "Before speaking with authority on anything.",
+        for: "Knowing where your real expertise stops.",
+        not: "Dismissing breadth — it is genuinely useful, just not the same thing.",
+        example: "An executive can discuss machine learning fluently in any meeting. Asked by an engineer why their model's precision fell while recall rose, he has nothing — the column ends about two questions down. He starts saying 'I don't know, explain it to me', and the engineers start telling him things.",
+        questions: [
+          "Name a topic you discuss confidently. How many follow-up questions until you run out?",
+          "Where has breadth been mistaken for expertise in your work?",
+          "What is the one subject where your column genuinely goes deep?"
+        ]
+      },
+      {
+        id: "unimaginable-model",
+        name: "The Unimaginable Model",
+        origin: "Krogerus & Tschäppeler / Nassim Taleb",
+        readMinutes: 2,
+        tags: ["risk", "uncertainty", "bias"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Unimaginable Model",
+          "A bell curve of expected outcomes with the far tail marked, where the events nobody planned for sit.", `
+          <path d="M 10 78 C 26 78 32 22 50 22 C 68 22 74 78 90 78" class="s-line"/>
+          <line x1="10" y1="78" x2="94" y2="78" class="s-dash"/>
+          <line x1="78" y1="78" x2="78" y2="64" class="s-dash"/>
+          <path d="M 78 78 L 94 78" class="s-accent" stroke-width="2.5"/>
+          <text x="50" y="52" class="t-m t-xs2" text-anchor="middle">What you expect</text>
+          <text x="44" y="90" class="t-m t-xs2" text-anchor="middle">Plans cover this</text>
+          <text x="86" y="90" class="t-m t-a" text-anchor="middle">Tail</text>`),
+        zones: ["Planned for", "Imagined but ignored", "Never considered"],
+        what: "Most planning covers the fat middle of the curve, while the damage lives in the tail nobody pictured.",
+        how: "Ask what would have to be true for this plan to fail completely, then price that, not the average case.",
+        when: "Any plan whose failure you could not absorb.",
+        for: "Building slack against events you cannot forecast.",
+        not: "Everyday decisions where the worst case is merely annoying.",
+        example: "A logistics firm modelled fuel prices, strikes and demand swings across a decade of data. What actually stopped them was a single container ship wedged sideways in a canal for six days — an event in nobody's spreadsheet. Their competitor held two weeks of buffer stock for no modelled reason and kept trading.",
+        questions: [
+          "What single event would end the thing you are working on?",
+          "Why is it not in your plan — because it is unlikely, or because you never pictured it?",
+          "What buffer would let you survive it rather than predict it?"
+        ]
+      },
+      {
+        id: "dunning-kruger",
+        name: "The Dunning-Kruger Curve",
+        // Dunning & Kruger (1999) plotted perceived against actual ability as two roughly
+        // straight lines. The peak-valley-plateau curve everyone draws is a later
+        // popularisation, so this diagram is interpreted, not canonical.
+        origin: "David Dunning & Justin Kruger",
+        readMinutes: 2,
+        tags: ["bias", "learning", "psychology"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Dunning-Kruger Curve",
+          "Confidence plotted against competence: a sharp early peak, a collapse into a valley, then a slow climb to a realistic plateau.", `
+          <line x1="14" y1="82" x2="92" y2="82" class="s-line"/>
+          <line x1="14" y1="12" x2="14" y2="82" class="s-line"/>
+          <path d="M 14 74 C 20 22 27 18 33 26 C 41 38 45 66 56 68 C 70 70 80 44 90 34" class="s-line"/>
+          <circle cx="30" cy="20" r="2.5" class="s-accent-f"/>
+          <text x="36" y="21" class="t-m t-xs2">Peak of confidence</text>
+          <text x="58" y="76" class="t-m t-xs2" text-anchor="middle">Valley</text>
+          <text x="53" y="94" class="t-m" text-anchor="middle">Competence</text>
+          <text x="7" y="47" class="t-m" text-anchor="middle" transform="rotate(-90 7 47)">Confidence</text>`),
+        zones: ["Early confidence", "The valley", "Realistic plateau"],
+        what: "Confidence peaks early, when you know just enough to misjudge how much there is.",
+        how: "Locate yourself on the curve honestly. Early certainty is a symptom, not evidence.",
+        when: "You feel sure about something you learned recently.",
+        for: "Calibrating how much to trust your own judgement.",
+        not: "Dismissing genuine expertise — the plateau is real.",
+        example: "Three weeks into a statistics course, an analyst redesigns the company's entire reporting on the strength of one technique. Six months later he cannot look at it. Two years on he rebuilds it properly and describes the result as 'probably about right, with these caveats' — which is what competence sounds like.",
+        questions: [
+          "What have you learned recently that you now feel certain about?",
+          "Who knows far more than you about it, and have you asked them?",
+          "Where in your work are you on the plateau — and how does that certainty feel different?"
+        ]
+      },
+      {
+        id: "conscious-competence",
+        name: "The Competence Ladder",
+        origin: "Noel Burch",
+        readMinutes: 2,
+        tags: ["learning", "skills", "solo"],
+        fidelity: "canonical",
+        svg: svgWrap("The Competence Ladder",
+          "Four rising steps from unconscious incompetence through conscious incompetence and conscious competence to unconscious competence.", `
+          <path d="M 12 84 H 32 V 68 H 52 V 52 H 72 V 36 H 92" class="s-line"/>
+          <text x="22" y="76" class="t-m t-xs2" data-ml="s1" text-anchor="middle">Unconscious</text>
+          <text x="22" y="81" class="t-m t-xs2" data-ml="s1" text-anchor="middle">incompetence</text>
+          <text x="42" y="60" class="t-m t-xs2" data-ml="s2" text-anchor="middle">Conscious</text>
+          <text x="42" y="65" class="t-m t-xs2" data-ml="s2" text-anchor="middle">incompetence</text>
+          <text x="62" y="44" class="t-m t-xs2" data-ml="s3" text-anchor="middle">Conscious</text>
+          <text x="62" y="49" class="t-m t-xs2" data-ml="s3" text-anchor="middle">competence</text>
+          <text x="82" y="28" class="t-m t-xs2" data-ml="s4" text-anchor="middle">Unconscious</text>
+          <text x="82" y="33" class="t-m t-xs2" data-ml="s4" text-anchor="middle">competence</text>`),
+        zones: ["Unconscious incompetence", "Conscious incompetence", "Conscious competence", "Unconscious competence"],
+        what: "Four stages of learning anything, starting with not knowing that you cannot do it.",
+        how: "Place the skill on a rung. The jump from step one to step two feels like getting worse; it is not.",
+        when: "Learning something hard, or teaching someone who has just got discouraged.",
+        for: "Surviving the stage where you first see how bad you are.",
+        not: "Skills you will only ever use once.",
+        example: "A manager thinks she is a good listener until a 360 review says otherwise — step one to step two in an afternoon, and it stings. Six months of deliberately not interrupting is exhausting and obvious to everyone. A year later she does it without noticing, which is the only rung that ever looks effortless.",
+        questions: [
+          "Name a skill where you are on step two — you can see the gap and it is uncomfortable.",
+          "What are you still on step one about, and who could tell you?",
+          "Which of your step-four skills could you no longer explain to a beginner?"
+        ]
+      },
+      {
+        id: "ladder-of-inference",
+        name: "The Ladder of Inference",
+        origin: "Chris Argyris",
+        readMinutes: 3,
+        tags: ["bias", "reasoning", "feedback"],
+        fidelity: "canonical",
+        svg: svgWrap("The Ladder of Inference",
+          "A ladder climbing from observable data at the bottom through selection, interpretation, assumption and conclusion to action at the top.", `
+          <line x1="20" y1="14" x2="20" y2="88" class="s-line"/>
+          <line x1="30" y1="14" x2="30" y2="88" class="s-line"/>
+          <line x1="20" y1="20" x2="30" y2="20" class="s-line"/>
+          <line x1="20" y1="34" x2="30" y2="34" class="s-line"/>
+          <line x1="20" y1="48" x2="30" y2="48" class="s-line"/>
+          <line x1="20" y1="62" x2="30" y2="62" class="s-line"/>
+          <line x1="20" y1="76" x2="30" y2="76" class="s-line"/>
+          <polygon points="25,8 21,14 29,14" class="s-dot"/>
+          <text x="36" y="21.5" class="t-m">I act</text>
+          <text x="36" y="35.5" class="t-m">I believe</text>
+          <text x="36" y="49.5" class="t-m">I conclude</text>
+          <text x="36" y="63.5" class="t-m">I assume</text>
+          <text x="36" y="77.5" class="t-m">I select data</text>`),
+        zones: ["Observable data", "What I selected", "What I assumed", "What I concluded"],
+        what: "The invisible climb from raw data to action, where each rung quietly discards evidence.",
+        how: "When you disagree with someone, walk back down: what did they see that you did not select?",
+        when: "Two reasonable people reach opposite conclusions from the same facts.",
+        for: "Unpicking an argument that has stopped being about facts.",
+        not: "Decisions that must be made in seconds.",
+        example: "A manager sees a report leave at five every day and concludes he is not committed. Walking back down: the data selected was the leaving time, not the commits pushed at 6am. The assumption was that hours equal commitment. The report has a nursery pickup and out-ships the team.",
+        questions: [
+          "Name a judgement you have made about a colleague this month. What data did you actually observe?",
+          "What did you leave out that someone else might have selected instead?",
+          "Which rung did you jump straight past?"
+        ]
+      },
+      {
+        id: "comfort-zone-model",
+        name: "The Comfort Zone Model",
+        // Bardwick named the comfort zone; the concentric comfort/stretch/panic rings
+        // come out of later experiential-training practice, not from her book.
+        origin: "Judith Bardwick",
+        readMinutes: 2,
+        tags: ["growth", "risk", "solo"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Comfort Zone Model",
+          "Three concentric rings: a shaded comfort zone at the centre, a stretch zone around it, and a panic zone outside.", `
+          <circle cx="50" cy="54" r="34" class="s-line"/>
+          <circle cx="50" cy="54" r="23" class="s-line"/>
+          <circle cx="50" cy="54" r="12" class="s-line s-fill"/>
+          <text x="50" y="55.5" class="t-m t-xs2" text-anchor="middle">Comfort</text>
+          <text x="50" y="38" class="t-m t-xs2" text-anchor="middle">Stretch</text>
+          <text x="50" y="27" class="t-m t-xs2" text-anchor="middle">Panic</text>`),
+        zones: ["Comfort", "Stretch", "Panic"],
+        what: "Growth happens in the ring just outside comfort and just inside panic.",
+        how: "Size the next challenge so it is uncomfortable but survivable. Panic teaches nothing.",
+        when: "Choosing what to take on next, or what to hand someone.",
+        for: "Calibrating difficulty deliberately.",
+        not: "Situations where failure is genuinely dangerous.",
+        example: "A team lead gives a nervous engineer the whole quarterly board presentation. He freezes, and avoids presenting for a year — straight into panic. The stretch version was ten minutes on one slide with the lead in the room, which is what they should have done and what eventually worked.",
+        questions: [
+          "What are you avoiding because it sits in panic rather than stretch?",
+          "How could you shrink it until it is merely uncomfortable?",
+          "What has been in your comfort ring so long that it no longer teaches you anything?"
+        ]
+      }
+    ]
+  },
+
+  "improve-others": {
+    title: "How to Improve Others",
+    short: "Improve Others",
+    axis: "Others + Doing",
+    subtitle: "Leadership and management models for guiding teams and shaping results.",
+    models: [
+      {
+        id: "project-management-triangle",
+        name: "The Project Management Triangle",
+        origin: "Classic project management",
+        readMinutes: 2,
+        tags: ["projects", "constraints", "team"],
+        fidelity: "canonical",
+        svg: svgWrap("The Project Management Triangle",
+          "A triangle with fast, good and cheap at the corners and the instruction to pick two in the centre.", `
+          <polygon points="50,20 16,76 84,76" class="s-line"/>
+          <circle cx="50" cy="20" r="3" class="s-dot"/>
+          <circle cx="16" cy="76" r="3" class="s-dot"/>
+          <circle cx="84" cy="76" r="3" class="s-dot"/>
+          <text x="50" y="13" class="t-b t-sm" text-anchor="middle">FAST</text>
+          <text x="16" y="87" class="t-b t-sm" text-anchor="middle">GOOD</text>
+          <text x="84" y="87" class="t-b t-sm" text-anchor="middle">CHEAP</text>
+          <text x="50" y="58" class="t-m" text-anchor="middle">Pick two</text>`),
+        zones: ["Fast", "Good", "Cheap"],
+        what: "Fast, good, cheap — you may have two.",
+        how: "Make the stakeholder choose which corner they are giving up, in writing, before work starts.",
+        when: "Setting scope on anything with a deadline and a budget.",
+        for: "Managing constraints and expectations at once.",
+        not: "Situations with genuinely elastic resources.",
+        example: "An agency is asked for a full rebrand in six weeks at the price of a logo refresh. Rather than argue, the account lead puts the triangle on screen and asks which corner goes. The client picks scope: one wordmark and a colour system now, the full identity in the autumn. The project ships on time because the trade was made openly at the start.",
+        questions: [
+          "On your current project, which corner has nobody actually agreed to give up?",
+          "If forced to sacrifice one right now, which would your client pick — and which would your team?",
+          "What happens in month three if that conversation never takes place?"
+        ]
+      },
+      {
+        id: "expectations-model",
+        name: "The Expectations Model",
+        origin: "Service quality research",
+        readMinutes: 2,
+        tags: ["clients", "delivery", "trust"],
+        fidelity: "interpreted",
+        svg: svgWrap("The Expectations Model",
+          "A flat promise line with the actual delivery curve rising above it, and the positive gap marked at the end.", `
+          <line x1="18" y1="68" x2="82" y2="68" class="s-dash"/>
+          <path d="M 18 68 Q 50 28 82 56" class="s-line"/>
+          <circle cx="82" cy="56" r="2.5" class="s-dot"/>
+          <text x="18" y="80" class="t-m" text-anchor="middle">Promise</text>
+          <text x="76" y="80" class="t-m" text-anchor="middle">Delivery</text>
+          <line x1="82" y1="56" x2="82" y2="68" class="s-accent"/>
+          <text x="88" y="64" class="t-m t-a" text-anchor="middle">Gap</text>`),
+        zones: ["Promised", "Delivered"],
+        what: "Satisfaction is delivery minus expectation, not delivery alone.",
+        how: "Set the expectation deliberately below what you are confident of, then beat it. Never the reverse.",
+        when: "Any client relationship or performance conversation.",
+        for: "Customer satisfaction and credibility.",
+        not: "Setting your own internal targets — sandbagging yourself is a different problem.",
+        example: "Two contractors do identical kitchen work in three weeks. The first promised two weeks and ran a week late; the client left a two-star review. The second promised four weeks and finished a week early; the client recommended him to a neighbour. Same work, same duration, opposite outcomes.",
+        questions: [
+          "What have you promised this week that you are not certain you can deliver?",
+          "What buffer would make it safe — and what stopped you asking for it?",
+          "Where are you currently over-delivering without anyone noticing, because you never set the expectation?"
+        ]
+      },
+      {
+        id: "hersey-blanchard-model",
+        name: "The Hersey-Blanchard Model",
+        origin: "Paul Hersey & Ken Blanchard",
+        readMinutes: 3,
+        tags: ["leadership", "coaching", "team"],
+        fidelity: "canonical",
+        svg: svgWrap("The Hersey-Blanchard Model",
+          "A two-by-two of task behaviour against supportive behaviour, giving the directing, coaching, supporting and delegating styles, with a curve tracking the follower's growing maturity from directing round to delegating.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="38" class="t-b t-sm" text-anchor="middle">SUPPORT</text>
+          <text x="65" y="38" class="t-b t-sm" text-anchor="middle">COACH</text>
+          <text x="35" y="68" class="t-b t-sm" text-anchor="middle">DELEGATE</text>
+          <text x="65" y="68" class="t-b t-sm" text-anchor="middle">DIRECT</text>
+          <path d="M 68 74 C 78 72 78 28 65 27 C 30 26 24 68 33 73" class="s-accent" stroke-dasharray="2 2"/>
+          <polygon points="30,74 36,71 35,77" class="s-accent-f"/>
+          <text x="35" y="90" class="t-m" text-anchor="middle">Low task</text>
+          <text x="65" y="90" class="t-m" text-anchor="middle">High task</text>
+          <text x="13" y="31" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 31)">High support</text>
+          <text x="13" y="69" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 69)">Low support</text>`),
+        zones: ["Direct", "Coach", "Support", "Delegate"],
+        what: "Situational leadership: the right style depends on how ready the person is, not on who you are.",
+        how: "Judge the person's competence and confidence for this specific task, then direct, coach, support or delegate accordingly.",
+        when: "Managing people at different stages on different tasks.",
+        for: "Getting more out of a mixed-ability team.",
+        not: "A fixed personal leadership style applied to everyone.",
+        example: "A lead has two engineers. The graduate is enthusiastic and lost, so gets explicit instructions and daily check-ins. The senior is capable but demoralised after a cancelled project, so gets no instruction at all — just support and the next decision handed to her outright. Swapping the two treatments would have insulted one and sunk the other.",
+        questions: [
+          "Pick one person you manage. For their current main task, are they competent, confident, both, or neither?",
+          "Which of the four styles are you actually using with them?",
+          "Who on your team are you still directing long after they stopped needing it?"
+        ]
+      },
+{
+        id: "team-model",
+        name: "The Team Model",
+        origin: "Bruce Tuckman",
+        readMinutes: 2,
+        tags: ["team", "leadership", "projects"],
+        fidelity: "canonical",
+        svg: svgWrap("The Team Model",
+          "Team performance over four stages — forming, storming, norming and performing — dipping through storming before climbing.", `
+          <line x1="12" y1="80" x2="94" y2="80" class="s-line"/>
+          <line x1="12" y1="14" x2="12" y2="80" class="s-line"/>
+          <line x1="30" y1="80" x2="30" y2="20" class="s-dash"/>
+          <line x1="50" y1="80" x2="50" y2="20" class="s-dash"/>
+          <line x1="70" y1="80" x2="70" y2="20" class="s-dash"/>
+          <path d="M 12 62 C 22 60 26 74 38 72 C 50 70 54 40 68 34 C 80 29 86 26 92 24" class="s-line"/>
+          <text x="21" y="88" class="t-m t-xs2" text-anchor="middle">Forming</text>
+          <text x="40" y="88" class="t-m t-xs2" text-anchor="middle">Storming</text>
+          <text x="59" y="88" class="t-m t-xs2" text-anchor="middle">Norming</text>
+          <text x="83" y="88" class="t-m t-xs2" text-anchor="middle">Performing</text>
+          <text x="6" y="47" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 6 47)">Performance</text>`),
+        zones: ["Forming", "Storming", "Norming", "Performing"],
+        what: "Every new team dips through conflict before it gets good. The dip is a stage, not a failure.",
+        how: "Name the stage out loud. In storming, surface the disagreement rather than smoothing it.",
+        when: "A team has just formed, or has just started arguing.",
+        for: "Holding your nerve through the difficult middle.",
+        not: "Long-standing teams that have stopped changing.",
+        example: "Six weeks into a merged team, two leads are briefing against each other and the director considers replacing both. Instead she names it as storming and runs one session on who decides what. The arguing stops within a fortnight, because it was never about the people.",
+        questions: [
+          "Which stage is your team actually in — and which do you keep telling yourself it is in?",
+          "If it is storming, what is the disagreement nobody will say in the room?",
+          "What did you last do that pushed the team backwards a stage?"
+        ]
+      },
+      {
+        id: "drexler-sibbet-model",
+        name: "The Drexler-Sibbet Model",
+        origin: "Allan Drexler & David Sibbet",
+        readMinutes: 3,
+        tags: ["team", "projects", "leadership"],
+        fidelity: "canonical",
+        svg: svgWrap("The Drexler-Sibbet Model",
+          "Seven numbered stages arranged in a V, descending through the work of creating a team and rising again through sustaining it.", `
+          <path d="M 12 26 L 26 44 L 40 62 L 52 76 L 66 62 L 80 44 L 90 26" class="s-dash"/>
+          <circle cx="12" cy="26" r="6.5" class="s-line s-fill"/>
+          <circle cx="26" cy="44" r="6.5" class="s-line s-fill"/>
+          <circle cx="40" cy="62" r="6.5" class="s-line s-fill"/>
+          <circle cx="52" cy="76" r="6.5" class="s-line s-fill"/>
+          <circle cx="66" cy="62" r="6.5" class="s-line"/>
+          <circle cx="80" cy="44" r="6.5" class="s-line"/>
+          <circle cx="90" cy="26" r="6.5" class="s-line"/>
+          <text x="12" y="28" class="t-b t-xs" text-anchor="middle">1</text>
+          <text x="26" y="46" class="t-b t-xs" text-anchor="middle">2</text>
+          <text x="40" y="64" class="t-b t-xs" text-anchor="middle">3</text>
+          <text x="52" y="78" class="t-b t-xs" text-anchor="middle">4</text>
+          <text x="66" y="64" class="t-b t-xs" text-anchor="middle">5</text>
+          <text x="80" y="46" class="t-b t-xs" text-anchor="middle">6</text>
+          <text x="90" y="28" class="t-b t-xs" text-anchor="middle">7</text>
+          <text x="24" y="12" class="t-m t-xs2" text-anchor="middle">Creating</text>
+          <text x="78" y="12" class="t-m t-xs2" text-anchor="middle">Sustaining</text>`),
+        zones: ["Orientation", "Trust building", "Goal clarification", "Commitment",
+                "Implementation", "High performance", "Renewal"],
+        what: "Seven stages a team descends through to form itself, then climbs to perform.",
+        how: "Diagnose which stage is unresolved. A team stuck at implementation usually failed at commitment.",
+        when: "A team is underperforming and nobody can say why.",
+        for: "Finding the stage you skipped.",
+        not: "One-off groups that will never meet again.",
+        example: "A project team misses three deadlines and the fix keeps being new tooling — an implementation answer. The real gap was stage four: nobody had ever said out loud that two of the six disagreed with the goal. One honest hour at stage four fixed what six weeks of tooling could not.",
+        questions: [
+          "Which of the seven stages did your team never actually complete?",
+          "Where does the team keep getting stuck, and which earlier stage explains it?",
+          "Who joined after the team formed, and which stages did they miss entirely?"
+        ]
+      },
+      {
+        id: "conflict-resolution-model",
+        name: "The Conflict Resolution Model",
+        origin: "Thomas-Kilmann",
+        readMinutes: 3,
+        tags: ["conflict", "negotiation", "team"],
+        fidelity: "canonical",
+        svg: svgWrap("The Conflict Resolution Model",
+          "Assertiveness against cooperativeness, giving compete, collaborate, avoid and accommodate, with compromise at the centre.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="37" class="t-m t-xs2" text-anchor="middle">COMPETE</text>
+          <text x="65" y="37" class="t-m t-xs2" text-anchor="middle">COLLABORATE</text>
+          <text x="35" y="68" class="t-m t-xs2" text-anchor="middle">AVOID</text>
+          <text x="65" y="68" class="t-m t-xs2" text-anchor="middle">ACCOMMODATE</text>
+          <rect x="37" y="45.5" width="26" height="9" class="s-knock-t"/>
+          <text x="50" y="52" class="t-m t-xs2" text-anchor="middle">COMPROMISE</text>
+          <text x="35" y="88" class="t-m t-xs2" text-anchor="middle">Uncooperative</text>
+          <text x="65" y="88" class="t-m t-xs2" text-anchor="middle">Cooperative</text>
+          <text x="13" y="31" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 31)">Assertive</text>
+          <text x="13" y="69" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 69)">Unassertive</text>`),
+        zones: ["Compete", "Collaborate", "Compromise", "Avoid", "Accommodate"],
+        what: "Five ways of handling conflict, set by how assertive and how cooperative you are.",
+        how: "Pick the mode deliberately for the stakes. Most people have one default and use it everywhere.",
+        when: "Before a difficult conversation, not during it.",
+        for: "Choosing a response instead of reacting with your habit.",
+        not: "Conflicts involving genuine misconduct, where accommodating is harmful.",
+        example: "A department head defaults to accommodating and is widely liked. It costs him nothing on catering choices and costs him two headcount at budget time, where the other heads competed. He now picks: accommodate on anything reversible, compete on anything annual.",
+        questions: [
+          "Which of the five is your default, and how do you know?",
+          "Name a recent conflict where your default was the wrong mode.",
+          "What is coming up where you should deliberately compete rather than accommodate?"
+        ]
+      },
+      {
+        id: "raci-matrix",
+        name: "The RACI Matrix",
+        origin: "Responsibility assignment",
+        readMinutes: 2,
+        tags: ["projects", "team", "clarity"],
+        fidelity: "canonical",
+        svg: svgWrap("The RACI Matrix",
+          "A grid of tasks against people, each cell marked R for responsible, A for accountable, C for consulted or I for informed.", `
+          <rect x="18" y="22" width="68" height="48" class="s-box"/>
+          <line x1="35" y1="22" x2="35" y2="70" class="s-line"/>
+          <line x1="52" y1="22" x2="52" y2="70" class="s-line"/>
+          <line x1="69" y1="22" x2="69" y2="70" class="s-line"/>
+          <line x1="18" y1="38" x2="86" y2="38" class="s-line"/>
+          <line x1="18" y1="54" x2="86" y2="54" class="s-line"/>
+          <text x="26.5" y="32" class="t-b t-sm" text-anchor="middle">R</text>
+          <text x="43.5" y="32" class="t-b t-sm" text-anchor="middle">A</text>
+          <text x="60.5" y="32" class="t-b t-sm" text-anchor="middle">C</text>
+          <text x="77.5" y="32" class="t-b t-sm" text-anchor="middle">I</text>
+          <text x="26.5" y="48" class="t-b t-sm" text-anchor="middle">A</text>
+          <text x="43.5" y="48" class="t-b t-sm" text-anchor="middle">R</text>
+          <text x="60.5" y="48" class="t-b t-sm" text-anchor="middle">I</text>
+          <text x="77.5" y="48" class="t-b t-sm" text-anchor="middle">C</text>
+          <text x="26.5" y="64" class="t-b t-sm" text-anchor="middle">C</text>
+          <text x="43.5" y="64" class="t-b t-sm" text-anchor="middle">I</text>
+          <text x="60.5" y="64" class="t-b t-sm" text-anchor="middle">R</text>
+          <text x="77.5" y="64" class="t-b t-sm" text-anchor="middle">A</text>
+          <text x="52" y="16" class="t-m t-xs2" text-anchor="middle">People</text>
+          <text x="11" y="46" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 11 46)">Tasks</text>`),
+        zones: ["Responsible", "Accountable", "Consulted", "Informed"],
+        what: "One grid naming, for every task, who does it, who owns it, who is asked and who is told.",
+        how: "One A per row and never more. If two people are accountable, nobody is.",
+        when: "Any project where more than three people touch a decision.",
+        for: "Killing the 'I thought you were doing it' failure.",
+        not: "Two-person work, where the overhead exceeds the benefit.",
+        example: "A launch slips because the pricing page had two owners and therefore none — each assumed the other had signed it off. Filling in one RACI took forty minutes and exposed four rows with no A at all, including the one that had just cost them a fortnight.",
+        questions: [
+          "On your current project, which task has two accountable people or none?",
+          "Who is being consulted who only needs to be informed?",
+          "Who is doing the work without being named responsible anywhere?"
+        ]
+      },
+      {
+        id: "grow-model",
+        name: "The GROW Model",
+        origin: "John Whitmore",
+        readMinutes: 2,
+        tags: ["coaching", "leadership", "team"],
+        fidelity: "canonical",
+        svg: svgWrap("The GROW Model",
+          "Four linked stages of a coaching conversation — goal, reality, options and will — running left to right.", `
+          <circle cx="18" cy="44" r="9" class="s-line"/>
+          <circle cx="40" cy="44" r="9" class="s-line"/>
+          <circle cx="62" cy="44" r="9" class="s-line"/>
+          <circle cx="84" cy="44" r="9" class="s-line"/>
+          <text x="18" y="46.5" class="t-b t-sm" text-anchor="middle">G</text>
+          <text x="40" y="46.5" class="t-b t-sm" text-anchor="middle">R</text>
+          <text x="62" y="46.5" class="t-b t-sm" text-anchor="middle">O</text>
+          <text x="84" y="46.5" class="t-b t-sm" text-anchor="middle">W</text>
+          <line x1="27" y1="44" x2="29" y2="44" class="s-line"/>
+          <polygon points="31,44 27,42 27,46" class="s-dot"/>
+          <line x1="49" y1="44" x2="51" y2="44" class="s-line"/>
+          <polygon points="53,44 49,42 49,46" class="s-dot"/>
+          <line x1="71" y1="44" x2="73" y2="44" class="s-line"/>
+          <polygon points="75,44 71,42 71,46" class="s-dot"/>
+          <text x="18" y="66" class="t-m t-xs2" text-anchor="middle">Goal</text>
+          <text x="40" y="66" class="t-m t-xs2" text-anchor="middle">Reality</text>
+          <text x="62" y="66" class="t-m t-xs2" text-anchor="middle">Options</text>
+          <text x="84" y="66" class="t-m t-xs2" text-anchor="middle">Will</text>`),
+        zones: ["Goal", "Reality", "Options", "Will"],
+        what: "A four-step structure for a coaching conversation that ends in a commitment.",
+        how: "Ask, do not tell, at each step. Do not leave Will without a specific action and a date.",
+        when: "Someone brings you a problem you are tempted to solve for them.",
+        for: "Building judgement in other people rather than dependence on you.",
+        not: "Emergencies, where telling is the correct response.",
+        example: "A report asks what to do about a difficult client. Twenty minutes of GROW instead of an answer: the goal is a renewed contract, the reality is two missed calls, the options include a written apology he had dismissed. He picks it, sends it Tuesday, and never needs to ask about that client again.",
+        questions: [
+          "Whose problems are you still solving that they could solve themselves?",
+          "In your last coaching conversation, how much of the talking was yours?",
+          "Which conversation ended without a specific action and a date?"
+        ]
+      },
+      {
+        id: "radical-candour",
+        name: "The Radical Candour Model",
+        origin: "Kim Scott",
+        readMinutes: 2,
+        tags: ["feedback", "leadership", "trust"],
+        fidelity: "canonical",
+        svg: svgWrap("The Radical Candour Model",
+          "Caring personally against challenging directly, giving ruinous empathy, radical candour, manipulative insincerity and obnoxious aggression.", `
+          <rect x="20" y="20" width="60" height="60" class="s-box"/>
+          <line x1="50" y1="20" x2="50" y2="80" class="s-line"/>
+          <line x1="20" y1="50" x2="80" y2="50" class="s-line"/>
+          <text x="35" y="34" class="t-m t-xs2" data-ml="re" text-anchor="middle">Ruinous</text>
+          <text x="35" y="39" class="t-m t-xs2" data-ml="re" text-anchor="middle">empathy</text>
+          <text x="65" y="34" class="t-m t-xs2" data-ml="rc" text-anchor="middle">Radical</text>
+          <text x="65" y="39" class="t-m t-xs2" data-ml="rc" text-anchor="middle">candour</text>
+          <text x="35" y="64" class="t-m t-xs2" data-ml="mi" text-anchor="middle">Manipulative</text>
+          <text x="35" y="69" class="t-m t-xs2" data-ml="mi" text-anchor="middle">insincerity</text>
+          <text x="65" y="64" class="t-m t-xs2" data-ml="oa" text-anchor="middle">Obnoxious</text>
+          <text x="65" y="69" class="t-m t-xs2" data-ml="oa" text-anchor="middle">aggression</text>
+          <text x="35" y="88" class="t-m t-xs2" text-anchor="middle">Low challenge</text>
+          <text x="66" y="88" class="t-m t-xs2" text-anchor="middle">High challenge</text>
+          <text x="13" y="31" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 31)">High care</text>
+          <text x="13" y="69" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 13 69)">Low care</text>`),
+        zones: ["Radical candour", "Ruinous empathy", "Obnoxious aggression", "Manipulative insincerity"],
+        what: "Good feedback needs both caring personally and challenging directly. Drop either and it curdles.",
+        how: "Before giving feedback, check you have both. Caring without challenge is the most common failure.",
+        when: "Any time you are about to soften something that needs saying.",
+        for: "Saying the hard thing without becoming a bully.",
+        not: "A licence for bluntness — challenge without care is the opposite corner.",
+        example: "A manager spends a year telling a struggling designer he is doing fine, because he likes him. At the layoff the designer asks why nobody told him — ruinous empathy, and it cost him a year he could have spent improving or leaving. The kind thing and the comfortable thing were never the same.",
+        questions: [
+          "What have you not said to someone this month because you like them?",
+          "Which corner is your usual failure — too soft, or too blunt?",
+          "Who on your team has never heard anything from you but praise?"
+        ]
+      },
+      {
+        id: "mckinsey-7s",
+        name: "The McKinsey 7S Model",
+        origin: "Peters & Waterman, McKinsey",
+        readMinutes: 3,
+        tags: ["strategy", "organisation", "change"],
+        fidelity: "canonical",
+        svg: svgWrap("The McKinsey 7S Model",
+          "Six interlinked elements arranged around shared values at the centre: strategy, structure, systems, staff, style and skills.", `
+          <path d="M 50 22 L 76 36 L 76 64 L 50 78 L 24 64 L 24 36 Z" class="s-line"/>
+          <path d="M 50 22 L 50 50 M 76 36 L 50 50 M 76 64 L 50 50 M 50 78 L 50 50 M 24 64 L 50 50 M 24 36 L 50 50" class="s-dash"/>
+          <circle cx="50" cy="50" r="11" class="s-knock"/>
+          <text x="50" y="49" class="t-m t-xs2" data-ml="sv" text-anchor="middle">Shared</text>
+          <text x="50" y="54" class="t-m t-xs2" data-ml="sv" text-anchor="middle">values</text>
+          <text x="50" y="14" class="t-m t-xs2" text-anchor="middle">Strategy</text>
+          <text x="96" y="35" class="t-m t-xs2" text-anchor="end">Structure</text>
+          <text x="96" y="71" class="t-m t-xs2" text-anchor="end">Systems</text>
+          <text x="50" y="90" class="t-m t-xs2" text-anchor="middle">Staff</text>
+          <text x="4" y="71" class="t-m t-xs2">Style</text>
+          <text x="4" y="35" class="t-m t-xs2">Skills</text>`),
+        zones: ["Strategy", "Structure", "Systems", "Shared values", "Skills", "Style", "Staff"],
+        what: "Seven elements that must line up for a change to hold — and they are all connected.",
+        how: "Change one and check the other six. Most reorganisations move structure and nothing else.",
+        when: "Planning or diagnosing an organisational change.",
+        for: "Understanding why a sensible restructure changed nothing.",
+        not: "Small teams, where six of the seven are the same three people.",
+        example: "A company flattens its hierarchy to move faster. Structure changes on Monday. Systems still require three sign-offs, style is still deferential, and staff are still rewarded for caution. Eighteen months later the layer has quietly grown back, because only one of the seven ever moved.",
+        questions: [
+          "For the change you are attempting, which of the seven have you actually altered?",
+          "Which one silently contradicts it — most often the reward system?",
+          "What do your shared values reward that your strategy needs people to stop doing?"
+        ]
+      },
+      {
+        id: "five-dysfunctions",
+        name: "The Five Dysfunctions Model",
+        origin: "Patrick Lencioni",
+        readMinutes: 3,
+        tags: ["team", "trust", "leadership"],
+        fidelity: "canonical",
+        svg: svgWrap("The Five Dysfunctions Model",
+          "A pyramid of five team dysfunctions stacked on absence of trust at the base, rising through conflict, commitment and accountability to results.", `
+          <polygon points="34,14 64,86 4,86" class="s-line"/>
+          <line x1="27.75" y1="28.4" x2="40.25" y2="28.4" class="s-line"/>
+          <line x1="21.5" y1="42.8" x2="46.5" y2="42.8" class="s-line"/>
+          <line x1="15.25" y1="57.2" x2="52.75" y2="57.2" class="s-line"/>
+          <line x1="9" y1="71.6" x2="59" y2="71.6" class="s-line"/>
+          <line x1="38" y1="21" x2="66" y2="21" class="s-dash"/>
+          <line x1="44" y1="35" x2="66" y2="35" class="s-dash"/>
+          <line x1="50" y1="50" x2="66" y2="50" class="s-dash"/>
+          <line x1="56" y1="64" x2="66" y2="64" class="s-dash"/>
+          <line x1="62" y1="79" x2="66" y2="79" class="s-dash"/>
+          <text x="68" y="22.5" class="t-m t-xs2">Results</text>
+          <text x="68" y="36.5" class="t-m t-xs2">Accountability</text>
+          <text x="68" y="51.5" class="t-m t-xs2">Commitment</text>
+          <text x="68" y="65.5" class="t-m t-xs2">Conflict</text>
+          <text x="68" y="80.5" class="t-m t-xs2">Trust</text>`),
+        zones: ["Absence of trust", "Fear of conflict", "Lack of commitment",
+                "Avoidance of accountability", "Inattention to results"],
+        what: "Five failures that stack: without trust there is no real conflict, and without conflict no real commitment.",
+        how: "Diagnose from the bottom. Fixing accountability while trust is absent does nothing.",
+        when: "A team is polite, agreeable and achieving very little.",
+        for: "Finding the layer the problem actually sits on.",
+        not: "Groups that only coordinate and never truly depend on each other.",
+        example: "A leadership team never argues, and the chief executive is proud of it. Decisions get nodded through and quietly ignored. The problem read as accountability, so he added a tracker; nothing changed. The real level was two rungs down — nobody trusted anyone enough to disagree in the room.",
+        questions: [
+          "When did your team last have a real disagreement in a meeting?",
+          "Which decisions were agreed in the room and ignored afterwards?",
+          "Which of the five layers are you trying to fix while a lower one is broken?"
+        ]
+      },
+      {
+        id: "swiss-cheese-model",
+        name: "The Swiss Cheese Model",
+        origin: "James Reason",
+        readMinutes: 2,
+        tags: ["risk", "safety", "systems"],
+        fidelity: "canonical",
+        svg: svgWrap("The Swiss Cheese Model",
+          "Four layers of defence drawn as slices with holes; an accident happens only when holes in every layer line up.", `
+          <rect x="16" y="20" width="10" height="60" class="s-box s-fill"/>
+          <rect x="36" y="20" width="10" height="60" class="s-box s-fill"/>
+          <rect x="56" y="20" width="10" height="60" class="s-box s-fill"/>
+          <rect x="76" y="20" width="10" height="60" class="s-box s-fill"/>
+          <circle cx="21" cy="50" r="4.5" class="s-knock-t"/>
+          <circle cx="21" cy="31" r="4" class="s-knock-t"/>
+          <circle cx="41" cy="50" r="4.5" class="s-knock-t"/>
+          <circle cx="41" cy="70" r="4" class="s-knock-t"/>
+          <circle cx="61" cy="50" r="4.5" class="s-knock-t"/>
+          <circle cx="61" cy="30" r="4" class="s-knock-t"/>
+          <circle cx="81" cy="50" r="4.5" class="s-knock-t"/>
+          <circle cx="81" cy="68" r="4" class="s-knock-t"/>
+          <path d="M 8 50 L 90 50" class="s-accent"/>
+          <polygon points="95,50 89,47 89,53" class="s-accent-f"/>
+          <text x="50" y="14" class="t-m t-xs2" text-anchor="middle">Holes line up</text>
+          <text x="50" y="92" class="t-m" text-anchor="middle">Layers of defence</text>`),
+        zones: ["Layer of defence", "Hole in it", "How they lined up"],
+        what: "Accidents need every layer of defence to fail at once. Single causes are almost always a story told afterwards.",
+        how: "After an incident, list every layer that should have caught it and why each hole was open.",
+        when: "Investigating a failure, or designing against one.",
+        for: "Stopping the search for one person to blame.",
+        not: "Simple systems with a single point of failure.",
+        example: "A wrong invoice reaches a client. The obvious cause is the junior who typed it. Four layers had holes: the template had no validation, the reviewer was on leave with no cover, the approval limit had been raised for the quarter, and the client's name was one character from another's. Sacking the junior closes none of them.",
+        questions: [
+          "For your last incident, how many layers had to fail — and did you fix one or all of them?",
+          "Which of your defences currently has a hole everyone knows about?",
+          "Where does your process depend on one person being careful?"
+        ]
+      },
+      {
+        id: "pygmalion-effect",
+        name: "The Pygmalion Effect",
+        origin: "Rosenthal & Jacobson",
+        readMinutes: 2,
+        tags: ["leadership", "psychology", "team"],
+        fidelity: "canonical",
+        svg: svgWrap("The Pygmalion Effect",
+          "A closed loop between your expectation of someone and their performance, each arrow feeding the other.", `
+          <rect x="12" y="28" width="30" height="22" class="s-box"/>
+          <rect x="58" y="28" width="30" height="22" class="s-box"/>
+          <text x="27" y="37" class="t-m t-xs2" data-ml="ex" text-anchor="middle">Your</text>
+          <text x="27" y="42" class="t-m t-xs2" data-ml="ex" text-anchor="middle">expectation</text>
+          <text x="73" y="37" class="t-m t-xs2" data-ml="pf" text-anchor="middle">Their</text>
+          <text x="73" y="42" class="t-m t-xs2" data-ml="pf" text-anchor="middle">performance</text>
+          <path d="M 42 34 L 52 34" class="s-line"/>
+          <polygon points="56,34 50,31 50,37" class="s-dot"/>
+          <path d="M 58 45 L 48 45" class="s-line"/>
+          <polygon points="44,45 50,42 50,48" class="s-dot"/>
+          <text x="50" y="66" class="t-m t-xs2" text-anchor="middle">Expectation shapes the result</text>`),
+        zones: ["What I expect", "How I behave", "What they deliver"],
+        what: "People tend to deliver roughly what you visibly expect of them, in both directions.",
+        how: "Audit your behaviour towards someone you rate low — the airtime, the stretch work, the benefit of the doubt.",
+        when: "You have written someone off, or labelled someone a star.",
+        for: "Breaking a self-fulfilling loop before it hardens.",
+        not: "Explaining away a genuine performance problem.",
+        example: "A manager privately decides a new hire is weak. He stops inviting her to client calls, gives her the tidy-up work, and checks it twice. Six months on she is visibly weak, and he counts it as proof. Her next manager gives her a launch, and she runs it.",
+        questions: [
+          "Who have you quietly decided is not very good? What have you stopped giving them?",
+          "What would you hand them if you assumed they were excellent?",
+          "Who treated you as capable before you were, and what did it change?"
+        ]
+      }
+    ]
+  },
+
+  "understand-others": {
+    title: "How to Understand Others Better",
+    short: "Understand Others",
+    axis: "Others + Thinking",
+    subtitle: "Analytical models for decoding groups, markets and behaviour.",
+    models: [
+      {
+        id: "maslows-pyramid",
+        name: "Maslow's Pyramid",
+        origin: "Abraham Maslow",
+        readMinutes: 2,
+        tags: ["motivation", "psychology", "needs"],
+        fidelity: "canonical",
+        svg: svgWrap("Maslow's Pyramid",
+          "A pyramid of five needs rising from physiological at the base through safety, belonging and esteem to self-actualisation at the apex.", `
+          <text x="50" y="9" class="t-m" text-anchor="middle">Self-actualisation</text>
+          <polygon points="50,14 84,86 16,86" class="s-line"/>
+          <line x1="43.2" y1="28.4" x2="56.8" y2="28.4" class="s-line"/>
+          <line x1="36.4" y1="42.8" x2="63.6" y2="42.8" class="s-line"/>
+          <line x1="29.6" y1="57.2" x2="70.4" y2="57.2" class="s-line"/>
+          <line x1="22.8" y1="71.6" x2="77.2" y2="71.6" class="s-line"/>
+          <text x="50" y="37" class="t-m" text-anchor="middle">Esteem</text>
+          <text x="50" y="51.5" class="t-m" text-anchor="middle">Belonging</text>
+          <text x="50" y="66" class="t-m" text-anchor="middle">Safety</text>
+          <text x="50" y="80.5" class="t-m" text-anchor="middle">Physiological</text>`),
+        zones: ["Self-actualisation", "Esteem", "Belonging", "Safety", "Physiological"],
+        what: "A hierarchy of five human needs, from physical survival up to self-actualisation.",
+        how: "Work out which level the person in front of you is currently operating at, and speak to that one.",
+        when: "Trying to understand what is actually motivating someone.",
+        for: "Management, marketing and negotiation.",
+        not: "Predicting a specific individual's next action.",
+        example: "A manager offers a struggling employee a stretch project and a mentoring scheme, and is baffled when it lands badly. The employee is three months from losing his flat. Recognition means nothing while the level below it is unstable; a salary advance and a fixed schedule would have.",
+        questions: [
+          "Think of someone you are failing to motivate. Which level are they actually on?",
+          "Which level are you addressing?",
+          "What would you need to fix underneath before your current offer means anything?"
+        ]
+      },
+      {
+        id: "pareto-principle",
+        name: "The Pareto Principle (80/20)",
+        origin: "Vilfredo Pareto",
+        readMinutes: 2,
+        tags: ["efficiency", "focus", "analysis"],
+        fidelity: "canonical",
+        svg: svgWrap("The Pareto Principle",
+          "A descending bar chart in which the two tallest bars, a fifth of the causes, account for about eighty per cent of the results.", `
+          <line x1="15" y1="82" x2="92" y2="82" class="s-line"/>
+          <line x1="15" y1="24" x2="15" y2="82" class="s-line"/>
+          <rect x="20" y="30" width="10" height="52" class="s-solid"/>
+          <rect x="33" y="46" width="10" height="36" class="s-solid"/>
+          <rect x="46" y="64" width="10" height="18" class="s-fill-2"/>
+          <rect x="59" y="72" width="10" height="10" class="s-fill-2"/>
+          <rect x="72" y="77" width="10" height="5" class="s-fill-2"/>
+          <text x="31" y="20" class="t-b t-sm" text-anchor="middle">80% of results</text>
+          <line x1="20" y1="88" x2="43" y2="88" class="s-accent"/>
+          <text x="31" y="97" class="t-m t-a" text-anchor="middle">20% of causes</text>`),
+        zones: ["Vital few (the 20%)", "Trivial many (the 80%)"],
+        what: "Roughly 80% of results come from roughly 20% of causes.",
+        how: "Rank your inputs by output. Find the short head. Defend it and starve the rest.",
+        when: "Anywhere effort and reward have come uncoupled.",
+        for: "Deciding where to stop spending time.",
+        not: "Work that must be complete rather than merely effective.",
+        example: "A consultancy reviews two years of invoices: 4 of 31 clients produced 71% of revenue, and the smallest 12 generated most of the admin and all of the late payments. They raise the floor rate, lose nine small clients, and revenue rises the following year.",
+        questions: [
+          "List your clients, tasks or products by what they actually return. What is in the top fifth?",
+          "What is in the bottom half, and what would break if you stopped it tomorrow?",
+          "Which single activity gets most of your hours but sits outside the top fifth?"
+        ]
+      },
+      {
+        id: "rumsfeld-matrix",
+        name: "The Rumsfeld Matrix",
+        origin: "Donald Rumsfeld",
+        readMinutes: 2,
+        tags: ["risk", "uncertainty", "strategy"],
+        fidelity: "canonical",
+        svg: svgWrap("The Rumsfeld Matrix",
+          "A two-by-two of knowledge against awareness, giving known knowns, known unknowns, unknown knowns and the shaded unknown unknowns.", `
+          <rect x="20" y="20" width="30" height="30" class="s-box"/>
+          <rect x="50" y="20" width="30" height="30" class="s-box"/>
+          <rect x="20" y="50" width="30" height="30" class="s-box"/>
+          <rect x="50" y="50" width="30" height="30" class="s-box s-fill"/>
+          <text x="35" y="33" class="t-m" data-ml="kk" text-anchor="middle">Known</text>
+          <text x="35" y="39" class="t-m" data-ml="kk" text-anchor="middle">knowns</text>
+          <text x="65" y="33" class="t-m" data-ml="ku" text-anchor="middle">Known</text>
+          <text x="65" y="39" class="t-m" data-ml="ku" text-anchor="middle">unknowns</text>
+          <text x="35" y="63" class="t-m" data-ml="uk" text-anchor="middle">Unknown</text>
+          <text x="35" y="69" class="t-m" data-ml="uk" text-anchor="middle">knowns</text>
+          <text x="65" y="63" class="t-m" data-ml="uu" text-anchor="middle">Unknown</text>
+          <text x="65" y="69" class="t-m" data-ml="uu" text-anchor="middle">unknowns</text>
+          <text x="35" y="15" class="t-m" text-anchor="middle">Knowns</text>
+          <text x="65" y="15" class="t-m" text-anchor="middle">Unknowns</text>
+          <text x="13" y="35" class="t-m" text-anchor="middle" transform="rotate(-90 13 35)">Aware</text>
+          <text x="13" y="65" class="t-m" text-anchor="middle" transform="rotate(-90 13 65)">Unaware</text>`),
+        zones: ["Known knowns", "Known unknowns", "Unknown knowns", "Unknown unknowns"],
+        what: "A sort of what you know, what you know you do not know, and the blind spot beyond both.",
+        how: "Fill the first three boxes honestly. The fourth cannot be filled — build slack for it instead.",
+        when: "Planning anything in a genuinely uncertain environment.",
+        for: "Finding the blind spots in a strategy.",
+        not: "Stable, well-understood domains.",
+        example: "Before a factory launch: known known — the line runs at 400 units an hour in testing. Known unknown — whether the supplier can hold that rate in winter. Unknown known — three floor staff already expect the humidity to jam the sealer, but nobody senior has asked them. The team schedules an hour with the floor staff, which converts the third box into the first.",
+        questions: [
+          "On your current plan, write one item in each of the first three boxes.",
+          "Who in your organisation already knows something you do not, that nobody has asked?",
+          "How much slack does your plan hold for the fourth box — in days or in money?"
+        ]
+      },
+      {
+        id: "black-box-model",
+        name: "The Black Box Model",
+        origin: "Cybernetics / behaviourism",
+        readMinutes: 2,
+        tags: ["systems", "behaviour", "analysis"],
+        fidelity: "canonical",
+        svg: svgWrap("The Black Box Model",
+          "An input arrow entering a solid black box and an output arrow leaving it, with the internal mechanism deliberately unexamined.", `
+          <rect x="36" y="36" width="28" height="28" class="s-solid"/>
+          <line x1="10" y1="50" x2="30" y2="50" class="s-line"/>
+          <polygon points="34,50 28,47 28,53" class="s-dot"/>
+          <line x1="66" y1="50" x2="84" y2="50" class="s-line"/>
+          <polygon points="90,50 84,47 84,53" class="s-dot"/>
+          <text x="20" y="44" class="t-m" text-anchor="middle">Input</text>
+          <text x="79" y="44" class="t-m" text-anchor="middle">Output</text>
+          <text x="50" y="52" class="t-b t-sm t-k" text-anchor="middle">BOX</text>`),
+        zones: ["Input", "Output"],
+        what: "Judging a system by what goes in and what comes out, ignoring the mechanism.",
+        how: "Vary one input. Record the output. Repeat. Build the rule empirically without opening the box.",
+        when: "The system is too complex, too opaque, or not yours to open.",
+        for: "Working with people and organisations you cannot see inside.",
+        not: "When the actual job is to repair the mechanism.",
+        example: "A supplier's lead times are erratic and no explanation is ever given. Rather than escalate, the buyer logs a year of orders and finds one rule: anything ordered after Thursday noon ships the week after next. She moves all ordering to Wednesday. Lead times stabilise without a single conversation about why.",
+        questions: [
+          "Which person or system in your work behaves unpredictably and will not explain itself?",
+          "What input could you vary deliberately this month to test it?",
+          "Do you actually need to understand it, or only to predict it?"
+        ]
+      },
+      {
+        id: "chasm-model",
+        name: "The Chasm Model",
+        origin: "Geoffrey Moore",
+        readMinutes: 3,
+        tags: ["adoption", "product", "market"],
+        fidelity: "canonical",
+        svg: svgWrap("The Chasm Model",
+          "The technology adoption curve divided into five segments — innovators, early adopters, early majority, late majority and laggards — with the chasm marked between the early adopters and the early majority.", `
+          <path d="M 6 80 C 20 80 22 66 30 60 C 40 52 46 30 60 26 C 74 22 82 44 92 60 C 100 72 108 80 116 80" class="s-line"/>
+          <line x1="6" y1="80" x2="116" y2="80" class="s-dash"/>
+          <line x1="29" y1="80" x2="29" y2="61" class="s-dash"/>
+          <line x1="51" y1="80" x2="51" y2="31" class="s-dash"/>
+          <line x1="79" y1="80" x2="79" y2="42" class="s-dash"/>
+          <line x1="99" y1="80" x2="99" y2="68" class="s-dash"/>
+          <line x1="46" y1="80" x2="56" y2="80" class="s-accent" stroke-width="2.5"/>
+          <text x="16" y="89" class="t-m t-xs2" text-anchor="middle">Innovators</text>
+          <text x="40" y="89" class="t-m t-xs2" data-ml="ea" text-anchor="middle">Early</text>
+          <text x="40" y="94" class="t-m t-xs2" data-ml="ea" text-anchor="middle">adopters</text>
+          <text x="65" y="89" class="t-m t-xs2" data-ml="em" text-anchor="middle">Early</text>
+          <text x="65" y="94" class="t-m t-xs2" data-ml="em" text-anchor="middle">majority</text>
+          <text x="89" y="89" class="t-m t-xs2" data-ml="lm" text-anchor="middle">Late</text>
+          <text x="89" y="94" class="t-m t-xs2" data-ml="lm" text-anchor="middle">majority</text>
+          <text x="110" y="89" class="t-m t-xs2" text-anchor="middle">Laggards</text>
+          <text x="51" y="103" class="t-m t-a" text-anchor="middle">The chasm</text>`,
+          "0 0 122 108"),
+        zones: ["Early adopters", "Early majority", "What blocks the crossing"],
+        what: "The gap between the enthusiasts who adopt anything new and the pragmatic majority who do not.",
+        how: "Stop selling novelty and start selling a complete, referenced solution to one specific segment's known problem.",
+        when: "A product has early traction that has stopped growing.",
+        for: "Understanding why a promising launch stalls.",
+        not: "Mature products in established categories.",
+        example: "A note-taking tool hits 40,000 delighted users in a year, then flatlines. The early adopters loved that it had no defaults and could be scripted. The majority wanted templates, a support number and someone else already using it. Shipping three templates and two named case studies restarted growth; adding more scripting would not have.",
+        questions: [
+          "Who are your current users, and what do they have in common that most people do not?",
+          "What would a cautious buyer need to see that your enthusiasts never asked for?",
+          "Name the one narrow segment you could dominate completely before widening."
+        ]
+      },
+{
+        id: "prisoners-dilemma",
+        name: "The Prisoner's Dilemma",
+        origin: "Merrill Flood & Melvin Dresher",
+        readMinutes: 3,
+        tags: ["negotiation", "trust", "strategy"],
+        fidelity: "canonical",
+        svg: svgWrap("The Prisoner's Dilemma",
+          "A payoff grid for two players each choosing to cooperate or defect, with the mutual-cooperation cell shaded as the outcome both would prefer.", `
+          <rect x="26" y="26" width="56" height="56" class="s-box"/>
+          <line x1="54" y1="26" x2="54" y2="82" class="s-line"/>
+          <line x1="26" y1="54" x2="82" y2="54" class="s-line"/>
+          <rect x="26" y="26" width="28" height="28" class="s-box s-fill"/>
+          <text x="40" y="42" class="t-b t-sm" text-anchor="middle">3 / 3</text>
+          <text x="68" y="42" class="t-b t-sm" text-anchor="middle">0 / 5</text>
+          <text x="40" y="70" class="t-b t-sm" text-anchor="middle">5 / 0</text>
+          <text x="68" y="70" class="t-b t-sm" text-anchor="middle">1 / 1</text>
+          <text x="40" y="20" class="t-m t-xs2" text-anchor="middle">Cooperate</text>
+          <text x="68" y="20" class="t-m t-xs2" text-anchor="middle">Defect</text>
+          <text x="19" y="40" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 19 40)">Cooperate</text>
+          <text x="19" y="70" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 19 70)">Defect</text>`),
+        zones: ["Both cooperate", "I defect", "They defect", "Both defect"],
+        what: "Two parties each do better by defecting, and both end up worse than if they had cooperated.",
+        how: "Change the game rather than the move: repeat it, make reputations visible, or make promises enforceable.",
+        when: "Negotiating with someone you will meet again.",
+        for: "Seeing why sensible people produce a bad shared outcome.",
+        not: "Genuinely one-off encounters with no reputation at stake.",
+        example: "Two agencies bidding for the same client both cut their rate to win, and both end up delivering at a margin that funds nothing. Neither was irrational — undercutting beat holding firm either way. The following year they specialise into different sectors, which changes the game rather than the move.",
+        questions: [
+          "Where are you and a competitor both worse off from moves that each made sense alone?",
+          "Is this game played once, or repeatedly with the same people?",
+          "What would make cooperation visible and defection costly?"
+        ]
+      },
+      {
+        id: "hype-cycle",
+        name: "The Hype Cycle",
+        origin: "Gartner",
+        readMinutes: 2,
+        tags: ["technology", "market", "adoption"],
+        fidelity: "canonical",
+        svg: svgWrap("The Hype Cycle",
+          "A sharp peak of inflated expectations falling into a trough of disillusionment, then a slow slope of enlightenment to a productivity plateau.", `
+          <line x1="10" y1="82" x2="94" y2="82" class="s-line"/>
+          <line x1="10" y1="12" x2="10" y2="82" class="s-line"/>
+          <path d="M 10 78 C 20 76 26 18 34 18 C 42 18 44 62 54 66 C 64 70 72 50 80 44 C 86 40 90 38 92 37" class="s-line"/>
+          <circle cx="34" cy="18" r="2.5" class="s-accent-f"/>
+          <text x="40" y="19" class="t-m t-xs2">Peak of hype</text>
+          <text x="54" y="76" class="t-m t-xs2" text-anchor="middle">Trough</text>
+          <text x="82" y="34" class="t-m t-xs2" text-anchor="middle">Plateau</text>
+          <text x="53" y="94" class="t-m" text-anchor="middle">Time</text>`),
+        zones: ["Peak of hype", "Trough", "Slope", "Plateau"],
+        what: "New technologies overshoot into hype, collapse into disappointment, then quietly become useful.",
+        how: "Locate the technology on the curve, then discount or upgrade the noise you are hearing accordingly.",
+        when: "Deciding when to adopt something new.",
+        for: "Buying at the trough rather than the peak.",
+        not: "Technologies that never had a hype phase at all.",
+        example: "A retailer buys a chatbot at the peak for a six-figure sum and shelves it within a year. A competitor buys a similar system three years later, in the trough, for a fifth of the price and with the failure modes documented by everyone else. Same technology, opposite outcome.",
+        questions: [
+          "Where on the curve is the technology your organisation is currently excited about?",
+          "What are you about to buy that would be far cheaper in two years?",
+          "What did you abandon in a trough that is now on somebody else's plateau?"
+        ]
+      },
+      {
+        id: "long-tail",
+        name: "The Long Tail",
+        origin: "Chris Anderson",
+        readMinutes: 2,
+        tags: ["market", "strategy", "analysis"],
+        fidelity: "canonical",
+        svg: svgWrap("The Long Tail",
+          "A demand curve with a tall short head of a few popular items and a long low tail of many niche ones, the tail shaded.", `
+          <line x1="12" y1="80" x2="94" y2="80" class="s-line"/>
+          <line x1="12" y1="14" x2="12" y2="80" class="s-line"/>
+          <path d="M 12 18 C 20 54 26 68 40 74 C 56 79 74 80 92 80 L 92 80 L 40 80 Z" class="s-fill"/>
+          <path d="M 12 18 C 20 54 26 68 40 74 C 56 79 74 80 92 80" class="s-line"/>
+          <line x1="40" y1="80" x2="40" y2="70" class="s-dash"/>
+          <text x="24" y="40" class="t-m t-xs2" text-anchor="middle">Head</text>
+          <text x="66" y="70" class="t-m t-xs2" text-anchor="middle">The long tail</text>
+          <text x="53" y="92" class="t-m" text-anchor="middle">Products by popularity</text>`),
+        zones: ["The head — few, popular", "The tail — many, niche"],
+        what: "When shelf space is unlimited, the many niche items can outsell the few hits combined.",
+        how: "Check whether your economics punish niche stock. If they do not, the tail is revenue you are refusing.",
+        when: "Deciding what to stock, publish or support.",
+        for: "Digital catalogues where holding an extra item costs nothing.",
+        not: "Physical retail, where every item occupies space someone must pay for.",
+        example: "A specialist publisher keeps 40 titles in print and lets 900 lapse. Digitised, the 900 sell three or four copies each a year — individually pointless, collectively larger than the front list. The only reason they were dropped was warehouse cost that no longer applied.",
+        questions: [
+          "What have you discontinued because each item alone looked too small?",
+          "What does it now cost you to keep one extra item available?",
+          "Who serves the customers you turned away, and what do they charge?"
+        ]
+      },
+      {
+        id: "political-compass",
+        name: "The Political Compass",
+        origin: "Two-axis political mapping",
+        readMinutes: 2,
+        tags: ["values", "groups", "analysis"],
+        fidelity: "canonical",
+        svg: svgWrap("The Political Compass",
+          "Two crossed axes mapping economic left and right against social authoritarian and libertarian, giving four quadrants.", `
+          <rect x="22" y="22" width="58" height="58" class="s-box"/>
+          <line x1="51" y1="22" x2="51" y2="80" class="s-line"/>
+          <line x1="22" y1="51" x2="80" y2="51" class="s-line"/>
+          <circle cx="42" cy="40" r="3" class="s-accent-f"/>
+          <text x="51" y="16" class="t-m t-xs2" text-anchor="middle">Authoritarian</text>
+          <text x="51" y="90" class="t-m t-xs2" text-anchor="middle">Libertarian</text>
+          <text x="14" y="51" class="t-m t-xs2" text-anchor="middle" transform="rotate(-90 14 51)">Left</text>
+          <text x="88" y="51" class="t-m t-xs2" text-anchor="middle" transform="rotate(90 88 51)">Right</text>`),
+        zones: ["Authoritarian left", "Authoritarian right", "Libertarian left", "Libertarian right"],
+        what: "One axis is never enough. Two crossed axes separate positions a single line collapses together.",
+        how: "Pick the two dimensions that actually differ, then place people or options rather than ranking them.",
+        when: "A debate has flattened into two camps that do not fit the people in it.",
+        for: "Showing that opponents on one axis can be allies on another.",
+        not: "Genuinely one-dimensional choices.",
+        example: "A board splits into 'pro-growth' and 'cautious' and stalls. Plotted on two axes — appetite for spend against appetite for public risk — the four positions are obvious, and two supposed opponents turn out to sit in the same quadrant. The deadlock was an artefact of the single line.",
+        questions: [
+          "What debate near you has been forced onto one axis?",
+          "What is the second dimension people are actually disagreeing about?",
+          "Who would become an ally once both axes are drawn?"
+        ]
+      },
+      {
+        id: "network-model",
+        name: "The Network Model",
+        origin: "Paul Baran",
+        readMinutes: 2,
+        tags: ["systems", "organisation", "risk"],
+        fidelity: "canonical",
+        svg: svgWrap("The Network Model",
+          "Three network shapes side by side: centralised around one hub, decentralised around several hubs, and fully distributed.", `
+          <circle cx="18" cy="40" r="2.5" class="s-dot"/>
+          <path d="M 18 40 L 8 30 M 18 40 L 28 30 M 18 40 L 8 50 M 18 40 L 28 50 M 18 40 L 18 26 M 18 40 L 18 54" class="s-line-thin"/>
+          <circle cx="8" cy="30" r="1.8" class="s-line"/><circle cx="28" cy="30" r="1.8" class="s-line"/>
+          <circle cx="8" cy="50" r="1.8" class="s-line"/><circle cx="28" cy="50" r="1.8" class="s-line"/>
+          <circle cx="18" cy="26" r="1.8" class="s-line"/><circle cx="18" cy="54" r="1.8" class="s-line"/>
+          <circle cx="44" cy="34" r="2.2" class="s-dot"/><circle cx="56" cy="46" r="2.2" class="s-dot"/>
+          <path d="M 44 34 L 56 46 M 44 34 L 36 26 M 44 34 L 36 42 M 44 34 L 46 24 M 56 46 L 64 54 M 56 46 L 64 38 M 56 46 L 54 56" class="s-line-thin"/>
+          <circle cx="36" cy="26" r="1.8" class="s-line"/><circle cx="36" cy="42" r="1.8" class="s-line"/>
+          <circle cx="46" cy="24" r="1.8" class="s-line"/><circle cx="64" cy="54" r="1.8" class="s-line"/>
+          <circle cx="64" cy="38" r="1.8" class="s-line"/><circle cx="54" cy="56" r="1.8" class="s-line"/>
+          <path d="M 74 26 L 86 26 L 92 38 L 86 50 L 74 50 L 68 38 Z M 74 26 L 86 50 M 86 26 L 74 50 M 68 38 L 92 38" class="s-line-thin"/>
+          <circle cx="74" cy="26" r="1.8" class="s-line"/><circle cx="86" cy="26" r="1.8" class="s-line"/>
+          <circle cx="92" cy="38" r="1.8" class="s-line"/><circle cx="86" cy="50" r="1.8" class="s-line"/>
+          <circle cx="74" cy="50" r="1.8" class="s-line"/><circle cx="68" cy="38" r="1.8" class="s-line"/>
+          <text x="18" y="72" class="t-m t-xs2" text-anchor="middle">Centralised</text>
+          <text x="50" y="72" class="t-m t-xs2" text-anchor="middle">Decentralised</text>
+          <text x="80" y="72" class="t-m t-xs2" text-anchor="middle">Distributed</text>`),
+        zones: ["Centralised", "Decentralised", "Distributed"],
+        what: "Three shapes a network can take, each with a different failure point.",
+        how: "Find the node whose removal breaks everything. That is your shape, whatever the org chart says.",
+        when: "Assessing how fragile a team, supply chain or system really is.",
+        for: "Locating single points of failure.",
+        not: "Judging which shape is best in the abstract — it depends entirely on what you fear.",
+        example: "A forty-person consultancy looks decentralised on paper. In practice one partner holds every client relationship, and when he is ill for a month nothing can be signed. The org chart showed three hubs; the network had one.",
+        questions: [
+          "Which single person or system, if removed for a month, would stop your work?",
+          "Does your real network look like your org chart?",
+          "What would it take to add one more hub?"
+        ]
+      },
+      {
+        id: "iceberg-model",
+        name: "The Iceberg Model",
+        origin: "Edward T. Hall",
+        readMinutes: 2,
+        tags: ["culture", "behaviour", "groups"],
+        fidelity: "canonical",
+        svg: svgWrap("The Iceberg Model",
+          "An iceberg with a small visible tip of behaviour above the waterline and a much larger hidden mass of values and assumptions below.", `
+          <path d="M 50 14 L 68 44 L 32 44 Z" class="s-line"/>
+          <path d="M 32 44 L 68 44 L 84 66 L 62 86 L 38 86 L 16 66 Z" class="s-line s-fill"/>
+          <path d="M 6 44 L 94 44" class="s-dash"/>
+          <text x="50" y="34" class="t-m t-xs2" text-anchor="middle">Visible</text>
+          <text x="50" y="62" class="t-m t-xs2" data-ml="hid" text-anchor="middle">Values,</text>
+          <text x="50" y="67" class="t-m t-xs2" data-ml="hid" text-anchor="middle">beliefs,</text>
+          <text x="50" y="72" class="t-m t-xs2" data-ml="hid" text-anchor="middle">assumptions</text>
+          <text x="8" y="40" class="t-m t-xs2">Seen</text>
+          <text x="8" y="52" class="t-m t-xs2">Hidden</text>`),
+        zones: ["Visible behaviour", "Stated values", "Unspoken assumptions"],
+        what: "What you can observe of a culture is a fraction of what drives it.",
+        how: "Treat every visible behaviour as a question: what would have to be believed for this to make sense?",
+        when: "Joining a new organisation, or baffled by one.",
+        for: "Reading a culture instead of judging it.",
+        not: "Explaining an individual's one-off behaviour.",
+        example: "A new director finds meetings start ten minutes late and reads it as sloppiness, so he enforces punctuality. Attendance drops. The ten minutes were the only unstructured time the teams had to raise problems informally — a function, not a fault, and invisible above the waterline.",
+        questions: [
+          "Name one behaviour in your organisation that outsiders find strange.",
+          "What would have to be true underneath for it to be sensible?",
+          "Which rule have you enforced without knowing what it was doing?"
+        ]
+      },
+      {
+        id: "transactional-analysis",
+        name: "Transactional Analysis",
+        origin: "Eric Berne",
+        readMinutes: 3,
+        tags: ["psychology", "communication", "conflict"],
+        fidelity: "canonical",
+        svg: svgWrap("Transactional Analysis",
+          "Two people each drawn as three stacked ego states — parent, adult and child — with a crossed transaction running between them.", `
+          <circle cx="26" cy="22" r="11" class="s-line"/>
+          <circle cx="26" cy="48" r="11" class="s-line s-fill"/>
+          <circle cx="26" cy="74" r="11" class="s-line"/>
+          <circle cx="74" cy="22" r="11" class="s-line"/>
+          <circle cx="74" cy="48" r="11" class="s-line"/>
+          <circle cx="74" cy="74" r="11" class="s-line s-fill"/>
+          <text x="26" y="23.5" class="t-m t-xs2" text-anchor="middle">Parent</text>
+          <text x="26" y="49.5" class="t-m t-xs2" text-anchor="middle">Adult</text>
+          <text x="26" y="75.5" class="t-m t-xs2" text-anchor="middle">Child</text>
+          <text x="74" y="23.5" class="t-m t-xs2" text-anchor="middle">Parent</text>
+          <text x="74" y="49.5" class="t-m t-xs2" text-anchor="middle">Adult</text>
+          <text x="74" y="75.5" class="t-m t-xs2" text-anchor="middle">Child</text>
+          <path d="M 37 48 L 63 74" class="s-accent"/>
+          <path d="M 37 22 L 63 48" class="s-dash"/>`),
+        zones: ["Parent", "Adult", "Child"],
+        what: "Every exchange comes from one of three states — parent, adult or child — and mismatches cause the friction.",
+        how: "Notice which state you are speaking from. Answering a parent remark from child keeps the pattern alive.",
+        when: "A relationship keeps producing the same argument.",
+        for: "Breaking a script two people run automatically.",
+        not: "Diagnosing anyone clinically.",
+        example: "A finance lead sends 'you've missed the deadline again' — parent. The manager replies with excuses and apology — child, and the loop is set for the year. Answered from adult, with 'the deadline slipped twice; here is the cause and what I need from you', the exchange stops being about tone.",
+        questions: [
+          "Which colleague reliably triggers your child state?",
+          "What is the exact sentence they use, and what state is it from?",
+          "What would the adult version of your usual reply sound like?"
+        ]
+      }
+    ]
+  }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = "decisionbook.v3";
+const storageOK = (() => {
+  try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); return true; }
+  catch (e) { return false; }
+})();
+
+let state = { answers: {}, sorters: {}, sketches: {}, theme: null };
+if (storageOK) {
+  try { state = Object.assign(state, JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")); }
+  catch (e) { /* corrupt payload — start clean */ }
+}
+if (!state.answers) state.answers = {};
+if (!state.sorters) state.sorters = {};
+if (!state.sketches) state.sketches = {};
+
+let saveTimer = null;
+function save() {
+  if (!storageOK) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }, 400);
+}
+function saveNow() {
+  if (!storageOK) return;
+  clearTimeout(saveTimer);
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+const allModels = [];
+Object.keys(database).forEach(key => {
+  database[key].models.forEach(m => allModels.push(Object.assign({ quadrant: key }, m)));
+});
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const app = document.getElementById("app");
+const emptyState = document.getElementById("empty-state");
+
+function sorterMarkup(m) {
+  if (!m.zones || !m.zones.length) return "";
+  const zones = m.zones.map((z, i) => `
+    <div class="zone" data-zone="${i}" data-model="${m.id}">
+      <h5>${esc(z)} <span class="zone-count" data-zone-count="${i}">0</span></h5>
+      <div class="zone-items" data-zone-items="${i}"></div>
+      <button class="zone-place" data-place="${i}" disabled>Move here</button>
+    </div>`).join("");
+  return `
+    <div class="sorter" data-sorter="${m.id}">
+      <div class="sorter-head">
+        <h4>Sort it out</h4>
+        <button class="clear-btn" data-clear-sorter="${m.id}">Clear items</button>
+      </div>
+      <form class="sorter-add" data-add="${m.id}">
+        <label class="sr-only" for="${m.id}-add">Add an item to sort for ${esc(m.name)}</label>
+        <input id="${m.id}-add" type="text" placeholder="Add something to sort…" autocomplete="off">
+        <button class="tool-btn" type="submit">Add</button>
+      </form>
+      <p class="sorter-hint">Drag an item into a zone — or select an item and choose <em>Move here</em>.</p>
+      <div class="zone-grid">
+        <div class="zone" data-pool="true" data-zone="-1" data-model="${m.id}">
+          <h5>Unsorted <span class="zone-count" data-zone-count="-1">0</span></h5>
+          <div class="zone-items" data-zone-items="-1"></div>
+          <button class="zone-place" data-place="-1" disabled>Move here</button>
+        </div>
+        ${zones}
+      </div>
+    </div>`;
+}
+
+function sketchMarkup(m) {
+  // Match the pad to the diagram's own proportions so redrawing it is a like-for-like
+  // exercise rather than a squashed approximation.
+  const vb = /viewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(m.svg);
+  const vw = vb ? parseFloat(vb[1]) : 100;
+  const vh = vb ? parseFloat(vb[2]) : 100;
+  const cw = 800;
+  const ch = Math.round(cw * vh / vw);
+  return `
+    <div class="sketch" data-sketch="${m.id}">
+      <div class="sketch-head">
+        <h4>Draw it yourself</h4>
+        <div class="sketch-tools" role="group" aria-label="Sketch tools for ${esc(m.name)}">
+          <button class="pen" data-w="3"  aria-pressed="true"  aria-label="Thin pen"><i></i></button>
+          <button class="pen" data-w="6"  aria-pressed="false" aria-label="Medium pen"><i></i></button>
+          <button class="pen" data-w="12" aria-pressed="false" aria-label="Thick pen"><i></i></button>
+          <button class="pen" data-erase="1" aria-pressed="false" aria-label="Eraser"><i></i></button>
+          <button class="tool-btn" data-undo="${m.id}">Undo</button>
+          <button class="tool-btn" data-clear-sketch="${m.id}">Clear</button>
+        </div>
+      </div>
+      <div class="sketch-wrap" data-drawn="false">
+        <canvas data-canvas="${m.id}" width="${cw}" height="${ch}"
+                role="img" aria-label="Freehand sketch area for ${esc(m.name)}"></canvas>
+        <span class="sketch-placeholder">Redraw the diagram here</span>
+      </div>
+      <p class="sketch-hint">Copy it from memory, then check it against the diagram above.</p>
+    </div>`;
+}
+
+function modelMarkup(m) {
+  const answers = state.answers[m.id] || [];
+  const questions = m.questions.map((q, i) => `
+    <div class="question">
+      <label for="${m.id}-q${i}">${esc(q)}</label>
+      <textarea id="${m.id}-q${i}" data-model="${m.id}" data-q="${i}"
+        rows="2" placeholder="Your answer…">${esc(answers[i] || "")}</textarea>
+    </div>`).join("");
+
+  return `
+  <article class="model" id="${m.id}" data-open="false" data-quadrant="${m.quadrant}"
+           data-tags="${esc(m.tags.join(" "))}">
+    <h3>
+      <button class="model-btn" aria-expanded="false" aria-controls="${m.id}-panel" data-model-btn="${m.id}">
+        <span class="model-mark" aria-hidden="true"></span>
+        <span class="model-title">${esc(m.name)}</span>
+        <span class="model-meta">${m.readMinutes} min</span>
+        <span class="model-icon" aria-hidden="true"></span>
+      </button>
+    </h3>
+    <div class="panel">
+      <div class="panel-inner">
+        <div class="panel-body" id="${m.id}-panel" role="region" aria-labelledby="${m.id}">
+          <div class="panel-side">
+            <figure class="panel-figure">
+              ${m.svg}
+              <figcaption class="figure-origin">${esc(m.origin)}<span class="fidelity" data-f="${esc(m.fidelity)}" title="${m.fidelity === "canonical" ? "Diagram follows the originator's own form." : "A later common rendering, not the originator's own diagram."}">${esc(m.fidelity)}</span></figcaption>
+            </figure>
+            ${sketchMarkup(m)}
+          </div>
+          <div class="panel-text">
+            <div class="field concept span">
+              <h4>The concept</h4>
+              <p>${esc(m.what)}</p>
+            </div>
+            <div class="field how span">
+              <h4>How it works</h4>
+              <p>${esc(m.how)}</p>
+            </div>
+            <div class="field">
+              <h4>When to use</h4>
+              <p>${esc(m.when)}</p>
+            </div>
+            <div class="field">
+              <h4>Best for</h4>
+              <p>${esc(m.for)}</p>
+            </div>
+            <div class="field not span">
+              <h4>Not for</h4>
+              <p>${esc(m.not)}</p>
+            </div>
+            <div class="field example span">
+              <h4>In practice</h4>
+              <p>${esc(m.example)}</p>
+            </div>
+            <div class="field span">
+              <div class="tag-row">${m.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+            </div>
+            <div class="worksheet">
+              <div class="worksheet-head">
+                <h4>Your turn</h4>
+                <span class="saved-state" data-saved="${m.id}" role="status">Saved</span>
+                <button class="clear-btn" data-clear="${m.id}">Clear answers</button>
+              </div>
+              ${questions}
+            </div>
+            ${sorterMarkup(m)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const sections = Object.keys(database).map((key, i) => {
+    const cat = database[key];
+    return `
+    <section class="category" id="cat-${key}" aria-labelledby="cat-${key}-h">
+      <div class="category-head">
+        <span class="eyebrow">Quadrant ${i + 1} &middot; ${esc(cat.axis)}</span>
+        <h2 id="cat-${key}-h">${esc(cat.title)}</h2>
+        <p>${esc(cat.subtitle)}</p>
+      </div>
+      <div class="model-list">
+        ${cat.models.map(m => modelMarkup(Object.assign({ quadrant: key }, m))).join("")}
+      </div>
+    </section>`;
+  }).join("");
+  app.insertAdjacentHTML("afterbegin", sections);
+}
+
+function renderMatrix() {
+  const matrix = document.getElementById("matrix");
+  const classes = ["q1", "q2", "q3", "q4"];
+  Object.keys(database).forEach((key, i) => {
+    const cat = database[key];
+    const a = document.createElement("a");
+    a.className = "quad " + classes[i];
+    a.href = "#cat-" + key;
+    a.innerHTML = `
+      <span class="quad-axis">${esc(cat.axis)}</span>
+      <span class="quad-name">${esc(cat.short)}</span>
+      <span class="quad-progress" data-progress="${key}">0 / ${cat.models.length}</span>
+      <span class="quad-bar" aria-hidden="true"><i data-bar="${key}"></i></span>`;
+    matrix.appendChild(a);
+  });
+}
+
+function renderToc() {
+  document.getElementById("toc-grid").innerHTML = Object.keys(database).map(key => `
+    <div>
+      <h2>${esc(database[key].short)}</h2>
+      <ol>${database[key].models.map(m => `<li><a href="#${m.id}">${esc(m.name)}</a></li>`).join("")}</ol>
+    </div>`).join("");
+}
+
+function renderChips() {
+  // Every tag as a chip is ~40 rows of chrome at 20 models and ~60 at 50, which buries
+  // the content. Surface the most common tags; the long tail stays reachable via search.
+  const freq = {};
+  allModels.forEach(m => m.tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }));
+  const tags = Object.keys(freq)
+    .sort((a, b) => freq[b] - freq[a] || a.localeCompare(b))
+    .slice(0, 10)
+    .sort();
+  const chips = document.getElementById("chips");
+  chips.innerHTML =
+    Object.keys(database).map(k =>
+      `<button class="chip chip-quad" data-quad="${k}" aria-pressed="false">${esc(database[k].short)}</button>`).join("") +
+    `<span class="chip-sep" aria-hidden="true"></span>` +
+    tags.map(t =>
+      `<button class="chip" data-tag="${esc(t)}" aria-pressed="false">${esc(t)} <span class="chip-n">${freq[t]}</span></button>`).join("");
+}
+
+render();
+renderMatrix();
+renderToc();
+renderChips();
+
+if (!storageOK) document.getElementById("storage-warning").classList.add("show");
+
+/* The sticky toolbar's height drives every scroll offset, and it changes with the
+   chip rows at narrow widths — so measure it rather than hard-coding a guess. */
+const toolbarEl = document.querySelector(".toolbar");
+function measureToolbar() {
+  document.documentElement.style.setProperty("--toolbar-h", toolbarEl.offsetHeight + "px");
+}
+measureToolbar();
+if (window.ResizeObserver) new ResizeObserver(measureToolbar).observe(toolbarEl);
+else window.addEventListener("resize", measureToolbar);
+
+/* ============================================================
+   ACCORDION
+   ============================================================ */
+function setOpen(id, open, push) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const btn = el.querySelector(".model-btn");
+  const inner = el.querySelector(".panel-inner");
+  el.dataset.open = open ? "true" : "false";
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+  if (open) inner.removeAttribute("inert"); else inner.setAttribute("inert", "");
+  if (push) {
+    const url = new URL(location.href);
+    url.hash = open ? id : "";
+    history.replaceState(null, "", url.toString().replace(/#$/, ""));
+  }
+}
+
+document.querySelectorAll(".panel-inner").forEach(p => p.setAttribute("inert", ""));
+
+app.addEventListener("click", e => {
+  const btn = e.target.closest("[data-model-btn]");
+  if (btn) {
+    const id = btn.dataset.modelBtn;
+    setOpen(id, document.getElementById(id).dataset.open !== "true", true);
+    return;
+  }
+  const clear = e.target.closest("[data-clear]");
+  if (clear) {
+    const id = clear.dataset.clear;
+    delete state.answers[id];
+    document.querySelectorAll(`textarea[data-model="${id}"]`).forEach(t => { t.value = ""; });
+    saveNow();
+    updateProgress();
+  }
+});
+
+/* ============================================================
+   WORKSHEETS
+   ============================================================ */
+app.addEventListener("input", e => {
+  const t = e.target;
+  if (t.tagName !== "TEXTAREA") return;
+  const id = t.dataset.model, i = Number(t.dataset.q);
+  if (!state.answers[id]) state.answers[id] = [];
+  state.answers[id][i] = t.value;
+  if (state.answers[id].every(v => !v || !v.trim())) delete state.answers[id];
+  save();
+  updateProgress();
+  const flag = document.querySelector(`[data-saved="${id}"]`);
+  if (flag && storageOK) {
+    flag.classList.add("show");
+    clearTimeout(flag._t);
+    flag._t = setTimeout(() => flag.classList.remove("show"), 1400);
+  }
+});
+
+/* ============================================================
+   SORTER
+   ============================================================ */
+let selectedItem = null;   // { model, id }
+
+function sorterItems(id) {
+  if (!state.sorters[id]) state.sorters[id] = [];
+  return state.sorters[id];
+}
+
+function renderSorter(id) {
+  const root = document.querySelector(`[data-sorter="${id}"]`);
+  if (!root) return;
+  const items = sorterItems(id);
+  root.querySelectorAll("[data-zone-items]").forEach(box => {
+    const z = Number(box.dataset.zoneItems);
+    const mine = items.filter(it => it.zone === z);
+    box.innerHTML = mine.length
+      ? mine.map(it => `
+          <button class="item" draggable="true" data-item="${it.id}" data-model="${id}"
+                  aria-pressed="${selectedItem && selectedItem.id === it.id ? "true" : "false"}">
+            <span class="item-text">${esc(it.text)}</span>
+            <span class="item-drop" data-remove="${it.id}" role="none">&times;</span>
+          </button>`).join("")
+      : (z === -1 ? `<p class="sorter-empty">Nothing left to sort.</p>` : "");
+    const count = root.querySelector(`[data-zone-count="${z}"]`);
+    if (count) count.textContent = mine.length;
+  });
+  root.querySelectorAll(".zone-place").forEach(b => {
+    b.disabled = !(selectedItem && selectedItem.model === id);
+  });
+}
+
+function moveItem(id, itemId, zone) {
+  const it = sorterItems(id).find(x => x.id === itemId);
+  if (!it) return;
+  it.zone = zone;
+  selectedItem = null;
+  save();
+  renderSorter(id);
+  updateProgress();
+}
+
+app.addEventListener("submit", e => {
+  const form = e.target.closest("[data-add]");
+  if (!form) return;
+  e.preventDefault();
+  const id = form.dataset.add;
+  const input = form.querySelector("input");
+  const text = input.value.trim();
+  if (!text) return;
+  sorterItems(id).push({ id: "i" + Date.now() + Math.random().toString(36).slice(2, 6), text, zone: -1 });
+  input.value = "";
+  input.focus();
+  save();
+  renderSorter(id);
+  updateProgress();
+});
+
+app.addEventListener("click", e => {
+  const remove = e.target.closest("[data-remove]");
+  if (remove) {
+    e.stopPropagation();
+    const id = remove.closest("[data-sorter]").dataset.sorter;
+    state.sorters[id] = sorterItems(id).filter(x => x.id !== remove.dataset.remove);
+    save(); renderSorter(id); updateProgress();
+    return;
+  }
+  const item = e.target.closest(".item");
+  if (item) {
+    const id = item.dataset.model;
+    const same = selectedItem && selectedItem.id === item.dataset.item;
+    selectedItem = same ? null : { model: id, id: item.dataset.item };
+    renderSorter(id);
+    return;
+  }
+  const place = e.target.closest("[data-place]");
+  if (place && selectedItem) {
+    const id = place.closest("[data-sorter]").dataset.sorter;
+    if (selectedItem.model === id) moveItem(id, selectedItem.id, Number(place.dataset.place));
+    return;
+  }
+  const clearS = e.target.closest("[data-clear-sorter]");
+  if (clearS) {
+    const id = clearS.dataset.clearSorter;
+    delete state.sorters[id];
+    selectedItem = null;
+    saveNow(); renderSorter(id); updateProgress();
+  }
+});
+
+app.addEventListener("dragstart", e => {
+  const item = e.target.closest(".item");
+  if (!item) return;
+  e.dataTransfer.setData("text/plain", JSON.stringify({ m: item.dataset.model, i: item.dataset.item }));
+  e.dataTransfer.effectAllowed = "move";
+  item.classList.add("dragging");
+});
+app.addEventListener("dragend", e => {
+  const item = e.target.closest(".item");
+  if (item) item.classList.remove("dragging");
+});
+app.addEventListener("dragover", e => {
+  const zone = e.target.closest(".zone");
+  if (!zone) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  zone.classList.add("drop-target");
+});
+app.addEventListener("dragleave", e => {
+  const zone = e.target.closest(".zone");
+  if (zone && !zone.contains(e.relatedTarget)) zone.classList.remove("drop-target");
+});
+app.addEventListener("drop", e => {
+  const zone = e.target.closest(".zone");
+  if (!zone) return;
+  e.preventDefault();
+  zone.classList.remove("drop-target");
+  let payload;
+  try { payload = JSON.parse(e.dataTransfer.getData("text/plain")); } catch (err) { return; }
+  if (!payload || payload.m !== zone.dataset.model) return;   // no cross-model drops
+  moveItem(payload.m, payload.i, Number(zone.dataset.zone));
+});
+
+/* ============================================================
+   SKETCHPAD — strokes stored as vectors, not a raster dataURL,
+   so the payload stays small and undo is free.
+   ============================================================ */
+const sketchTool = { w: 3, erase: false };
+
+function strokesFor(id) {
+  if (!state.sketches[id]) state.sketches[id] = [];
+  return state.sketches[id];
+}
+
+function inkColour() {
+  return getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#f1f5f9";
+}
+
+function redraw(id) {
+  const canvas = document.querySelector(`[data-canvas="${id}"]`);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const strokes = strokesFor(id);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  const colour = inkColour();
+  const W = canvas.width, H = canvas.height;
+  strokes.forEach(s => {
+    if (!s.pts.length) return;
+    ctx.globalCompositeOperation = s.e ? "destination-out" : "source-over";
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = s.e ? s.w * 4 : s.w;
+    ctx.beginPath();
+    ctx.moveTo(s.pts[0][0] * W, s.pts[0][1] * H);
+    for (let i = 1; i < s.pts.length; i++) ctx.lineTo(s.pts[i][0] * W, s.pts[i][1] * H);
+    if (s.pts.length === 1) ctx.lineTo(s.pts[0][0] * W + 0.1, s.pts[0][1] * H);
+    ctx.stroke();
+  });
+  ctx.globalCompositeOperation = "source-over";
+  const wrap = canvas.closest(".sketch-wrap");
+  if (wrap) wrap.dataset.drawn = strokes.length ? "true" : "false";
+}
+
+/* Points are stored normalised to 0..1, not in canvas pixels, so the pad can change
+   size or aspect per model without invalidating anything already drawn. */
+function canvasPoint(canvas, ev) {
+  const r = canvas.getBoundingClientRect();
+  const round = n => Math.round(n * 1e4) / 1e4;
+  return [round((ev.clientX - r.left) / r.width), round((ev.clientY - r.top) / r.height)];
+}
+
+app.addEventListener("pointerdown", e => {
+  const canvas = e.target.closest("[data-canvas]");
+  if (!canvas) return;
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  const id = canvas.dataset.canvas;
+  strokesFor(id).push({ w: sketchTool.w, e: sketchTool.erase, pts: [canvasPoint(canvas, e)] });
+  canvas._drawing = true;
+  redraw(id);
+});
+app.addEventListener("pointermove", e => {
+  const canvas = e.target.closest("[data-canvas]");
+  if (!canvas || !canvas._drawing) return;
+  const id = canvas.dataset.canvas;
+  const strokes = strokesFor(id);
+  strokes[strokes.length - 1].pts.push(canvasPoint(canvas, e));
+  redraw(id);
+});
+function endStroke(e) {
+  const canvas = e.target.closest && e.target.closest("[data-canvas]");
+  if (!canvas || !canvas._drawing) return;
+  canvas._drawing = false;
+  save();
+  updateProgress();
+}
+app.addEventListener("pointerup", endStroke);
+app.addEventListener("pointercancel", endStroke);
+
+app.addEventListener("click", e => {
+  const pen = e.target.closest(".pen");
+  if (pen) {
+    const group = pen.closest(".sketch-tools");
+    group.querySelectorAll(".pen").forEach(p => p.setAttribute("aria-pressed", "false"));
+    pen.setAttribute("aria-pressed", "true");
+    sketchTool.erase = pen.hasAttribute("data-erase");
+    if (!sketchTool.erase) sketchTool.w = Number(pen.dataset.w);
+    return;
+  }
+  const undo = e.target.closest("[data-undo]");
+  if (undo) {
+    strokesFor(undo.dataset.undo).pop();
+    saveNow(); redraw(undo.dataset.undo); updateProgress();
+    return;
+  }
+  const clearSk = e.target.closest("[data-clear-sketch]");
+  if (clearSk) {
+    state.sketches[clearSk.dataset.clearSketch] = [];
+    saveNow(); redraw(clearSk.dataset.clearSketch); updateProgress();
+  }
+});
+
+function isUsed(m) {
+  const a = state.answers[m.id];
+  const answered = !!a && m.questions.every((_, i) => a[i] && a[i].trim().length > 0);
+  const sorted = (state.sorters[m.id] || []).filter(it => it.zone >= 0).length >= 3;
+  return answered || sorted;
+}
+
+function updateProgress() {
+  Object.keys(database).forEach(key => {
+    const models = database[key].models.map(m => Object.assign({ quadrant: key }, m));
+    const done = models.filter(isUsed).length;
+    const el = document.querySelector(`[data-progress="${key}"]`);
+    const bar = document.querySelector(`[data-bar="${key}"]`);
+    if (el) el.textContent = `${done} / ${models.length}`;
+    if (bar) bar.style.width = (done / models.length * 100) + "%";
+  });
+  allModels.forEach(m => {
+    const el = document.getElementById(m.id);
+    if (el) el.dataset.used = isUsed(m) ? "true" : "false";
+  });
+}
+updateProgress();
+allModels.forEach(m => { renderSorter(m.id); redraw(m.id); });
+
+/* ============================================================
+   SEARCH + FILTER
+   ============================================================ */
+const searchInput = document.getElementById("search");
+const countEl = document.getElementById("count");
+let activeQuads = new Set(), activeTags = new Set();
+
+function haystack(m) {
+  return [m.name, m.origin, m.what, m.how, m.when, m.for, m.not, m.example,
+          m.tags.join(" "), m.questions.join(" ")].join(" ").toLowerCase();
+}
+allModels.forEach(m => { m._hay = haystack(m); });
+
+function applyFilters(push) {
+  const q = searchInput.value.trim().toLowerCase();
+  let shown = 0;
+  allModels.forEach(m => {
+    const match =
+      (!q || m._hay.includes(q)) &&
+      (activeQuads.size === 0 || activeQuads.has(m.quadrant)) &&
+      (activeTags.size === 0 || m.tags.some(t => activeTags.has(t)));
+    const el = document.getElementById(m.id);
+    if (el) el.hidden = !match;
+    if (match) shown++;
+  });
+  Object.keys(database).forEach(key => {
+    const sec = document.getElementById("cat-" + key);
+    if (sec) sec.hidden = !database[key].models.some(m => {
+      const el = document.getElementById(m.id);
+      return el && !el.hidden;
+    });
+  });
+  const filtering = q || activeQuads.size || activeTags.size;
+  countEl.textContent = filtering ? `${shown} of ${allModels.length}` : `${allModels.length} models`;
+  emptyState.classList.toggle("show", shown === 0);
+  if (push) syncUrl();
+}
+
+function syncUrl() {
+  const url = new URL(location.href);
+  url.search = "";
+  const q = searchInput.value.trim();
+  if (q) url.searchParams.set("q", q);
+  if (activeQuads.size) url.searchParams.set("quad", [...activeQuads].join(","));
+  if (activeTags.size) url.searchParams.set("tag", [...activeTags].join(","));
+  history.replaceState(null, "", url.toString());
+}
+
+searchInput.addEventListener("input", () => applyFilters(true));
+
+document.getElementById("chips").addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  const set = chip.dataset.quad ? activeQuads : activeTags;
+  const val = chip.dataset.quad || chip.dataset.tag;
+  if (set.has(val)) set.delete(val); else set.add(val);
+  chip.setAttribute("aria-pressed", set.has(val) ? "true" : "false");
+  applyFilters(true);
+});
+
+function resetFilters() {
+  searchInput.value = "";
+  activeQuads.clear(); activeTags.clear();
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", "false"));
+  applyFilters(true);
+}
+document.getElementById("empty-reset").addEventListener("click", resetFilters);
+
+/* ============================================================
+   THEME
+   ============================================================ */
+const themeBtn = document.getElementById("theme-btn");
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  themeBtn.textContent = t === "dark" ? "Light" : "Dark";
+  themeBtn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+  themeBtn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  // Sketch ink is baked into the bitmap, so the strokes must be repainted on a theme flip.
+  allModels.forEach(m => redraw(m.id));
+}
+applyTheme(document.documentElement.getAttribute("data-theme") || "dark");
+themeBtn.addEventListener("click", () => {
+  const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  state.theme = next;
+  applyTheme(next);
+  saveNow();
+});
+/* V4 followed the OS colour scheme until the user picked one. V5 ships dark as the house
+   default, so the system preference no longer drives the page — only the toggle does. */
+
+/* ============================================================
+   EXPORT / IMPORT
+   ============================================================ */
+document.getElementById("export-btn").addEventListener("click", () => {
+  const payload = {
+    format: "decision-book-v5",
+    exported: new Date().toISOString(),
+    answers: state.answers,
+    sorters: state.sorters,
+    sketches: state.sketches
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `decision-book-answers-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+const importFile = document.getElementById("import-file");
+document.getElementById("import-btn").addEventListener("click", () => importFile.click());
+importFile.addEventListener("change", () => {
+  const f = importFile.files && importFile.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data.answers !== "object" || data.answers === null) {
+        throw new Error("no answers object");
+      }
+      state.answers = data.answers;
+      // v3 exports carry answers only; treat the newer sections as optional.
+      state.sorters = (data.sorters && typeof data.sorters === "object") ? data.sorters : {};
+      state.sketches = (data.sketches && typeof data.sketches === "object") ? data.sketches : {};
+      saveNow();
+      allModels.forEach(m => {
+        (state.answers[m.id] || []).forEach((v, i) => {
+          const t = document.getElementById(`${m.id}-q${i}`);
+          if (t) t.value = v || "";
+        });
+        if (!state.answers[m.id]) {
+          document.querySelectorAll(`textarea[data-model="${m.id}"]`).forEach(t => { t.value = ""; });
+        }
+        renderSorter(m.id);
+        redraw(m.id);
+      });
+      updateProgress();
+    } catch (err) {
+      window.alert("That file could not be read as a Decision Book export.");
+    }
+    importFile.value = "";
+  };
+  reader.readAsText(f);
+});
+
+/* ============================================================
+   KEYBOARD
+   ============================================================ */
+const helpDialog = document.getElementById("help-dialog");
+document.getElementById("help-btn").addEventListener("click", () => helpDialog.showModal());
+document.getElementById("help-close").addEventListener("click", () => helpDialog.close());
+
+function visibleModels() {
+  return allModels.map(m => document.getElementById(m.id)).filter(el => el && !el.hidden);
+}
+function focusModel(dir) {
+  const list = visibleModels();
+  if (!list.length) return;
+  const current = document.activeElement.closest(".model");
+  let i = current ? list.indexOf(current) : -1;
+  i = i < 0 ? (dir > 0 ? 0 : list.length - 1) : Math.min(list.length - 1, Math.max(0, i + dir));
+  const btn = list[i].querySelector(".model-btn");
+  btn.focus();
+  btn.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+
+document.addEventListener("keydown", e => {
+  /* The login gate is a fixed overlay, not a modal, so page shortcuts would still fire
+     behind it — and `?` would open a dialog in the top layer, above the gate. */
+  const gate = document.getElementById("loginView");
+  if (gate && gate.style.display !== "none") return;
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if (e.key === "Escape") {
+    if (helpDialog.open) return;
+    if (typing && e.target === searchInput) { resetFilters(); searchInput.blur(); return; }
+    const open = document.querySelector('.model[data-open="true"]');
+    if (open) setOpen(open.id, false, true);
+    return;
+  }
+  if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "/") { e.preventDefault(); searchInput.focus(); searchInput.select(); return; }
+  if (e.key === "?") { e.preventDefault(); helpDialog.showModal(); return; }
+  if (e.key === "j") { e.preventDefault(); focusModel(1); return; }
+  if (e.key === "k") { e.preventDefault(); focusModel(-1); return; }
+});
+
+/* ============================================================
+   BOOT — restore filters and deep link from the URL
+   ============================================================ */
+(function boot() {
+  const params = new URLSearchParams(location.search);
+  const q = params.get("q");
+  if (q) searchInput.value = q;
+  (params.get("quad") || "").split(",").filter(Boolean).forEach(k => {
+    if (database[k]) {
+      activeQuads.add(k);
+      const c = document.querySelector(`.chip[data-quad="${k}"]`);
+      if (c) c.setAttribute("aria-pressed", "true");
+    }
+  });
+  (params.get("tag") || "").split(",").filter(Boolean).forEach(t => {
+    activeTags.add(t);
+    const c = document.querySelector(`.chip[data-tag="${t}"]`);
+    if (c) c.setAttribute("aria-pressed", "true");
+  });
+  applyFilters(false);
+
+  const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+  if (hash && document.getElementById(hash) && document.getElementById(hash).classList.contains("model")) {
+    setOpen(hash, true, false);
+    requestAnimationFrame(() => {
+      document.getElementById(hash).scrollIntoView({ block: "start" });
+    });
+  }
+})();
+
+window.addEventListener("hashchange", () => {
+  const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+  const el = document.getElementById(hash);
+  if (el && el.classList.contains("model")) setOpen(hash, true, false);
+});
+
+/* Expand everything for printing, then restore. */
+let printRestore = [];
+window.addEventListener("beforeprint", () => {
+  printRestore = [];
+  document.querySelectorAll(".model").forEach(el => {
+    printRestore.push([el.id, el.dataset.open === "true"]);
+    if (!el.hidden) setOpen(el.id, true, false);
+  });
+});
+window.addEventListener("afterprint", () => {
+  printRestore.forEach(([id, was]) => setOpen(id, was, false));
+});
+
+/* Exposed for the verification harness. */
+window.database = database;
+window.allModels = allModels;
+window.__state = () => state;
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>

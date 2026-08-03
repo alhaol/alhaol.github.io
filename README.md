@@ -67,6 +67,11 @@ No build step, no package manager.
 │   ├── Memories/       # Individual class pages (NN_slug_YYYY-MM-DD.html)
 │   ├── LinkedIn_Posts/ # Companion post drafts (one per class)
 │   └── _not_approved/  # Gitignored: drafts staged here until approved
+├── books/              # Books — full books distilled into interactive workbook pages
+│   ├── index.html      # Books Hub (data-driven from books.json)
+│   ├── books.json      # Book registry
+│   ├── books/          # Individual book pages (NNN_slug.html)
+│   └── _not_approved/  # Gitignored: drafts + their .book.json staged here until approved
 ├── workshops/          # Hands-on, code-first workshop decks (reuse the presentations deck engine)
 │   ├── index.html      # Workshops hub (data-driven from workshops.json)
 │   ├── workshops.json  # Workshop registry
@@ -78,12 +83,13 @@ No build step, no package manager.
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. A single foldable hub dock at bottom-right: it starts folded — tap `+` to unfold labelled links to the Apps Hub, Articles, Blooms, Memory and Prompts, `−` to fold. Presentations entry is commented out. |
+| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. A single foldable hub dock at bottom-right: it starts folded — tap `+` to unfold labelled links to the Apps Hub, Articles, Blooms, Memory, Books and Prompts, `−` to fold. Presentations entry is commented out. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 43-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
 | Memory Classes | `/memory/` | 2-class series that moves one concept into long-term memory via the 5-step cognitive sequence (chunk, offload to a diagram, spring a trap, scaffold, then re-encode it into the format you will actually retrieve it in: a decision card, a rule you say aloud, a diagram you redraw from memory, a causal graph you rebuild edge by edge, a procedure with the decisions blanked out, a letter system you fill in yourself, a metrical rule, or real code). Each page carries a freehand sketchpad, a light/dark toggle and a retrieval quiz that resurfaces what you missed. |
 | Learning Prompts | `/prompts/` | 9 copy-paste prompts that turn any chat AI into an active tutor — it asks before it tells and won't hand over the answer until you've tried. Searchable icon card grid; opening a prompt gives you a form for its `[PLACEHOLDER]` blanks with live substitution, a one-click copy, and a hand-off into a fresh chat. Driven by `prompts/prompts.json` over the markdown in `prompts/mds/`. |
+| Books | `/books/` | 1 book distilled into an interactive workbook: every model the book actually teaches gets a redrawn diagram, a what/how/when card and a worked example, all placed on a 2x2 memory map so a model can be found again mid-decision. Each page lets you sort your own items into a model's zones, sketch over the figure and answer three questions in place, with everything persisted locally and exportable as JSON. Login-gated. |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
 | Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |

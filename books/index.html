@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Books distilled into interactive workbooks — every model diagrammed, explained and answerable in place.">
+    <title>Books | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Books hardcodes its own accent, like every other hub on this site.
+           Amber matches the accent the book pages themselves paint with. */
+        :root {
+            --bg-color: #0a0f1a;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #fbbf24;
+            --secondary-color: #f59e0b;
+            --card-bg: #16202f;
+            --border-color: #2a3346;
+            --header-bg-start: #020617;
+            --header-bg-end: #0f172a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+        }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.14);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .prose { color: var(--text-main); }
+        .prose p { color: var(--text-muted); line-height: 1.75; }
+
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+        }
+
+        .nav-link { color: var(--text-main); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+            margin-bottom: 0.35rem;
+            background-color: rgba(251, 191, 36, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        /* The card's left edge carries the accent instead of a cover image — these are
+           distillations, not scans, so a fake book cover would misrepresent them. */
+        .book-card {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .book-card-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+
+        /* Per-book icon. Icons are picked on https://icons0.dev/ (a search front-end over
+           Iconify) and embedded from Iconify's CDN, which is the data source icons0 indexes.
+           The registry stores the icons0 name verbatim, e.g. "ph:squares-four-duotone". */
+        .book-icon {
+            flex: 0 0 auto;
+            width: 46px;
+            height: 46px;
+            border-radius: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .theme-card:hover .book-icon {
+            background-color: rgba(251, 191, 36, 0.18);
+            border-color: var(--primary-color);
+        }
+        .book-icon img { width: 26px; height: 26px; display: block; }
+
+        .book-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .book-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s;
+        }
+        .book-link:hover { gap: 0.75rem; }
+
+        .published-date { font-size: 0.875rem; color: var(--text-muted); }
+
+        .book-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .concept-count {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .book-author {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .search-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.7rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary-color); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .tag-chip {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 999px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .tag-chip:hover { color: var(--text-main); border-color: var(--primary-color); }
+        .tag-chip.on {
+            background-color: rgba(251, 191, 36, 0.12);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="py-6 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="nav-link text-sm" style="color: white;">← Back to Portfolio</a>
+            <a href="../memory/" class="nav-link text-sm" style="color: white;">Memory →</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div class="mb-10">
+            <h1 class="text-4xl font-bold mb-4">Books</h1>
+            <p class="text-lg prose">Books taken apart into the models they actually teach. Each one is a single page: every concept gets a drawn diagram, a what/how/when card and a worked example, then hands the page back to you — sort your own items into its zones, sketch over the figure, answer the questions in place. Your answers stay in the browser, and you can export the whole workbook.</p>
+        </div>
+
+        <div class="mb-8 flex flex-col gap-4">
+            <input id="search" class="search-input" type="search" placeholder="Search books, authors, or topics…" aria-label="Search books">
+            <div id="tags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <p id="empty" class="prose hidden py-16 text-center"></p>
+    </main>
+
+    <script>
+    (function () {
+        var all = [], activeTag = null, q = '';
+        var grid = document.getElementById('grid');
+        var empty = document.getElementById('empty');
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+
+        function prettyDate(iso) {
+            var p = String(iso || '').split('-');
+            if (p.length !== 3) return iso || '';
+            var months = ['January','February','March','April','May','June',
+                          'July','August','September','October','November','December'];
+            return months[Number(p[1]) - 1] + ' ' + Number(p[2]) + ', ' + p[0];
+        }
+
+        // "collection:name" as shown on icons0.dev, resolved through Iconify's CDN.
+        // Anything that is not a clean collection:name pair falls back to a book glyph
+        // rather than emitting a broken <img>.
+        var ICON_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        var ICON_FALLBACK = 'ph:book-open-duotone';
+
+        function iconUrl(name) {
+            var id = ICON_RE.test(String(name || '')) ? name : ICON_FALLBACK;
+            return 'https://api.iconify.design/' + id.replace(':', '/') +
+                   '.svg?color=%23fbbf24&width=26&height=26';
+        }
+
+        // The registry carries the filename outright: book pages are NN_slug.html with no
+        // date segment, so there is nothing to reconstruct. Fall back to num_slug for an
+        // entry written without one.
+        function fileOf(b) {
+            return b.file || (b.num + '_' + b.slug + '.html');
+        }
+
+        function card(b) {
+            return '' +
+            '<article class="theme-card book-card rounded-xl overflow-hidden">' +
+              '<div class="book-card-content">' +
+                '<div class="flex items-start gap-3 mb-3">' +
+                  '<span class="book-icon"><img src="' + esc(iconUrl(b.icon)) + '" alt="" loading="lazy" aria-hidden="true"></span>' +
+                  '<div class="flex-1 min-w-0 flex items-center justify-between">' +
+                    '<span class="book-num">BOOK ' + esc(b.num) + '</span>' +
+                    (b.concepts ? '<span class="concept-count">' + esc(b.concepts) + ' MODELS</span>' : '') +
+                  '</div>' +
+                '</div>' +
+                '<div class="mb-3">' +
+                  (b.tags || []).map(function (t) {
+                    return '<span class="category-badge">' + esc(t) + '</span>';
+                  }).join('') +
+                '</div>' +
+                // dir="auto" so Arabic entries lay out RTL inside this LTR hub.
+                '<h3 class="text-xl font-bold mb-1" dir="auto">' + esc(b.title) + '</h3>' +
+                (b.author ? '<p class="book-author" dir="auto">' + esc(b.author) + '</p>' : '') +
+                '<p class="text-sm mb-4" dir="auto">' + esc(b.tagline || '') + '</p>' +
+                '<p class="text-sm prose mb-4 flex-grow" dir="auto">' + esc(b.description || '') + '</p>' +
+                '<div class="book-card-footer">' +
+                  '<div>' +
+                    '<p class="published-date">' + esc(prettyDate(b.date)) + '</p>' +
+                  '</div>' +
+                  '<a href="books/' + esc(fileOf(b)) + '" class="book-link">Open →</a>' +
+                '</div>' +
+              '</div>' +
+            '</article>';
+        }
+
+        function matches(b) {
+            if (activeTag && (b.tags || []).indexOf(activeTag) < 0) return false;
+            if (!q) return true;
+            var hay = [b.title, b.author, b.tagline, b.description, b.slug]
+                        .concat(b.tags || []).join(' ').toLowerCase();
+            return hay.indexOf(q) >= 0;
+        }
+
+        function render() {
+            var list = all.filter(matches);
+            grid.innerHTML = list.map(card).join('');
+            if (!list.length) {
+                empty.classList.remove('hidden');
+                empty.textContent = all.length
+                    ? 'No books match that filter.'
+                    : 'No books published yet.';
+            } else {
+                empty.classList.add('hidden');
+            }
+        }
+
+        function renderTags() {
+            var seen = [];
+            all.forEach(function (b) {
+                (b.tags || []).forEach(function (t) { if (seen.indexOf(t) < 0) seen.push(t); });
+            });
+            document.getElementById('tags').innerHTML = seen.map(function (t) {
+                return '<button class="tag-chip" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+            }).join('');
+        }
+
+        document.getElementById('tags').addEventListener('click', function (e) {
+            var b = e.target.closest('button[data-tag]');
+            if (!b) return;
+            activeTag = (activeTag === b.dataset.tag) ? null : b.dataset.tag;
+            var chips = this.querySelectorAll('.tag-chip');
+            for (var i = 0; i < chips.length; i++) {
+                chips[i].classList.toggle('on', chips[i].dataset.tag === activeTag);
+            }
+            render();
+        });
+
+        document.getElementById('search').addEventListener('input', function () {
+            q = this.value.trim().toLowerCase();
+            render();
+        });
+
+        fetch('books.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                // Newest first, by number.
+                all = (d || []).slice().sort(function (a, b) { return Number(b.num) - Number(a.num); });
+                renderTags();
+                render();
+            })
+            .catch(function () {
+                empty.classList.remove('hidden');
+                empty.textContent = 'Could not load books.json.';
+            });
+    })();
+    </script>
+</body>
+</html>
