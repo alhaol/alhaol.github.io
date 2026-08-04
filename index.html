@@ -81,6 +81,31 @@
            tinted with the active theme accent, so they auto-theme via --primary-color.
            Items are visibility:hidden while folded, which also drops them out of the
            tab order. Lives outside #app so render() can't wipe it. */
+        /* Mirror of .hub-dock on the opposite corner: same glass, same fold, left-anchored
+           so the two never collide. Lives outside #app because render() replaces that node. */
+        .stat-dock {
+            position: fixed;
+            left: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: flex-start;
+            gap: 0.55rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-dock-toggle { padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .stat-dock-item { align-items: center; gap: 0.5rem; }
+        /* The number is the payload, so it sits in the circle. 4 digits have to fit at 46px. */
+        .stat-dock-icon {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-dock-label { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .stat-dock-label svg { width: 13px; height: 13px; }
+
         .hub-dock {
             position: fixed;
             right: 1.25rem;
@@ -94,7 +119,9 @@
         }
 
         .hub-dock-toggle,
-        .hub-dock-icon {
+        .hub-dock-icon,
+        .stat-dock-toggle,
+        .stat-dock-icon {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,7 +139,8 @@
                         border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .hub-dock-toggle {
+        .hub-dock-toggle,
+        .stat-dock-toggle {
             width: 54px;
             height: 54px;
             padding: 0;
@@ -120,7 +148,8 @@
             -webkit-tap-highlight-color: transparent;
         }
         .hub-dock-toggle:hover,
-        .hub-dock-item:hover .hub-dock-icon {
+        .hub-dock-item:hover .hub-dock-icon,
+        .stat-dock-toggle:hover {
             background: color-mix(in srgb, var(--primary-color, #00ff41) 26%, transparent);
             border-color: color-mix(in srgb, var(--primary-color, #00ff41) 75%, transparent);
             box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38),
@@ -128,28 +157,34 @@
             transform: translateY(-2px);
         }
         .hub-dock-toggle:focus-visible,
-        .hub-dock-item:focus-visible .hub-dock-icon {
+        .hub-dock-item:focus-visible .hub-dock-icon,
+        .stat-dock-toggle:focus-visible {
             outline: 2px solid var(--primary-color, #00ff41);
             outline-offset: 3px;
         }
         .hub-dock-item:focus-visible { outline: none; }
 
         /* plus -> minus: the vertical bar fades out, the glyph spins half a turn */
-        .hub-dock-toggle svg {
+        .hub-dock-toggle svg,
+        .stat-dock-toggle svg {
             transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .hub-dock-toggle .bar-v {
+        .hub-dock-toggle .bar-v,
+        .stat-dock-toggle .bar-v {
             opacity: 1;
             transition: opacity 0.2s ease;
         }
-        .hub-dock[data-open="true"] .hub-dock-toggle svg {
+        .hub-dock[data-open="true"] .hub-dock-toggle svg,
+        .stat-dock[data-open="true"] .stat-dock-toggle svg {
             transform: rotate(180deg);
         }
-        .hub-dock[data-open="true"] .hub-dock-toggle .bar-v {
+        .hub-dock[data-open="true"] .hub-dock-toggle .bar-v,
+        .stat-dock[data-open="true"] .stat-dock-toggle .bar-v {
             opacity: 0;
         }
 
-        .hub-dock-item {
+        .hub-dock-item,
+        .stat-dock-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -159,26 +194,33 @@
             transform: translateY(10px) scale(0.85);
             transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
         }
-        .hub-dock[data-open="true"] .hub-dock-item {
+        .hub-dock[data-open="true"] .hub-dock-item,
+        .stat-dock[data-open="true"] .stat-dock-item {
             opacity: 1;
             visibility: visible;
             transform: none;
         }
         /* stagger the unfold (child 1 is the toggle) */
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(2) { transition-delay: 0.03s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(3) { transition-delay: 0.06s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(4) { transition-delay: 0.09s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(5) { transition-delay: 0.12s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(2),
+        .stat-dock[data-open="true"] .stat-dock-item:nth-child(2) { transition-delay: 0.03s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(3),
+        .stat-dock[data-open="true"] .stat-dock-item:nth-child(3) { transition-delay: 0.06s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(4),
+        .stat-dock[data-open="true"] .stat-dock-item:nth-child(4) { transition-delay: 0.09s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(5),
+        .stat-dock[data-open="true"] .stat-dock-item:nth-child(5) { transition-delay: 0.12s; }
         .hub-dock[data-open="true"] .hub-dock-item:nth-child(6) { transition-delay: 0.15s; }
         .hub-dock[data-open="true"] .hub-dock-item:nth-child(7) { transition-delay: 0.18s; }
 
-        .hub-dock-icon {
+        .hub-dock-icon,
+        .stat-dock-icon {
             width: 46px;
             height: 46px;
             flex: none;
         }
 
-        .hub-dock-label {
+        .hub-dock-label,
+        .stat-dock-label {
             font-size: 0.7rem;
             letter-spacing: 0.02em;
             white-space: nowrap;
@@ -198,26 +240,34 @@
         }
 
         /* Light themes: the glass needs a light base to stay readable */
-        body.dock-light .hub-dock-label {
+        body.dock-light .hub-dock-label,
+        body.dock-light .stat-dock-label {
             color: var(--text-main, #0f172a);
             background: rgba(255, 255, 255, 0.82);
             border-color: color-mix(in srgb, var(--primary-color, #2563eb) 30%, transparent);
         }
         body.dock-light .hub-dock-toggle,
-        body.dock-light .hub-dock-icon {
+        body.dock-light .hub-dock-icon,
+        body.dock-light .stat-dock-toggle,
+        body.dock-light .stat-dock-icon {
             background: color-mix(in srgb, var(--primary-color, #2563eb) 12%, rgba(255, 255, 255, 0.72));
             box-shadow: 0 6px 20px rgba(15, 23, 42, 0.18);
         }
 
         @media (max-width: 480px) {
             .hub-dock { right: 0.9rem; bottom: 0.9rem; gap: 0.5rem; }
+            .stat-dock { left: 0.9rem; bottom: 0.9rem; gap: 0.5rem; }
+            .stat-dock-toggle { width: 50px; height: 50px; }
+            .stat-dock-icon { width: 42px; height: 42px; font-size: 0.72rem; }
             .hub-dock-toggle { width: 50px; height: 50px; }
             .hub-dock-icon { width: 42px; height: 42px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             .hub-dock-item,
+            .stat-dock-item,
             .hub-dock-toggle svg,
+            .stat-dock-toggle svg,
             .hub-dock-toggle,
             .hub-dock-icon { transition-duration: 0.01ms; }
         }
@@ -226,6 +276,33 @@
 <body>
 
     <!-- Hub dock: toggle first in the DOM, column-reverse puts it at the bottom -->
+    <nav class="stat-dock" id="statDock" data-open="false" aria-label="Research statistics">
+        <button type="button" class="stat-dock-toggle" id="statDockToggle"
+                aria-expanded="false" aria-controls="statDock" aria-label="Show research statistics">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line class="bar-v" x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <div class="stat-dock-item">
+            <span class="stat-dock-icon" data-stat="citations">0</span>
+            <span class="stat-dock-label"><i data-stat-icon="Citations"></i>// citations</span>
+        </div>
+        <div class="stat-dock-item">
+            <span class="stat-dock-icon" data-stat="patents">0</span>
+            <span class="stat-dock-label"><i data-stat-icon="Patents"></i>// patents</span>
+        </div>
+        <div class="stat-dock-item">
+            <span class="stat-dock-icon" data-stat="conferences">0</span>
+            <span class="stat-dock-label"><i data-stat-icon="Conferences"></i>// conferences</span>
+        </div>
+        <div class="stat-dock-item">
+            <span class="stat-dock-icon" data-stat="journals">0</span>
+            <span class="stat-dock-label"><i data-stat-icon="Journals"></i>// journals</span>
+        </div>
+    </nav>
+
     <nav class="hub-dock" id="hubDock" data-open="false" aria-label="Site sections">
         <button type="button" class="hub-dock-toggle" id="hubDockToggle"
                 aria-expanded="false" aria-controls="hubDock" aria-label="Open site sections">
@@ -317,16 +394,17 @@
     </nav>
 
     <script>
-        // Hub dock fold/unfold. Always starts folded — the + opens it, the - closes it.
-        (function () {
-            const dock = document.getElementById('hubDock');
-            const toggle = document.getElementById('hubDockToggle');
+        // Dock fold/unfold, shared by the hub dock (right) and the stats dock (left).
+        // Both always start folded — the + opens, the - closes.
+        function wireDock(dockId, toggleId, openLabel, closeLabel) {
+            const dock = document.getElementById(dockId);
+            const toggle = document.getElementById(toggleId);
             if (!dock || !toggle) return;
 
             const setOpen = (open) => {
                 dock.dataset.open = open ? 'true' : 'false';
                 toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-                toggle.setAttribute('aria-label', open ? 'Close site sections' : 'Open site sections');
+                toggle.setAttribute('aria-label', open ? closeLabel : openLabel);
             };
 
             setOpen(false);
@@ -348,7 +426,10 @@
                 if (dock.contains(e.target)) return;
                 setOpen(false);
             });
-        })();
+        }
+
+        wireDock('hubDock', 'hubDockToggle', 'Open site sections', 'Close site sections');
+        wireDock('statDock', 'statDockToggle', 'Show research statistics', 'Hide research statistics');
     </script>
 
 
@@ -370,12 +451,13 @@
     "personalInfo": {
         "name": "Ibrahim AbuAlhaol",
         "title": "AI Technical Lead | PhD, PEng, SMIEEE",
+        "motto": "Doing something I like, in a place I love, with clean-hearted people.",
         "email": "iabualhaol@gmail.com",
         "location": "Ottawa, Canada",
         "linkedin": "linkedin.com/in/abualhaol/",
         "googleScholar": "https://scholar.google.com/citations?user=UougQ9UAAAAJ",
         "summary": "AI Technical Lead and System Architect bridging the gap between academic research and industrial scale. An inventor with a robust patent portfolio, specializing in architecting Agentic AI, intelligent edge systems, and advanced cybersecurity solutions. Integrates System Engineering and Innovation Management to lead high-performing teams, delivering resilient solutions while empowering the next generation of engineering talent. Committed to ethical AI development and technical mentorship, fostering innovation from research concept to commercial deployment.",
-        "citations": 1061,
+        "citations": 1141,
         "conferences": 40,
         "patents": 42,
         "journals": 14
@@ -1464,13 +1546,25 @@
         }
         
         // Helper to get stat icon
-        function getStatIcon(statName) {
+        function getStatIcon(statName, size = 32) {
             const lower = statName.toLowerCase();
-            if (lower.includes('citation')) return getIcon('quote', 32);
-            if (lower.includes('patent')) return getIcon('medal', 32);
-            if (lower.includes('conference')) return getIcon('presentation', 32);
-            if (lower.includes('journal')) return getIcon('fileText', 32);
-            return getIcon('award', 32);
+            if (lower.includes('citation')) return getIcon('quote', size);
+            if (lower.includes('patent')) return getIcon('medal', size);
+            if (lower.includes('conference')) return getIcon('presentation', size);
+            if (lower.includes('journal')) return getIcon('fileText', size);
+            return getIcon('award', size);
+        }
+
+        // The stats dock lives outside #app, so render() cannot emit it — it refills it instead.
+        function renderStatDock(data) {
+            const info = (data && data.personalInfo) || {};
+            document.querySelectorAll('#statDock [data-stat]').forEach(el => {
+                const v = info[el.dataset.stat];
+                el.textContent = (v === undefined || v === null) ? 0 : v;
+            });
+            document.querySelectorAll('#statDock [data-stat-icon]').forEach(el => {
+                el.innerHTML = getStatIcon(el.dataset.statIcon, 13);
+            });
         }
 
         // Helper to get publication icon
@@ -1652,7 +1746,7 @@
 
         // Toggle Function
         window.toggleSection = function(id) {
-            const sections = ['about', 'experience', 'education', 'publications', 'updates'];
+            const sections = ['about', 'experience', 'skills', 'education', 'publications', 'updates'];
             
             sections.forEach(key => {
                 const content = document.getElementById(key);
@@ -1874,17 +1968,27 @@
                         <div class="max-w-5xl mx-auto relative z-10">
                             <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
                                 <div class="shrink-0">
-                                    <!-- Profile Image with correct path -->
-                                    <img src="assets/ibrahim-image-circle.png" alt="${data.personalInfo.name}" class="${imgSizeClass} rounded-full shadow-2xl border-4 border-white/20 shrink-0 object-cover bg-white transition-all duration-500" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IA&background=0D8ABC&color=fff';"/>
+                                    <!-- The portrait is the contact link. The email pill was removed from
+                                         the row below, so this is the only route to it now — hence the
+                                         title/aria-label and the hover ring, which a bare image link
+                                         would not give the reader. -->
+                                    <a href="mailto:${data.personalInfo.email}"
+                                       class="group block rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+                                       title="Email ${data.personalInfo.name} — ${data.personalInfo.email}"
+                                       aria-label="Email ${data.personalInfo.name} at ${data.personalInfo.email}">
+                                        <img src="assets/ibrahim-image-circle.png" alt="${data.personalInfo.name}" class="${imgSizeClass} rounded-full shadow-2xl border-4 border-white/20 shrink-0 object-cover bg-white transition-all duration-500 cursor-pointer group-hover:border-white/70 group-hover:scale-[1.03]" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IA&background=0D8ABC&color=fff';"/>
+                                    </a>
                                 </div>
                                 <div class="text-center md:text-left flex-1">
                                     <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-tight text-white">${data.personalInfo.name}</h1>
-                                    <p class="text-xl text-blue-100 mb-8 font-light max-w-2xl">${data.personalInfo.title}</p>
-                                    
+                                    <p class="text-xl text-blue-100 mb-5 font-light max-w-2xl">${data.personalInfo.title}</p>
+
+                                    ${data.personalInfo.motto ? `
+                                    <p class="mb-8 text-base md:text-lg font-light italic text-white/75 max-w-2xl md:border-l-2 md:border-white/25 md:pl-4">
+                                        ${data.personalInfo.motto}
+                                    </p>` : ''}
+
                                     <div class="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-white/90">
-                                        <a href="mailto:${data.personalInfo.email}" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
-                                            ${getIcon('mail', 16)} ${data.personalInfo.email}
-                                        </a>
                                         <a href="https://${data.personalInfo.linkedin}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
                                             ${getIcon('linkedin', 16)} LinkedIn
                                         </a>
@@ -1902,21 +2006,11 @@
                     </div>
 
                     <!-- MAIN CONTENT -->
-                    <div class="max-w-6xl mx-auto px-4 -mt-16 relative z-20">
-                        <!-- Stats Row -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                            ${['Citations', 'Patents', 'Conferences', 'Journals'].map(stat => `
-                                <div class="theme-card flex flex-col items-center justify-center p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow group">
-                                    <div class="text-[var(--primary-color)] mb-2 group-hover:scale-110 transition-transform">${getStatIcon(stat)}</div>
-                                    <span class="text-3xl font-bold">${data.personalInfo[stat.toLowerCase()] || 0}</span>
-                                    <span class="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-1">${stat}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                            <!-- Left Column -->
-                            <div class="lg:col-span-8 space-y-12">
+                    <div class="max-w-6xl mx-auto px-4 mt-12 relative z-20">
+                        <!-- Single full-width column. Technical Expertise used to be a sticky
+                             sidebar card here; it now sits inline after Professional Experience,
+                             so there is no second column left to lay out. -->
+                        <div class="space-y-12">
                                 <section>
                                     <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('about')">
                                         <div class="flex items-center gap-3">
@@ -1945,6 +2039,47 @@
                                         </div>
                                     </div>
                                     <div id="experience" class="space-y-4 transition-all duration-300 overflow-hidden hidden">${experienceHtml}</div>
+                                </section>
+
+                                <section>
+                                    <div class="flex items-center justify-between mb-6 border-b border-[var(--border-color)] pb-4 cursor-pointer group" onclick="toggleSection('skills')">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 text-[var(--primary-color)]">${getIcon('layers', 24)}</div>
+                                            <h2 class="text-2xl font-bold group-hover:text-[var(--primary-color)] transition-colors">Technical Expertise</h2>
+                                        </div>
+                                        <div id="icon-skills" class="text-[var(--text-muted)] transition-transform duration-300 transform rotate-0">
+                                            ${getIcon('chevronDown', 24)}
+                                        </div>
+                                    </div>
+                                    <div id="skills" class="theme-card p-8 rounded-xl transition-all duration-300 overflow-hidden hidden">
+                                        <!-- Four categories across the full width, stacking to 2 then 1 on narrow screens. -->
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                            <div>
+                                                <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                    ${getIcon('brain', 14)} Agentic &amp; Generative AI
+                                                </h4>
+                                                <div class="flex flex-wrap gap-2">${buildSkills("Agentic & Generative AI")}</div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                    ${getIcon('shield', 14)} Cybersecurity &amp; Networks
+                                                </h4>
+                                                <div class="flex flex-wrap gap-2">${buildSkills("Cybersecurity & Networks")}</div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                    ${getIcon('layout', 14)} Infrastructure &amp; Data
+                                                </h4>
+                                                <div class="flex flex-wrap gap-2">${buildSkills("Infrastructure & Data")}</div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                    ${getIcon('user', 14)} Leadership
+                                                </h4>
+                                                <div class="flex flex-wrap gap-2">${buildSkills("Leadership")}</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </section>
 
                                 <section>
@@ -1989,43 +2124,6 @@
                                         </div>
                                     </div>
                                 </section>
-                            </div>
-
-                            <!-- Right Column (Sidebar) -->
-                            <div class="lg:col-span-4 space-y-8">
-                                <section class="theme-card p-6 rounded-xl sticky top-8">
-                                    <div class="flex items-center gap-3 mb-6 border-b border-[var(--border-color)] pb-4">
-                                        <div class="text-[var(--primary-color)]">${getIcon('layers', 24)}</div>
-                                        <h3 class="font-bold text-xl">Technical Expertise</h3>
-                                    </div>
-                                    <div class="space-y-8">
-                                        <div>
-                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                ${getIcon('brain', 14)} Agentic & Generative AI
-                                            </h4>
-                                            <div class="flex flex-wrap gap-2">${buildSkills("Agentic & Generative AI")}</div>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                ${getIcon('shield', 14)} Cybersecurity & Networks
-                                            </h4>
-                                            <div class="flex flex-wrap gap-2">${buildSkills("Cybersecurity & Networks")}</div>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                ${getIcon('layout', 14)} Infrastructure & Data
-                                            </h4>
-                                            <div class="flex flex-wrap gap-2">${buildSkills("Infrastructure & Data")}</div>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                ${getIcon('user', 14)} Leadership
-                                            </h4>
-                                            <div class="flex flex-wrap gap-2">${buildSkills("Leadership")}</div>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
                         </div>
                     </div>
                     
@@ -2036,6 +2134,8 @@
                 </div>
             `;
             
+            renderStatDock(data);
+
             // Set initial theme selection in dropdown
             const selector = document.getElementById('theme-selector');
             if (selector && data.config?.currentTheme) {
