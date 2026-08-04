@@ -451,7 +451,7 @@
     "personalInfo": {
         "name": "Ibrahim AbuAlhaol",
         "title": "AI Technical Lead | PhD, PEng, SMIEEE",
-        "motto": "Doing something I like, in a place I love, with clean-hearted people.",
+        "motto": "Work worth doing, in a place I love, with clean-hearted people.",
         "email": "iabualhaol@gmail.com",
         "location": "Ottawa, Canada",
         "linkedin": "linkedin.com/in/abualhaol/",
@@ -1984,8 +1984,15 @@
                                     <p class="text-xl text-blue-100 mb-5 font-light max-w-2xl">${data.personalInfo.title}</p>
 
                                     ${data.personalInfo.motto ? `
-                                    <p class="mb-8 text-base md:text-lg font-light italic text-white/75 max-w-2xl md:border-l-2 md:border-white/25 md:pl-4">
-                                        ${data.personalInfo.motto}
+                                    <!-- Sized above the job title on purpose: this is the line meant to be
+                                         read, and the accent bar picks up the active theme colour rather
+                                         than a flat white rule so it reads as part of the design. -->
+                                    <p class="mb-8 max-w-3xl text-lg md:text-2xl italic leading-snug text-white
+                                              border-l-4 pl-4 md:pl-5"
+                                       style="border-color: var(--primary-color); text-shadow: 0 2px 12px rgba(0,0,0,0.55);">
+                                        ${data.personalInfo.motto.split(/,\s+/).map((clause, i, all) =>
+                                            `<span class="whitespace-nowrap">${clause}${i < all.length - 1 ? ',' : ''}</span>`
+                                        ).join(' ')}
                                     </p>` : ''}
 
                                     <div class="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-white/90">
