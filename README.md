@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (foldable hub dock, bottom-right → Apps Hub, Articles, Blooms, Memory, Prompts. Presentations entry is commented out)
+├── index.html          # Main portfolio / CV page (two foldable docks: hub bottom-right → Apps Hub, Articles, Blooms, Memory, Books, Prompts; stats bottom-left → citations, patents, conferences, journals)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -83,7 +83,7 @@ No build step, no package manager.
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, experience, education, patents, publications, recent activity. A single foldable hub dock at bottom-right: it starts folded — tap `+` to unfold labelled links to the Apps Hub, Articles, Blooms, Memory, Books and Prompts, `−` to fold. Presentations entry is commented out. |
+| Portfolio | `/` | Full CV: bio, motto, experience, education, patents, publications, recent activity. The portrait is the contact link (mailto). Every section folds, one open at a time. Two docks, both starting folded: **hub** bottom-right (`+` unfolds Apps Hub, Articles, Blooms, Memory, Books, Prompts; Presentations commented out) and **stats** bottom-left (citations, patents, conferences, journals). `−`, Esc, or a click outside folds either. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 43-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
