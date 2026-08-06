@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Verification Tax | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_44.png" alt="The Verification Tax" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-workflow">Delivery Strategy</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Verification Tax</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">AI broke the fast, cheap, good tradeoff for generation and left it completely intact for anything you cannot check.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 6, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~10 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Fast, cheap, good: pick two. The rule survived fifty-seven years because it described a real constraint. Half of it is now wrong, and the half that broke is not the half most teams think.</p>
+
+                    <h2>Where the triangle came from</h2>
+
+                    <p>Martin Barnes drew it in 1969 for a course called Time and Money in Contract Control. Three corners, time, cost and quality, each pulling against the other two. It held for so long because all three were funded from one account: skilled human attention. Money bought hours. Hours bought either speed or care, and Fred Brooks showed in 1975 that past a certain point buying more hours bought neither, because coordination ate the difference.</p>
+
+                    <p>That single shared input is the whole mechanism. The triangle was never a law of physics. It was a description of what happens when one scarce resource feeds three goals. Change the resource and the rule changes with it.</p>
+
+                    <p>AI changed the resource for exactly one of the three.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 406" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">How the fast, cheap, good tradeoff split into a generation half and a verification half</title>
+                                <desc id="fig1-desc">Until recently, one scarce input, skilled human attention, funded speed, cost and quality together, so a team could afford only two of the three. AI supplied a second and far cheaper input, but only for generation. Speed and cost now draw on machine generation, which is close to free. Quality still draws on human verification, which has not changed.</desc>
+
+                                <defs>
+                                    <marker id="f1-arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"></path>
+                                    </marker>
+                                    <marker id="f1-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa"></path>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="26" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Where the constraint moved</text>
+
+                                <!-- Panel A -->
+                                <text x="30" y="50" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">1969 TO 2022: ONE INPUT FEEDS ALL THREE</text>
+
+                                <rect x="30" y="72" width="160" height="60" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="110" y="97" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Skilled human</text>
+                                <text x="110" y="115" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">attention</text>
+
+                                <line x1="190" y1="102" x2="334" y2="78" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#f1-arrow-amber)"></line>
+                                <line x1="190" y1="102" x2="334" y2="118" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#f1-arrow-amber)"></line>
+                                <line x1="190" y1="102" x2="334" y2="158" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#f1-arrow-amber)"></line>
+
+                                <rect x="340" y="62" width="180" height="32" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="430" y="83" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">FAST</text>
+                                <rect x="340" y="102" width="180" height="32" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="430" y="123" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">CHEAP</text>
+                                <rect x="340" y="142" width="180" height="32" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="430" y="163" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">GOOD</text>
+
+                                <text x="30" y="196" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">One scarce input funded all three. You could afford two.</text>
+
+                                <line x1="30" y1="214" x2="610" y2="214" stroke="#2a3f5f" stroke-width="1"></line>
+
+                                <!-- Panel B -->
+                                <text x="30" y="240" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">2023 ONWARD: THE INPUT SPLITS IN TWO</text>
+
+                                <rect x="30" y="254" width="160" height="48" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"></rect>
+                                <text x="110" y="274" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#60a5fa">Generation</text>
+                                <text x="110" y="292" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">machine, near free</text>
+
+                                <rect x="30" y="316" width="160" height="48" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="110" y="336" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f59e0b">Verification</text>
+                                <text x="110" y="354" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">human, unchanged</text>
+
+                                <line x1="190" y1="278" x2="334" y2="266" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#f1-arrow-blue)"></line>
+                                <line x1="190" y1="278" x2="334" y2="306" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#f1-arrow-blue)"></line>
+                                <line x1="190" y1="340" x2="334" y2="346" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#f1-arrow-amber)"></line>
+
+                                <rect x="340" y="250" width="180" height="32" rx="5" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"></rect>
+                                <text x="430" y="271" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">FAST</text>
+                                <rect x="340" y="290" width="180" height="32" rx="5" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"></rect>
+                                <text x="430" y="311" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">CHEAP</text>
+                                <rect x="340" y="330" width="180" height="32" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+                                <text x="430" y="351" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">GOOD</text>
+
+                                <text x="30" y="386" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Two goals got a cheaper supplier. The third did not.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The 1969 triangle assumed one scarce input feeding all three goals, which is why funding two starved the third. AI supplied a second and far cheaper input, but only to generation. Sources: Barnes (1969), via Weaver, <em>The Origins of Modern Project Management</em>; Epoch AI, LLM inference price trends.</figcaption>
+                    </figure>
+
+                    <blockquote>The triangle did not break. It split. Fast and cheap now describe generation, where the constraint collapsed. Good still describes verification, where nothing moved.</blockquote>
+
+                    <h2>One corner collapsed, the other did not</h2>
+
+                    <p>The collapse is easy to document. Epoch AI tracks what it costs to buy a fixed level of model performance over time. The price of GPT-4 level results on PhD-level science questions fell roughly 40 times per year, and across the benchmarks they track the range runs from 9 times to 900 times per year. Producing a plausible first version of nearly anything is now close to instant and close to free.</p>
+
+                    <p>Teams feel it. In the 2025 DORA report, drawn from nearly 5,000 technology professionals, 90 percent said they use AI at work and more than 80 percent said it raised their productivity. For the first time, AI adoption correlated positively with software delivery throughput. In the 2024 report that correlation ran the other way.</p>
+
+                    <p>If the old rule still held, quality should now be cheap too. The same 2025 report says it is not. AI adoption still correlates negatively with software delivery stability. Throughput up and stability down, in one dataset, in one year. That is the split, measured.</p>
+
+                    <h2>Good was always a claim about checking</h2>
+
+                    <p>Quality is not a substance you put into an artifact. It is a claim you establish about one. <strong>Verification</strong>, the work of establishing that claim, used to be funded from the same account as construction, which is why the two moved together and why Barnes could treat quality as a corner you traded away. Cut construction cost to near zero and verification cost stays exactly where it was. The ratio between them shifts by orders of magnitude, and every process built on the old ratio quietly stops working.</p>
+
+                    <p>One thing did change, and it made this worse. The link between how good something looks and how good it is has weakened. Every review instinct a professional has was calibrated on human authors, for whom clean structure and confident prose were weak but genuine evidence of underlying care. A model produces that surface independently of the care. The proxy broke and nothing replaced it.</p>
+
+                    <p>METR ran the experiment that shows the cost. Sixteen experienced developers worked 246 real issues on open-source repositories they had contributed to for years, projects that average more than 22,000 stars and a million lines of code. Before starting, they forecast that AI would speed them up by 24 percent. Afterwards, they estimated it had sped them up by 20 percent. The clock said they were 19 percent slower.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 285" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Developer estimates of AI speedup compared with the measured result</title>
+                                <desc id="fig2-desc">In a randomized trial run by METR, sixteen experienced developers forecast a 24 percent speedup from AI before the study and still estimated a 20 percent speedup after taking part. The measured result was a 19 percent slowdown, a gap of 39 percentage points between belief and outcome.</desc>
+
+                                <text x="30" y="26" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">What the developers felt, and what the clock recorded</text>
+                                <text x="30" y="52" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">METR RANDOMIZED TRIAL: 16 DEVELOPERS, 246 REAL ISSUES</text>
+
+                                <line x1="410" y1="70" x2="410" y2="218" stroke="#64748b" stroke-width="1" stroke-dasharray="3 3"></line>
+
+                                <text x="190" y="100" text-anchor="end" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">Forecast, before</text>
+                                <rect x="410" y="80" width="182" height="30" rx="3" fill="#2a3f5f"></rect>
+                                <text x="584" y="100" text-anchor="end" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#f1f5f9">+24%</text>
+
+                                <text x="190" y="150" text-anchor="end" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">Estimate, after</text>
+                                <rect x="410" y="130" width="152" height="30" rx="3" fill="#2a3f5f"></rect>
+                                <text x="554" y="150" text-anchor="end" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#f1f5f9">+20%</text>
+
+                                <text x="190" y="200" text-anchor="end" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">Actual, measured</text>
+                                <rect x="266" y="180" width="144" height="30" rx="3" fill="#f59e0b"></rect>
+                                <text x="274" y="200" text-anchor="start" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#0a1628">19% slower</text>
+
+                                <text x="410" y="236" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">no change</text>
+
+                                <text x="30" y="266" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">The 39-point gap is verification effort, which nobody can feel.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> Experienced developers, working on repositories they had known for years, were wrong about their own throughput by 39 percentage points. Source: Becker, Rush, Barnes and Rein (METR), arXiv:2507.09089, July 2025.</figcaption>
+                    </figure>
+
+                    <p>The slowdown is not the interesting number. The 39-point gap is. These were not careless people, and they were not wrong that generation had got faster. What they could not perceive is that reading, checking and correcting had absorbed the gain, because verification effort arrives as a diffuse tax on attention rather than as an event you can point at. Nobody logs the twenty minutes spent deciding whether a plausible diff is also correct.</p>
+
+                    <h2>The bill that does not show up this quarter</h2>
+
+                    <p>GitClear studied 211 million changed lines from repositories owned by Google, Microsoft, Meta and enterprise C-corporations, from January 2020 through December 2024. Two numbers moved in opposite directions. The share of changed lines that were refactored, meaning moved rather than newly written, fell from about 25 percent in 2021 to under 10 percent in 2024. The share classified as copy-pasted rose from 8.3 percent to 12.3 percent over the same window, and duplicated blocks grew roughly fourfold.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 320" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig3-title">Refactored lines fell while copy-pasted lines rose, crossing over in 2024</title>
+                                <desc id="fig3-desc">Across 211 million changed lines of code, the share that was refactored fell from about 25 percent in 2021 to under 10 percent in 2024, while the share that was copy-pasted rose from 8.3 percent to 12.3 percent. The two lines cross in 2024, the first year copy-pasted code exceeded refactored code.</desc>
+
+                                <text x="30" y="26" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">The corner that got spent</text>
+                                <text x="30" y="52" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">211 MILLION CHANGED LINES, GOOGLE / MICROSOFT / META / ENTERPRISE REPOS</text>
+
+                                <line x1="110" y1="76" x2="110" y2="256" stroke="#2a3f5f" stroke-width="1"></line>
+                                <line x1="580" y1="76" x2="580" y2="256" stroke="#2a3f5f" stroke-width="1"></line>
+
+                                <line x1="110" y1="98" x2="580" y2="192" stroke="#f59e0b" stroke-width="2.5"></line>
+                                <line x1="110" y1="200" x2="580" y2="175" stroke="#60a5fa" stroke-width="2.5"></line>
+
+                                <circle cx="110" cy="98" r="4" fill="#f59e0b"></circle>
+                                <circle cx="580" cy="192" r="4" fill="#f59e0b"></circle>
+                                <circle cx="110" cy="200" r="4" fill="#60a5fa"></circle>
+                                <circle cx="580" cy="175" r="4" fill="#60a5fa"></circle>
+                                <circle cx="513" cy="179" r="6" fill="none" stroke="#f1f5f9" stroke-width="1.5"></circle>
+
+                                <text x="122" y="88" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#f59e0b">Refactored (moved) lines</text>
+                                <text x="122" y="222" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#60a5fa">Copy-pasted lines</text>
+
+                                <text x="100" y="102" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">25%</text>
+                                <text x="100" y="204" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">8.3%</text>
+                                <text x="592" y="200" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">&lt;10%</text>
+                                <text x="592" y="172" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">12.3%</text>
+
+                                <text x="110" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">2021</text>
+                                <text x="580" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">2024</text>
+
+                                <text x="30" y="302" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Copy-paste passed refactoring for the first time in 2024.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 3.</b> Values are shares of changed lines, so the two series are directly comparable. The circle marks the crossover. Source: GitClear, <em>AI Copilot Code Quality</em>, 2025 research.</figcaption>
+                    </figure>
+
+                    <p>Refactoring is what you do when you understand code well enough to not want a second copy of it. Copy-paste is what you do when producing a second copy costs less than understanding the first. The crossing lines read like a discipline problem. They are better read as a location readout: they tell you where the cheap resource now sits, and what people do when one corner of the triangle goes on sale.</p>
+
+                    <p>None of it appears in a quarterly delivery number. It appears eighteen months later, as a change that should take a day and takes three weeks.</p>
+
+                    <h2>The rule that replaced pick two</h2>
+
+                    <p>The replacement was published before the models arrived. <em>Accelerate</em>, the 2018 book by Nicole Forsgren, Jez Humble and Gene Kim, found that speed and stability were not a tradeoff for teams that had the right delivery capabilities. Elite performers deployed far more often and had lower change failure rates at the same time. The tradeoff turned out to be conditional rather than fundamental, and the condition was whether the checking had been automated.</p>
+
+                    <p>The 2025 DORA report says the same thing about AI, more loudly. It calls AI an amplifier: teams with strong automated testing, mature version control and fast feedback loops convert model output into throughput, while teams with tightly coupled systems and manual gates get very little from the same tools. The model is identical for everyone. The verification capability is not, and that is what decides the outcome.</p>
+
+                    <p>So the useful question is no longer which two you pick. It is whether a cheap automatic <strong>oracle</strong> exists for the work in front of you: something that can tell you an output is correct without spending a person on it. A test suite, a compiler, a type system, a simulator, a replay of production traffic, a diff against a known good result.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 306" role="img" aria-labelledby="fig4-title fig4-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig4-title">A decision rule based on whether an automatic correctness check exists</title>
+                                <desc id="fig4-desc">Work that has a cheap automatic correctness check, such as unit tests, a compiler, a type system or replayed production traffic, can now be fast, cheap and good at once because both generation and checking are close to free. Work with no automatic check, such as architecture, security posture, a figure shown to a customer or a claim in a regulatory filing, still forces a choice of two, and quality should not be the one given up.</desc>
+
+                                <text x="30" y="26" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">The question that replaced pick two</text>
+                                <text x="30" y="50" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">IS THERE AN AUTOMATIC CHECK THAT SAYS THIS IS CORRECT?</text>
+
+                                <rect x="30" y="68" width="282" height="220" rx="8" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"></rect>
+                                <rect x="328" y="68" width="282" height="220" rx="8" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"></rect>
+
+                                <text x="46" y="94" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#60a5fa">YES</text>
+                                <text x="46" y="120" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Unit tests, a compiler, a type</text>
+                                <text x="46" y="140" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">system, a simulator, replayed</text>
+                                <text x="46" y="160" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">traffic, a diff against known good.</text>
+                                <line x1="46" y1="178" x2="296" y2="178" stroke="#2a3f5f" stroke-width="1"></line>
+                                <text x="46" y="200" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Generation: free.</text>
+                                <text x="46" y="220" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Checking: free.</text>
+                                <line x1="46" y1="238" x2="296" y2="238" stroke="#2a3f5f" stroke-width="1"></line>
+                                <text x="46" y="262" font-family="Inter, sans-serif" font-size="14" font-weight="700" letter-spacing="0.04em" fill="#60a5fa">TAKE ALL THREE</text>
+                                <text x="46" y="280" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The 1969 rule does not apply.</text>
+
+                                <text x="344" y="94" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">NO</text>
+                                <text x="344" y="120" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Architecture, security posture,</text>
+                                <text x="344" y="140" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">a number shown to a customer,</text>
+                                <text x="344" y="160" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">a claim in a regulatory filing.</text>
+                                <line x1="344" y1="178" x2="594" y2="178" stroke="#2a3f5f" stroke-width="1"></line>
+                                <text x="344" y="200" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Generation: free.</text>
+                                <text x="344" y="220" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Checking: still a person.</text>
+                                <line x1="344" y1="238" x2="594" y2="238" stroke="#2a3f5f" stroke-width="1"></line>
+                                <text x="344" y="262" font-family="Inter, sans-serif" font-size="14" font-weight="700" letter-spacing="0.04em" fill="#f59e0b">PICK TWO</text>
+                                <text x="344" y="280" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Do not pick against good.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 4.</b> Whether the old tradeoff applies now turns on whether correctness can be established by machine rather than by a person. Sources: Forsgren, Humble and Kim, <em>Accelerate</em> (2018); DORA (2025).</figcaption>
+                    </figure>
+
+                    <p>Where an oracle exists, take all three. Generation is free and checking is free, so the 1969 rule genuinely does not apply, and a team still rationing against it is leaving output on the table. Where no oracle exists, and architecture decisions, security posture, a number you put in front of a customer and a claim in a regulatory filing all qualify, the triangle is fully intact. The only thing AI changed there is that weak work now arrives faster and looks better while it does.</p>
+
+                    <p>This reframes what an AI strategy is. Most of them are procurement plans: which models, which seats, which vendor. That is the half of the problem that solved itself, and it keeps getting cheaper whether or not you have a plan for it. The half that did not solve itself is unglamorous and internal. It is test coverage on the paths that matter, environments that reproduce production, data you can replay, and a review process that assumes the author had no judgment.</p>
+
+                    <p>Barnes's triangle lasted because it named a real scarcity, not because it was a law. The scarcity moved. The organizations that look lucky in three years will be the ones that spent this stretch building the machinery that decides whether a thing is right, rather than the ones that adopted the models earliest, because that machinery guards the only corner that still costs anything.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Split cycle time into generation and verification and track the two separately. If generation gets five times faster and total cycle time improves by 10 percent, verification is your binding constraint and more model capacity will not move it. Both DORA and METR predict that exact shape, so measure it before you spend against it.</li>
+                        <li>Fund the oracle before the model. List the work you want accelerated over the next two quarters and mark each item with the automatic check that would prove it correct. Put the next budget increment into building checks for the unmarked items rather than into more seats for work that has none.</li>
+                        <li>Run GitClear's three measures against your own repositories: share of changed lines refactored, share copy-pasted, and count of duplicated blocks. All three are computable from git history you already have, and they move a year or more ahead of your delivery metrics.</li>
+                        <li>Stop accepting self-reported productivity as evidence. METR's participants were off by 39 points about their own work, on code they knew well. Require one measured before-and-after comparison on real tasks before any rollout scales past a pilot.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Plausibility Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A robot can practice on fake video that looks perfect and still get the real world wrong.</p>
+                        <a href="the-plausibility-trap.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Harness Advantage</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
+                        <a href="the-harness-advantage.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Experience Bottleneck</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Language models inherited a corpus. Robots have to earn every hour of theirs.</p>
+                        <a href="the-experience-bottleneck.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Weaver, P. <em>"The Origins of Modern Project Management."</em> Mosaic Project Services. Credits the time, cost and quality triangle to Martin Barnes and his 1969 course "Time and Money in Contract Control."
+                        <a href="https://mosaicprojects.com.au/PDF_Papers/P050_Origins_of_Modern_PM.pdf" target="_blank">https://mosaicprojects.com.au/PDF_Papers/P050_Origins_of_Modern_PM.pdf</a>
+                    </li>
+                    <li class="reference-item">
+                        Brooks, F. P. (1975). <em>"The Mythical Man-Month: Essays on Software Engineering."</em> Addison-Wesley.
+                    </li>
+                    <li class="reference-item">
+                        Forsgren, N., Humble, J., &amp; Kim, G. (2018). <em>"Accelerate: The Science of Lean Software and DevOps."</em> IT Revolution Press.
+                        <a href="https://itrevolution.com/product/accelerate/" target="_blank">https://itrevolution.com/product/accelerate/</a>
+                    </li>
+                    <li class="reference-item">
+                        DORA / Google Cloud (2025). <em>"2025 DORA Report: State of AI-assisted Software Development."</em> Published September 23, 2025.
+                        <a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report" target="_blank">https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report</a>
+                    </li>
+                    <li class="reference-item">
+                        Becker, J., Rush, N., Barnes, E., &amp; Rein, D. (2025). <em>"Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity."</em> METR. arXiv:2507.09089.
+                        <a href="https://arxiv.org/abs/2507.09089" target="_blank">https://arxiv.org/abs/2507.09089</a>
+                    </li>
+                    <li class="reference-item">
+                        GitClear (2025). <em>"AI Copilot Code Quality: 2025 Data Suggests 4x Growth in Code Clones."</em> Analysis of 211 million changed lines, 2020 to 2024.
+                        <a href="https://www.gitclear.com/ai_assistant_code_quality_2025_research" target="_blank">https://www.gitclear.com/ai_assistant_code_quality_2025_research</a>
+                    </li>
+                    <li class="reference-item">
+                        Epoch AI. <em>"LLM inference prices have fallen rapidly but unequally across tasks."</em>
+                        <a href="https://epoch.ai/data-insights/llm-inference-price-trends" target="_blank">https://epoch.ai/data-insights/llm-inference-price-trends</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
