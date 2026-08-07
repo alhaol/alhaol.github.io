@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Annie Duke's How to Decide as an interactive workbook: 27 decision tools on a fast/thorough map, each with a diagram, a worked example and three questions you answer on the page.">
+<title>How to Decide</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+<script>
+/* Resolve theme before first paint to avoid a flash. Dark is the house default. */
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem('howtodecide.v1') || '{}');
+    document.documentElement.setAttribute('data-theme', s.theme || 'dark');
+  } catch (e) { /* localStorage unavailable — stay dark */ }
+})();
+</script>
+<style>
+/* ============================================================
+   1. TOKENS
+   ============================================================ */
+/* Dark is the default: this page is styled to the alhaol.github.io /apps/ house look
+   (slate-950 base, glass panels, Inter, one gold accent). Every colour below is a token,
+   and every diagram paints from those tokens, so the light theme is a value swap only. */
+:root {
+  color-scheme: dark;
+  --bg: #020617;
+  --bg-grad: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+  /* --surface must stay OPAQUE: SVG knockouts (.s-knock) and the matrix axis labels
+     paint with it, and a translucent fill would let the shape underneath bleed through. */
+  --surface: #0f172a;
+  --surface-2: #16202f;
+  --ink: #f1f5f9;
+  --ink-2: #cbd5e1;
+  --ink-3: #94a3b8;
+  --ink-4: #64748b;
+  --rule: #273449;
+  --rule-2: #475569;
+  --fill: #1e293b;
+  --accent: #fbbf24;
+  --accent-soft: #f59e0b;
+  --accent-ink: #fbbf24;
+  --focus: #60a5fa;
+
+  /* Glass is the decorative layer — used only where a translucent panel is safe. */
+  --glass: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --r-1: 10px;
+  --r-2: 14px;
+
+  --measure: 66ch;
+  --step--2: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0:  0.9375rem;
+  --step-1:  1.0625rem;
+  --step-2:  1.375rem;
+  --step-3:  2rem;
+  --step-4:  2.75rem;
+
+  --sp-1: .25rem; --sp-2: .5rem;  --sp-3: .75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem; --sp-6: 2rem;   --sp-7: 3rem;   --sp-8: 4rem;
+
+  --dur: .35s;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --bg-grad: none;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --ink: #1a202c;
+  --ink-2: #4a5568;
+  --ink-3: #718096;
+  --ink-4: #a0aec0;
+  --rule: #e2e8f0;
+  --rule-2: #cbd5e0;
+  --fill: #f1f5f9;
+  /* Gold at full brightness is unreadable on white, so the light theme drops to amber-600. */
+  --accent: #d97706;
+  --accent-soft: #b45309;
+  --accent-ink: #b45309;
+  --focus: #2b6cb0;
+
+  --glass: #ffffff;
+  --glass-border: #e2e8f0;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0s; }
+  * { animation-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ============================================================
+   2. RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; background: var(--bg); }
+body {
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  background-color: var(--bg);
+  /* Fixed, so the glow stays at the top of the viewport instead of stretching over a
+     page that is ~50 accordions tall. */
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1,h2,h3,h4 { line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+svg { display: block; }
+:where(a) { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.wrap { max-width: 60rem; margin-inline: auto; padding-inline: var(--sp-4); }
+.wrap-narrow { max-width: 52rem; margin-inline: auto; padding-inline: var(--sp-4); }
+.eyebrow {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-4);
+  text-transform: uppercase; letter-spacing: .14em;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--sp-4); top: -3rem; z-index: 100;
+  background: var(--surface); color: var(--ink); padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--rule-2); transition: top .2s;
+}
+.skip-link:focus { top: var(--sp-4); }
+
+/* ============================================================
+   3. HEADER + HERO MATRIX
+   ============================================================ */
+/* Transparent so the fixed radial glow reads through the tallest part of the page. */
+.site-header {
+  background: transparent;
+  border-bottom: 1px solid var(--rule);
+  padding-block: var(--sp-5) var(--sp-7);
+  text-align: center;
+}
+.header-nav {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: var(--sp-3); margin-bottom: var(--sp-6);
+}
+.header-nav a {
+  font-size: var(--step--1); color: var(--ink-3); text-decoration: none;
+  transition: color var(--dur);
+}
+.header-nav a:hover { color: var(--ink); }
+.site-header h1 {
+  font-size: clamp(var(--step-3), 7vw, var(--step-4));
+  margin-block: var(--sp-3) var(--sp-4);
+}
+.lede {
+  font-size: var(--step-1); font-weight: 300; color: var(--ink-3);
+  max-width: 34rem; margin-inline: auto;
+}
+
+.matrix {
+  position: relative; width: 100%; max-width: 30rem;
+  aspect-ratio: 1; margin: var(--sp-8) auto 0;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.matrix-axis-x, .matrix-axis-y { position: absolute; background: var(--ink-4); z-index: 1; }
+/* Inset by 7% so the edge labels clear the axis tips. V4 knocked them out with an opaque
+   background instead, which only worked while the header itself was opaque. */
+.matrix-axis-x { top: 50%; left: 7%; right: 7%; height: 1px; transform: translateY(-50%); }
+.matrix-axis-y { left: 50%; top: 7%; bottom: 7%; width: 1px; transform: translateX(-50%); }
+.matrix-label {
+  position: absolute; font-size: var(--step--2); font-weight: 600; color: var(--ink-3);
+  letter-spacing: .1em; text-transform: uppercase; z-index: 2;
+  padding: 0 .35em;
+}
+/* V4 straddled these on the matrix border, which was fine when the matrix had no bounds.
+   The glass panel clips, so they now sit just inside it. */
+.label-top    { top: var(--sp-2);    left: 50%;  transform: translateX(-50%); }
+.label-bottom { bottom: var(--sp-2); left: 50%;  transform: translateX(-50%); }
+.label-left   { top: 50%; left: 0;   transform: translate(0, -50%) rotate(-90deg); }
+.label-right  { top: 50%; right: 0;  transform: translate(0, -50%) rotate(90deg); }
+
+.quad {
+  position: absolute; width: 50%; height: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: var(--sp-4) var(--sp-3);
+  text-decoration: none; border: 1px solid transparent; transition: background var(--dur);
+}
+.quad:hover, .quad:focus-visible { background: var(--surface-2); z-index: 3; }
+.quad:hover .quad-name { color: var(--accent-ink); }
+.q1 { top: 0; left: 0;     border-right: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); }
+.q2 { top: 0; right: 0;    border-bottom: 1px solid var(--rule-2); }
+.q3 { bottom: 0; left: 0;  border-right: 1px solid var(--rule-2); }
+.q4 { bottom: 0; right: 0; }
+.quad-axis { font-size: var(--step--2); color: var(--ink-4); text-transform: uppercase; letter-spacing: .08em; }
+.quad-name { font-size: var(--step-1); color: var(--ink); margin-block: var(--sp-1); transition: color var(--dur); }
+.quad-progress { font-size: var(--step--2); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.quad-bar { width: 3rem; height: 2px; background: var(--rule); margin-top: var(--sp-1); }
+.quad-bar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width var(--dur); }
+
+@media (max-width: 30rem) {
+  .matrix { aspect-ratio: auto; max-width: none; display: grid; grid-template-columns: 1fr 1fr; }
+  .matrix-axis-x, .matrix-axis-y, .matrix-label { display: none; }
+  .quad { position: static; width: auto; height: auto; border: 1px solid var(--rule); }
+}
+
+/* ============================================================
+   4. TOOLBAR
+   ============================================================ */
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.toolbar-row {
+  display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap;
+  padding-block: var(--sp-3);
+}
+.search-field { position: relative; flex: 1 1 14rem; min-width: 0; }
+.search-field input {
+  width: 100%; padding: var(--sp-2) var(--sp-3) var(--sp-2) 2.1rem;
+  background: var(--surface); border: 1px solid var(--rule-2); border-radius: var(--r-1);
+  font-size: var(--step-0);
+}
+.search-field input::placeholder { color: var(--ink-4); }
+.search-field svg { position: absolute; left: .6rem; top: 50%; transform: translateY(-50%);
+  width: 1rem; height: 1rem; stroke: var(--ink-4); fill: none; stroke-width: 2; }
+.kbd {
+  font-family: var(--mono); font-size: var(--step--2); color: var(--ink-4);
+  border: 1px solid var(--rule-2); border-bottom-width: 2px; border-radius: 3px;
+  padding: 0 .3em; background: var(--surface);
+}
+.search-hint { position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); }
+.tool-btn {
+  padding: var(--sp-2) var(--sp-3); border: 1px solid var(--rule-2); border-radius: var(--r-1);
+  background: var(--surface); font-size: var(--step--1); color: var(--ink-2);
+  white-space: nowrap; transition: border-color var(--dur), color var(--dur);
+}
+.tool-btn:hover { border-color: var(--ink-3); color: var(--ink); }
+.chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; padding-bottom: var(--sp-3); }
+.chip {
+  font-size: var(--step--2); text-transform: uppercase; letter-spacing: .06em;
+  padding: .25rem .6rem; border: 1px solid var(--rule-2); border-radius: 999px;
+  color: var(--ink-3); background: var(--surface); transition: all var(--dur);
+}
+.chip:hover { border-color: var(--ink-3); color: var(--ink); }
+.chip[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: #020617; border-color: transparent; font-weight: 600;
+}
+.chip[aria-pressed="true"] .chip-n { color: #020617; opacity: .55; }
+.chip-quad { border-color: var(--ink-4); color: var(--ink-2); }
+.chip-n { color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.chip-sep { width: 1px; align-self: stretch; background: var(--rule); margin-inline: var(--sp-1); }
+.result-count { font-size: var(--step--1); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.storage-warning {
+  display: none; padding: var(--sp-2) 0; font-size: var(--step--1); color: var(--accent-ink);
+}
+.storage-warning.show { display: block; }
+
+/* ============================================================
+   5. TABLE OF CONTENTS
+   ============================================================ */
+.toc { border-bottom: 1px solid var(--rule); }
+.toc > summary {
+  cursor: pointer; padding-block: var(--sp-4); font-size: var(--step--1);
+  text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600;
+}
+.toc > summary::marker { color: var(--ink-4); }
+.toc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--sp-5); padding-bottom: var(--sp-6);
+}
+.toc-grid h2 { font-size: var(--step--1); text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-4); margin-bottom: var(--sp-2); font-weight: 700; letter-spacing: .08em; }
+.toc-grid ol { list-style: none; padding: 0; }
+.toc-grid a { display: block; padding: .15rem 0; font-size: var(--step--1); color: var(--ink-2);
+  text-decoration: none; }
+.toc-grid a:hover { color: var(--accent-ink); text-decoration: underline; }
+
+/* ============================================================
+   6. MODEL LIST + ACCORDION
+   ============================================================ */
+main { padding-block: var(--sp-7) var(--sp-8); }
+.category { margin-bottom: var(--sp-8); scroll-margin-top: calc(var(--toolbar-h, 5rem) + 1rem); }
+.category-head { margin-bottom: var(--sp-5); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--rule); }
+.category-head h2 { font-size: var(--step-2); margin-top: var(--sp-1); }
+.category-head p { color: var(--ink-3); font-size: var(--step--1); margin-top: var(--sp-2); max-width: var(--measure); }
+.model-list { border-top: 1px solid var(--rule); }
+
+.model { border-bottom: 1px solid var(--rule); scroll-margin-top: calc(var(--toolbar-h, 5rem) + 1rem); }
+.model[hidden] { display: none; }
+.model-btn {
+  width: 100%; display: flex; align-items: baseline; gap: var(--sp-3);
+  padding-block: var(--sp-4); text-align: left; transition: background var(--dur);
+}
+.model-btn:hover { background: var(--surface-2); }
+.model-title { font-size: var(--step-1); font-weight: 500; color: var(--ink); flex: 1; }
+.model-meta { font-size: var(--step--2); color: var(--ink-4); white-space: nowrap; }
+.model-mark {
+  width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent);
+  flex: none; align-self: center; opacity: 0;
+}
+.model[data-used="true"] .model-mark { opacity: 1; }
+.model-icon { flex: none; align-self: center; width: 1rem; height: 1rem; position: relative; }
+.model-icon::before, .model-icon::after {
+  content: ""; position: absolute; inset: 50% 0 auto 0; height: 1.5px; background: var(--ink-3);
+  transition: transform var(--dur);
+}
+.model-icon::after { transform: rotate(90deg); }
+.model[data-open="true"] .model-icon::after { transform: rotate(0deg); }
+
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur) ease; }
+.model[data-open="true"] .panel { grid-template-rows: 1fr; }
+.panel-inner {
+  overflow: hidden; visibility: hidden;
+  transition: visibility 0s linear var(--dur);
+}
+.model[data-open="true"] .panel-inner { visibility: visible; transition-delay: 0s; }
+.panel-body { padding-block: var(--sp-5) var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-6); }
+@media (min-width: 48rem) {
+  .panel-body { flex-direction: row; align-items: flex-start; }
+  /* The side column now holds the diagram AND the pad, so it is too tall to stick. */
+  .panel-side { width: 34%; flex: none; }
+  .panel-text { width: 66%; }
+}
+.panel-side { display: flex; flex-direction: column; gap: var(--sp-4); }
+.panel-figure {
+  border: 1px solid var(--glass-border); background: var(--surface);
+  border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-5); display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+}
+.svg-illustration { width: 100%; max-width: 14rem; height: auto; }
+.figure-origin { font-size: var(--step--2); color: var(--ink-4); text-align: center; }
+/* Fidelity badge: says whether this diagram is the originator's own form or a later
+   common rendering of it. Every model carries the flag, so the reader can tell a
+   sourced framework from a popularisation without leaving the page. */
+.fidelity {
+  display: inline-block; margin-left: .4rem; padding: 0 .35rem;
+  font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--rule-2); border-radius: 3px; vertical-align: .05em;
+}
+.fidelity[data-f="interpreted"] { color: var(--accent-ink); border-color: var(--accent-soft); }
+
+.panel-text { display: grid; gap: var(--sp-5); }
+@media (min-width: 48rem) { .panel-text { grid-template-columns: 1fr 1fr; } }
+.field { min-width: 0; }
+.field.span { grid-column: 1 / -1; }
+.field h4 {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-4);
+  text-transform: uppercase; letter-spacing: .12em; margin-bottom: var(--sp-2);
+}
+.field p { font-size: var(--step-0); color: var(--ink-2); max-width: var(--measure); }
+.field.concept p { color: var(--ink); }
+.field.how p { border-left: 2px solid var(--rule-2); padding: .15rem 0 .15rem var(--sp-4); }
+.field.example p {
+  background: var(--surface-2); border-left: 2px solid var(--accent);
+  padding: var(--sp-3) var(--sp-4); font-size: var(--step--1);
+}
+.field.not p::before {
+  content: "—"; color: var(--ink-4); margin-right: .4em;
+}
+.tag-row { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.tag { font-size: var(--step--2); color: var(--ink-3); background: var(--fill);
+  padding: .1rem .5rem; border-radius: 999px; }
+
+/* ============================================================
+   7. WORKSHEET
+   ============================================================ */
+.worksheet { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding-top: var(--sp-5); }
+.worksheet-head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.worksheet-head h4 { flex: 1; }
+.saved-state { font-size: var(--step--2); color: var(--ink-4); opacity: 0; transition: opacity .3s; }
+.saved-state.show { opacity: 1; }
+.question { margin-bottom: var(--sp-4); }
+.question label { display: block; font-size: var(--step--1); color: var(--ink); margin-bottom: var(--sp-2); }
+.question textarea {
+  width: 100%; min-height: 3.5rem; resize: vertical;
+  padding: var(--sp-3); background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule-2); border-radius: var(--r-1); font-size: var(--step--1); line-height: 1.5;
+}
+.question textarea:focus { border-color: var(--focus); }
+.clear-btn { font-size: var(--step--2); color: var(--ink-4); text-decoration: underline; }
+.clear-btn:hover { color: var(--accent-ink); }
+
+/* ============================================================
+   7b. SORTER — drag items into the model's own zones
+   ============================================================ */
+.sorter { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding-top: var(--sp-5); }
+.sorter-head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-3); flex-wrap: wrap; }
+.sorter-head h4 { flex: 1; }
+.sorter-add { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.sorter-add input {
+  flex: 1; min-width: 0; padding: var(--sp-2) var(--sp-3);
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule-2); border-radius: var(--r-1); font-size: var(--step--1);
+}
+.sorter-add input:focus { border-color: var(--focus); }
+.sorter-hint { font-size: var(--step--2); color: var(--ink-4); margin-bottom: var(--sp-3); }
+
+.zone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: var(--sp-3); }
+.zone {
+  border: 1px dashed var(--rule-2); border-radius: var(--r-1); padding: var(--sp-3);
+  min-height: 5rem; background: var(--surface); transition: border-color .15s, background .15s;
+}
+.zone[data-pool="true"] { border-style: solid; background: var(--surface-2); }
+.zone.drop-target, .zone:focus-visible { border-color: var(--accent); background: var(--surface-2); }
+.zone h5 {
+  font-size: var(--step--2); font-weight: 700; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--sp-2);
+  display: flex; justify-content: space-between; gap: var(--sp-2);
+}
+.zone-count { color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.zone-items { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.item {
+  display: flex; align-items: center; gap: var(--sp-2); width: 100%;
+  padding: .3rem .5rem; text-align: left; cursor: grab;
+  background: var(--fill); border: 1px solid transparent; border-radius: 8px;
+  font-size: var(--step--1); color: var(--ink); line-height: 1.35;
+}
+.item:hover { border-color: var(--rule-2); }
+.item[aria-pressed="true"] { border-color: var(--accent); background: var(--surface); }
+.item.dragging { opacity: .4; }
+.item-text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.item-drop { font-size: var(--step--2); color: var(--ink-4); }
+.item-drop:hover { color: var(--accent-ink); }
+.sorter-empty { font-size: var(--step--2); color: var(--ink-4); font-style: italic; }
+.zone-place {
+  margin-top: var(--sp-2); font-size: var(--step--2); color: var(--accent-ink);
+  text-decoration: underline; background: none; border: 0;
+}
+.zone-place[disabled] { color: var(--ink-4); text-decoration: none; opacity: .5; cursor: default; }
+
+/* ============================================================
+   7c. SKETCHPAD
+   ============================================================ */
+.sketch {
+  border: 1px solid var(--glass-border); background: var(--glass);
+  backdrop-filter: blur(12px); border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-4);
+}
+.sketch-head {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--sp-2); margin-bottom: var(--sp-3);
+}
+.sketch-tools { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.sketch-tools .tool-btn { padding: .2rem var(--sp-2); }
+.sketch-hint { font-size: var(--step--2); color: var(--ink-4); margin-top: var(--sp-2); }
+.pen {
+  width: 1.6rem; height: 1.6rem; border: 1px solid var(--rule-2); border-radius: 50%;
+  display: grid; place-items: center; background: var(--surface); flex: none;
+}
+.pen[aria-pressed="true"] { border-color: var(--ink); background: var(--fill); }
+.pen i { display: block; background: var(--ink); border-radius: 50%; }
+.pen[data-w="3"]  i { width: 3px; height: 3px; }
+.pen[data-w="6"]  i { width: 6px; height: 6px; }
+.pen[data-w="12"] i { width: 10px; height: 10px; }
+.pen[data-erase] i { background: none; border: 1.5px solid var(--ink-3); width: 10px; height: 10px; border-radius: 2px; }
+.sketch-wrap {
+  position: relative; border: 1px solid var(--rule-2); background: var(--surface);
+  border-radius: var(--r-1); overflow: hidden;
+}
+.sketch-wrap canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; }
+.sketch-placeholder {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  color: var(--ink-4); font-size: var(--step--1);
+}
+.sketch-wrap[data-drawn="true"] .sketch-placeholder { display: none; }
+
+/* ============================================================
+   8. EMPTY STATE + SHORTCUTS DIALOG
+   ============================================================ */
+.empty-state { display: none; padding: var(--sp-8) 0; text-align: center; color: var(--ink-3); }
+.empty-state.show { display: block; }
+.empty-state strong { display: block; color: var(--ink); font-size: var(--step-2); margin-bottom: var(--sp-2); }
+
+dialog {
+  border: 1px solid var(--glass-border); background: var(--surface); color: var(--ink);
+  border-radius: var(--r-2); box-shadow: var(--shadow);
+  padding: var(--sp-6); max-width: 26rem; width: calc(100% - 2rem);
+}
+dialog::backdrop { background: rgba(2,6,23,.7); backdrop-filter: blur(4px); }
+dialog h2 { font-size: var(--step-2); margin-bottom: var(--sp-4); }
+dialog dl { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-3) var(--sp-4); align-items: center; }
+dialog dt { justify-self: start; }
+dialog dd { font-size: var(--step--1); color: var(--ink-2); }
+
+footer {
+  border-top: 1px solid var(--rule); background: transparent;
+  padding-block: var(--sp-7); text-align: center; color: var(--ink-4); font-size: var(--step--1);
+}
+footer p + p { margin-top: var(--sp-2); }
+
+/* ============================================================
+   9. SVG PRIMITIVES — all colour via tokens so diagrams invert
+   ============================================================ */
+.s-line      { stroke: var(--ink-2); stroke-width: 1.2; fill: none; }
+.s-line-b    { stroke: var(--ink);   stroke-width: 2;   fill: none; }
+.s-line-thin { stroke: var(--ink-2); stroke-width: .8;  fill: none; }
+.s-dash      { stroke: var(--rule-2); stroke-width: 1;  fill: none; stroke-dasharray: 2 2; }
+.s-fill      { fill: var(--fill);  stroke: none; }
+.s-fill-2    { fill: var(--rule);  stroke: none; }
+.s-solid     { fill: var(--ink);   stroke: none; }
+.s-dot       { fill: var(--ink);   stroke: none; }
+.s-knock     { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.5; }
+.s-knock-t   { fill: var(--surface); stroke: none; }
+.s-accent    { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+.s-accent-f  { fill: var(--accent); stroke: none; }
+.s-box       { stroke: var(--ink-2); stroke-width: 1.2; fill: none; }
+.t   { font-family: var(--font); font-size: 5px; fill: var(--ink);   font-weight: 700; letter-spacing: .3px; }
+.t-b { font-family: var(--font); font-size: 6px; fill: var(--ink);   font-weight: 800; }
+.t-m { font-family: var(--font); font-size: 4px; fill: var(--ink-2); text-transform: uppercase; letter-spacing: .2px;
+       font-weight: 700; }
+.t-a { fill: var(--accent); }
+.t-k { fill: var(--surface); }
+/* Presentation attributes lose to these class rules, so size overrides need a class. */
+.t-b.t-sm { font-size: 4.6px; }
+.t-b.t-xs { font-size: 4px; }
+/* Dense axis labels on the 2x2s, where two labels share one edge. Bold widened these
+   enough to touch their neighbours, so the tracking comes back off to pay for it. */
+.t-m.t-xs2 { font-size: 3.4px; letter-spacing: -.05px; }
+/* .s-box declares fill:none and is declared after .s-fill, so at equal specificity it
+   won and the shaded cells silently never painted. These compound rules restore them. */
+.s-box.s-fill   { fill: var(--fill); }
+.s-box.s-fill-2 { fill: var(--rule); }
+
+/* ============================================================
+   10. PRINT
+   ============================================================ */
+@media print {
+  :root { --bg: #fff; --surface: #fff; --surface-2: #fff;
+          --ink: #000; --ink-2: #222; --ink-3: #444; --ink-4: #666;
+          --rule: #ccc; --rule-2: #999; --fill: #eee; --accent: #000; --accent-ink: #000; }
+  .toolbar, .toc, .skip-link, .model-icon, .model-mark, .clear-btn,
+  .empty-state, dialog, .quad-bar, .storage-warning,
+  .sorter-add, .sorter-hint, .sketch-tools, .item-drop { display: none !important; }
+  .zone { border: 1px solid #999; min-height: 3.5rem; break-inside: avoid; }
+  .item { background: #fff; border: 1px solid #ccc; }
+  .sketch-wrap { border: 1px solid #999; break-inside: avoid; }
+  body { background: #fff; font-size: 10.5pt; }
+  .site-header { padding-block: 0 var(--sp-5); border-bottom: 1px solid #000; }
+  .matrix { max-width: 18rem; }
+  .model { break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #ccc; }
+  .panel { grid-template-rows: 1fr !important; }
+  .panel-inner { visibility: visible !important; overflow: visible !important; }
+  .panel-figure { position: static; border: 1px solid #ccc; }
+  .question textarea { border: 1px solid #999; min-height: 2.5rem; }
+  .category { break-before: page; }
+  .category:first-of-type { break-before: auto; }
+  a { text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<a class="skip-link" href="#app">Skip to the models</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <nav class="header-nav"><a href="../">&larr; Books</a></nav>
+    <p class="eyebrow">Twenty-seven tools &middot; Interactive edition</p>
+    <h1>How to Decide</h1>
+    <p class="lede">Tools for deciding under uncertainty &mdash; sort your own choices into them, sketch on them, and answer in place.</p>
+
+    <div class="matrix" id="matrix">
+      <div class="matrix-axis-x"></div>
+      <div class="matrix-axis-y"></div>
+      <span class="matrix-label label-top">This Decision</span>
+      <span class="matrix-label label-bottom">Every Decision</span>
+      <span class="matrix-label label-left">Fast</span>
+      <span class="matrix-label label-right">Thorough</span>
+      <!-- quadrants injected -->
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="toolbar-row">
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <label class="sr-only" for="search">Search the models</label>
+        <input id="search" type="search" placeholder="Search models, tags, or text…" autocomplete="off" spellcheck="false">
+        <span class="search-hint kbd" aria-hidden="true">/</span>
+      </div>
+      <span class="result-count" id="count" role="status" aria-live="polite"></span>
+      <button class="tool-btn" id="theme-btn" aria-pressed="false">Dark</button>
+      <button class="tool-btn" id="export-btn">Export</button>
+      <button class="tool-btn" id="import-btn">Import</button>
+      <button class="tool-btn" id="help-btn" aria-haspopup="dialog">?</button>
+      <input type="file" id="import-file" accept="application/json,.json" class="sr-only" tabindex="-1">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter models"></div>
+    <p class="storage-warning" id="storage-warning">
+      This browser is blocking local storage on <code>file://</code>, so your answers will not
+      be remembered after a reload. Use <strong>Export</strong> to save them to a file.
+    </p>
+  </div>
+</div>
+
+<div class="wrap">
+  <details class="toc" id="toc">
+    <summary>Contents &mdash; all models</summary>
+    <div class="toc-grid" id="toc-grid"></div>
+  </details>
+</div>
+
+<main class="wrap" id="app">
+  <div class="empty-state" id="empty-state">
+    <strong>No models match that search.</strong>
+    <p>Try a broader term, or <button class="clear-btn" id="empty-reset">clear all filters</button>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>An interactive guide based on <em>How to Decide: Simple Tools for Making Better Choices</em> by Annie Duke.</p>
+    <p>Your answers are stored only in this browser. Nothing is sent anywhere.</p>
+  </div>
+</footer>
+
+<dialog id="help-dialog" aria-labelledby="help-title">
+  <h2 id="help-title">Keyboard shortcuts</h2>
+  <dl>
+    <dt><span class="kbd">/</span></dt><dd>Focus search</dd>
+    <dt><span class="kbd">j</span></dt><dd>Next model</dd>
+    <dt><span class="kbd">k</span></dt><dd>Previous model</dd>
+    <dt><span class="kbd">Enter</span></dt><dd>Open or close the focused model</dd>
+    <dt><span class="kbd">Esc</span></dt><dd>Clear search, or close the open model</dd>
+    <dt><span class="kbd">?</span></dt><dd>This panel</dd>
+  </dl>
+  <p style="margin-top:1.5rem"><button class="tool-btn" id="help-close">Close</button></p>
+</dialog>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DATA
+   ============================================================ */
+
+const database = {
+  "decide-it-now": {
+    "title": "How to Decide It Now",
+    "short": "Decide It Now",
+    "axis": "This Decision + Fast",
+    "subtitle": "Screens that end a small decision in seconds, so the deliberation goes where it earns something.",
+    "models": [
+      {
+        "id": "happiness-test",
+        "name": "The Happiness Test",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "speed",
+          "triage",
+          "solo"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Happiness Test</title><desc>A curve of a decision's impact on your happiness plotted against time, decaying almost to zero by the one-year mark, which is marked with a dashed line.</desc>\n          <line x1=\"14\" y1=\"78\" x2=\"90\" y2=\"78\" class=\"s-line\"/>\n          <line x1=\"14\" y1=\"20\" x2=\"14\" y2=\"78\" class=\"s-line\"/>\n          <path d=\"M 17 26 Q 40 70 86 76\" class=\"s-line-b\"/>\n          <line x1=\"80\" y1=\"34\" x2=\"80\" y2=\"78\" class=\"s-dash\"/>\n          <circle cx=\"80\" cy=\"75\" r=\"2.6\" class=\"s-accent-f\"/>\n          <text x=\"30\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">week</text>\n          <text x=\"55\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">month</text>\n          <text x=\"80\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">year</text>\n          <text x=\"52\" y=\"94\" class=\"t-m\" text-anchor=\"middle\">Time from now</text>\n          <text x=\"7\" y=\"48\" class=\"t-m\" text-anchor=\"middle\" transform=\"rotate(-90 7 48)\">Impact</text></svg>",
+        "zones": [
+          "Still matters in a year",
+          "Matters for a month",
+          "Matters for a week",
+          "Gone by tonight"
+        ],
+        "what": "A screen that asks whether a choice will still be touching your happiness in a year, and lets you decide in seconds when the answer is no.",
+        "how": "Ask three questions in order: will this matter to my happiness in a year? in a month? in a week? At the first no, stop deliberating, set a two-minute timer, and pick.",
+        "when": "You have been circling a choice for longer than the choice is worth.",
+        "for": "Killing small decisions fast.",
+        "not": "Decisions that are cheap to make but expensive to unwind — the impact curve says nothing about reversibility.",
+        "example": "A product manager spent four days choosing between two analytics vendors at $340 and $390 a month. Run through the test, neither answer changes her happiness in a year, a month, or a week. She picked the cheaper one in ninety seconds and moved the four days onto a hiring decision that will still matter in 2029.",
+        "questions": [
+          "Name a decision you are currently carrying. Will it touch your happiness a year from now?",
+          "How many hours have you already spent on it, and what would those hours be worth spent elsewhere?",
+          "Which decision on your list would pass the year test — and how much less time is it getting than the one that fails?"
+        ]
+      },
+      {
+        "id": "freeroll",
+        "name": "Freerolls",
+        "origin": "Annie Duke / poker",
+        "readMinutes": 2,
+        "tags": [
+          "speed",
+          "risk",
+          "asymmetry"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Freerolls</title><desc>A break-even line with a very short bar to its left showing a tiny downside and a long bar to its right showing a large upside.</desc>\n          <rect x=\"26\" y=\"40\" width=\"8\" height=\"20\" class=\"s-fill-2\"/>\n          <rect x=\"34\" y=\"40\" width=\"50\" height=\"20\" class=\"s-accent-f\"/>\n          <line x1=\"34\" y1=\"30\" x2=\"34\" y2=\"70\" class=\"s-line-b\"/>\n          <text x=\"22\" y=\"34\" class=\"t-m t-xs2\" text-anchor=\"middle\">downside</text>\n          <text x=\"59\" y=\"34\" class=\"t-m t-xs2\" text-anchor=\"middle\">upside</text>\n          <text x=\"34\" y=\"80\" class=\"t-m t-xs2\" text-anchor=\"middle\">break even</text>\n          <text x=\"50\" y=\"92\" class=\"t-m\" text-anchor=\"middle\">Almost nothing to lose</text></svg>",
+        "zones": [
+          "Freeroll — just take it",
+          "Real downside — think first"
+        ],
+        "what": "A choice where the worst case costs you almost nothing and the best case is worth real money, time or information.",
+        "how": "Ask what you actually lose if it goes badly, in units you would notice. If the loss is small, capped and recoverable, act now and spend the deliberation somewhere it earns something.",
+        "when": "An opportunity appears and your instinct is to think about it.",
+        "for": "Spotting choices that need no analysis at all.",
+        "not": "Anything with a tail you have not priced — a small premium with an uncapped liability behind it is the opposite of a freeroll wearing its costume.",
+        "example": "An engineer was asked to give a fifteen-minute talk at a local meetup and deliberated for a week. The downside was a mildly awkward evening in front of forty people who would forget it. The upside turned out to be two contract offers. The deliberation cost more than the talk did.",
+        "questions": [
+          "What did you turn down in the last month whose actual downside you never wrote out?",
+          "Take one thing you are weighing now. In plain numbers, what do you lose if it goes as badly as it realistically can?",
+          "What are you treating as a risk that is really just a fear of looking foolish?"
+        ]
+      },
+      {
+        "id": "only-option-test",
+        "name": "The Only-Option Test",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "speed",
+          "tiebreak",
+          "solo"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Only-Option Test</title><desc>Two boxes labelled A and B, each with a tick beneath it, whose lines converge on the verdict: pick either.</desc>\n          <text x=\"28\" y=\"16\" class=\"t-m t-xs2\" text-anchor=\"middle\">only option?</text>\n          <text x=\"72\" y=\"16\" class=\"t-m t-xs2\" text-anchor=\"middle\">only option?</text>\n          <rect x=\"14\" y=\"22\" width=\"28\" height=\"22\" class=\"s-box\"/>\n          <rect x=\"58\" y=\"22\" width=\"28\" height=\"22\" class=\"s-box\"/>\n          <text x=\"28\" y=\"36\" class=\"t-b\" text-anchor=\"middle\">A</text>\n          <text x=\"72\" y=\"36\" class=\"t-b\" text-anchor=\"middle\">B</text>\n          <path d=\"M 22 54 L 26 58 L 34 48\" class=\"s-line-b\"/>\n          <path d=\"M 66 54 L 70 58 L 78 48\" class=\"s-line-b\"/>\n          <path d=\"M 28 64 L 50 74 M 72 64 L 50 74\" class=\"s-line\"/>\n          <text x=\"50\" y=\"86\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">PICK EITHER</text></svg>",
+        "zones": [
+          "Yes to both — pick either",
+          "Yes to one only — pick it",
+          "No to both — look wider"
+        ],
+        "what": "A tiebreaker for two options you cannot separate: ask of each, in isolation, whether you would take it if nothing else were on the table.",
+        "how": "Cover one option. Ask whether you would accept the other if it were the only thing offered. Uncover, cover the other, ask again. Two yeses mean the options are close enough that the choice is not what is costing you — pick either and go.",
+        "when": "You have compared two options so many times the comparison has stopped moving.",
+        "for": "Breaking a genuine tie.",
+        "not": "Choices where the options are not comparable in kind — a job and a sabbatical can both pass alone while the real question, what you want the year to be, goes unasked.",
+        "example": "A designer agonised for three weeks between two offers, one at $118k in Toronto and one at $124k remote. Asked separately, she would have taken either in a heartbeat. That was the answer: the difference was not worth three weeks, and the thing actually keeping her awake was leaving her current team.",
+        "questions": [
+          "Take the two options you are stuck between. Cover one. Would you take the other if it were the only offer?",
+          "Now the reverse. What did you answer?",
+          "If both answers were yes, what is the question you are avoiding by staying busy with this comparison?"
+        ]
+      },
+      {
+        "id": "reversibility-check",
+        "name": "The Reversibility Check",
+        "origin": "Decision science; popularised as one-way and two-way doors",
+        "readMinutes": 2,
+        "tags": [
+          "speed",
+          "risk",
+          "triage"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Reversibility Check</title><desc>Two doorways side by side. The left has a double-headed arrow through it and is labelled fast; the right has a single arrow and a wall behind it, and is labelled slow.</desc>\n          <text x=\"28\" y=\"17\" class=\"t-b t-sm\" text-anchor=\"middle\">FAST</text>\n          <text x=\"72\" y=\"17\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">SLOW</text>\n          <rect x=\"14\" y=\"24\" width=\"28\" height=\"44\" class=\"s-box\"/>\n          <rect x=\"58\" y=\"24\" width=\"28\" height=\"44\" class=\"s-box\"/>\n          <line x1=\"21\" y1=\"46\" x2=\"35\" y2=\"46\" class=\"s-line-b\"/>\n          <polygon points=\"17,46 23,43 23,49\" class=\"s-dot\"/>\n          <polygon points=\"39,46 33,43 33,49\" class=\"s-dot\"/>\n          <line x1=\"63\" y1=\"46\" x2=\"76\" y2=\"46\" class=\"s-line-b\"/>\n          <polygon points=\"80,46 74,43 74,49\" class=\"s-dot\"/>\n          <line x1=\"82\" y1=\"26\" x2=\"82\" y2=\"66\" class=\"s-line-b\"/>\n          <text x=\"28\" y=\"78\" class=\"t-m t-xs2\" text-anchor=\"middle\">walk back</text>\n          <text x=\"72\" y=\"78\" class=\"t-m t-xs2\" text-anchor=\"middle\">no way back</text>\n          <text x=\"50\" y=\"92\" class=\"t-m\" text-anchor=\"middle\">Cost to undo sets the budget</text></svg>",
+        "zones": [
+          "Free to undo",
+          "Costly to undo",
+          "Hard to undo",
+          "Irreversible"
+        ],
+        "what": "How much thinking a decision deserves is set by what it costs to reverse, not by how important it feels.",
+        "how": "Before deliberating at all, price the reversal: money, time, relationships, reputation. Cheap to undo means decide now and correct from real data. Expensive to undo means slow down and build the full tree.",
+        "when": "At the start of any decision, before you have spent a minute on the substance.",
+        "for": "Deciding how much decision to spend.",
+        "not": "Decisions that are technically reversible but socially not — you can withdraw an offer, and the candidate will still tell people.",
+        "example": "A startup spent one meeting choosing a project-management tool they could migrate off in a weekend, and one meeting choosing a co-founder's equity split. Eighteen months later the tool had been swapped twice at no cost and the split, which nobody wanted to re-open, was the reason the second founder left.",
+        "questions": [
+          "What does it actually cost — in money, time and relationships — to undo the decision in front of you?",
+          "Which decision are you over-thinking that you could reverse next week for almost nothing?",
+          "Which one-way door did you walk through quickly because it felt small at the time?"
+        ]
+      },
+      {
+        "id": "speed-accuracy",
+        "name": "The Speed–Accuracy Trade-off",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "speed",
+          "analysis-paralysis",
+          "solo"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Speed–Accuracy Trade-off</title><desc>Decision quality plotted against time spent deciding. The curve rises steeply and then flattens; the point where it flattens is marked stop here.</desc>\n          <line x1=\"14\" y1=\"78\" x2=\"90\" y2=\"78\" class=\"s-line\"/>\n          <line x1=\"14\" y1=\"18\" x2=\"14\" y2=\"78\" class=\"s-line\"/>\n          <path d=\"M 16 74 Q 30 28 86 24\" class=\"s-line-b\"/>\n          <line x1=\"40\" y1=\"39\" x2=\"40\" y2=\"78\" class=\"s-dash\"/>\n          <circle cx=\"40\" cy=\"39\" r=\"2.6\" class=\"s-accent-f\"/>\n          <text x=\"45\" y=\"34\" class=\"t-m t-a\">stop here</text>\n          <text x=\"52\" y=\"90\" class=\"t-m\" text-anchor=\"middle\">Time deciding</text>\n          <text x=\"7\" y=\"48\" class=\"t-m\" text-anchor=\"middle\" transform=\"rotate(-90 7 48)\">Quality</text></svg>",
+        "zones": [
+          "Worth more time",
+          "Diminishing returns",
+          "Pure delay"
+        ],
+        "what": "Thinking improves a decision quickly at first and then almost stops, while the cost of the delay keeps accruing at full price.",
+        "how": "Ask what the next hour of thinking could actually change. Name the specific fact it would produce and what you would do differently if you had it. If you cannot name one, you are past the flat part — decide.",
+        "when": "The third time you revisit the same options without new information.",
+        "for": "Ending analysis paralysis honestly.",
+        "not": "Decisions where a fact is genuinely arriving — waiting for Thursday's numbers is not delay, it is sequencing.",
+        "example": "A team spent six weeks choosing between two database engines, and week six produced the same shortlist as week two. The delay pushed the launch past the quarter, which cost a customer commitment worth more than either engine's entire licence. The extra four weeks bought no new fact.",
+        "questions": [
+          "For the decision you are on now, what is the one fact the next hour of work would give you?",
+          "What would you do differently if you had it? If the answer is nothing, why are you still working?",
+          "What is the delay itself costing per week, in a number?"
+        ]
+      }
+    ]
+  },
+  "map-it-properly": {
+    "title": "How to Map It Properly",
+    "short": "Map It Properly",
+    "axis": "This Decision + Thorough",
+    "subtitle": "The full machinery for one decision that deserves it: futures, payoffs, probabilities and what to watch for.",
+    "models": [
+      {
+        "id": "decision-multiverse",
+        "name": "The Decision Multiverse",
+        "origin": "Annie Duke",
+        "readMinutes": 3,
+        "tags": [
+          "uncertainty",
+          "framing",
+          "solo"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Decision Multiverse</title><desc>A single choice point on the left fans out into five possible futures, four drawn as dashed lines and one solid, marking the only future you actually get to live.</desc>\n          <text x=\"50\" y=\"10\" class=\"t-m\" text-anchor=\"middle\">Possible futures</text>\n          <circle cx=\"18\" cy=\"50\" r=\"3\" class=\"s-dot\"/>\n          <text x=\"16\" y=\"42\" class=\"t-m t-xs2\" text-anchor=\"middle\">choice</text>\n          <path d=\"M 21 50 L 80 18\" class=\"s-dash\"/>\n          <path d=\"M 21 50 L 80 34\" class=\"s-dash\"/>\n          <path d=\"M 21 50 L 80 50\" class=\"s-accent\"/>\n          <path d=\"M 21 50 L 80 66\" class=\"s-dash\"/>\n          <path d=\"M 21 50 L 80 82\" class=\"s-dash\"/>\n          <circle cx=\"80\" cy=\"18\" r=\"2\" class=\"s-line\"/>\n          <circle cx=\"80\" cy=\"34\" r=\"2\" class=\"s-line\"/>\n          <circle cx=\"80\" cy=\"50\" r=\"2.6\" class=\"s-solid\"/>\n          <circle cx=\"80\" cy=\"66\" r=\"2\" class=\"s-line\"/>\n          <circle cx=\"80\" cy=\"82\" r=\"2\" class=\"s-line\"/>\n          <text x=\"80\" y=\"92\" class=\"t-m t-xs2\" text-anchor=\"middle\">only one gets lived</text></svg>",
+        "zones": [
+          "Best case",
+          "Likely case",
+          "Worst case",
+          "The one that happened"
+        ],
+        "what": "Every choice opens a set of possible futures, and you only ever get to observe one of them — which is why a single outcome tells you so little.",
+        "how": "Before choosing, list the futures the choice could produce, not just the one you expect. Include the tails. Then say roughly how much of the set each one occupies.",
+        "when": "Any decision you are about to make on the strength of the outcome you are picturing.",
+        "for": "Seeing the full range instead of the vivid case.",
+        "not": "Reviewing a decision after the fact — by then hindsight has already collapsed the set, and you will reconstruct a multiverse that flatters the outcome.",
+        "example": "A founder pictured one future for raising a bridge round: it closes in eight weeks and the company reaches profitability. Forced to list the set, she wrote five, including one where the round takes five months and one where a down round resets everyone's equity. That second future was about a third of the set, and it changed how she wrote the term sheet.",
+        "questions": [
+          "For your current decision, write down the future you have been picturing. Now write four more.",
+          "Which of the five had you never said out loud?",
+          "Roughly what fraction of the set is the one you were picturing — half? a fifth?"
+        ]
+      },
+      {
+        "id": "three-ps",
+        "name": "Preferences, Payoffs, Probabilities",
+        "origin": "Annie Duke",
+        "readMinutes": 3,
+        "tags": [
+          "structure",
+          "comparison",
+          "solo"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Preferences, Payoffs, Probabilities</title><desc>Three stacked boxes labelled preferences, payoffs and probabilities feed into a single box on the right where the options get ranked.</desc>\n          <rect x=\"10\" y=\"18\" width=\"38\" height=\"15\" class=\"s-box\"/>\n          <rect x=\"10\" y=\"42\" width=\"38\" height=\"15\" class=\"s-box\"/>\n          <rect x=\"10\" y=\"66\" width=\"38\" height=\"15\" class=\"s-box\"/>\n          <text x=\"29\" y=\"28\" class=\"t-m t-xs2\" text-anchor=\"middle\">PREFERENCES</text>\n          <text x=\"29\" y=\"52\" class=\"t-m t-xs2\" text-anchor=\"middle\">PAYOFFS</text>\n          <text x=\"29\" y=\"76\" class=\"t-m t-xs2\" text-anchor=\"middle\">PROBABILITIES</text>\n          <path d=\"M 48 26 L 64 45 M 48 50 L 64 50 M 48 74 L 64 55\" class=\"s-line\"/>\n          <rect x=\"66\" y=\"38\" width=\"24\" height=\"24\" class=\"s-box\"/>\n          <text x=\"78\" y=\"52\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">RANK</text></svg>",
+        "zones": [
+          "Preferences",
+          "Payoffs",
+          "Probabilities"
+        ],
+        "what": "Three inputs turn a pile of options into a decision: what you actually want, what each future is worth to you, and how likely each one is.",
+        "how": "For every option, list its possible outcomes. Score each outcome's payoff against your own preferences rather than a generic good and bad. Attach a probability to each. Only then compare options.",
+        "when": "Any decision big enough to deserve being written down.",
+        "for": "Turning a stuck comparison into three answerable questions.",
+        "not": "Decisions where your preferences are the unresolved part — the method assumes you know what you want, and it will happily rank options against a preference you have not examined.",
+        "example": "Two job offers looked identical until the three P's were separated. The preference was time with a young child, not title. Payoffs re-scored: the higher-titled role's payoff went negative on the thing that mattered. The probabilities finished it — the travel in that role was near-certain, not occasional.",
+        "questions": [
+          "Write your top preference for the current decision in one sentence. Is it the thing you have been optimising?",
+          "Re-score your options' payoffs against that preference alone. Does the ranking change?",
+          "Which probability in your comparison have you never actually estimated, only assumed?"
+        ]
+      },
+      {
+        "id": "decision-tree",
+        "name": "The Decision Tree",
+        "origin": "Annie Duke",
+        "readMinutes": 3,
+        "tags": [
+          "structure",
+          "uncertainty",
+          "comparison"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Decision Tree</title><desc>A decision point branches into two options, A and B, each of which branches into two outcomes carrying a payoff and a probability.</desc>\n          <circle cx=\"16\" cy=\"50\" r=\"3\" class=\"s-dot\"/>\n          <text x=\"16\" y=\"42\" class=\"t-m t-xs2\" text-anchor=\"middle\">now</text>\n          <path d=\"M 19 50 L 40 28 M 19 50 L 40 72\" class=\"s-line-b\"/>\n          <circle cx=\"40\" cy=\"28\" r=\"2.4\" class=\"s-dot\"/>\n          <circle cx=\"40\" cy=\"72\" r=\"2.4\" class=\"s-dot\"/>\n          <text x=\"35\" y=\"24\" class=\"t-b t-sm\" text-anchor=\"end\">A</text>\n          <text x=\"35\" y=\"80\" class=\"t-b t-sm\" text-anchor=\"end\">B</text>\n          <path d=\"M 42 28 L 66 18 M 42 28 L 66 32 M 42 72 L 66 62 M 42 72 L 66 82\" class=\"s-line\"/>\n          <text x=\"69\" y=\"20\" class=\"t-m t-xs2 t-a\">+8 &middot; 60%</text>\n          <text x=\"69\" y=\"34\" class=\"t-m t-xs2\">&minus;3 &middot; 40%</text>\n          <text x=\"69\" y=\"64\" class=\"t-m t-xs2\">+2 &middot; 80%</text>\n          <text x=\"69\" y=\"84\" class=\"t-m t-xs2\">&minus;1 &middot; 20%</text>\n          <text x=\"50\" y=\"94\" class=\"t-m\" text-anchor=\"middle\">payoff &middot; probability</text></svg>",
+        "zones": [
+          "Options",
+          "Outcomes",
+          "Payoffs",
+          "Probabilities",
+          "Comparison"
+        ],
+        "what": "A drawing that turns one option into a set of scored, weighted branches, then repeats it for every option so the comparison is between structures rather than stories.",
+        "how": "Draw the decision point. Branch each option into its reasonable outcomes. Put a payoff on each outcome and a probability beside it. Repeat for every option. Compare the whole branches, not their best leaves.",
+        "when": "A decision with real stakes, more than one option, and genuine uncertainty.",
+        "for": "Making the comparison visible and arguable.",
+        "not": "Decisions with one dominant unknown — a tree with a made-up number at its root is precision built on a guess, and it will feel far more solid than it is.",
+        "example": "A clinic weighing a second location drew both branches. Expanding had a good leaf worth roughly triple the current practice at about 30%, and a bad leaf that took the existing site down with it at about 25%. Staying had no bright leaf and no dark one. Drawn side by side, the partners realised they had been comparing the bright leaf against the whole of staying.",
+        "questions": [
+          "Draw your current decision as two branches. How many outcomes did you have to invent because you had never named them?",
+          "Which branch has an outcome you keep leaving off the page?",
+          "Are you comparing whole branches, or your favourite leaf on one against the average of the other?"
+        ]
+      },
+      {
+        "id": "expected-value",
+        "name": "Expected Value",
+        "origin": "Blaise Pascal and Pierre de Fermat",
+        "readMinutes": 2,
+        "tags": [
+          "comparison",
+          "arithmetic",
+          "risk"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Expected Value</title><desc>Two bars compared on a baseline. Option A's bar is taller and marked in the accent colour with the value 3.6; option B's is shorter at 1.4.</desc>\n          <line x1=\"14\" y1=\"78\" x2=\"90\" y2=\"78\" class=\"s-line\"/>\n          <rect x=\"22\" y=\"34\" width=\"20\" height=\"44\" class=\"s-accent-f\"/>\n          <rect x=\"60\" y=\"52\" width=\"20\" height=\"26\" class=\"s-fill-2\"/>\n          <text x=\"32\" y=\"29\" class=\"t-b t-sm\" text-anchor=\"middle\">3.6</text>\n          <text x=\"70\" y=\"47\" class=\"t-b t-sm\" text-anchor=\"middle\">1.4</text>\n          <text x=\"32\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">Option A</text>\n          <text x=\"70\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">Option B</text>\n          <text x=\"50\" y=\"94\" class=\"t-m\" text-anchor=\"middle\">payoff &times; probability, summed</text></svg>",
+        "zones": [
+          "Option A",
+          "Option B",
+          "Option C"
+        ],
+        "what": "An option's value is every outcome's payoff multiplied by its probability, added up — not the payoff of the outcome you are picturing.",
+        "how": "For each branch of your tree, multiply the payoff by the probability. Sum the branches. Compare totals. Where the numbers are guesses, vary them and see whether the ranking survives.",
+        "when": "You have a tree and two options that both sound reasonable.",
+        "for": "Comparing options that feel incomparable.",
+        "not": "Decisions you only take once where a bad outcome ends the game — a positive expected value is worthless if you are not around for the average.",
+        "example": "A contractor compared a $40k fixed-price job at 90% likely to clear $12k against a $200k job at 35% likely to clear $60k and 65% likely to lose $15k. The second sounded far better and priced out at $11.3k against $10.8k — near-identical, on four times the exposure. He took the small one.",
+        "questions": [
+          "Compute the expected value of the two options in front of you, even with rough numbers. Which wins?",
+          "Change your least confident probability by twenty points. Does the ranking flip?",
+          "If the bad branch of the higher-value option landed tomorrow, would you still be in business? If not, does the average apply to you at all?"
+        ]
+      },
+      {
+        "id": "estimate-with-a-range",
+        "name": "Estimate With a Range",
+        "origin": "Annie Duke; calibration training",
+        "readMinutes": 2,
+        "tags": [
+          "beliefs",
+          "uncertainty",
+          "calibration"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Estimate With a Range</title><desc>A number line with a bracketed range drawn across it and a marked best guess sitting inside the brackets, labelled ninety per cent sure it's in here.</desc>\n          <line x1=\"14\" y1=\"56\" x2=\"90\" y2=\"56\" class=\"s-line\"/>\n          <path d=\"M 30 44 L 30 68 M 76 44 L 76 68\" class=\"s-line-b\"/>\n          <line x1=\"30\" y1=\"56\" x2=\"76\" y2=\"56\" class=\"s-line-b\"/>\n          <circle cx=\"48\" cy=\"56\" r=\"3\" class=\"s-accent-f\"/>\n          <text x=\"48\" y=\"38\" class=\"t-m t-a\" text-anchor=\"middle\">best guess</text>\n          <text x=\"30\" y=\"78\" class=\"t-m t-xs2\" text-anchor=\"middle\">low</text>\n          <text x=\"76\" y=\"78\" class=\"t-m t-xs2\" text-anchor=\"middle\">high</text>\n          <text x=\"53\" y=\"92\" class=\"t-m\" text-anchor=\"middle\">90% sure it's in here</text></svg>",
+        "zones": [
+          "Low bound",
+          "Best guess",
+          "High bound"
+        ],
+        "what": "A way of holding a belief that carries its own uncertainty: a low bound, a high bound, and how sure you are the truth sits between them.",
+        "how": "Replace “I don't know” with a range wide enough that you would be surprised nine times in ten to fall outside it. Then narrow it only as far as your honest confidence allows, and write the number down.",
+        "when": "Any time you catch yourself saying you have no idea, or stating a single number you have not earned.",
+        "for": "Making vague beliefs comparable and checkable.",
+        "not": "Questions with no underlying quantity — a range around “will she enjoy the job” is precision theatre.",
+        "example": "Asked how long a migration would take, the lead engineer's instinct was “about six weeks.” Pushed for a 90% range, he gave four to twenty. Nobody in the room had known the top end was that high, and the plan that had been built on six weeks got a staged rollout instead. It finished in fifteen.",
+        "questions": [
+          "Take a number you have been quoting confidently. What is your honest 90% range around it?",
+          "How wide was it? Was anyone relying on the single number?",
+          "Which belief are you treating as a fact that you have never put a range around?"
+        ]
+      },
+      {
+        "id": "premortem",
+        "name": "The Premortem",
+        "origin": "Gary Klein",
+        "readMinutes": 2,
+        "tags": [
+          "risk",
+          "planning",
+          "team"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Premortem</title><desc>A timeline runs from today to a future point marked FAILED, with a dashed arrow curving back from that point to the present, labelled list the causes.</desc>\n          <line x1=\"16\" y1=\"38\" x2=\"80\" y2=\"38\" class=\"s-line-b\"/>\n          <polygon points=\"86,38 79,34.5 79,41.5\" class=\"s-dot\"/>\n          <circle cx=\"16\" cy=\"38\" r=\"2.6\" class=\"s-dot\"/>\n          <text x=\"16\" y=\"30\" class=\"t-m t-xs2\" text-anchor=\"middle\">today</text>\n          <text x=\"76\" y=\"28\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">FAILED</text>\n          <path d=\"M 80 46 Q 50 74 24 54\" class=\"s-dash\"/>\n          <polygon points=\"19,51 26,50 24,57\" class=\"s-dot\"/>\n          <text x=\"51\" y=\"88\" class=\"t-m\" text-anchor=\"middle\">list the causes</text></svg>",
+        "zones": [
+          "Assume it failed",
+          "List the causes",
+          "Rank by damage",
+          "Fix the top two"
+        ],
+        "what": "Standing in a future where the plan has already failed and explaining, in the past tense, why it did.",
+        "how": "Pick a date. Say out loud that the project failed. Write the causes as facts, not risks — “the integration slipped” rather than “the integration might slip.” Rank by damage. Fix the top two before you start.",
+        "when": "Immediately after a plan is agreed and before anyone commits resources.",
+        "for": "Getting objections out of people who will not raise them.",
+        "not": "Teams where dissent is already punished — the exercise gives cover, but it cannot manufacture safety that is not there.",
+        "example": "A rollout team ran a premortem and the quietest engineer wrote that the failure was caused by the client's data being in two incompatible formats nobody had checked. It took an afternoon to confirm he was right. In the risk register, filed weeks earlier as a maybe, it had been ranked eleventh.",
+        "questions": [
+          "Your current plan has failed. It is six months from now. Write the top cause as a completed fact.",
+          "Who on your team already suspects that cause and has not said it?",
+          "Of the causes you listed, which one could you cheaply check this week?"
+        ]
+      },
+      {
+        "id": "backcasting",
+        "name": "Backcasting",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "planning",
+          "goals",
+          "team"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Backcasting</title><desc>A staircase rising from a starting point at the lower left to a marked win at the upper right, with a dashed arrow beneath running the other way, labelled trace it back.</desc>\n          <path d=\"M 18 76 L 34 76 L 34 64 L 50 64 L 50 52 L 66 52 L 66 38 L 84 38\" class=\"s-line-b\"/>\n          <circle cx=\"18\" cy=\"76\" r=\"2.6\" class=\"s-dot\"/>\n          <circle cx=\"84\" cy=\"38\" r=\"3.2\" class=\"s-accent-f\"/>\n          <text x=\"82\" y=\"28\" class=\"t-m t-a\" text-anchor=\"middle\">the win</text>\n          <text x=\"20\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">start</text>\n          <path d=\"M 80 92 L 36 92\" class=\"s-dash\"/>\n          <polygon points=\"30,92 37,89 37,95\" class=\"s-dot\"/>\n          <text x=\"58\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">trace it back</text></svg>",
+        "zones": [
+          "The win",
+          "What had to be true",
+          "First move"
+        ],
+        "what": "The premortem's twin: stand in a future where it worked, then trace backwards through what had to happen for it to work.",
+        "how": "Pick the date it succeeded. Write the last thing that had to be true, then the thing before that, then the thing before that, until you reach something you could do this week. That last item is the plan.",
+        "when": "After a premortem, and any time a goal is clear but the first step is not.",
+        "for": "Turning a goal into a first move.",
+        "not": "Goals you have not actually committed to — backcasting produces a convincing path to a destination you do not want, and the path is what stops you noticing.",
+        "example": "A writer wanted a book out in two years. Backcast: published means a manuscript delivered at eighteen months, which means a full draft at twelve, which means eight chapters by month six, which means a chapter every three weeks starting now. The two-year goal had felt distant. The three-week chapter did not.",
+        "questions": [
+          "Take a goal you have been carrying. What is the very last thing that had to happen before it was true?",
+          "Keep going back. What is the first step that lands inside this week?",
+          "Which link in that chain is the one you have no idea how to do?"
+        ]
+      },
+      {
+        "id": "signposts",
+        "name": "Signposts",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "monitoring",
+          "planning",
+          "uncertainty"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Signposts</title><desc>A road rises from now and forks into two paths, with small marker posts placed along each branch showing what would be visible early on that route.</desc>\n          <text x=\"50\" y=\"14\" class=\"t-m\" text-anchor=\"middle\">What shows up first?</text>\n          <path d=\"M 16 84 L 50 56\" class=\"s-line-b\"/>\n          <path d=\"M 50 56 L 84 30 M 50 56 L 84 74\" class=\"s-line\"/>\n          <line x1=\"60\" y1=\"48\" x2=\"60\" y2=\"41\" class=\"s-line-thin\"/>\n          <rect x=\"60\" y=\"36\" width=\"9\" height=\"5\" class=\"s-accent-f\"/>\n          <line x1=\"73\" y1=\"38\" x2=\"73\" y2=\"31\" class=\"s-line-thin\"/>\n          <rect x=\"73\" y=\"26\" width=\"9\" height=\"5\" class=\"s-fill-2\"/>\n          <line x1=\"64\" y1=\"67\" x2=\"64\" y2=\"60\" class=\"s-line-thin\"/>\n          <rect x=\"64\" y=\"55\" width=\"9\" height=\"5\" class=\"s-fill-2\"/>\n          <text x=\"16\" y=\"92\" class=\"t-m t-xs2\" text-anchor=\"middle\">now</text></svg>",
+        "zones": [
+          "The signpost",
+          "Date to check",
+          "What it means",
+          "What I'll do"
+        ],
+        "what": "Observable markers, agreed in advance, that tell you mid-plan which of your mapped futures you are actually travelling through.",
+        "how": "For each outcome in your tree, name one thing that would be visible early if that outcome were coming. Give it a date and a threshold. Write what you will do when you see it. Then actually check on the date.",
+        "when": "Right after you map the outcomes, while the futures are still distinguishable to you.",
+        "for": "Noticing which future you are in before it arrives.",
+        "not": "Signals you can only read in hindsight — “morale dropped” is a description of the past, not a signpost.",
+        "example": "A team launching in a new market set three signposts: forty trial signups by week three, at least one unprompted referral by week six, and support tickets under twelve a week. Week three came in at nine signups. They had pre-agreed that meant repositioning rather than more spend, and the argument that would have taken a month took an hour.",
+        "questions": [
+          "For your current plan, what would be visible in three weeks if the bad outcome were coming?",
+          "What date will you check it, and what number counts as the signal?",
+          "Which signpost have you already passed without stopping?"
+        ]
+      }
+    ]
+  },
+  "decide-once": {
+    "title": "How to Decide Once, Not Every Time",
+    "short": "Decide Once",
+    "axis": "Every Decision + Fast",
+    "subtitle": "Rules, defaults and precommitments that answer a whole class of choices before they arrive.",
+    "models": [
+      {
+        "id": "category-decisions",
+        "name": "Category Decisions",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "rules",
+          "repetition",
+          "speed"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Category Decisions</title><desc>A three-by-three grid of identical small squares on the left feeds through an arrow into a single box on the right marked RULE.</desc>\n          <text x=\"28\" y=\"13\" class=\"t-m t-xs2\" text-anchor=\"middle\">the same choice</text>\n          <text x=\"28\" y=\"18\" class=\"t-m t-xs2\" text-anchor=\"middle\">over and over</text>\n          <rect x=\"14\" y=\"24\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"25\" y=\"24\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"36\" y=\"24\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"14\" y=\"35\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"25\" y=\"35\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"36\" y=\"35\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"14\" y=\"46\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"25\" y=\"46\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <rect x=\"36\" y=\"46\" width=\"9\" height=\"9\" class=\"s-fill-2\"/>\n          <line x1=\"50\" y1=\"44\" x2=\"60\" y2=\"44\" class=\"s-line-b\"/>\n          <polygon points=\"65,44 58,40.5 58,47.5\" class=\"s-dot\"/>\n          <rect x=\"68\" y=\"32\" width=\"24\" height=\"24\" class=\"s-accent\"/>\n          <text x=\"80\" y=\"46\" class=\"t-b t-sm\" text-anchor=\"middle\">RULE</text>\n          <text x=\"80\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">decide once</text></svg>",
+        "zones": [
+          "The rule",
+          "Instances it covers",
+          "Genuine exceptions"
+        ],
+        "what": "Deciding the whole class of choices once, so that every instance afterwards costs nothing.",
+        "how": "Notice a decision you keep re-making. Write a rule that answers all of them, including the awkward cases. Apply it without re-opening it, and only revisit the rule on a schedule, never in the moment.",
+        "when": "The third time you recognise a decision you have made before.",
+        "for": "Removing recurring decisions from your day entirely.",
+        "not": "Choices where the instances genuinely differ in kind — a hiring rule that ignores the role produces consistent decisions that are consistently wrong.",
+        "example": "A consultant kept agonising over speaking invitations. She wrote one rule: paid, within a two-hour trip, and on a topic she already had material for — otherwise no. Eleven invitations later she had spent about four minutes total on the decisions, and the two she accepted were the two that would have survived the agonising anyway.",
+        "questions": [
+          "Which decision have you made three or more times this year in essentially the same form?",
+          "Write the rule that would have answered all of them. What awkward case does it get wrong?",
+          "What would you have to give up to let the rule decide without you?"
+        ]
+      },
+      {
+        "id": "ulysses-contract",
+        "name": "The Ulysses Contract",
+        "origin": "Homer; precommitment in behavioural economics",
+        "readMinutes": 2,
+        "tags": [
+          "precommitment",
+          "self-control",
+          "rules"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Ulysses Contract</title><desc>A figure bound to a mast by a rope drawn in the accent colour, with a wavy dashed line off to the right representing the pull that will arrive later.</desc>\n          <line x1=\"36\" y1=\"20\" x2=\"36\" y2=\"80\" class=\"s-line-b\"/>\n          <circle cx=\"36\" cy=\"44\" r=\"5\" class=\"s-line\"/>\n          <path d=\"M 30 38 Q 43 42 30 46 Q 43 50 30 54\" class=\"s-accent\"/>\n          <path d=\"M 56 40 Q 64 30 72 40 Q 80 50 88 40\" class=\"s-dash\"/>\n          <text x=\"72\" y=\"60\" class=\"t-m t-xs2\" text-anchor=\"middle\">the pull</text>\n          <text x=\"36\" y=\"90\" class=\"t-m t-xs2\" text-anchor=\"middle\">you, in advance</text>\n          <text x=\"50\" y=\"12\" class=\"t-m\" text-anchor=\"middle\">Bind yourself first</text></svg>",
+        "zones": [
+          "Decided while calm",
+          "The binding mechanism",
+          "The moment it fires"
+        ],
+        "what": "A commitment your calm self makes that removes your loud self's ability to change it later.",
+        "how": "Decide the action while you are level. Then attach a mechanism that takes the choice out of your hands — an automatic transfer, a stop-loss, a co-signer, a deleted account, a public date. The mechanism, not the intention, is the contract.",
+        "when": "Any decision where you already know the version of you who shows up later will disagree.",
+        "for": "Beating your own predictable failure.",
+        "not": "Situations where new information genuinely arrives — a binding you cannot break also binds you when you were wrong, which is the price you are paying.",
+        "example": "A trader who kept riding losers set a broker-side stop at eight per cent on every position, with no manual override. The first month it fired on a stock that recovered two days later, and it cost him about $2,300 in regret. Over the year it cut his worst drawdown by more than half.",
+        "questions": [
+          "Where do you already know your future self will overrule your present self?",
+          "What mechanism would make that impossible rather than merely discouraged?",
+          "What is the cost of the times the binding fires when it should not have — and is it smaller than the drift?"
+        ]
+      },
+      {
+        "id": "defaults",
+        "name": "Defaults",
+        "origin": "Richard Thaler and Cass Sunstein",
+        "readMinutes": 2,
+        "tags": [
+          "rules",
+          "inaction",
+          "design"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Defaults</title><desc>From a starting point, a straight accented line runs to the right marked if you do nothing, while a dashed curve rises above it marked if you act.</desc>\n          <circle cx=\"18\" cy=\"50\" r=\"3\" class=\"s-dot\"/>\n          <text x=\"18\" y=\"42\" class=\"t-m t-xs2\" text-anchor=\"middle\">now</text>\n          <path d=\"M 21 50 L 84 50\" class=\"s-accent\"/>\n          <path d=\"M 24 48 Q 44 26 84 30\" class=\"s-dash\"/>\n          <text x=\"54\" y=\"60\" class=\"t-m t-xs2\" text-anchor=\"middle\">if you do nothing</text>\n          <text x=\"56\" y=\"20\" class=\"t-m t-xs2\" text-anchor=\"middle\">if you act</text>\n          <text x=\"50\" y=\"90\" class=\"t-m\" text-anchor=\"middle\">Set the do-nothing path</text></svg>",
+        "zones": [
+          "Current default",
+          "Better default",
+          "Cost of opting out"
+        ],
+        "what": "The outcome that happens when you make no decision at all — which, over a year, is most of them.",
+        "how": "For a decision you keep deferring, ask what happens if you never act. That is the choice you are currently making. If it is wrong, change the default rather than resolving to decide better.",
+        "when": "Any decision that has been open long enough that inaction has become the answer.",
+        "for": "Making inaction work for you instead of against you.",
+        "not": "Decisions that genuinely need a person — a default that quietly approves things nobody reviewed is worse than the deferral it replaced.",
+        "example": "A team's default for expense approvals was that nothing moved until the director looked, and she looked roughly fortnightly. Flipping the default — anything under $500 auto-approves unless flagged within three days — removed about ninety decisions a month from her queue and changed the spend by under two per cent.",
+        "questions": [
+          "What happens to your open decision if you never touch it again? Are you happy with that?",
+          "Which of your recurring defaults was never chosen, just inherited?",
+          "What would the right default be, and what stops you setting it today?"
+        ]
+      },
+      {
+        "id": "quitting-criteria",
+        "name": "Quitting Criteria",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "precommitment",
+          "monitoring",
+          "quitting"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Quitting Criteria</title><desc>A trajectory rises above a dashed threshold line and then falls back through it; the crossing point is marked in the accent colour and labelled STOP.</desc>\n          <line x1=\"14\" y1=\"78\" x2=\"90\" y2=\"78\" class=\"s-line\"/>\n          <line x1=\"14\" y1=\"18\" x2=\"14\" y2=\"78\" class=\"s-line\"/>\n          <line x1=\"14\" y1=\"56\" x2=\"90\" y2=\"56\" class=\"s-dash\"/>\n          <path d=\"M 16 70 Q 34 30 52 48 T 86 72\" class=\"s-line-b\"/>\n          <circle cx=\"61\" cy=\"56\" r=\"3\" class=\"s-accent-f\"/>\n          <text x=\"66\" y=\"50\" class=\"t-m t-a\">STOP</text>\n          <text x=\"88\" y=\"42\" class=\"t-m t-xs2\" text-anchor=\"end\">threshold</text>\n          <text x=\"52\" y=\"90\" class=\"t-m\" text-anchor=\"middle\">Time</text>\n          <text x=\"7\" y=\"48\" class=\"t-m\" text-anchor=\"middle\" transform=\"rotate(-90 7 48)\">Metric</text></svg>",
+        "zones": [
+          "The metric",
+          "The threshold",
+          "The date",
+          "The action"
+        ],
+        "what": "The conditions, written down before you start, under which you will stop — decided while you are still capable of deciding them.",
+        "how": "Name a metric, a threshold and a date: if we are under X by June, we stop. Put it where other people can see it. When the date arrives, honour it without re-opening the negotiation.",
+        "when": "At the start of anything you will find hard to abandon once you are inside it.",
+        "for": "Quitting on time instead of late.",
+        "not": "Efforts whose payoff is genuinely lumpy and back-loaded — a threshold set on a metric that was never going to move early kills the thing before it had a chance.",
+        "example": "Two co-founders agreed before launch: if monthly recurring revenue was under $8k at month nine, they would stop. Month nine came in at $5.2k. It took a bruising afternoon, but they closed with $60k in the bank and both had new roles inside two months. The version of them at month nine would have raised the bar to twelve.",
+        "questions": [
+          "What are you currently in that has no agreed stopping condition?",
+          "Write one now: metric, number, date. Would you have signed it at the start?",
+          "What have you already quit far later than you should have — and what would the criterion have been?"
+        ]
+      },
+      {
+        "id": "decision-stack",
+        "name": "The Decision Stack",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "values",
+          "goals",
+          "alignment"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Decision Stack</title><desc>Four stacked bars narrowing downward, from purpose at the top through values and goals to the single decision at the bottom, with a dashed arrow up the side.</desc>\n          <text x=\"50\" y=\"13\" class=\"t-m t-xs2\" text-anchor=\"middle\">check upward</text>\n          <rect x=\"16\" y=\"20\" width=\"68\" height=\"13\" class=\"s-box\"/>\n          <rect x=\"22\" y=\"36\" width=\"56\" height=\"13\" class=\"s-box\"/>\n          <rect x=\"28\" y=\"52\" width=\"44\" height=\"13\" class=\"s-box\"/>\n          <rect x=\"34\" y=\"68\" width=\"32\" height=\"13\" class=\"s-accent\"/>\n          <text x=\"50\" y=\"29\" class=\"t-m\" text-anchor=\"middle\">PURPOSE</text>\n          <text x=\"50\" y=\"45\" class=\"t-m\" text-anchor=\"middle\">VALUES</text>\n          <text x=\"50\" y=\"61\" class=\"t-m\" text-anchor=\"middle\">GOALS</text>\n          <text x=\"50\" y=\"77\" class=\"t-m\" text-anchor=\"middle\">THIS ONE</text>\n          <line x1=\"90\" y1=\"30\" x2=\"90\" y2=\"78\" class=\"s-dash\"/>\n          <polygon points=\"90,24 86.5,31 93.5,31\" class=\"s-dot\"/></svg>",
+        "zones": [
+          "Purpose",
+          "Values",
+          "Goals",
+          "This decision"
+        ],
+        "what": "The layers sitting above any single choice — purpose, values, goals — which, once written, answer most choices before you reach them.",
+        "how": "Write the three upper layers once, in plain language, when nothing is at stake. When a decision arrives, test it against the layer directly above rather than reasoning from scratch. Where it conflicts, the decision is wrong or the layer was never true.",
+        "when": "Any decision that feels harder than its size, which usually means it is conflicting with a layer you have not written down.",
+        "for": "Making most choices answer themselves.",
+        "not": "Genuine ties between options that serve the stack equally well — the stack has nothing left to say, and you should use the Only-Option Test instead.",
+        "example": "A developer turned down a 30% raise in ten minutes. His written stack had “work I can explain to my daughter” two layers above any salary goal, and the role was ad-tech attribution. Without the stack the same decision had taken him two weeks the previous year, and he had said yes and left in five months.",
+        "questions": [
+          "Write your purpose in one sentence, without using the word success.",
+          "Name a decision from this year that conflicted with it. What did you choose?",
+          "Which of your current goals does not ladder up to anything above it?"
+        ]
+      }
+    ]
+  },
+  "get-better": {
+    "title": "How to Get Better at Deciding",
+    "short": "Get Better",
+    "axis": "Every Decision + Thorough",
+    "subtitle": "The learning loop: separating skill from luck, protecting the record, and getting uncontaminated information from other people.",
+    "models": [
+      {
+        "id": "resulting",
+        "name": "Resulting",
+        "origin": "Annie Duke / poker",
+        "readMinutes": 3,
+        "tags": [
+          "review",
+          "luck",
+          "learning"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Resulting</title><desc>A decision box connects forward to an outcome box through a step labelled plus luck. A dashed arrow running backwards from outcome to decision is crossed out.</desc>\n          <rect x=\"12\" y=\"40\" width=\"28\" height=\"20\" class=\"s-box\"/>\n          <rect x=\"60\" y=\"40\" width=\"28\" height=\"20\" class=\"s-box\"/>\n          <text x=\"26\" y=\"52\" class=\"t-m t-xs2\" text-anchor=\"middle\">DECISION</text>\n          <text x=\"74\" y=\"52\" class=\"t-m t-xs2\" text-anchor=\"middle\">OUTCOME</text>\n          <line x1=\"40\" y1=\"50\" x2=\"54\" y2=\"50\" class=\"s-line\"/>\n          <polygon points=\"60,50 53,46.5 53,53.5\" class=\"s-dot\"/>\n          <text x=\"50\" y=\"42\" class=\"t-m t-xs2\" text-anchor=\"middle\">+ luck</text>\n          <path d=\"M 74 66 Q 50 82 26 66\" class=\"s-dash\"/>\n          <polygon points=\"21,64 28,63 26,70\" class=\"s-dot\"/>\n          <path d=\"M 45 70 L 55 80 M 55 70 L 45 80\" class=\"s-accent\"/>\n          <text x=\"50\" y=\"92\" class=\"t-m\" text-anchor=\"middle\">Don't read it backwards</text></svg>",
+        "zones": [
+          "Decision quality",
+          "Outcome quality",
+          "Luck"
+        ],
+        "what": "Judging how good a decision was by how it happened to turn out — the single most common way people learn the wrong lesson.",
+        "how": "When reviewing, hold the two questions apart. Ask what you knew at the time, what you could reasonably have known, and what you did with it. Judge that. Then ask separately how it turned out, and give luck its share.",
+        "when": "Every post-mortem, every performance review, and every time you catch yourself saying “I should have known.”",
+        "for": "Learning the right lesson from a single event.",
+        "not": "Patterns across many outcomes — when the same decision loses forty times, the outcomes are telling you something real and “that's just variance” becomes the excuse.",
+        "example": "A hiring manager made two offers in the same week using the same process. One hire became the best on the team; the other left in four months after a family move nobody could have foreseen. The company praised the first decision and audited the second. The process was identical, and the audit changed it for the worse.",
+        "questions": [
+          "Name a decision of yours that is judged well only because it worked out. What was the process actually like?",
+          "Name one that is judged badly and was not. Who else believes that?",
+          "In your last review, which lesson was drawn from the outcome rather than the reasoning?"
+        ]
+      },
+      {
+        "id": "decision-outcome-matrix",
+        "name": "Decision Quality × Outcome Quality",
+        "origin": "Annie Duke",
+        "readMinutes": 3,
+        "tags": [
+          "review",
+          "luck",
+          "learning"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Decision Quality by Outcome Quality</title><desc>A two-by-two grid crossing good and bad decisions with good and bad outcomes, giving deserved success, bad luck, dumb luck and poetic justice.</desc>\n          <rect x=\"20\" y=\"20\" width=\"60\" height=\"60\" class=\"s-box\"/>\n          <line x1=\"50\" y1=\"20\" x2=\"50\" y2=\"80\" class=\"s-line\"/>\n          <line x1=\"20\" y1=\"50\" x2=\"80\" y2=\"50\" class=\"s-line\"/>\n          <text x=\"35\" y=\"15\" class=\"t-m t-xs2\" text-anchor=\"middle\">good outcome</text>\n          <text x=\"65\" y=\"15\" class=\"t-m t-xs2\" text-anchor=\"middle\">bad outcome</text>\n          <text x=\"13\" y=\"35\" class=\"t-m t-xs2\" text-anchor=\"middle\" transform=\"rotate(-90 13 35)\">good dec.</text>\n          <text x=\"13\" y=\"65\" class=\"t-m t-xs2\" text-anchor=\"middle\" transform=\"rotate(-90 13 65)\">bad dec.</text>\n          <text x=\"35\" y=\"34\" class=\"t-b t-sm\" text-anchor=\"middle\">DESERVED</text>\n          <text x=\"35\" y=\"41\" class=\"t-b t-sm\" text-anchor=\"middle\">SUCCESS</text>\n          <text x=\"65\" y=\"34\" class=\"t-b t-sm\" text-anchor=\"middle\">BAD</text>\n          <text x=\"65\" y=\"41\" class=\"t-b t-sm\" text-anchor=\"middle\">LUCK</text>\n          <text x=\"35\" y=\"64\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">DUMB</text>\n          <text x=\"35\" y=\"71\" class=\"t-b t-sm t-a\" text-anchor=\"middle\">LUCK</text>\n          <text x=\"65\" y=\"64\" class=\"t-b t-sm\" text-anchor=\"middle\">POETIC</text>\n          <text x=\"65\" y=\"71\" class=\"t-b t-sm\" text-anchor=\"middle\">JUSTICE</text></svg>",
+        "zones": [
+          "Deserved success",
+          "Bad luck",
+          "Dumb luck",
+          "Poetic justice"
+        ],
+        "what": "The four ways a decision and its outcome can combine, named so you can tell them apart after the fact.",
+        "how": "Place a past decision on the grid using what you knew at the time, not what you know now. The dangerous cell is bad decision with good outcome — it teaches nothing, feels like skill, and you will do it again.",
+        "when": "Reviewing anything that already happened, alone or with a team.",
+        "for": "Separating skill from luck in hindsight.",
+        "not": "Live decisions — the grid needs an outcome, and using it forward turns into predicting which cell you will land in, which is the whole problem.",
+        "example": "A sales director reviewed the year's four biggest deals. Two closed, and one of those had been pursued against every qualification rule the team had — dumb luck. It had become the story junior reps repeated. Naming the cell out loud cost an uncomfortable hour and stopped the practice spreading.",
+        "questions": [
+          "Place your best result this year on the grid honestly. Which cell?",
+          "Which of your habits currently sits in dumb luck and is being copied by someone?",
+          "What went in the bad-luck cell that you are still quietly blaming yourself for?"
+        ]
+      },
+      {
+        "id": "hindsight-bias",
+        "name": "Hindsight Bias",
+        "origin": "Baruch Fischhoff",
+        "readMinutes": 2,
+        "tags": [
+          "memory",
+          "review",
+          "bias"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Hindsight Bias</title><desc>Before the outcome, a fan of possible paths spreads from a point; after it, a single bold path remains, and an accented line shows the one route memory now insists was always obvious.</desc>\n          <line x1=\"52\" y1=\"16\" x2=\"52\" y2=\"84\" class=\"s-dash\"/>\n          <text x=\"30\" y=\"12\" class=\"t-m t-xs2\" text-anchor=\"middle\">before</text>\n          <text x=\"72\" y=\"12\" class=\"t-m t-xs2\" text-anchor=\"middle\">after</text>\n          <circle cx=\"16\" cy=\"50\" r=\"2.6\" class=\"s-dot\"/>\n          <path d=\"M 18 50 L 48 24 M 18 50 L 48 50 M 18 50 L 48 76\" class=\"s-line-thin\"/>\n          <path d=\"M 18 50 L 48 33\" class=\"s-accent\"/>\n          <text x=\"30\" y=\"26\" class=\"t-m t-xs2 t-a\" text-anchor=\"middle\">remembered</text>\n          <path d=\"M 52 50 L 86 32\" class=\"s-line-b\"/>\n          <text x=\"70\" y=\"88\" class=\"t-m t-xs2\" text-anchor=\"middle\">one path, obvious</text></svg>",
+        "zones": [
+          "What I predicted",
+          "What I remember predicting",
+          "What happened"
+        ],
+        "what": "Once you know how something turned out, you can no longer recover how uncertain it genuinely felt beforehand.",
+        "how": "Write your estimate down before the outcome arrives, with a date and a number. Afterwards, compare the written record to your memory of it. The gap is the bias, and it is reliably wider than anyone expects.",
+        "when": "Any review of a decision whose outcome you already know — which is all of them.",
+        "for": "Protecting the only honest record of what you believed.",
+        "not": "Decisions where you genuinely did have the information and ignored it — not every “I knew it” is a bias, and calling it one is its own way of dodging.",
+        "example": "Before a product launch a team was polled: median confidence of hitting target was 45%. It missed. In the retrospective six weeks later, seven of nine people said they had thought it was unlikely from the start. The poll was on the wall behind them.",
+        "questions": [
+          "Recall a failure you say you saw coming. Where is the written evidence?",
+          "What is the probability you would have given it a week before, honestly?",
+          "What are you predicting right now that you should write down and date, so future-you cannot rewrite it?"
+        ]
+      },
+      {
+        "id": "paradox-of-experience",
+        "name": "The Paradox of Experience",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "learning",
+          "sample-size",
+          "bias"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Paradox of Experience</title><desc>On the left, a single accented data point with a confident steep line drawn through it. On the right, a scatter of many points with a much flatter line.</desc>\n          <text x=\"50\" y=\"14\" class=\"t-m\" text-anchor=\"middle\">The line you draw</text>\n          <path d=\"M 14 66 L 44 34\" class=\"s-line-b\"/>\n          <circle cx=\"28\" cy=\"50\" r=\"3.2\" class=\"s-accent-f\"/>\n          <path d=\"M 56 58 L 88 50\" class=\"s-line\"/>\n          <circle cx=\"58\" cy=\"58\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"64\" cy=\"53\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"68\" cy=\"59\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"72\" cy=\"50\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"76\" cy=\"56\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"82\" cy=\"48\" r=\"1.6\" class=\"s-dot\"/>\n          <circle cx=\"86\" cy=\"53\" r=\"1.6\" class=\"s-dot\"/>\n          <text x=\"28\" y=\"80\" class=\"t-m t-xs2\" text-anchor=\"middle\">n = 1</text>\n          <text x=\"72\" y=\"80\" class=\"t-m t-xs2\" text-anchor=\"middle\">n = many</text></svg>",
+        "zones": [
+          "Sample of one",
+          "Real pattern",
+          "Not enough data yet"
+        ],
+        "what": "Experience is the best teacher and the worst: every lesson arrives as one outcome, and one outcome is a sample of one.",
+        "how": "Before drawing a lesson from an event, ask how many times this situation would have to repeat before the pattern were real. If the answer is more than you have, either wait, or borrow other people's samples and add them to yours.",
+        "when": "Immediately after something works or fails hard enough that you want to change how you operate.",
+        "for": "Not over-fitting your process to one event.",
+        "not": "Rare events with severe consequences — you do not get to wait for n = 30 on a safety failure, and demanding a sample there is negligence wearing rigour's clothes.",
+        "example": "A recruiter hired one engineer from a bootcamp who did not work out and quietly stopped considering bootcamp applicants for two years. Her sample was one. A colleague's was nineteen, with a hit rate above the university pipeline. Nobody compared the two until an audit forced it.",
+        "questions": [
+          "What rule are you following that came from exactly one bad experience?",
+          "How many times would it need to happen before you would believe it as a pattern?",
+          "Whose sample could you borrow this week to check it?"
+        ]
+      },
+      {
+        "id": "knowledge-tracker",
+        "name": "The Knowledge Tracker",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "review",
+          "record",
+          "calibration"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Knowledge Tracker</title><desc>A ruled log sheet with rows of entries and a narrow right-hand column of outcome marks; one row is outlined in the accent colour.</desc>\n          <text x=\"50\" y=\"12\" class=\"t-m t-xs2\" text-anchor=\"middle\">belief &middot; confidence &middot; why</text>\n          <rect x=\"16\" y=\"18\" width=\"68\" height=\"64\" class=\"s-box\"/>\n          <line x1=\"16\" y1=\"34\" x2=\"84\" y2=\"34\" class=\"s-line-thin\"/>\n          <line x1=\"16\" y1=\"50\" x2=\"84\" y2=\"50\" class=\"s-line-thin\"/>\n          <line x1=\"16\" y1=\"66\" x2=\"84\" y2=\"66\" class=\"s-line-thin\"/>\n          <line x1=\"66\" y1=\"18\" x2=\"66\" y2=\"82\" class=\"s-line-thin\"/>\n          <line x1=\"22\" y1=\"27\" x2=\"58\" y2=\"27\" class=\"s-line-thin\"/>\n          <line x1=\"22\" y1=\"43\" x2=\"58\" y2=\"43\" class=\"s-line-thin\"/>\n          <line x1=\"22\" y1=\"59\" x2=\"58\" y2=\"59\" class=\"s-line-thin\"/>\n          <line x1=\"22\" y1=\"75\" x2=\"58\" y2=\"75\" class=\"s-line-thin\"/>\n          <path d=\"M 71 27 L 73 30 L 78 24\" class=\"s-line\"/>\n          <circle cx=\"75\" cy=\"43\" r=\"2\" class=\"s-dot\"/>\n          <path d=\"M 71 59 L 73 62 L 78 56\" class=\"s-line\"/>\n          <rect x=\"16\" y=\"66\" width=\"68\" height=\"16\" class=\"s-accent\"/>\n          <text x=\"50\" y=\"90\" class=\"t-m\" text-anchor=\"middle\">Written before you know</text></svg>",
+        "zones": [
+          "The belief",
+          "How sure",
+          "Why",
+          "What happened"
+        ],
+        "what": "A written record of what you believed, how sure you were and why — captured before the answer arrives, which is the only time it is honest.",
+        "how": "For each real decision, log four things: the date, the choice, your probability, and the two facts you most wish you had. Review the log quarterly against what actually happened, in batches rather than one at a time.",
+        "when": "At the moment of deciding, not afterwards. Afterwards is a different document.",
+        "for": "Beating hindsight bias with evidence.",
+        "not": "Every decision you make — a log that tries to capture everything gets abandoned in three weeks, and the ones that survive record maybe one decision a fortnight.",
+        "example": "A portfolio manager logged a one-line rationale and a confidence figure for every position over eighteen months. The quarterly review found something the memory had hidden completely: his 80%-confidence calls came in around 55%, and the 55% calls came in near 60%. He had been sizing them the wrong way round.",
+        "questions": [
+          "What are you deciding this week? Write the belief, your confidence as a number, and the two facts you wish you had.",
+          "Where will that live so you actually see it again in three months?",
+          "Look at a decision from last quarter. What would the log have said, and does that match what you now remember?"
+        ]
+      },
+      {
+        "id": "outside-view",
+        "name": "The Outside View",
+        "origin": "Daniel Kahneman and Amos Tversky",
+        "readMinutes": 2,
+        "tags": [
+          "base-rates",
+          "forecasting",
+          "bias"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Outside View</title><desc>A distribution curve for a class of similar cases, with a dashed line at the base rate and an accented marker far out on the tail labelled you, and an arrow pulling it back toward the centre.</desc>\n          <line x1=\"14\" y1=\"74\" x2=\"90\" y2=\"74\" class=\"s-line-thin\"/>\n          <path d=\"M 16 74 Q 34 74 42 40 Q 50 12 58 40 Q 66 74 84 74\" class=\"s-line\"/>\n          <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"74\" class=\"s-dash\"/>\n          <text x=\"50\" y=\"24\" class=\"t-m t-xs2\" text-anchor=\"middle\">base rate</text>\n          <circle cx=\"80\" cy=\"74\" r=\"3.2\" class=\"s-accent-f\"/>\n          <text x=\"80\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">you</text>\n          <path d=\"M 76 84 L 58 84\" class=\"s-dash\"/>\n          <polygon points=\"52,84 59,80.5 59,87.5\" class=\"s-dot\"/>\n          <text x=\"50\" y=\"94\" class=\"t-m\" text-anchor=\"middle\">Start from the class</text></svg>",
+        "zones": [
+          "The reference class",
+          "Its base rate",
+          "Named adjustments",
+          "My estimate"
+        ],
+        "what": "Asking what usually happens to people in your situation before asking what will happen to you.",
+        "how": "Define the reference class honestly — not “startups” but “B2B startups at this stage in this market.” Find its base rate. Start from that number and adjust only for differences you can name out loud and defend to someone else.",
+        "when": "Any forecast about your own project, timeline, or odds.",
+        "for": "Anchoring a forecast to reality rather than to enthusiasm.",
+        "not": "Genuinely novel situations with no honest reference class — a base rate borrowed from a class you do not belong to is worse than no number, because it arrives with false authority.",
+        "example": "A couple budgeted fourteen weeks and $60k for a renovation. The builder's own last eleven jobs of that size averaged twenty-two weeks and 30% over. They could name two real differences — no structural work, materials already bought — worth maybe three weeks. They planned for nineteen and finished in twenty.",
+        "questions": [
+          "Define the reference class for your current project in one specific sentence.",
+          "What is its base rate? If you do not know, who would?",
+          "List the differences you are claiming make you an exception. Which could you defend to a sceptic?"
+        ]
+      },
+      {
+        "id": "decision-hygiene",
+        "name": "Decision Hygiene",
+        "origin": "Annie Duke",
+        "readMinutes": 3,
+        "tags": [
+          "team",
+          "elicitation",
+          "bias"
+        ],
+        "fidelity": "canonical",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Decision Hygiene</title><desc>Two people separated by an accented barrier, each producing an estimate independently, whose results then converge on a comparison box.</desc>\n          <text x=\"50\" y=\"10\" class=\"t-m t-xs2\" text-anchor=\"middle\">no contact yet</text>\n          <circle cx=\"26\" cy=\"30\" r=\"9\" class=\"s-line\"/>\n          <circle cx=\"74\" cy=\"30\" r=\"9\" class=\"s-line\"/>\n          <text x=\"26\" y=\"32\" class=\"t-m t-xs2\" text-anchor=\"middle\">you</text>\n          <text x=\"74\" y=\"32\" class=\"t-m t-xs2\" text-anchor=\"middle\">them</text>\n          <line x1=\"50\" y1=\"14\" x2=\"50\" y2=\"58\" class=\"s-accent\"/>\n          <rect x=\"18\" y=\"46\" width=\"16\" height=\"9\" class=\"s-box\"/>\n          <rect x=\"66\" y=\"46\" width=\"16\" height=\"9\" class=\"s-box\"/>\n          <path d=\"M 26 58 L 50 68 M 74 58 L 50 68\" class=\"s-line\"/>\n          <rect x=\"38\" y=\"70\" width=\"24\" height=\"12\" class=\"s-box\"/>\n          <text x=\"50\" y=\"78\" class=\"t-m t-xs2\" text-anchor=\"middle\">compare</text></svg>",
+        "zones": [
+          "My view, quarantined",
+          "Their independent view",
+          "The comparison"
+        ],
+        "what": "Keeping your own opinion out of the answers you are about to collect, because you will contaminate them without noticing.",
+        "how": "Ask for their view before you offer yours. Collect estimates independently and in writing before anyone speaks in the room. Never signal what you are hoping to hear, including with the framing of the question.",
+        "when": "Any time you seek input on something you already have a view about.",
+        "for": "Getting information rather than agreement.",
+        "not": "Situations where the other person genuinely needs your context to answer — quarantining so hard that they guess at the question gives you clean noise.",
+        "example": "A director asked six people whether to launch in March, having already said in two meetings that she liked March. Five agreed. A month later she re-ran it as a written, blind estimate on a different question — what is the earliest date you would bet your own money on? The median came back late May.",
+        "questions": [
+          "Whose opinion did you ask for recently after telling them yours first?",
+          "What would it cost you to ask the next one blind and in writing?",
+          "Where in your team does everyone agree suspiciously fast?"
+        ]
+      },
+      {
+        "id": "feedback-protocol",
+        "name": "The Feedback Protocol",
+        "origin": "Annie Duke",
+        "readMinutes": 2,
+        "tags": [
+          "team",
+          "elicitation",
+          "review"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>The Feedback Protocol</title><desc>Four numbered steps in a row: facts, their read, your view, and what's missing. The third step, your view, is circled in the accent colour to show it is deliberately held back.</desc>\n          <text x=\"50\" y=\"20\" class=\"t-m\" text-anchor=\"middle\">Your view goes third</text>\n          <circle cx=\"20\" cy=\"48\" r=\"7\" class=\"s-line\"/>\n          <circle cx=\"40\" cy=\"48\" r=\"7\" class=\"s-line\"/>\n          <circle cx=\"60\" cy=\"48\" r=\"7\" class=\"s-accent\"/>\n          <circle cx=\"80\" cy=\"48\" r=\"7\" class=\"s-line\"/>\n          <text x=\"20\" y=\"50\" class=\"t-m t-xs2\" text-anchor=\"middle\">1</text>\n          <text x=\"40\" y=\"50\" class=\"t-m t-xs2\" text-anchor=\"middle\">2</text>\n          <text x=\"60\" y=\"50\" class=\"t-m t-xs2\" text-anchor=\"middle\">3</text>\n          <text x=\"80\" y=\"50\" class=\"t-m t-xs2\" text-anchor=\"middle\">4</text>\n          <line x1=\"27\" y1=\"48\" x2=\"33\" y2=\"48\" class=\"s-line\"/>\n          <line x1=\"47\" y1=\"48\" x2=\"53\" y2=\"48\" class=\"s-line\"/>\n          <line x1=\"67\" y1=\"48\" x2=\"73\" y2=\"48\" class=\"s-line\"/>\n          <text x=\"20\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">facts</text>\n          <text x=\"40\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">their</text>\n          <text x=\"40\" y=\"71\" class=\"t-m t-xs2\" text-anchor=\"middle\">read</text>\n          <text x=\"60\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">your</text>\n          <text x=\"60\" y=\"71\" class=\"t-m t-xs2\" text-anchor=\"middle\">view</text>\n          <text x=\"80\" y=\"66\" class=\"t-m t-xs2\" text-anchor=\"middle\">what's</text>\n          <text x=\"80\" y=\"71\" class=\"t-m t-xs2\" text-anchor=\"middle\">missing</text></svg>",
+        "zones": [
+          "Facts only",
+          "Their read",
+          "Your view",
+          "What's missing"
+        ],
+        "what": "The order in which you ask determines what comes back — so the order is the tool, not the questions.",
+        "how": "State the facts with no conclusion attached. Ask for their read and let them finish. Only then say what you did and what you were hoping for. Close by asking what they would need to know that you did not tell them.",
+        "when": "Bringing a decision, finished or unfinished, to someone whose judgement you want.",
+        "for": "Getting a second opinion that is actually second.",
+        "not": "Emergencies — the protocol takes time, and withholding your view while the building is on fire is a procedure fetish.",
+        "example": "An engineer used to open with “I think we should rewrite the service, what do you think?” and got agreement every time. Reordered — latency numbers, error rates, no conclusion — the first colleague he tried it on came back with a caching change that took two days. The rewrite had been scoped at eleven weeks.",
+        "questions": [
+          "Recall the last time you asked for advice. Did you state your conclusion before or after their answer?",
+          "Take your current decision. Write the facts alone, with no conclusion. What is left?",
+          "Who tells you what you want to hear, and have you ever given them a chance not to?"
+        ]
+      },
+      {
+        "id": "motivated-reasoning",
+        "name": "Motivated Reasoning",
+        "origin": "Ziva Kunda",
+        "readMinutes": 2,
+        "tags": [
+          "bias",
+          "evidence",
+          "self-awareness"
+        ],
+        "fidelity": "interpreted",
+        "svg": "<svg viewBox=\"0 0 100 100\" class=\"svg-illustration\" role=\"img\"><title>Motivated Reasoning</title><desc>A balance scale tipped to one side by an accented weight in the right-hand pan, which represents the conclusion you already wanted.</desc>\n          <polygon points=\"50,52 44,74 56,74\" class=\"s-line\"/>\n          <line x1=\"20\" y1=\"42\" x2=\"80\" y2=\"58\" class=\"s-line-b\"/>\n          <line x1=\"20\" y1=\"42\" x2=\"20\" y2=\"49\" class=\"s-line-thin\"/>\n          <path d=\"M 12 49 Q 20 60 28 49\" class=\"s-line\"/>\n          <line x1=\"80\" y1=\"58\" x2=\"80\" y2=\"65\" class=\"s-line-thin\"/>\n          <path d=\"M 72 65 Q 80 76 88 65\" class=\"s-line\"/>\n          <circle cx=\"80\" cy=\"68\" r=\"3.2\" class=\"s-accent-f\"/>\n          <text x=\"22\" y=\"64\" class=\"t-m t-xs2\" text-anchor=\"middle\">everything</text>\n          <text x=\"22\" y=\"69\" class=\"t-m t-xs2\" text-anchor=\"middle\">else</text>\n          <text x=\"80\" y=\"86\" class=\"t-m t-xs2\" text-anchor=\"middle\">what you want</text>\n          <text x=\"50\" y=\"94\" class=\"t-m\" text-anchor=\"middle\">Name it before you look</text></svg>",
+        "zones": [
+          "The answer I want",
+          "Evidence for",
+          "Evidence against",
+          "What I skipped"
+        ],
+        "what": "You do not weigh evidence neutrally; you weigh it in favour of the conclusion you already want, and the weighing feels like reasoning throughout.",
+        "how": "Before looking at the evidence, say out loud which answer you are hoping for. Write it down. Then spend the first block of time deliberately on the case against it, and only afterwards on the case for.",
+        "when": "Any question where you can already feel which answer you would prefer.",
+        "for": "Catching the bias while it is still catchable.",
+        "not": "Decisions where your preference is legitimately part of the answer — what you want from a career is not contamination, it is the input.",
+        "example": "A CTO evaluating whether to keep an in-house system he had built spent two weeks gathering evidence and concluded to keep it. Asked to name his preferred answer first and argue the other side for an hour, he found three costs he had genuinely not counted — on-call load, the hiring premium, and a compliance renewal. The system was retired that quarter.",
+        "questions": [
+          "For the question in front of you, which answer are you hoping for? Write it down.",
+          "Spend ten minutes building the strongest case against it. What is the best argument?",
+          "Which evidence did you look at quickly because it pointed the wrong way?"
+        ]
+      }
+    ]
+  }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = "howtodecide.v1";
+const storageOK = (() => {
+  try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); return true; }
+  catch (e) { return false; }
+})();
+
+let state = { answers: {}, sorters: {}, sketches: {}, theme: null };
+if (storageOK) {
+  try { state = Object.assign(state, JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")); }
+  catch (e) { /* corrupt payload — start clean */ }
+}
+if (!state.answers) state.answers = {};
+if (!state.sorters) state.sorters = {};
+if (!state.sketches) state.sketches = {};
+
+let saveTimer = null;
+function save() {
+  if (!storageOK) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }, 400);
+}
+function saveNow() {
+  if (!storageOK) return;
+  clearTimeout(saveTimer);
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+const allModels = [];
+Object.keys(database).forEach(key => {
+  database[key].models.forEach(m => allModels.push(Object.assign({ quadrant: key }, m)));
+});
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const app = document.getElementById("app");
+const emptyState = document.getElementById("empty-state");
+
+function sorterMarkup(m) {
+  if (!m.zones || !m.zones.length) return "";
+  const zones = m.zones.map((z, i) => `
+    <div class="zone" data-zone="${i}" data-model="${m.id}">
+      <h5>${esc(z)} <span class="zone-count" data-zone-count="${i}">0</span></h5>
+      <div class="zone-items" data-zone-items="${i}"></div>
+      <button class="zone-place" data-place="${i}" disabled>Move here</button>
+    </div>`).join("");
+  return `
+    <div class="sorter" data-sorter="${m.id}">
+      <div class="sorter-head">
+        <h4>Sort it out</h4>
+        <button class="clear-btn" data-clear-sorter="${m.id}">Clear items</button>
+      </div>
+      <form class="sorter-add" data-add="${m.id}">
+        <label class="sr-only" for="${m.id}-add">Add an item to sort for ${esc(m.name)}</label>
+        <input id="${m.id}-add" type="text" placeholder="Add something to sort…" autocomplete="off">
+        <button class="tool-btn" type="submit">Add</button>
+      </form>
+      <p class="sorter-hint">Drag an item into a zone — or select an item and choose <em>Move here</em>.</p>
+      <div class="zone-grid">
+        <div class="zone" data-pool="true" data-zone="-1" data-model="${m.id}">
+          <h5>Unsorted <span class="zone-count" data-zone-count="-1">0</span></h5>
+          <div class="zone-items" data-zone-items="-1"></div>
+          <button class="zone-place" data-place="-1" disabled>Move here</button>
+        </div>
+        ${zones}
+      </div>
+    </div>`;
+}
+
+function sketchMarkup(m) {
+  // Match the pad to the diagram's own proportions so redrawing it is a like-for-like
+  // exercise rather than a squashed approximation.
+  const vb = /viewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(m.svg);
+  const vw = vb ? parseFloat(vb[1]) : 100;
+  const vh = vb ? parseFloat(vb[2]) : 100;
+  const cw = 800;
+  const ch = Math.round(cw * vh / vw);
+  return `
+    <div class="sketch" data-sketch="${m.id}">
+      <div class="sketch-head">
+        <h4>Draw it yourself</h4>
+        <div class="sketch-tools" role="group" aria-label="Sketch tools for ${esc(m.name)}">
+          <button class="pen" data-w="3"  aria-pressed="true"  aria-label="Thin pen"><i></i></button>
+          <button class="pen" data-w="6"  aria-pressed="false" aria-label="Medium pen"><i></i></button>
+          <button class="pen" data-w="12" aria-pressed="false" aria-label="Thick pen"><i></i></button>
+          <button class="pen" data-erase="1" aria-pressed="false" aria-label="Eraser"><i></i></button>
+          <button class="tool-btn" data-undo="${m.id}">Undo</button>
+          <button class="tool-btn" data-clear-sketch="${m.id}">Clear</button>
+        </div>
+      </div>
+      <div class="sketch-wrap" data-drawn="false">
+        <canvas data-canvas="${m.id}" width="${cw}" height="${ch}"
+                role="img" aria-label="Freehand sketch area for ${esc(m.name)}"></canvas>
+        <span class="sketch-placeholder">Redraw the diagram here</span>
+      </div>
+      <p class="sketch-hint">Copy it from memory, then check it against the diagram above.</p>
+    </div>`;
+}
+
+function modelMarkup(m) {
+  const answers = state.answers[m.id] || [];
+  const questions = m.questions.map((q, i) => `
+    <div class="question">
+      <label for="${m.id}-q${i}">${esc(q)}</label>
+      <textarea id="${m.id}-q${i}" data-model="${m.id}" data-q="${i}"
+        rows="2" placeholder="Your answer…">${esc(answers[i] || "")}</textarea>
+    </div>`).join("");
+
+  return `
+  <article class="model" id="${m.id}" data-open="false" data-quadrant="${m.quadrant}"
+           data-tags="${esc(m.tags.join(" "))}">
+    <h3>
+      <button class="model-btn" aria-expanded="false" aria-controls="${m.id}-panel" data-model-btn="${m.id}">
+        <span class="model-mark" aria-hidden="true"></span>
+        <span class="model-title">${esc(m.name)}</span>
+        <span class="model-meta">${m.readMinutes} min</span>
+        <span class="model-icon" aria-hidden="true"></span>
+      </button>
+    </h3>
+    <div class="panel">
+      <div class="panel-inner">
+        <div class="panel-body" id="${m.id}-panel" role="region" aria-labelledby="${m.id}">
+          <div class="panel-side">
+            <figure class="panel-figure">
+              ${m.svg}
+              <figcaption class="figure-origin">${esc(m.origin)}<span class="fidelity" data-f="${esc(m.fidelity)}" title="${m.fidelity === "canonical" ? "Diagram follows the originator's own form." : "A later common rendering, not the originator's own diagram."}">${esc(m.fidelity)}</span></figcaption>
+            </figure>
+            ${sketchMarkup(m)}
+          </div>
+          <div class="panel-text">
+            <div class="field concept span">
+              <h4>The concept</h4>
+              <p>${esc(m.what)}</p>
+            </div>
+            <div class="field how span">
+              <h4>How it works</h4>
+              <p>${esc(m.how)}</p>
+            </div>
+            <div class="field">
+              <h4>When to use</h4>
+              <p>${esc(m.when)}</p>
+            </div>
+            <div class="field">
+              <h4>Best for</h4>
+              <p>${esc(m.for)}</p>
+            </div>
+            <div class="field not span">
+              <h4>Not for</h4>
+              <p>${esc(m.not)}</p>
+            </div>
+            <div class="field example span">
+              <h4>In practice</h4>
+              <p>${esc(m.example)}</p>
+            </div>
+            <div class="field span">
+              <div class="tag-row">${m.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+            </div>
+            <div class="worksheet">
+              <div class="worksheet-head">
+                <h4>Your turn</h4>
+                <span class="saved-state" data-saved="${m.id}" role="status">Saved</span>
+                <button class="clear-btn" data-clear="${m.id}">Clear answers</button>
+              </div>
+              ${questions}
+            </div>
+            ${sorterMarkup(m)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const sections = Object.keys(database).map((key, i) => {
+    const cat = database[key];
+    return `
+    <section class="category" id="cat-${key}" aria-labelledby="cat-${key}-h">
+      <div class="category-head">
+        <span class="eyebrow">Quadrant ${i + 1} &middot; ${esc(cat.axis)}</span>
+        <h2 id="cat-${key}-h">${esc(cat.title)}</h2>
+        <p>${esc(cat.subtitle)}</p>
+      </div>
+      <div class="model-list">
+        ${cat.models.map(m => modelMarkup(Object.assign({ quadrant: key }, m))).join("")}
+      </div>
+    </section>`;
+  }).join("");
+  app.insertAdjacentHTML("afterbegin", sections);
+}
+
+function renderMatrix() {
+  const matrix = document.getElementById("matrix");
+  const classes = ["q1", "q2", "q3", "q4"];
+  Object.keys(database).forEach((key, i) => {
+    const cat = database[key];
+    const a = document.createElement("a");
+    a.className = "quad " + classes[i];
+    a.href = "#cat-" + key;
+    a.innerHTML = `
+      <span class="quad-axis">${esc(cat.axis)}</span>
+      <span class="quad-name">${esc(cat.short)}</span>
+      <span class="quad-progress" data-progress="${key}">0 / ${cat.models.length}</span>
+      <span class="quad-bar" aria-hidden="true"><i data-bar="${key}"></i></span>`;
+    matrix.appendChild(a);
+  });
+}
+
+function renderToc() {
+  document.getElementById("toc-grid").innerHTML = Object.keys(database).map(key => `
+    <div>
+      <h2>${esc(database[key].short)}</h2>
+      <ol>${database[key].models.map(m => `<li><a href="#${m.id}">${esc(m.name)}</a></li>`).join("")}</ol>
+    </div>`).join("");
+}
+
+function renderChips() {
+  // Every tag as a chip is ~40 rows of chrome at 20 models and ~60 at 50, which buries
+  // the content. Surface the most common tags; the long tail stays reachable via search.
+  const freq = {};
+  allModels.forEach(m => m.tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }));
+  const tags = Object.keys(freq)
+    .sort((a, b) => freq[b] - freq[a] || a.localeCompare(b))
+    .slice(0, 10)
+    .sort();
+  const chips = document.getElementById("chips");
+  chips.innerHTML =
+    Object.keys(database).map(k =>
+      `<button class="chip chip-quad" data-quad="${k}" aria-pressed="false">${esc(database[k].short)}</button>`).join("") +
+    `<span class="chip-sep" aria-hidden="true"></span>` +
+    tags.map(t =>
+      `<button class="chip" data-tag="${esc(t)}" aria-pressed="false">${esc(t)} <span class="chip-n">${freq[t]}</span></button>`).join("");
+}
+
+render();
+renderMatrix();
+renderToc();
+renderChips();
+
+if (!storageOK) document.getElementById("storage-warning").classList.add("show");
+
+/* The sticky toolbar's height drives every scroll offset, and it changes with the
+   chip rows at narrow widths — so measure it rather than hard-coding a guess. */
+const toolbarEl = document.querySelector(".toolbar");
+function measureToolbar() {
+  document.documentElement.style.setProperty("--toolbar-h", toolbarEl.offsetHeight + "px");
+}
+measureToolbar();
+if (window.ResizeObserver) new ResizeObserver(measureToolbar).observe(toolbarEl);
+else window.addEventListener("resize", measureToolbar);
+
+/* ============================================================
+   ACCORDION
+   ============================================================ */
+function setOpen(id, open, push) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const btn = el.querySelector(".model-btn");
+  const inner = el.querySelector(".panel-inner");
+  el.dataset.open = open ? "true" : "false";
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+  if (open) inner.removeAttribute("inert"); else inner.setAttribute("inert", "");
+  if (push) {
+    const url = new URL(location.href);
+    url.hash = open ? id : "";
+    history.replaceState(null, "", url.toString().replace(/#$/, ""));
+  }
+}
+
+document.querySelectorAll(".panel-inner").forEach(p => p.setAttribute("inert", ""));
+
+app.addEventListener("click", e => {
+  const btn = e.target.closest("[data-model-btn]");
+  if (btn) {
+    const id = btn.dataset.modelBtn;
+    setOpen(id, document.getElementById(id).dataset.open !== "true", true);
+    return;
+  }
+  const clear = e.target.closest("[data-clear]");
+  if (clear) {
+    const id = clear.dataset.clear;
+    delete state.answers[id];
+    document.querySelectorAll(`textarea[data-model="${id}"]`).forEach(t => { t.value = ""; });
+    saveNow();
+    updateProgress();
+  }
+});
+
+/* ============================================================
+   WORKSHEETS
+   ============================================================ */
+app.addEventListener("input", e => {
+  const t = e.target;
+  if (t.tagName !== "TEXTAREA") return;
+  const id = t.dataset.model, i = Number(t.dataset.q);
+  if (!state.answers[id]) state.answers[id] = [];
+  state.answers[id][i] = t.value;
+  if (state.answers[id].every(v => !v || !v.trim())) delete state.answers[id];
+  save();
+  updateProgress();
+  const flag = document.querySelector(`[data-saved="${id}"]`);
+  if (flag && storageOK) {
+    flag.classList.add("show");
+    clearTimeout(flag._t);
+    flag._t = setTimeout(() => flag.classList.remove("show"), 1400);
+  }
+});
+
+/* ============================================================
+   SORTER
+   ============================================================ */
+let selectedItem = null;   // { model, id }
+
+function sorterItems(id) {
+  if (!state.sorters[id]) state.sorters[id] = [];
+  return state.sorters[id];
+}
+
+function renderSorter(id) {
+  const root = document.querySelector(`[data-sorter="${id}"]`);
+  if (!root) return;
+  const items = sorterItems(id);
+  root.querySelectorAll("[data-zone-items]").forEach(box => {
+    const z = Number(box.dataset.zoneItems);
+    const mine = items.filter(it => it.zone === z);
+    box.innerHTML = mine.length
+      ? mine.map(it => `
+          <button class="item" draggable="true" data-item="${it.id}" data-model="${id}"
+                  aria-pressed="${selectedItem && selectedItem.id === it.id ? "true" : "false"}">
+            <span class="item-text">${esc(it.text)}</span>
+            <span class="item-drop" data-remove="${it.id}" role="none">&times;</span>
+          </button>`).join("")
+      : (z === -1 ? `<p class="sorter-empty">Nothing left to sort.</p>` : "");
+    const count = root.querySelector(`[data-zone-count="${z}"]`);
+    if (count) count.textContent = mine.length;
+  });
+  root.querySelectorAll(".zone-place").forEach(b => {
+    b.disabled = !(selectedItem && selectedItem.model === id);
+  });
+}
+
+function moveItem(id, itemId, zone) {
+  const it = sorterItems(id).find(x => x.id === itemId);
+  if (!it) return;
+  it.zone = zone;
+  selectedItem = null;
+  save();
+  renderSorter(id);
+  updateProgress();
+}
+
+app.addEventListener("submit", e => {
+  const form = e.target.closest("[data-add]");
+  if (!form) return;
+  e.preventDefault();
+  const id = form.dataset.add;
+  const input = form.querySelector("input");
+  const text = input.value.trim();
+  if (!text) return;
+  sorterItems(id).push({ id: "i" + Date.now() + Math.random().toString(36).slice(2, 6), text, zone: -1 });
+  input.value = "";
+  input.focus();
+  save();
+  renderSorter(id);
+  updateProgress();
+});
+
+app.addEventListener("click", e => {
+  const remove = e.target.closest("[data-remove]");
+  if (remove) {
+    e.stopPropagation();
+    const id = remove.closest("[data-sorter]").dataset.sorter;
+    state.sorters[id] = sorterItems(id).filter(x => x.id !== remove.dataset.remove);
+    save(); renderSorter(id); updateProgress();
+    return;
+  }
+  const item = e.target.closest(".item");
+  if (item) {
+    const id = item.dataset.model;
+    const same = selectedItem && selectedItem.id === item.dataset.item;
+    selectedItem = same ? null : { model: id, id: item.dataset.item };
+    renderSorter(id);
+    return;
+  }
+  const place = e.target.closest("[data-place]");
+  if (place && selectedItem) {
+    const id = place.closest("[data-sorter]").dataset.sorter;
+    if (selectedItem.model === id) moveItem(id, selectedItem.id, Number(place.dataset.place));
+    return;
+  }
+  const clearS = e.target.closest("[data-clear-sorter]");
+  if (clearS) {
+    const id = clearS.dataset.clearSorter;
+    delete state.sorters[id];
+    selectedItem = null;
+    saveNow(); renderSorter(id); updateProgress();
+  }
+});
+
+app.addEventListener("dragstart", e => {
+  const item = e.target.closest(".item");
+  if (!item) return;
+  e.dataTransfer.setData("text/plain", JSON.stringify({ m: item.dataset.model, i: item.dataset.item }));
+  e.dataTransfer.effectAllowed = "move";
+  item.classList.add("dragging");
+});
+app.addEventListener("dragend", e => {
+  const item = e.target.closest(".item");
+  if (item) item.classList.remove("dragging");
+});
+app.addEventListener("dragover", e => {
+  const zone = e.target.closest(".zone");
+  if (!zone) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  zone.classList.add("drop-target");
+});
+app.addEventListener("dragleave", e => {
+  const zone = e.target.closest(".zone");
+  if (zone && !zone.contains(e.relatedTarget)) zone.classList.remove("drop-target");
+});
+app.addEventListener("drop", e => {
+  const zone = e.target.closest(".zone");
+  if (!zone) return;
+  e.preventDefault();
+  zone.classList.remove("drop-target");
+  let payload;
+  try { payload = JSON.parse(e.dataTransfer.getData("text/plain")); } catch (err) { return; }
+  if (!payload || payload.m !== zone.dataset.model) return;   // no cross-model drops
+  moveItem(payload.m, payload.i, Number(zone.dataset.zone));
+});
+
+/* ============================================================
+   SKETCHPAD — strokes stored as vectors, not a raster dataURL,
+   so the payload stays small and undo is free.
+   ============================================================ */
+const sketchTool = { w: 3, erase: false };
+
+function strokesFor(id) {
+  if (!state.sketches[id]) state.sketches[id] = [];
+  return state.sketches[id];
+}
+
+function inkColour() {
+  return getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#f1f5f9";
+}
+
+function redraw(id) {
+  const canvas = document.querySelector(`[data-canvas="${id}"]`);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const strokes = strokesFor(id);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  const colour = inkColour();
+  const W = canvas.width, H = canvas.height;
+  strokes.forEach(s => {
+    if (!s.pts.length) return;
+    ctx.globalCompositeOperation = s.e ? "destination-out" : "source-over";
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = s.e ? s.w * 4 : s.w;
+    ctx.beginPath();
+    ctx.moveTo(s.pts[0][0] * W, s.pts[0][1] * H);
+    for (let i = 1; i < s.pts.length; i++) ctx.lineTo(s.pts[i][0] * W, s.pts[i][1] * H);
+    if (s.pts.length === 1) ctx.lineTo(s.pts[0][0] * W + 0.1, s.pts[0][1] * H);
+    ctx.stroke();
+  });
+  ctx.globalCompositeOperation = "source-over";
+  const wrap = canvas.closest(".sketch-wrap");
+  if (wrap) wrap.dataset.drawn = strokes.length ? "true" : "false";
+}
+
+/* Points are stored normalised to 0..1, not in canvas pixels, so the pad can change
+   size or aspect per model without invalidating anything already drawn. */
+function canvasPoint(canvas, ev) {
+  const r = canvas.getBoundingClientRect();
+  const round = n => Math.round(n * 1e4) / 1e4;
+  return [round((ev.clientX - r.left) / r.width), round((ev.clientY - r.top) / r.height)];
+}
+
+app.addEventListener("pointerdown", e => {
+  const canvas = e.target.closest("[data-canvas]");
+  if (!canvas) return;
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  const id = canvas.dataset.canvas;
+  strokesFor(id).push({ w: sketchTool.w, e: sketchTool.erase, pts: [canvasPoint(canvas, e)] });
+  canvas._drawing = true;
+  redraw(id);
+});
+app.addEventListener("pointermove", e => {
+  const canvas = e.target.closest("[data-canvas]");
+  if (!canvas || !canvas._drawing) return;
+  const id = canvas.dataset.canvas;
+  const strokes = strokesFor(id);
+  strokes[strokes.length - 1].pts.push(canvasPoint(canvas, e));
+  redraw(id);
+});
+function endStroke(e) {
+  const canvas = e.target.closest && e.target.closest("[data-canvas]");
+  if (!canvas || !canvas._drawing) return;
+  canvas._drawing = false;
+  save();
+  updateProgress();
+}
+app.addEventListener("pointerup", endStroke);
+app.addEventListener("pointercancel", endStroke);
+
+app.addEventListener("click", e => {
+  const pen = e.target.closest(".pen");
+  if (pen) {
+    const group = pen.closest(".sketch-tools");
+    group.querySelectorAll(".pen").forEach(p => p.setAttribute("aria-pressed", "false"));
+    pen.setAttribute("aria-pressed", "true");
+    sketchTool.erase = pen.hasAttribute("data-erase");
+    if (!sketchTool.erase) sketchTool.w = Number(pen.dataset.w);
+    return;
+  }
+  const undo = e.target.closest("[data-undo]");
+  if (undo) {
+    strokesFor(undo.dataset.undo).pop();
+    saveNow(); redraw(undo.dataset.undo); updateProgress();
+    return;
+  }
+  const clearSk = e.target.closest("[data-clear-sketch]");
+  if (clearSk) {
+    state.sketches[clearSk.dataset.clearSketch] = [];
+    saveNow(); redraw(clearSk.dataset.clearSketch); updateProgress();
+  }
+});
+
+function isUsed(m) {
+  const a = state.answers[m.id];
+  const answered = !!a && m.questions.every((_, i) => a[i] && a[i].trim().length > 0);
+  const sorted = (state.sorters[m.id] || []).filter(it => it.zone >= 0).length >= 3;
+  return answered || sorted;
+}
+
+function updateProgress() {
+  Object.keys(database).forEach(key => {
+    const models = database[key].models.map(m => Object.assign({ quadrant: key }, m));
+    const done = models.filter(isUsed).length;
+    const el = document.querySelector(`[data-progress="${key}"]`);
+    const bar = document.querySelector(`[data-bar="${key}"]`);
+    if (el) el.textContent = `${done} / ${models.length}`;
+    if (bar) bar.style.width = (done / models.length * 100) + "%";
+  });
+  allModels.forEach(m => {
+    const el = document.getElementById(m.id);
+    if (el) el.dataset.used = isUsed(m) ? "true" : "false";
+  });
+}
+updateProgress();
+allModels.forEach(m => { renderSorter(m.id); redraw(m.id); });
+
+/* ============================================================
+   SEARCH + FILTER
+   ============================================================ */
+const searchInput = document.getElementById("search");
+const countEl = document.getElementById("count");
+let activeQuads = new Set(), activeTags = new Set();
+
+function haystack(m) {
+  return [m.name, m.origin, m.what, m.how, m.when, m.for, m.not, m.example,
+          m.tags.join(" "), m.questions.join(" ")].join(" ").toLowerCase();
+}
+allModels.forEach(m => { m._hay = haystack(m); });
+
+function applyFilters(push) {
+  const q = searchInput.value.trim().toLowerCase();
+  let shown = 0;
+  allModels.forEach(m => {
+    const match =
+      (!q || m._hay.includes(q)) &&
+      (activeQuads.size === 0 || activeQuads.has(m.quadrant)) &&
+      (activeTags.size === 0 || m.tags.some(t => activeTags.has(t)));
+    const el = document.getElementById(m.id);
+    if (el) el.hidden = !match;
+    if (match) shown++;
+  });
+  Object.keys(database).forEach(key => {
+    const sec = document.getElementById("cat-" + key);
+    if (sec) sec.hidden = !database[key].models.some(m => {
+      const el = document.getElementById(m.id);
+      return el && !el.hidden;
+    });
+  });
+  const filtering = q || activeQuads.size || activeTags.size;
+  countEl.textContent = filtering ? `${shown} of ${allModels.length}` : `${allModels.length} models`;
+  emptyState.classList.toggle("show", shown === 0);
+  if (push) syncUrl();
+}
+
+function syncUrl() {
+  const url = new URL(location.href);
+  url.search = "";
+  const q = searchInput.value.trim();
+  if (q) url.searchParams.set("q", q);
+  if (activeQuads.size) url.searchParams.set("quad", [...activeQuads].join(","));
+  if (activeTags.size) url.searchParams.set("tag", [...activeTags].join(","));
+  history.replaceState(null, "", url.toString());
+}
+
+searchInput.addEventListener("input", () => applyFilters(true));
+
+document.getElementById("chips").addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  const set = chip.dataset.quad ? activeQuads : activeTags;
+  const val = chip.dataset.quad || chip.dataset.tag;
+  if (set.has(val)) set.delete(val); else set.add(val);
+  chip.setAttribute("aria-pressed", set.has(val) ? "true" : "false");
+  applyFilters(true);
+});
+
+function resetFilters() {
+  searchInput.value = "";
+  activeQuads.clear(); activeTags.clear();
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", "false"));
+  applyFilters(true);
+}
+document.getElementById("empty-reset").addEventListener("click", resetFilters);
+
+/* ============================================================
+   THEME
+   ============================================================ */
+const themeBtn = document.getElementById("theme-btn");
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  themeBtn.textContent = t === "dark" ? "Light" : "Dark";
+  themeBtn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+  themeBtn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  // Sketch ink is baked into the bitmap, so the strokes must be repainted on a theme flip.
+  allModels.forEach(m => redraw(m.id));
+}
+applyTheme(document.documentElement.getAttribute("data-theme") || "dark");
+themeBtn.addEventListener("click", () => {
+  const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  state.theme = next;
+  applyTheme(next);
+  saveNow();
+});
+/* V4 followed the OS colour scheme until the user picked one. V5 ships dark as the house
+   default, so the system preference no longer drives the page — only the toggle does. */
+
+/* ============================================================
+   EXPORT / IMPORT
+   ============================================================ */
+document.getElementById("export-btn").addEventListener("click", () => {
+  const payload = {
+    format: "decision-book-v5",
+    exported: new Date().toISOString(),
+    answers: state.answers,
+    sorters: state.sorters,
+    sketches: state.sketches
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `decision-book-answers-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+const importFile = document.getElementById("import-file");
+document.getElementById("import-btn").addEventListener("click", () => importFile.click());
+importFile.addEventListener("change", () => {
+  const f = importFile.files && importFile.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data.answers !== "object" || data.answers === null) {
+        throw new Error("no answers object");
+      }
+      state.answers = data.answers;
+      // v3 exports carry answers only; treat the newer sections as optional.
+      state.sorters = (data.sorters && typeof data.sorters === "object") ? data.sorters : {};
+      state.sketches = (data.sketches && typeof data.sketches === "object") ? data.sketches : {};
+      saveNow();
+      allModels.forEach(m => {
+        (state.answers[m.id] || []).forEach((v, i) => {
+          const t = document.getElementById(`${m.id}-q${i}`);
+          if (t) t.value = v || "";
+        });
+        if (!state.answers[m.id]) {
+          document.querySelectorAll(`textarea[data-model="${m.id}"]`).forEach(t => { t.value = ""; });
+        }
+        renderSorter(m.id);
+        redraw(m.id);
+      });
+      updateProgress();
+    } catch (err) {
+      window.alert("That file could not be read as a Decision Book export.");
+    }
+    importFile.value = "";
+  };
+  reader.readAsText(f);
+});
+
+/* ============================================================
+   KEYBOARD
+   ============================================================ */
+const helpDialog = document.getElementById("help-dialog");
+document.getElementById("help-btn").addEventListener("click", () => helpDialog.showModal());
+document.getElementById("help-close").addEventListener("click", () => helpDialog.close());
+
+function visibleModels() {
+  return allModels.map(m => document.getElementById(m.id)).filter(el => el && !el.hidden);
+}
+function focusModel(dir) {
+  const list = visibleModels();
+  if (!list.length) return;
+  const current = document.activeElement.closest(".model");
+  let i = current ? list.indexOf(current) : -1;
+  i = i < 0 ? (dir > 0 ? 0 : list.length - 1) : Math.min(list.length - 1, Math.max(0, i + dir));
+  const btn = list[i].querySelector(".model-btn");
+  btn.focus();
+  btn.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+
+document.addEventListener("keydown", e => {
+  /* The login gate is a fixed overlay, not a modal, so page shortcuts would still fire
+     behind it — and `?` would open a dialog in the top layer, above the gate. */
+  const gate = document.getElementById("loginView");
+  if (gate && gate.style.display !== "none") return;
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if (e.key === "Escape") {
+    if (helpDialog.open) return;
+    if (typing && e.target === searchInput) { resetFilters(); searchInput.blur(); return; }
+    const open = document.querySelector('.model[data-open="true"]');
+    if (open) setOpen(open.id, false, true);
+    return;
+  }
+  if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "/") { e.preventDefault(); searchInput.focus(); searchInput.select(); return; }
+  if (e.key === "?") { e.preventDefault(); helpDialog.showModal(); return; }
+  if (e.key === "j") { e.preventDefault(); focusModel(1); return; }
+  if (e.key === "k") { e.preventDefault(); focusModel(-1); return; }
+});
+
+/* ============================================================
+   BOOT — restore filters and deep link from the URL
+   ============================================================ */
+(function boot() {
+  const params = new URLSearchParams(location.search);
+  const q = params.get("q");
+  if (q) searchInput.value = q;
+  (params.get("quad") || "").split(",").filter(Boolean).forEach(k => {
+    if (database[k]) {
+      activeQuads.add(k);
+      const c = document.querySelector(`.chip[data-quad="${k}"]`);
+      if (c) c.setAttribute("aria-pressed", "true");
+    }
+  });
+  (params.get("tag") || "").split(",").filter(Boolean).forEach(t => {
+    activeTags.add(t);
+    const c = document.querySelector(`.chip[data-tag="${t}"]`);
+    if (c) c.setAttribute("aria-pressed", "true");
+  });
+  applyFilters(false);
+
+  const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+  if (hash && document.getElementById(hash) && document.getElementById(hash).classList.contains("model")) {
+    setOpen(hash, true, false);
+    requestAnimationFrame(() => {
+      document.getElementById(hash).scrollIntoView({ block: "start" });
+    });
+  }
+})();
+
+window.addEventListener("hashchange", () => {
+  const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+  const el = document.getElementById(hash);
+  if (el && el.classList.contains("model")) setOpen(hash, true, false);
+});
+
+/* Expand everything for printing, then restore. */
+let printRestore = [];
+window.addEventListener("beforeprint", () => {
+  printRestore = [];
+  document.querySelectorAll(".model").forEach(el => {
+    printRestore.push([el.id, el.dataset.open === "true"]);
+    if (!el.hidden) setOpen(el.id, true, false);
+  });
+});
+window.addEventListener("afterprint", () => {
+  printRestore.forEach(([id, was]) => setOpen(id, was, false));
+});
+
+/* Exposed for the verification harness. */
+window.database = database;
+window.allModels = allModels;
+window.__state = () => state;
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
