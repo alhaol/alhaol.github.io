@@ -164,7 +164,8 @@
         }
         .hub-dock-item:focus-visible { outline: none; }
 
-        /* plus -> minus: the vertical bar fades out, the glyph spins half a turn */
+        /* Open/close glyph, shared by both docks: every .bar-v fades out and the glyph
+           spins half a turn. Hub dock '+' -> '-'; stat dock '#' -> '='. */
         .hub-dock-toggle svg,
         .stat-dock-toggle svg {
             transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -279,9 +280,13 @@
     <nav class="stat-dock" id="statDock" data-open="false" aria-label="Research statistics">
         <button type="button" class="stat-dock-toggle" id="statDockToggle"
                 aria-expanded="false" aria-controls="statDock" aria-label="Show research statistics">
+            <!-- '#' — the number sign, for a dock of counts. Both verticals carry .bar-v,
+                 so the shared fade rule collapses it to '=' when the dock is open. -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line class="bar-v" x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <line class="bar-v" x1="10.5" y1="4" x2="8.5" y2="20"></line>
+                <line class="bar-v" x1="16.5" y1="4" x2="14.5" y2="20"></line>
+                <line x1="4" y1="9.5" x2="19.5" y2="9.5"></line>
+                <line x1="4.5" y1="15" x2="20" y2="15"></line>
             </svg>
         </button>
 
@@ -451,7 +456,7 @@
     "personalInfo": {
         "name": "Ibrahim AbuAlhaol",
         "title": "AI Technical Lead | PhD, PEng, SMIEEE",
-        "motto": "Work worth doing, in a place I love, with clean-hearted people.",
+        "motto": "Work worth doing, in a place I love, with clean-hearted people, and my own heart, still clean.",
         "email": "iabualhaol@gmail.com",
         "location": "Ottawa, Canada",
         "linkedin": "linkedin.com/in/abualhaol/",
