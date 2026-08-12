@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Router to Conductor | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_46.png" alt="From Router to Conductor" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">From Router to Conductor</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Model routing solves a real problem inside pipelines, but the layer end-users actually want is orchestration.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 12, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Ask a router which model should answer a prompt and it returns a fast, defensible answer. Ask an end-user which model they want and you have already lost them. That gap is the whole story. Model routing is a good idea that optimizes a decision most people using the product never wanted to make.</p>
+
+                    <p>Chris Alexiuk, a developer advocate at NVIDIA, has argued that routing will quickly grow into orchestration. Routing earns its place inside a pipeline, where an engineer is happy to trade a little quality for a lot of cost savings. It becomes awkward the moment a person is on the other end of it, because a person is not holding a cost-quality dial. They are holding a goal. I think he is right, and the reason is worth spelling out, because it changes what you should build next.</p>
+
+                    <h2>What routing actually solves</h2>
+
+                    <p>A router looks at an incoming request and picks which model handles it. Send the easy questions to a small, cheap model and reserve the expensive frontier model for the hard ones. Two research systems made this concrete. FrugalGPT showed that a cascade of models, cheap ones first, could match the accuracy of a single large model at a fraction of the cost. RouteLLM trained routers on human preference data and cut costs by more than 80 percent on some benchmarks while keeping most of the quality.</p>
+
+                    <p>The math is honest and the wins are real. If you run millions of requests, routing turns a runaway inference bill into a manageable one. Inside a pipeline you control, where the input distribution is known and the output feeds another program, a router is close to free money.</p>
+
+                    <blockquote>Routing answers one question: which model should handle this prompt? Orchestration answers a larger one: what has to happen for this goal to be met? The second question contains the first.</blockquote>
+
+                    <p>That containment is the key. A router is a single decision made once, at the front door, before any work has been done. It is a classifier. It has no memory of what happened last time, no ability to check its own guess, and no second move if the guess was wrong.</p>
+
+                    <h2>Where routing gets awkward</h2>
+
+                    <p>Put a router in front of an end-user and three problems show up at once.</p>
+
+                    <p>First, it optimizes a metric the user does not hold. The user wants the task done well. The router is tuned to spend as little as possible while staying above a quality floor. Most of the time those goals agree. When they diverge, the router quietly picks the cheaper option and the user gets a worse answer they cannot see the reason for.</p>
+
+                    <p>Second, it is a single point with no recovery. The routing decision happens before generation. If it sends a genuinely hard request to the small model, there is no step that notices the answer is weak and escalates. The mistake is baked in at the first move.</p>
+
+                    <p>Third, it exposes a choice the user did not ask to make. Routing frameworks often surface model names, tiers, and toggles. That is plumbing leaking into the interface. Someone trying to draft a contract or debug a script does not want a menu of model options. They want the contract and the working script.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 360" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Routing as a single front-door decision compared with orchestration as a self-correcting loop</title>
+                                <desc id="fig1-desc">Routing takes a prompt, makes one model choice at the front door, and returns whatever that one model produces, with no recovery step. Orchestration takes a goal, then plans, coordinates models and tools, and verifies before returning a result, looping back when a check fails.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">One front-door decision versus a loop that can correct itself</text>
+
+                                <!-- column headers -->
+                                <text x="165" y="58" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="middle">ROUTING</text>
+                                <text x="470" y="58" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="middle">ORCHESTRATION</text>
+
+                                <!-- ROUTING column: boxes centered at x=165, width 150 -> x=90..240 -->
+                                <g font-family="Inter, sans-serif" text-anchor="middle">
+                                    <rect x="90" y="76" width="150" height="34" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                    <text x="165" y="98" fill="#f1f5f9" font-size="13">user prompt</text>
+
+                                    <rect x="90" y="140" width="150" height="34" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="2"/>
+                                    <text x="165" y="162" fill="#f1f5f9" font-size="13">router picks a model</text>
+
+                                    <rect x="90" y="204" width="150" height="34" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                    <text x="165" y="226" fill="#f1f5f9" font-size="13">one model answers</text>
+
+                                    <rect x="90" y="268" width="150" height="34" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                    <text x="165" y="290" fill="#f1f5f9" font-size="13">output</text>
+                                </g>
+                                <g stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#arrow-amber-f1)">
+                                    <line x1="165" y1="110" x2="165" y2="136"/>
+                                    <line x1="165" y1="174" x2="165" y2="200"/>
+                                    <line x1="165" y1="238" x2="165" y2="264"/>
+                                </g>
+                                <text x="165" y="330" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" font-style="italic">decided once, no recovery</text>
+
+                                <!-- ORCHESTRATION column: boxes centered at x=470, width 150 -> x=395..545 -->
+                                <g font-family="Inter, sans-serif" text-anchor="middle">
+                                    <rect x="395" y="76" width="150" height="34" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                    <text x="470" y="98" fill="#f1f5f9" font-size="13">user goal</text>
+
+                                    <rect x="395" y="140" width="150" height="34" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="2"/>
+                                    <text x="470" y="162" fill="#f1f5f9" font-size="13">plan and delegate</text>
+
+                                    <rect x="395" y="204" width="150" height="34" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="2"/>
+                                    <text x="470" y="226" fill="#f1f5f9" font-size="13">verify and decide</text>
+
+                                    <rect x="395" y="268" width="150" height="34" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                    <text x="470" y="290" fill="#f1f5f9" font-size="13">verified result</text>
+                                </g>
+                                <g stroke="#60a5fa" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue-f1)">
+                                    <line x1="470" y1="110" x2="470" y2="136"/>
+                                    <line x1="470" y1="174" x2="470" y2="200"/>
+                                    <line x1="470" y1="238" x2="470" y2="264"/>
+                                </g>
+                                <!-- loop-back arrow in reserved right column x=560..585 -->
+                                <path d="M545 221 L575 221 L575 157 L547 157" stroke="#60a5fa" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue-f1)"/>
+                                <text x="588" y="192" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" transform="rotate(90 588 192)">retry</text>
+                                <text x="470" y="330" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" font-style="italic">many steps, self-correcting</text>
+
+                                <defs>
+                                    <marker id="arrow-amber-f1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                        <path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/>
+                                    </marker>
+                                    <marker id="arrow-blue-f1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                        <path d="M0,0 L6,3 L0,6 Z" fill="#60a5fa"/>
+                                    </marker>
+                                </defs>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> A router is a classifier that fires once, before any work is done, so a bad model choice has no correction path. An orchestrator turns the goal into a loop that plans, checks its own output, and retries when a check fails. The single amber box is the whole of routing; it is one step inside the blue loop.</figcaption>
+                    </figure>
+
+                    <h2>Orchestration contains routing</h2>
+
+                    <p>Orchestration keeps a goal in view and drives a sequence of steps toward it. Anthropic describes one common shape as orchestrator-workers: a central model breaks a task into subtasks, hands each to a worker, and combines the results. The controller holds state, so it knows what it has tried. It can call tools, run code, search, and read back the output. Most importantly, it can check the result of a step and decide the next one based on what actually happened.</p>
+
+                    <p>Inside that loop, choosing which model runs a given subtask is still a real decision. It is just no longer the top-level decision. It becomes one node, wrapped by steps that can catch and repair its mistakes. Route a subtask to a small model, verify the output, and escalate to a larger model when the check fails. Routing survives, demoted from the interface to an implementation detail.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 320" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Model routing shown as one node inside an orchestration loop</title>
+                                <desc id="fig2-desc">An orchestration loop cycles through four steps: plan the task, route the subtask to a model, run the model or tool, then verify and decide. The route step is one node among four. The verify step loops back to plan, so a weak result can be caught and retried rather than returned.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">Routing is one node inside the loop, not the loop itself</text>
+
+                                <!-- outer loop container -->
+                                <rect x="40" y="66" width="560" height="222" rx="12" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5 4"/>
+                                <text x="320" y="182" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" font-style="italic">orchestration loop, holding the goal and the state</text>
+
+                                <!-- four corner nodes -->
+                                <g font-family="Inter, sans-serif" text-anchor="middle">
+                                    <rect x="80" y="92" width="170" height="44" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="2"/>
+                                    <text x="165" y="112" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">STEP 1</text>
+                                    <text x="165" y="128" fill="#f1f5f9" font-size="13">plan the task</text>
+
+                                    <rect x="390" y="92" width="170" height="44" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="2"/>
+                                    <text x="475" y="112" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">STEP 2</text>
+                                    <text x="475" y="128" fill="#f1f5f9" font-size="13">route: which model?</text>
+
+                                    <rect x="390" y="218" width="170" height="44" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="2"/>
+                                    <text x="475" y="238" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">STEP 3</text>
+                                    <text x="475" y="254" fill="#f1f5f9" font-size="13">run model or tool</text>
+
+                                    <rect x="80" y="218" width="170" height="44" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="2"/>
+                                    <text x="165" y="238" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">STEP 4</text>
+                                    <text x="165" y="254" fill="#f1f5f9" font-size="13">verify and decide</text>
+                                </g>
+
+                                <!-- perimeter arrows, clockwise -->
+                                <g stroke="#60a5fa" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue-f2)">
+                                    <line x1="250" y1="114" x2="384" y2="114"/>
+                                    <line x1="475" y1="136" x2="475" y2="212"/>
+                                    <line x1="390" y1="240" x2="256" y2="240"/>
+                                </g>
+                                <!-- verify loops back to plan -->
+                                <line x1="165" y1="218" x2="165" y2="142" stroke="#60a5fa" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue-f2)"/>
+
+                                <defs>
+                                    <marker id="arrow-blue-f2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                        <path d="M0,0 L6,3 L0,6 Z" fill="#60a5fa"/>
+                                    </marker>
+                                </defs>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The same routing decision that was awkward as a front door becomes useful as step two of a loop. The verify step catches a weak result and sends the work back around, so a cheap model can be tried first and a larger one brought in only when needed. Source shape: Anthropic, orchestrator-workers pattern (2024).</figcaption>
+                    </figure>
+
+                    <h2>The ergonomics are the point</h2>
+
+                    <p>Routing is awkward for end-users for the same reason a car's transmission is awkward as a user interface. The transmission is a genuine engineering achievement, and drivers are glad it exists. They do not want to operate it gear by gear. Automatic transmission won not because it shifted better than a skilled driver, but because it moved the decision out of the driver's hands entirely. The driver states intent with the accelerator, and the machine handles the mechanism.</p>
+
+                    <p>Orchestration is the automatic transmission for models. The user states a goal. The system decides how many steps it takes, which models and tools to use, and when the work is good enough to return. Routing is one gear-change inside that machine, and like a gear-change it should be invisible when it works. This is why routing reads as a stepping stone. It is the moment the field learned that not every request needs the biggest model. Orchestration is what you build once you accept that the user should never have to know which model ran at all.</p>
+
+                    <h2>What this looks like in practice</h2>
+
+                    <p>The migration path is incremental. You do not throw away the router. You wrap it.</p>
+
+                    <p>Start with the router you already have and put a verification step after it. When a cheap model handles a request, check the output against the goal, whether that is a test suite, a schema, a rubric, or a second model asked to critique the first. If the check fails, escalate. That single change converts a one-shot classifier into a two-step loop and removes the worst failure mode, the confidently wrong cheap answer that nobody caught.</p>
+
+                    <p>From there, give the controller memory and tools, so it can break a request into subtasks, run each, and assemble the result. Keep model selection where it belongs, buried a layer below the interface. The person on the other end should see a goal going in and a finished result coming out, with the machinery of which-model-when handled for them.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Treat any model picker exposed to end-users as technical debt. If your product asks a customer to choose a model or a quality tier, put a plan in place to hide that choice behind a goal-level interface.</li>
+                        <li>Add a verification step after every routing decision. Before adopting more models, make sure a weak answer from a cheap model gets caught and escalated. One check after the router removes the most damaging failure and costs little to build.</li>
+                        <li>Fund the orchestration layer as a product surface, not as glue code. The controller that holds the goal, state, and tool access is where user experience now lives. Staff it and measure it like the interface it is.</li>
+                        <li>Buy routing, build orchestration. Per-query model selection is becoming a commodity inside gateways and inference platforms. The loop that turns a goal into a verified result is where your product is different, so keep that in-house.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Multi-Agent Orchestration</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Coordinating a system of specialized models instead of leaning on one.</p>
+                        <a href="multi-agent-orchestration.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Orchestrated Mind</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Directing many parallel processes toward a single goal.</p>
+                        <a href="the-orchestrated-mind.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Inference Registry</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Keeping track of which model ran, at what cost, for which job.</p>
+                        <a href="the-inference-registry.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Chen, L., Zaharia, M., &amp; Zou, J. (2023). <em>"FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance."</em> arXiv.
+                        <a href="https://arxiv.org/abs/2305.05176" target="_blank">https://arxiv.org/abs/2305.05176</a>
+                    </li>
+                    <li class="reference-item">
+                        Ong, I., Almahairi, A., Wu, V., et al. (2024). <em>"RouteLLM: Learning to Route LLMs with Preference Data."</em> arXiv.
+                        <a href="https://arxiv.org/abs/2406.18665" target="_blank">https://arxiv.org/abs/2406.18665</a>
+                    </li>
+                    <li class="reference-item">
+                        Anthropic. (2024). <em>"Building Effective Agents."</em> Anthropic Engineering.
+                        <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank">https://www.anthropic.com/engineering/building-effective-agents</a>
+                    </li>
+                    <li class="reference-item">
+                        NVIDIA. (2025). <em>"Route AI Agent Workloads Across Models with NVIDIA NeMo Switchyard."</em> NVIDIA Technical Blog.
+                        <a href="https://developer.nvidia.com/blog/route-ai-agent-workloads-across-models-with-nvidia-nemo-switchyard/" target="_blank">https://developer.nvidia.com/blog/route-ai-agent-workloads-across-models-with-nvidia-nemo-switchyard/</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
