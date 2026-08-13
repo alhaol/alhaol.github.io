@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Graph You're Missing | alhaol.github.io</title>
+    <meta name="description" content="Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_47.png" alt="The Graph You're Missing" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Graph You're Missing</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 13, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 9 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Three different things are sold under the word graph, and teams keep buying the wrong one. An agent hits a wall, someone proposes a graph, six months of ontology work follows, and the wall is still there. The purchase was not wrong in general. It was wrong for that wall.</p>
+
+                    <p>The three separate cleanly once you ask what question each one answers. A <strong>knowledge graph</strong> answers what is true, and who said so: entities as nodes, relationships as edges, ideally with a source and a timestamp on every edge. A <strong>cognitive graph</strong> answers how did I get here, recording the agent's own reasoning as it happens. A <strong>causal graph</strong> answers what would happen if I acted differently, encoding which variables actually move which other variables.</p>
+
+                    <p>One caution about vocabulary before going further. Two of those three terms are settled. Knowledge graph has been standard usage since Google adopted it in 2012. Causal graph has a formal definition and a calculus behind it. Cognitive graph has neither, and gets attached to at least four unrelated structures depending on who is selling. In this article it means one specific thing: a persistent, queryable record of the agent's own reasoning.</p>
+
+                    <p>To keep this concrete, one system runs through the whole article. A security operations agent doing alert triage. It is 04:12, and alert 40,113 of the week has just arrived.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 336" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">One security alert answered three different ways by three types of graph</title>
+                                <desc id="fig1-desc">Given the same alert about suspected lateral movement on host SRV-4471, a knowledge graph reports what the host actually is, a cognitive graph reports that the agent has judged this alert family before and was often wrong, and a causal graph reports that escalating would not have changed the outcome.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">One alert, three answers</text>
+                                <text x="30" y="50" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Each graph answers a different question about the same event</text>
+
+                                <rect x="30" y="66" width="580" height="38" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="46" y="90" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="12" font-weight="500">04:12  ALERT 40,113</text>
+                                <text x="196" y="90" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Lateral movement suspected on SRV-4471</text>
+
+                                <line x1="174" y1="118" x2="174" y2="314" stroke="#2a3f5f" stroke-width="1"/>
+                                <line x1="30" y1="182" x2="610" y2="182" stroke="#2a3f5f" stroke-width="1"/>
+                                <line x1="30" y1="250" x2="610" y2="250" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <text x="30" y="142" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">KNOWLEDGE</text>
+                                <text x="30" y="160" fill="#64748b" font-family="Inter, sans-serif" font-size="11">what is true?</text>
+                                <text x="190" y="142" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">SRV-4471 is a decommissioned print server,</text>
+                                <text x="190" y="162" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">not the domain controller its name implies.</text>
+
+                                <text x="30" y="210" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">COGNITIVE</text>
+                                <text x="30" y="228" fill="#64748b" font-family="Inter, sans-serif" font-size="11">how did I get here?</text>
+                                <text x="190" y="210" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">I judged four alerts in this family last week</text>
+                                <text x="190" y="230" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">on the same evidence. Three were wrong.</text>
+
+                                <text x="30" y="278" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CAUSAL</text>
+                                <text x="30" y="296" fill="#64748b" font-family="Inter, sans-serif" font-size="11">what if I act?</text>
+                                <text x="190" y="278" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Escalating would not change the outcome.</text>
+                                <text x="190" y="298" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">The change window is the driver, not the host.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The three graphs are not competing implementations of the same idea. Each one is the only structure that can produce its row. An agent holding all three answers can act; an agent holding one of them is guessing about the other two.</figcaption>
+                    </figure>
+
+                    <blockquote>The graphs do not compete. They answer different questions, and an agent has a different hole in it depending on which question it cannot answer.</blockquote>
+
+                    <p>That reframing turns an architecture debate into a diagnosis. You do not pick a graph from a catalog. You read the way your agent fails and the failure names the layer.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 340" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">A diagnostic mapping five agent failure symptoms to the graph layer each one implies is missing</title>
+                                <desc id="fig2-desc">Confidently wrong facts indicate a missing knowledge graph. Re-solving solved problems indicates a missing cognitive graph. Breaking when nothing broke indicates a missing causal graph. Being unable to explain a decision indicates all three exist but are not joined. A correct answer that cannot be proven indicates the knowledge graph lacks lineage.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">What the failure tells you to build</text>
+                                <text x="30" y="50" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Read the symptom on the left. It names the layer on the right.</text>
+
+                                <text x="30" y="76" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">SYMPTOM</text>
+                                <text x="404" y="76" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">MISSING LAYER</text>
+                                <line x1="30" y1="86" x2="610" y2="86" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <g stroke="#2a3f5f" stroke-width="1">
+                                    <line x1="30" y1="142" x2="610" y2="142"/>
+                                    <line x1="30" y1="188" x2="610" y2="188"/>
+                                    <line x1="30" y1="234" x2="610" y2="234"/>
+                                    <line x1="30" y1="280" x2="610" y2="280"/>
+                                </g>
+
+                                <g fill="#f59e0b">
+                                    <circle cx="38" cy="119" r="4"/>
+                                    <circle cx="38" cy="165" r="4"/>
+                                    <circle cx="38" cy="211" r="4"/>
+                                    <circle cx="38" cy="257" r="4"/>
+                                    <circle cx="38" cy="303" r="4"/>
+                                </g>
+
+                                <g fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">
+                                    <text x="54" y="124">Confidently wrong about a basic fact</text>
+                                    <text x="54" y="170">Re-solves what it solved last night</text>
+                                    <text x="54" y="216">Breaks when nothing actually broke</text>
+                                    <text x="54" y="262">Cannot explain why it decided</text>
+                                    <text x="54" y="308">Right answer, no way to prove it</text>
+                                </g>
+
+                                <g stroke="#64748b" stroke-width="1.5" fill="none">
+                                    <path d="M362 119 L386 119 M380 114 L386 119 L380 124"/>
+                                    <path d="M362 165 L386 165 M380 160 L386 165 L380 170"/>
+                                    <path d="M362 211 L386 211 M380 206 L386 211 L380 216"/>
+                                    <path d="M362 257 L386 257 M380 252 L386 257 L380 262"/>
+                                    <path d="M362 303 L386 303 M380 298 L386 303 L380 308"/>
+                                </g>
+
+                                <g fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="600">
+                                    <text x="404" y="124">Knowledge graph</text>
+                                    <text x="404" y="170">Cognitive graph</text>
+                                    <text x="404" y="216">Causal graph</text>
+                                    <text x="404" y="262">All three, unjoined</text>
+                                    <text x="404" y="308">Lineage, not more facts</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The diagnostic that should precede any graph purchase. Sort your last twenty agent failures into these rows before choosing a technology, because the two most expensive mistakes in this space are building an ontology to fix a memory problem and buying a memory product to fix a grounding problem.</figcaption>
+                    </figure>
+
+                    <h2>Symptom: confidently wrong</h2>
+
+                    <p>The alert says lateral movement on SRV-4471. The model reads the hostname, recognizes the naming convention, infers a domain controller, and escalates to P1. A human analyst is woken up. SRV-4471 is a decommissioned print server that nobody removed from the scanner's scope.</p>
+
+                    <p>Nothing failed in the reasoning. Given what the model believed, escalation was correct. The belief was wrong, and no part of the pipeline could contradict it, because there was no representation of the estate for the model to consult. Document retrieval makes this worse rather than better: a wiki page from 2023 does describe SRV-4471 as a domain controller, retrieval will surface it, and the model becomes more confident while staying wrong.</p>
+
+                    <p>A knowledge graph fixes the class of failure by making the entity the unit of storage instead of the document. SRV-4471 becomes a node with an owner, a subnet, a lifecycle state, and a last-seen timestamp. Microsoft Research demonstrated the general form of this advantage with GraphRAG: building an entity graph before any query arrives beats flat retrieval on questions that need more than one hop, which describes almost every real triage question.</p>
+
+                    <p>The other two dimensions come along with it. On efficiency, one traversal replaces the five tool calls the agent would otherwise make to learn who owns a host. On governance, provenance becomes a property of the edge rather than an afterthought in a log file, so the question of where a fact came from has an answer built into the data structure.</p>
+
+                    <p>The cost is staleness. A knowledge graph is a photograph of infrastructure that changes hourly, and a stale node is worse than a missing one because a wrong fact arrives dressed in the authority of a retrieved one. Bi-temporal designs address part of this. Graphiti, the engine behind Zep, stamps every edge with both when the fact was true and when the system learned it, so a later contradiction updates the record instead of corrupting it. The second cost is schedule. Ontology work pays back late, and teams that spend a year modeling before the first query often never ship at all.</p>
+
+                    <h2>Symptom: it learns nothing overnight</h2>
+
+                    <p>Three weeks later the same agent has a correct estate model. A similar alert family now arrives every night around the same hour. Every night the agent runs the same investigation, makes the same eleven tool calls, and reaches the same conclusion. No individual run is wrong. The waste is that run twenty-one has no access to runs one through twenty.</p>
+
+                    <p>Deduplication at the signature level does not help, because the alerts are not identical. What repeats is the conclusion, not the input. Two alerts with different hashes, different source addresses, and different timestamps can still be the same judgment call, and only something that stored the judgment can see that.</p>
+
+                    <p>A cognitive graph stores the reasoning itself. Nodes are observations, hypotheses, and conclusions. Edges are the inferences that connect them. The agent can then ask a question it currently has no way to ask: have I concluded something about this before, and on what evidence? Accuracy improves because the agent stops re-deriving conclusions it already found to be wrong. Efficiency improves most of all, since deduplicating at the conclusion is the difference between eleven tool calls and one lookup.</p>
+
+                    <p>Governance is where this stopped being optional. Article 12 of the EU AI Act requires high-risk systems to automatically record events across their lifetime, with traceability appropriate to the system's purpose, and it became enforceable on 2 August 2026. An agent whose reasoning existed only inside a context window that has since been discarded cannot satisfy that on application logs alone. Application logs record what the agent called. They do not record what it believed.</p>
+
+                    <h2>The cognitive graph is a liability before it is an asset</h2>
+
+                    <p>Here is the part the vendors skip. A cognitive graph is a durable, queryable store of an agent's private reasoning, and every property that makes it useful also makes it dangerous.</p>
+
+                    <p>It is poisonable. Write one false conclusion into the trace and every later run inherits it. A knowledge graph has an external referent, so a wrong node can be checked against the asset database. A wrong conclusion has no referent, because the source is the agent itself. OWASP ranked this as ASI06, memory and context poisoning, in its December 2025 Top 10 for Agentic Applications, and described the effect precisely: poisoned memory reshapes behavior long after the interaction that planted it.</p>
+
+                    <p>It leaks. Reasoning traces capture whatever the agent was looking at, which in a security operations center means raw alert payloads, credentials that happened to appear in a log line, internal hostnames, and the names of the analysts who touched the case. That store now needs a data classification, a retention period, and an access model. Very few teams write a retention policy for an agent's thoughts before they write the agent.</p>
+
+                    <p>It reinforces itself. An agent that remembers concluding "benign" is more likely to conclude "benign" again. When the first conclusion was right, that is exactly the behavior we wanted. When it was wrong, it is confirmation bias with a database behind it, and the wrong case is the one that matters, because it is the case an attacker will arrange deliberately.</p>
+
+                    <p>None of this argues for skipping the layer. It argues for sequencing it correctly, which is the point the scorecard below is built around.</p>
+
+                    <h2>Symptom: it broke when nothing broke</h2>
+
+                    <p>The third failure survives both previous fixes. The agent now has a correct estate model and a full memory of its own reasoning, and its false positive rate jumps by an order of magnitude in a single week. No system changed. IT enabled remote desktop access for a hybrid work program, and traffic on port 3389 went from rare to ordinary.</p>
+
+                    <p>The agent had learned that activity on 3389 predicts compromise. The correlation was real in the training data and it was never the mechanism. When the world moved, the correlation inverted, and the model had no way to notice, because a correlation carries no information about why it holds. This is Judea Pearl's distinction between seeing and doing: observing that escalated tickets correlate with resolved incidents tells you nothing about whether escalating causes resolution.</p>
+
+                    <p>A causal graph encodes the mechanism rather than the pattern. On accuracy, it survives the shift that breaks the correlation. On efficiency, it prunes the hypothesis space, so the agent tests the few nodes that could actually produce the observation instead of enumerating every explanation consistent with it. On governance, it supports the counterfactual that every post-incident review eventually asks: if the agent had escalated at 04:12, would the outcome have been different? A correlational model cannot answer that question. It can only report what happened next to what else happened.</p>
+
+                    <p>The cost is that causal graphs are the most expensive of the three to build and the worst of the three to get wrong. A wrong knowledge graph is wrong about a fact, which is embarrassing and fixable. A wrong causal graph is wrong about the shape of the world, and it defends its errors fluently, because everything downstream of a bad structural assumption stays internally consistent. I have written about the upside of causal modeling in <a href="the-causal-advantage.html">The Causal Advantage</a>. The discipline it demands is the reason most teams should not start here.</p>
+
+                    <h2>The honest scorecard</h2>
+
+                    <p>A grid in which every cell is a win is a sales deck. Each of these three layers makes at least one thing worse, and the cost row is the row to read first, because it is the one that determines build order.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 424" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig3-title">Three graph types scored across accuracy, efficiency, and governance, each with its cost</title>
+                                <desc id="fig3-desc">The knowledge graph grounds entities, collapses lookups, and carries provenance, but goes stale and pays back late. The cognitive graph stops repeated errors, deduplicates at the conclusion, and makes decisions replayable, but is a poisonable and leaky store of the agent's own reasoning. The causal graph survives distribution shift, prunes hypotheses, and answers counterfactuals, but is costly to build and defends its errors fluently when misspecified.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="600">The honest scorecard</text>
+                                <text x="30" y="50" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">What each layer buys, and what it charges for it</text>
+
+                                <g fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">
+                                    <text x="158" y="76">ACCURACY</text>
+                                    <text x="314" y="76">EFFICIENCY</text>
+                                    <text x="470" y="76">GOVERNANCE</text>
+                                </g>
+                                <line x1="30" y1="86" x2="610" y2="86" stroke="#2a3f5f" stroke-width="1"/>
+                                <line x1="30" y1="200" x2="610" y2="200" stroke="#2a3f5f" stroke-width="1"/>
+                                <line x1="30" y1="306" x2="610" y2="306" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <g stroke="#2a3f5f" stroke-width="1">
+                                    <line x1="152" y1="98" x2="152" y2="156"/>
+                                    <line x1="308" y1="98" x2="308" y2="156"/>
+                                    <line x1="464" y1="98" x2="464" y2="156"/>
+                                    <line x1="152" y1="204" x2="152" y2="262"/>
+                                    <line x1="308" y1="204" x2="308" y2="262"/>
+                                    <line x1="464" y1="204" x2="464" y2="262"/>
+                                    <line x1="152" y1="310" x2="152" y2="368"/>
+                                    <line x1="308" y1="310" x2="308" y2="368"/>
+                                    <line x1="464" y1="310" x2="464" y2="368"/>
+                                </g>
+
+                                <text x="30" y="120" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">Knowledge</text>
+                                <text x="30" y="138" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">graph</text>
+                                <g fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">
+                                    <text x="162" y="120">Grounds the nouns.</text>
+                                    <text x="162" y="138">Right host, right owner.</text>
+                                    <text x="318" y="120">One traversal replaces</text>
+                                    <text x="318" y="138">five tool calls.</text>
+                                    <text x="474" y="120">Provenance lives on</text>
+                                    <text x="474" y="138">the edge itself.</text>
+                                </g>
+                                <rect x="30" y="164" width="580" height="28" rx="4" fill="#1a2942"/>
+                                <line x1="31" y1="164" x2="31" y2="192" stroke="#f59e0b" stroke-width="3"/>
+                                <text x="44" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="88" y="182" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Goes stale, and a stale fact arrives dressed as a verified one.</text>
+
+                                <text x="30" y="226" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">Cognitive</text>
+                                <text x="30" y="244" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">graph</text>
+                                <g fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">
+                                    <text x="162" y="226">Stops re-deriving the</text>
+                                    <text x="162" y="244">same wrong answer.</text>
+                                    <text x="318" y="226">Dedupes at the level</text>
+                                    <text x="318" y="244">of the conclusion.</text>
+                                    <text x="474" y="226">The decision path is</text>
+                                    <text x="474" y="244">replayable.</text>
+                                </g>
+                                <rect x="30" y="270" width="580" height="28" rx="4" fill="#1a2942"/>
+                                <line x1="31" y1="270" x2="31" y2="298" stroke="#f59e0b" stroke-width="3"/>
+                                <text x="44" y="288" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="88" y="288" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">A poisonable, leaky store of the agent's own reasoning.</text>
+
+                                <text x="30" y="332" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">Causal</text>
+                                <text x="30" y="350" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">graph</text>
+                                <g fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">
+                                    <text x="162" y="332">Survives a shift that</text>
+                                    <text x="162" y="350">breaks correlation.</text>
+                                    <text x="318" y="332">Prunes hypotheses</text>
+                                    <text x="318" y="350">to a few nodes.</text>
+                                    <text x="474" y="332">Answers the review's</text>
+                                    <text x="474" y="350">counterfactual.</text>
+                                </g>
+                                <rect x="30" y="376" width="580" height="28" rx="4" fill="#1a2942"/>
+                                <line x1="31" y1="376" x2="31" y2="404" stroke="#f59e0b" stroke-width="3"/>
+                                <text x="44" y="394" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="88" y="394" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Costly to build, and when misspecified it defends its errors.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 3.</b> Nine claims and three admissions. The cognitive graph has the strongest efficiency case of the three and the worst security cost, which is why it should be built last rather than first. Sources: GraphRAG (arXiv 2404.16130); Zep and Graphiti (arXiv 2501.13956); OWASP Top 10 for Agentic Applications, ASI06.</figcaption>
+                    </figure>
+
+                    <p>Reading the cost column gives an order that surprises most teams. Build the knowledge graph first, because it is the only layer with an external referent and everything above it needs something to be checked against. Add causal structure second, but only around the decisions that have to be defended. Build the cognitive graph last.</p>
+
+                    <p>That last instruction is the counterintuitive one, since the cognitive graph has the largest and fastest efficiency payoff. Build it first and you get exactly the store OWASP describes: an unaudited, poisonable record of the agent's private conclusions, with nothing to validate those conclusions against. The same layer built third sits on top of a grounded estate model and a causal model that can flag when a remembered conclusion no longer follows. The layer does not change. What changes is whether anything can catch it when it goes wrong.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Sort your last twenty agent failures using Figure 2 before approving any graph spend. The two most expensive mistakes in this area are commissioning an ontology to fix a memory problem and buying a memory product to fix a grounding problem, and both are avoidable with an afternoon of triage.</li>
+                        <li>Require two timestamps and a source on every edge of the knowledge graph from the first commit: when the fact was true, and when the system learned it. Retrofitting provenance onto a graph already in production costs more than building it correctly, and Article 12 of the EU AI Act has been enforceable since 2 August 2026.</li>
+                        <li>Treat the cognitive graph as a production data store rather than a log. Before it ships it needs a data classification, a retention period, an access model, and a defined procedure for invalidating a conclusion that turns out to be poisoned. If nobody owns that procedure, the layer is not ready.</li>
+                        <li>Add causal structure only where a counterfactual has to be defended to a regulator, a customer, or an incident review. Everywhere else, correlation with a drift monitor is cheaper and honest about what it is.</li>
+                    </ol>
+
+                    <p>The word graph will keep being used to mean all three of these things at once. Teams that separate them by the question each answers will spend their next architecture budget on the layer they are actually missing.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Causal Advantage</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why causal data quality, not dataset size, decides how far a system can go.</p>
+                        <a href="the-causal-advantage.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Loops, Graphs, and Anchors</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A different three graphs: control flow, stored knowledge, and system improvement.</p>
+                        <a href="loops-graphs-anchors.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Working memory as a surface you handle, not a container you fill.</p>
+                        <a href="the-memory-workbench.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Pearl, J. and Mackenzie, D. <em>The Book of Why: The New Science of Cause and Effect</em>. Basic Books, 2018. The ladder of causation and the distinction between seeing and doing.</li>
+                    <li class="reference-item">Edge, D. et al. "From Local to Global: A Graph RAG Approach to Query-Focused Summarization." Microsoft Research, arXiv:2404.16130. <a href="https://arxiv.org/abs/2404.16130" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2404.16130</a></li>
+                    <li class="reference-item">"Zep: A Temporal Knowledge Graph Architecture for Agent Memory." arXiv:2501.13956. Describes Graphiti and its bi-temporal edge model. <a href="https://arxiv.org/abs/2501.13956" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2501.13956</a></li>
+                    <li class="reference-item">OWASP Gen AI Security Project. "OWASP Top 10 for Agentic Applications," December 9, 2025. Threat ASI06, Memory and Context Poisoning. <a href="https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/" target="_blank" rel="noopener noreferrer">genai.owasp.org</a></li>
+                    <li class="reference-item">European Union. Artificial Intelligence Act, Article 12: Record-keeping. Automatic logging and traceability duties for high-risk AI systems, enforceable from August 2, 2026. <a href="https://artificialintelligenceact.eu/article/12/" target="_blank" rel="noopener noreferrer">artificialintelligenceact.eu/article/12</a></li>
+                    <li class="reference-item">MITRE. <em>ATT&amp;CK</em>. The adversary tactic and technique model most often used as the shared ontology for a security operations knowledge graph. <a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">attack.mitre.org</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
