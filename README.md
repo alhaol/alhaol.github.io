@@ -77,8 +77,9 @@ No build step, no package manager.
 │   ├── workshops.json  # Workshop registry
 │   ├── assets/         # workshop.css — workshop-only components (exercises, callouts, motion)
 │   └── <slug>/         # One folder per workshop: index.html + images/
-└── pages/              # Standalone pages that don't fit an existing hub. Under construction.
-    └── index.html      # Placeholder landing page
+└── pages/              # Masterclass Library — self-contained interactive learning pages
+    ├── index.html      # Static card-grid landing page (not data-driven; add a card per new class)
+    └── NNN_slug.html   # Individual masterclass pages (001_the_synthetic_mind.html …)
 ```
 
 ## Pages & Apps
@@ -94,7 +95,7 @@ No build step, no package manager.
 | Books | `/books/` | 2 books distilled into interactive workbooks: every model the book actually teaches gets a redrawn diagram, a what/how/when card and a worked example, all placed on a 2x2 memory map so a model can be found again mid-decision. Each page lets you sort your own items into a model's zones, sketch over the figure and answer three questions in place, with everything persisted locally and exportable as JSON. Login-gated. |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
 | Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
-| Pages | `/pages/` | Standalone pages that don't fit an existing hub. Placeholder landing page only, content to follow. |
+| Pages | `/pages/` | Masterclass Library — 3 self-contained interactive learning pages: The Synthetic Mind (knowledge, cognitive, causal & wisdom graphs in AI agents), The Wealth Barbell (sequencing employment, investing, entrepreneurship & family business via Taleb's Barbell Strategy), The Grafted Tree (raising kids fluent in Western life and rooted in Islamic values). |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |

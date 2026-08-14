@@ -1,44 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pages | alhaol.github.io</title>
-    <meta name="description" content="Standalone pages, currently under construction.">
-    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <title>Masterclass Library</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } }
+        }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-        }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+        .glow-emerald { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
+        .glow-purple  { box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25); }
+        .glow-amber   { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
+        .glow-pink    { box-shadow: 0 0 25px -5px rgba(236, 72, 153, 0.25); }
+        .glow-sky     { box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25); }
+        .glow-cyan    { box-shadow: 0 0 25px -5px rgba(34, 211, 238, 0.25); }
     </style>
 </head>
-<body>
-    <header class="py-6 shadow-md">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="nav-link text-sm">← Back to Portfolio</a>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white leading-relaxed">
+
+    <header class="border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
+            <div class="p-2 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-lg text-white font-bold shadow-lg shadow-sky-500/20">
+                <i class="fa-solid fa-graduation-cap text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg text-white leading-tight">Masterclass Library</h1>
+                <p class="text-xs text-slate-400">Self-contained interactive learning pages, generated on demand</p>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 py-24 text-center">
-        <div class="theme-card rounded-xl p-12">
-            <h1 class="text-3xl font-bold mb-4">Pages</h1>
-            <p class="text-lg" style="color: var(--text-muted);">This section is under construction. Check back soon.</p>
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+        <div class="max-w-2xl space-y-3">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight">Every masterclass, one click away.</h2>
+            <p class="text-slate-400 text-sm leading-relaxed">
+                Each card below opens one self-contained <code class="text-slate-300">NNN_&#123;slug&#125;.html</code> page —
+                dual-coded diagrams, real code, and an active-recall quiz for a single topic. Click a card, or use
+                <span class="font-mono text-slate-300">Export .MD</span> / <span class="font-mono text-slate-300">Print</span>
+                inside any page to take it with you.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+            <a href="001_the_synthetic_mind.html" class="group block bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-emerald-500/50 hover:-translate-y-1 transition-all glow-emerald">
+                <div class="flex items-center justify-between">
+                    <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl text-2xl">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-400 text-[10px] font-mono font-bold">No. 001</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">The Synthetic Mind</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">How Knowledge, Cognitive, Causal &amp; Wisdom graphs let AI agents mirror — and outgrow — human working-memory limits.</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 pt-2 border-t border-slate-800">
+                    <span>Open Masterclass</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <a href="002_the_wealth_barbell.html" class="group block bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-purple-500/50 hover:-translate-y-1 transition-all glow-purple">
+                <div class="flex items-center justify-between">
+                    <div class="p-3 bg-purple-500/20 text-purple-400 rounded-xl text-2xl">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-400 text-[10px] font-mono font-bold">No. 002</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-purple-300 transition-colors">The Wealth Barbell</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">Sequencing employment, investing, entrepreneurship &amp; family business with Taleb's Barbell Strategy for minimal ruin risk.</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] font-semibold text-purple-400 pt-2 border-t border-slate-800">
+                    <span>Open Masterclass</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <a href="003_the_grafted_tree.html" class="group block bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-amber-500/50 hover:-translate-y-1 transition-all glow-amber">
+                <div class="flex items-center justify-between">
+                    <div class="p-3 bg-amber-500/20 text-amber-400 rounded-xl text-2xl">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-400 text-[10px] font-mono font-bold">No. 003</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">The Grafted Tree</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">Raising kids fluent in Western life and rooted in Islamic values — one integrated identity, not a hidden double life, built into real leadership.</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] font-semibold text-amber-400 pt-2 border-t border-slate-800">
+                    <span>Open Masterclass</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
         </div>
     </main>
+
+    <footer class="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <p>Generated with the <span class="font-mono text-slate-400">create-masterclass-page</span> local skill.</p>
+    </footer>
+
 </body>
 </html>

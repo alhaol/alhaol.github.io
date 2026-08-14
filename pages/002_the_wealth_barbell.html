@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wealth Barbell: Employment, Investing, Entrepreneurship &amp; Family Business Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: { 50: '#f0f7ff', 100: '#e0effe', 500: '#0284c7', 600: '#0369a1', 900: '#0c4a6e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; font-size: 11pt; }
+            .print-page-break { page-break-before: always; }
+            .shadow-xl, .shadow-2xl, .shadow-md, .glow-emerald, .glow-purple, .glow-amber, .glow-pink, .glow-sky, .glow-cyan { box-shadow: none !important; }
+            .border { border-color: #d1d5db !important; }
+            pre, code { white-space: pre-wrap !important; word-break: break-all; }
+        }
+        .prose pre { background-color: #0f172a; color: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; }
+
+        .glow-emerald { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
+        .glow-purple  { box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25); }
+        .glow-amber   { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
+        .glow-pink    { box-shadow: 0 0 25px -5px rgba(236, 72, 153, 0.25); }
+        .glow-sky     { box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25); }
+        .glow-cyan    { box-shadow: 0 0 25px -5px rgba(34, 211, 238, 0.25); }
+
+        pre::-webkit-scrollbar { height: 6px; width: 6px; }
+        pre::-webkit-scrollbar-track { background: #090d16; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white leading-relaxed">
+
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-lg text-white font-bold shadow-lg shadow-sky-500/20">
+                    <i class="fa-solid fa-seedling text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-tight">The Wealth Barbell</h1>
+                    <p class="text-xs text-slate-400">Sequencing Career, Capital &amp; Legacy With Minimal Ruin Risk</p>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex items-center space-x-5 text-sm font-medium text-slate-300">
+                <a href="#mnemonic-matrix" class="hover:text-sky-400 transition-colors">The Four Plots</a>
+                <a href="#employment" class="hover:text-emerald-400 transition-colors">1. Employment</a>
+                <a href="#investing" class="hover:text-purple-400 transition-colors">2. Investing</a>
+                <a href="#entrepreneurship" class="hover:text-amber-400 transition-colors">3. Ventures</a>
+                <a href="#family-business" class="hover:text-pink-400 transition-colors">4. Family Biz</a>
+                <a href="#synthesis" class="hover:text-pink-400 transition-colors">Synthesis</a>
+                <a href="#active-recall" class="hover:text-cyan-400 transition-colors">Recall</a>
+                <a href="#unified-system" class="hover:text-sky-400 transition-colors">Career Arc</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="exportMarkdown()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-file-arrow-down text-sky-400"></i>
+                    <span>Export .MD</span>
+                </button>
+                <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-lg flex items-center gap-2 shadow-lg shadow-sky-600/30 transition-all">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Print / Save PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- ============================= HERO ============================= -->
+        <section class="relative rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 p-8 sm:p-12 overflow-hidden shadow-2xl">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-4xl relative z-10 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/80 border border-sky-800/50 text-sky-400 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-lightbulb"></i> Career &amp; Capital Allocation Masterclass
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                    Playing All Four Money Games <br>
+                    <span class="bg-gradient-to-r from-emerald-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
+                        Without Betting The House
+                    </span>
+                </h1>
+                <p class="text-slate-300 text-lg sm:text-xl leading-relaxed font-light">
+                    Employment, stock investing, entrepreneurship, and a family business are not competing life choices — they are four different games with four different <strong class="text-white">time horizons</strong> and <strong class="text-white">risk profiles</strong>. Most people go broke or burn out not because they picked the wrong game, but because they played the wrong game with money or time that belonged to a different one. This page teaches you to sequence all four using <strong class="text-white">Nassim Taleb's Barbell Strategy</strong> so no single bet can sink you.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg text-xl"><i class="fa-solid fa-briefcase"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-emerald-400">Employment</div>
+                            <div class="text-sm font-semibold text-white">The Vegetable Patch</div>
+                            <div class="text-xs text-slate-400">"What feeds us THIS season?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-purple-500/20 text-purple-400 rounded-lg text-xl"><i class="fa-solid fa-chart-line"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-purple-400">Stock Investing</div>
+                            <div class="text-sm font-semibold text-white">The Orchard</div>
+                            <div class="text-xs text-slate-400">"What compounds untouched?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-amber-500/20 text-amber-400 rounded-lg text-xl"><i class="fa-solid fa-rocket"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-amber-400">Entrepreneurship</div>
+                            <div class="text-sm font-semibold text-white">The Greenhouse</div>
+                            <div class="text-xs text-slate-400">"What small bet could 10x?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-pink-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-pink-500/20 text-pink-400 rounded-lg text-xl"><i class="fa-solid fa-people-roof"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-pink-400">Family Business</div>
+                            <div class="text-sm font-semibold text-white">The Ancestral Farm</div>
+                            <div class="text-xs text-slate-400">"What must outlive me?"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 1. MNEMONIC / METAPHOR MATRIX ============================= -->
+        <section id="mnemonic-matrix" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">1. The Master Gardener's Metaphor: Four Plots, Four Clocks</h2>
+                <p class="text-slate-400 text-sm mt-1">To lock each game into memory, picture one gardener — Sarah, 32, an engineer with $45,000 saved whose parents run the family hardware store — tending four plots of land at once.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 hover:border-emerald-500/50 transition-all glow-emerald">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">PLOT #1</span>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-300 text-xs font-bold">CASH FLOW</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-briefcase text-emerald-400"></i> Employment
+                    </h3>
+                    <div class="text-xs font-semibold text-emerald-400 italic">"The Vegetable Patch"</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Metaphor:</strong> Fast-growing rows watered every week, harvested every season. It won't make Sarah rich, but it puts food on the table while the slower plots mature.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question:</div>
+                        <div class="text-emerald-300 font-mono">"What feeds the household THIS season?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Time Horizon:</strong> Immediate, ongoing</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Risk Profile:</strong> Lowest, most linear</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Funds:</strong> Every other plot</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 hover:border-purple-500/50 transition-all glow-purple">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">PLOT #2</span>
+                        <span class="px-2.5 py-1 rounded-full bg-purple-950 border border-purple-800 text-purple-300 text-xs font-bold">COMPOUNDING</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-purple-400"></i> Stock Investing
+                    </h3>
+                    <div class="text-xs font-semibold text-purple-400 italic">"The Orchard"</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Metaphor:</strong> Trees planted once. You don't dig up the roots every week to check on them — you water on a schedule and harvest decades later, much bigger than you planted.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question:</div>
+                        <div class="text-purple-300 font-mono">"What compounds untouched for decades?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Time Horizon:</strong> 10-40 years</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Risk Profile:</strong> Low if diversified &amp; patient</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Funds:</strong> Retirement / freedom</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 hover:border-amber-500/50 transition-all glow-amber">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">PLOT #3</span>
+                        <span class="px-2.5 py-1 rounded-full bg-amber-950 border border-amber-800 text-amber-300 text-xs font-bold">OPTIONALITY</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-rocket text-amber-400"></i> Entrepreneurship
+                    </h3>
+                    <div class="text-xs font-semibold text-amber-400 italic">"The Greenhouse"</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Metaphor:</strong> Experimental hybrid seeds. Most trays fail — that's expected and budgeted for. But one tray could produce something the vegetable patch never could.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question:</div>
+                        <div class="text-amber-300 font-mono">"What small bet could 10x, and costs little if it fails?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Time Horizon:</strong> 2-5 years per attempt</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Risk Profile:</strong> High, must be capped</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Funds:</strong> Asymmetric upside</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 hover:border-pink-500/50 transition-all glow-pink">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">PLOT #4</span>
+                        <span class="px-2.5 py-1 rounded-full bg-pink-950 border border-pink-800 text-pink-300 text-xs font-bold">LEGACY</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-people-roof text-pink-400"></i> Family Business
+                    </h3>
+                    <div class="text-xs font-semibold text-pink-400 italic">"The Ancestral Farm"</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Metaphor:</strong> Inherited land, already producing — but every family member has a hand on the irrigation valve. Without rules for who waters what, the farm doesn't die from bad soil, it dies from disagreement.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question:</div>
+                        <div class="text-pink-300 font-mono">"What must be governed so it outlives me?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Time Horizon:</strong> 20-50+ years</li>
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Risk Profile:</strong> Concentrated, illiquid</li>
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Funds:</strong> Multi-generational wealth</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 2. EMPLOYMENT ============================= -->
+        <section id="employment" class="space-y-8">
+            <div class="border-l-4 border-emerald-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">2. Employment: The Vegetable Patch That Funds Everything Else</h2>
+                    <span class="px-3 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold rounded-full">CASH FLOW LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Human capital is highest early in a career — the job's real job is to convert that human capital into a runway for every other plot.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-emerald-400"></i> The Human Story: Why Skipping The Vegetable Patch Backfires
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Marcus, a talented developer, quits his job with $2,000 in savings to build an app full-time. Six months later the app isn't finished, rent is due, and the credit card balance has grown faster than the user base. He takes the first job offer he can find and sells the unfinished app for scraps.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        The idea wasn't the problem. The <strong class="text-white">runway</strong> was. Without a cash floor, every decision becomes forced — you stop choosing the best option and start choosing whichever option keeps the lights on.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-emerald-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-emerald-400 tracking-wider">The Engineering Solution: Treat Your Paycheck as Risk-Free Rate</h4>
+                        <p class="text-xs text-slate-300">
+                            Employment income is the "risk-free rate" of your personal balance sheet. Its job is to build a 3-6 month emergency fund, then generate the investable surplus that seeds the Orchard (Section 3) — before any capital is ever risked in the Greenhouse (Section 4).
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-emerald-400 block font-bold">Human Capital (Early Career)</span>
+                                <span class="text-slate-400">High: decades of future paychecks to recover from a mistake.</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">Financial Capital (Early Career)</span>
+                                <span class="text-slate-400">Low: little saved yet — this is exactly why career risk is cheap now.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-emerald-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-emerald-500 text-xs text-emerald-200 italic leading-relaxed">
+                            "Employment isn't the opposite of entrepreneurship — it's the funding source that makes entrepreneurship survivable."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Recommended Emergency Fund:</strong> 3-6 months of expenses</div>
+                            <div><strong class="text-slate-200">Optimal Career-Risk Window:</strong> 20s-30s (peak human capital)</div>
+                            <div><strong class="text-slate-200">Main Trade-off:</strong> Capped, mostly linear income growth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-emerald">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-emerald-400"></i> Visual Memory Anchor 1: Where a Paycheck Actually Goes
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 260" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-em-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+                            </marker>
+                            <marker id="arrow-em-2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa"/>
+                            </marker>
+                        </defs>
+
+                        <g transform="translate(90, 130)">
+                            <circle r="42" fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="11" font-weight="bold">SARAH</text>
+                            <text text-anchor="middle" dy="14" fill="#94a3b8" font-size="9">Career Start</text>
+                        </g>
+
+                        <rect x="230" y="90" width="280" height="80" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                        <text x="370" y="122" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">W-2 EMPLOYMENT</text>
+                        <text x="370" y="140" text-anchor="middle" fill="#94a3b8" font-size="9.5">Stable, Predictable Cash Flow</text>
+                        <text x="370" y="156" text-anchor="middle" fill="#64748b" font-size="9">"Pay Yourself First" Waterfall</text>
+
+                        <g transform="translate(740, 70)">
+                            <circle r="44" fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="10.5" font-weight="bold">EMERGENCY</text>
+                            <text text-anchor="middle" dy="9" fill="#ffffff" font-size="10.5" font-weight="bold">FUND</text>
+                            <text text-anchor="middle" dy="24" fill="#34d399" font-size="8.5">3-6mo Expenses</text>
+                        </g>
+
+                        <g transform="translate(740, 200)">
+                            <circle r="44" fill="#0f172a" stroke="#8b5cf6" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="10" font-weight="bold">INVESTABLE</text>
+                            <text text-anchor="middle" dy="9" fill="#ffffff" font-size="10" font-weight="bold">SURPLUS</text>
+                            <text text-anchor="middle" dy="24" fill="#a78bfa" font-size="8.5">&#8594; Feeds The Orchard</text>
+                        </g>
+
+                        <line x1="132" y1="130" x2="222" y2="130" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-em-1)"/>
+                        <path d="M 510 115 C 600 115, 620 70, 696 70" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-em-1)" fill="none"/>
+                        <path d="M 510 145 C 600 145, 620 200, 696 200" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-em-2)" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-emerald-400"></i> Pay-Yourself-First Monthly Waterfall</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 text-[10px] font-semibold">YAML</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-emerald-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># Automate this on payday -- decisions made once beat willpower exercised monthly</span>
+<span class="text-purple-400">monthly_income_waterfall</span>:
+  <span class="text-sky-400">net_pay</span>: <span class="text-amber-400">6500</span>
+  <span class="text-sky-400">priority_1_emergency_fund</span>: <span class="text-emerald-300">"10% -- until 3-6mo expenses reached, then redirect"</span>
+  <span class="text-sky-400">priority_2_index_investing</span>: <span class="text-emerald-300">"20% -- automatic, untouched, see Section 3"</span>
+  <span class="text-sky-400">priority_3_essential_expenses</span>: <span class="text-emerald-300">"50% -- rent, food, insurance"</span>
+  <span class="text-sky-400">priority_4_capped_risk_bucket</span>: <span class="text-emerald-300">"20% -- discretionary OR pre-budgeted venture capital, see Section 4"</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 3. INVESTING ============================= -->
+        <section id="investing" class="space-y-8">
+            <div class="border-l-4 border-purple-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">3. Stock Investing: The Orchard You Plant Once</h2>
+                    <span class="px-3 py-1 bg-purple-950 border border-purple-800 text-purple-400 text-xs font-bold rounded-full">COMPOUNDING LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Time horizon, not stock-picking skill, is the entire edge in public markets.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-purple-400"></i> The Human Story: Why Checking Your Portfolio Hourly Loses Money
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Priya checks her portfolio every day and moves to cash whenever the market drops 5%. Over ten years the S&amp;P 500 grinds out its historical long-run average, but Priya's account lags far behind it — not because she picked bad funds, but because the market's best days repeatedly land right after its worst days, and she is out of the market for exactly those days.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        This is the "behavior gap": investors as a group systematically underperform the very funds they hold, because fear sells at the bottom and euphoria buys at the top.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-purple-400 tracking-wider">The Engineering Solution: Time In The Market, Not Timing It</h4>
+                        <p class="text-xs text-slate-300">
+                            Bill Bengen's 1994 research and the 1998 "Trinity Study" (Cooley, Hubbard &amp; Walz) tested diversified stock/bond portfolios across every rolling 30-year period in U.S. market history and found a ~4% initial withdrawal rate held up in the overwhelming majority of them — precisely because the underlying portfolio stayed invested through full market cycles instead of trying to dodge the bad years.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 border-l-4 border-l-red-500">
+                    <h3 class="text-md font-bold text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-skull-crossbones"></i> The Dark Side: Performance Chasing
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Recency bias makes last year's winning fund feel like next year's safe bet — so investors chase whatever just went up and dump whatever just went down, systematically buying high and selling low in the exact opposite order of "buy low, sell high."
+                    </p>
+                    <blockquote class="p-2 bg-red-950/40 rounded border border-red-900 text-red-200 text-xs font-semibold">
+                        Golden Rule: "The stock market is a device for transferring money from the impatient to the patient." (often attributed to Warren Buffett)
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-purple">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-purple-400"></i> Visual Memory Anchor 2: The Rule of 72 Doubling Staircase
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 240" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-inv-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa"/>
+                            </marker>
+                        </defs>
+                        <line x1="20" y1="210" x2="860" y2="210" stroke="#334155" stroke-width="1.5"/>
+
+                        <rect x="40" y="180" width="150" height="30" rx="6" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="115" y="170" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">$10,000</text>
+                        <text x="115" y="228" text-anchor="middle" fill="#94a3b8" font-size="9">Year 0</text>
+
+                        <rect x="250" y="150" width="150" height="60" rx="6" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="325" y="140" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">$20,000</text>
+                        <text x="325" y="228" text-anchor="middle" fill="#94a3b8" font-size="9">~Year 10 (72&#247;7&#8776;10.3yrs)</text>
+
+                        <rect x="460" y="110" width="150" height="100" rx="6" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="535" y="100" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">$40,000</text>
+                        <text x="535" y="228" text-anchor="middle" fill="#94a3b8" font-size="9">~Year 20</text>
+
+                        <rect x="670" y="60" width="150" height="150" rx="6" fill="#0f172a" stroke="#a78bfa" stroke-width="2.5"/>
+                        <text x="745" y="50" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">$80,000</text>
+                        <text x="745" y="228" text-anchor="middle" fill="#c4b5fd" font-size="9" font-weight="bold">~Year 30</text>
+
+                        <path d="M 190 195 C 210 195, 230 180, 248 180" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-inv-1)" fill="none"/>
+                        <path d="M 400 180 C 420 180, 440 160, 458 160" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-inv-1)" fill="none"/>
+                        <path d="M 610 160 C 630 160, 650 135, 668 135" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-inv-1)" fill="none"/>
+
+                        <text x="440" y="30" text-anchor="middle" fill="#64748b" font-size="10">Illustrative doubling at a 7%/yr real return -- past performance does not guarantee future results</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-brands fa-python text-purple-400"></i> Rule of 72 &amp; Future Value Estimator</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-purple-400 text-[10px] font-semibold">PYTHON</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-purple-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># Rule of 72: years to double a diversified index position, inflation-adjusted</span>
+<span class="text-purple-400">def</span> <span class="text-sky-400">years_to_double</span>(annual_return_pct):
+    <span class="text-purple-400">return</span> <span class="text-amber-400">72</span> / annual_return_pct
+
+<span class="text-slate-500"># Long-run diversified equity real return assumption &#8776; 7%/yr</span>
+<span class="text-sky-400">print</span>(years_to_double(<span class="text-amber-400">7</span>))  <span class="text-slate-500"># &#8776; 10.3 years to double</span>
+
+<span class="text-purple-400">def</span> <span class="text-sky-400">future_value</span>(principal, annual_return, years, monthly_contribution=<span class="text-amber-400">0</span>):
+    months = years * <span class="text-amber-400">12</span>
+    r = annual_return / <span class="text-amber-400">12</span>
+    fv = principal * (<span class="text-amber-400">1</span> + r) ** months
+    <span class="text-purple-400">for</span> m <span class="text-purple-400">in</span> <span class="text-sky-400">range</span>(<span class="text-amber-400">1</span>, months + <span class="text-amber-400">1</span>):
+        fv += monthly_contribution * (<span class="text-amber-400">1</span> + r) ** (months - m)
+    <span class="text-purple-400">return</span> fv
+
+<span class="text-slate-500"># $10,000 seed + $500/month for 30 years at a 7% real return</span>
+<span class="text-sky-400">print</span>(future_value(<span class="text-amber-400">10_000</span>, <span class="text-amber-400">0.07</span>, <span class="text-amber-400">30</span>, <span class="text-amber-400">500</span>))</code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 4. ENTREPRENEURSHIP ============================= -->
+        <section id="entrepreneurship" class="space-y-8">
+            <div class="border-l-4 border-amber-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">4. Entrepreneurship: The Greenhouse &amp; The Barbell Bet Size</h2>
+                    <span class="px-3 py-1 bg-amber-950 border border-amber-800 text-amber-400 text-xs font-bold rounded-full">OPTIONALITY LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Nassim Taleb's Barbell Strategy: extreme safety on one side, a small capped bet on the other, nothing in the fragile middle.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-amber-400"></i> The Human Story: Two Founders, Same Idea, Different Sizing
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Founder A quits their job, empties their savings, and burns out in 8 months when the idea actually needed 18 to work. Founder B keeps part-time consulting income, pre-commits exactly $15,000 as their "risk capital," and builds nights and weekends until the product proves itself — <em>then</em> goes full-time.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Same idea. Same market. The difference was sizing the bet <strong class="text-white">before</strong> starting, not discovering the real cost mid-flight.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-amber-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-amber-400 tracking-wider">The Engineering Solution: Barbell Sizing, Not "All In"</h4>
+                        <p class="text-xs text-slate-300">
+                            Taleb's Barbell Strategy puts the bulk of capital (often ~90%) into extremely safe assets — here, your job and the Orchard from Section 3 — and caps a small slice (~10-20%) as pure, pre-committed risk capital in the venture. The safe side survives any single venture outcome; the risky side can pay off disproportionately if it works.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 border-l-4 border-l-red-500">
+                    <h3 class="text-md font-bold text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-skull-crossbones"></i> The Dark Side: Undercapitalization &amp; Runway Roulette
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        U.S. Bureau of Labor Statistics data shows roughly 20% of new businesses close within their first year and about half don't reach their fifth. Most of those failures aren't bad-idea problems — they're runway problems: the idea needed more time than the founder budgeted for.
+                    </p>
+                    <blockquote class="p-2 bg-red-950/40 rounded border border-red-900 text-red-200 text-xs font-semibold">
+                        Golden Rule: Cap the bet at money and time you've explicitly budgeted to lose — never at your emergency fund or your family's cash flow.
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-amber">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-amber-400"></i> Visual Memory Anchor 3: The Barbell, Not The Fragile Middle
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 200" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <linearGradient id="safe-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                            </linearGradient>
+                            <linearGradient id="risky-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                            </linearGradient>
+                        </defs>
+
+                        <rect x="40" y="40" width="220" height="120" rx="16" fill="url(#safe-grad)" stroke="#10b981" stroke-width="2"/>
+                        <text x="150" y="80" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">SAFE CORE</text>
+                        <text x="150" y="100" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Job + Index Investing</text>
+                        <text x="150" y="118" text-anchor="middle" fill="#94a3b8" font-size="9.5">&#8776; 90% of Capital</text>
+
+                        <rect x="260" y="90" width="360" height="20" fill="#334155" stroke="#475569" stroke-width="1"/>
+
+                        <rect x="350" y="68" width="180" height="64" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 4"/>
+                        <text x="440" y="94" text-anchor="middle" fill="#f87171" font-size="10" font-weight="bold">AVOID THE MIDDLE</text>
+                        <text x="440" y="110" text-anchor="middle" fill="#fca5a5" font-size="8.5">Undiversified "medium risk" bets</text>
+                        <text x="440" y="123" text-anchor="middle" fill="#fca5a5" font-size="8.5">hide the most fragility</text>
+
+                        <rect x="620" y="40" width="220" height="120" rx="16" fill="url(#risky-grad)" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="730" y="80" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="bold">RISKY TAIL</text>
+                        <text x="730" y="100" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Capped Venture Bet</text>
+                        <text x="730" y="118" text-anchor="middle" fill="#94a3b8" font-size="9.5">&#8776; 10% of Capital, Pre-Budgeted</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-brands fa-python text-amber-400"></i> Pre-Committed Risk Capital Budget</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-400 text-[10px] font-semibold">PYTHON</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-amber-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># Decide your maximum acceptable loss BEFORE you start (Taleb barbell sizing)</span>
+<span class="text-purple-400">def</span> <span class="text-sky-400">risk_capital_budget</span>(liquid_net_worth, emergency_fund_target, max_risk_pct=<span class="text-amber-400">0.10</span>):
+    investable_surplus = liquid_net_worth - emergency_fund_target
+    <span class="text-purple-400">return</span> <span class="text-sky-400">max</span>(<span class="text-amber-400">0</span>, investable_surplus * max_risk_pct)
+
+<span class="text-slate-500"># $80,000 liquid net worth, $24,000 (6mo) emergency fund reserved, 10% barbell allocation</span>
+<span class="text-sky-400">print</span>(risk_capital_budget(<span class="text-amber-400">80_000</span>, <span class="text-amber-400">24_000</span>, <span class="text-amber-400">0.10</span>))  <span class="text-slate-500"># =&gt; $5,600 max venture bet</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 5. FAMILY BUSINESS ============================= -->
+        <section id="family-business" class="space-y-8">
+            <div class="border-l-4 border-pink-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">5. Family Business: The Ancestral Farm Needs Governance, Not Hope</h2>
+                    <span class="px-3 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded-full">LEGACY LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">A family business is a multi-generational compounding asset — treat it with the same governance rigor as any long-horizon investment.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-pink-400"></i> The Human Story: "We'll Figure It Out When I Retire"
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        The Alvarez family hardware store thrived for 22 years under its founder. When he passed suddenly with no written succession plan or ownership agreement, three siblings disagreed on whether to sell, expand, or split the assets. The store closed within 18 months — not from bad sales, but from an ungoverned transition.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        This is the norm, not the exception: only about <strong class="text-white">30% of family businesses survive to the second generation</strong>, and about <strong class="text-white">12% make it to the third</strong> (Family Firm Institute research popularized from John Ward's studies at Northwestern's Kellogg School). Roughly two-thirds have no documented succession plan at all.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-pink-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-pink-400 tracking-wider">The Engineering Solution: Govern It Like Any Long-Horizon Asset</h4>
+                        <p class="text-xs text-slate-300">
+                            Start succession planning 10-15 years before the expected transition: a written ownership/buy-sell agreement with a pre-agreed valuation method, a named and trained successor, a family council with an independent advisor, and a pre-agreed conflict/arbitration protocol for disagreeing heirs.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-pink-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-pink-500 text-xs text-pink-200 italic leading-relaxed">
+                            "A family business without a written succession plan isn't a legacy asset — it's a countdown timer to a fire sale."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Survival to Gen 2:</strong> &#126;30%</div>
+                            <div><strong class="text-slate-200">Survival to Gen 3:</strong> &#126;12%</div>
+                            <div><strong class="text-slate-200">Start Planning:</strong> 10-15 years pre-transition</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-pink">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-pink-400"></i> Visual Memory Anchor 4: Generational Survival Without Governance
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 920 200" class="w-full h-auto min-w-[750px] font-sans">
+                        <defs>
+                            <marker id="arrow-fam-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ec4899"/>
+                            </marker>
+                            <marker id="arrow-fam-2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+                            </marker>
+                        </defs>
+
+                        <rect x="20" y="60" width="180" height="80" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="2.5"/>
+                        <text x="110" y="94" text-anchor="middle" fill="#f9a8d4" font-size="12" font-weight="bold">GEN 1: FOUNDER</text>
+                        <text x="110" y="112" text-anchor="middle" fill="#94a3b8" font-size="9.5">100% Ownership, Original Vision</text>
+
+                        <rect x="300" y="60" width="180" height="80" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+                        <text x="390" y="94" text-anchor="middle" fill="#f9a8d4" font-size="12" font-weight="bold">GEN 2</text>
+                        <text x="390" y="112" text-anchor="middle" fill="#94a3b8" font-size="9.5">&#126;30% Still Family-Owned</text>
+
+                        <rect x="580" y="60" width="180" height="80" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="2" stroke-dasharray="5 4"/>
+                        <text x="670" y="94" text-anchor="middle" fill="#f9a8d4" font-size="12" font-weight="bold">GEN 3</text>
+                        <text x="670" y="112" text-anchor="middle" fill="#94a3b8" font-size="9.5">&#126;12% Still Family-Owned</text>
+
+                        <g transform="translate(850, 100)">
+                            <circle r="35" fill="#0f172a" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/>
+                            <text text-anchor="middle" dy="-2" fill="#f87171" font-size="9" font-weight="bold">GEN 4+</text>
+                            <text text-anchor="middle" dy="10" fill="#fca5a5" font-size="8">&#126;3%</text>
+                        </g>
+
+                        <line x1="200" y1="100" x2="300" y2="100" stroke="#ec4899" stroke-width="2" marker-end="url(#arrow-fam-1)"/>
+                        <rect x="205" y="78" width="90" height="20" fill="#0f172a" stroke="#ec4899" stroke-width="0.7" rx="5"/>
+                        <text x="250" y="92" text-anchor="middle" fill="#f9a8d4" font-size="7.5" font-weight="bold">SUCCESSION PLAN</text>
+
+                        <line x1="480" y1="100" x2="580" y2="100" stroke="#ec4899" stroke-width="2" marker-end="url(#arrow-fam-1)"/>
+                        <rect x="485" y="78" width="90" height="20" fill="#0f172a" stroke="#ec4899" stroke-width="0.7" rx="5"/>
+                        <text x="530" y="92" text-anchor="middle" fill="#f9a8d4" font-size="7.5" font-weight="bold">FAMILY COUNCIL</text>
+
+                        <line x1="760" y1="100" x2="813" y2="100" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arrow-fam-2)"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-pink-400"></i> Minimum Viable Succession Plan</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-400 text-[10px] font-semibold">YAML</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-pink-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># The five components most ungoverned family businesses are missing</span>
+<span class="text-purple-400">succession_plan_minimum_viable</span>:
+  <span class="text-sky-400">ownership_agreement</span>: <span class="text-emerald-300">"Buy-sell agreement, valuation method fixed in advance"</span>
+  <span class="text-sky-400">leadership_transition</span>: <span class="text-emerald-300">"Named successor(s), trained 5-10 years pre-transition"</span>
+  <span class="text-sky-400">governance_body</span>: <span class="text-emerald-300">"Family council + independent advisor, meets quarterly"</span>
+  <span class="text-sky-400">timeline</span>: <span class="text-emerald-300">"Start planning 10-15 years before expected transition"</span>
+  <span class="text-sky-400">conflict_protocol</span>: <span class="text-emerald-300">"Pre-agreed arbitration/buyout terms for disagreeing heirs"</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 6. SYNTHESIS ============================= -->
+        <section id="synthesis" class="space-y-8">
+            <div class="border-l-4 border-pink-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">6. The Barbell Life: One Rule That Ties All Four Plots Together</h2>
+                    <span class="px-3 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded-full">SYNTHESIS</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Distilling employment, investing, entrepreneurship, and family business into one decision heuristic.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-w-0">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 min-w-0">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-feather-pointed text-pink-400"></i> Match Every Dollar and Every Hour To Its Correct Time Horizon
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        The single rule underneath all four sections: <strong class="text-white">never let a short-horizon obligation depend on a long-horizon or high-variance asset.</strong> Employment funds the present. Index investing compounds the multi-decade future, untouched. Entrepreneurship gets a capped, pre-budgeted slice of risk capital sized like Taleb's barbell — never the emergency fund, never the family business's core cash flow. The family business is itself a long-horizon compounding asset, so it gets governed like one: a written plan, not "we'll figure it out."
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-pink-900/50 space-y-3 min-w-0">
+                        <h4 class="text-xs font-bold uppercase text-pink-400 tracking-wider">The Distillation Pipeline</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                            <div class="p-2 bg-slate-900 border border-slate-800 rounded">
+                                <span class="text-slate-400 block font-bold">Income</span>
+                                <span class="text-[10px] text-slate-500">Employment (Sec. 2)</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-emerald-800/50 rounded">
+                                <span class="text-emerald-400 block font-bold">Time-Horizon Match</span>
+                                <span class="text-[10px] text-slate-500">Orchard vs Greenhouse</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-amber-800/50 rounded">
+                                <span class="text-amber-400 block font-bold">Barbell Sizing</span>
+                                <span class="text-[10px] text-slate-500">90% Safe / 10% Risky</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-pink-500/80 rounded glow-pink">
+                                <span class="text-pink-400 block font-bold">Multi-Gen Wealth</span>
+                                <span class="text-[10px] text-pink-300">Governed Legacy Asset</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between min-w-0">
+                    <div class="space-y-3 min-w-0">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> Personal Capital Allocation Policy</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-400 text-[10px] font-semibold">YAML</span>
+                        </div>
+                        <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-pink-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-purple-400">personal_capital_allocation_policy</span>:
+  <span class="text-sky-400">layer_1_employment</span>:
+    <span class="text-sky-400">role</span>: <span class="text-emerald-300">"Fund emergency reserve + surplus"</span>
+    <span class="text-sky-400">horizon</span>: <span class="text-emerald-300">"Immediate, ongoing"</span>
+  <span class="text-sky-400">layer_2_index_investing</span>:
+    <span class="text-sky-400">role</span>: <span class="text-emerald-300">"Core compounding engine"</span>
+    <span class="text-sky-400">horizon</span>: <span class="text-emerald-300">"10-40yrs, untouched"</span>
+    <span class="text-sky-400">allocation</span>: <span class="text-amber-400">"80-90%"</span>
+  <span class="text-sky-400">layer_3_entrepreneurship</span>:
+    <span class="text-sky-400">role</span>: <span class="text-emerald-300">"Capped asymmetric bet"</span>
+    <span class="text-sky-400">horizon</span>: <span class="text-emerald-300">"2-5yrs/attempt"</span>
+    <span class="text-sky-400">allocation</span>: <span class="text-amber-400">"10-20%, pre-committed"</span>
+  <span class="text-sky-400">layer_4_family_business</span>:
+    <span class="text-sky-400">role</span>: <span class="text-emerald-300">"Multi-gen legacy asset"</span>
+    <span class="text-sky-400">requirement</span>: <span class="text-emerald-300">"Written succession plan"</span></code></pre>
+                    </div>
+                    <p class="text-xs text-slate-500 italic mt-2">
+                        None of these four games is "the right one" — the risk is in playing the wrong game with the wrong time horizon.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 7. ACTIVE RECALL ============================= -->
+        <section id="active-recall" class="space-y-8">
+            <div class="border-l-4 border-cyan-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">7. Reader Retention &amp; Active Recall System</h2>
+                    <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded-full">LONG-TERM MEMORY LOCK</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Interactive self-testing tools designed to lock these frameworks into your long-term memory before you leave.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-400">
+                        <span>RECALL CUE #1</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What's the actual purpose of a stable W-2 job in this framework?</h4>
+                    <button onclick="toggleAnswer('ans-1')" class="text-xs px-3 py-1.5 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg hover:bg-emerald-900 w-full font-medium transition-colors">
+                        Show Answer
+                    </button>
+                    <div id="ans-1" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        It's not the opposite of ambition — it funds the <strong>emergency reserve</strong> and <strong>investable surplus</strong> that make every other bet on this page survivable.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-purple-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-purple-400">
+                        <span>RECALL CUE #2</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why does "time in market" beat "timing the market" for index investing?</h4>
+                    <button onclick="toggleAnswer('ans-2')" class="text-xs px-3 py-1.5 bg-purple-950 text-purple-300 border border-purple-800 rounded-lg hover:bg-purple-900 w-full font-medium transition-colors">
+                        Show Answer
+                    </button>
+                    <div id="ans-2" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        The market's best days repeatedly cluster right after its worst days; moving to cash after a drop turns a long-run winner into a loser, which is exactly why the <strong>Trinity Study's 4% rule</strong> was built on staying invested through full 30-year cycles.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-amber-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-400">
+                        <span>RECALL CUE #3</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What's the one thing that makes entrepreneurship survivable that most failed founders skip?</h4>
+                    <button onclick="toggleAnswer('ans-3')" class="text-xs px-3 py-1.5 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg hover:bg-amber-900 w-full font-medium transition-colors">
+                        Show Answer
+                    </button>
+                    <div id="ans-3" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        A <strong>pre-committed risk-capital budget</strong> sized like Taleb's barbell — cap the loss before you start, and never draw from the emergency fund to keep going past that cap.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-pink-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400">
+                        <span>RECALL CUE #4</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why do most family businesses fail to reach the 3rd generation?</h4>
+                    <button onclick="toggleAnswer('ans-4')" class="text-xs px-3 py-1.5 bg-pink-950 text-pink-300 border border-pink-800 rounded-lg hover:bg-pink-900 w-full font-medium transition-colors">
+                        Show Answer
+                    </button>
+                    <div id="ans-4" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        Only about <strong>12% survive to Gen 3</strong> — most failures are an <strong>ungoverned-transition</strong> problem (no succession plan, no ownership agreement), not a sales problem.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 8. UNIFIED / CAREER ARC ============================= -->
+        <section id="unified-system" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">8. The Unified Career Arc: Human Capital vs Financial Capital</h2>
+                <p class="text-slate-400 text-sm mt-1">The right mix of the four plots shifts predictably as one form of capital replaces the other over a career.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-sky-400 font-semibold text-lg">
+                        <i class="fa-solid fa-hourglass-start"></i>
+                        <h3>Early Career: Human-Capital Rich</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        In your 20s and early 30s, your biggest asset isn't your bank balance — it's the <strong class="text-white">decades of future paychecks</strong> ahead of you that can absorb and recover from a bad bet. Savings are thin, but the runway to earn them back is long.
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-sky-900/50 space-y-2">
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider block"><i class="fa-solid fa-lightbulb"></i> How To Play It</span>
+                        <p class="text-xs text-slate-300">
+                            Take asymmetric career and venture risk now — job-hop for skills, negotiate equity, run a capped side venture. Time, not money, is your edge.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-purple-400 font-semibold text-lg">
+                        <i class="fa-solid fa-vault"></i>
+                        <h3>Late Career: Financial-Capital Rich</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        By your 40s-50s+, savings and any family business equity can dwarf the earning power left in your remaining working years — a single bad bet can no longer be "worked off" with decades of future paychecks.
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-2">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider block"><i class="fa-solid fa-shield-halved"></i> How To Play It</span>
+                        <p class="text-xs text-slate-300">
+                            Shift new capital toward preservation and diversification; formalize family business governance and succession well before you need it, not after.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-sky">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-sky-400"></i> Visual Memory Anchor: The Four Plots Feeding One Legacy
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 920 380" class="w-full h-auto min-w-[750px] font-sans">
+                        <defs>
+                            <marker id="arrow-uni-sky" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-uni-em" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+                            </marker>
+                            <marker id="arrow-uni-pu" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+                            </marker>
+                            <marker id="arrow-uni-am" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+                            </marker>
+                            <marker id="arrow-uni-pk" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ec4899"/>
+                            </marker>
+                        </defs>
+
+                        <g transform="translate(20, 175)">
+                            <rect width="170" height="90" rx="12" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="85" y="42" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="13">YOU</text>
+                            <text x="85" y="60" text-anchor="middle" fill="#e0effe" font-size="10">Career Timeline, Age 22-65+</text>
+                        </g>
+
+                        <rect x="320" y="20" width="260" height="65" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                        <text x="450" y="47" text-anchor="middle" fill="#34d399" font-weight="bold" font-size="11.5">1. EMPLOYMENT</text>
+                        <text x="450" y="64" text-anchor="middle" fill="#94a3b8" font-size="9.5">Cash floor, 20s onward</text>
+
+                        <rect x="320" y="100" width="260" height="65" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="450" y="127" text-anchor="middle" fill="#a78bfa" font-weight="bold" font-size="11.5">2. STOCK INVESTING</text>
+                        <text x="450" y="144" text-anchor="middle" fill="#94a3b8" font-size="9.5">Compounds all 40+ years</text>
+
+                        <rect x="320" y="180" width="260" height="65" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="450" y="207" text-anchor="middle" fill="#fbbf24" font-weight="bold" font-size="11.5">3. ENTREPRENEURSHIP</text>
+                        <text x="450" y="224" text-anchor="middle" fill="#94a3b8" font-size="9.5">Capped bets, prime earning years</text>
+
+                        <rect x="320" y="260" width="260" height="65" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+                        <text x="450" y="287" text-anchor="middle" fill="#f9a8d4" font-weight="bold" font-size="11.5">4. FAMILY BUSINESS</text>
+                        <text x="450" y="304" text-anchor="middle" fill="#94a3b8" font-size="9.5">Governed 10-15yrs pre-transition</text>
+
+                        <g transform="translate(700, 175)">
+                            <rect width="200" height="90" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="100" y="42" text-anchor="middle" fill="#38bdf8" font-weight="bold" font-size="12">LEGACY NET WORTH</text>
+                            <text x="100" y="60" text-anchor="middle" fill="#94a3b8" font-size="10">Retirement + Multi-Gen Wealth</text>
+                        </g>
+
+                        <path d="M 190 205 C 250 205, 260 52.5, 320 52.5" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-uni-em)" fill="none"/>
+                        <path d="M 190 215 C 250 215, 260 132.5, 320 132.5" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-uni-pu)" fill="none"/>
+                        <path d="M 190 225 C 250 225, 260 212.5, 320 212.5" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-uni-am)" fill="none"/>
+                        <path d="M 190 235 C 250 235, 260 292.5, 320 292.5" stroke="#ec4899" stroke-width="2" marker-end="url(#arrow-uni-pk)" fill="none"/>
+
+                        <path d="M 580 52.5 C 630 52.5, 640 220, 698 220" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-uni-sky)" fill="none"/>
+                        <path d="M 580 132.5 C 630 132.5, 640 220, 698 220" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-uni-sky)" fill="none"/>
+                        <path d="M 580 212.5 C 630 212.5, 640 220, 698 220" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-uni-sky)" fill="none"/>
+                        <path d="M 580 292.5 C 630 292.5, 640 220, 698 220" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-uni-sky)" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 9. ROADMAP ============================= -->
+        <section id="roadmap" class="space-y-8">
+            <div class="border-l-4 border-slate-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">9. Strategic Build Order: What To Do In Which Decade</h2>
+                <p class="text-slate-400 text-sm mt-1">Avoid the two most expensive personal-finance mistakes: risking your cash floor on a venture, or waiting until retirement to plan a succession.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Phase 1 (Mandatory Baseline, 20s)</div>
+                    <h3 class="text-xl font-bold text-white">Employment + Emergency Fund + Auto-Investing</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Builds the cash floor every other plot depends on</li>
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Starts the compounding clock while time is cheapest</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Feels slow, no glamour, easy to skip</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-amber-400 text-xs font-bold uppercase tracking-wider">Phase 2 (Safety &amp; Optionality, 30s-40s)</div>
+                    <h3 class="text-xl font-bold text-white">Capped Entrepreneurial Bets</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-amber-400"></i> Asymmetric upside, new skills, new networks</li>
+                        <li><i class="fa-solid fa-check text-amber-400"></i> Barbell-sized so failure can't sink the household</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> &#126;50% of ventures don't survive 5 years (BLS) — must be pre-budgeted</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-purple-400 text-xs font-bold uppercase tracking-wider">Phase 3 (Legacy &amp; Optimization, 40s-60s+)</div>
+                    <h3 class="text-xl font-bold text-white">Family Business Governance &amp; Succession</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-purple-400"></i> Multi-generational compounding &amp; estate efficiency</li>
+                        <li><i class="fa-solid fa-check text-purple-400"></i> Preserves financial capital as human capital declines</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Requires uncomfortable family conversations 10-15yrs early</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-8 mt-16 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>&#169; 2026 The Wealth Barbell Masterclass. Personal finance &amp; career-risk framework, for education only — not individualized financial or legal advice.</p>
+            <p class="font-mono text-slate-600">Single-File Standalone Interactive Edition</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function exportMarkdown() {
+            const markdownContent = `# The Wealth Barbell: Employment, Investing, Entrepreneurship & Family Business
+
+## Executive Abstract
+Employment, stock investing, entrepreneurship, and a family business are four separate games with four separate time horizons and risk profiles. Financial and career mistakes usually come from playing the wrong game with the wrong money or time, not from picking the "wrong" game. Nassim Taleb's Barbell Strategy — extreme safety on one side, a small pre-capped risky bet on the other, nothing in the fragile middle — is the sequencing rule that lets you play all four without any single bet sinking you.
+
+---
+
+## 1. The Four Plots At A Glance
+
+| Plot | Metaphor | Time Horizon | Risk Profile | Core Question |
+| :--- | :--- | :--- | :--- | :--- |
+| **Employment** | The Vegetable Patch | Immediate, ongoing | Lowest, linear | "What feeds us THIS season?" |
+| **Stock Investing** | The Orchard | 10-40 years | Low if diversified & patient | "What compounds untouched?" |
+| **Entrepreneurship** | The Greenhouse | 2-5 years/attempt | High, must be capped | "What small bet could 10x?" |
+| **Family Business** | The Ancestral Farm | 20-50+ years | Concentrated, illiquid | "What must outlive me?" |
+
+---
+
+## 2. Grounding Facts
+- BLS (2024): ~20.4% of new U.S. businesses fail in year 1; ~49.4% fail within 5 years.
+- Family Firm Institute / John Ward (Kellogg School): ~30% of family businesses survive to Gen 2; ~12% to Gen 3; ~3% beyond.
+- Bengen (1994) / Trinity Study (Cooley, Hubbard & Walz, 1998): the 4% safe withdrawal rate was validated across rolling 30-year historical market periods of continuous investment.
+- Nassim Taleb's Barbell Strategy: ~90% extreme safety, ~10% capped speculative upside, avoid the "moderate risk" middle.
+
+---
+
+## 3. The Barbell Life: One Distilled Rule
+Match every dollar and every hour to its correct time horizon. Never let a short-horizon obligation (rent, groceries) depend on a long-horizon or high-variance asset (an unproven venture, an illiquid family business). Employment funds the present. Index investing compounds the multi-decade future untouched. Entrepreneurship gets a capped, pre-budgeted slice of risk capital. The family business gets governed like the long-horizon asset it is, with a written succession plan.
+
+---
+
+## 4. Active Recall
+1. **Employment's real job:** it funds the emergency reserve and investable surplus that make every other bet survivable.
+2. **Time in market vs timing it:** the market's best days cluster right after its worst days — staying invested through full cycles is what the Trinity Study's 4% rule actually tested.
+3. **What makes entrepreneurship survivable:** a pre-committed risk-capital budget, sized like a barbell, capped before the venture starts.
+4. **Why family businesses fail by Gen 3:** ~12% survival — almost always an ungoverned-transition problem, not a sales problem.
+`;
+
+            const blob = new Blob([markdownContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'The_Wealth_Barbell_Masterclass.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

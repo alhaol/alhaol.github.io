@@ -1,0 +1,1046 @@
+    <!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Synthetic Mind: Masterclass on Knowledge, Cognitive & Causal Graphs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        kg: '#10b981',   // Emerald (Grounding, Truth, Facts)
+                        cog: '#8b5cf6',  // Violet (Psychology, Mind, Memory)
+                        causal: '#f59e0b', // Amber (Physics, Cause, Energy)
+                        wisdom: '#ec4899', // Rose/Pink (Wisdom, Heuristics, First Principles)
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; font-size: 11pt; }
+            .print-page-break { page-break-before: always; }
+            .shadow-xl, .shadow-2xl, .shadow-md, .glow-kg, .glow-cog, .glow-causal { box-shadow: none !important; }
+            .border { border-color: #d1d5db !important; }
+            pre, code { white-space: pre-wrap !important; word-break: break-all; }
+        }
+        .prose pre { background-color: #0f172a; color: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; }
+        .glow-kg { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
+        .glow-cog { box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25); }
+        .glow-causal { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
+        .glow-wisdom { box-shadow: 0 0 25px -5px rgba(236, 72, 153, 0.25); }
+        .tab-btn.active-kg { border-color: #10b981; color: #34d399; background-color: rgba(16, 185, 129, 0.1); }
+        .tab-btn.active-cog { border-color: #8b5cf6; color: #a78bfa; background-color: rgba(139, 92, 246, 0.1); }
+        .tab-btn.active-causal { border-color: #f59e0b; color: #fbbf24; background-color: rgba(245, 158, 11, 0.1); }
+        
+        /* Sleek custom scrollbars for code boxes */
+        pre::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #090d16;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white leading-relaxed">
+
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-lg text-white font-bold shadow-lg shadow-sky-500/20">
+                    <i class="fa-solid fa-brain text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-tight">The Synthetic Mind</h1>
+                    <p class="text-xs text-slate-400">Human Intuition & AI Tri-Graph Architecture</p>
+                </div>
+            </div>
+            
+            <div class="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-300">
+                <a href="#pedagogy" class="hover:text-sky-400 transition-colors">Cognitive Design</a>
+                <a href="#mnemonic-matrix" class="hover:text-sky-400 transition-colors">4-Graph Matrix</a>
+                <a href="#knowledge-graph" class="hover:text-emerald-400 transition-colors">1. Knowledge</a>
+                <a href="#cognitive-graph" class="hover:text-purple-400 transition-colors">2. Cognitive</a>
+                <a href="#causal-graph" class="hover:text-amber-400 transition-colors">3. Causal</a>
+                <a href="#wisdom-graph" class="hover:text-pink-400 transition-colors">4. Wisdom</a>
+                <a href="#active-recall" class="hover:text-cyan-400 transition-colors">Active Recall</a>
+                <a href="#unified-system" class="hover:text-sky-400 transition-colors">Unified Engine</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="exportMarkdown()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-file-arrow-down text-sky-400"></i>
+                    <span>Export .MD</span>
+                </button>
+                <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-lg flex items-center gap-2 shadow-lg shadow-sky-600/30 transition-all">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Print / Save PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+        
+        <section class="relative rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 p-8 sm:p-12 overflow-hidden shadow-2xl">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="max-w-4xl relative z-10 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/80 border border-sky-800/50 text-sky-400 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-lightbulb"></i> Human Memory & AI Architecture Masterclass
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                    Mastering Graphs Through <br>
+                    <span class="bg-gradient-to-r from-emerald-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
+                        Human Cognitive Intuition
+                    </span>
+                </h1>
+                <p class="text-slate-300 text-lg sm:text-xl leading-relaxed font-light">
+                    Why do human brains effortlessly solve multi-step problems with paper and pen, while $100B Large Language Models hallucinate? Learn how <strong class="text-white">Knowledge</strong>, <strong class="text-white">Cognitive</strong>, <strong class="text-white">Causal</strong>, and <strong class="text-white">Wisdom Graphs</strong> mirror human memory and heuristics, and how to extract inherited wisdom so you remember it forever.
+                </p>
+
+                <!-- Dual Coding Memory Hook Box -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg text-xl"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-emerald-400">Knowledge Graph</div>
+                            <div class="text-sm font-semibold text-white">The Board</div>
+                            <div class="text-xs text-slate-400">"What IS true?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-purple-500/20 text-purple-400 rounded-lg text-xl"><i class="fa-solid fa-book-bookmark"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-purple-400">Cognitive Graph</div>
+                            <div class="text-sm font-semibold text-white">The Journal</div>
+                            <div class="text-xs text-slate-400">"How did I think?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-amber-500/20 text-amber-400 rounded-lg text-xl"><i class="fa-solid fa-gears"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-amber-400">Causal Graph</div>
+                            <div class="text-sm font-semibold text-white">The Machine</div>
+                            <div class="text-xs text-slate-400">"What moves what?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-pink-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-pink-500/20 text-pink-400 rounded-lg text-xl"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-pink-400">Wisdom Graph</div>
+                            <div class="text-sm font-semibold text-white">The Rulebook</div>
+                            <div class="text-xs text-slate-400">"What rule applies?"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="wisdom-graph" class="space-y-8">
+            <div class="border-l-4 border-pink-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">5. Wisdom Graphs: Principles, Heuristics & Meta-Learning</h2>
+                    <span class="px-3 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded-full">META-HEURISTIC LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Extracting timeless first-principles, decision heuristics, and governing rules from accumulated episodes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-w-0">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 min-w-0">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-feather-pointed text-pink-400"></i> Wisdom Extraction: Going Beyond Facts & Reasoning Steps
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        While Knowledge Graphs hold facts and Cognitive Graphs trace episodic steps, <strong class="text-white">Wisdom Extraction</strong> synthesizes hundreds of past runs into generalized <strong class="text-pink-300">Axioms & Heuristics</strong>. In human cognition, this is how expert intuition forms: moving from memorizing rules to effortless pattern abstraction.
+                    </p>
+                    
+                    <div class="p-4 bg-slate-950 rounded-xl border border-pink-900/50 space-y-3 min-w-0">
+                        <h4 class="text-xs font-bold uppercase text-pink-400 tracking-wider">The DIKW Wisdom Pyramid Engine</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                            <div class="p-2 bg-slate-900 border border-slate-800 rounded">
+                                <span class="text-slate-400 block font-bold">Data / Facts</span>
+                                <span class="text-[10px] text-slate-500">Raw Telemetry</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-emerald-800/50 rounded">
+                                <span class="text-emerald-400 block font-bold">Knowledge</span>
+                                <span class="text-[10px] text-slate-500">Bi-Temporal Entities</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-amber-800/50 rounded">
+                                <span class="text-amber-400 block font-bold">Causal Mech</span>
+                                <span class="text-[10px] text-slate-500">Invariants & do(X)</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-pink-500/80 rounded glow-wisdom">
+                                <span class="text-pink-400 block font-bold">Wisdom Rule</span>
+                                <span class="text-[10px] text-pink-300">Distilled Heuristic</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between min-w-0">
+                    <div class="space-y-3 min-w-0">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> Wisdom Extraction Prompt Pattern</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-400 text-[10px] font-semibold">YAML</span>
+                        </div>
+                        <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-pink-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-pink-400"># Wisdom Extraction Meta-Prompt Pattern Specification</span>
+<span class="text-purple-400">system_prompt</span>: <span class="text-amber-300">|
+  You are a Wisdom Synthesis Engine. 
+  Analyze N Cognitive Trace logs and extract generalized heuristics.
+  Filter episodic noise and distill core invariants into rules.</span>
+
+<span class="text-purple-400">input_schema</span>:
+  <span class="text-sky-400">source_episodes</span>: [<span class="text-emerald-300">"EP-901"</span>, <span class="text-emerald-300">"EP-1102"</span>, <span class="text-emerald-300">"EP-1405"</span>]
+  <span class="text-sky-400">domain</span>: <span class="text-emerald-300">"SOC Incident Response"</span>
+
+<span class="text-purple-400">extraction_rules</span>:
+  - <span class="text-slate-300">Identify recurring condition-action invariants across episodes.</span>
+  - <span class="text-slate-300">Formulate high-confidence IF-THEN rules to bypass multi-step reasoning.</span>
+  - <span class="text-slate-300">Require confidence_score > 0.95 and min 5 supporting runs.</span>
+
+<span class="text-purple-400">output_format</span>:
+  <span class="text-sky-400">heuristic_id</span>: <span class="text-emerald-300">"H-SOC-004"</span>
+  <span class="text-sky-400">rule_name</span>: <span class="text-emerald-300">"Automated Service RDP Suppression"</span>
+  <span class="text-sky-400">if_conditions</span>:
+    - <span class="text-emerald-300">"Port 3389 active AND User == AutomatedService"</span>
+    - <span class="text-emerald-300">"Maintenance Window == Active"</span>
+  <span class="text-sky-400">then_rule</span>: <span class="text-emerald-300">"Suppress Alert; Do NOT trigger isolate_host()"</span>
+  <span class="text-sky-400">confidence_score</span>: <span class="text-amber-400">0.992</span></code></pre>
+                    </div>
+                    <p class="text-xs text-slate-500 italic mt-2">
+                        Wisdom graphs reduce LLM inference cost by 90% by substituting multi-step reasoning with proven meta-heuristics.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="active-recall" class="space-y-8">
+            <div class="border-l-4 border-cyan-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">6. Reader Wisdom Retention & Active Recall System</h2>
+                    <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded-full">LONG-TERM MEMORY LOCK</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Interactive self-testing tools designed to lock these mental models into your long-term biological memory before you leave.</p>
+            </div>
+
+            <!-- Interactive Flashcards / Self-Test -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-400">
+                        <span>RECALL CUE #1</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What problem does a Knowledge Graph solve that Vector RAG fails at?</h4>
+                    <button onclick="toggleAnswer('ans-1')" class="text-xs px-3 py-1.5 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg hover:bg-emerald-900 w-full font-medium transition-colors">
+                        Show Wisdom Answer
+                    </button>
+                    <div id="ans-1" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        Vector RAG matches string similarity regardless of time or entity state. A Knowledge Graph anchors facts into <strong>bi-temporal deterministic entities</strong> (Valid Time vs Transaction Time).
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-purple-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-purple-400">
+                        <span>RECALL CUE #2</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why store Cognitive Graphs instead of raw LLM chat histories?</h4>
+                    <button onclick="toggleAnswer('ans-2')" class="text-xs px-3 py-1.5 bg-purple-950 text-purple-300 border border-purple-800 rounded-lg hover:bg-purple-900 w-full font-medium transition-colors">
+                        Show Wisdom Answer
+                    </button>
+                    <div id="ans-2" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        Raw chat history leads to O(N²) token bloat and 'Lost in the Middle' decay. Cognitive Graphs store structured reasoning traces for instant replay and EU AI Act Art. 12 compliance.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-amber-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-400">
+                        <span>RECALL CUE #3</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What is Judea Pearl's Level 2 Intervention $do(X)$?</h4>
+                    <button onclick="toggleAnswer('ans-3')" class="text-xs px-3 py-1.5 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg hover:bg-amber-900 w-full font-medium transition-colors">
+                        Show Wisdom Answer
+                    </button>
+                    <div id="ans-3" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        Level 2 evaluates the outcome of an active modification $P(Y | do(X))$, predicting physical side-effects before performing actions in real systems.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-pink-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400">
+                        <span>RECALL CUE #4</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What is the core purpose of the Wisdom Graph?</h4>
+                    <button onclick="toggleAnswer('ans-4')" class="text-xs px-3 py-1.5 bg-pink-950 text-pink-300 border border-pink-800 rounded-lg hover:bg-pink-900 w-full font-medium transition-colors">
+                        Show Wisdom Answer
+                    </button>
+                    <div id="ans-4" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">
+                        Wisdom Graphs compress repeated episodic experiences into reusable, high-confidence <strong>Heuristic Rules</strong> and <strong>First-Principles Axioms</strong>.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="unified-system" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">7. The Master Unified Quad-Graph Runtime Engine</h2>
+                <p class="text-slate-400 text-sm mt-1">End-to-End Orchestration: How an AI Agent coordinates Knowledge, Cognitive, Causal, and Wisdom graphs in real-time.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Human Memory Bottleneck Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-sky-400 font-semibold text-lg">
+                        <i class="fa-solid fa-brain"></i>
+                        <h3>Human Working Memory Limits</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Your conscious brain is severely constrained by <strong class="text-white">Miller’s Law (7 ± 2 items)</strong> and <strong class="text-white">Cowan’s Working Memory Capacity (4 ± 1 active chunks)</strong>. When you try to hold a complex 10-step math problem in your head, your brain experiences <em>Cognitive Overload (Sweller)</em> and suffers memory decay (Ebbinghaus).
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-sky-900/50 space-y-2">
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider block"><i class="fa-solid fa-lightbulb"></i> How Humans Adapt: Symbolic Externalization</span>
+                        <p class="text-xs text-slate-300">
+                            Humans survive limited working memory by offloading facts onto external visual artifacts: tax forms, architectural blueprints, case notes, and flowcharts.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- LLM Parallel Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-purple-400 font-semibold text-lg">
+                        <i class="fa-solid fa-microchip"></i>
+                        <h3>Synthetic Context Degradation (The LLM Mirror)</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        LLMs suffer from the exact same limitation! Even with 1-Million-token context windows, standard O(N²) dot-product self-attention mechanisms suffer from <strong class="text-white">The "Lost in the Middle" Effect</strong>. Distractor tokens dilute key entity weights, resulting in hallucinations, lost logic, and context rot.
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-2">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider block"><i class="fa-solid fa-shield-halved"></i> How AI Agents Adapt: The Tri-Graph Scaffold</span>
+                        <p class="text-xs text-slate-300">
+                            Just as a human detective uses a whiteboard, an AI agent offloads facts, thoughts, and mechanisms into Knowledge, Cognitive, and Causal graphs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SVG 1: Cognitive Mirror Diagram -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-cog">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-sky-400"></i> Visual Memory Anchor 1: Biological Brain Memory vs. Synthetic Tri-Graph AI
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 310" class="w-full h-auto min-w-[720px] font-sans">
+                        <defs>
+                            <linearGradient id="bio-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.2"/>
+                                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                            </linearGradient>
+                            <linearGradient id="synth-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.2"/>
+                                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                            </linearGradient>
+
+                            <marker id="arrow-main" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-kg-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+                            </marker>
+                            <marker id="arrow-cog-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa"/>
+                            </marker>
+                            <marker id="arrow-causal-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Left Side: Biological Brain Memory Systems -->
+                        <rect x="20" y="20" width="390" height="270" rx="16" fill="url(#bio-grad)" stroke="#0284c7" stroke-width="1.5"/>
+                        <text x="40" y="48" fill="#38bdf8" font-weight="bold" font-size="12" letter-spacing="0.5">BIOLOGICAL HUMAN BRAIN</text>
+                        
+                        <rect x="40" y="65" width="350" height="48" rx="8" fill="#0f172a" stroke="#0284c7"/>
+                        <text x="55" y="85" fill="#e2e8f0" font-size="11" font-weight="bold">Working Memory (Cowan's 4 Chunks)</text>
+                        <text x="55" y="100" fill="#94a3b8" font-size="9.5">Fails under heavy calculations / stress</text>
+
+                        <rect x="40" y="123" width="350" height="42" rx="8" fill="#0f172a" stroke="#10b981"/>
+                        <text x="55" y="148" fill="#34d399" font-size="11" font-weight="bold">Semantic Memory (Facts & Taxonomies)</text>
+
+                        <rect x="40" y="175" width="350" height="42" rx="8" fill="#0f172a" stroke="#8b5cf6"/>
+                        <text x="55" y="200" fill="#a78bfa" font-size="11" font-weight="bold">Episodic Memory (Life Case Experiences)</text>
+
+                        <rect x="40" y="227" width="350" height="42" rx="8" fill="#0f172a" stroke="#f59e0b"/>
+                        <text x="55" y="252" fill="#fbbf24" font-size="11" font-weight="bold">Mental Models & Physics (Cause & Effect)</text>
+
+                        <!-- Middle Connecting Arrows (Calculated to stop exactly at border without penetrating) -->
+                        <line x1="400" y1="89" x2="462" y2="89" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-main)"/>
+                        <line x1="400" y1="144" x2="462" y2="144" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-kg-m)"/>
+                        <line x1="400" y1="196" x2="462" y2="196" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-cog-m)"/>
+                        <line x1="400" y1="248" x2="462" y2="248" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-causal-m)"/>
+
+                        <!-- Right Side: Synthetic AI Tri-Graph Systems -->
+                        <rect x="470" y="20" width="390" height="270" rx="16" fill="url(#synth-grad)" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <text x="490" y="48" fill="#c084fc" font-weight="bold" font-size="12" letter-spacing="0.5">SYNTHETIC AGENT (Tri-Graph Engine)</text>
+
+                        <rect x="490" y="65" width="350" height="48" rx="8" fill="#0f172a" stroke="#8b5cf6"/>
+                        <text x="505" y="85" fill="#e2e8f0" font-size="11" font-weight="bold">LLM Context Window (In-Attention)</text>
+                        <text x="505" y="100" fill="#94a3b8" font-size="9.5">Suffers from 'Lost in Middle' & Context Decay</text>
+
+                        <rect x="490" y="123" width="350" height="42" rx="8" fill="#0f172a" stroke="#10b981"/>
+                        <text x="505" y="148" fill="#34d399" font-size="11" font-weight="bold">1. KNOWLEDGE GRAPH (Grounding Layer)</text>
+
+                        <rect x="490" y="175" width="350" height="42" rx="8" fill="#0f172a" stroke="#8b5cf6"/>
+                        <text x="505" y="200" fill="#a78bfa" font-size="11" font-weight="bold">2. COGNITIVE GRAPH (Episodic Memory)</text>
+
+                        <rect x="490" y="227" width="350" height="42" rx="8" fill="#0f172a" stroke="#f59e0b"/>
+                        <text x="505" y="252" fill="#fbbf24" font-size="11" font-weight="bold">3. CAUSAL GRAPH (Interventional SCM)</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="mnemonic-matrix" class="space-y-8">
+            <div class="border-l-4 border-emerald-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">2. The Mnemonic Triad: The Detective's Metaphor</h2>
+                <p class="text-slate-400 text-sm mt-1">To lock each graph into your human memory forever, picture a Master Detective solving case 40,113 at 04:12 AM.</p>
+            </div>
+
+            <!-- The Mnemonic Comparison Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Knowledge Graph Metaphor Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-emerald-500/50 transition-all glow-kg">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">GRAPH #1</span>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-300 text-xs font-bold">FACTS</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Knowledge Graph
+                        </h3>
+                        <div class="text-xs font-semibold text-emerald-400 italic">"The Detective's Crime Scene Board"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> Photos pinned on a corkboard connected by string. <em>"Server A belongs to Subnet B, owned by Alice."</em>
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-emerald-300 font-mono">"What IS true right now, and who said so?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Unit:</strong> Entities & Bi-temporal Triples</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Fixes Failure:</strong> "Confidently Wrong" / Hallucinations</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Human Parallel:</strong> Semantic Memory</li>
+                    </ul>
+                </div>
+
+                <!-- Cognitive Graph Metaphor Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-purple-500/50 transition-all glow-cog">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">GRAPH #2</span>
+                        <span class="px-2.5 py-1 rounded-full bg-purple-950 border border-purple-800 text-purple-300 text-xs font-bold">THOUGHTS</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-purple-400"></i> Cognitive Graph
+                        </h3>
+                        <div class="text-xs font-semibold text-purple-400 italic">"The Detective's Case Notebook"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> A diary of past deductions. <em>"At 03:00, I suspected lateral movement, tested IP .4, and found it was benign."</em>
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-purple-300 font-mono">"How did I reach this thought, and what did I conclude before?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Unit:</strong> Reasoning Traces & Hypotheses</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Fixes Failure:</strong> "Learns Nothing Overnight" / Re-work</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Human Parallel:</strong> Episodic Memory</li>
+                    </ul>
+                </div>
+
+                <!-- Causal Graph Metaphor Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-amber-500/50 transition-all glow-causal">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">GRAPH #3</span>
+                        <span class="px-2.5 py-1 rounded-full bg-amber-950 border border-amber-800 text-amber-300 text-xs font-bold">PHYSICS</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-gears text-amber-400"></i> Causal Graph
+                        </h3>
+                        <div class="text-xs font-semibold text-amber-400 italic">"The Domino Machine Blueprint"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> Understanding physical levers. <em>"If I press Switch A, light B turns off because wire C connects them."</em>
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-amber-300 font-mono">"What actually moves what if I intervene do(X)?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Unit:</strong> Structural Equations & $do$-calculus</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Fixes Failure:</strong> "Broke When Nothing Broke" / Drift</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Human Parallel:</strong> Mental Intuitive Physics</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="knowledge-graph" class="space-y-8">
+            <div class="border-l-4 border-emerald-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">3. Knowledge Graphs: Grounding Reality & Semantic Memory</h2>
+                    <span class="px-3 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold rounded-full">GROUNDING LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Converting unstructured document text into unambiguous, deterministic entity truths.</p>
+            </div>
+
+            <!-- Deep Dive Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-emerald-400"></i> The Human Story: Why Vector RAG Fails Your Brain
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Imagine a security team where a rookie asks: <em>"Is server SRV-4471 safe to reboot?"</em> Vector RAG searches document embeddings and finds a 2023 Wiki page saying <em>"SRV-4471 is our primary Domain Controller!"</em> The agent escalates to P1 emergency.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        In reality, SRV-4471 was decommissioned yesterday and turned into a print server! Flat document retrieval failed because text chunks do not understand <strong>time or entity lifecycles</strong>.
+                    </p>
+
+                    <!-- Bi-Temporal Recall Anchor -->
+                    <div class="p-4 bg-slate-950 rounded-xl border border-emerald-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-emerald-400 tracking-wider">The Engineering Solution: Bi-Temporal Edge Stamps</h4>
+                        <p class="text-xs text-slate-300">
+                            Knowledge Graphs eliminate this by making <strong>entities</strong> (not documents) the unit of storage, stamped with two distinct timestamps (as seen in Microsoft GraphRAG and Zep/Graphiti):
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-emerald-400 block font-bold">t_valid (Valid Time)</span>
+                                <span class="text-slate-400">When the fact was actually true in the real world (e.g., 2026-08-01 to NOW).</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">t_transaction (System Time)</span>
+                                <span class="text-slate-400">When the AI system ingested and recorded the edge.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Sidebar -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-emerald-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-emerald-500 text-xs text-emerald-200 italic leading-relaxed">
+                            "A Knowledge Graph converts fuzzy text documents into crisp, deterministic entities so the AI knows what is true RIGHT NOW."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Primary Query Language:</strong> Cypher / SPARQL</div>
+                            <div><strong class="text-slate-200">Traversal Latency:</strong> &lt; 5 ms (1-2 hop deterministic)</div>
+                            <div><strong class="text-slate-200">Main Trade-off:</strong> High initial ontology setup effort</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SVG 2: Knowledge Graph Traversal SVG (Precise Geometry Offsets) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-kg">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-emerald-400"></i> Visual Memory Anchor 2: Knowledge Graph Bi-Temporal Traversal
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 270" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-kg-2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+                            </marker>
+                            <marker id="arrow-kg-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Host Node (cx: 110, cy: 135, r: 44) -->
+                        <g transform="translate(110, 135)">
+                            <circle r="44" fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="12" font-weight="bold">SRV-4471</text>
+                            <text text-anchor="middle" dy="14" fill="#94a3b8" font-size="9.5">Server Host</text>
+                        </g>
+
+                        <!-- Domain Controller Role (cx: 410, cy: 60, r: 40) -->
+                        <g transform="translate(410, 60)">
+                            <circle r="40" fill="#0f172a" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            <text text-anchor="middle" dy="-4" fill="#94a3b8" font-size="11">DomainCtrl</text>
+                            <text text-anchor="middle" dy="13" fill="#f87171" font-size="8.5" font-weight="semibold">EXPIRED (2023)</text>
+                        </g>
+
+                        <!-- Print Server Role (cx: 410, cy: 210, r: 40) -->
+                        <g transform="translate(410, 210)">
+                            <circle r="40" fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="11" font-weight="bold">PrintServer</text>
+                            <text text-anchor="middle" dy="13" fill="#34d399" font-size="8.5" font-weight="bold">ACTIVE ROLE</text>
+                        </g>
+
+                        <!-- Subnet Node (cx: 730, cy: 210, r: 40) -->
+                        <g transform="translate(730, 210)">
+                            <circle r="40" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="11" font-weight="bold">Subnet-04</text>
+                            <text text-anchor="middle" dy="13" fill="#38bdf8" font-size="9">Low Security</text>
+                        </g>
+
+                        <!-- Edges calculated with exact radius + marker offsets to stop outside target shapes -->
+                        <!-- Edge 1: Host to Expired Role (x1: 154.6, y1: 123.8 -> x2: 363.4, y2: 71.6) -->
+                        <line x1="154.6" y1="123.8" x2="363.4" y2="71.6" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrow-kg-red)"/>
+                        <rect x="185" y="82" width="140" height="22" fill="#0f172a" stroke="#ef4444" stroke-width="0.5" rx="5"/>
+                        <text x="255" y="96" text-anchor="middle" fill="#f87171" font-size="8.5" font-weight="medium">r.valid_to = 2025-12-31</text>
+
+                        <!-- Edge 2: Host to Active Role (x1: 154.6, y1: 146.2 -> x2: 363.4, y2: 198.4) -->
+                        <line x1="154.6" y1="146.2" x2="363.4" y2="198.4" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-kg-2)"/>
+                        <rect x="185" y="164" width="140" height="22" fill="#0f172a" stroke="#10b981" stroke-width="0.8" rx="5"/>
+                        <text x="255" y="178" text-anchor="middle" fill="#34d399" font-size="9" font-weight="bold">HAS_ROLE (Active)</text>
+
+                        <!-- Edge 3: Active Role to Subnet (x1: 456, y1: 210 -> x2: 682, y2: 210) -->
+                        <line x1="456" y1="210" x2="682" y2="210" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-kg-2)"/>
+                        <rect x="514" y="199" width="110" height="22" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8" rx="5"/>
+                        <text x="569" y="213" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">LOCATED_IN</text>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Code Snippet -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-emerald-400"></i> Production Cypher Query (Neo4j / Memgraph) for Deterministic Grounding</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 text-[10px] font-semibold">CYPHER</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-emerald-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500">// Deterministic Agent Grounding Traversal with Bi-Temporal Validity Filter</span>
+<span class="text-purple-400">MATCH</span> (h:<span class="text-sky-400">Host</span> {<span class="text-amber-300">hostname</span>: <span class="text-emerald-300">"SRV-4471"</span>})-[r:<span class="text-emerald-400">HAS_ROLE</span>]->(role:<span class="text-sky-400">Role</span>)
+<span class="text-purple-400">WHERE</span> r.valid_from &lt;= <span class="text-sky-300">datetime</span>() <span class="text-purple-400">AND</span> (r.valid_to <span class="text-purple-400">IS NULL</span> <span class="text-purple-400">OR</span> r.valid_to &gt; <span class="text-sky-300">datetime</span>())
+<span class="text-purple-400">OPTIONAL MATCH</span> (h)-[:<span class="text-emerald-400">LOCATED_IN</span>]->(s:<span class="text-sky-400">Subnet</span>)-[:<span class="text-emerald-400">PROTECTED_BY</span>]->(fw:<span class="text-sky-400">Firewall</span>)
+<span class="text-purple-400">RETURN</span> h.hostname <span class="text-purple-400">AS</span> host, role.name <span class="text-purple-400">AS</span> active_role, s.cidr <span class="text-purple-400">AS</span> subnet, fw.policy_status <span class="text-purple-400">AS</span> firewall_state;</code></pre>
+            </div>
+        </section>
+
+        <section id="cognitive-graph" class="space-y-8">
+            <div class="border-l-4 border-purple-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">4. Cognitive Graphs: Episodic Thought Traces & Agent Memory</h2>
+                    <span class="px-3 py-1 bg-purple-950 border border-purple-800 text-purple-400 text-xs font-bold rounded-full">EPISODIC LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Recording the agent’s internal reasoning trajectories to eliminate re-derivation waste and ensure regulatory compliance.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-brain text-purple-400"></i> The Human Story: Why Your AI Keeps Forgetting Night After Night
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Imagine a detective who gets hit with memory loss every morning. Every night at 04:00 AM, alert 40,113 arrives. Every night, the detective executes the exact same 15 investigation steps, calls 10 APIs, spends $20 in tokens, and reaches the exact same conclusion: <em>"It's a harmless automated backup."</em>
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        A <strong class="text-white">Cognitive Graph</strong> gives the agent persistent episodic memory. It records the agent's internal thought nodes: <code class="text-purple-300 font-mono">(Observation) &rarr; (Hypothesis) &rarr; (Deduction) &rarr; (Conclusion)</code>.
+                    </p>
+
+                    <!-- EU AI Act Highlight -->
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-2">
+                        <h4 class="text-xs font-bold uppercase text-purple-400 tracking-wider"><i class="fa-solid fa-scale-balanced"></i> EU AI Act Article 12 Alignment (Enforceable August 2, 2026)</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Article 12 mandates automatic event logging and traceability for high-risk AI systems. Storing raw context windows is impossible due to cost and privacy; cognitive graphs provide structured, auditable proof of reasoning lineage.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Danger Box: OWASP ASI06 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 border-l-4 border-l-red-500">
+                    <h3 class="text-md font-bold text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-skull-crossbones"></i> The Dark Side: OWASP ASI06 (Memory Poisoning)
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Every feature making cognitive graphs efficient also makes them dangerous. If an attacker plants a single false hypothesis into the agent's memory trace (e.g., <em>"IP 10.0.4.2 is approved backup scanner"</em>), all future agent runs inherit this conclusion without re-checking raw data!
+                    </p>
+                    <blockquote class="p-2 bg-red-950/40 rounded border border-red-900 text-red-200 text-xs font-semibold">
+                        Golden Rule: Cognitive Graphs MUST be built downstream of Knowledge and Causal validation layers!
+                    </blockquote>
+                </div>
+            </div>
+
+            <!-- SVG 3: Cognitive Graph Trajectory (Expanded Box Bounds & Margins) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-cog">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-purple-400"></i> Visual Memory Anchor 3: Cognitive Trace & Validation Safeguard
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 230" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-cog-3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Step 1: Alert (x: 30 to 160) -->
+                        <g transform="translate(30, 80)">
+                            <rect width="130" height="70" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                            <text x="65" y="32" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">Alert 40,113</text>
+                            <text x="65" y="48" text-anchor="middle" fill="#64748b" font-size="9" font-weight="semibold">OBSERVATION</text>
+                        </g>
+
+                        <!-- Step 2: Hypothesis (x: 240 to 380) -->
+                        <g transform="translate(240, 80)">
+                            <rect width="140" height="70" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                            <text x="70" y="32" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">Lateral Movement?</text>
+                            <text x="70" y="48" text-anchor="middle" fill="#64748b" font-size="9" font-weight="semibold">HYPOTHESIS TRACE</text>
+                        </g>
+
+                        <!-- Step 3: OWASP Poisoned Memory (x: 460 to 600) -->
+                        <g transform="translate(460, 80)">
+                            <rect width="140" height="70" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/>
+                            <text x="70" y="32" text-anchor="middle" fill="#f87171" font-size="11" font-weight="bold">Poisoned Trace</text>
+                            <text x="70" y="48" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="semibold">OWASP ASI06</text>
+                        </g>
+
+                        <!-- Step 4: Knowledge Graph Guard (x: 680 to 840) -->
+                <g transform="translate(680, 75)">
+                    <rect width="160" height="80" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                    <text x="80" y="28" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">KG Guard Check</text>
+                    <text x="80" y="44" text-anchor="middle" fill="#94a3b8" font-size="9">Invalidates Memory</text>
+                    <text x="80" y="60" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">BLOCKED / CLEANED</text>
+                </g>
+
+                <!-- Connecting Arrows stopping 10px before target shape border -->
+                <line x1="162" y1="115" x2="230" y2="115" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-cog-3)"/>
+                <line x1="382" y1="115" x2="450" y2="115" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-cog-3)"/>
+                <line x1="602" y1="115" x2="670" y2="115" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-cog-3)"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Cognitive Trace Code Box -->
+    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-purple-400"></i> Episodic Cognitive Trace Structure (JSON-LD Trace)</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-purple-400 text-[10px] font-semibold">JSON</span>
+        </div>
+        <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-purple-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code>{
+  <span class="text-purple-400">"trace_id"</span>: <span class="text-emerald-300">"COG-2026-0814-001"</span>,
+  <span class="text-purple-400">"trigger_event"</span>: <span class="text-emerald-300">"Alert 40,113: Port 3389 Spikes"</span>,
+  <span class="text-purple-400">"thought_nodes"</span>: [
+    { <span class="text-sky-400">"step"</span>: 1, <span class="text-sky-400">"type"</span>: <span class="text-amber-300">"Observation"</span>, <span class="text-sky-400">"data"</span>: <span class="text-emerald-300">"Host SRV-4471 inbound RDP high"</span> },
+    { <span class="text-sky-400">"step"</span>: 2, <span class="text-sky-400">"type"</span>: <span class="text-amber-300">"Hypothesis"</span>, <span class="text-sky-400">"data"</span>: <span class="text-emerald-300">"Possible credential brute force or backup"</span> },
+    { <span class="text-sky-400">"step"</span>: 3, <span class="text-sky-400">"type"</span>: <span class="text-amber-300">"Validation"</span>, <span class="text-sky-400">"kg_verify"</span>: <span class="text-emerald-300">"SRV-4471 active_role == PrintServer"</span> }
+  ],
+  <span class="text-purple-400">"final_deduction"</span>: <span class="text-emerald-300">"Benign Automated Backup Task"</span>,
+  <span class="text-purple-400">"eu_ai_act_article_12_hash"</span>: <span class="text-emerald-300">"0xa7f9b83e2011c491"</span>
+}</code></pre>
+    </div>
+</section>
+
+        <section id="causal-graph" class="space-y-8">
+            <div class="border-l-4 border-amber-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">5. Causal Graphs: Mechanics, Interventions & Counterfactuals</h2>
+                    <span class="px-3 py-1 bg-amber-950 border border-amber-800 text-amber-400 text-xs font-bold rounded-full">INTERVENTIONAL LAYER</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Judea Pearl’s $do$-calculus framework to ensure AI agents survive real-world domain drift and distribution shifts.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Pearl's Ladder Explained for Human Intuition -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group"></i> Judea Pearl’s Ladder of Causation
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-slate-400">L1: ASSOCIATION (Seeing)</span>
+                                <span class="text-slate-500 font-mono">P(Y | X)</span>
+                            </div>
+                            <p class="text-xs text-slate-300">Statistical correlation. Standard ML/LLMs. <em>"RDP Traffic on Port 3389 correlates with malware."</em> Fails when RDP is enabled for hybrid work!</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-xl border border-amber-900/50 space-y-1">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-amber-400">L2: INTERVENTION (Doing)</span>
+                                <span class="text-amber-300 font-mono">P(Y | do(X))</span>
+                            </div>
+                            <p class="text-xs text-slate-300">Active agent action. <em>"If I execute do(isolate_server), will it shut down the active payment gateway?"</em></p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-xl border border-amber-500/30 space-y-1">
+                            <div class="flex justify-between items-center text-xs font-bold">
+                                <span class="text-amber-300">L3: COUNTERFACTUALS (Imagining)</span>
+                                <span class="text-amber-200 font-mono">P(Y_x | X', Y')</span>
+                            </div>
+                            <p class="text-xs text-slate-300">Post-incident audit. <em>"Would the data breach have occurred IF the agent had revoked credentials 10 minutes earlier?"</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python DoWhy Code Sample -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between min-w-0">
+                    <div class="space-y-3 min-w-0">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="flex items-center gap-1.5"><i class="fa-brands fa-python text-amber-400"></i> Structural Causal Model (DoWhy Python)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-400 text-[10px] font-semibold">PYTHON</span>
+                        </div>
+                        <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-amber-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-purple-400">import</span> dowhy
+<span class="text-purple-400">from</span> dowhy <span class="text-purple-400">import</span> CausalModel
+
+<span class="text-slate-500"># Define Structural Causal DAG for SOC Decisioning</span>
+causal_graph = <span class="text-emerald-300">"""
+digraph {
+    RemoteDesktopEnabled -> HighPort3389Traffic;
+    AttackerExploit -> HighPort3389Traffic;
+    AttackerExploit -> UnauthorizedAccess;
+    HighPort3389Traffic -> AgentAlertEscalation;
+}
+"""</span>
+
+model = CausalModel(
+    data=df,
+    treatment=<span class="text-emerald-300">'RemoteDesktopEnabled'</span>,
+    outcome=<span class="text-emerald-300">'UnauthorizedAccess'</span>,
+    graph=causal_graph
+)
+
+<span class="text-slate-500"># Identify interventional effect under do(RemoteDesktopEnabled=True)</span>
+identified_estimand = model.identify_effect()
+causal_estimate = model.estimate_effect(identified_estimand)
+<span class="text-sky-400">print</span>(<span class="text-emerald-300">"True Causal Impact:"</span>, causal_estimate.value)</code></pre>
+                    </div>
+                    <p class="text-xs text-slate-500 italic mt-2">
+                        Causal DAGs prune hypothesis search spaces from O(2^N) down to immediate topological parents Pa(Y).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="unified-system" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">6. The Master Unified Tri-Graph Runtime Engine</h2>
+                <p class="text-slate-400 text-sm mt-1">End-to-End Orchestration: How an AI Agent coordinates Knowledge, Cognitive, and Causal graphs in real-time.</p>
+            </div>
+
+            <!-- Master System Architecture SVG (Bezier curves + precise connector markers) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-sky">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-sky-400"></i> Visual Memory Anchor 4: Master Orchestration Sequence
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 920 360" class="w-full h-auto min-w-[750px] font-sans">
+                        <defs>
+                            <marker id="arrow-sky-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-kg-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+                            </marker>
+                            <marker id="arrow-cog-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+                            </marker>
+                            <marker id="arrow-causal-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Central Orchestrator (x: 30 to 200) -->
+                        <g transform="translate(30, 135)">
+                            <rect width="170" height="90" rx="12" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="85" y="42" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="13">AGENTIC CORE</text>
+                            <text x="85" y="60" text-anchor="middle" fill="#e0effe" font-size="10">Orchestrator LLM</text>
+                        </g>
+
+                        <!-- Step 1: Knowledge Graph (x: 320 to 580) -->
+                        <g transform="translate(320, 20)">
+                            <rect width="260" height="75" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                            <text x="130" y="34" text-anchor="middle" fill="#34d399" font-weight="bold" font-size="12">1. KNOWLEDGE GRAPH</text>
+                            <text x="130" y="52" text-anchor="middle" fill="#94a3b8" font-size="10">Fetch ground truth & bi-temporal state</text>
+                        </g>
+
+                        <!-- Step 2: Cognitive Graph (x: 320 to 580) -->
+                        <g transform="translate(320, 140)">
+                            <rect width="260" height="75" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                            <text x="130" y="34" text-anchor="middle" fill="#a78bfa" font-weight="bold" font-size="12">2. COGNITIVE GRAPH</text>
+                            <text x="130" y="52" text-anchor="middle" fill="#94a3b8" font-size="10">Check past conclusions & episodic traces</text>
+                        </g>
+
+                        <!-- Step 3: Causal Graph (x: 320 to 580) -->
+                        <g transform="translate(320, 260)">
+                            <rect width="260" height="75" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+                            <text x="130" y="34" text-anchor="middle" fill="#fbbf24" font-weight="bold" font-size="12">3. CAUSAL GRAPH</text>
+                            <text x="130" y="52" text-anchor="middle" fill="#94a3b8" font-size="10">Evaluate do(X) interventional risks</text>
+                        </g>
+
+                        <!-- Action Execution (x: 700 to 890) -->
+                        <g transform="translate(700, 135)">
+                            <rect width="190" height="90" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="95" y="42" text-anchor="middle" fill="#38bdf8" font-weight="bold" font-size="13">ACTION EXECUTION</text>
+                            <text x="95" y="60" text-anchor="middle" fill="#94a3b8" font-size="10">Targeted API Action / Suppress</text>
+                        </g>
+
+                        <!-- Smooth Bezier Connector Paths with exact end-point offsets -->
+                        <!-- Orchestrator to Graphs -->
+                        <path d="M 200 155 C 250 155, 260 57.5, 310 57.5" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-kg-4)" fill="none"/>
+                        <path d="M 200 180 L 310 180" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-cog-4)" fill="none"/>
+                        <path d="M 200 205 C 250 205, 260 297.5, 310 297.5" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-causal-4)" fill="none"/>
+
+                        <!-- Graphs to Action Execution -->
+                        <path d="M 580 57.5 C 630 57.5, 640 155, 690 155" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-sky-4)" fill="none"/>
+                        <path d="M 580 180 L 690 180" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-sky-4)" fill="none"/>
+                        <path d="M 580 297.5 C 630 297.5, 640 205, 690 205" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-sky-4)" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="space-y-8">
+            <div class="border-l-4 border-slate-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">7. Strategic Build Order & Engineering Roadmap</h2>
+                <p class="text-slate-400 text-sm mt-1">Avoid the two most expensive enterprise mistakes: building an ontology for a memory problem, or buying memory for a grounding problem.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Phase 1 (Mandatory Baseline)</div>
+                    <h3 class="text-xl font-bold text-white">Knowledge Graph</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Grounding truth with external referent</li>
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Bi-temporal timestamping</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> High initial ontology build effort</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-amber-400 text-xs font-bold uppercase tracking-wider">Phase 2 (Safety & Invariants)</div>
+                    <h3 class="text-xl font-bold text-white">Causal Graph</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-amber-400"></i> Survives environment & correlation shift</li>
+                        <li><i class="fa-solid fa-check text-amber-400"></i> Enables counterfactual post-mortems</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Hardest to formalize & build</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-purple-400 text-xs font-bold uppercase tracking-wider">Phase 3 (Optimization)</div>
+                    <h3 class="text-xl font-bold text-white">Cognitive Graph</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-purple-400"></i> Maximum token & execution efficiency</li>
+                        <li><i class="fa-solid fa-check text-purple-400"></i> Satisfies EU AI Act Art. 12 traceability</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Vulnerable to OWASP ASI06 memory poisoning</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-8 mt-16 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 The Synthetic Mind Masterclass. Based on Ibrahim AbuAlhaol's Tri-Graph Paradigm.</p>
+            <p class="font-mono text-slate-600">Generated for Executive & Senior System Architects | Single-File Standalone Interactive Edition</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        function exportMarkdown() {
+            const markdownContent = `# The Synthetic Mind: Masterclass on Knowledge, Cognitive, Causal & Wisdom Graphs for Autonomous AI Agents
+
+## Executive Abstract
+Large language models collapse under complex enterprise workflows due to fundamental limits in self-attention mechanisms and context windows. These synthetic limitations directly mirror biological human working memory constraints (Miller's $7 \\pm 2$ Law, Cowan's $4 \\pm 1$ Capacity Limit, and Sweller's Cognitive Load Theory). 
+
+To achieve resilient agentic intelligence, systems must implement a **Quad-Graph Architecture**:
+1. **Knowledge Graph (Grounding Layer):** Answers *"What is true right now, and who said so?"*
+2. **Cognitive Graph (Episodic Layer):** Answers *"How did I reach this conclusion previously?"*
+3. **Causal Graph (Interventional Layer):** Answers *"What actually moves what if I intervene?"*
+4. **Wisdom Graph (Meta-Heuristic Layer):** Answers *"What generalized rule or axiom governs this situation?"*
+
+---
+
+## 1. Biological vs Synthetic Cognitive Limits
+
+| Metric | Biological Human Brain | Synthetic LLM Context |
+| :--- | :--- | :--- |
+| **Working Memory** | $4 \\pm 1$ chunks (Cowan) | In-Context Window Attention |
+| **Degradation Mechanism** | Cognitive Fatigue / Heuristics | "Lost in the Middle" Effect ($O(N^2)$ Decay) |
+| **Long-Term Storage** | Semantic & Episodic Memory | Knowledge & Cognitive Graphs |
+| **Mechanisms & Logic** | Mental Causal Models | Structural Causal Models (SCM) |
+| **Intuition & Wisdom** | Heuristic Extraction | Wisdom Graph Axioms |
+
+---
+
+## 2. Wisdom Extraction Framework (DIKW Pyramid)
+Wisdom extraction translates hundreds of cognitive trace episodes into distilled, high-confidence heuristic axioms:
+- **Input:** $N$ cognitive execution logs
+- **Process:** Pattern abstraction & counterfactual safety validation
+- **Output:** Fast-path decision heuristics bypassing multi-step inference cost
+
+---
+
+## 3. Post-Read Active Recall & Wisdom Retention
+1. **Knowledge Graph Grounding:** Uses bi-temporal entities (Valid Time vs Transaction Time) to eliminate document ambiguity.
+2. **Cognitive Graph Lineage:** Tracks reasoning trace nodes for auditability and EU AI Act Art. 12 compliance.
+3. **Causal Graph Interventions:** Uses Pearl's $do(X)$ operator to predict structural side effects.
+4. **Wisdom Graph Rules:** Converts experience into reusable heuristics.
+`;
+
+            const blob = new Blob([markdownContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'The_Synthetic_Mind_Masterclass.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
