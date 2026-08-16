@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>port-check — snippet 06</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2e38; --text: #e6e8ec;
+    --muted: #9aa1ad; --accent: #5fb3ff; --good: #4fd18b; --warn: #ffb454;
+    --code-bg: #0b0d11; --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f7f8fa; --panel:#fff; --border:#e2e5ea; --text:#1b1f27; --muted:#5b6270; --code-bg:#f1f3f6; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+  a { color: var(--accent); }
+  a.back { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .desc { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .badges { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .badge {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  }
+  section { margin-bottom: 30px; }
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin: 0 0 10px; font-weight: 700;
+  }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 10px 6px 0; vertical-align: top; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; width: 110px; }
+  tr:last-child td, tr:last-child th { border-bottom: none; }
+  code { font-family: var(--mono); font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    font-family: var(--mono); font-size: 13px; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; margin: 0; white-space: pre;
+  }
+  ul.security { margin: 0; padding-left: 18px; }
+  ul.security li { margin-bottom: 6px; }
+  ul.security li::marker { color: var(--good); }
+  .filename { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; all snippets</a>
+
+  <h1>port-check</h1>
+  <p class="desc">Checks whether a TCP host:port is reachable within a timeout, using only bash builtins (no netcat required). Use it before a deploy or in a health-check script.</p>
+  <div class="badges">
+    <span class="badge">Bash</span>
+    <span class="badge">#06</span>
+  </div>
+
+  <section>
+    <h2>Source</h2>
+    <div class="filename">port-check.sh</div>
+    <pre><code>#!/usr/bin/env bash
+# Check TCP reachability of host:port within a timeout.
+# Usage: port-check.sh &lt;host&gt; &lt;port&gt; [timeout_seconds]
+set -euo pipefail
+host="$1"
+port="$2"
+timeout_s="${3:-3}"
+
+if timeout "$timeout_s" bash -c 'exec 3&lt;&gt;"/dev/tcp/$1/$2"' _ "$host" "$port" 2&gt;/dev/null; then
+  echo "open"
+else
+  echo "closed"
+  exit 1
+fi</code></pre>
+  </section>
+
+  <section>
+    <h2>Input</h2>
+    <div class="panel">
+      <table>
+        <tr><th>host</th><td>string — positional argument, hostname or IP, e.g. <code>db.internal</code></td></tr>
+        <tr><th>port</th><td>integer — positional argument, TCP port, e.g. <code>5432</code></td></tr>
+        <tr><th>timeout_s</th><td>integer — optional 3rd argument, seconds to wait; defaults to <code>3</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <div class="panel">
+      Prints <code>open</code> and exits 0 if the connection succeeds within the timeout; prints
+      <code>closed</code> and exits 1 otherwise.
+    </div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <pre><code>$ ./port-check.sh db.internal 5432
+open
+
+$ ./port-check.sh db.internal 9999 2
+closed</code></pre>
+  </section>
+
+  <section>
+    <h2>Config</h2>
+    <div class="panel">
+      No configuration required.
+    </div>
+  </section>
+
+  <section>
+    <h2>Security notes</h2>
+    <div class="panel">
+      <ul class="security">
+        <li><code>host</code>/<code>port</code> are passed into the inner <code>bash -c</code> as positional parameters (<code>$1</code>/<code>$2</code>), never string-interpolated into the command text, so a crafted hostname can't inject shell commands.</li>
+        <li><code>set -euo pipefail</code> ensures a missing argument fails loudly instead of running with an empty value.</li>
+        <li>Bounded by an explicit <code>timeout</code> so it can never hang a calling script indefinitely.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>

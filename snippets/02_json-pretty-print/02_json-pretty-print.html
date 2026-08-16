@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>json-pretty-print — snippet 02</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2e38; --text: #e6e8ec;
+    --muted: #9aa1ad; --accent: #5fb3ff; --good: #4fd18b; --warn: #ffb454;
+    --code-bg: #0b0d11; --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f7f8fa; --panel:#fff; --border:#e2e5ea; --text:#1b1f27; --muted:#5b6270; --code-bg:#f1f3f6; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+  a { color: var(--accent); }
+  a.back { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .desc { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .badges { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .badge {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  }
+  section { margin-bottom: 30px; }
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin: 0 0 10px; font-weight: 700;
+  }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 10px 6px 0; vertical-align: top; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; width: 110px; }
+  tr:last-child td, tr:last-child th { border-bottom: none; }
+  code { font-family: var(--mono); font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    font-family: var(--mono); font-size: 13px; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; margin: 0; white-space: pre;
+  }
+  ul.security { margin: 0; padding-left: 18px; }
+  ul.security li { margin-bottom: 6px; }
+  ul.security li::marker { color: var(--good); }
+  .filename { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; all snippets</a>
+
+  <h1>json-pretty-print</h1>
+  <p class="desc">Reads a JSON file, validates it, and prints it back indented and readable. Use it to sanity-check a config file or eyeball an API response saved to disk.</p>
+  <div class="badges">
+    <span class="badge">Python 3</span>
+    <span class="badge">#02</span>
+  </div>
+
+  <section>
+    <h2>Source</h2>
+    <div class="filename">json-pretty-print.py</div>
+    <pre><code>#!/usr/bin/env python3
+"""Validate a JSON file and pretty-print it."""
+import json
+import sys
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit("usage: json-pretty-print.py &lt;path&gt;")
+    try:
+        with open(sys.argv[1], "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except OSError as e:
+        sys.exit(f"error: {e}")
+    except json.JSONDecodeError as e:
+        sys.exit(f"invalid JSON: {e}")
+    print(json.dumps(data, indent=2, ensure_ascii=False))</code></pre>
+  </section>
+
+  <section>
+    <h2>Input</h2>
+    <div class="panel">
+      <table>
+        <tr><th>path</th><td>string — positional argument, path to a <code>.json</code> file, e.g. <code>config.json</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <div class="panel">
+      Prints the JSON re-formatted with 2-space indentation to stdout, exit 0. If the file is
+      missing/unreadable or not valid JSON, exits non-zero with a one-line error on stderr
+      instead of a stack trace.
+    </div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <pre><code>$ python3 json-pretty-print.py config.json
+{
+  "name": "svc",
+  "port": 8080
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Config</h2>
+    <div class="panel">
+      No configuration required.
+    </div>
+  </section>
+
+  <section>
+    <h2>Security notes</h2>
+    <div class="panel">
+      <ul class="security">
+        <li>Uses <code>json.load</code>, which only parses data (no code execution), unlike <code>eval</code>-based approaches.</li>
+        <li>Malformed JSON is caught and reported cleanly instead of leaking a raw traceback.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (two foldable docks: hub bottom-right → Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages; stats bottom-left → citations, patents, conferences, journals)
+├── index.html          # Main portfolio / CV page (two foldable docks: hub bottom-right → Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets; stats bottom-left → citations, patents, conferences, journals)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -77,16 +77,19 @@ No build step, no package manager.
 │   ├── workshops.json  # Workshop registry
 │   ├── assets/         # workshop.css — workshop-only components (exercises, callouts, motion)
 │   └── <slug>/         # One folder per workshop: index.html + images/
-└── pages/              # Masterclass Library — self-contained interactive learning pages
-    ├── index.html      # Static card-grid landing page (not data-driven; add a card per new class)
-    └── NNN_slug.html   # Individual masterclass pages (001_the_synthetic_mind.html …)
+├── pages/              # Masterclass Library — self-contained interactive learning pages
+│   ├── index.html      # Static card-grid landing page (not data-driven; add a card per new class)
+│   └── NNN_slug.html   # Individual masterclass pages (001_the_synthetic_mind.html …)
+└── snippets/           # Snippet Library — short, self-contained, vetted reference scripts
+    ├── index.html      # Card-grid gallery with filter (not data-driven; add a card per new snippet)
+    └── NN_slug/         # One folder per snippet: NN_slug.html doc page + source (.py/.sh/.js)
 ```
 
 ## Pages & Apps
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, motto, experience, education, patents, publications, recent activity. The portrait is the contact link (mailto). Every section folds, one open at a time. Two docks, both starting folded: **hub** bottom-right (`+` unfolds Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages; Presentations commented out) and **stats** bottom-left (`#` unfolds citations, patents, conferences, journals). Folding either flattens its glyph — `+` to `−`, `#` to `=` — and Esc or a click outside does the same. |
+| Portfolio | `/` | Full CV: bio, motto, experience, education, patents, publications, recent activity. The portrait is the contact link (mailto). Every section folds, one open at a time. Two docks, both starting folded: **hub** bottom-right (`+` unfolds Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets; Presentations commented out) and **stats** bottom-left (`#` unfolds citations, patents, conferences, journals). Folding either flattens its glyph — `+` to `−`, `#` to `=` — and Esc or a click outside does the same. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 47-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
@@ -95,7 +98,8 @@ No build step, no package manager.
 | Books | `/books/` | 2 books distilled into interactive workbooks: every model the book actually teaches gets a redrawn diagram, a what/how/when card and a worked example, all placed on a 2x2 memory map so a model can be found again mid-decision. Each page lets you sort your own items into a model's zones, sketch over the figure and answer three questions in place, with everything persisted locally and exportable as JSON. Login-gated. |
 | Presentations | `/presentations/` | Browser-native HTML decks (cyber theme + light/dark toggle). Arrow keys to navigate, `F` fullscreen, `T` theme, `O` overview, `N` speaker notes, `↓ pdf` button or `E` to export. Decks cloned from `Presentations/_template/`. Current decks: _template demo, The Efficiency Trilemma, Predicting the Network |
 | Workshops | `/workshops/` | 1-workshop hands-on series (shared deck engine, login-gated, code-first). Build-along decks where each module ends in a "your turn" exercise; real code embedded via the create-workshop-presentation-html skill's scripts. |
-| Pages | `/pages/` | Masterclass Library — 3 self-contained interactive learning pages: The Synthetic Mind (knowledge, cognitive, causal & wisdom graphs in AI agents), The Wealth Barbell (sequencing employment, investing, entrepreneurship & family business via Taleb's Barbell Strategy), The Grafted Tree (raising kids fluent in Western life and rooted in Islamic values). |
+| Pages | `/pages/` | Masterclass Library — 4 self-contained interactive learning pages: The Synthetic Mind (knowledge, cognitive, causal & wisdom graphs in AI agents), The Wealth Barbell (sequencing employment, investing, entrepreneurship & family business via Taleb's Barbell Strategy), The Grafted Tree (raising kids fluent in Western life and rooted in Islamic values), The AFPISH Operating System (Allah, family, profession, independence, social life & health as six scheduled processes). |
+| Snippets | `/snippets/` | Snippet Library — 10 short, self-contained, vetted reference scripts (Python, Bash, JavaScript) with a filterable card gallery. Each opens a doc sheet with usage, input/output, and source. Covers hash-file, json-pretty-print, find-large-files, csv-to-json, count-lines, port-check, backup-file, disk-usage-top, uuid-gen, slugify. |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |

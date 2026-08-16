@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Snippet Library</title>
+<style>
+  /* ---- tokens: dark-first blueprint, swapped consistently for light ---- */
+  :root {
+    --ground: #0a1f3d;
+    --ground-line: #12294a;      /* faint drafting grid on the ground */
+    --surface: #0e2749;
+    --line: #3a6199;             /* card borders / rules */
+    --line-soft: #1e3c66;        /* quiet dividers */
+    --ink: #eaf2ff;
+    --ink-dim: #93b0d6;
+    --accent: #e8a33d;           /* stamp-ink amber */
+    --accent-ink: #241a06;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Roboto Mono", monospace;
+    --sans: "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground: #f1ead9;
+      --ground-line: #e6dcc4;
+      --surface: #f8f3e6;
+      --line: #7897c0;
+      --line-soft: #cfc4a4;
+      --ink: #17233a;
+      --ink-dim: #4f5f7d;
+      --accent: #a9660f;
+      --accent-ink: #fff6e6;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #f1ead9;
+    --ground-line: #e6dcc4;
+    --surface: #f8f3e6;
+    --line: #7897c0;
+    --line-soft: #cfc4a4;
+    --ink: #17233a;
+    --ink-dim: #4f5f7d;
+    --accent: #a9660f;
+    --accent-ink: #fff6e6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background:
+      repeating-linear-gradient(0deg, var(--ground-line) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, var(--ground-line) 0 1px, transparent 1px 28px),
+      var(--ground);
+    color: var(--ink);
+    font: 15px/1.55 var(--sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  .sheet { max-width: 980px; margin: 0 auto; padding: 48px 24px 90px; }
+
+  header.title-block {
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    background: var(--surface);
+  }
+  header.title-block h1 {
+    font-size: 26px;
+    margin: 0;
+    letter-spacing: .01em;
+    text-wrap: balance;
+  }
+  header.title-block p {
+    margin: 4px 0 0;
+    color: var(--ink-dim);
+    font-size: 14px;
+    max-width: 46ch;
+  }
+  .sheet-ref {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    text-align: right;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+  .sheet-ref strong { color: var(--accent); font-weight: 700; }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .filter-row label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-dim);
+  }
+  #filter {
+    flex: 1 1 260px;
+    max-width: 340px;
+    padding: 9px 12px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    color: var(--ink);
+    font: 14px/1 var(--mono);
+  }
+  #filter:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  #filter::placeholder { color: var(--ink-dim); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    padding: 16px 16px 14px;
+  }
+  .card::before, .card::after {
+    content: "";
+    position: absolute;
+    width: 9px; height: 9px;
+    border: 1px solid var(--line);
+    pointer-events: none;
+  }
+  .card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+  .card:hover, .card:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
+  .card:hover::before, .card:hover::after,
+  .card:focus-visible::before, .card:focus-visible::after { border-color: var(--accent); }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .card-head .no { letter-spacing: .04em; }
+  .card-head .lang {
+    padding: 2px 7px;
+    border: 1px solid var(--line-soft);
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-size: 10px;
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 16px;
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: .04em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: border-color .12s ease; }
+    .card::before, .card::after { transition: border-color .12s ease; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="title-block">
+    <div>
+      <h1>Snippets</h1>
+      <p>Short, self-contained, vetted reference scripts. Open a sheet for usage, input/output, and source.</p>
+    </div>
+    <div class="sheet-ref">SHEET <strong id="count">10</strong> OF <strong id="total">10</strong><br>REV 2026-08-16</div>
+  </header>
+
+  <div class="filter-row">
+    <label for="filter">Filter</label>
+    <input id="filter" type="text" placeholder="name or language…" autocomplete="off">
+  </div>
+
+  <div class="grid" id="grid">
+    <a class="card" href="01_hash-file/01_hash-file.html">
+      <div class="card-head"><span class="no">No. 01</span><span class="lang">Python</span></div>
+      <h3>hash-file</h3>
+      <p>Print the SHA-256 checksum of a file.</p>
+    </a>
+    <a class="card" href="02_json-pretty-print/02_json-pretty-print.html">
+      <div class="card-head"><span class="no">No. 02</span><span class="lang">Python</span></div>
+      <h3>json-pretty-print</h3>
+      <p>Validate a JSON file and pretty-print it.</p>
+    </a>
+    <a class="card" href="03_find-large-files/03_find-large-files.html">
+      <div class="card-head"><span class="no">No. 03</span><span class="lang">Python</span></div>
+      <h3>find-large-files</h3>
+      <p>List files in a directory over a given size threshold.</p>
+    </a>
+    <a class="card" href="04_csv-to-json/04_csv-to-json.html">
+      <div class="card-head"><span class="no">No. 04</span><span class="lang">Python</span></div>
+      <h3>csv-to-json</h3>
+      <p>Convert a CSV file to a JSON array of objects.</p>
+    </a>
+    <a class="card" href="05_count-lines/05_count-lines.html">
+      <div class="card-head"><span class="no">No. 05</span><span class="lang">Python</span></div>
+      <h3>count-lines</h3>
+      <p>Count total lines across files matching a glob pattern.</p>
+    </a>
+    <a class="card" href="06_port-check/06_port-check.html">
+      <div class="card-head"><span class="no">No. 06</span><span class="lang">Bash</span></div>
+      <h3>port-check</h3>
+      <p>Check if host:port is reachable within a timeout.</p>
+    </a>
+    <a class="card" href="07_backup-file/07_backup-file.html">
+      <div class="card-head"><span class="no">No. 07</span><span class="lang">Bash</span></div>
+      <h3>backup-file</h3>
+      <p>Make a timestamped copy of a file before you edit it.</p>
+    </a>
+    <a class="card" href="08_disk-usage-top/08_disk-usage-top.html">
+      <div class="card-head"><span class="no">No. 08</span><span class="lang">Bash</span></div>
+      <h3>disk-usage-top</h3>
+      <p>Show the top N largest subdirectories in a path.</p>
+    </a>
+    <a class="card" href="09_uuid-gen/09_uuid-gen.html">
+      <div class="card-head"><span class="no">No. 09</span><span class="lang">JS</span></div>
+      <h3>uuid-gen</h3>
+      <p>Print a random UUID v4.</p>
+    </a>
+    <a class="card" href="10_slugify/10_slugify.html">
+      <div class="card-head"><span class="no">No. 10</span><span class="lang">JS</span></div>
+      <h3>slugify</h3>
+      <p>Convert a string to a URL-safe kebab-case slug.</p>
+    </a>
+    <!-- CARDS -->
+  </div>
+
+  <footer>snippets/ — flat, globally numbered, one folder per entry</footer>
+</div>
+
+<script>
+  var filter = document.getElementById('filter');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#grid .card'));
+  var countEl = document.getElementById('count');
+  filter.addEventListener('input', function (e) {
+    var q = e.target.value.toLowerCase();
+    var visible = 0;
+    cards.forEach(function (card) {
+      var hit = card.textContent.toLowerCase().indexOf(q) !== -1;
+      card.style.display = hit ? '' : 'none';
+      if (hit) visible++;
+    });
+    countEl.textContent = visible;
+  });
+</script>
+</body>
+</html>

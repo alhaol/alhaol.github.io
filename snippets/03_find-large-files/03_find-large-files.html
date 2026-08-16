@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>find-large-files — snippet 03</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2e38; --text: #e6e8ec;
+    --muted: #9aa1ad; --accent: #5fb3ff; --good: #4fd18b; --warn: #ffb454;
+    --code-bg: #0b0d11; --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f7f8fa; --panel:#fff; --border:#e2e5ea; --text:#1b1f27; --muted:#5b6270; --code-bg:#f1f3f6; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+  a { color: var(--accent); }
+  a.back { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .desc { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .badges { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .badge {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  }
+  section { margin-bottom: 30px; }
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin: 0 0 10px; font-weight: 700;
+  }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 10px 6px 0; vertical-align: top; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; width: 110px; }
+  tr:last-child td, tr:last-child th { border-bottom: none; }
+  code { font-family: var(--mono); font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    font-family: var(--mono); font-size: 13px; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; margin: 0; white-space: pre;
+  }
+  ul.security { margin: 0; padding-left: 18px; }
+  ul.security li { margin-bottom: 6px; }
+  ul.security li::marker { color: var(--good); }
+  .filename { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; all snippets</a>
+
+  <h1>find-large-files</h1>
+  <p class="desc">Lists every file under a directory that's at or above a given size threshold. Use it to hunt down what's eating disk space or bloating a repo/build output.</p>
+  <div class="badges">
+    <span class="badge">Python 3</span>
+    <span class="badge">#03</span>
+  </div>
+
+  <section>
+    <h2>Source</h2>
+    <div class="filename">find-large-files.py</div>
+    <pre><code>#!/usr/bin/env python3
+"""List files in a directory over a given size threshold (bytes)."""
+import sys
+from pathlib import Path
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        sys.exit("usage: find-large-files.py &lt;dir&gt; &lt;min_bytes&gt;")
+    root = Path(sys.argv[1]).resolve()
+    try:
+        threshold = int(sys.argv[2])
+    except ValueError:
+        sys.exit("min_bytes must be an integer")
+    if not root.is_dir():
+        sys.exit(f"not a directory: {root}")
+    for p in sorted(root.rglob("*")):
+        if p.is_file() and p.stat().st_size &gt;= threshold:
+            print(f"{p.stat().st_size:&gt;12}  {p}")</code></pre>
+  </section>
+
+  <section>
+    <h2>Input</h2>
+    <div class="panel">
+      <table>
+        <tr><th>dir</th><td>string — positional argument, directory to scan recursively, e.g. <code>.</code></td></tr>
+        <tr><th>min_bytes</th><td>integer — positional argument, minimum file size to report, e.g. <code>10485760</code> (10&nbsp;MB)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <div class="panel">
+      Prints one line per matching file: right-aligned byte size, two spaces, then the absolute
+      path. Files are visited in sorted path order. Exits non-zero with a message if <code>dir</code>
+      isn't a directory or <code>min_bytes</code> isn't an integer.
+    </div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <pre><code>$ python3 find-large-files.py . 10485760
+    52428800  /repo/build/app.tar.gz
+    15728640  /repo/data/dump.sql</code></pre>
+  </section>
+
+  <section>
+    <h2>Config</h2>
+    <div class="panel">
+      No configuration required.
+    </div>
+  </section>
+
+  <section>
+    <h2>Security notes</h2>
+    <div class="panel">
+      <ul class="security">
+        <li>Uses <code>pathlib</code> for all path handling — no shell globbing, no <code>os.system</code>.</li>
+        <li>The scan root is resolved to an absolute path before walking, so relative-path confusion can't send it outside where you expect.</li>
+        <li>Numeric input is validated with a caught <code>int()</code> conversion instead of letting a bad value crash with a raw traceback.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>

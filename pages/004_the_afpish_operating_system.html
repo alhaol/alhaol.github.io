@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AFPISH Operating System: Scheduling Allah, Family, Profession, Independence, Social Life &amp; Health</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: { 50: '#f0f7ff', 100: '#e0effe', 500: '#0284c7', 600: '#0369a1', 900: '#0c4a6e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; font-size: 11pt; }
+            .print-page-break { page-break-before: always; }
+            .shadow-xl, .shadow-2xl, .shadow-md, .glow-emerald, .glow-purple, .glow-amber, .glow-pink, .glow-sky, .glow-cyan { box-shadow: none !important; }
+            .border { border-color: #d1d5db !important; }
+            pre, code { white-space: pre-wrap !important; word-break: break-all; }
+        }
+        .prose pre { background-color: #0f172a; color: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; }
+
+        .glow-emerald { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
+        .glow-purple  { box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25); }
+        .glow-amber   { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
+        .glow-pink    { box-shadow: 0 0 25px -5px rgba(236, 72, 153, 0.25); }
+        .glow-sky     { box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25); }
+        .glow-cyan    { box-shadow: 0 0 25px -5px rgba(34, 211, 238, 0.25); }
+
+        pre::-webkit-scrollbar { height: 6px; width: 6px; }
+        pre::-webkit-scrollbar-track { background: #090d16; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white leading-relaxed">
+
+    <!-- ============================= HEADER ============================= -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-lg text-white font-bold shadow-lg shadow-sky-500/20">
+                    <i class="fa-solid fa-microchip text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-tight">AFPISH OS</h1>
+                    <p class="text-xs text-slate-400">One CPU. One clock. Six always-on processes.</p>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex items-center space-x-5 text-sm font-medium text-slate-300">
+                <a href="#mnemonic-matrix" class="hover:text-sky-400 transition-colors">Process Table</a>
+                <a href="#concept-1" class="hover:text-emerald-400 transition-colors">1. Kernel</a>
+                <a href="#concept-2" class="hover:text-purple-400 transition-colors">2. init</a>
+                <a href="#concept-3" class="hover:text-amber-400 transition-colors">3. Foreground</a>
+                <a href="#concept-4" class="hover:text-pink-400 transition-colors">4. Storage</a>
+                <a href="#concept-5" class="hover:text-sky-400 transition-colors">5. Network</a>
+                <a href="#concept-6" class="hover:text-cyan-400 transition-colors">6. Hardware</a>
+                <a href="#active-recall" class="hover:text-cyan-400 transition-colors">Recall</a>
+                <a href="#unified-system" class="hover:text-sky-400 transition-colors">One Machine</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="exportMarkdown()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-file-arrow-down text-sky-400"></i>
+                    <span>Export .MD</span>
+                </button>
+                <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-lg flex items-center gap-2 shadow-lg shadow-sky-600/30 transition-all">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Print / Save PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- ============================= 1. HERO ============================= -->
+        <section class="relative rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 p-8 sm:p-12 overflow-hidden shadow-2xl">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-4xl relative z-10 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/80 border border-sky-800/50 text-sky-400 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-lightbulb"></i> Life Systems Masterclass
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                    You Don't Balance Six Lives. <br>
+                    <span class="bg-gradient-to-r from-emerald-400 via-amber-400 to-cyan-400 bg-clip-text text-transparent">
+                        You Schedule One Machine.
+                    </span>
+                </h1>
+                <p class="text-slate-300 text-lg sm:text-xl leading-relaxed font-light">
+                    Allah, family, profession, independence, social life, and health are not six hobbies competing for your spare time. They are six processes sharing one CPU (your day) and one disk (your one life) &mdash; and the ones you never consciously schedule get starved or killed by the ones you do. This masterclass reframes <strong>AFPISH</strong> as an operating system: one kernel, five dependent processes, and the scheduling rules that keep all six alive at once by allocating time and space on purpose instead of by accident.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg text-xl"><i class="fa-solid fa-mosque"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-emerald-400">Allah</div>
+                            <div class="text-sm font-semibold text-white">The Kernel</div>
+                            <div class="text-xs text-slate-400">"What does every process answer to?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-purple-500/20 text-purple-400 rounded-lg text-xl"><i class="fa-solid fa-people-roof"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-purple-400">Family</div>
+                            <div class="text-sm font-semibold text-white">Process Zero (init)</div>
+                            <div class="text-xs text-slate-400">"Whose child am I, and who's mine?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-amber-500/20 text-amber-400 rounded-lg text-xl"><i class="fa-solid fa-terminal"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-amber-400">Profession</div>
+                            <div class="text-sm font-semibold text-white">The Foreground Process</div>
+                            <div class="text-xs text-slate-400">"What's running when someone looks at my terminal?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-pink-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-pink-500/20 text-pink-400 rounded-lg text-xl"><i class="fa-solid fa-hard-drive"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-pink-400">Independence</div>
+                            <div class="text-sm font-semibold text-white">Persistent Storage</div>
+                            <div class="text-xs text-slate-400">"What survives when the power goes out?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-sky-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-sky-500/20 text-sky-400 rounded-lg text-xl"><i class="fa-solid fa-network-wired"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-sky-400">Social</div>
+                            <div class="text-sm font-semibold text-white">The Network Stack</div>
+                            <div class="text-xs text-slate-400">"What packets go in and out?"</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center gap-3">
+                        <div class="p-3 bg-cyan-500/20 text-cyan-400 rounded-lg text-xl"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <div>
+                            <div class="text-xs uppercase font-bold text-cyan-400">Health</div>
+                            <div class="text-sm font-semibold text-white">The Hardware Itself</div>
+                            <div class="text-xs text-slate-400">"What throttles when I don't maintain it?"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 2. MNEMONIC / METAPHOR MATRIX ============================= -->
+        <section id="mnemonic-matrix" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">2. The Process Table</h2>
+                <p class="text-slate-400 text-sm mt-1">One machine, six processes &mdash; read like <code class="text-slate-300">ps aux</code> for a life instead of a server.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-emerald-500/50 transition-all glow-emerald">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">CONCEPT #1</span>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-300 text-xs font-bold">REAL-TIME</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-mosque text-emerald-400"></i> Allah
+                        </h3>
+                        <div class="text-xs font-semibold text-emerald-400 italic">"The Kernel"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> The kernel owns the master clock interrupt. Every other process, however important it looks, yields to it or the whole machine eventually corrupts. Five daily interrupts, plus Duha, are the only priority level nothing else is allowed to preempt.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-emerald-300 font-mono">"What does every process answer to?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Unit:</strong> Salah, Duha, fasting, Qur'an</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Fixes Failure:</strong> Stops any other process from crowning itself kernel</li>
+                        <li><i class="fa-solid fa-check text-emerald-400 mr-1"></i> <strong>Real-world Parallel:</strong> An interrupt that fires on schedule whether or not the CPU "feels like it"</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-purple-500/50 transition-all glow-purple">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">CONCEPT #2</span>
+                        <span class="px-2.5 py-1 rounded-full bg-purple-950 border border-purple-800 text-purple-300 text-xs font-bold">PID 1</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-people-roof text-purple-400"></i> Family
+                        </h3>
+                        <div class="text-xs font-semibold text-purple-400 italic">"Process Zero (init)"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> init spawns and supervises every user process on the machine; if it dies, its children don't die instantly &mdash; they become orphans nobody is watching. Family is the tree you inherited (parents) and the one you're spawning (spouse, kids).
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-purple-300 font-mono">"Whose child am I, and who's mine?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Unit:</strong> Parents, spouse, kids</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Fixes Failure:</strong> Prevents orphaned processes nobody supervises</li>
+                        <li><i class="fa-solid fa-check text-purple-400 mr-1"></i> <strong>Real-world Parallel:</strong> A server whose init crashed still boots, but never reaches a usable state</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-amber-500/50 transition-all glow-amber">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">CONCEPT #3</span>
+                        <span class="px-2.5 py-1 rounded-full bg-amber-950 border border-amber-800 text-amber-300 text-xs font-bold">FOREGROUND</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-amber-400"></i> Profession
+                        </h3>
+                        <div class="text-xs font-semibold text-amber-400 italic">"The Foreground Process"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> The foreground process is the one everyone can see in the terminal window, so it's easy to mistake it for the whole machine. It's one process among six sharing the same CPU &mdash; not the CPU itself.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-amber-300 font-mono">"What's running when someone looks at my terminal?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Unit:</strong> Projects, learning</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Fixes Failure:</strong> Stops mistaking the visible job for the entire self</li>
+                        <li><i class="fa-solid fa-check text-amber-400 mr-1"></i> <strong>Real-world Parallel:</strong> Dozens of daemons keep a system alive while one foreground job gets the credit</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-pink-500/50 transition-all glow-pink">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">CONCEPT #4</span>
+                        <span class="px-2.5 py-1 rounded-full bg-pink-950 border border-pink-800 text-pink-300 text-xs font-bold">PERSISTENT</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-hard-drive text-pink-400"></i> Independence
+                        </h3>
+                        <div class="text-xs font-semibold text-pink-400 italic">"Persistent Storage"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> RAM is fast but volatile; everything in it vanishes on power loss. Financial and mental independence are what you've written to disk instead of leaving in an employer's or a crowd's RAM.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-pink-300 font-mono">"What survives when the power goes out?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Unit:</strong> Financial, mental / opinion</li>
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Fixes Failure:</strong> Prevents total data loss on one power failure</li>
+                        <li><i class="fa-solid fa-check text-pink-400 mr-1"></i> <strong>Real-world Parallel:</strong> A machine with no disk loses everything the instant power cuts</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-sky-500/50 transition-all glow-sky">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">CONCEPT #5</span>
+                        <span class="px-2.5 py-1 rounded-full bg-sky-950 border border-sky-800 text-sky-300 text-xs font-bold">I/O</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-sky-400"></i> Social
+                        </h3>
+                        <div class="text-xs font-semibold text-sky-400 italic">"The Network Stack"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> A machine can compute flawlessly in total isolation, but a severed network stack means no I/O with anyone else. Friends and charity are the packets in and out &mdash; and a fully open, unfirewalled port fails the same way a fully closed one does.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-sky-300 font-mono">"What packets go in and out?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-sky-400 mr-1"></i> <strong>Unit:</strong> Friends, charity</li>
+                        <li><i class="fa-solid fa-check text-sky-400 mr-1"></i> <strong>Fixes Failure:</strong> Prevents both isolation and unbounded overexposure</li>
+                        <li><i class="fa-solid fa-check text-sky-400 mr-1"></i> <strong>Real-world Parallel:</strong> Zakat is a scheduled outbound packet the protocol requires, not a discretionary one</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-cyan-500/50 transition-all glow-cyan">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">CONCEPT #6</span>
+                        <span class="px-2.5 py-1 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300 text-xs font-bold">HARDWARE</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-heart-pulse text-cyan-400"></i> Health
+                        </h3>
+                        <div class="text-xs font-semibold text-cyan-400 italic">"The Hardware Itself"</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>The Human Metaphor:</strong> Software can be flawless while fried hardware halts every process at once. Sleep, diet, and movement aren't one more app competing for CPU time &mdash; they're the chip everything else executes on.
+                    </p>
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
+                        <div class="font-bold text-slate-200">Core Question Answered:</div>
+                        <div class="text-cyan-300 font-mono">"What throttles when I don't maintain it?"</div>
+                    </div>
+                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-800 pt-3">
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-1"></i> <strong>Unit:</strong> Gym, diet, sleep</li>
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-1"></i> <strong>Fixes Failure:</strong> Prevents total hardware failure that halts every process simultaneously</li>
+                        <li><i class="fa-solid fa-check text-cyan-400 mr-1"></i> <strong>Real-world Parallel:</strong> Sleep debt doesn't pause one process &mdash; it underclocks the whole machine</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================= 3. CONCEPT 1: ALLAH / THE KERNEL ============================= -->
+        <section id="concept-1" class="space-y-8">
+            <div class="border-l-4 border-emerald-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">3. Allah: The Kernel</h2>
+                    <span class="px-3 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold rounded-full">REAL-TIME PRIORITY</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">The interrupt handler nothing else in the system is allowed to preempt.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-emerald-400"></i> The Snooze Button
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Yusuf sets an alarm for Fajr and hits snooze &mdash; just five more minutes, it costs nothing. Except the adhan doesn't renegotiate. It fired on schedule regardless of how the CPU felt that morning, and ignoring an interrupt doesn't cancel it; it just queues a missed deadline that has to be made up later, and the debt compounds daily.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Treat Fajr as a low-priority background job and every other process on the machine will happily consume the slot &mdash; a scroll session, an extra hour of sleep, an email. The kernel doesn't fight for its own CPU time. That's the engineer's job, not the interrupt's.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-emerald-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-emerald-400 tracking-wider">The Fix: Real-Time Scheduling Class</h4>
+                        <p class="text-xs text-slate-300">
+                            Give the five daily prayers and Duha <code class="text-emerald-300">SCHED_FIFO</code> priority in your actual calendar &mdash; blocked, not "hopefully available." Everything else negotiates for the gaps between them, never the reverse.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-emerald-400 block font-bold">SCHED_OTHER (normal)</span>
+                                <span class="text-slate-400">Can be delayed indefinitely by higher-priority work</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">SCHED_FIFO (kernel)</span>
+                                <span class="text-slate-400">Runs the instant it's ready; nothing preempts it</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-emerald-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-emerald-500 text-xs text-emerald-200 italic leading-relaxed">
+                            "The five daily interrupts aren't optional background tasks &mdash; they're the one priority level the rest of your day is scheduled around, not squeezed against."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Priority Level:</strong> REALTIME (SCHED_FIFO)</div>
+                            <div><strong class="text-slate-200">Frequency:</strong> 5x/day + Duha</div>
+                            <div><strong class="text-slate-200">Source:</strong> Qur'an 28:77 &mdash; "seek the home of the Hereafter, and do not forget your share of this world"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-emerald">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-emerald-400"></i> Visual Memory Anchor 1: Six Interrupts on a 24-Hour Timeline
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 880 235" class="w-full h-auto min-w-[700px] font-sans">
+                        <text x="50" y="35" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em">SIX FIXED INTERRUPTS THE SCHEDULER CANNOT SKIP</text>
+
+                        <text x="229" y="95" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">FAJR</text>
+                        <text x="359" y="78" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">DUHA</text>
+                        <text x="456" y="95" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">DHUHR</text>
+                        <text x="570" y="78" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">ASR</text>
+                        <text x="651" y="95" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">MAGHRIB</text>
+                        <text x="700" y="78" text-anchor="middle" fill="#f1f5f9" font-size="9.5" font-weight="600">ISHA</text>
+
+                        <line x1="229" y1="99" x2="229" y2="110" stroke="#10b981" stroke-width="1.2"/>
+                        <line x1="359" y1="82" x2="359" y2="110" stroke="#10b981" stroke-width="1.2"/>
+                        <line x1="456" y1="99" x2="456" y2="110" stroke="#10b981" stroke-width="1.2"/>
+                        <line x1="570" y1="82" x2="570" y2="110" stroke="#10b981" stroke-width="1.2"/>
+                        <line x1="651" y1="99" x2="651" y2="110" stroke="#10b981" stroke-width="1.2"/>
+                        <line x1="700" y1="82" x2="700" y2="110" stroke="#10b981" stroke-width="1.2"/>
+
+                        <rect x="50" y="110" width="780" height="50" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+
+                        <circle cx="229" cy="135" r="7" fill="#10b981"/>
+                        <circle cx="359" cy="135" r="7" fill="#10b981"/>
+                        <circle cx="456" cy="135" r="7" fill="#10b981"/>
+                        <circle cx="570" cy="135" r="7" fill="#10b981"/>
+                        <circle cx="651" cy="135" r="7" fill="#10b981"/>
+                        <circle cx="700" cy="135" r="7" fill="#10b981"/>
+
+                        <rect x="50" y="175" width="780" height="20" rx="6" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 4"/>
+                        <text x="440" y="189" text-anchor="middle" fill="#94a3b8" font-size="10">F &#183; P &#183; I &#183; S &#183; H negotiate for the remaining slices</text>
+
+                        <text x="50" y="218" fill="#64748b" font-size="10">Everything else negotiates for the gaps between these six fixed points &mdash; never the reverse.</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-emerald-400"></i> /etc/cron.d/kernel-interrupts</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 text-[10px] font-semibold">CRONTAB</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-emerald-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># cannot be renice'd, cannot be killed, missed runs queue a makeup (qadaa)</span>
+<span class="text-amber-400">05 05</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Fajr"</span>
+<span class="text-amber-400">30 09</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Duha"</span>    --rakat=<span class="text-amber-400">2</span>
+<span class="text-amber-400">30 12</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Dhuhr"</span>
+<span class="text-amber-400">00 16</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Asr"</span>
+<span class="text-amber-400">30 18</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Maghrib"</span>
+<span class="text-amber-400">00 20</span> * * *  <span class="text-purple-400">sched</span> --priority=<span class="text-sky-400">REALTIME</span>  <span class="text-purple-400">salah</span> --name=<span class="text-emerald-300">"Isha"</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 4. CONCEPT 2: FAMILY / INIT (PID 1) ============================= -->
+        <section id="concept-2" class="space-y-8">
+            <div class="border-l-4 border-purple-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">4. Family: Process Zero</h2>
+                    <span class="px-3 py-1 bg-purple-950 border border-purple-800 text-purple-400 text-xs font-bold rounded-full">PID 1</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">The process tree that dies loudest when it's starved, not fed.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-purple-400"></i> The Partner Track
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Sara works seventy-hour weeks for three straight years to make partner. She makes it &mdash; and her father has a stroke while she's four thousand kilometers away, and her kids call their stepmom's name at bedtime. Nothing crashed loudly. The processes she was starving didn't die instantly; they became zombies, technically still listed, no longer really running.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        A process that only gets "whatever time is left over" isn't scheduled &mdash; it's opportunistic, and opportunistic processes starve the moment anything with higher declared priority shows up. Family loses that contest every single week unless it's given a guarantee, not an intention.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-purple-400 tracking-wider">The Fix: A Dependency the OOM Killer Can't Touch</h4>
+                        <p class="text-xs text-slate-300">
+                            Give init-class processes an explicit <code class="text-purple-300">Requires=</code> on the processes above them and an <code class="text-purple-300">OOMScoreAdjust</code> that makes them the last thing ever killed under memory pressure &mdash; not the first thing cut when a deadline gets tight.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-purple-400 block font-bold">Opportunistic scheduling</span>
+                                <span class="text-slate-400">Runs only if nothing else claims the slot first</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">Guaranteed minimum</span>
+                                <span class="text-slate-400">A fixed weekly time-slice that survives a launch week</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border-l-4 border-red-500 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-red-400"></i> Danger: Orphaned-Process Syndrome
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Children and spouse are technically still "listed" &mdash; same roof, same last name &mdash; but structurally unsupervised. Homework, grief, a hard day: all running unsupervised, because init never actually scheduled time for them, only intended to.
+                        </p>
+                        <blockquote class="p-3 bg-slate-900 rounded-xl border-l-2 border-red-500 text-xs text-red-200 italic leading-relaxed">
+                            "Golden Rule: if it's not on the calendar with a guaranteed time-slice, it isn't running &mdash; it's a zombie."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-purple">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-purple-400"></i> Visual Memory Anchor 2: The Process Tree
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 820 310" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-c2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+                            </marker>
+                        </defs>
+
+                        <rect x="50" y="25" width="230" height="55" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="165" y="48" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">parents.service</text>
+                        <text x="165" y="65" text-anchor="middle" fill="#94a3b8" font-size="9">Requires= (inherited)</text>
+
+                        <g transform="translate(410, 160)">
+                            <circle r="55" fill="#0f172a" stroke="#8b5cf6" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="-6" fill="#ffffff" font-size="12" font-weight="bold">YOU</text>
+                            <text text-anchor="middle" dy="10" fill="#c4b5fd" font-size="9.5">init &#8212; PID 1</text>
+                        </g>
+
+                        <rect x="560" y="135" width="210" height="55" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="665" y="158" text-anchor="middle" fill="#c4b5fd" font-size="11" font-weight="700">spouse.service</text>
+                        <text x="665" y="175" text-anchor="middle" fill="#94a3b8" font-size="9">co-init, Before=career</text>
+
+                        <g transform="translate(300, 270)">
+                            <circle r="40" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="10.5" font-weight="bold">KID_1</text>
+                            <text text-anchor="middle" dy="10" fill="#94a3b8" font-size="8.5">.service</text>
+                        </g>
+                        <g transform="translate(500, 270)">
+                            <circle r="40" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                            <text text-anchor="middle" dy="-4" fill="#ffffff" font-size="10.5" font-weight="bold">KID_2</text>
+                            <text text-anchor="middle" dy="10" fill="#94a3b8" font-size="8.5">.service</text>
+                        </g>
+
+                        <line x1="165" y1="80" x2="400" y2="104" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-c2)"/>
+                        <line x1="465" y1="160" x2="550" y2="162" stroke="#8b5cf6" stroke-width="2"/>
+                        <line x1="371" y1="199" x2="328" y2="238" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-c2)"/>
+                        <line x1="445" y1="203" x2="478" y2="236" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-c2)"/>
+
+                        <text x="410" y="295" text-anchor="middle" fill="#f87171" font-size="10" font-style="italic">if init stalls, children aren't killed &#8212; they're orphaned, silently</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-purple-400"></i> family.service</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-purple-400 text-[10px] font-semibold">SYSTEMD UNIT</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-purple-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-purple-400">[Unit]</span>
+<span class="text-slate-300">Description</span>=<span class="text-emerald-300">Family (PID 1 descendant tree)</span>
+<span class="text-slate-300">Requires</span>=<span class="text-sky-400">parents.service</span>
+<span class="text-slate-300">Before</span>=<span class="text-sky-400">career.service</span>
+
+<span class="text-purple-400">[Service]</span>
+<span class="text-slate-300">Restart</span>=<span class="text-emerald-300">always</span>
+<span class="text-slate-300">RestartSec</span>=<span class="text-amber-400">0</span>
+<span class="text-slate-300">OOMScoreAdjust</span>=<span class="text-amber-400">-1000</span>  <span class="text-slate-500"># never eligible for the OOM killer</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 5. CONCEPT 3: PROFESSION / FOREGROUND PROCESS ============================= -->
+        <section id="concept-3" class="space-y-8">
+            <div class="border-l-4 border-amber-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">5. Profession: The Foreground Process</h2>
+                    <span class="px-3 py-1 bg-amber-950 border border-amber-800 text-amber-400 text-xs font-bold rounded-full">VISIBLE, NOT SPECIAL</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">The window everyone can see, mistaken for the machine that's running it.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-amber-400"></i> The Promotion
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Da'ud gets the promotion, and for the first time in years he can't remember eating dinner with his wife awake. He'd assumed the terminal window &mdash; his job title &mdash; was the whole machine. Six months in, a <code class="text-amber-300">top</code> on his own life would have shown the daemons quietly keeping the system alive &mdash; sleep, prayer, a marriage &mdash; all getting starved to feed one foreground process.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        The foreground process isn't wrong to run. It's wrong to run unsupervised at 94% CPU while everything that isn't visible in the window gets silently deprioritized to STAT <code class="text-amber-300">D</code> &mdash; uninterruptible sleep, unable even to respond to a signal.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-amber-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-amber-400 tracking-wider">The Fix: Monitor the Whole Process Table</h4>
+                        <p class="text-xs text-slate-300">
+                            Cap Profession's CPU share deliberately &mdash; one process among six, never all six at once &mdash; and check <code class="text-amber-300">ps aux</code> on your own week before assuming the visible job is the only thing that matters.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-amber-400 block font-bold">Uncapped foreground</span>
+                                <span class="text-slate-400">Consumes whatever the scheduler doesn't defend elsewhere</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">cgroup CPU quota</span>
+                                <span class="text-slate-400">A hard ceiling profession cannot exceed, no matter the deadline</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-amber-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-amber-500 text-xs text-amber-200 italic leading-relaxed">
+                            "The foreground process is the one everyone can see; the daemons everyone can't see are the ones actually keeping the machine alive."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Visible To:</strong> Everyone &mdash; that's the trap</div>
+                            <div><strong class="text-slate-200">Fair Share of CPU:</strong> 1 of 6, not 6 of 6</div>
+                            <div><strong class="text-slate-200">Failure Signature:</strong> <code class="text-amber-300">top</code> shows 94% CPU, daemons stuck in state D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-amber">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-amber-400"></i> Visual Memory Anchor 3: The Process List Nobody Checks
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 860 260" class="w-full h-auto min-w-[700px] font-sans">
+                        <rect x="60" y="30" width="740" height="55" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+                        <text x="80" y="63" fill="#fbbf24" font-size="12" font-weight="700" font-family="monospace">profession --deadline=fri &#8212; FOREGROUND, 94% CPU</text>
+
+                        <rect x="60" y="105" width="740" height="34" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <text x="80" y="127" fill="#94a3b8" font-size="10" font-family="monospace">salah.daemon &#160;&#160;&#160;&#160;[S] sleeping &#8212; waiting for CPU</text>
+
+                        <rect x="60" y="145" width="740" height="34" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <text x="80" y="167" fill="#94a3b8" font-size="10" font-family="monospace">family.daemon &#160;&#160;&#160;&#160;[S] sleeping &#8212; waiting for CPU</text>
+
+                        <rect x="60" y="185" width="740" height="34" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <text x="80" y="207" fill="#94a3b8" font-size="10" font-family="monospace">health.daemon &#160;&#160;&#160;&#160;[S] sleeping &#8212; waiting for CPU</text>
+
+                        <rect x="60" y="225" width="740" height="34" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <text x="80" y="247" fill="#94a3b8" font-size="10" font-family="monospace">social.daemon &#160;&#160;&#160;&#160;[S] sleeping &#8212; waiting for CPU</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-amber-400"></i> a week, unmonitored</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-400 text-[10px] font-semibold">CLI TRANSCRIPT</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-amber-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500">$ ps aux --sort=-%cpu</span>
+<span class="text-sky-400">USER</span>   <span class="text-sky-400">PID</span>  <span class="text-sky-400">%CPU</span>  <span class="text-sky-400">%MEM</span>  <span class="text-sky-400">STAT</span>  <span class="text-sky-400">COMMAND</span>
+you    501  <span class="text-amber-400">94.2</span>   3.1  R     <span class="text-purple-400">profession</span> --deadline=<span class="text-emerald-300">fri</span>
+you    102   1.8   0.4  D     <span class="text-purple-400">salah.daemon</span>
+you    103   0.6   0.2  D     <span class="text-purple-400">family.daemon</span>
+you    104   0.3   0.1  D     <span class="text-purple-400">health.daemon</span>
+<span class="text-slate-500"># D = uninterruptible sleep. Not idle. Starved.</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 6. CONCEPT 4: INDEPENDENCE / PERSISTENT STORAGE ============================= -->
+        <section id="concept-4" class="space-y-8">
+            <div class="border-l-4 border-pink-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">6. Independence: Persistent Storage</h2>
+                    <span class="px-3 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded-full">SURVIVES A REBOOT</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">What's written to disk, versus what only ever lived in someone else's RAM.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-pink-400"></i> The Layoff Email
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Layla is financially dependent on one employer and emotionally dependent on being liked there. When the layoff email lands, she loses her income and her sense of self on the same Tuesday morning &mdash; because both were stored in the same volatile, employer-owned RAM. Neither had ever been written anywhere she owned.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        RAM is fast to read from and fast to write to, which is exactly why it's tempting to leave everything important there. It's also the first thing wiped the moment power is interrupted &mdash; and a single employer, a single platform, a single audience is one power source.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-pink-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-pink-400 tracking-wider">The Fix: Scheduled Writes to Disk</h4>
+                        <p class="text-xs text-slate-300">
+                            Automate a recurring transfer from volatile income to persistent savings, and from borrowed approval to convictions you hold regardless of who's applauding. Both need a write operation on a schedule, not a hope that it happens eventually.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-pink-400 block font-bold">RAM (volatile)</span>
+                                <span class="text-slate-400">Job income, workplace status &mdash; gone at power loss</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">Disk (persistent)</span>
+                                <span class="text-slate-400">Savings, an owned skill, a held conviction &mdash; survives it</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border-l-4 border-red-500 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-red-400"></i> Danger: Single Point of Failure
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Income, identity, and self-worth all stored in one employer's volatile memory means one event wipes all three at once &mdash; not because any one of them was fragile alone, but because they were never on separate disks.
+                        </p>
+                        <blockquote class="p-3 bg-slate-900 rounded-xl border-l-2 border-red-500 text-xs text-red-200 italic leading-relaxed">
+                            "Golden Rule: anything you can't survive losing in a day shouldn't be the only place you stored it."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-pink">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-pink-400"></i> Visual Memory Anchor 4: What a Power Loss Actually Erases
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 820 250" class="w-full h-auto min-w-[700px] font-sans">
+                        <text x="180" y="18" text-anchor="middle" font-size="20">&#9889;</text>
+                        <text x="180" y="40" text-anchor="middle" fill="#f87171" font-size="12" font-weight="700">RAM (volatile)</text>
+                        <text x="180" y="230" text-anchor="middle" fill="#94a3b8" font-size="9">job income &#183; workplace status</text>
+                        <rect x="100" y="50" width="160" height="170" rx="16" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+                        <rect x="108" y="192" width="144" height="20" rx="6" fill="#ef4444" fill-opacity="0.4"/>
+                        <text x="180" y="140" text-anchor="middle" fill="#64748b" font-size="9">EMPTIED ON</text>
+                        <text x="180" y="152" text-anchor="middle" fill="#64748b" font-size="9">POWER LOSS</text>
+
+                        <text x="640" y="40" text-anchor="middle" fill="#f9a8d4" font-size="12" font-weight="700">DISK (persistent)</text>
+                        <text x="640" y="230" text-anchor="middle" fill="#94a3b8" font-size="9">savings &#183; owned skill &#183; convictions</text>
+                        <rect x="560" y="50" width="160" height="170" rx="16" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+                        <rect x="568" y="68" width="144" height="142" rx="8" fill="#ec4899" fill-opacity="0.35"/>
+                        <text x="640" y="140" text-anchor="middle" fill="#f9a8d4" font-size="9">SURVIVES A</text>
+                        <text x="640" y="152" text-anchor="middle" fill="#f9a8d4" font-size="9">REBOOT</text>
+
+                        <line x1="270" y1="130" x2="550" y2="130" stroke="#ec4899" stroke-width="2"/>
+                        <rect x="335" y="115" width="150" height="22" rx="5" fill="#0f172a" stroke="#ec4899" stroke-width="0.8"/>
+                        <text x="410" y="130" text-anchor="middle" fill="#f9a8d4" font-size="9" font-weight="700">scheduled WRITE</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-pink-400"></i> what actually survives a layoff</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-400 text-[10px] font-semibold">YAML</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-pink-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># /etc/fstab-equivalent</span>
+<span class="text-purple-400">mount</span>: <span class="text-sky-400">/independence/financial</span>
+  <span class="text-slate-300">device</span>: <span class="text-emerald-300">savings + owned-skill</span>
+  <span class="text-slate-300">type</span>: <span class="text-emerald-300">persistent</span>   <span class="text-slate-500"># not ramfs</span>
+  <span class="text-slate-300">min_free</span>: <span class="text-amber-400">6</span>_months_expenses
+<span class="text-purple-400">mount</span>: <span class="text-sky-400">/independence/mental</span>
+  <span class="text-slate-300">device</span>: <span class="text-emerald-300">convictions</span>
+  <span class="text-slate-300">type</span>: <span class="text-emerald-300">persistent</span>
+  <span class="text-slate-300">readonly_from</span>: <span class="text-emerald-300">applause</span>   <span class="text-slate-500"># cannot be overwritten by opinion</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 7. CONCEPT 5: SOCIAL / NETWORK STACK ============================= -->
+        <section id="concept-5" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">7. Social: The Network Stack</h2>
+                    <span class="px-3 py-1 bg-sky-950 border border-sky-800 text-sky-400 text-xs font-bold rounded-full">RATE-LIMITED I/O</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">A closed port and an unfirewalled one fail the exact same way: nothing real gets through.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-sky-400"></i> Two Machines, Same Failure
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Omar either ghosts every group chat to "focus" &mdash; network stack effectively down, total isolation &mdash; or says yes to every request and every fundraiser, unfirewalled, no rate limit, every port wide open. Neither machine is healthy. One computes alone until it forgets how to route a packet at all; the other spends every cycle answering inbound traffic and never gets its own work done.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        A working network stack isn't "maximally open" or "maximally closed." It's scheduled: specific outbound packets, on a cadence, to specific destinations, with a rule for everything else.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-sky-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-sky-400 tracking-wider">The Fix: Rate Limits in Both Directions</h4>
+                        <p class="text-xs text-slate-300">
+                            Set an outbound cadence for friends and charity so they actually happen on a schedule instead of "whenever," and set an inbound rate limit so the whole day doesn't get consumed answering everyone else's priorities.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">Port fully closed</span>
+                                <span class="text-slate-400">Isolation &mdash; reads as "stable" right up until it isn't</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-amber-400 block font-bold">Port fully open</span>
+                                <span class="text-slate-400">Unbounded inbound traffic drowns every other process</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-sky-400"></i> The 1-Sentence Recall Lock-In
+                        </h3>
+                        <blockquote class="p-3 bg-slate-950 rounded-xl border-l-2 border-sky-500 text-xs text-sky-200 italic leading-relaxed">
+                            "A network stack with no rate limit and one with no packets at all fail the same way: nothing real gets through."
+                        </blockquote>
+                        <div class="text-xs text-slate-400 space-y-2">
+                            <div><strong class="text-slate-200">Outbound Rate:</strong> Scheduled, not unlimited</div>
+                            <div><strong class="text-slate-200">Mandatory Packet:</strong> Zakat &mdash; not discretionary</div>
+                            <div><strong class="text-slate-200">Closed-Port Risk:</strong> Reads as stable right up until it isn't</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-sky">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-sky-400"></i> Visual Memory Anchor 5: Scheduled Ports vs. an Open One
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 840 280" class="w-full h-auto min-w-[700px] font-sans">
+                        <defs>
+                            <marker id="arrow-c5" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-c5-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f87171"/>
+                            </marker>
+                        </defs>
+
+                        <g transform="translate(420, 140)">
+                            <circle r="50" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <text text-anchor="middle" dy="5" fill="#ffffff" font-size="13" font-weight="bold">YOU</text>
+                        </g>
+
+                        <g transform="translate(160, 70)">
+                            <circle r="38" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text text-anchor="middle" dy="4" fill="#e0f2fe" font-size="10" font-weight="600">FRIENDS</text>
+                        </g>
+                        <g transform="translate(160, 210)">
+                            <circle r="38" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text text-anchor="middle" dy="4" fill="#e0f2fe" font-size="10" font-weight="600">CHARITY</text>
+                        </g>
+                        <g transform="translate(680, 70)">
+                            <circle r="38" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text text-anchor="middle" dy="4" fill="#e0f2fe" font-size="9.5" font-weight="600">COMMUNITY</text>
+                        </g>
+
+                        <line x1="372" y1="127" x2="196" y2="82" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-c5)"/>
+                        <rect x="235" y="90" width="110" height="20" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+                        <text x="290" y="104" text-anchor="middle" fill="#bae6fd" font-size="8.5">rate-limited: 3/wk</text>
+
+                        <line x1="372" y1="153" x2="196" y2="198" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-c5)"/>
+                        <rect x="235" y="178" width="140" height="20" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+                        <text x="305" y="192" text-anchor="middle" fill="#bae6fd" font-size="8.5">scheduled: 1/wk (zakat)</text>
+
+                        <line x1="468" y1="127" x2="644" y2="82" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-c5)"/>
+                        <rect x="500" y="90" width="110" height="20" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+                        <text x="555" y="104" text-anchor="middle" fill="#bae6fd" font-size="8.5">rate-limited: 2/wk</text>
+
+                        <rect x="560" y="185" width="220" height="60" rx="10" fill="#0f172a" stroke="#f87171" stroke-width="2" stroke-dasharray="5 4"/>
+                        <text x="670" y="210" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">EVERYONE ELSE</text>
+                        <text x="670" y="226" text-anchor="middle" fill="#94a3b8" font-size="8.5">unfiltered inbound</text>
+
+                        <line x1="466" y1="158" x2="605" y2="192" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-c5-red)"/>
+                        <text x="600" y="175" text-anchor="middle" fill="#f87171" font-size="9" font-weight="700">&#9888; NO RATE LIMIT</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-sky-400"></i> outbound / inbound social I/O</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-sky-400 text-[10px] font-semibold">FIREWALL RULES</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-sky-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-slate-500"># rate-limited outbound</span>
+-A <span class="text-purple-400">OUTPUT</span> -p <span class="text-sky-400">charity</span>  -m limit --limit <span class="text-amber-400">1</span>/week  -j <span class="text-emerald-300">ACCEPT</span>
+-A <span class="text-purple-400">OUTPUT</span> -p <span class="text-sky-400">friends</span>  -m limit --limit <span class="text-amber-400">3</span>/week  -j <span class="text-emerald-300">ACCEPT</span>
+
+<span class="text-slate-500"># bounded inbound &#8212; no unlimited traffic from anyone</span>
+-A <span class="text-purple-400">INPUT</span>  -p <span class="text-sky-400">everyone</span> -m limit --limit <span class="text-amber-400">20</span>/week -j <span class="text-emerald-300">ACCEPT</span>
+-A <span class="text-purple-400">INPUT</span>  -p <span class="text-sky-400">everyone</span>                        -j <span class="text-red-400">DROP</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 8. CONCEPT 6: HEALTH / HARDWARE ============================= -->
+        <section id="concept-6" class="space-y-8">
+            <div class="border-l-4 border-cyan-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">8. Health: The Hardware Itself</h2>
+                    <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded-full">THE SUBSTRATE</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Not one more process competing for CPU time &mdash; the chip everything else runs on.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-cyan-400"></i> Three All-Nighters
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Karim pulls three all-nighters to ship a deadline, hits it, then gets sick for two weeks and misses the next three deadlines. Total output across the month was lower than if he'd slept. He debugged every process except the machine they were all running on.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        You don't get a crash dialog when you're sleep-deprived. Every process just quietly runs thirty percent slower, and it's tempting to blame the processes &mdash; poor focus, low motivation &mdash; rather than the chip they're all executing on.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-cyan-900/50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase text-cyan-400 tracking-wider">The Fix: Scheduled Maintenance Windows</h4>
+                        <p class="text-xs text-slate-300">
+                            Treat sleep, diet, and movement as maintenance the whole system requires on a fixed cadence &mdash; not an optional background task the scheduler is free to kill the instant load increases.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-cyan-400 block font-bold">Deferred maintenance</span>
+                                <span class="text-slate-400">Runs fast short-term, throttles hard once thermal debt compounds</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                                <span class="text-sky-400 block font-bold">Scheduled maintenance</span>
+                                <span class="text-slate-400">A fixed floor (7h sleep) every process depends on, not negotiates around</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border-l-4 border-red-500 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-md font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-red-400"></i> Danger: Silent Thermal Throttling
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            There's no alert when you're running hot. Every process above the hardware just gets slower together, and because nothing crashed, the slowdown gets attributed to the processes instead of the substrate underneath all of them.
+                        </p>
+                        <blockquote class="p-3 bg-slate-900 rounded-xl border-l-2 border-red-500 text-xs text-red-200 italic leading-relaxed">
+                            "Golden Rule: you cannot optimize software running on hardware you're actively destroying."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-cyan">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-cyan-400"></i> Visual Memory Anchor 6: What Throttles When the Chip Overheats
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 820 330" class="w-full h-auto min-w-[700px] font-sans">
+                        <text x="410" y="30" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">&#9888; SLEEP DEBT &#8594; EVERY PROCESS ABOVE THROTTLES TOGETHER</text>
+
+                        <rect x="30" y="80" width="140" height="40" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="100" y="105" text-anchor="middle" fill="#a5f3fc" font-size="9" font-weight="600">ALLAH</text>
+
+                        <rect x="185" y="80" width="140" height="40" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="255" y="105" text-anchor="middle" fill="#a5f3fc" font-size="9" font-weight="600">FAMILY</text>
+
+                        <rect x="340" y="80" width="140" height="40" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="410" y="105" text-anchor="middle" fill="#a5f3fc" font-size="9" font-weight="600">PROFESSION</text>
+
+                        <rect x="495" y="80" width="140" height="40" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="565" y="105" text-anchor="middle" fill="#a5f3fc" font-size="9" font-weight="600">INDEPENDENCE</text>
+
+                        <rect x="650" y="80" width="140" height="40" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="720" y="105" text-anchor="middle" fill="#a5f3fc" font-size="9" font-weight="600">SOCIAL</text>
+
+                        <line x1="100" y1="120" x2="100" y2="250" stroke="#22d3ee" stroke-width="1.5"/>
+                        <line x1="255" y1="120" x2="255" y2="250" stroke="#22d3ee" stroke-width="1.5"/>
+                        <line x1="410" y1="120" x2="410" y2="250" stroke="#22d3ee" stroke-width="1.5"/>
+                        <line x1="565" y1="120" x2="565" y2="250" stroke="#22d3ee" stroke-width="1.5"/>
+                        <line x1="720" y1="120" x2="720" y2="250" stroke="#22d3ee" stroke-width="1.5"/>
+
+                        <line x1="15" y1="185" x2="805" y2="185" stroke="#f87171" stroke-width="2" stroke-dasharray="6 4"/>
+
+                        <rect x="210" y="250" width="400" height="50" rx="10" fill="#0f172a" stroke="#22d3ee" stroke-width="2.5"/>
+                        <text x="410" y="272" text-anchor="middle" fill="#a5f3fc" font-size="11" font-weight="700">HARDWARE &#8212; BODY</text>
+                        <text x="410" y="288" text-anchor="middle" fill="#94a3b8" font-size="9">sleep &#183; diet &#183; movement</text>
+
+                        <text x="410" y="318" text-anchor="middle" fill="#94a3b8" font-size="10">Fixing five processes never works if the sixth (the chip) is overheating.</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 min-w-0">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-code text-cyan-400"></i> hardware-health.rules</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-cyan-400 text-[10px] font-semibold">YAML</span>
+                </div>
+                <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-cyan-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-purple-400">groups</span>:
+  - <span class="text-slate-300">name</span>: <span class="text-emerald-300">hardware-health</span>
+    <span class="text-slate-300">rules</span>:
+      - <span class="text-slate-300">alert</span>: <span class="text-sky-400">SleepDebtCritical</span>
+        <span class="text-slate-300">expr</span>: hours_slept_avg_7d &lt; <span class="text-amber-400">6</span>
+        <span class="text-slate-300">for</span>: <span class="text-amber-400">2</span>d
+        <span class="text-slate-300">labels</span>: { severity: <span class="text-emerald-300">throttle_all_processes</span> }
+        <span class="text-slate-300">annotations</span>:
+          <span class="text-slate-300">summary</span>: <span class="text-emerald-300">"CPU (body) about to thermal-throttle every process"</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ============================= 9. WISDOM / SYNTHESIS ============================= -->
+        <section id="synthesis" class="space-y-8">
+            <div class="border-l-4 border-pink-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">9. The Scheduler's Law</h2>
+                    <span class="px-3 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded-full">DISTILLED RULE</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Six processes, one clock, one rule that decides the other five without a daily renegotiation.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-w-0">
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 min-w-0">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-feather-pointed text-pink-400"></i> Schedule the Kernel First
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        None of the six domains individually causes a crash. What crashes a life is scheduling them in the wrong order &mdash; letting the foreground process claim the CPU before the kernel gets its interrupt, or leaving init to run on whatever time is left over instead of a guarantee. Fix the order once and the daily renegotiation disappears: pin the five daily interrupts as REALTIME, give init and hardware a guaranteed floor, and only then tune profession, independence, and social I/O for actual output. Qur'an 28:77 states the whole shape of the rule in one line &mdash; seek the Hereafter through what you've been given, and do not forget your share of this world. Neither half is optional; the order between them is what the whole system depends on.
+                    </p>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-pink-900/50 space-y-3 min-w-0">
+                        <h4 class="text-xs font-bold uppercase text-pink-400 tracking-wider">Distillation Pipeline</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                            <div class="p-2 bg-slate-900 border border-slate-800 rounded">
+                                <span class="text-slate-400 block font-bold">DATA</span>
+                                <span class="text-[10px] text-slate-500">Raw hours in your day</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-emerald-800/50 rounded">
+                                <span class="text-emerald-400 block font-bold">DOMAINS</span>
+                                <span class="text-[10px] text-slate-500">A &#183; F &#183; P &#183; I &#183; S &#183; H</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-amber-800/50 rounded">
+                                <span class="text-amber-400 block font-bold">MECHANISM</span>
+                                <span class="text-[10px] text-slate-500">Priority + guaranteed slice</span>
+                            </div>
+                            <div class="p-2 bg-slate-900 border border-pink-500/80 rounded glow-pink">
+                                <span class="text-pink-400 block font-bold">RULE</span>
+                                <span class="text-[10px] text-pink-300">Kernel-first scheduling</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between min-w-0">
+                    <div class="space-y-3 min-w-0">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> priority.yaml</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-400 text-[10px] font-semibold">YAML</span>
+                        </div>
+                        <pre class="text-xs font-mono text-slate-200 bg-slate-900/90 p-4 rounded-xl border border-pink-900/40 overflow-x-auto whitespace-pre leading-relaxed"><code><span class="text-purple-400">schedule</span>:
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">allah</span>
+    <span class="text-slate-300">priority</span>: <span class="text-sky-400">REALTIME</span>
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">family</span>
+    <span class="text-slate-300">guarantee</span>: <span class="text-amber-400">yes</span>
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">health</span>
+    <span class="text-slate-300">guarantee</span>: <span class="text-amber-400">yes</span>
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">profession</span>
+    <span class="text-slate-300">quota</span>: <span class="text-amber-400">1</span>/6 <span class="text-slate-500"># tunable, never all six</span>
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">independence</span>
+    <span class="text-slate-300">quota</span>: <span class="text-amber-400">1</span>/6
+  - <span class="text-slate-300">process</span>: <span class="text-emerald-300">social</span>
+    <span class="text-slate-300">quota</span>: <span class="text-amber-400">1</span>/6</code></pre>
+                    </div>
+                    <p class="text-xs text-slate-500 italic mt-2">
+                        You don't find balance. You configure it once, then run the scheduler.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 10. ACTIVE RECALL ============================= -->
+        <section id="active-recall" class="space-y-8">
+            <div class="border-l-4 border-cyan-500 pl-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">10. Reader Retention &amp; Active Recall System</h2>
+                    <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded-full">LONG-TERM MEMORY LOCK</span>
+                </div>
+                <p class="text-slate-400 text-sm mt-1">Interactive self-testing tools designed to lock these mental models into your long-term memory before you leave.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-400">
+                        <span>RECALL CUE #1</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why can't a "busy day" ever cancel Fajr the way it can cancel a meeting?</h4>
+                    <button onclick="toggleAnswer('ans-1')" class="text-xs px-3 py-1.5 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg hover:bg-emerald-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-1" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">Because it runs at <strong>REALTIME</strong> priority, like a kernel interrupt &mdash; everything else negotiates for the gaps around it, it never negotiates for a gap around anything else.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-purple-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-purple-400">
+                        <span>RECALL CUE #2</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why does a neglected family often look fine right up until it doesn't?</h4>
+                    <button onclick="toggleAnswer('ans-2')" class="text-xs px-3 py-1.5 bg-purple-950 text-purple-300 border border-purple-800 rounded-lg hover:bg-purple-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-2" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">Starved processes don't crash loudly &mdash; they become <strong>zombies</strong>, technically listed, no longer really running, until the missing supervision becomes impossible to hide.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-amber-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-400">
+                        <span>RECALL CUE #3</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why is it dangerous to let your job title answer "who am I"?</h4>
+                    <button onclick="toggleAnswer('ans-3')" class="text-xs px-3 py-1.5 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg hover:bg-amber-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-3" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">The job is the <strong>foreground process</strong>, the one everyone can see &mdash; not the machine. Daemons nobody can see are what actually keep the system alive.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-pink-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400">
+                        <span>RECALL CUE #4</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why can a layoff destroy income and identity on the same day?</h4>
+                    <button onclick="toggleAnswer('ans-4')" class="text-xs px-3 py-1.5 bg-pink-950 text-pink-300 border border-pink-800 rounded-lg hover:bg-pink-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-4" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">If both were only ever stored in the employer's <strong>volatile RAM</strong> instead of written to disk you own, one power loss erases both at once.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-sky-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-sky-400">
+                        <span>RECALL CUE #5</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What do total isolation and saying yes to everyone have in common?</h4>
+                    <button onclick="toggleAnswer('ans-5')" class="text-xs px-3 py-1.5 bg-sky-950 text-sky-300 border border-sky-800 rounded-lg hover:bg-sky-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-5" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">Both are <strong>unrated</strong> ports &mdash; one fully closed, one fully open &mdash; and both fail the same way: nothing real gets through in either direction.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-cyan-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-cyan-400">
+                        <span>RECALL CUE #6</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">Why can perfect discipline in five domains still fail the sixth week?</h4>
+                    <button onclick="toggleAnswer('ans-6')" class="text-xs px-3 py-1.5 bg-cyan-950 text-cyan-300 border border-cyan-800 rounded-lg hover:bg-cyan-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-6" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">Because health isn't a sixth process competing for CPU &mdash; it's the <strong>hardware</strong> the other five run on, and it throttles all of them at once when neglected.</div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-pink-500/50 transition-all">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400">
+                        <span>RECALL CUE #7</span>
+                        <i class="fa-solid fa-question-circle"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-white">What's the one scheduling change that removes the daily renegotiation?</h4>
+                    <button onclick="toggleAnswer('ans-7')" class="text-xs px-3 py-1.5 bg-pink-950 text-pink-300 border border-pink-800 rounded-lg hover:bg-pink-900 w-full font-medium transition-colors">Show Answer</button>
+                    <div id="ans-7" class="hidden text-xs text-slate-300 pt-2 border-t border-slate-800 leading-relaxed">Pin the <strong>kernel</strong> (Allah) as REALTIME first. Every other domain's schedule falls out of what's left, instead of everything competing from scratch each morning.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 11. UNIFIED / MASTER SECTION ============================= -->
+        <section id="unified-system" class="space-y-8">
+            <div class="border-l-4 border-sky-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">11. One Machine, One Clock</h2>
+                <p class="text-slate-400 text-sm mt-1">From six apps fighting for attention to one scheduler with a guaranteed slice for each.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-sky-400 font-semibold text-lg">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <h3>The Multitasking Illusion</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        It feels like six independent apps competing for your attention &mdash; work, family, faith, money, friends, and your body, each demanding its own dedicated window. But there's one body, one day, twenty-four hours: a single-core CPU time-slicing between processes that only look independent from the outside.
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-sky-900/50 space-y-2">
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider block"><i class="fa-solid fa-lightbulb"></i> Why It Feels Right</span>
+                        <p class="text-xs text-slate-300">Each domain really does have its own priorities and its own crises &mdash; treating them as separate apps isn't wrong, only incomplete, because they all still share one substrate underneath.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 text-purple-400 font-semibold text-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <h3>The Scheduled System</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Explicit priorities plus a guaranteed minimum time-slice per process prevents any one domain from starving the rest &mdash; a real-time interrupt for the kernel, a protected floor for init and hardware, and a tunable quota for the three that can actually flex.
+                    </p>
+                    <div class="p-4 bg-slate-950 rounded-xl border border-purple-900/50 space-y-2">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider block"><i class="fa-solid fa-shield-halved"></i> What It Buys</span>
+                        <p class="text-xs text-slate-300">A machine that degrades gracefully under load instead of catastrophically &mdash; one process slows, not six domains collapsing at once.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 glow-sky">
+                <h3 class="text-sm font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-sky-400"></i> Visual Memory Anchor: Six Processes, One Kernel, One Output
+                </h3>
+                <div class="w-full overflow-x-auto">
+                    <svg viewBox="0 0 920 400" class="w-full h-auto min-w-[750px] font-sans">
+                        <defs>
+                            <marker id="arrow-sky-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-emerald-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+                            </marker>
+                        </defs>
+
+                        <g transform="translate(20, 175)">
+                            <rect width="150" height="90" rx="12" fill="#065f46" stroke="#10b981" stroke-width="2"/>
+                            <text x="75" y="42" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">KERNEL</text>
+                            <text x="75" y="60" text-anchor="middle" fill="#d1fae5" font-size="9.5">Allah &#8212; REALTIME</text>
+                        </g>
+
+                        <rect x="250" y="20" width="230" height="50" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="365" y="43" text-anchor="middle" fill="#c4b5fd" font-weight="bold" font-size="11">FAMILY (init)</text>
+                        <text x="365" y="58" text-anchor="middle" fill="#94a3b8" font-size="8.5">guaranteed floor</text>
+
+                        <rect x="250" y="85" width="230" height="50" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="365" y="108" text-anchor="middle" fill="#fbbf24" font-weight="bold" font-size="11">PROFESSION (fg)</text>
+                        <text x="365" y="123" text-anchor="middle" fill="#94a3b8" font-size="8.5">quota: 1/6</text>
+
+                        <rect x="250" y="150" width="230" height="50" rx="10" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+                        <text x="365" y="173" text-anchor="middle" fill="#f9a8d4" font-weight="bold" font-size="11">INDEPENDENCE (disk)</text>
+                        <text x="365" y="188" text-anchor="middle" fill="#94a3b8" font-size="8.5">quota: 1/6</text>
+
+                        <rect x="250" y="215" width="230" height="50" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="365" y="238" text-anchor="middle" fill="#bae6fd" font-weight="bold" font-size="11">SOCIAL (network)</text>
+                        <text x="365" y="253" text-anchor="middle" fill="#94a3b8" font-size="8.5">quota: 1/6</text>
+
+                        <rect x="250" y="280" width="230" height="50" rx="10" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="365" y="303" text-anchor="middle" fill="#a5f3fc" font-weight="bold" font-size="11">HEALTH (hardware)</text>
+                        <text x="365" y="318" text-anchor="middle" fill="#94a3b8" font-size="8.5">guaranteed floor</text>
+
+                        <g transform="translate(720, 165)">
+                            <rect width="190" height="90" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="95" y="42" text-anchor="middle" fill="#38bdf8" font-weight="bold" font-size="13">FALAH</text>
+                            <text x="95" y="60" text-anchor="middle" fill="#94a3b8" font-size="9.5">a life that doesn't crash</text>
+                        </g>
+
+                        <path d="M 170 220 C 210 220, 210 45, 250 45" stroke="#10b981" stroke-width="1.8" marker-end="url(#arrow-emerald-m)" fill="none"/>
+                        <path d="M 170 220 C 210 220, 210 110, 250 110" stroke="#10b981" stroke-width="1.8" marker-end="url(#arrow-emerald-m)" fill="none"/>
+                        <path d="M 170 220 C 210 220, 210 175, 250 175" stroke="#10b981" stroke-width="1.8" marker-end="url(#arrow-emerald-m)" fill="none"/>
+                        <path d="M 170 220 C 210 220, 210 240, 250 240" stroke="#10b981" stroke-width="1.8" marker-end="url(#arrow-emerald-m)" fill="none"/>
+                        <path d="M 170 220 C 210 220, 210 305, 250 305" stroke="#10b981" stroke-width="1.8" marker-end="url(#arrow-emerald-m)" fill="none"/>
+
+                        <path d="M 480 45 C 600 45, 600 210, 715 210" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-sky-m)" fill="none"/>
+                        <path d="M 480 110 C 600 110, 600 210, 715 210" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-sky-m)" fill="none"/>
+                        <path d="M 480 175 C 600 175, 600 210, 715 210" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-sky-m)" fill="none"/>
+                        <path d="M 480 240 C 600 240, 600 210, 715 210" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-sky-m)" fill="none"/>
+                        <path d="M 480 305 C 600 305, 600 210, 715 210" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-sky-m)" fill="none"/>
+
+                        <text x="460" y="378" text-anchor="middle" fill="#64748b" font-size="10">Five scheduled processes, one privileged kernel, one output &mdash; not six lives running in parallel.</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= 12. ROADMAP ============================= -->
+        <section id="roadmap" class="space-y-8">
+            <div class="border-l-4 border-slate-500 pl-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">12. Build Order</h2>
+                <p class="text-slate-400 text-sm mt-1">The mistake this avoids: optimizing profession before the kernel and init are even scheduled.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Phase 1 &#183; Mandatory Baseline</div>
+                    <h3 class="text-xl font-bold text-white">Pin the Kernel</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Block the five prayers plus Duha as REALTIME on the actual calendar, not "hopefully available"</li>
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Nothing else can preempt it &mdash; the day finally has a fixed spine</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Feels rigid for the first two weeks</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-amber-400 text-xs font-bold uppercase tracking-wider">Phase 2 &#183; Safety &amp; Invariants</div>
+                    <h3 class="text-xl font-bold text-white">Guarantee init &amp; Hardware</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> A minimum weekly slice for family (e.g. two non-negotiable dinners) that survives the busiest work week</li>
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> A 7-hour sleep floor treated as scheduled maintenance, not optional</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Profession may feel slower in the short term</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="text-purple-400 text-xs font-bold uppercase tracking-wider">Phase 3 &#183; Optimization</div>
+                    <h3 class="text-xl font-bold text-white">Tune the Rest</h3>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> Now tune profession, independence, and social I/O for real output</li>
+                        <li><i class="fa-solid fa-check text-emerald-400"></i> The foundation processes can't be starved by whatever you optimize here</li>
+                        <li><i class="fa-solid fa-xmark text-red-400"></i> Requires re-tuning as life stage changes &mdash; the config isn't static</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================= FOOTER ============================= -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-8 mt-16 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>Generated with the <span class="font-mono text-slate-400">create-masterclass-page</span> local skill.</p>
+            <p class="font-mono text-slate-600">Single-File Standalone Interactive Edition</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function exportMarkdown() {
+            const markdownContent = `# The AFPISH Operating System
+
+## Executive Abstract
+Allah, family, profession, independence, social life, and health are not six hobbies competing for spare time. They are six processes sharing one CPU (your day) and one disk (your one life). This masterclass reframes AFPISH as an operating system: one privileged kernel, five dependent processes, and the scheduling rules that keep all six alive at once.
+
+---
+
+## The Process Table
+
+| OS Role | Domain | Core Question |
+|---|---|---|
+| The Kernel | Allah | What does every process answer to? |
+| Process Zero (init) | Family | Whose child am I, and who's mine? |
+| The Foreground Process | Profession | What's running when someone looks at my terminal? |
+| Persistent Storage | Independence | What survives when the power goes out? |
+| The Network Stack | Social | What packets go in and out? |
+| The Hardware Itself | Health | What throttles when I don't maintain it? |
+
+---
+
+## 1. Allah: The Kernel
+The five daily interrupts aren't optional background tasks. They're the one priority level (REALTIME) the rest of your day is scheduled around, not squeezed against. Source: Qur'an 28:77.
+
+## 2. Family: Process Zero
+A process that only gets "whatever time is left over" isn't scheduled, it's opportunistic. Golden Rule: if it's not on the calendar with a guaranteed time-slice, it isn't running, it's a zombie.
+
+## 3. Profession: The Foreground Process
+The foreground process is the one everyone can see; the daemons everyone can't see are the ones actually keeping the machine alive. Fair share of CPU: 1 of 6, not 6 of 6.
+
+## 4. Independence: Persistent Storage
+Golden Rule: anything you can't survive losing in a day shouldn't be the only place you stored it. Write income and identity to disk you own, not an employer's volatile RAM.
+
+## 5. Social: The Network Stack
+A network stack with no rate limit and one with no packets at all fail the same way: nothing real gets through. Zakat is a scheduled outbound packet the protocol requires, not a discretionary one.
+
+## 6. Health: The Hardware Itself
+Golden Rule: you cannot optimize software running on hardware you're actively destroying. Sleep, diet, and movement are the chip everything else executes on, not one more app competing for CPU time.
+
+---
+
+## The Scheduler's Law
+Fix the order once and the daily renegotiation disappears: pin the five daily interrupts as REALTIME, give init and hardware a guaranteed floor, and only then tune profession, independence, and social I/O for actual output. You don't find balance. You configure it once, then run the scheduler.
+
+---
+
+## Active Recall
+1. Q: Why can't a "busy day" ever cancel Fajr the way it can cancel a meeting? A: It runs at REALTIME priority; everything else negotiates for the gaps around it.
+2. Q: Why does a neglected family often look fine right up until it doesn't? A: Starved processes become zombies, technically listed, no longer really running.
+3. Q: Why is it dangerous to let your job title answer "who am I"? A: The job is the foreground process, not the machine.
+4. Q: Why can a layoff destroy income and identity on the same day? A: Both were stored in volatile RAM instead of written to disk you own.
+5. Q: What do total isolation and saying yes to everyone have in common? A: Both are unrated ports, and both fail the same way.
+6. Q: Why can perfect discipline in five domains still fail the sixth week? A: Health is the hardware the other five run on, and it throttles all of them at once.
+7. Q: What's the one scheduling change that removes the daily renegotiation? A: Pin the kernel (Allah) as REALTIME first.
+`;
+
+            const blob = new Blob([markdownContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'the_afpish_operating_system.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

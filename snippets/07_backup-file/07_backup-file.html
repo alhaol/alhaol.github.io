@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>backup-file — snippet 07</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2e38; --text: #e6e8ec;
+    --muted: #9aa1ad; --accent: #5fb3ff; --good: #4fd18b; --warn: #ffb454;
+    --code-bg: #0b0d11; --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f7f8fa; --panel:#fff; --border:#e2e5ea; --text:#1b1f27; --muted:#5b6270; --code-bg:#f1f3f6; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+  a { color: var(--accent); }
+  a.back { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .desc { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .badges { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .badge {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  }
+  section { margin-bottom: 30px; }
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin: 0 0 10px; font-weight: 700;
+  }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 10px 6px 0; vertical-align: top; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; width: 110px; }
+  tr:last-child td, tr:last-child th { border-bottom: none; }
+  code { font-family: var(--mono); font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    font-family: var(--mono); font-size: 13px; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; margin: 0; white-space: pre;
+  }
+  ul.security { margin: 0; padding-left: 18px; }
+  ul.security li { margin-bottom: 6px; }
+  ul.security li::marker { color: var(--good); }
+  .filename { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; all snippets</a>
+
+  <h1>backup-file</h1>
+  <p class="desc">Makes a timestamped copy of a file next to the original before you edit or overwrite it. A one-line safety net for config files, scripts, or anything you're about to hand-edit.</p>
+  <div class="badges">
+    <span class="badge">Bash</span>
+    <span class="badge">#07</span>
+  </div>
+
+  <section>
+    <h2>Source</h2>
+    <div class="filename">backup-file.sh</div>
+    <pre><code>#!/usr/bin/env bash
+# Make a timestamped copy of a file: name.ext -&gt; name.ext.20260816-153000.bak
+# Usage: backup-file.sh &lt;path&gt;
+set -euo pipefail
+src="$1"
+
+if [ ! -f "$src" ]; then
+  echo "not a file: $src" &gt;&amp;2
+  exit 1
+fi
+
+ts="$(date +%Y%m%d-%H%M%S)"
+dest="${src}.${ts}.bak"
+cp -p -- "$src" "$dest"
+echo "$dest"</code></pre>
+  </section>
+
+  <section>
+    <h2>Input</h2>
+    <div class="panel">
+      <table>
+        <tr><th>path</th><td>string — positional argument, path to the file to back up, e.g. <code>nginx.conf</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <div class="panel">
+      Creates <code>&lt;path&gt;.&lt;timestamp&gt;.bak</code> (mode/timestamps preserved via <code>cp -p</code>)
+      and prints its path to stdout, exit 0. Exits 1 with a message on stderr if <code>path</code>
+      isn't a regular file.
+    </div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <pre><code>$ ./backup-file.sh nginx.conf
+nginx.conf.20260816-153000.bak</code></pre>
+  </section>
+
+  <section>
+    <h2>Config</h2>
+    <div class="panel">
+      No configuration required.
+    </div>
+  </section>
+
+  <section>
+    <h2>Security notes</h2>
+    <div class="panel">
+      <ul class="security">
+        <li><code>cp -p -- "$src" "$dest"</code> uses <code>--</code> and quoting so a filename starting with <code>-</code> can't be interpreted as a <code>cp</code> option.</li>
+        <li><code>set -euo pipefail</code> plus an explicit file-existence check means a missing/typo'd path fails clearly instead of silently doing nothing.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>
