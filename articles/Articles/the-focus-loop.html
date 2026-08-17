@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Focus Loop | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_48.png" alt="The Focus Loop" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive Systems</span>
+                        <span class="category-badge category-workflow">Workflow</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Focus Loop</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">A methodology that treats focus as an engineering problem, not a willpower problem, using AI to hold task state so restarting costs almost nothing.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 17, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Most focus advice treats attention like a muscle: build discipline, cut distractions, push through the urge to check your phone. That model gets the mechanism wrong. The real cost of an interruption is not the interruption itself. It is the price of restarting afterward, and that price is mostly a tooling problem, not a willpower problem.</p>
+
+<p>Knowledge workers do not get long uninterrupted stretches by default. A message arrives, a meeting starts, a colleague stops by a desk. None of that is new. What has changed is how much it now costs to get back to where you were, because most work today lives in half-finished documents, open browser tabs, and a mental model of a problem that nobody wrote down. When the interruption ends, you do not resume. You reconstruct.</p>
+
+<h2>Why focus breaks down: the restart tax</h2>
+
+<p>Organizational psychologist Sophie Leroy named this effect <em>attention residue</em>: part of your attention stays attached to the task you left, even after you start the next one, because your brain has not finished processing it. Her 2009 study found that people who switched tasks without finishing the first one performed worse on the second, and the gap grew with how unresolved the first task felt when they left it.</p>
+
+<p>Gloria Mark's research at UC Irvine puts a number on the recovery. In her book <em>Attention Span</em>, she reports that it takes an average of about 23 minutes to fully return to a task after a switch. That is not 23 minutes of idle time. It is 23 minutes of degraded output: slower typing, more errors, more re-reading of what you already wrote, because you are rebuilding a mental model that a slide deck or an inbox will not hand back to you.</p>
+
+<blockquote>The real lever is not blocking interruptions. It is collapsing the cost of the next restart back toward zero, so a broken session becomes a minor tax instead of a lost hour.</blockquote>
+
+<p>Figure 1 makes the comparison concrete. The gap between the two rows is not attention span or discipline. It is whether something outside your head held the state of the task while you were gone.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 220" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Interruption cost with and without AI-held task state</title>
+            <desc id="fig1-desc">Without a system holding task state, resuming after an interruption costs roughly 23 minutes of attention residue before full refocus. With an AI system that restates the task on resume, that residue drops to under 20 seconds.</desc>
+            <text x="320" y="30" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="700" font-family="Inter, sans-serif">The restart tax</text>
+
+            <text x="40" y="54" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em" font-family="Inter, sans-serif">WITHOUT HELD STATE</text>
+            <rect x="40" y="64" width="330" height="26" fill="#f59e0b" rx="3"/>
+            <rect x="370" y="64" width="230" height="26" fill="#60a5fa" rx="3"/>
+            <text x="205" y="106" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">attention residue</text>
+            <text x="205" y="120" text-anchor="middle" fill="#64748b" font-size="11" font-family="Inter, sans-serif">~23 min, Mark (2023)</text>
+            <text x="485" y="106" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">resumed work</text>
+
+            <text x="40" y="150" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em" font-family="Inter, sans-serif">WITH AI-HELD STATE</text>
+            <rect x="40" y="160" width="60" height="26" fill="#f59e0b" rx="3"/>
+            <rect x="100" y="160" width="500" height="26" fill="#60a5fa" rx="3"/>
+            <text x="70" y="202" text-anchor="middle" fill="#f1f5f9" font-size="11" font-family="Inter, sans-serif">&lt;20s</text>
+            <text x="350" y="202" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">resumed work</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Attention residue, not the interruption itself, is what erases a work session. When a system holds the task's state and restates it on resume, the residue segment collapses from roughly 23 minutes to under 20 seconds. Sources: Leroy (2009), Mark (2023).</figcaption>
+</figure>
+
+<h2>Borrowing from habit science, not app gamification</h2>
+
+<p>Most focus apps copy the wrong half of habit science. They borrow the reward loop (streaks, badges, weekly summaries) and skip the part that actually predicts behavior. BJ Fogg's Tiny Habits model states it plainly: a behavior happens when motivation, ability, and a prompt converge at the same moment. Miss the prompt, or leave the ability bar too high, and motivation alone will not carry you across.</p>
+
+<p>Psychologist Peter Gollwitzer found the same thing from a different angle. His research on implementation intentions, plans in the form "when X happens, I will do Y," showed that people who wrote a specific if-then plan followed through far more often than people who just intended to act. The plan removes a decision at the exact moment willpower is weakest: the first thirty seconds after you sit back down.</p>
+
+<p>A habit app can supply the prompt. It cannot lower the ability bar, because it does not know what you were doing. It can only ask if you did the thing. This is where an AI system that can read a document, a codebase, or a running conversation earns its place: it can restate exactly where a task stood and hand you a next step small enough to start in under two minutes, the ability half of Fogg's model that a static app can never fill in.</p>
+
+<h2>Designing the AI-held loop</h2>
+
+<p>The system worth building has four stages, and the AI's job changes at each one. A trigger, usually a calendar block or a recurring cue, starts the session. The AI proposes a micro-task, sized from what actually happened last time rather than from a fixed plan. A work block runs on a timer, one task, one window. At the end, the AI captures state: what got done, what is blocked, and what the very next step is.</p>
+
+<p>The adaptive part is the sizing. If the last two or three blocks ended unfinished, the next micro-task should shrink, not repeat at the same size. If blocks have been finishing early, it should grow. A streak counter cannot do this because it only knows whether you showed up, not whether the step you were given fit the time you had. An AI that reads your session-end notes can adjust the next prompt on that signal instead of on a fixed rule someone wrote into the app a year ago.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 190" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">The adaptive focus loop</title>
+            <desc id="fig2-desc">A four-stage loop. A trigger cues a micro-task sized by the AI, a timed work block follows, the AI captures the resulting state, and the loop returns to the next scheduled trigger. The AI resizes the next micro-task based on whether recent blocks were completed.</desc>
+            <defs>
+                <marker id="fig2-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+                </marker>
+            </defs>
+
+            <text x="320" y="30" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="700" font-family="Inter, sans-serif">The adaptive focus loop</text>
+
+            <rect x="20" y="54" width="135" height="60" fill="#1a2942" stroke="#2a3f5f" rx="6"/>
+            <text x="87" y="78" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em" font-family="Inter, sans-serif">TRIGGER</text>
+            <text x="87" y="96" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">calendar cue</text>
+
+            <rect x="175" y="54" width="135" height="60" fill="#1a2942" stroke="#2a3f5f" rx="6"/>
+            <text x="242" y="78" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em" font-family="Inter, sans-serif">MICRO-TASK</text>
+            <text x="242" y="96" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">AI sizes the step</text>
+
+            <rect x="330" y="54" width="135" height="60" fill="#1a2942" stroke="#2a3f5f" rx="6"/>
+            <text x="397" y="78" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em" font-family="Inter, sans-serif">WORK BLOCK</text>
+            <text x="397" y="96" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">single task, timed</text>
+
+            <rect x="485" y="54" width="135" height="60" fill="#1a2942" stroke="#2a3f5f" rx="6"/>
+            <text x="552" y="78" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em" font-family="Inter, sans-serif">STATE CAPTURE</text>
+            <text x="552" y="96" text-anchor="middle" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif">AI logs progress</text>
+
+            <line x1="157" y1="84" x2="173" y2="84" stroke="#60a5fa" stroke-width="2" marker-end="url(#fig2-arrow)"/>
+            <line x1="312" y1="84" x2="328" y2="84" stroke="#60a5fa" stroke-width="2" marker-end="url(#fig2-arrow)"/>
+            <line x1="467" y1="84" x2="483" y2="84" stroke="#60a5fa" stroke-width="2" marker-end="url(#fig2-arrow)"/>
+
+            <path d="M552,114 L552,150 L88,150 L88,114" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#fig2-arrow)"/>
+            <text x="320" y="170" text-anchor="middle" fill="#64748b" font-size="11" font-family="Inter, sans-serif">resizes next micro-task, then repeats at the next trigger</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The loop an AI system can hold that a static habit tracker cannot: it sizes the next step from what actually happened last time, not from a fixed streak target. Skipped or incomplete blocks shrink the next micro-task. Completed blocks with time to spare grow it.</figcaption>
+</figure>
+
+<h2>Building your own resume prompt</h2>
+
+<p>You do not need a custom tool to test this. Two prompts, one at the start of a session and one at the end, are enough to run the loop with any AI assistant you already use.</p>
+
+<pre><code>SESSION START (paste at the top of a fresh chat)
+Task: [one line, the actual next deliverable]
+Last state: [paste what the AI wrote at your last session end]
+Give me exactly one next action I can start in under two minutes.
+
+SESSION END (paste before you close the chat or step away)
+Summarize where this task stands in three lines: what's done,
+what's blocked, what the very next step is when I come back.
+Flag if the last two sessions ended incomplete, so the next
+micro-task starts smaller.</code></pre>
+
+<p>Run it for two weeks and read your own session-end notes back. You will see the pattern Leroy and Mark describe from the inside: sessions that start from a restated state feel almost like you never left, and sessions that start cold burn the first ten minutes rebuilding context you already had yesterday.</p>
+
+<h2>What this does not fix</h2>
+
+<p>None of this repairs a calendar that resets a team's attention every fifty minutes. A single person running a tight resume loop still loses the afternoon if four separate meetings each interrupt a different piece of work. The loop reduces the tax on each individual restart. It does not remove the restarts a badly designed schedule keeps generating.</p>
+
+<p>That is the actual argument for treating this as infrastructure rather than a personal productivity trick. If an AI system can hold task state well enough that a restart costs seconds instead of minutes, the constraint on deep work shifts from "protect long uninterrupted blocks at all costs" to "make every interruption cheap to recover from." That is a more realistic thing to design a workday around, and it changes what a manager should measure.</p>
+
+<h2>What leaders should do</h2>
+<ol>
+<li>Measure restart cost, not just meeting count. Ask a few teams to note how long it actually takes to get back to real output after a meeting ends, and track that number the way you would track cycle time or defect rate.</li>
+<li>Standardize a one-line session-end note as a team habit: what's done, what's blocked, what's next. It costs under a minute to write and it is the one input that makes an AI resume prompt work.</li>
+<li>Stop funding focus tools that optimize for streaks. Ask vendors and internal tool owners whether the system adjusts task size from actual completion data, or just counts consecutive days.</li>
+<li>Audit recurring meetings for restart cost, not just calendar cost. A 15-minute status meeting landing in the middle of someone's deep work block can cost 40 minutes once residue is counted, and moving it to the edge of a block is often free.</li>
+</ol>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Happiness Loop</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">The best hours of your life run on four conditions you can build, and AI is the first tool that can supply all four or destroy all four.</p>
+                        <a href="the-happiness-loop.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is how you work the brief window before new information decays.</p>
+                        <a href="the-memory-workbench.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Friction Advantage</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the smoothest path to knowledge is usually the one where you learn the least, and how to make AI work against that instinct.</p>
+                        <a href="the-friction-advantage.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Leroy, S. (2009). <em>"Why is it so hard to do my work? The challenge of attention residue when switching between work tasks."</em> Organizational Behavior and Human Decision Processes, 109(2), 168-181.
+                        <a href="https://doi.org/10.1016/j.obhdp.2009.04.002" target="_blank">https://doi.org/10.1016/j.obhdp.2009.04.002</a>
+                    </li>
+                    <li class="reference-item">
+                        Mark, G. (2023). <em>Attention Span: A Groundbreaking Way to Restore Balance, Happiness and Productivity.</em> Hanover Square Press.
+                    </li>
+                    <li class="reference-item">
+                        Fogg, B. J. (2019). <em>Tiny Habits: The Small Changes That Change Everything.</em> Houghton Mifflin Harcourt.
+                    </li>
+                    <li class="reference-item">
+                        Gollwitzer, P. M. (1999). <em>"Implementation intentions: Strong effects of simple plans."</em> American Psychologist, 54(7), 493-503.
+                        <a href="https://doi.org/10.1037/0003-066X.54.7.493" target="_blank">https://doi.org/10.1037/0003-066X.54.7.493</a>
+                    </li>
+                    <li class="reference-item">
+                        Anthropic. <em>"Building effective agents."</em> Anthropic Engineering.
+                        <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank">https://www.anthropic.com/engineering/building-effective-agents</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
