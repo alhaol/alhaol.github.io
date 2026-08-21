@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Benchmark You Build | alhaol.github.io</title>
+    <meta name="description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="The Benchmark You Build">
+    <meta property="og:description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_50.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_50.png" alt="The Benchmark You Build" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI / ML</span>
+                        <span class="category-badge category-engineering">Engineering</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Benchmark You Build</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 20, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+<p>Every team that picks a model off a leaderboard is running an experiment somebody else designed, on a population that is not theirs, and treating the result as a decision.</p>
+
+<p>That is usually not laziness. A public score is often the only number available, it arrives free, and it comes with the authority of a paper and a chart. The problem is that three separate forces pull that number away from your reality, and none of them announce themselves. The score does not get less true. It gets less relevant, which is harder to notice.</p>
+
+<blockquote>A leaderboard measures a model against a population of questions. You are buying a model to serve a population of users. Nobody has ever shown you that those two populations resemble each other.</blockquote>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Overlap between what a public benchmark samples and what production traffic looks like</title>
+            <desc id="fig1-desc">Two overlapping regions. The public benchmark region contains Modern Standard Arabic, general knowledge, multiple choice and curated text. The production traffic region contains dialect, code-switching, your own domain and messy open-ended requests. The overlap between them is narrow, and the published score is computed almost entirely outside it.</desc>
+
+            <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">What the score measures, and what you sell</text>
+
+            <ellipse cx="230" cy="152" rx="150" ry="95" fill="#60a5fa" fill-opacity="0.09" stroke="#60a5fa" stroke-opacity="0.8"/>
+            <ellipse cx="410" cy="152" rx="150" ry="95" fill="#f59e0b" fill-opacity="0.09" stroke="#f59e0b" stroke-opacity="0.8"/>
+
+            <text x="96" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#60a5fa">PUBLIC BENCHMARK</text>
+            <text x="96" y="136" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Modern Standard Arabic</text>
+            <text x="96" y="156" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">General knowledge</text>
+            <text x="96" y="176" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Multiple choice</text>
+            <text x="96" y="196" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Curated and clean</text>
+
+            <text x="398" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">YOUR TRAFFIC</text>
+            <text x="398" y="136" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Dialect, code-switched</text>
+            <text x="398" y="156" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Your domain only</text>
+            <text x="398" y="176" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Open ended</text>
+            <text x="398" y="196" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Typos and half sentences</text>
+
+            <text x="320" y="146" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">the part</text>
+            <text x="320" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">that carries</text>
+            <text x="320" y="178" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">over</text>
+
+            <text x="40" y="278" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The published number is computed across the whole blue region, including the part you will never serve.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> A benchmark score is an average over a question population. Buying on that number assumes the two populations overlap, which is the one thing the number cannot tell you.</figcaption>
+</figure>
+
+<h2>Three ways a public number drifts</h2>
+
+<p>The first is contamination. Shuo Yang and colleagues showed that the standard defence, removing test items from training data by matching overlapping word sequences, does not survive paraphrase or translation. A rephrased test item slips straight through the filter. They found 8 to 18 percent of the HumanEval benchmark present in widely used pretraining corpora, and demonstrated that a 13 billion parameter model overfit to a rephrased test set can post numbers on par with GPT-4. The score is real. The competence behind it is not.</p>
+
+<p>The second is ordinary reuse. Benjamin Recht and colleagues rebuilt the test sets for CIFAR-10 and ImageNet, following the original collection procedure as closely as they could, then re-scored a wide range of published models. Accuracy fell by 11 to 14 percent on ImageNet and 3 to 15 percent on CIFAR-10. Nobody cheated. A decade of the research community tuning against one fixed sample was enough on its own to inflate every number in the literature.</p>
+
+<p>The third is the incentive structure around the leaderboard itself. A 2025 study of Chatbot Arena documented undisclosed private testing, where a provider evaluates many variants and publishes only the winner, and found that even modest amounts of extra arena data can produce relative gains of up to 112 percent on the arena distribution. That is a measurement of how well a model fits the arena, which is a different quantity from how well it works.</p>
+
+<h2>What Arabic makes impossible to ignore</h2>
+
+<p>Every team has this problem. Arabic teams find out sooner, because the gap between the benchmark and the user is visible in the language itself.</p>
+
+<p>Arabic is diglossic. Modern Standard Arabic is the written and formal register, and it is what nearly every Arabic benchmark is composed in. Your users write dialect, and they switch into English mid-sentence for technical terms. A model can score well on formal Arabic comprehension and still fail on a Gulf or Levantine support request, and no MSA benchmark will warn you.</p>
+
+<p>The better Arabic benchmarks know this and say so. ArabicMMLU was deliberately built from school exams across North Africa, the Levant and the Gulf with native speakers, rather than translating the English MMLU, because a translated benchmark carries the framing and the cultural assumptions of the original along with it. AraDiCE, published at COLING 2025 by a team at QCRI, went further and built dialectal sets for Gulf, Egyptian and Levantine Arabic, roughly 45,000 post-edited samples, plus a fine-grained benchmark for cultural awareness across those regions. Their result is worth holding onto: Arabic-specific models such as Jais and AceGPT beat multilingual models on dialect work, and dialect identification and generation remain difficult for everything tested.</p>
+
+<p>Those benchmarks are good and you should run them. They still stop one square short of where your product lives.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 348" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Coverage grid of Arabic benchmarks by language register and task specificity</title>
+            <desc id="fig2-desc">A two by two grid. Modern Standard Arabic with general knowledge is well covered by benchmarks such as ArabicMMLU. Dialect with general knowledge is partly covered by AraDiCE. Modern Standard Arabic on a specific domain is thin. Dialect on your own domain, which is where most production traffic sits, has no public benchmark at all.</desc>
+
+            <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Where Arabic benchmarks sit, and where your traffic sits</text>
+
+            <text x="245" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">GENERAL KNOWLEDGE</text>
+            <text x="435" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">YOUR DOMAIN</text>
+            <text x="140" y="120" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">DIALECT</text>
+            <text x="140" y="230" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">MSA</text>
+
+            <rect x="150" y="62" width="190" height="110" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="340" y="62" width="190" height="110" fill="#1a2942" stroke="#f59e0b" stroke-width="2"/>
+            <rect x="150" y="172" width="190" height="110" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="340" y="172" width="190" height="110" fill="#1a2942" stroke="#2a3f5f"/>
+
+            <text x="245" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#60a5fa">AraDiCE</text>
+            <text x="245" y="127" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Gulf, Egyptian, Levantine</text>
+            <text x="245" y="147" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Partly covered</text>
+
+            <text x="435" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#f59e0b">Your production traffic</text>
+            <text x="435" y="127" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">No public benchmark</text>
+            <text x="435" y="147" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">exists for this square</text>
+
+            <text x="245" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#60a5fa">ArabicMMLU</text>
+            <text x="245" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">40 tasks, 14,575 items</text>
+            <text x="245" y="257" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Well covered</text>
+
+            <text x="435" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">Domain sets</text>
+            <text x="435" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Thin and scattered</text>
+            <text x="435" y="257" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Rarely your domain</text>
+
+            <text x="40" y="312" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The amber square is the one you are paid to be correct in, and the only one nobody else will measure.</text>
+            <text x="40" y="330" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Sources: ArabicMMLU (ACL Findings 2024), AraDiCE (COLING 2025).</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> Public Arabic benchmarks have made real progress on register and culture. None of them cover your dialect on your task, which is the square your users occupy.</figcaption>
+</figure>
+
+<h2>How to build one that survives contact</h2>
+
+<p>A useful evaluation set is smaller and duller than people expect. Three hundred to five hundred items will separate serious candidates. Ten thousand items mostly buys you a slower feedback loop and a false sense of rigor.</p>
+
+<p>Sample the items from real traffic rather than writing them from imagination. Imagination produces the questions you expect to receive, which your system already handles, because you built it while imagining the same things. Logs produce the ones you actually get, including the half-typed ones and the ones in the wrong language. Stratify the sample so dialects and task types appear in something close to their real proportions, then oversample the rare cases you cannot afford to fail.</p>
+
+<p>Every item needs either a verifiable answer or an explicit rubric written before anyone scores a model. Label each item twice, independently, and keep a log of the disagreements. That disagreement rate is not overhead, it is the measurement's ceiling: if two of your own experts agree only 82 percent of the time, a model reporting 94 percent is telling you about your rubric, not about the model.</p>
+
+<p>Then split the set. Keep a private half that never leaves machines you control, never goes into a prompt to a hosted API, and never gets pasted into a vendor console during a bake-off. Contamination is not a hypothetical for a set you have been sending to third parties for a year.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 268" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">The five step loop for building and maintaining a custom evaluation set</title>
+            <desc id="fig3-desc">Five steps run left to right: sample real traffic, write items with answers, label twice and log disputes, hold out a private split, and score every candidate. The third and fourth steps are the ones most teams skip. A return arrow closes the loop, since the set is re-sampled each quarter and leaked items are retired.</desc>
+
+            <defs>
+                <marker id="arw50" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 z" fill="#60a5fa"/>
+                </marker>
+            </defs>
+
+            <text x="30" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Building the set, and keeping it honest</text>
+
+            <circle cx="80" cy="62" r="13" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="80" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">1</text>
+            <rect x="30" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="80" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Sample real</text>
+            <text x="80" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">traffic, not</text>
+            <text x="80" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">imagination</text>
+            <line x1="132" y1="122" x2="146" y2="122" stroke="#60a5fa" marker-end="url(#arw50)"/>
+
+            <circle cx="200" cy="62" r="13" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="200" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">2</text>
+            <rect x="150" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="200" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Write items</text>
+            <text x="200" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">with answers</text>
+            <text x="200" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">or rubrics</text>
+            <line x1="252" y1="122" x2="266" y2="122" stroke="#60a5fa" marker-end="url(#arw50)"/>
+
+            <circle cx="320" cy="62" r="13" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="320" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#f59e0b">3</text>
+            <rect x="270" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="320" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Label twice,</text>
+            <text x="320" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">log every</text>
+            <text x="320" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">disagreement</text>
+            <line x1="372" y1="122" x2="386" y2="122" stroke="#60a5fa" marker-end="url(#arw50)"/>
+
+            <circle cx="440" cy="62" r="13" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="440" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#f59e0b">4</text>
+            <rect x="390" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="440" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Hold out a</text>
+            <text x="440" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">private split</text>
+            <text x="440" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">that never ships</text>
+            <line x1="492" y1="122" x2="506" y2="122" stroke="#60a5fa" marker-end="url(#arw50)"/>
+
+            <circle cx="560" cy="62" r="13" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="560" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">5</text>
+            <rect x="510" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="560" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Score every</text>
+            <text x="560" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">candidate,</text>
+            <text x="560" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">yours included</text>
+
+            <path d="M270,176 L270,182 L490,182 L490,176" fill="none" stroke="#f59e0b" stroke-opacity="0.8"/>
+            <text x="380" y="200" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f59e0b">the two steps most teams skip</text>
+
+            <path d="M560,160 L560,226 L80,226 L80,166" fill="none" stroke="#60a5fa" stroke-opacity="0.55" stroke-dasharray="4 4" marker-end="url(#arw50)"/>
+            <text x="120" y="248" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Re-sample each quarter and retire items that turn up in vendor material.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> Steps 3 and 4 are what separate an evaluation set from a demo script. They are also the two that get cut when the deadline moves.</figcaption>
+</figure>
+
+<h2>Scoring without fooling yourself</h2>
+
+<p>Use exact match wherever the task allows it, because it costs nothing and cannot flatter anyone. For open-ended work you will end up using a model as the judge, which is reasonable and needs care.</p>
+
+<p>Lianmin Zheng and colleagues found that a strong judge model agrees with human preferences more than 80 percent of the time, which is about the rate at which humans agree with each other. The same paper documents the failure modes: position bias, where the answer shown first wins more often; verbosity bias, where longer answers score higher regardless of quality; and self-enhancement bias, where a judge prefers output from its own model family. Randomize the presentation order, control for length, and never let a vendor's model judge that vendor's model in a procurement decision.</p>
+
+<p>Then calibrate. Have humans label a subset that the judge also scores, and publish the agreement rate beside every result. A score without an agreement number attached is a rumor with a decimal point.</p>
+
+<h2>What leaders should do</h2>
+
+<ol>
+    <li>Pull 500 real requests from last quarter's logs, stratified by task type and by dialect, and make that the seed of the evaluation set. Budget two people for two weeks, not a research program.</li>
+    <li>Split it in half. The public half is for iterating and for sharing with vendors. The private half never touches a hosted API, and it is the one that decides purchases.</li>
+    <li>Require every model claim, internal or from a vendor, to be restated as a score on your set with the judge's human agreement rate next to it. A number without that context does not enter the decision.</li>
+    <li>Measure the agreement rate between your own annotators and treat it as the ceiling. When a model reaches it, stop tuning and go work on something else, because past that point you are fitting noise in your own rubric.</li>
+</ol>
+
+<p>Model weights are becoming a commodity, and they change every few months. The evaluation set is the part of the stack that appreciates. It encodes what your organization means by correct, in your language and your domain, and it keeps that meaning stable while everything underneath it gets replaced. Teams that own one can swap providers in an afternoon. Teams that do not are choosing between vendors on the strength of report cards those vendors printed.</p>
+
+<p>Arabic makes the argument concrete, since a benchmark written in formal Arabic plainly does not describe a user typing Gulf dialect with English technical terms mixed in. But nothing here is specific to Arabic. Any team whose traffic differs from the average of the internet is in exactly the same position, and most of them have not noticed yet because the leaderboard number keeps going up.</p>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Sovereignty Starts at the Tokenizer</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.</p>
+                        <a href="sovereignty-at-the-tokenizer.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Scoreboard Effect</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the benchmarks you choose quietly decide what kind of AI system you end up building.</p>
+                        <a href="the-scoreboard-effect.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Sovereign Dialect Adaptation</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">An architecting blueprint for in-house small-language-model specialization under data-sovereignty constraints.</p>
+                        <a href="sovereign-dialect-adaptation.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Yang, S., Chiang, W. L., Zheng, L., Gonzalez, J. E., &amp; Stoica, I. (2023). <em>Rethinking Benchmark and Contamination for Language Models with Rephrased Samples.</em> <a href="https://arxiv.org/abs/2311.04850" target="_blank" rel="noopener">arxiv.org/abs/2311.04850</a></li>
+                    <li class="reference-item">Recht, B., Roelofs, R., Schmidt, L., &amp; Shankar, V. (2019). <em>Do ImageNet Classifiers Generalize to ImageNet?</em> ICML 2019. <a href="https://arxiv.org/abs/1902.10811" target="_blank" rel="noopener">arxiv.org/abs/1902.10811</a></li>
+                    <li class="reference-item">Singh, S., et al. (2025). <em>The Leaderboard Illusion.</em> <a href="https://arxiv.org/abs/2504.20879" target="_blank" rel="noopener">arxiv.org/abs/2504.20879</a></li>
+                    <li class="reference-item">Zheng, L., et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> NeurIPS 2023 Datasets and Benchmarks. <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">arxiv.org/abs/2306.05685</a></li>
+                    <li class="reference-item">Koto, F., Li, H., Shatnawi, S., et al. (2024). <em>ArabicMMLU: Assessing Massive Multitask Language Understanding in Arabic.</em> Findings of ACL 2024. <a href="https://arxiv.org/abs/2402.12840" target="_blank" rel="noopener">arxiv.org/abs/2402.12840</a></li>
+                    <li class="reference-item">Mousi, B., Durrani, N., Ahmad, F., et al. (2024). <em>AraDiCE: Benchmarks for Dialectal and Cultural Capabilities in LLMs.</em> COLING 2025. <a href="https://arxiv.org/abs/2409.11404" target="_blank" rel="noopener">arxiv.org/abs/2409.11404</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
