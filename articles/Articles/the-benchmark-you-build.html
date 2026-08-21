@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Benchmark You Build | alhaol.github.io</title>
-    <meta name="description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <meta name="description" content="Public leaderboards are perishable and measure someone else's population. A method for building the 500-item evaluation set that decides your purchases.">
     <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
     <meta property="og:type" content="article">
     <meta property="og:title" content="The Benchmark You Build">
-    <meta property="og:description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <meta property="og:description" content="Public leaderboards are perishable and measure someone else's population. A method for building the 500-item evaluation set that decides your purchases.">
     <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
     <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_50.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -111,9 +111,9 @@
                         </div>
                     </div>
                     <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: August 20, 2026</span>
+                        <span>Published: August 21, 2026</span>
                         <span class="mx-2">|</span>
-                        <span>Reading Time: 7 min</span>
+                        <span>Reading Time: 16 min</span>
                     </div>
                 </header>
 
@@ -121,7 +121,7 @@
 
 <p>Every team that picks a model off a leaderboard is running an experiment somebody else designed, on a population that is not theirs, and treating the result as a decision.</p>
 
-<p>That is usually not laziness. A public score is often the only number available, it arrives free, and it comes with the authority of a paper and a chart. The problem is that three separate forces pull that number away from your reality, and none of them announce themselves. The score does not get less true. It gets less relevant, which is harder to notice.</p>
+<p>That is rarely laziness. A public score is often the only number available, it arrives free, and it carries the authority of a paper and a chart. The trouble is that several forces pull that number away from your reality, and none of them announce themselves. The score does not become false. It becomes irrelevant, which is much harder to notice.</p>
 
 <blockquote>A leaderboard measures a model against a population of questions. You are buying a model to serve a population of users. Nobody has ever shown you that those two populations resemble each other.</blockquote>
 
@@ -160,27 +160,121 @@
 
 <h2>Three ways a public number drifts</h2>
 
-<p>The first is contamination. Shuo Yang and colleagues showed that the standard defence, removing test items from training data by matching overlapping word sequences, does not survive paraphrase or translation. A rephrased test item slips straight through the filter. They found 8 to 18 percent of the HumanEval benchmark present in widely used pretraining corpora, and demonstrated that a 13 billion parameter model overfit to a rephrased test set can post numbers on par with GPT-4. The score is real. The competence behind it is not.</p>
+<p>The first is contamination. Shuo Yang and colleagues showed that the standard defence, removing test items from training data by matching overlapping n-grams, does not survive paraphrase or translation. A rephrased item passes straight through the filter while remaining, to a model, the same item. They found 8 to 18 percent of the HumanEval benchmark present in widely used pretraining corpora, and demonstrated that a 13-billion-parameter model deliberately overfit to a rephrased test set can post numbers on par with GPT-4. The score is real. The competence behind it is not. Their proposed remedy, a decontaminator that compares embeddings rather than surface strings, works better and is still not a solution you can buy: it only runs on corpora you are allowed to see, which rules out every closed model on the board.</p>
 
-<p>The second is ordinary reuse. Benjamin Recht and colleagues rebuilt the test sets for CIFAR-10 and ImageNet, following the original collection procedure as closely as they could, then re-scored a wide range of published models. Accuracy fell by 11 to 14 percent on ImageNet and 3 to 15 percent on CIFAR-10. Nobody cheated. A decade of the research community tuning against one fixed sample was enough on its own to inflate every number in the literature.</p>
+<p>The second is ordinary reuse. Benjamin Recht and colleagues rebuilt the test sets for CIFAR-10 and ImageNet, following the original collection protocol as closely as they could, then re-scored a wide range of published models. Accuracy fell 11 to 14 percent on ImageNet and 3 to 15 percent on CIFAR-10. Nobody cheated. A decade of one research community tuning against one fixed sample was enough on its own to inflate every number in the literature. The useful detail is what survived: the ranking held up far better than the absolute scores. A leaderboard is a more honest ordering than it is a forecast, and teams get into trouble by reading it as the second.</p>
 
-<p>The third is the incentive structure around the leaderboard itself. A 2025 study of Chatbot Arena documented undisclosed private testing, where a provider evaluates many variants and publishes only the winner, and found that even modest amounts of extra arena data can produce relative gains of up to 112 percent on the arena distribution. That is a measurement of how well a model fits the arena, which is a different quantity from how well it works.</p>
+<p>The third is the incentive structure around the leaderboard itself. A 2025 audit of Chatbot Arena covering roughly two million battles, 42 providers and 243 models found undisclosed private testing, where a provider evaluates many variants and publishes only the winner, including 27 unreleased variants tested by one provider ahead of a single launch. The same work found that modest amounts of arena-specific data can produce relative gains up to 112 percent on the arena distribution, and that proprietary models are sampled in more battles than open-weight ones. The arena operators disputed parts of the analysis, which is worth knowing and does not change the structural point: a leaderboard that matters becomes a target, and a target measures fit to itself.</p>
+
+<h2>The leaderboards themselves keep telling you this</h2>
+
+<p>The strongest evidence here is not a critique paper. It is the behaviour of the people who run the leaderboards, and Hugging Face's Open LLM Leaderboard is the cleanest case.</p>
+
+<p>Version 1 launched in mid-2023 and ran six benchmarks, ARC, HellaSwag, MMLU, TruthfulQA, WinoGrande and GSM8K, through a single standardized harness so numbers were comparable across submissions. It was archived in June 2024 because the models had saturated it: scores had bunched near the ceiling and the ruler no longer separated good from great. Version 2 replaced the set with harder tasks chosen to resist saturation, MMLU-Pro, GPQA, MuSR, IFEval, BBH and MATH Level 5. In March 2025, after evaluating more than 13,000 models, that was retired too. The stated reason reads better as an engineering warning than as an announcement: as capabilities moved toward reasoning and assistant behaviour, the benchmark suite was drifting toward measuring something the field had stopped caring about, and continuing to publish it would encourage teams to hill-climb an irrelevant direction.</p>
+
+<p>Read that back. The best-resourced, most carefully maintained public evaluation in open-weights AI lasted about 21 months across two versions, and its maintainers shut it down rather than let people optimize against a stale target. Whatever leaderboard you are reading today sits somewhere on that same curve, and nothing on the page tells you where.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 356" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">The useful life of public benchmark leaderboards compared with a private evaluation set</title>
+            <desc id="fig2-desc">A timeline from mid-2023 to now. The Open LLM Leaderboard version 1 ran about a year and was archived once models saturated its benchmarks. Version 2 ran about nine months and was retired in March 2025 after scoring more than thirteen thousand models. The Open Arabic LLM Leaderboard was rebuilt from version 1 to version 2 in February 2025, dropping translated benchmarks. AraGen avoids expiry by replacing its private test set every three months. A private evaluation set owned by the team runs the whole period without expiring, because it is re-sampled rather than retired.</desc>
+
+            <defs>
+                <marker id="arw50b" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 z" fill="#f59e0b"/>
+                </marker>
+            </defs>
+
+            <text x="20" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">The useful life of a public ruler</text>
+
+            <text x="20" y="54" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">PUBLIC BENCHMARKS</text>
+
+            <text x="168" y="71" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open LLM</text>
+            <text x="168" y="87" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard v1</text>
+            <rect x="178" y="66" width="138" height="18" rx="2" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-opacity="0.8"/>
+            <line x1="316" y1="62" x2="316" y2="88" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="324" y="71" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">archived Jun 2024</text>
+            <text x="324" y="87" font-family="Inter, sans-serif" font-size="11" fill="#64748b">benchmarks saturated</text>
+
+            <text x="168" y="115" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open LLM</text>
+            <text x="168" y="131" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard v2</text>
+            <rect x="316" y="110" width="104" height="18" rx="2" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-opacity="0.8"/>
+            <line x1="420" y1="106" x2="420" y2="132" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="428" y="115" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">retired Mar 2025</text>
+            <text x="428" y="131" font-family="Inter, sans-serif" font-size="11" fill="#64748b">after 13,000+ models</text>
+
+            <text x="168" y="159" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open Arabic LLM</text>
+            <text x="168" y="175" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard</text>
+            <rect x="305" y="154" width="103" height="18" rx="2" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-opacity="0.55"/>
+            <rect x="408" y="154" width="207" height="18" rx="2" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-opacity="0.8"/>
+            <line x1="408" y1="150" x2="408" y2="176" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="356" y="167" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">v1</text>
+            <text x="511" y="167" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#f1f5f9">v2, native sets only</text>
+
+            <text x="168" y="203" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">AraGen</text>
+            <text x="168" y="219" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">3-month cycles</text>
+            <rect x="385" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
+            <rect x="420" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <rect x="455" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
+            <rect x="490" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <rect x="525" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
+            <rect x="560" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <rect x="595" y="198" width="20" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
+            <text x="385" y="236" font-family="Inter, sans-serif" font-size="11" fill="#64748b">the set is replaced, not the leaderboard</text>
+
+            <text x="20" y="262" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">YOUR SET</text>
+
+            <text x="168" y="281" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Your evaluation</text>
+            <text x="168" y="297" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">set, 500 items</text>
+            <rect x="178" y="280" width="437" height="18" rx="2" fill="#f59e0b" fill-opacity="0.20" stroke="#f59e0b" stroke-opacity="0.9"/>
+            <line x1="247" y1="282" x2="247" y2="296" stroke="#f59e0b" stroke-opacity="0.55"/>
+            <line x1="316" y1="282" x2="316" y2="296" stroke="#f59e0b" stroke-opacity="0.55"/>
+            <line x1="385" y1="282" x2="385" y2="296" stroke="#f59e0b" stroke-opacity="0.55"/>
+            <line x1="454" y1="282" x2="454" y2="296" stroke="#f59e0b" stroke-opacity="0.55"/>
+            <line x1="523" y1="282" x2="523" y2="296" stroke="#f59e0b" stroke-opacity="0.55"/>
+            <line x1="615" y1="289" x2="626" y2="289" stroke="#f59e0b" marker-end="url(#arw50b)"/>
+            <text x="182" y="316" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">re-sampled each quarter, never retired</text>
+
+            <line x1="178" y1="332" x2="615" y2="332" stroke="#2a3f5f"/>
+            <line x1="258" y1="332" x2="258" y2="338" stroke="#2a3f5f"/>
+            <line x1="397" y1="332" x2="397" y2="338" stroke="#2a3f5f"/>
+            <line x1="535" y1="332" x2="535" y2="338" stroke="#2a3f5f"/>
+            <text x="178" y="352" font-family="Inter, sans-serif" font-size="11" fill="#64748b">mid-2023</text>
+            <text x="258" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2024</text>
+            <text x="397" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2025</text>
+            <text x="535" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2026</text>
+            <text x="620" y="352" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#64748b">now</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> Every public ruler on this chart was archived, retired or rebuilt inside two years. The one design that does not expire is AraGen&#39;s, which rotates a private set every quarter &mdash; the same discipline a team applies to its own evaluation set. Sources: Hugging Face Open LLM Leaderboard archive; Open Arabic LLM Leaderboard v2 (Feb 2025); AraGen 3C3H (Dec 2024).</figcaption>
+</figure>
 
 <h2>What Arabic makes impossible to ignore</h2>
 
 <p>Every team has this problem. Arabic teams find out sooner, because the gap between the benchmark and the user is visible in the language itself.</p>
 
-<p>Arabic is diglossic. Modern Standard Arabic is the written and formal register, and it is what nearly every Arabic benchmark is composed in. Your users write dialect, and they switch into English mid-sentence for technical terms. A model can score well on formal Arabic comprehension and still fail on a Gulf or Levantine support request, and no MSA benchmark will warn you.</p>
+<p>Arabic is diglossic. Modern Standard Arabic is the written and formal register, and it is what nearly every Arabic benchmark is composed in. Your users write dialect, and they switch into English mid-sentence for technical terms. A model can score well on formal Arabic comprehension and still fail a Gulf or Levantine support request, and no MSA benchmark will warn you.</p>
 
-<p>The better Arabic benchmarks know this and say so. ArabicMMLU was deliberately built from school exams across North Africa, the Levant and the Gulf with native speakers, rather than translating the English MMLU, because a translated benchmark carries the framing and the cultural assumptions of the original along with it. AraDiCE, published at COLING 2025 by a team at QCRI, went further and built dialectal sets for Gulf, Egyptian and Levantine Arabic, roughly 45,000 post-edited samples, plus a fine-grained benchmark for cultural awareness across those regions. Their result is worth holding onto: Arabic-specific models such as Jais and AceGPT beat multilingual models on dialect work, and dialect identification and generation remain difficult for everything tested.</p>
+<p>The Arabic leaderboards have been unusually candid about this, and their revision history is worth studying. The Open Arabic LLM Leaderboard launched in May 2024 from 2A2I, TII and Hugging Face with fourteen benchmarks, several of them machine translations of English sets such as MMLU and EXAMS. Version 2, released in February 2025, dropped the translations outright. The reasoning was that a translated item carries the framing and cultural assumptions of the original and produces mismatches that have nothing to do with the model's Arabic. In their place came native sets: ArabicMMLU with roughly 15,000 items built from real school exams, AraTrust with 522 human-written questions on trustworthiness, MadinahQA, and ALRAGE, a retrieval-augmented generation set drawn from 40 Arabic books.</p>
 
-<p>Those benchmarks are good and you should run them. They still stop one square short of where your product lives.</p>
+<p>Buried in the same release is the detail that should stay with you. The maintainers found a silent bug in AlGhafa, one of the main tasks carried over from version 1, in how answer choices were handled. Correcting it moved scores by as much as 20 points, and it hit smaller models hardest. No model changed. The scoring code did. Anyone who had shortlisted candidates from that leaderboard the week before was partly ranking an artifact of the harness, and had no way to see it, because the harness is not the thing on the page.</p>
+
+<p>AraGen, from Inception and MBZUAI, attacked the problem from the other end. Instead of multiple choice it scores free generation, using a metric called 3C3H: Correctness, Completeness, Conciseness, Helpfulness, Honesty and Harmlessness. Correctness is binary and gates the rest, so a wrong answer zeroes every other dimension and a fluent falsehood cannot out-score a blunt fact. The more interesting design choice is operational. AraGen Bench is only 279 human-verified questions, and it stays private for three months at a time before being published and replaced by a fresh set of comparable structure and difficulty. That is a public leaderboard voluntarily adopting the two disciplines this article argues for: keep the set small enough to curate properly, and keep it private long enough for the number to mean something.</p>
+
+<p>Dialect is the remaining hole, and AraDiCE is the serious attempt at it. Built by QCRI and published at COLING 2025, it covers Gulf, Egyptian and Levantine Arabic across roughly 45,000 post-edited samples, plus a benchmark for cultural awareness in those regions. Its headline finding is one to keep: Arabic-specific models such as Jais and AceGPT beat larger multilingual models on dialect work, and dialect identification and generation remain hard for everything tested.</p>
+
+<p>Some of that square I have had to build. In work on Jordanian dialect speech recognition with Ali Safieh and Rawan Ghnemat, there was no labelled corpus to evaluate against, so we assembled one: 97,000 records and 113 hours of speech, of which only 52 hours could be labelled at all. The comparison point for Modern Standard Arabic was the 1,000-hour Massive Arabic Speech Corpus. That ratio is the argument in a single line.</p>
+
+<p>The resolution turned out to matter more than the label suggests. Jordanian Arabic carries phonemes the MSA set does not, and it splits into urban, rural and Bedouin varieties inside one country, which means even "Levantine" is too coarse a bucket to make a purchase on. Our best system reached 51 percent word error rate after five generations of self-supervised training. That number is not a failure. It is what an honest measurement looks like the first time it is taken on the right population, and no public leaderboard would have produced it.</p>
+
+<p>All of these are good, and you should run them. They still stop one square short of where your product lives.</p>
 
 <figure class="fig">
     <div class="fig-scroll">
-        <svg viewBox="0 0 640 348" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
-            <title id="fig2-title">Coverage grid of Arabic benchmarks by language register and task specificity</title>
-            <desc id="fig2-desc">A two by two grid. Modern Standard Arabic with general knowledge is well covered by benchmarks such as ArabicMMLU. Dialect with general knowledge is partly covered by AraDiCE. Modern Standard Arabic on a specific domain is thin. Dialect on your own domain, which is where most production traffic sits, has no public benchmark at all.</desc>
+        <svg viewBox="0 0 640 348" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">Coverage grid of Arabic benchmarks by language register and task specificity</title>
+            <desc id="fig3-desc">A two by two grid. Modern Standard Arabic with general knowledge is well covered by benchmarks such as ArabicMMLU. Dialect with general knowledge is partly covered by AraDiCE. Modern Standard Arabic on a specific domain is thin. Dialect on your own domain, which is where most production traffic sits, has no public benchmark at all.</desc>
 
             <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Where Arabic benchmarks sit, and where your traffic sits</text>
 
@@ -202,8 +296,8 @@
             <text x="435" y="127" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">No public benchmark</text>
             <text x="435" y="147" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">exists for this square</text>
 
-            <text x="245" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#60a5fa">ArabicMMLU</text>
-            <text x="245" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">40 tasks, 14,575 items</text>
+            <text x="245" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#60a5fa">ArabicMMLU, AraGen</text>
+            <text x="245" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">both run by OALL v2</text>
             <text x="245" y="257" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Well covered</text>
 
             <text x="435" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">Domain sets</text>
@@ -211,27 +305,70 @@
             <text x="435" y="257" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Rarely your domain</text>
 
             <text x="40" y="312" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The amber square is the one you are paid to be correct in, and the only one nobody else will measure.</text>
-            <text x="40" y="330" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Sources: ArabicMMLU (ACL Findings 2024), AraDiCE (COLING 2025).</text>
+            <text x="40" y="330" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Sources: ArabicMMLU (ACL 2024), AraDiCE (COLING 2025), OALL v2, AraGen.</text>
         </svg>
     </div>
-    <figcaption><b>Figure 2.</b> Public Arabic benchmarks have made real progress on register and culture. None of them cover your dialect on your task, which is the square your users occupy.</figcaption>
+    <figcaption><b>Figure 3.</b> Public Arabic benchmarks have made real progress on register and culture. None of them cover your dialect on your task, which is the square your users occupy.</figcaption>
 </figure>
+
+<h2>What each kind of evaluation is actually good for</h2>
+
+<p>None of this makes public benchmarks worthless, and a team that responds by ignoring them has traded one error for another. The useful move is to be explicit about the division of labour, including where your own set is the weaker instrument.</p>
+
+<h3>What a public leaderboard does well</h3>
+
+<ul class="list-disc space-y-2">
+    <li><b>Screening.</b> It cuts a field of forty candidates down to five for free, in an afternoon, before you have spent anything.</li>
+    <li><b>Comparability at a scale you cannot reach.</b> One harness, one prompt format, one parser, run across thousands of models. You will never reproduce that internally, and without it you cannot say whether a 4-point gap is the model or the plumbing.</li>
+    <li><b>Ordering, more than absolute accuracy.</b> This is the practical lesson from the ImageNet rebuild: rankings held up much better than the scores did. Trust a leaderboard to tell you which models are in the conversation, not what accuracy you will see.</li>
+    <li><b>Regression detection.</b> A new checkpoint that drops several points on IFEval has broken something general, and you want to know that before you evaluate it on anything of your own.</li>
+    <li><b>Adversarial scrutiny.</b> The AlGhafa scoring bug was found and disclosed because many independent people ran the same harness. Your internal set has one pair of eyes on it, and its bugs stay yours.</li>
+    <li><b>Coverage you cannot afford to build.</b> Expert-level science questions, multi-domain safety, long-context retrieval. You are not going to construct a GPQA.</li>
+</ul>
+
+<h3>What it structurally cannot do</h3>
+
+<ul class="list-disc space-y-2">
+    <li>It carries no prior about your distribution, so it cannot tell you whether the gap between two models will appear at all on your traffic.</li>
+    <li>It cannot be decontaminated for a closed model, because you cannot inspect the training corpus.</li>
+    <li>It is perishable, on a horizon of one to two years, and the page never says how far along it is.</li>
+    <li>It reports a point estimate with no interval, which invites teams to read a 1-point gap as a ranking.</li>
+    <li>It measures a model, not your system. Your prompt, retrieval layer, tools, latency budget and cost ceiling are all excluded from the number and are usually where your quality actually comes from.</li>
+    <li>Once it matters commercially, it becomes a target, and it starts measuring who most wants to be at the top of it.</li>
+</ul>
+
+<h3>What your own set costs you</h3>
+
+<p>Being honest about this is what keeps the practice alive after the first quarter.</p>
+
+<ul class="list-disc space-y-2">
+    <li>It costs real time. Two people for two weeks is the floor for the first version, and it recurs every quarter, forever.</li>
+    <li>Small samples mean wide intervals. Five hundred items cannot resolve small differences, and pretending otherwise is the same mistake in a smaller font.</li>
+    <li>It encodes your annotators' assumptions, including the ones they are not aware of. Your blind spots become your ceiling.</li>
+    <li>It goes stale. Traffic drifts, the product changes, and a set built two years ago is a fossil of an older user.</li>
+    <li>It says nothing about general capability. A model can be excellent on your 500 items and poor at everything adjacent, which matters the day someone expands the scope of the product.</li>
+    <li>You can overfit to it exactly the way the field overfit ImageNet, and you will not notice, for the same reasons they did not.</li>
+</ul>
+
+<p>That last risk is the one that dictates the build. It is the reason half the set stays sealed.</p>
 
 <h2>How to build one that survives contact</h2>
 
-<p>A useful evaluation set is smaller and duller than people expect. Three hundred to five hundred items will separate serious candidates. Ten thousand items mostly buys you a slower feedback loop and a false sense of rigor.</p>
+<p>A useful evaluation set is smaller and duller than people expect. Three hundred to five hundred items will separate serious candidates, and that is arithmetic rather than a hedge. On 500 items with accuracy near 80 percent, the standard error of a single score is about 1.8 points, so the 95 percent interval spans roughly plus or minus 3.5 points. Two models three points apart on that set are tied, and reporting them as ranked repeats the error you are trying to escape.</p>
+
+<p>You can recover most of that precision without buying more items by testing paired: run every candidate over the identical items and compare outcomes item by item rather than in aggregate. A paired test, McNemar's being the standard one, only looks at the items where two models disagree, so it detects far smaller true differences than two independent scores with overlapping intervals ever could. Ten thousand items, by contrast, mostly buys a slower feedback loop and a false sense of rigor.</p>
 
 <p>Sample the items from real traffic rather than writing them from imagination. Imagination produces the questions you expect to receive, which your system already handles, because you built it while imagining the same things. Logs produce the ones you actually get, including the half-typed ones and the ones in the wrong language. Stratify the sample so dialects and task types appear in something close to their real proportions, then oversample the rare cases you cannot afford to fail.</p>
 
-<p>Every item needs either a verifiable answer or an explicit rubric written before anyone scores a model. Label each item twice, independently, and keep a log of the disagreements. That disagreement rate is not overhead, it is the measurement's ceiling: if two of your own experts agree only 82 percent of the time, a model reporting 94 percent is telling you about your rubric, not about the model.</p>
+<p>Every item needs either a verifiable answer or an explicit rubric written before anyone scores a model. Label each item twice, independently, and keep a log of the disagreements, because that rate is the measurement's ceiling: if two of your own experts agree only 82 percent of the time, a model reporting 94 percent is telling you about your rubric, not about the model. Record it as Cohen's kappa rather than raw agreement. Raw agreement flatters you on skewed data, since two annotators who both answer "no violation" on a set that is 90 percent compliant will agree 90 percent of the time while having measured nothing at all. Kappa subtracts that chance floor. Below about 0.6, fix the rubric before you score a single model.</p>
 
-<p>Then split the set. Keep a private half that never leaves machines you control, never goes into a prompt to a hosted API, and never gets pasted into a vendor console during a bake-off. Contamination is not a hypothetical for a set you have been sending to third parties for a year.</p>
+<p>Then split the set. Keep a private half that never leaves machines you control, never goes into a prompt to a hosted API, and never gets pasted into a vendor console during a bake-off. Contamination stops being hypothetical the moment a set has been travelling to third parties for a year.</p>
 
 <figure class="fig">
     <div class="fig-scroll">
-        <svg viewBox="0 0 640 268" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
-            <title id="fig3-title">The five step loop for building and maintaining a custom evaluation set</title>
-            <desc id="fig3-desc">Five steps run left to right: sample real traffic, write items with answers, label twice and log disputes, hold out a private split, and score every candidate. The third and fourth steps are the ones most teams skip. A return arrow closes the loop, since the set is re-sampled each quarter and leaked items are retired.</desc>
+        <svg viewBox="0 0 640 286" role="img" aria-labelledby="fig4-title fig4-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig4-title">The five step loop for building and maintaining a custom evaluation set</title>
+            <desc id="fig4-desc">Five steps run left to right: sample real traffic, write items with answers, label twice and log disputes, hold out a private split, and score every candidate. The third and fourth steps are the ones most teams skip. A return arrow closes the loop, since the set is re-sampled each quarter and leaked items are retired.</desc>
 
             <defs>
                 <marker id="arw50" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -277,17 +414,18 @@
             <text x="560" y="67" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">5</text>
             <rect x="510" y="84" width="100" height="76" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="560" y="112" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Score every</text>
-            <text x="560" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">candidate,</text>
-            <text x="560" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">yours included</text>
+            <text x="560" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">candidate with</text>
+            <text x="560" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">an interval</text>
 
             <path d="M270,176 L270,182 L490,182 L490,176" fill="none" stroke="#f59e0b" stroke-opacity="0.8"/>
             <text x="380" y="200" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f59e0b">the two steps most teams skip</text>
 
             <path d="M560,160 L560,226 L80,226 L80,166" fill="none" stroke="#60a5fa" stroke-opacity="0.55" stroke-dasharray="4 4" marker-end="url(#arw50)"/>
             <text x="120" y="248" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Re-sample each quarter and retire items that turn up in vendor material.</text>
+            <text x="120" y="268" font-family="Inter, sans-serif" font-size="11" fill="#64748b">At 500 items and 80 percent accuracy the 95 percent band is about 3.5 points.</text>
         </svg>
     </div>
-    <figcaption><b>Figure 3.</b> Steps 3 and 4 are what separate an evaluation set from a demo script. They are also the two that get cut when the deadline moves.</figcaption>
+    <figcaption><b>Figure 4.</b> Steps 3 and 4 are what separate an evaluation set from a demo script. They are also the two that get cut when the deadline moves.</figcaption>
 </figure>
 
 <h2>Scoring without fooling yourself</h2>
@@ -296,20 +434,23 @@
 
 <p>Lianmin Zheng and colleagues found that a strong judge model agrees with human preferences more than 80 percent of the time, which is about the rate at which humans agree with each other. The same paper documents the failure modes: position bias, where the answer shown first wins more often; verbosity bias, where longer answers score higher regardless of quality; and self-enhancement bias, where a judge prefers output from its own model family. Randomize the presentation order, control for length, and never let a vendor's model judge that vendor's model in a procurement decision.</p>
 
-<p>Then calibrate. Have humans label a subset that the judge also scores, and publish the agreement rate beside every result. A score without an agreement number attached is a rumor with a decimal point.</p>
+<p>The AraGen team measured all of this on their own leaderboard and published the numbers, which puts a useful floor under how much to trust a judge. Their judge was highly reliable at the narrow task of detecting hallucination, above 96 percent, and still landed at a Cohen's kappa near 0.44 against human raters on the full rubric, which is moderate agreement, not strong. They also quantified self-preference directly: GPT-4o scored itself 0.8025 against 0.7928 when scored by other judges. That gap is small, consistent, and almost exactly the size of margin that procurement decisions turn on. Notably, a jury of several judges did not change the rankings, so the answer is not more judges. It is publishing the agreement number next to the score.</p>
+
+<p>So calibrate, and say so. A score without an agreement number attached is a rumour with a decimal point.</p>
 
 <h2>What leaders should do</h2>
 
 <ol>
     <li>Pull 500 real requests from last quarter's logs, stratified by task type and by dialect, and make that the seed of the evaluation set. Budget two people for two weeks, not a research program.</li>
     <li>Split it in half. The public half is for iterating and for sharing with vendors. The private half never touches a hosted API, and it is the one that decides purchases.</li>
-    <li>Require every model claim, internal or from a vendor, to be restated as a score on your set with the judge's human agreement rate next to it. A number without that context does not enter the decision.</li>
-    <li>Measure the agreement rate between your own annotators and treat it as the ceiling. When a model reaches it, stop tuning and go work on something else, because past that point you are fitting noise in your own rubric.</li>
+    <li>Require every model claim, internal or from a vendor, to be restated as a score on your set, with a confidence interval and the judge's human agreement rate beside it. Two models whose intervals overlap are tied; break that tie on cost, latency, licence or data residency, not on the decimal.</li>
+    <li>Measure agreement between your own annotators as kappa and treat it as the ceiling. When a model reaches it, stop tuning and go work on something else, because past that point you are fitting noise in your own rubric.</li>
+    <li>Put the quarterly re-sample in the calendar and retire any item that turns up in vendor material or public documentation. This is the step that gets cut, and cutting it is how the set quietly becomes a fossil.</li>
 </ol>
 
-<p>Model weights are becoming a commodity, and they change every few months. The evaluation set is the part of the stack that appreciates. It encodes what your organization means by correct, in your language and your domain, and it keeps that meaning stable while everything underneath it gets replaced. Teams that own one can swap providers in an afternoon. Teams that do not are choosing between vendors on the strength of report cards those vendors printed.</p>
+<p>Model weights are a commodity now, and they change every few months. The evaluation set is the part of the stack that appreciates. It encodes what your organization means by correct, in your language and your domain, and it holds that meaning stable while everything underneath it is replaced. Teams that own one can switch providers in an afternoon. Teams that do not are choosing between vendors on the strength of report cards those vendors printed, from an exam that will be retired before the contract is up.</p>
 
-<p>Arabic makes the argument concrete, since a benchmark written in formal Arabic plainly does not describe a user typing Gulf dialect with English technical terms mixed in. But nothing here is specific to Arabic. Any team whose traffic differs from the average of the internet is in exactly the same position, and most of them have not noticed yet because the leaderboard number keeps going up.</p>
+<p>Arabic makes the argument concrete, because a benchmark written in formal Arabic plainly does not describe a user typing Gulf dialect with English technical terms mixed in. But nothing here is specific to Arabic. Any team whose traffic differs from the average of the internet is in exactly the same position, and most of them have not noticed, because the leaderboard number keeps going up.</p>
 
                 </div>
             </div>
@@ -344,6 +485,10 @@
                     <li class="reference-item">Zheng, L., et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> NeurIPS 2023 Datasets and Benchmarks. <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">arxiv.org/abs/2306.05685</a></li>
                     <li class="reference-item">Koto, F., Li, H., Shatnawi, S., et al. (2024). <em>ArabicMMLU: Assessing Massive Multitask Language Understanding in Arabic.</em> Findings of ACL 2024. <a href="https://arxiv.org/abs/2402.12840" target="_blank" rel="noopener">arxiv.org/abs/2402.12840</a></li>
                     <li class="reference-item">Mousi, B., Durrani, N., Ahmad, F., et al. (2024). <em>AraDiCE: Benchmarks for Dialectal and Cultural Capabilities in LLMs.</em> COLING 2025. <a href="https://arxiv.org/abs/2409.11404" target="_blank" rel="noopener">arxiv.org/abs/2409.11404</a></li>
+                    <li class="reference-item">Safieh, A. A., Abu Alhaol, I., &amp; Ghnemat, R. (2022). <em>End-to-end Jordanian dialect speech-to-text self-supervised learning framework.</em> Frontiers in Robotics and AI, 9. <a href="https://doi.org/10.3389/frobt.2022.1090012" target="_blank" rel="noopener">doi.org/10.3389/frobt.2022.1090012</a></li>
+                    <li class="reference-item">Hugging Face (2024&ndash;2025). <em>Open LLM Leaderboard: v1 archive and v2 retirement notes.</em> <a href="https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/archive" target="_blank" rel="noopener">huggingface.co/docs/leaderboards/open_llm_leaderboard/archive</a></li>
+                    <li class="reference-item">Ali, A., Ghouti, L., Fourrier, C., et al. (2025). <em>The Open Arabic LLM Leaderboard 2.</em> Hugging Face Blog, February 2025. <a href="https://huggingface.co/blog/leaderboard-arabic-v2" target="_blank" rel="noopener">huggingface.co/blog/leaderboard-arabic-v2</a></li>
+                    <li class="reference-item">Inception &amp; MBZUAI (2024). <em>Rethinking LLM Evaluation with 3C3H: AraGen Benchmark and Leaderboard.</em> Hugging Face Blog, December 2024. <a href="https://huggingface.co/blog/leaderboard-3c3h-aragen" target="_blank" rel="noopener">huggingface.co/blog/leaderboard-3c3h-aragen</a></li>
                 </ol>
             </div>
         </article>
