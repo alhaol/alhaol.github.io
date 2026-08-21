@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Video playlists watched inside a tracker that keeps progress, notes and annotations in the browser.">
+    <title>Playlists | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Playlists hardcodes its own accent, like every other hub on this site.
+           The gold matches the accent the player pages themselves paint with,
+           so the hub and the app it opens read as one thing. */
+        :root {
+            --bg-color: #0b0e14;
+            --text-main: #e8eef6;
+            --text-muted: #93a0b3;
+            --primary-color: #e8b923;
+            --card-bg: #141922;
+            --border-color: #262e3a;
+            --header-bg-start: #05070b;
+            --header-bg-end: #121722;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            box-shadow: 0 10px 30px rgba(232, 185, 35, 0.14);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .prose { color: var(--text-main); }
+        .prose p { color: var(--text-muted); line-height: 1.75; }
+
+        header {
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end));
+            color: white;
+        }
+
+        .nav-link { color: var(--text-main); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary-color); }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.4rem;
+            margin-bottom: 0.35rem;
+            background-color: rgba(232, 185, 35, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(232, 185, 35, 0.3);
+        }
+
+        .playlist-card {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* The thumbnail is the playlist's own YouTube art. It is decorative: the title
+           below carries the meaning, so a blocked or missing image costs nothing. */
+        .playlist-thumb {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a2029;
+            overflow: hidden;
+        }
+        .playlist-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .playlist-thumb::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11, 14, 20, 0.75), rgba(11, 14, 20, 0) 55%);
+        }
+
+        .thumb-count {
+            position: absolute;
+            right: 0.6rem;
+            bottom: 0.6rem;
+            z-index: 1;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            background-color: rgba(11, 14, 20, 0.85);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .playlist-card-content { padding: 1.35rem; flex: 1; display: flex; flex-direction: column; }
+
+        .playlist-channel {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .playlist-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .playlist-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s;
+        }
+        .playlist-link:hover { gap: 0.75rem; }
+
+        .published-date { font-size: 0.85rem; color: var(--text-muted); }
+
+        .search-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.7rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary-color); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .tag-chip {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 999px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .tag-chip:hover { color: var(--text-main); border-color: var(--primary-color); }
+        .tag-chip.on {
+            background-color: rgba(232, 185, 35, 0.12);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="py-6 shadow-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="nav-link text-sm" style="color: white;">← Back to Portfolio</a>
+            <a href="../links/" class="nav-link text-sm" style="color: white;">Apps Hub →</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div class="mb-10">
+            <h1 class="text-4xl font-bold mb-4">Playlists</h1>
+            <p class="text-lg prose">Video courses kept in one place, each with its own tracker. Progress, ratings, tags, notes and per-video annotations are stored in your browser, so a playlist you started weeks ago opens where you left it rather than at video one.</p>
+        </div>
+
+        <div class="mb-8 flex flex-col gap-4">
+            <input id="search" class="search-input" type="search" placeholder="Search playlists, channels, or topics…" aria-label="Search playlists">
+            <div id="tags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <p id="empty" class="prose hidden py-16 text-center"></p>
+    </main>
+
+    <script>
+    (function () {
+        var all = [], activeTag = null, q = '';
+        var grid = document.getElementById('grid');
+        var empty = document.getElementById('empty');
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+
+        function prettyDate(iso) {
+            var p = String(iso || '').split('-');
+            if (p.length !== 3) return iso || '';
+            var months = ['January','February','March','April','May','June',
+                          'July','August','September','October','November','December'];
+            return months[Number(p[1]) - 1] + ' ' + Number(p[2]) + ', ' + p[0];
+        }
+
+        // Each playlist lives in its own folder next to this page, named by slug.
+        function hrefOf(p) {
+            return encodeURIComponent(p.slug) + '/';
+        }
+
+        function card(p) {
+            var thumb = p.thumbnail
+                ? '<div class="playlist-thumb">' +
+                    '<img src="' + esc(p.thumbnail) + '" alt="" loading="lazy" aria-hidden="true">' +
+                    (p.videos ? '<span class="thumb-count">' + esc(p.videos) + ' VIDEOS</span>' : '') +
+                  '</div>'
+                : '';
+            return '' +
+            '<article class="theme-card playlist-card rounded-xl overflow-hidden">' +
+              thumb +
+              '<div class="playlist-card-content">' +
+                '<div class="mb-3">' +
+                  (p.tags || []).map(function (t) {
+                    return '<span class="category-badge">' + esc(t) + '</span>';
+                  }).join('') +
+                '</div>' +
+                // dir="auto" so Arabic titles lay out RTL inside this LTR hub.
+                '<h3 class="text-xl font-bold mb-1" dir="auto">' + esc(p.title) + '</h3>' +
+                (p.subtitle ? '<p class="text-sm mb-2" dir="auto">' + esc(p.subtitle) + '</p>' : '') +
+                (p.channel ? '<p class="playlist-channel" dir="auto">' + esc(p.channel) + '</p>' : '') +
+                '<p class="text-sm prose mb-4 flex-grow" dir="auto">' + esc(p.description || '') + '</p>' +
+                '<div class="playlist-card-footer">' +
+                  '<div>' +
+                    '<p class="published-date">' + esc(prettyDate(p.date)) + '</p>' +
+                  '</div>' +
+                  '<a href="' + esc(hrefOf(p)) + '" class="playlist-link">Open →</a>' +
+                '</div>' +
+              '</div>' +
+            '</article>';
+        }
+
+        function matches(p) {
+            if (activeTag && (p.tags || []).indexOf(activeTag) < 0) return false;
+            if (!q) return true;
+            var hay = [p.title, p.subtitle, p.channel, p.description, p.slug, p.language]
+                        .concat(p.tags || []).join(' ').toLowerCase();
+            return hay.indexOf(q) >= 0;
+        }
+
+        function render() {
+            var list = all.filter(matches);
+            grid.innerHTML = list.map(card).join('');
+            if (!list.length) {
+                empty.classList.remove('hidden');
+                empty.textContent = all.length
+                    ? 'No playlists match that filter.'
+                    : 'No playlists published yet.';
+            } else {
+                empty.classList.add('hidden');
+            }
+        }
+
+        function renderTags() {
+            var seen = [];
+            all.forEach(function (p) {
+                (p.tags || []).forEach(function (t) { if (seen.indexOf(t) < 0) seen.push(t); });
+            });
+            document.getElementById('tags').innerHTML = seen.map(function (t) {
+                return '<button class="tag-chip" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+            }).join('');
+        }
+
+        document.getElementById('tags').addEventListener('click', function (e) {
+            var b = e.target.closest('button[data-tag]');
+            if (!b) return;
+            activeTag = (activeTag === b.dataset.tag) ? null : b.dataset.tag;
+            var chips = this.querySelectorAll('.tag-chip');
+            for (var i = 0; i < chips.length; i++) {
+                chips[i].classList.toggle('on', chips[i].dataset.tag === activeTag);
+            }
+            render();
+        });
+
+        document.getElementById('search').addEventListener('input', function () {
+            q = this.value.trim().toLowerCase();
+            render();
+        });
+
+        fetch('playlists.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                // Newest first.
+                all = (d || []).slice().sort(function (a, b) {
+                    return String(b.date || '').localeCompare(String(a.date || ''));
+                });
+                renderTags();
+                render();
+            })
+            .catch(function () {
+                empty.classList.remove('hidden');
+                empty.textContent = 'Could not load playlists.json.';
+            });
+    })();
+    </script>
+</body>
+</html>
