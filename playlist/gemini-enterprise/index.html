@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini Enterprise, zero to hero</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141922; --panel-2:#1a2029; --panel-3:#222a36;
+    --line:#262e3a; --line-2:#394454;
+    --text:#e8eef6; --dim:#93a0b3; --faint:#697585;
+    --accent:#e8b923; --accent-soft:rgba(232,185,35,.13);
+    --ok:#3fb950; --warn:#d98b22; --info:#58a6ff; --danger:#f43f5e;
+    --sans:'Inter','IBM Plex Sans Arabic','Segoe UI',system-ui,-apple-system,sans-serif;
+    --slide:105%;
+  }
+  [dir="ltr"]{--slide:105%}
+  [dir="rtl"]{--slide:-105%}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--info)}
+  ::selection{background:var(--accent-soft)}
+
+  /* ============ header ============ */
+  header{position:sticky;top:0;z-index:40;background:rgba(11,14,20,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .head-in{max-width:1280px;margin:0 auto;padding:12px 20px}
+  .head-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .pl-art{width:76px;height:43px;border-radius:7px;object-fit:cover;background:var(--panel-2);flex:none}
+  .pl-meta{flex:1;min-width:200px}
+  .pl-title{font-size:19px;font-weight:700;margin:0;line-height:1.3}
+  .pl-sub{color:var(--dim);font-size:12.5px}
+  .head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+  .btn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;transition:.15s;white-space:nowrap}
+  .btn:hover{background:var(--panel-3);border-color:var(--line-2)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#1a1400;font-weight:700}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:4px 9px;font-size:12px}
+
+  .resume{display:flex;align-items:center;gap:12px;margin-top:11px;padding:10px 14px;background:linear-gradient(90deg,var(--accent-soft),transparent);border:1px solid rgba(232,185,35,.3);border-radius:10px;cursor:pointer;transition:.15s}
+  .resume:hover{border-color:var(--accent)}
+  .resume[hidden]{display:none}
+  .resume .rk{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);font-weight:700;flex:none}
+  .resume .rt{flex:1;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .resume .rw{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums;flex:none}
+  .resume .go{font-size:19px;color:var(--accent);flex:none}
+  [dir="rtl"] .resume .go{transform:scaleX(-1)}
+
+  .stats{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .bar{flex:1;min-width:160px;height:7px;border-radius:99px;background:var(--panel-2);overflow:hidden;display:flex}
+  .bar i{display:block;height:100%;transition:width .3s}
+  .bar .w{background:var(--ok)} .bar .g{background:var(--warn)}
+  .stat{font-size:12px;color:var(--dim);white-space:nowrap}
+  .stat b{color:var(--text);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .search{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px}
+  .search:focus,select:focus{outline:none;border-color:var(--accent)}
+  select{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;max-width:180px}
+  .chips{display:flex;gap:5px;flex-wrap:wrap}
+  .chip{background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:12.5px;color:var(--dim);transition:.15s}
+  .chip:hover{color:var(--text);border-color:var(--line-2)}
+  .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .chip .n{opacity:.6;margin-inline-start:5px;font-variant-numeric:tabular-nums}
+
+  /* ============ outline ============ */
+  main{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
+
+  .sec{margin-bottom:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+  .sec-h{width:100%;display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--panel-2);border:none;text-align:start;transition:.15s}
+  .sec-h:hover{background:var(--panel-3)}
+  .sec-h .car{font-size:11px;color:var(--faint);transition:transform .18s;flex:none}
+  .sec.closed .car{transform:rotate(-90deg)}
+  [dir="rtl"] .sec.closed .car{transform:rotate(90deg)}
+  .sec-h .nm{font-weight:700;font-size:14.5px;flex:none}
+  .sec-h .mt{font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .sec-h .sbar{flex:1;min-width:50px;max-width:200px;height:5px;border-radius:99px;background:var(--panel);overflow:hidden}
+  .sec-h .sbar i{display:block;height:100%;background:var(--ok)}
+  .sec.closed .sec-body{display:none}
+
+  .item{display:flex;align-items:center;gap:11px;padding:8px 14px;border-top:1px solid var(--line);cursor:pointer;position:relative;transition:.12s}
+  .item:hover{background:var(--panel-2)}
+  .item.active{background:var(--accent-soft)}
+  .item.watched .lbl{color:var(--dim)}
+  .item.skipped{opacity:.4}
+  .item.skipped .lbl{text-decoration:line-through}
+
+  .idx{width:26px;flex:none;text-align:center;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .tick{width:24px;height:24px;flex:none;border-radius:50%;border:1.5px solid var(--line-2);background:transparent;display:grid;place-items:center;font-size:12px;color:transparent;transition:.15s;padding:0}
+  .tick:hover{border-color:var(--ok);color:var(--faint)}
+  .item.watched .tick{background:var(--ok);border-color:var(--ok);color:#08240d;font-weight:800}
+  .item.watching .tick{border-color:var(--warn);color:var(--warn)}
+  .item.skipped .tick{color:var(--faint);border-style:dashed}
+
+  .lbl{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lbl .qn{color:var(--accent);font-weight:700;margin-inline-end:7px;font-variant-numeric:tabular-nums}
+  .sum{display:block;font-size:11.5px;color:var(--faint);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .meta{display:flex;align-items:center;gap:9px;flex:none;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .meta .st{color:var(--accent)}
+  .meta .mk{color:var(--info)}
+  .meta .dur{min-width:44px;text-align:end}
+  .iprog{position:absolute;bottom:0;inset-inline-start:0;height:2px;background:var(--warn)}
+
+  /* grid view */
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:.15s}
+  .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .card.watched{opacity:.6} .card.watched:hover{opacity:1}
+  .card.skipped{opacity:.38}
+  .tw{position:relative;aspect-ratio:16/9;background:var(--panel-2)}
+  .tw img{width:100%;height:100%;object-fit:cover;display:block}
+  .badge{position:absolute;top:7px;inset-inline-start:7px;background:rgba(0,0,0,.8);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700}
+  .badge.q{background:var(--accent);color:#1a1400}
+  .dur2{position:absolute;bottom:7px;inset-inline-end:7px;background:rgba(0,0,0,.85);border-radius:5px;padding:1px 6px;font-size:11px;font-variant-numeric:tabular-nums}
+  .seen{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,14,20,.5);font-size:28px;color:var(--ok)}
+  .cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .ctitle{font-size:14px;font-weight:600;line-height:1.4;margin:0;display:-webkit-box;
+    -webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px;font-size:11.5px;color:var(--faint)}
+  .pill{border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700;border:1px solid}
+  .pill.unwatched{color:var(--faint);border-color:var(--line)}
+  .pill.watching{color:var(--warn);border-color:rgba(217,139,34,.45);background:rgba(217,139,34,.1)}
+  .pill.watched{color:var(--ok);border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.1)}
+  .pill.skipped{color:var(--faint);border-color:var(--line)}
+  .tagrow{display:flex;gap:4px;flex-wrap:wrap}
+  .tag{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:11px;color:var(--dim)}
+
+  /* view switcher */
+  .vsw{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .vsw button{background:transparent;border:none;padding:5px 10px;font-size:13px;color:var(--faint);transition:.15s;line-height:1.4}
+  .vsw button+button{border-inline-start:1px solid var(--line)}
+  .vsw button:hover{background:var(--panel-2);color:var(--text)}
+  .vsw button.on{background:var(--accent-soft);color:var(--accent)}
+
+  /* table view */
+  .tblwrap{border:1px solid var(--line);border-radius:12px;overflow-x:auto;background:var(--panel)}
+  table.vt{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+  table.vt th{background:var(--panel-2);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--faint);font-weight:800;padding:9px 12px;text-align:start;white-space:nowrap;position:sticky;top:0;z-index:1}
+  table.vt td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:middle}
+  table.vt tbody tr{cursor:pointer;transition:.12s}
+  table.vt tbody tr:hover{background:var(--panel-2)}
+  table.vt tr.watched td{opacity:.62}
+  table.vt tr.skipped{opacity:.4}
+  table.vt tr.skipped .c-t{text-decoration:line-through}
+  .c-n{width:34px;color:var(--faint);font-variant-numeric:tabular-nums;text-align:center}
+  .c-q{width:44px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+  .c-t{font-weight:500;min-width:200px}
+  .c-t .sub2{display:block;font-size:11.5px;color:var(--faint);font-weight:400;margin-top:1px}
+  .c-d,.c-r,.c-m{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:center}
+  .c-d{width:66px;color:var(--dim)}
+  .c-r{width:66px;color:var(--accent)}
+  .c-m{width:58px;color:var(--info)}
+  .c-s{width:112px}
+  .c-x{min-width:170px;max-width:300px;color:var(--dim);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .empty{text-align:center;color:var(--dim);padding:60px 20px}
+
+  /* ============ drawer ============ */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:50;opacity:0;pointer-events:none;transition:.2s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;inset-inline-end:0;height:100vh;width:min(700px,100vw);background:var(--bg);border-inline-start:1px solid var(--line);z-index:51;transform:translateX(var(--slide));transition:transform .22s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+  .drawer.on{transform:none}
+  .d-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex:none}
+  .d-head .who{flex:1;font-size:12px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icon-btn{background:transparent;border:none;color:var(--dim);font-size:18px;padding:3px 9px;border-radius:7px;line-height:1;text-decoration:none}
+  .icon-btn:hover{background:var(--panel-2);color:var(--text)}
+  [dir="rtl"] #dPrev,[dir="rtl"] #dNext{transform:scaleX(-1)}
+  .player{aspect-ratio:16/9;width:100%;background:#000;flex:none}
+  .player iframe{width:100%;height:100%;border:0;display:block}
+  #playerBox{width:100%;height:100%}
+  .d-body{overflow-y:auto;padding:0 0 40px;flex:1}
+  .acts{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ibtn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;
+    font-size:12.5px;display:flex;align-items:center;gap:7px;transition:.15s;color:var(--dim)}
+  .ibtn:hover{background:var(--panel-3);color:var(--text)}
+  .ibtn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .ibtn .ic{font-size:14px}
+  .sumbox{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--accent);
+    border-radius:9px;padding:13px 15px;font-size:14.2px;line-height:1.85;white-space:pre-wrap}
+  .sumbox.miss{border-inline-start-color:var(--line-2);color:var(--dim);font-size:13px;line-height:1.7;white-space:normal}
+  .sumbox code{background:var(--panel-3);padding:1px 7px;border-radius:5px;font-size:12px;
+    font-family:ui-monospace,Consolas,monospace;direction:ltr;display:inline-block}
+  .srcline{font-size:11px;color:var(--faint);margin-top:9px;display:flex;gap:8px;flex-wrap:wrap}
+  .d-sec{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .d-title{font-size:16.5px;font-weight:700;margin:0 0 6px;line-height:1.45}
+  .qtag{display:inline-block;background:var(--accent);color:#1a1400;border-radius:6px;padding:1px 9px;font-size:12px;font-weight:800;margin-inline-end:8px;vertical-align:2px}
+  .kv{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--dim);margin-top:7px}
+  .kv b{color:var(--text);font-weight:600}
+  .label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:800;margin:0 0 9px;display:flex;align-items:center;gap:8px}
+  .label .count{background:var(--panel-2);border-radius:99px;padding:1px 7px;letter-spacing:0;text-transform:none;font-size:11px;color:var(--dim)}
+  .seg{display:flex;gap:5px;flex-wrap:wrap}
+  .seg .chip{padding:6px 13px;font-size:13px}
+  .star-pick{display:flex;gap:1px;align-items:center;margin-top:11px}
+  .star-pick button{background:none;border:none;font-size:21px;color:var(--line-2);padding:0 1px;line-height:1}
+  .star-pick button.on{color:var(--accent)}
+  .star-pick .clear{font-size:12px;color:var(--faint);margin-inline-start:9px}
+
+  textarea,.ti{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:14px;resize:vertical;line-height:1.65}
+  textarea:focus,.ti:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:7px;align-items:flex-start}
+  .row .ti{flex:1}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-inline-start:2px solid var(--info);border-radius:8px;padding:8px 11px;margin-bottom:7px;font-size:13.5px;display:flex;gap:9px;align-items:flex-start}
+  .note.comment{border-inline-start-color:var(--danger)}
+  .note .txt{flex:1;white-space:pre-wrap;word-break:break-word;cursor:text}
+  .note .txt:hover{color:#fff}
+  .note .when{font-size:10.5px;color:var(--faint);margin-top:3px}
+  .stamp{background:var(--accent-soft);color:var(--accent);border:none;border-radius:5px;padding:2px 7px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+  .stamp:hover{filter:brightness(1.3)}
+  .stamp.none{background:var(--panel-2);color:var(--faint)}
+  .del{background:none;border:none;color:var(--faint);font-size:15px;padding:0 3px;line-height:1;flex:none}
+  .del:hover{color:var(--danger)}
+  .desc{font-size:13px;color:var(--dim);white-space:pre-wrap;max-height:110px;overflow:hidden;line-height:1.65}
+  .desc.open{max-height:none}
+  .more{background:none;border:none;color:var(--info);font-size:12.5px;padding:6px 0 0}
+  .hint{font-size:11.5px;color:var(--faint);margin-top:7px}
+
+  #saveState{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  #saveState b{width:7px;height:7px;border-radius:99px;background:var(--faint);display:block}
+  #saveState.dirty b{background:var(--warn)} #saveState.saved b{background:var(--ok)} #saveState.err b{background:var(--danger)}
+
+  .banner{background:rgba(217,139,34,.12);border-bottom:1px solid rgba(217,139,34,.35);color:#e3b341;font-size:13px;padding:9px 20px;display:none}
+  .banner.on{display:block}
+  .banner code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-size:12px}
+
+  .toast{position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-3);border:1px solid var(--line-2);border-radius:9px;padding:9px 18px;font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:.2s}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:700px){
+    .head-in,main{padding-left:13px;padding-right:13px}
+    .pl-art{display:none}
+    .meta .mk,.meta .st{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="banner" id="banner"></div>
+
+<header>
+  <div class="head-in">
+    <div class="head-top">
+      <img class="pl-art" id="plArt" alt="">
+      <div class="pl-meta">
+        <h1 class="pl-title" id="plTitle" dir="auto">…</h1>
+        <div class="pl-sub" id="plSub"></div>
+      </div>
+      <div class="head-actions">
+        <div id="saveState"><b></b><span>—</span></div>
+        <button class="btn ghost sm" id="btnLang">EN</button>
+        <div class="vsw" id="viewSwitch">
+          <button data-view="outline">☰</button>
+          <button data-view="tiles">▦</button>
+          <button data-view="table">▤</button>
+        </div>
+        <button class="btn ghost sm" id="btnSheet"></button>
+        <button class="btn ghost sm" id="btnExport"></button>
+        <button class="btn ghost sm" id="btnImport"></button>
+        <input type="file" id="fileIn" accept="application/json" hidden>
+        <button class="btn primary sm" id="btnSave"></button>
+      </div>
+    </div>
+
+    <div class="resume" id="resume" hidden>
+      <span class="rk" id="rkLabel"></span>
+      <span class="rt" id="rTitle" dir="auto"></span>
+      <span class="rw" id="rWhen"></span>
+      <span class="go">›</span>
+    </div>
+
+    <div class="stats">
+      <div class="bar"><i class="w" id="barW"></i><i class="g" id="barG"></i></div>
+      <div class="stat"><b id="sWatched">0</b> <span id="lWatched"></span></div>
+      <div class="stat"><b id="sLeft">0</b> <span id="lLeft"></span></div>
+      <div class="stat"><b id="sTime">0h</b> <span id="lTime"></span></div>
+      <div class="stat"><b id="sNotes">0</b> <span id="lNotes"></span></div>
+    </div>
+
+    <div class="tools">
+      <input class="search" id="q">
+      <div class="chips" id="statusChips"></div>
+      <select id="sort"></select>
+      <select id="tagFilter"></select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="list"></div>
+  <div class="empty" id="empty" hidden></div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="d-head">
+    <button class="icon-btn" id="dPrev">‹</button>
+    <button class="icon-btn" id="dNext">›</button>
+    <div class="who" id="dWho"></div>
+    <a class="icon-btn" id="dOpen" target="_blank" rel="noopener">↗</a>
+    <button class="icon-btn" id="dClose">✕</button>
+  </div>
+  <div class="player" id="playerHost"></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<!-- Playlist data, embedded so this page is self-contained: it renders from
+     file:// with no server and no fetch. data.json is kept alongside as the
+     source of truth; after editing it, re-embed it into this block. -->
+<script type="application/json" id="seedData">{"generatedAt":"2026-08-21T22:20:16Z","savedAt":"2026-08-21T22:20:16Z","playlists":[{"playlistId":"gemini-enterprise","title":"Gemini Enterprise, zero to hero","description":"A curated path through Google's agentic platform, in teaching order.","channelTitle":"Google Cloud, Google for Developers and others","thumbnail":"https://i.ytimg.com/vi/3wMwdzxIyN0/maxresdefault.jpg","itemCount":49}],"videos":[{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"aK_Vbt_RkJE","position":0,"playlistId":"gemini-enterprise","module":"intro","title":"Say hello to Gemini Enterprise","description":"Learn more → cloud.google.com/gemini-enterprise \n\nGemini Enterprise is the best of Google AI for every employee, every workflow. Discover, create, share, and run AI agents — all in one secure place.","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2025-10-21T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/aK_Vbt_RkJE/maxresdefault.jpg","durationSeconds":30,"duration":"0:30","definition":"hd","viewCount":72476269,"likeCount":117,"commentCount":16,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=aK_Vbt_RkJE","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"GI9wJLvHBdc","position":1,"playlistId":"gemini-enterprise","module":"intro","title":"Introducing Gemini Enterprise (in less than a minute)","description":"Sundar Pichai, CEO, Google and Alphabet, opens the keynote for Google Cloud's event on October 9, 2025.\n\nWatch the full 50-minute replay here → https://www.youtube.com/live/uLHF9T1SLrU\n\nIn the full show, you’ll hear from Google Cloud CEO Thomas Kurian, see Gemini Enterprise in action with live demos from product leaders, and hear how customers around the world are transforming their businesses.\n\nTo learn more, register for the Gemini Enterprise Deep Dives digital series, covering Gemini Enterprise use cases and practical next steps to build the AI business case to upskill your organization: https://bit.ly/gaw_deep_dives\n\nGet 150 credits for AI learning on Google Skills: https://bit.ly/gaw_ai_skills\n\nRequest a meeting with a Google Specialist:\nEnglish: https://bit.ly/gaw_consultation\nSpanish: https://bit.ly/consultation-es\nPortuguese: https://bit.ly/consultation_pt","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2025-10-10T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/GI9wJLvHBdc/maxresdefault.jpg","durationSeconds":38,"duration":"0:38","definition":"hd","viewCount":68120,"likeCount":468,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=GI9wJLvHBdc","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"3wMwdzxIyN0","position":2,"playlistId":"gemini-enterprise","module":"intro","title":"Google Announces Gemini Enterprise Agent Platform: The Future of Agentic AI","description":"Google is in its agentic Gemini era. Hear from CEO of Google and Alphabet Sundar Pichai on how Google is customer zero of its own technologies and helping enterprises manage, scale and optimize their agents.  \nChapters\n0:00 - The Pace of Technological Change \n0:45 - Google’s Multi-Billion Dollar AI Investment \n1:30 - How Google Uses AI to Generate 75% of New Code \n2:15 - Scaling Complex Code Migrations with Agentic Workflows \n3:00 - AI in Marketing: 70% Faster Turnaround & Personalized Creative \n3:45 - Boosting Cybersecurity with AI Agents \n4:30 - Introducing Gemini Enterprise Agent Platform\n#googlecloudnext","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-04-23T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/3wMwdzxIyN0/maxresdefault.jpg","durationSeconds":337,"duration":"5:37","definition":"hd","viewCount":407001,"likeCount":5541,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=3wMwdzxIyN0","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"j8qW5poBkEU","position":3,"playlistId":"gemini-enterprise","module":"intro","title":"What is Gemini Enterprise Agent Platform?","description":"Ready to take your AI development to the next level? Discover how the Gemini Enterprise Agent Platform gives developers a clean path from writing their first lines of code to running secure, scalable agents in production. Join Holt Skinner as he dives into the complete agent lifecycle, and be sure to check out the linked resources below to try out the tutorials for yourself.\n\nGitHub repository (tutorials/notebooks) → https://goo.gle/agent-platform-github\nAgent Development Kit (ADK) → https://goo.gle/48GfaDH\nVideos from Google Cloud → https://goo.gle/4th8t37\nAgents CLI → https://goo.gle/agents-cli\n\nSpeakers: Holt Skinner\nProducts Mentioned: Gemini Enterprise Agent Platform","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-04-22T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/j8qW5poBkEU/maxresdefault.jpg","durationSeconds":541,"duration":"9:01","definition":"hd","viewCount":100128,"likeCount":1487,"commentCount":40,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=j8qW5poBkEU","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"4NFtsoPg5EU","position":4,"playlistId":"gemini-enterprise","module":"intro","title":"Gemini Enterprise - Your front door to AI at workplace","description":"To learn more, visit: https://goo.gle/4marpxL\n\nThis video takes you through the key pillars, features and functionalities of Gemini Enterprise - the workplace AI solution from Google Cloud.","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-04-03T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/4NFtsoPg5EU/maxresdefault.jpg","durationSeconds":458,"duration":"7:38","definition":"hd","viewCount":33663,"likeCount":175,"commentCount":5,"youtubeTags":["Gemini Enterprise","Gemini","Google AI","ChatGTP Enterprise","Claude Code","AI for workplace","Gemini for Business","Google AI for workplace","workplace AI","ChatGPT Business"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=4NFtsoPg5EU","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"gT4qqHMiEpA","position":5,"playlistId":"gemini-enterprise","module":"platform","title":"What is Vertex AI?","description":"Introduction to Vertex AI → https://goo.gle/3r428tg\n\nVertex AI is Google Cloud’s end-to-end ML platform for data scientists and ML engineers to accelerate ML experimentation and deployment. The platform unifies Google Cloud’s existing ML offerings into a single environment for efficiently building and managing the lifecycle of ML projects. In this video, we show how this toolset supports your entire ML workflow from data management all the way to predictions. Watch to learn how you can use Vertex AI for your ML projects!\n\nChapters: \n0:00 - Intro \n0:56 - Basic ML Workflow\n1:29 - How Vertex AI offers tools for different steps of ML workflow\n3:39 - Demo Vertex AI Dashboard \n6:37 - Summary\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\nWatch more episodes of AI Simplified → http://goo.gle/AISimplified \n\n#AISimplified\n\nProduct: Vertex AI;  fullname: Priyanka Vergadia;","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2021-05-22T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/gT4qqHMiEpA/maxresdefault.jpg","durationSeconds":436,"duration":"7:16","definition":"hd","viewCount":372662,"likeCount":4615,"commentCount":156,"youtubeTags":["GDS: Yes","what is Vertex AI","how to use Vertex AI","getting started with Vertex AI","Vertex AI demo","Vertex AI tutorial","ML workflow management","unified ML platform","accelerate ML deployment","manage ML workflows with Vertex AI","how to manage ML workflows","manage lifecycle ML projects","machine learning deployment","ML workflows","Vertex AI"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=gT4qqHMiEpA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"YfiLUpNejpE","position":6,"playlistId":"gemini-enterprise","module":"platform","title":"Introduction to Gemini on Vertex AI","description":"You've seen what Gemini can do, now it's your turn. Take on the challenge of building with a 1 million token context window. Start the codelab now and build something amazing. → https://goo.gle/47taaTd\n\nLooking to build scalable, enterprise grade AI applications? This video is your guide to using Gemini models on Google Cloud's Vertex AI platform. We'll show you how to leverage powerful, multimodal models like Gemini 1.5 Pro and Gemini 1.5 Flash to create chatbots, agents, and solutions for text and video processing. \n\nYou'll learn how to get started with Vertex AI Studio in the Cloud Console, where you can explore and customize prompts, adjust model parameters, and generate code for your projects. We'll also cover the difference between Vertex AI and other Gemini APIs, and highlight key features like the massive 1 million token context window.\n\nChapters:\n0:00 - Intro\n1:37 - What is Gemini?\n2:47 - How to use Gemini\n4:45 - Get started today\n\nWatch more AI Guide for Cloud Developers → https://goo.gle/AtoZforAI\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\nSpeaker: Holt Skinner\nProducts Mentioned: Gemini,  Vertex AI\n\n#GoogleCloud #AIforDevelopers","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2024-12-02T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/YfiLUpNejpE/maxresdefault.jpg","durationSeconds":328,"duration":"5:28","definition":"hd","viewCount":74982,"likeCount":680,"commentCount":18,"youtubeTags":["pr_pr: Google Cloud;","Campaign: ;","ct: AIG;","gds:Yes;","Gemini","Vertex AI","Google Cloud","Generative AI","AI Platform","AI models","Machine Learning","Artificial Intelligence","LLM","Large Language Model","Chatbots"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=YfiLUpNejpE","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"7NN4oyDiMv8","position":7,"playlistId":"gemini-enterprise","module":"platform","title":"Google Gemini Enterprise Agent Platform Explained | The Evolution of Vertex AI","description":"Google Gemini Enterprise Agent Platform Explained | The Evolution of Vertex AI\n\nAt Google Cloud Next 2026, Google introduced the Gemini Enterprise Agent Platform — the next evolution of Vertex AI and Google’s biggest step toward an agent-driven future.\n\nIn this video, I break down:\n✅ What is Gemini Enterprise Agent Platform\n✅ How Vertex AI is evolving into a complete Agent Platform\n✅ Agent Studio, Agent Runtime, Agent Gateway & Agent Registry\n✅ How Google is enabling autonomous AI agents at enterprise scale\n✅ Gemini + Antigravity + Agent Platform ecosystem\n✅ The rise of the “Agent Economy” with A2A & MCP protocols\n✅ Why developers may soon focus only on “What to build”\n\nGoogle’s vision is becoming very clear:\n\nAI is no longer just assisting developers with code.\n\nIt is moving toward:\n\nBuilding applications\nOrchestrating workflows\nDeploying systems\nConnecting enterprise tools\nAutomating entire business processes\n\nThe biggest shift?\n\nGoogle is slowly removing the “How” part:\n❌ How to code\n❌ How to deploy\n❌ How to integrate systems\n\nAnd pushing us toward:\n✅ What problems to solve\n✅ What products to create\n✅ What ideas to execute\n\nThis is more than a rebrand of Vertex AI.\nThis feels like the beginning of an entirely new software engineering era. ()\n\n🚀 Join TechTrapture Academy (Completely Free)\nNew Agent Platform playlists, tutorials & hands-on challenges coming soon.\n\n#GoogleCloud #GeminiEnterprise #AgentPlatform #VertexAI #GeminiAI #AgenticAI #GoogleCloudNext #AIEngineering #GenerativeAI #TechTrapture\n\nPlaylists\nGoogle Agent Development Kit (ADK)\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz2HwepRUVpq1TEPuYWo_fSi\n\nLearn Airflow\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz3i8qw6yakrfJzx75W_vVaH\n\nLearn Google Cloud in 2025\nhttps://youtube.com/playlist?list=PLLrA_pU9-Gz2OnBoICkewd9-Fc9Mi0nm7&si=8kkB3ct5wDHCMkoi\n\nData Engineering Hands-on Projects\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz2DaQDcY5g9aYczmipBQ_Ek\n\nLooking to get in touch?\nDrop me a line at vishal.bulbule@techtrapture.com\n\nLinkedin\nhttps://www.linkedin.com/in/vishal-bulbule/\n\nMedium Blog\nhttps://medium.com/@VishalBulbule\n\nGithub\nSource Code\nhttps://github.com/vishal-bulbule","channelTitle":"TechTrapture","channelId":"UCMNZFAhQSB314E_MG3IbTXQ","publishedAt":"2026-05-11T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/7NN4oyDiMv8/maxresdefault.jpg","durationSeconds":1917,"duration":"31:57","definition":"hd","viewCount":4215,"likeCount":70,"commentCount":6,"youtubeTags":["gemini enterprise agent platform","google cloud vertex ai agent builder hackathon","google gemini enterprise","google gemini agents","google gemini 3 agents","vertex ai agent engine","enterprise ai agents","introduction to vertex ai agents","ai agents explained","google gemini ai","google cloud ai platform","vertex ai agent builder","google ai agent builder","agent development kit explained","google ai agents"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=7NN4oyDiMv8","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Yfkr5IobjtA","position":8,"playlistId":"gemini-enterprise","module":"platform","title":"Google Agentspace is now Gemini Enterprise: What is the Impact on your Business?","description":"Originally broadcast on the 14th of October 2025, Devoteam’s Google Cloud Gemini expert breaks down what the latest Gemini Enterprise announcements made on 9 October 2025 mean for your business.\n\nBy watching this on-demand webinar, you will learn the differences between each of the four new SKUs and the proven strategies for successful Gemini Enterprise adoption and use. \n\nAccelerate your organisation's adoption of Gemini Enterprise with Devoteam: https://www.devoteam.com/google-cloud-gemini-enterprise/","channelTitle":"Devoteam - Google Cloud Partner","channelId":"UChj032jtRiz_NxpF9Fw7eSw","publishedAt":"2025-10-28T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Yfkr5IobjtA/maxresdefault.jpg","durationSeconds":3193,"duration":"53:13","definition":"hd","viewCount":2160,"likeCount":25,"commentCount":2,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Yfkr5IobjtA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"UUlnIK0lnos","position":9,"playlistId":"gemini-enterprise","module":"enable","title":"Introducing Gemini Enterprise Agent Ready","description":"Learn more: https://goo.gle/4ulsxlG\n\nJoin Gemini Enterprise Agent Ready (GEAR) and get 35 monthly credits to learn how to build enterprise-grade agents.","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-05-18T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/UUlnIK0lnos/maxresdefault.jpg","durationSeconds":43,"duration":"0:43","definition":"hd","viewCount":19981,"likeCount":275,"commentCount":13,"youtubeTags":["#GEAR","#GeminiEnterprise","#AgentPlatform"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=UUlnIK0lnos","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Rz6RS61vApQ","position":10,"playlistId":"gemini-enterprise","module":"enable","title":"🤖 Gemini Enterprise - First Setup 🤖","description":"","channelTitle":"Moshiko Avraham - מושיקו אברהם","channelId":"UCKmZyF5BNkfebVVih8jzGyA","publishedAt":"2026-03-18T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Rz6RS61vApQ/maxresdefault.jpg","durationSeconds":236,"duration":"3:56","definition":"hd","viewCount":459,"likeCount":12,"commentCount":0,"youtubeTags":[],"audioLanguage":"iw","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Rz6RS61vApQ","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"xfS_QTabOfQ","position":11,"playlistId":"gemini-enterprise","module":"enable","title":"How to create an AI Agent in Gemini Enterprise","description":"In this step-by-step tutorial, you will learn how to create an AI Agent in Gemini Enterprise. To get started with Gemini Enterprise, please click here: https://www.devoteam.com/google-cloud-gemini-enterprise/?utm_campaign=354388215-FY26_H1%26H2_EMEA_G%20Cloud_YouTube&utm_source=youtube&utm_medium=social&utm_content=How%20to%20create%20an%20AI%20Agent%20in%20Gemini%20Enterprise","channelTitle":"Devoteam - Google Cloud Partner","channelId":"UChj032jtRiz_NxpF9Fw7eSw","publishedAt":"2026-03-16T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/xfS_QTabOfQ/maxresdefault.jpg","durationSeconds":377,"duration":"6:17","definition":"hd","viewCount":13178,"likeCount":105,"commentCount":8,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=xfS_QTabOfQ","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"--dzkQDt9lE","position":12,"playlistId":"gemini-enterprise","module":"enable","title":"Gemini Enterprise from Google on Google Cloud","description":"Gemini Enterprise from Google on Google Cloud.\n\nTo enable or support contact sudhanshu@nandyavart.in\n\nIt works through Google Cloud - Gemini Enterprise.","channelTitle":"Sudhanshu Jain","channelId":"UCZ-d0qX9KERaNpTEfewVunQ","publishedAt":"2025-10-19T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/--dzkQDt9lE/maxresdefault.jpg","durationSeconds":602,"duration":"10:02","definition":"hd","viewCount":3069,"likeCount":21,"commentCount":0,"youtubeTags":["Gemini Enterprise from Google on Google Cloud"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=--dzkQDt9lE","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Ph0g6dnsB4g","position":13,"playlistId":"gemini-enterprise","module":"ground","title":"Introduction to grounding with Gemini on Vertex AI","description":"Grounding overview | Google Cloud → https://goo.gle/3CPOnYq\nTry Vertex AI Search | Google Cloud → https://goo.gle/3YYwM8l\nGet started with Vertex AI Search → https://goo.gle/3AVivRF\n\nleverage Gemini and Vertex AI to build AI models that are more accurate, reliable, and less prone to hallucinations with a technique called grounding. Join Googler Holt Skinner as he walks through grounding to connect Gemini to real world data from Google Search and data from Vertex AI Search to produce more reliable generative AI outputs. \n\nChapters:\n0:00 - Intro\n0:36 - Why grounding?\n2:21 - Grounding with Google Search\n3:19 - Vertex AI Search\n6:54 - Get started today\n\nMore resources:\nGrounded Generation in Vertex AI Search → https://goo.gle/4hXLc0Z\nGenerative AI GitHub repository → https://goo.gle/3NF6rXC\nGetting started with grounding with Gemini in Vertex AI → https://goo.gle/3Alb59Z\n\nWatch more AI Guide for Cloud Developers → https://goo.gle/AtoZforAI\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n\nSpeaker: Holt Skinner\nProducts Mentioned: Vertex AI Vector Search,  Vertex AI,  Gemini\n\n#GoogleCloud #AIforDevelopers","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2024-12-04T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Ph0g6dnsB4g/maxresdefault.jpg","durationSeconds":463,"duration":"7:43","definition":"hd","viewCount":24458,"likeCount":371,"commentCount":12,"youtubeTags":["pr_pr: Google Cloud;","Campaign: ;","ct: AIG;","gds:Yes;","Grounding","Retrieval Augmented Generation","AI Hallucination","Vector Embeddings","Data Stores","AI Models","AI Applications","Google Cloud","Vertex AI","Gemini","Google Cloud AI Platform"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Ph0g6dnsB4g","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"ml2xMeftEG4","position":14,"playlistId":"gemini-enterprise","module":"ground","title":"Grounding in Gemini with Vertex AI Search","description":"Are you tired on learning and building a production RAG systems? With the Grounding support in Gemini, you can easily build a RAG system by enabling the option on the console.\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2024-06-04T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/ml2xMeftEG4/maxresdefault.jpg","durationSeconds":285,"duration":"4:45","definition":"hd","viewCount":7012,"likeCount":123,"commentCount":15,"youtubeTags":["genai","vertexai","rag","grounding"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=ml2xMeftEG4","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"HEa43ydSHUA","position":15,"playlistId":"gemini-enterprise","module":"ground","title":"Provide better search and generative AI experiences with Vertex AI Search","description":"Discover how Vertex AI Search leverages generative AI including Google Cloud's latest Gemini models to power high quality search experiences grounded in your data. We’ll share how you can increase customer and employee satisfaction with personalized search and recommendations experiences. Learn how Vertex AI Search can help you ground gen AI apps in your data functioning as an information retrieval and answer generation system. Discover the latest product enhancements and discover how customers are transforming search capabilities in the enterprise. \n\nSpeakers: Lisa O'Malley, Rohini Goyal, David Johnson\n\nWatch more:\nAll sessions from Google Cloud Next → https://goo.gle/next24\n\n#GoogleCloudNext\n\nAIML132\nEvent: Google Cloud Next 2024","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2024-07-01T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/HEa43ydSHUA/maxresdefault.jpg","durationSeconds":2181,"duration":"36:21","definition":"hd","viewCount":10940,"likeCount":119,"commentCount":3,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=HEa43ydSHUA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"v4s5eU2tfd4","position":16,"playlistId":"gemini-enterprise","module":"ground","title":"Grounding for Gemini with Vertex AI Search and DIY RAG","description":"Click here to master RAG with Vertex AI Search. → https://goo.gle/45Pbcrx\n\nStruggling with LLM hallucinations and outdated information? This video will show you how to build a production ready RAG (Retrieval-Augmented Generation) system to ground your Generative AI.\n\nYou’ll learn how to integrate Gemini, multi-modal embeddings, and vector search to create an AI application that provides accurate, up to date, and relevant answers from your own data. We'll explore a fully managed, all in one solution with Vertex AI Search, as well as a DIY approach for those who want more control.\n\nBuilding a RAG system from scratch is hard. This video showed you the DIY path, but also a fully managed solution: Vertex AI Search. Ready to try the easy way? Our codelab will guide you through building your own grounded system in minutes.\n\nNOTE: Cloud Credits discussed in this session or workshop were for live audiences only\n\nSpeaker: Holt Skinner\n\nWatch more:\nCheck out all the AI videos at Google I/O 2024 → https://goo.gle/io24-ai-yt\nCheck out all the Cloud videos at Google I/O 2024 → https://goo.gle/io24-cloud-yt\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleIO  \n\n\nProducts Mentioned: Vertex AI\nEvent: Google I/O 2024","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2024-05-16T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/v4s5eU2tfd4/maxresdefault.jpg","durationSeconds":2130,"duration":"35:30","definition":"hd","viewCount":51155,"likeCount":744,"commentCount":13,"youtubeTags":["pr_pr: Google I/O;","ct:Event - Workshop;","ct:Stack - AI;","ct:Stack - Cloud;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=v4s5eU2tfd4","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Y5Jm_Gtfhsg","position":17,"playlistId":"gemini-enterprise","module":"ground","title":"Get Started with Vector Search using Vertex AI","description":"What is Vector Search and why is it becoming so important for businesses? Watch along and learn how to get started with building production-quality vector search services with Google Cloud Vertex AI.\n\nGet started with Vector Search → https://goo.gle/3tOSpfe\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2023-11-02T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Y5Jm_Gtfhsg/maxresdefault.jpg","durationSeconds":562,"duration":"9:22","definition":"hd","viewCount":40636,"likeCount":422,"commentCount":21,"youtubeTags":["generativeai","large language models","vertexai","vectorsearch","llm","genai"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Y5Jm_Gtfhsg","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"eIBrvOUbufY","position":18,"playlistId":"gemini-enterprise","module":"nocode","title":"Build agents with Agent Platform","description":"This demo guides you through the end-to-end process of building AI agents with instructions, skills, and tools using Gemini Enterprise Agent Platform and Agent Development Kit.\n\nhttps://goo.gle/buildagents\n\nWatch the full developer keynote → https://youtube.com/live/A01DQ8_xy7Q\nWatch more: 100+ sessions from Google Cloud Next 26 → https://www.googlecloudevents.com/next-vegas/\nSubscribe to Google Cloud → https://goo.gle/GoogleCloud\nGet hands on with Codelabs→ https://goo.gle/BuildAgents\n\nSpeakers: Mofi Rahman\n\n\nDEVKEY-Demo1\n#GoogleCloudNext","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-04-27T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/eIBrvOUbufY/maxresdefault.jpg","durationSeconds":330,"duration":"5:30","definition":"hd","viewCount":12641,"likeCount":200,"commentCount":16,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=eIBrvOUbufY","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"jMCqT7iGKx0","position":19,"playlistId":"gemini-enterprise","module":"nocode","title":"Agent Designer in Gemini Enterprise (first demo)","description":"I posted a video about the Agent Designer announcement on Instagram and TikTok, and a lot of you were interested in the hands-on demo I got. Here we go!\n\nThis is in the Gemini Enterprise app, not the regular Gemini app. Link to learn more and try it out: https://cloud.google.com/gemini-enterprise","channelTitle":"Future with Fawzi","channelId":"UCPHw0SHvIjXDfl-boQ1Lhsw","publishedAt":"2026-05-07T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/jMCqT7iGKx0/maxresdefault.jpg","durationSeconds":298,"duration":"4:58","definition":"hd","viewCount":1078,"likeCount":12,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=jMCqT7iGKx0","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"S1PkHSy2R9k","position":20,"playlistId":"gemini-enterprise","module":"nocode","title":"How to build a staff scheduling agent with Gemini Enterprise app?","description":"Learn more about Gemini Enterprise app and sign up for a free trial at: https://goo.gle/4nJ4Cu3\n\nThis video talks through the process of creating an AI agent with Gemini Enterprise app's no-code agent designer to automate manual staff scheduling tasks.","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-05-20T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/S1PkHSy2R9k/maxresdefault.jpg","durationSeconds":156,"duration":"2:36","definition":"hd","viewCount":2770,"likeCount":26,"commentCount":1,"youtubeTags":["Gemini Enterprise","Gemini","Google AI","ChatGTP Enterprise","Claude Code","AI for workplace","Gemini for Business","Google AI for workplace","workplace AI","ChatGPT Business","Claude cowork"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=S1PkHSy2R9k","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"nIMk_Gq82vA","position":21,"playlistId":"gemini-enterprise","module":"nocode","title":"How to build a social media impact agent with Gemini Enterprise app?","description":"Learn more about Gemini Enterprise app and sign up for 30-day free trial at: https://goo.gle/4woCSyq\n\nThis video teaches you how to use Gemini Enterprise app's no-code agent designer to create an AI agent that helps measure the impact of your social media activities.","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-05-11T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/nIMk_Gq82vA/maxresdefault.jpg","durationSeconds":251,"duration":"4:11","definition":"hd","viewCount":3268,"likeCount":76,"commentCount":3,"youtubeTags":["Gemini","Gemini Enterprise","Gemini for businesses","Gemini for Enterprise","Gemini for Work","Gemini at workplace","Workplace AI tool","ChatGPT Enterprise","ChatGPT Business","Gemini at Work","Google AI for work","Google AI for business","Google AI for enterprise","enterprise AI solutions","agentic platform"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=nIMk_Gq82vA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"81qWbN8Xj_s","position":22,"playlistId":"gemini-enterprise","module":"nocode","title":"Automate your entire Agent Development Lifecycle using Gemini Enterprise","description":"Learn how to simply and securely scale production-grade AI agents in minutes – entirely on our Agent Platform. Our end-to-end platform for enterprise developers to accelerate agentic development from concept to production without compromising on reliability or governance\n\nBuilding an agent is the easy part. The real challenge is the lifecycle: managing deployments, governance, evaluation, and publishing across fragmented tools.\n\nIn this session, you’ll learn how to turn your existing coding agent into a platform expert. First, you’ll learn how to build and deploy custom workflows using the Agent Development Kit (ADK) and Agents CLI. Then, you’ll discover how to scale execution with the agent runtime and memory bank, govern securely via the Agent Gateway and Agent Registry, and continuously optimize performance using agent observability and evaluation.\n\nYou’ll learn how to:\n\n- Build no code, low code or high code agents directly in Gemini Enterprise Agent Platform \n- Scaffold an ADK agent and build deterministic tools from plain-English prompts, then run it locally\n- Scale and Deploy to Agent Runtime and add Sessions and Memory Bank so the agent keeps context across sessions\n- Give the agent an identity and screen untrusted input for prompt injection \n- Govern your agents securely with Agent Gateway and Agent Registry \nGrade the agent on grounding and hallucination, then optimize the prompt behind a no-regression gate\n- Publish the finished agent into Gemini Enterprise so it is available to your entire organization\n\nResources\nGemini Enterprise Agent Platform Overview - https://docs.cloud.google.com/gemini-enterprise-agent-platform/overview\nAgents CLI Documentation - https://google.github.io/agents-cli/\nADK Framework Guide - https://adk.dev/\n\n#GoogleCloud #AgentDevelopment #ADK #GenerativeAI #CodingAgent #CloudComputing #AgentGovernance \n\nSpeakers: Shubham Saboo Lavi Nigam\nProducts Mentioned:, ADK, Agents CLI, Vertex Agent Platform, Model Armor, Gemini Enterprise","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2026-07-28T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/81qWbN8Xj_s/maxresdefault.jpg","durationSeconds":1143,"duration":"19:03","definition":"hd","viewCount":2691,"likeCount":67,"commentCount":5,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=81qWbN8Xj_s","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Zqno_vux6d8","position":23,"playlistId":"gemini-enterprise","module":"adk","title":"AI agents explained: Build your first agent in 8 minutes","description":"Follow the codelab → https://goo.gle/3Q5TSt3\nGitHub repo → https://goo.gle/4fsahT8 \nGoogle Agent Development Kit (ADK) → https://goo.gle/3Q3enqf\n\nAt the simplest level, an AI agent doesn’t just answer—it decides and takes action. In this video, Smitha goes beyond basic chatbots and demonstrates how to build a fully autonomous, self-correcting multi-agent system from scratch using Google’s Google Agent Development Kit (ADK).\n\n\nFirst, Smitha breaks down the theory behind modern agents: the ReAct Framework (reasoning and acting) and the 3 main agent patterns (sequential, reactive, and planning). Then, she jumps straight into Python to build a practical *Blog Writing Agent*. Watch along and learn how to combine *Planner* and *Writer* agents with validation checkers and loop agents to create an AI that catches its own mistakes and automatically retries until it gets it right.\n\nChapters:\n00:00 - AI Agents Explained\n01:05 - The ReAct Framework Explained \n02:15 - The 3 Types of AI Agents (Sequential, Reactive, Planning) \n03:30 - Project Overview: The Auto-Correcting Blog Writer \n04:15 - Setting Up Google ADK & UV \n04:50 - Coding the Planner Agent \n05:40 - Adding Auto-Correction (Validation Checkers & Loop Agents) \n06:50 - Coding the Blog Writer & Root Agent \n08:20 - Testing the AI in the ADK Web UI \n09:40 - What's Next? (Connecting to MCP Servers)\n\nMore resources:\nReAct Paper → https://goo.gle/4oa1oQ9 \n\n🔗 Connect with Smitha online:\nYouTube → https://goo.gle/Smitha-on-YouTube \nLinkedin → https://goo.gle/Smitha-on-LinkedIn\nX → https://goo.gle/Smitha-on-X \n\n#AIAgents #GoogleADK #PythonTutorial #SoftwareEngineering #MachineLearning #LLMs\n\nWatch more Modern AI Agents: From Theory to Production → https://goo.gle/Learn-with-Smitha\n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#AIAgents #Gemini\n\nSpeaker: Smitha Kolan\nProducts Mentioned: Agent Development Kit, Gemini","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-06-10T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Zqno_vux6d8/maxresdefault.jpg","durationSeconds":509,"duration":"8:29","definition":"hd","viewCount":415778,"likeCount":12546,"commentCount":177,"youtubeTags":["AIAgents","GoogleADK","PythonTutorial","SoftwareEngineering","MachineLearning","LLMs"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Zqno_vux6d8","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"zgrOwow_uTQ","position":24,"playlistId":"gemini-enterprise","module":"adk","title":"Introducing Agent Development Kit","description":"Building complex, production-ready AI agents, especially multi-modal or multi-agent systems, can be challenging. Introducing the Agent Development Kit (ADK), a new open-source project from Google designed to simplify this process based on Google's internal experience. ADK provides a powerful, open foundation (model-agnostic, deployment-agnostic, interoperable) that makes agent development feel like software development, complete with native multi-modal streaming and easy local debugging via a built-in UI.\n\nWatch Product Manager Anand Iyer, Tech Lead Bo Yang, and Developer Advocate, Ivan Nardini introduce ADK and demo building a multi-agent, multi-modal travel planner quickly using the SDK. Learn about the core design principles and see how you can get started building your own sophisticated AI agents today.\n\nResources: \nGet Started → https://google.github.io/adk-docs\nSample Agents → https://goo.gle/3Rbdo4s \n\nSubscribe to Google for Developers → https://goo.gle/developers \n\nSpeaker: Anand Iyer, Bo Yang, Ivan Nardini \nProducts mentioned: Agent Development Kit","channelTitle":"Google for Developers","channelId":"UC_x5XG1OV2P6uZZ5FSM9Ttw","publishedAt":"2025-04-10T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/zgrOwow_uTQ/maxresdefault.jpg","durationSeconds":527,"duration":"8:47","definition":"hd","viewCount":400254,"likeCount":9787,"commentCount":394,"youtubeTags":["Google","developers","Agent Development Kit","ADK","AI Agents","Build AI Agents","Multi-modal Agents","Multi-agent Systems","Open Source AI","AI SDK","Agent Framework","Google AI","Generative AI","LLM Agents","Large Language Models"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=zgrOwow_uTQ","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"44C8u0CDtSo","position":25,"playlistId":"gemini-enterprise","module":"adk","title":"Getting started with Agent Development Kit","description":"Ready to build your first AI agent with ADK? This video simplifies the process using Google's open-source Agent Development Kit (ADK). Follow along as we guide you through the initial steps, demonstrating ADK's intuitive code-first framework. Learn the fundamentals of agent definition, essential concepts like the Runner and Services, and how easily you can run and debug your agent locally using the built-in web UI (adk web) or CLI (adk run). We'll build a sample YouTube Shorts agent to get you started quickly.\n\nChapters: \n0:00 - Intro \n0:26 - What is ADK?\n1:17 - Sample agent architecture \n2:28 - LLM Agent  \n6:30 - Different ways to run the ADK Agent \n7:11 - ADK run\n7:50 - ADK web \n9:33 - Different types of Agents \n10:50 - Loop Agent: \n12:06 - Testing Loop Agent:  \n13:20 - Runner, Services and Event loop \n16:17 - Run your agent programmatically \n18:00 - Recap \n\nResources: \nGet Started → https://google.github.io/adk-docs\nSample Agents → https://goo.gle/3Rbdo4s \nYoutube Shorts Assistant Agent →  https://goo.gle/44zmiR0 \n\nSubscribe to Google for Developers → https://goo.gle/developers \n\nProducts mentioned: Agent Development Kit","channelTitle":"Google for Developers","channelId":"UC_x5XG1OV2P6uZZ5FSM9Ttw","publishedAt":"2025-04-16T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/44C8u0CDtSo/maxresdefault.jpg","durationSeconds":1125,"duration":"18:45","definition":"hd","viewCount":153713,"likeCount":3217,"commentCount":159,"youtubeTags":["Google","developers","Type: DevByte;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=44C8u0CDtSo","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"YXOipluh87g","position":26,"playlistId":"gemini-enterprise","module":"adk","title":"Build an AI agent with Gemini CLI and Agent Development Kit","description":"Agentverse - The Shadowblade's Codex → https://goo.gle/49izfAR\nCheck out the blog to learn more. → https://goo.gle/49zR5hI\n\nJoin the Agentverse and master Gemini CLI for AI powered app creation! 🚀 This video demonstrates vibecoding an app from scratch, incorporating version control with Gitea, generating AI images with Imagen, exploring context engineering, and setting up an automated CI pipeline for testing and deployment. Discover how these tools enhance your ability to build powerful, secure, and intelligent applications.\n\nChapters:\n0:00 - Intro\n01:35 - Building a profile website with Gemini CLI\n03:50 - Version control and connecting to Git with MCP \n06:15  - Generating an AI profile image with Imagen\n08:38 - Context engineering and agent guardrails\n10:15 - Creating your agent and arming it with tools\n11:33 - Automated testing and CI for AI agents\n13:48 - Deploying your AI agent to Cloud Run\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #AIAgents #ADK #GeminiCLI\n\nSpeakers: Debi Cabrera\nProducts Mentioned: Agent Development Kit, Gemini CLI, Vertex AI","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-01-13T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/YXOipluh87g/maxresdefault.jpg","durationSeconds":918,"duration":"15:18","definition":"hd","viewCount":40973,"likeCount":1306,"commentCount":17,"youtubeTags":["Pr_pr: Google Cloud Tech;","Series: Agentverse","ct: AIG;","gds:Yes;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=YXOipluh87g","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"xXQKoYaoZwA","position":27,"playlistId":"gemini-enterprise","module":"adk","title":"Google Cloud Agent Development Kit Tutorial | Build Your First ADK Agent","description":"🎓 Learn Google Cloud, AI, Agentic AI & hands-on projects with structured learning at TechTrapture Academy.\nJoin free & premium learning paths: https://academy.techtrapture.com/\n\nCheck out the full Udemy course (with complete source code) available now at a discounted price.\n\nhttps://www.udemy.com/course/agentic-ai-with-google-adk-mcp-servers/?referralCode=1D4127421535C3024964\n\nGoogle Cloud Agent Development Kit Tutorial | Build Your First ADK Agent\n\nWelcome to the first video in my Google Cloud ADK (Agent Development Kit) series! 🚀\n\nIn this beginner-friendly tutorial, I’ll walk you through:\nWhat is Google Cloud ADK?\nKey features and benefits of ADK\nADK Architecture explained\nStep-by-step demo: Creating your first ADK Agent\n\nBy the end of this video, you’ll have a solid understanding of ADK and know how to set up your first working agent.\n\n📂 What You’ll Learn:\nWhy Google Cloud introduced ADK\nHow ADK simplifies agent-based AI development\nCore components of ADK architecture\nHow to quickly create and run your first ADK Agent\n\nStay tuned for upcoming videos where we dive deeper into advanced ADK features, integrations, and real-world use cases!\n\nPlaylists\n\nGoogle Agent Development Kit (ADK)\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz2HwepRUVpq1TEPuYWo_fSi\n\nLearn Airflow\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz3i8qw6yakrfJzx75W_vVaH\n\nLearn Google Cloud in 2025\nhttps://youtube.com/playlist?list=PLLrA_pU9-Gz2OnBoICkewd9-Fc9Mi0nm7&si=8kkB3ct5wDHCMkoi\n\nData Engineering Hands-on Projects\nhttps://www.youtube.com/playlist?list=PLLrA_pU9-Gz2DaQDcY5g9aYczmipBQ_Ek\n\nLooking to get in touch?\nDrop me a line at vishal.bulbule@techtrapture.com\n\nLinkedin\nhttps://www.linkedin.com/in/vishal-bulbule/\n\nMedium Blog\nhttps://medium.com/@VishalBulbule\n\nGithub\nSource Code\nhttps://github.com/vishal-bulbule\n\n💬 Join Our WhatsApp Community for Discussions and Updates:\nhttps://chat.whatsapp.com/I7omzvh5BZrILaBCPL8pPq\n\n\nGoogle Cloud ADK tutorial\nGoogle Agent Development Kit\nWhat is Google Cloud ADK\nADK architecture explained\nGoogle Cloud AI agents\nCreate first ADK agent\nADK beginner tutorial\nGoogle Cloud ADK step by step\nAI agent development Google Cloud\nADK agent example\nGoogle Cloud agent tutorial\nAI agents with ADK\nBuild AI agents on Google Cloud\nGoogle Cloud ADK explained\nGoogle ADK quickstart\nMultiAgent System\n#GoogleCloud #ADK #GoogleADK #AgentDevelopmentKit #AI #ArtificialIntelligence #AIagents #GoogleCloudAI #CloudComputing #MachineLearning #AIProjects #AITutorial #CloudAI #AIAgents #multiagentsystems","channelTitle":"TechTrapture","channelId":"UCMNZFAhQSB314E_MG3IbTXQ","publishedAt":"2025-09-17T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/xXQKoYaoZwA/maxresdefault.jpg","durationSeconds":2111,"duration":"35:11","definition":"hd","viewCount":37775,"likeCount":396,"commentCount":54,"youtubeTags":["Google Cloud ADK","Google Agent Development Kit","Google Cloud Agent Development Kit","What is Google Cloud ADK","ADK tutorial","ADK beginner tutorial","Google Cloud ADK step by step","Google Cloud ADK quickstart","Create first ADK agent","Google Cloud AI agents","AI agents with ADK","Agent Development Kit tutorial","Google Cloud ADK demo","Google Cloud ADK setup","AI agent development Google Cloud"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=xXQKoYaoZwA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"P4VFL9nIaIA","position":28,"playlistId":"gemini-enterprise","module":"adk","title":"Agent Development Kit (ADK) Masterclass: Build AI Agents & Automate Workflows (Beginner to Pro)","description":"🚀 Pre-order Shipkit.ai - AI dev toolkit for AI-driven development: templates for chat, RAG, and ADK agents, a 14-module course, and Cursor-first workflows to build your entire app. Launching Sep 20. \n\n⚡️Pre-order Shipkit.ai for instant access to 15+ prompts, 40+ Cursor rules, and my previous full-stack marketing course.\n\n👉 Pre-order shipkit.ai today https://shipkit.ai\n\n🤖 Download the source code here for free:\nhttps://brandonhancock.io/adk-crash-course\n\nDon’t forget to Like & Subscribe for more AI tutorials and free resources! 🎉  \n\n📆 Need Help with AI? Join my FREE Skool Community for AI developers (+6K Members):  \nhttps://www.skool.com/ai-developer-accelerator/about\n\n🧑‍💻 Want me to help you bring your AI projects to life? Hire me:\nbrandon@brandonhancock.io\n\n📰 Stay Updated with My Latest Projects:\n📍 LinkedIn: https://www.linkedin.com/in/brandon-hancock-ai/\n🐦 Twitter/X: https://twitter.com/bhancock_ai\n\n⏰ Video Timestamps: \n00:00 - Start\n01:25 - Example Overview\n04:20 - Example 1: Basic Agent\n23:01 - Example 2: Tools\n35:24 - Example 3: LiteLLM\n43:49 - Example 4: Structured Output\n53:13 - Example 5: Session, State, & Runner\n01:14:13 - Example 6: Persistent Storage\n01:30:58 - Example 7: Multi-Agent\n01:52:05 - Example 8: Stateful Multi-Agent\n02:13:40 - Example 9: Callbacks\n02:38:15 - Example 10: Sequential Agents\n02:48:13 - Example 11: Parallel Agents\n02:58:58 - Example 12: Loop Agents\n03:12:04 - Outro","channelTitle":"aiwithbrandon","channelId":"UCEzrs7gK6Nf6t_tadEprzxQ","publishedAt":"2025-05-03T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/P4VFL9nIaIA/maxresdefault.jpg","durationSeconds":11568,"duration":"3:12:48","definition":"hd","viewCount":358195,"likeCount":7485,"commentCount":507,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=P4VFL9nIaIA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"AAxT42MYDFc","position":29,"playlistId":"gemini-enterprise","module":"mcp","title":"What is the Model Context Protocol (MCP)? An Expert Explanation","description":"Start building your own AI agents with the Startup technical guide: AI agents, learn to build from prototype to deployment. Download guide: https://goo.gle/47rX2gA\n\nGo deeper into the architecture of modern AI Agents with this special segment from the \"Building Agents with Claude on Vertex AI,\" a webinar presented by experts from Google Cloud and Anthropic.\n\nIn this video, Elie Shoppik, Head of Technical Training at Anthropic, breaks down the Model Context Protocol (MCP). You'll get an overview of the standard that enables agents to be more effective and trustworthy.\n\n🔧 In this deep dive, you'll learn:\n- Standardizing Connections: Understand what MCP is and how it acts as a universal interface between AIs and tools.\n- Building Efficiently: Learn the \"build once, reuse anywhere\" benefit of MCP for tool integrations.\n- Understanding the Architecture: See how MCP uses a client-server model to function.\n- Solving for Trust: Explore how agents can verify tools and operate securely.\n- Implementing the Solution: Discover how Server Discovery provides context to improve agent accuracy and safety.\n\nExplore the Claude sample code and notebook tutorial: https://goo.gle/3J7KJwA\n\nPresented by: Elie Schoppik, Head of Technical Training, Anthropic\n\n▶️ Watch the full, original webinar, \"Building Agents with Claude on Vertex AI,\" on Google Cloud OnAir: https://goo.gle/4nUksRK\n\nWhat are your thoughts on having an open standard like MCP for the future of AI agents? Let us know in the comments!\n\n👍 Don't forget to like and subscribe for more AI insights!","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2025-10-15T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/AAxT42MYDFc/maxresdefault.jpg","durationSeconds":312,"duration":"5:12","definition":"hd","viewCount":973,"likeCount":11,"commentCount":0,"youtubeTags":["#AIAgents","#Anthropic","#Claude","#MCP","#Protocol","#GoogleCloud","#VertexAI","#SoftwareArchitecture","#API","#Webinar"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=AAxT42MYDFc","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"cGuyrANVi4A","position":30,"playlistId":"gemini-enterprise","module":"mcp","title":"How Model Context Protocol (MCP) actually works","description":"Google MCPs → https://goo.gle/3PYkjky \nBuild an ADK agent with Google MCPs → https://goo.gle/4o6h8DP \nConnect an MCP server to an AI agent → https://goo.gle/4uk7YW2 \n\nAPIs were built for deterministic programs, but AI models reason probabilistically. So how do you get your AI agents to talk to your tools and data without writing messy, custom integration code every time? Enter the Model Context Protocol (MCP). In this video, Smitha Kolan explains what MCP is, how it standardizes the way AI models discover and interact with external resources, and why it's becoming the new standard over traditional APIs for AI-powered applications\n\nChapters:\n0:00 - Intro: The problem with APIs and AI \n0:48 - What is Model Context Protocol (MCP)?\n1:26 - What exactly do MCPs connect to? \n2:43 - How MCP works (clients vs. servers) \n4:03 - MCP core components: Tools, prompts, resources & context \n5:20 - MCP vs. API: What is the difference? \n6:43 - Practical example: Building an AI assistant using MCP \n7:48 - Summary\n\nMore resources:\nLearn what AI agents and build an agent → https://goo.gle/AI-agents-explained\nLearn how to build a MCP server → https://goo.gle/MCP-servers-explained\nRead more about Google managed MCP servers → https://goo.gle/4e3Wobs \n\n🔗 Connect with Smitha online:\nYouTube → https://goo.gle/Smitha-on-YouTube \nLinkedin → https://goo.gle/Smitha-on-LinkedIn\nX → https://goo.gle/Smitha-on-X\n\nWatch more Modern AI Agents: From Theory to Production → https://goo.gle/Learn-with-Smitha\n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#AIAgents #MCP #ModelContextProtocol\n\nSpeaker: Smitha Kolan\nProducts Mentioned: AI Infrastructure","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-06-24T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/cGuyrANVi4A/maxresdefault.jpg","durationSeconds":478,"duration":"7:58","definition":"hd","viewCount":279914,"likeCount":8201,"commentCount":105,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=cGuyrANVi4A","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"185XGEMefgc","position":31,"playlistId":"gemini-enterprise","module":"mcp","title":"MCP vs API: Why traditional APIs are failing AI agents","description":"MCPs explained → https://goo.gle/4wjeLka\nGoogle MCP repo → https://goo.gle/4aeGUA5   \nModel Context Protocol (MCP) → https://goo.gle/4uQk3D8 \n\nMCP vs API: What's the difference and why does it matter for AI developers? In this video, Smitha Kolan breaks down how Model Context Protocol (MCP) works, how it's different from traditional APIs, and why it's becoming the new standard for connecting AI agents to tools, data, and systems.\n\nFor decades, APIs have been the universal handshake between software systems: clean, predictable, and built for programs talking to programs. But Large Language Models (LLMs) don't just call a single endpoint. They need to chain tools together, interpret unstructured data, and reason about what to do next. APIs weren't designed for that. MCP is.\n\nLearn how MCP allows models to autonomously discover and use tools without manual hardcoding or constant prompt engineering, including a real world example of how an AI agent can connect to services like Gmail, Notion, and Jira through MCP without writing custom integration code for each one.\n\nChapters: \n0:00 - The big shift in AI: Model Context Protocol\n0:45 - APIs vs. MCP: Why APIs aren't enough for LLMs \n2:48 - How MCP works: Context vs. hardcoding \n4:52 - Real world example: Building an AI agent \n6:49 - Under the hood: MCP servers and metadata \n8:58 - MCP on top of APIs: The new middleware \n10:16 - Challenges with MCP: Security and control \n11:29 - The interoperable ecosystem of AI agents \n\nMore resources: \n50+ fully managed MCP servers now available for Google Cloud services\n → https://goo.gle/4uMMtOx \nGoogle Cloud MCP servers overview → https://goo.gle/4g21Vlf \nPowering the next generation of agents with Google Cloud databases → https://goo.gle/4oa4iV3 \n\n🔗 Connect with Smitha online:\nYouTube → https://goo.gle/Smitha-on-YouTube \nLinkedin → https://goo.gle/Smitha-on-LinkedIn\nX → https://goo.gle/Smitha-on-X\n\nWatch more Modern AI Agents: From Theory to Production → https://goo.gle/Learn-with-Smitha\n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#ModelContextProtocol #GoogleCloud #Gemini #ArtificialIntelligence #AIAgents #MachineLearning #APIs\n\nSpeaker: Smitha Kolan\nProducts Mentioned: AI Infrastructure, Gemini, Agent Development Kit","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-07-01T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/185XGEMefgc/maxresdefault.jpg","durationSeconds":745,"duration":"12:25","definition":"hd","viewCount":743861,"likeCount":22263,"commentCount":677,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=185XGEMefgc","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"JnKkdHaatwU","position":32,"playlistId":"gemini-enterprise","module":"mcp","title":"Connecting ADK Agents to MCP Servers","description":"Discover the Model Context Protocol (MCP), an open standard acting as a universal adapter for AI agents to interact with external systems. This video explains how connecting your Agent Development Kit (ADK) agents to MCP servers provides access to real time capabilities like filesystems, databases, Google Maps, and Google Cloud Genmedia services. We also explore benefits such as modularity, enhanced security, reduced hallucinations, and simplified deployment for scalable AI applications.\n\nChapters:\n0:00 - Introduction to MCP\n1:06 - What is MCP?\n2:16 - Why connect ADK with an MCP server?\n4:05 - How to connect an ADK agent with an MCP server\n5:01 - MCP connection examples\n6:38 - Recap\n\nMCP tutorials:\nADK Agentic Pattern with Memory & MCP → https://goo.gle/advancedadk\nConnect Agents to Live Tools with MCPToolset & ADK → https://goo.gle/mcpclient\nADK Agent integrated with MCP Client → https://goo.gle/mcpserver\n\nWatch more AI agent crash course→ https://goo.gle/AIforBeginners\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #AIAgents #ADK #MCP\n\nSpeakers: Annie Wang\nProducts Mentioned: Agent Development Kit, Model Context Protocol, ADK, MCP","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2025-11-07T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/JnKkdHaatwU/maxresdefault.jpg","durationSeconds":459,"duration":"7:39","definition":"hd","viewCount":22902,"likeCount":571,"commentCount":20,"youtubeTags":["Pr_pr: Google Cloud Tech;","Campaign: GCT Pilots;","ct: AIG;","gds:Yes;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=JnKkdHaatwU","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"04Gap8vWV28","position":33,"playlistId":"gemini-enterprise","module":"mcp","title":"Power your AI agents with MCP tools on Google Cloud Run","description":"What is MCP (Model Context Protocol) and how does it make life easier for AI agent developers?  In this video, Jack Wotherspoon explains MCP to Martin Omander. Watch the duo as they walk through a practical demo of building an MCP server (using FastMCP) and deploying it on Google Cloud Run. Learn why a serverless platform like Cloud Run is a great fit for developers, letting anyone deploy their tools without worrying about managing infrastructure. Martin and Jack dig into the code, covering how an agent (built with ADK) calls an MCP tool and how to handle service to service authentication using Cloud Run's built in OIDC tokens.  \n\nChapters:\n0:00 - Intro \n0:42 - What is MCP? \n1:26 - Why is MCP useful for AI agent tools? \n2:28 - [Demo] How an AI agent uses an MCP tool \n3:55 - Code walkthrough \n5:10 - MCP on Cloud Run \n6:02 - [Q&A] Why MCP? \n6:40 - [Q&A] How to authenticate with MCP? \n7:20 - [Q&A] What does MCP look like on the wire? \n7:40 - [Q&A] MCP vs OpenAPI? \n7:58 - [Q&A] How to use MCP with an existing API? \n8:30 - Recap\n\nWatch more Serverless Expeditions → https://goo.gle/ServerlessExpeditions\n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #CloudRun #Serverless\n\nSpeakers: Martin Omander, Jack Wotherspoon\nProducts Mentioned: Cloud Run, Agent Development Kit","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2025-11-06T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/04Gap8vWV28/maxresdefault.jpg","durationSeconds":573,"duration":"9:33","definition":"hd","viewCount":8546,"likeCount":269,"commentCount":30,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=04Gap8vWV28","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Fbr_Solax1w","position":34,"playlistId":"gemini-enterprise","module":"a2a","title":"Introduction to Agent2Agent (A2A) Protocol","description":"A2A Documentation → https://goo.gle/a2a \nA2A Python SDK → https://goo.gle/a2a-python-sdk \nA2A Sample Code → https://goo.gle/a2a-samples\n\nAI Agents are everywhere, and as these agents rapidly expand in scope, they need a consistent way to communicate with each other. The Agent2Agent (A2A) protocol, created by Google, is an open standard for all AI Agents to follow. Here's a video outlining the concepts and implementation of the protocol so the world can multi-agent systems across any Agentic frameworks!\n\nResources: \nIntroductory Tutorial → https://goo.gle/a2a-tutorial\n\nSubscribe to Google for Developers → https://goo.gle/developers  \n\nSpeaker: Holt Skinner \nProducts Mentioned: AI Infrastructure","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-02-06T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Fbr_Solax1w/maxresdefault.jpg","durationSeconds":479,"duration":"7:59","definition":"hd","viewCount":89267,"likeCount":1296,"commentCount":40,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Fbr_Solax1w","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"6mQwHqK1I5w","position":35,"playlistId":"gemini-enterprise","module":"a2a","title":"How to build an AI agent with MCP, ADK, and A2A on Google Cloud","description":"Explore the powerful tools and protocols for AI agent development on Google Cloud. In this video, we dive into how to connect AI models to resources using Model Context Protocol (MCP), streamline agent creation with the Agent Development Kit (ADK), and enable seamless communication between agents with the Agent2Agent (A2A) protocol. By the end, you will have a working AI agent system, while understanding its underlying architecture.\n\nResources: \nGetting Started with MCP, ADK and A2A → https://goo.gle/48scfNV \nBuild with Vertex AI: Deploy Agents with Agent Development Kit (ADK), MCP, and A2A → https://goo.gle/48LAwjm \nADK samples GitHub → https://goo.gle/3Y5OC96 \n\nChapters:\n0:00 - Introduction \n0:38- Understanding ADK, A2A, and MCP\n2:02 - Setting up your Google Cloud environment\n3:09 - Enabling Google Cloud APIs\n5:04 - Building the MCP server for tools\n6:57 - Deploying the MCP server to Cloud Run\n8:42 - Creating your AI agent with ADK\n10:21 - Exposing your agent via A2A\n12:28 - Testing the A2A communication\n13:29 - Cleaning up your Google Cloud project\n14:02 - Conclusion: building with AI agents\n\nSubscribe to Google for Developers → https://goo.gle/developers \n\nSpeaker: Julia Wiesinger\nProducts Mentioned:  Google AI, Agent Development Kit (ADK)","channelTitle":"Google for Developers","channelId":"UC_x5XG1OV2P6uZZ5FSM9Ttw","publishedAt":"2025-12-02T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/6mQwHqK1I5w/maxresdefault.jpg","durationSeconds":872,"duration":"14:32","definition":"hd","viewCount":47355,"likeCount":1477,"commentCount":30,"youtubeTags":["Google","developers","pr_pr: Google for Developers;","Purpose: Learn;","Video Type:DevByte;","Campaign: BBDS;","Series: BBD Demos;","ct: AIG;","gds:Yes;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=6mQwHqK1I5w","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"8pJVwg5849A","position":36,"playlistId":"gemini-enterprise","module":"a2a","title":"Keynote: The Agent2Agent (A2A) Protocol - Mike Smith, Staff Software Engineer, Google","description":"Don't miss out! Join us at the next Open Source Summit in Hyderabad, India (August 5); Amsterdam, Netherland (August 25-29); Seoul, South Korea (November 4-5). Join us at the premier vendor-neutral open source conference, where developers and technologists come together to collaborate, share knowledge, and explore the latest innovations and advancements in open source technology. Learn more at https://events.linuxfoundation.org/\n\nKeynote: The Agent2Agent (A2A) Protocol - Mike Smith, Staff Software Engineer, Google\n\nThe Agent2Agent (A2A) Protocol is an open standard designed to enable seamless communication and collaboration between AI agents. We'll discuss the motivation for introducing this new standard and where we see this standard fitting into the broader ecosystem of AI agent development.","channelTitle":"The Linux Foundation","channelId":"UCfX55Sx5hEFjoC3cNs6mCUQ","publishedAt":"2025-07-02T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/8pJVwg5849A/maxresdefault.jpg","durationSeconds":584,"duration":"9:44","definition":"hd","viewCount":1251,"likeCount":25,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=8pJVwg5849A","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"VdLNUReEyws","position":37,"playlistId":"gemini-enterprise","module":"a2a","title":"A2A Protocol (Agent2Agent) Fundamentals with Google ADK","description":"In this video, I have covered  the Agent2Agent (A2A) Protocol  Fundamentals and its implementation with Google ADK.\n\nWhat You’ll Learn:\n✅ Basics of A2A protocol\n✅ 3 Stages of A2A protocol\n✅ What is Agent Card\n✅ How to expose remote agent using google ADK (python and CLI)\n✅ How to integrate remote agents with client agents using google ADK\n\nHere is the source code used for this video: https://github.com/yazeedbashammakh/genAI_tutorials/tree/main/a2a_1_adk_client_and_remote\n\n\n⏰ Video Timeline:\n\n00:00 - Introduction\n00:21 - A2A Fundamentals \n01:38 - 3 Steps of A2A / Agent Card\n03:53 - Implementation Overview\n05:55 - Expose first remote agent \n10:30 - Expose second remote agent using ADK CLI\n15:30 - Integrate remote agents with client agent\n19:26 - Outro","channelTitle":"Yazeed Bashammakh ","channelId":"UCCiYVsyEN4X5-aE11SwvjNw","publishedAt":"2025-11-06T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/VdLNUReEyws/maxresdefault.jpg","durationSeconds":1189,"duration":"19:49","definition":"hd","viewCount":45201,"likeCount":46,"commentCount":3,"youtubeTags":["Agents","Agent2Agent","Agent to Agent","Google ADK","ADK","Agent Development Kit"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=VdLNUReEyws","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"0Z0GUDakR_A","position":38,"playlistId":"gemini-enterprise","module":"multi","title":"Intro to multi-agent systems with ADK","description":"Build today. → https://goo.gle/-ai-studio\n\nGet started with the Agent Development Kit (ADK), a Google framework that simplifies the building and testing of agents. In this tutorial, we walk through creating your first agent, equipping it with custom tools like real time date retrieval and Google Search, and using the built-in web interface for easy debugging. Watch along and learn how to build a powerful multi-agent system that can reduce hallucinations and ensure data accuracy.\n\nWatch more AI Builder Essentials → https://goo.gle/AI-Building-101\n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\nSpeaker: Greg Baugues\nProducts Mentioned: Agent Development Kit","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-06-08T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/0Z0GUDakR_A/maxresdefault.jpg","durationSeconds":712,"duration":"11:52","definition":"hd","viewCount":18214,"likeCount":582,"commentCount":29,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=0Z0GUDakR_A","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"pX0_iIfRilU","position":39,"playlistId":"gemini-enterprise","module":"multi","title":"Foundations of multi-agent systems with ADK","description":"Discover the fundamentals of Multi-Agent Systems and how Google's Agent Development Kit (ADK) simplifies their creation. This video introduces the core concepts of multi-agent systems, including decentralized control, local views, and emergent behavior. We then explore how ADK supports development through its distinct agent types: LLM, Workflow (Sequential, Parallel, Loop), and Custom agents. Finally, understand the foundational concept of agent hierarchy for structuring your multi-agent applications.\n\nChapters:\n\n0:11 - Introduction to Multi-Agent Systems and ADK\n0:57 - What are Multi-Agent Systems?\n2:04 - How ADK Supports Multi-Agent Development\n2:24 - LLM Agents\n2:38 - Workflow Agents\n3:13 - Custom Agents\n3:35 - Agent Hierarchy\n4:17 - Recap and Next Steps\n\nResources:\nGoogle ADK tutorial → http://goo.gle/48GQ8VO\nGoogle ADK doc → http://goo.gle/485dvIx \nGoogle ADK sample → http://goo.gle/4pOnIPV \n\n\nWatch more AI agent crash course→ https://goo.gle/AIforBeginners\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #AIAgents #ADK\n\nSpeakers: Annie Wang\nProducts Mentioned: Agent Development Kit, Gemini","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2025-10-01T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/pX0_iIfRilU/maxresdefault.jpg","durationSeconds":317,"duration":"5:17","definition":"hd","viewCount":29149,"likeCount":757,"commentCount":19,"youtubeTags":["Pr_pr: Google Cloud Tech;","Campaign: GCT Pilots;","ct: AIG;","gds:Yes;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=pX0_iIfRilU","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"j_l-9uNX2SA","position":40,"playlistId":"gemini-enterprise","module":"multi","title":"Architecting multi-agent systems","description":"Get the code →https://goo.gle/4p63Iqm \nAgent Development Kit (ADK) →https://goo.gle/4j2EUOx\n\nTired of building AI features that work great locally but collapse when you try to integrate them into your production backend? Time to stop building a single, stressed out monolith agent and hire a specialized squad. \n\nJoin Amit Maraj as he breaks down how Google's Agent Development Kit (ADK) and Agent2Agent Protocol (A2A) to build complex features with loop agents, sequential agents, and judges that communicate seamlessly over web standards, turning any AI logic into reliable, connectable components.\n\nMore resources: \nAgent-to-Agent Protocol (A2A) →https://goo.gle/4plOZrH \nGoogle Cloud Run →https://goo.gle/3N6Cu5w \nGemini 3 models →https://goo.gle/3Y07kiL\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#AIAgents #GoogleCloud\n\nSpeaker: Amit Maraj \nProducts Mentioned: Agent Development Kit, Agent2Agent Protocol","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-01-06T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/j_l-9uNX2SA/maxresdefault.jpg","durationSeconds":200,"duration":"3:20","definition":"hd","viewCount":53166,"likeCount":1511,"commentCount":41,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=j_l-9uNX2SA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"W54cRxp-bSA","position":41,"playlistId":"gemini-enterprise","module":"multi","title":"Build a multi-agent system using ADK & MCP","description":"Join Gemini Enterprise Agent Ready (GEAR) for the latest agent resources here. → https://goo.gle/3Srblgl\n\nLearn how to build a production-grade agent with Google's Agent Development Kit (ADK), the Model Context Protocol (MCP), and Gemini 3 Flash. Google Developer Expert, Jigyasa Grover showcases “Critics Cut,” a multilingual, context-aware AI assistant designed to eliminate the endless scrolling when looking for something to watch.\n\nSpeakers: Jigyasa Grover\nProducts Mentioned: Agent Development Kit, Model Context Protocol","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-06-29T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/W54cRxp-bSA/maxresdefault.jpg","durationSeconds":676,"duration":"11:16","definition":"hd","viewCount":7908,"likeCount":264,"commentCount":21,"youtubeTags":["AI Agents","ADK","MCP","Multi-agent","Agent Governance"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=W54cRxp-bSA","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"EKZJrHjZ6Ag","position":42,"playlistId":"gemini-enterprise","module":"multi","title":"Use Gemini Enterprise to orchestrate multiple AI agents","description":"See a demo of how Gemini Enterprise orchestrates multiple AI agents to automate a full-scale marketing campaign in just minutes.\n\nDemoers: Gabe Weiss, Taylor Mullen","channelTitle":"Google Cloud","channelId":"UCTMRxtyHoE3LPcrl-kT4AQQ","publishedAt":"2025-10-16T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/EKZJrHjZ6Ag/maxresdefault.jpg","durationSeconds":722,"duration":"12:02","definition":"hd","viewCount":22547,"likeCount":246,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=EKZJrHjZ6Ag","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"6o78Idiom94","position":43,"playlistId":"gemini-enterprise","module":"govern","title":"A deep dive into Gemini Enterprise app governance, security, and compliance","description":"As enterprises graduate from initial AI pilots to full-scale production, the focus shifts from “What can generative AI do?” to “How do we govern and secure it at scale?” Join this technical deep dive that unpacks the multilayered security architecture of Gemini Enterprise app, providing a blueprint for deploying, orchestrating, and governing complex agent ecosystems. We’ll go beyond theory into the practical implementation of defense-in-depth strategies, dissecting the three critical AI security layers – content, network, and identity – and demonstrating how to implement centralized governance. You’ll leave with a comprehensive enterprise-readiness checklist, equipping you with the specific controls needed to launch secure, compliant AI agents today.\n\nWatch more: 100+ sessions from Google Cloud Next 26 → https://www.googlecloudevents.com/next-vegas/\nSubscribe to Google Cloud → https://goo.gle/GoogleCloud\n\nSpeakers: Anusheel Pareek, Pramod Ramesh, Bright Renolds\n\nBRK3-024\n#GoogleCloudNext","channelTitle":"Google Cloud Events","channelId":"UCXYZWHSFKBpF0WUQEgEA8qA","publishedAt":"2026-07-07T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/6o78Idiom94/maxresdefault.jpg","durationSeconds":2377,"duration":"39:37","definition":"hd","viewCount":351,"likeCount":7,"commentCount":0,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=6o78Idiom94","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"DQX81oJfsTE","position":44,"playlistId":"gemini-enterprise","module":"govern","title":"Identity and Access Management for Agents","description":"Learn how to securely build AI agents that interact with user-specific data in a database. This video outlines a high-level, layered approach to securing agents, starting with Identity and Access Management (IAM) for controlling agent access. We then explore the critical intermediary pattern for isolating agents from managing credentials and direct data access, using secure Tools. Finally, discover how Model Armor and Sensitive Data Protection (SDP) add a final layer of defense by inspecting and redacting sensitive information in conversational data.\n\nPLEASE NOTE: the condition's expression should be resource.name, not resource.displayName. See more here: https://goo.gle/3LGTcYR\n\nChapters:\n0:00 - Introduction: Secure Agents and User Data\n0:19 - Controlling Agent Management and Interaction with IAM\n1:13 - Isolating Agent Credentials: The Intermediary Pattern\n1:35 - How Agent Tools Access User-Specific Data Securely\n2:54 - Handling Third-Party API Keys without Agent Exposure\n3:11 - Protecting Conversational Data: Model Armor and SDP\n3:27 - The Three Layers of Agent Security\n\n\nResources:\n- Blog post: How to build user authentication into your gen AI app-accessing database → http://goo.gle/43Mhh6q\n\nPrevious videos\n- Secure AI: De-identifying data with SDP → http://goo.gle/4htbmcf\n- Secure ADK agents with Secret Manager → http://goo.gle/4oEnFF3 \n- Agent Sessions and Tool Authentication → http://goo.gle/4oErjid \n\n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #IAM #SDP #AIAgent\n\nSpeakers: Aron Eidelman\nProducts Mentioned: Google Cloud Security","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2025-10-23T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/DQX81oJfsTE/maxresdefault.jpg","durationSeconds":250,"duration":"4:10","definition":"hd","viewCount":7821,"likeCount":177,"commentCount":9,"youtubeTags":["Pr_pr: Google Cloud Tech;","Campaign: GCT Pilots;","ct: AIG;","gds:Yes;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=DQX81oJfsTE","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"J4Naxhm9y5g","position":45,"playlistId":"gemini-enterprise","module":"govern","title":"Data security with AI powered agents","description":"Google’s Secure AI Framework (SAIF) → https://goo.gle/4cmX60X\nBest practices for securing AI deployments  → https://goo.gle/3zrZRzE\nBuild AI securely on Google Cloud (Full report) → https://goo.gle/3XBvy3P\n\nLarge language models can speed up coding, operations tasks, pattern matching, and more for developer workflows. However, exposing sensitive data with these models is top of mind for organization decision-makers and developers alike. Watch along as Luis Urena, Developer Advocate at Google Cloud, discusses best practices for securing AI deployments, how to build an input and output parser using Sensitive Data Protection, and interviews Cloud Security Architect, Jim Miller, on his experience supporting Google Cloud customers deploy AI. \n\nChapters:\n0:00 - Intro\n1:04 - Google’s commitment to AI security\n2:26 - What is Sensitive Data Protection?\n4:32 - Demo: Large Language Models in action\n8:44 - Interview with Jim Miller\n11:19 - Wrap up\n\nBuild your own input and output parser using Sensitive Data Protection (Github)→ https://goo.gle/3VJgwHR\n\nWatch more Making with AI → https://goo.gle/MakewithAI\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#MakingwithAI #GoogleCloud\n\nSpeakers: Luis Urena, Jim Miller\nProducts Mentioned: Cloud - AI and Machine Learning - Vertex AI","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2024-06-26T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/J4Naxhm9y5g/maxresdefault.jpg","durationSeconds":707,"duration":"11:47","definition":"hd","viewCount":8185,"likeCount":175,"commentCount":3,"youtubeTags":["pr_pr: Google Cloud","Campaign:","ct:","type: DevByte Video;","gds:Yes;","Large Language Models","Google AI","Google DeepMind","Secure AI Framework","Vertex AI Agent Builder","Google Cloud","Vertex AI","Generative AI","AI deployment","Secure AI Systems"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=J4Naxhm9y5g","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"NrgoZLcY3Kk","position":46,"playlistId":"gemini-enterprise","module":"prod","title":"Introduction to Vertex AI Agent Engine","description":"Discover Vertex AI Agent Engine, a managed service that helps you deploy, manage, and scale your AI agents from development to production. This video addresses the challenge of moving AI agents from a laptop environment to thousands of users by handling backend complexities. It explores core services like runtime, quality and evaluation, context management, and secure code execution, ensuring your agentic applications are scalable and production ready.\n\nChapters:\n0:00 - Intro\n0:30 - The problem: The production gap for AI agents\n1:10 - Agent Engine core services & capabilities\n2:52 - The developer workflow: From Code to Query\n3:57 - Production ready with the Agent starter pack\n4:22 - Conclusion and recap\n\nResources: \nDocumentation → https://goo.gle/3LOlrEH \nNotebooks → https://goo.gle/4nIhD5q \n\nSubscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#GoogleCloud #AIAgents #ADK #MCP\n\nSpeakers: Ivan Nardini\nProducts Mentioned: AI Infrastructure, Vertex AI","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2025-11-06T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/NrgoZLcY3Kk/maxresdefault.jpg","durationSeconds":325,"duration":"5:25","definition":"hd","viewCount":43411,"likeCount":852,"commentCount":24,"youtubeTags":["Pr_pr: Google Cloud Tech;","Campaign: GCT Pilots;","ct: AIG;","gds:Yes;","Type: DevByte;"],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=NrgoZLcY3Kk","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"_PU0fNGIvUw","position":47,"playlistId":"gemini-enterprise","module":"prod","title":"Deploy your ADK Agent in under 5 minutes using Agent Starter Pack","description":"Disclaimer: The views and opinions expressed in this video are my own and do not necessarily reflect the official policy or position of my employer.\n-----\n\nNote: this video is partially out of date due to a recent change to Agent Starter Pack to match a more up to date version of ADK. The concept on the Makefile & deployment python module are still relevant but the deployment logic is now moved into app_utils/deploy.py.\n\nCreate and deploy your first AI agent in UNDER 5 MINUTES. ⚡\n\nThat's the power of the Agent Start Pack (ADK), and I'll show you exactly how in my new video.\n\nBut we don't stop there.\n\nWhile the speed is fantastic, it's not \"magic.\" To really master the tool, you need to know what's happening under the hood.\n\nSo, in this video, we cover: \n00:00 - Intro\n01:17 - Agenda\n02:15 - Create & Deploy your first ADK agent in under 5 minutes\n07:17 - Project structure generated by Agent Starter Pack\n12:11 - ADK Playground & Notebook for Agent Engine testing\n14:53 - Understanding all the \"make commands\"\n24:22 - Next steps\n27:51 - References\n\nCome for the 5-minute agent, stay for the deep dive!\n\n#AgentStarterPack #ADK #AIAgents #Developer #AI #SoftwareEngineering #DevTools #Tutorial #practicalgcp \n\nReferences\n- Agent Starter Pack on Github: https://github.com/GoogleCloudPlatform/agent-starter-pack\n- Quick Start Guide: https://googlecloudplatform.github.io/agent-starter-pack/guide/getting-started.html\n- Full Development Guide: https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide.html\n- More Advanced Video Walk Throughs: https://github.com/GoogleCloudPlatform/agent-starter-pack?tab=readme-ov-file#video-walkthrough","channelTitle":"PracticalGCP","channelId":"UC3XbEkSbPOzHvqNBrjNIu7A","publishedAt":"2025-10-20T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/_PU0fNGIvUw/maxresdefault.jpg","durationSeconds":1717,"duration":"28:37","definition":"hd","viewCount":2700,"likeCount":70,"commentCount":17,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=_PU0fNGIvUw","unavailable":false},{"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0,"videoId":"Ni1P8TITtE8","position":48,"playlistId":"gemini-enterprise","module":"prod","title":"How to Build a production-ready RAG AI agent","description":"GCP credit → https://goo.gle/handson-ep2-lab2\nCodelab & source code → https://goo.gle/scholar\nTry Google ADK → https://goo.gle/4bPEHej\n\nIn this episode, Ayo and Annie go from structured data to a fully deployed, data-aware RAG agent, and we cover a LOT of ground. Starting where they left off from last episode (BigQuery + BQML.GENERATE_TEXT), the duo now wire up the full backend for an AI agent: a vector database, an embedding pipeline, a RAG retrieval system, and a production ready Cloud Run deployment. \n\n🛠️ *What we build:*\n* Cloud SQL for PostgreSQL with pgvector for semantic search \n* A containerized Apache Beam pipeline on Dataflow to batch-process text and generate Gemini embeddings \n* A RAG retrieval layer that lets the agent query vectorized knowledge \n* An ADK based agent that answers questions using that knowledge \n* A Cloud Run deployment with proper security and scalability settings \n\nThis is hands-on, infrastructure-meets AI content. you'll leave with a real, working pattern you can adapt for your own projects. \n\nChapters:\n0:00 - Intro\n1:41 - (RAG) Retrieval Augmented Generation and chunking\n4:40 - Data project overview\n4:52 - Similarity search\n6:40 - RAG in BigQuery\n11:56 - [BQML] ML Generate in Big Query\n19:46 - OLAP & OLTP\n24:21 - AI in CloudSQL \n28:38 - Index using HNSW\n31:29 - Scaling with data pipeline\n36:46 - Apache Beam\n53:02 - RAG agent With CloudSQL\n1:09:52 - Flight the BOSS with A2A\n\nMore resources:\nAI in CloudSQL →  https://goo.gle/4uRlm5v\nApache Beam → https://goo.gle/3O6OJzY\nADK Sample → https://goo.gle/4rQKWVn\n\nWatch more Hand on AI → https://goo.gle/HowToWithGemini \n🔔 Subscribe to Google Cloud Tech → https://goo.gle/GoogleCloudTech\n\n#Gemini #GoogleCloud\n\nSpeakers: Ayo Adedeji, Annie Wang\nProducts Mentioned: Agent Development Kit, Dataflow","channelTitle":"Google Cloud Tech","channelId":"UCJS9pqu9BzkAMNTmzNMNhvg","publishedAt":"2026-03-28T00:00:00Z","thumbnail":"https://i.ytimg.com/vi/Ni1P8TITtE8/maxresdefault.jpg","durationSeconds":4423,"duration":"1:13:43","definition":"hd","viewCount":11869,"likeCount":318,"commentCount":16,"youtubeTags":[],"audioLanguage":"en","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Ni1P8TITtE8","unavailable":false}]}</script>
+<script>
+"use strict";
+
+/* ==================================================================== i18n */
+const T = {
+  ar:{
+    search:"ابحث في العناوين والملاحظات والخلاصات…",
+    all:"الكل", unwatched:"لم يُشاهد", watching:"قيد المشاهدة", watched:"تمت المشاهدة",
+    skipped:"متجاوَز", starred:"★ مميّز", noted:"له ملاحظات",
+    watchedL:"مُشاهَد", leftL:"متبقٍ", timeL:"من الوقت", notesL:"موثّق",
+    resume:"أكمل", start:"ابدأ", at:"عند",
+    save:"حفظ", exp:"تصدير", imp:"استيراد", sheet:"ورقة المذاكرة",
+    status:"الحالة", summary:"الخلاصة", annotations:"ملاحظات موقّتة",
+    comments:"تعليقات", yourTags:"وسومك", ytTags:"وسوم يوتيوب", description:"الوصف",
+    add:"إضافة", star:"☆ تمييز", starred2:"★ مميّز", clear:"مسح",
+    sumPh:"ما خلاصة هذا الدرس بكلماتك؟", annPh:"ملاحظة عند لحظة معيّنة…",
+    cmtPh:"فكرة حول الفيديو ككل…", tagPh:"أضف وسمًا ثم Enter",
+    noAnn:"لا ملاحظات بعد.", noCmt:"لا تعليقات بعد.", noTags:"لا وسوم.",
+    annHint:"يُرفق وقت التشغيل الحالي تلقائيًا. اضغط على نص الملاحظة لتعديله.",
+    resumeAt:"نقطة الاستئناف:", progHint:"يُحفظ موضع التشغيل أثناء المشاهدة.",
+    more:"عرض المزيد", less:"عرض أقل", empty:"لا نتائج مطابقة.",
+    markThrough:"تحديد كل ما سبق كمُشاهَد",
+    long:"المدة", views:"مشاهدة", likes:"إعجاب", ytc:"تعليق يوتيوب",
+    published:"نُشر في", watchedOn:"شوهد في", autoplay:"تشغيل التالي تلقائيًا",
+    sortPos:"ترتيب الدورة", sortPosR:"عكس الترتيب", sortNew:"الأحدث", sortOld:"الأقدم",
+    sortLong:"الأطول", sortShort:"الأقصر", sortViews:"الأكثر مشاهدة",
+    sortRate:"الأعلى تقييمًا", sortNotes:"الأكثر توثيقًا", allTags:"كل الوسوم",
+    savedTo:"محفوظ في data.json", unsaved:"غير محفوظ", localOnly:"محليًا فقط",
+    secs:{intro:"التعريف", platform:"Vertex AI وAgentspace", enable:"التفعيل", ground:"ربطها ببيانات شركتك", nocode:"وكلاء بلا كود", adk:"حزمة تطوير الوكلاء", mcp:"الأدوات عبر MCP", a2a:"تواصل الوكلاء A2A", multi:"أنظمة متعددة الوكلاء", govern:"الحوكمة والأمان", prod:"التشغيل في الإنتاج"},
+    sheetTitle:"ورقة المذاكرة", noNotes:"لا توجد ملاحظات بعد — اكتب خلاصة أو ملاحظة أولًا.",
+    dl:"تحميل Markdown", print:"طباعة", videos:"فيديو", total:"الإجمالي", watch:"شاهد",
+    autoSum:"ملخص المحاضرة", myNotes:"ملاحظاتي",
+    vOutline:"مخطط الدورة", vTiles:"بطاقات", vTable:"جدول",
+    colNum:"#", colQ:"رقم", colTitle:"العنوان", colDur:"المدة",
+    colStatus:"الحالة", colRate:"التقييم",
+    colNotes:"ملاحظات", colSum:"الخلاصة",
+    noSum:"لا يوجد ملخص لهذا الفيديو بعد. هذه المحاضرات بلا ترجمة نصية على يوتيوب، لذا يُستخرج النص من الصوت أولًا:",
+    genCmd:"python make_transcripts.py", srcLbl:"المصدر", charsLbl:"طول النص"
+  },
+  en:{
+    search:"Search titles, notes, summaries…",
+    all:"All", unwatched:"Unwatched", watching:"Watching", watched:"Watched",
+    skipped:"Skipped", starred:"★ Starred", noted:"Noted",
+    watchedL:"watched", leftL:"to go", timeL:"remaining", notesL:"annotated",
+    resume:"Resume", start:"Start", at:"at",
+    save:"Save", exp:"Export", imp:"Import", sheet:"Study sheet",
+    status:"Status", summary:"Summary", annotations:"Annotations",
+    comments:"Comments", yourTags:"Your tags", ytTags:"YouTube tags", description:"Description",
+    add:"Add", star:"☆ Star", starred2:"★ Starred", clear:"clear",
+    sumPh:"What is this video about, in your words?", annPh:"Note at a moment in the video…",
+    cmtPh:"A thought about the video as a whole…", tagPh:"Add a tag and press Enter",
+    noAnn:"No annotations yet.", noCmt:"No comments yet.", noTags:"None yet.",
+    annHint:"The current playback time is attached automatically. Click a note to edit it.",
+    resumeAt:"Resume point:", progHint:"Playback position is saved as you watch.",
+    more:"Show more", less:"Show less", empty:"Nothing matches those filters.",
+    markThrough:"Mark everything before this watched",
+    long:"long", views:"views", likes:"likes", ytc:"YT comments",
+    published:"published", watchedOn:"Marked watched", autoplay:"Autoplay next",
+    sortPos:"Course order", sortPosR:"Reverse order", sortNew:"Newest first", sortOld:"Oldest first",
+    sortLong:"Longest first", sortShort:"Shortest first", sortViews:"Most viewed",
+    sortRate:"Highest rated", sortNotes:"Most annotated", allTags:"All tags",
+    savedTo:"saved to data.json", unsaved:"unsaved", localOnly:"local only",
+    secs:{intro:"What it is", platform:"Vertex AI and Agentspace", enable:"Turning it on", ground:"Grounding in your data", nocode:"Agents, no-code first", adk:"Agent Development Kit", mcp:"Tools with MCP", a2a:"Agent to agent (A2A)", multi:"Multi-agent systems", govern:"Governance and security", prod:"Running in production"},
+    sheetTitle:"Study sheet", noNotes:"Nothing written yet — add a summary or a note first.",
+    dl:"Download Markdown", print:"Print", videos:"videos", total:"total", watch:"watch",
+    autoSum:"Lecture summary", myNotes:"My notes",
+    vOutline:"Course outline", vTiles:"Tiles", vTable:"Table",
+    colNum:"#", colQ:"No.", colTitle:"Title", colDur:"Length", colStatus:"Status",
+    colRate:"Rating", colNotes:"Notes", colSum:"Summary",
+    noSum:"No summary for this video yet. These lectures have no captions on YouTube, so the text has to be transcribed from the audio first:",
+    genCmd:"python make_transcripts.py", srcLbl:"source", charsLbl:"transcript"
+  }
+};
+let L = T.en;
+
+/* =================================================================== state */
+const STORE_KEY = "videoList.gemini-enterprise.overlay.v1";
+const PREF_KEY  = "videoList.gemini-enterprise.prefs.v1";
+const STATUSES  = ["unwatched","watching","watched","skipped"];
+const SEC_ORDER = ["intro","platform","enable","ground","nocode","adk","mcp","a2a","multi","govern","prod"];
+
+let DATA = {playlists:[], videos:[]};
+let view = [];
+let openId = null;
+let serverSave = false, dirty = false, saveTimer = null;
+let player = null, ytReady = false, trackTimer = null;
+
+const prefs = {lang:"en", view:"outline", autoplay:true, closed:{}, showSum:true};
+const state = {q:"", status:"all", sort:"position", tag:""};
+
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => Array.from(r.querySelectorAll(s));
+const byId = id => DATA.videos.find(v => v.videoId === id);
+
+/* =============================================================== utilities */
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDur(sec){
+  sec = Math.max(0, Math.round(sec||0));
+  const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60;
+  return h ? h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
+           : m+":"+String(s).padStart(2,"0");
+}
+function fmtHours(sec){
+  const h = sec/3600;
+  return h>=10 ? Math.round(h)+"h" : h>=1 ? h.toFixed(1)+"h" : Math.round(sec/60)+"m";
+}
+function fmtCount(n){
+  n = n||0;
+  if (n>=1e6) return (n/1e6).toFixed(1).replace(/\.0$/,"")+"M";
+  if (n>=1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"K";
+  return String(n);
+}
+function fmtDate(iso){
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString(prefs.lang==="ar" ? "ar-EG" : undefined,
+    {year:"numeric", month:"short", day:"numeric"});
+}
+const nowISO = () => new Date().toISOString();
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* Arabic-aware search key. Strips harakat and folds the letter shapes people
+   type interchangeably, so الاسلام finds الإسلام and عائشه finds عائشة. */
+function norm(s){
+  return String(s ?? "").toLowerCase()
+    .replace(/[ً-ْٰـ]/g,"")        // harakat, dagger alef, tatweel
+    .replace(/[آأإٱ]/g,"ا")   // آ أ إ ٱ -> ا
+    .replace(/ى/g,"ي")                       // ى -> ي
+    .replace(/ة/g,"ه")                       // ة -> ه
+    .replace(/ؤ/g,"و").replace(/ئ/g,"ي")
+    .replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660))
+    .replace(/\s+/g," ");
+}
+function arDigits(s){
+  return String(s).replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660));
+}
+
+/* ------------------------------------------------- course structure parsing
+   Derived from titles at render time, so data.json stays raw API truth. */
+function classify(v){
+  return {sec: SEC_ORDER.indexOf(v.module) === -1 ? "intro" : v.module, n: null};
+}
+function shortTitle(v){
+  return String(v.title || "").trim();
+}
+function decorate(){
+  DATA.videos.forEach(v => {
+    const c = classify(v);
+    v._sec = c.sec;
+    v._n = c.n;
+    v._short = shortTitle(v);
+    v._key = norm([
+      v.title, v.description, v.channelTitle, v.summary, v.autoSummary,
+      (v.tags||[]).join(" "), (v.youtubeTags||[]).join(" "),
+      (v.annotations||[]).map(a=>a.text).join(" "),
+      (v.comments||[]).map(c=>c.text).join(" ")
+    ].join(" "));
+  });
+}
+/* The uploader tagged almost every video "en" while speaking Arabic, so the
+   declared audio language is useless — read the script of the title instead. */
+function videoLang(v){
+  return /[؀-ۿ]/.test(String(v.title||"")) ? "ar" : "en";
+}
+const noteCount = v => (v.annotations||[]).length + (v.comments||[]).length;
+const hasNotes  = v => noteCount(v) > 0 || !!v.summary;
+
+/* ============================================================= persistence */
+function userSlice(v){
+  return {status:v.status, progressSeconds:v.progressSeconds, rating:v.rating,
+    favorite:v.favorite, tags:v.tags, summary:v.summary, annotations:v.annotations,
+    comments:v.comments, watchedAt:v.watchedAt, notesUpdatedAt:v.notesUpdatedAt,
+    autoSummary:v.autoSummary, summaryLang:v.summaryLang,
+    summarySource:v.summarySource, transcriptChars:v.transcriptChars};
+}
+function stripDerived(v){
+  const o = {};
+  Object.keys(v).forEach(k => { if (k[0] !== "_") o[k] = v[k]; });
+  return o;
+}
+function writeOverlay(){
+  try{
+    const o = {};
+    DATA.videos.forEach(v => { o[v.videoId] = userSlice(v); });
+    localStorage.setItem(STORE_KEY, JSON.stringify({at:nowISO(), videos:o}));
+  }catch(e){}
+}
+function applyOverlay(){
+  let parsed;
+  try{ parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); }
+  catch(e){ return false; }
+  const map = parsed && parsed.videos;
+  if (!map) return false;
+  let touched = false;
+  DATA.videos.forEach(v => {
+    const o = map[v.videoId];
+    if (!o) return;
+    const n = (o.annotations||[]).length + (o.comments||[]).length;
+    if (o.status !== "unwatched" || o.summary || n || o.rating || o.favorite
+        || (o.tags||[]).length || o.progressSeconds){
+      Object.assign(v, o);
+      touched = true;
+    }
+  });
+  return touched;
+}
+function savePrefs(){
+  try{ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }catch(e){}
+}
+function loadPrefs(){
+  try{ Object.assign(prefs, JSON.parse(localStorage.getItem(PREF_KEY) || "{}")); }catch(e){}
+  if (prefs.grid !== undefined){          // migrate the old two-way toggle
+    prefs.view = prefs.grid ? "tiles" : "outline";
+    delete prefs.grid;
+  }
+  if (["outline","tiles","table"].indexOf(prefs.view) === -1) prefs.view = "outline";
+  L = T[prefs.lang] || T.en;
+}
+
+function markDirty(){
+  dirty = true;
+  setSaveState("dirty", L.unsaved);
+  writeOverlay();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 1200);
+}
+function setSaveState(cls, text){
+  const el = $("#saveState");
+  el.className = cls;
+  el.lastElementChild.textContent = text;
+}
+async function save(silent){
+  clearTimeout(saveTimer);
+  writeOverlay();
+  const payload = {generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)};
+  try{
+    const res = await fetch("api/save", {method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    if (!res.ok) throw new Error("HTTP "+res.status);
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || "refused");
+    serverSave = true;
+    dirty = false;
+    setSaveState("saved", L.savedTo);
+    banner("");
+    return true;
+  }catch(err){
+    dirty = true;
+    setSaveState("err", L.localOnly);
+    /* The initial load calls save(true). Only say something when the reader
+       actually changed something; until then the "local only" chip is enough. */
+    if (!silent) {
+      banner("Your progress and notes are saved in this browser only. "
+           + "Press <b>"+esc(L.exp)+"</b> to keep a copy you can carry elsewhere.");
+    }
+    if (!silent) console.warn("save failed:", err);
+    return false;
+  }
+}
+function banner(html){
+  const b = $("#banner");
+  b.innerHTML = html;
+  b.classList.toggle("on", !!html);
+}
+let toastTimer;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 1900);
+}
+
+/* ==================================================================== load */
+async function load(){
+  let raw;
+  try{
+    /* Read the copy embedded in this page (#seedData) rather than fetching
+       data.json, so the tracker works from file:// and from any static host. */
+    raw = JSON.parse(document.getElementById("seedData").textContent);
+  }catch(err){
+    $("#plTitle").textContent = "Couldn't read the embedded playlist data";
+    banner("The <code>#seedData</code> block in this page is missing or invalid.");
+    return;
+  }
+  adopt(raw);
+  save(true);
+}
+function adopt(raw){
+  DATA = raw;
+  DATA.videos = (DATA.videos||[]).map(v => Object.assign({
+    status:"unwatched", progressSeconds:0, rating:0, favorite:false, tags:[],
+    summary:"", annotations:[], comments:[], watchedAt:null, notesUpdatedAt:null,
+    autoSummary:"", summaryLang:"", summarySource:"", transcriptChars:0
+  }, v));
+  const overlaid = applyOverlay();
+  decorate();
+  applyLang();
+  renderHeader();
+  render();
+  if (overlaid) markDirty();
+}
+
+/* ============================================================ chrome / i18n */
+function applyLang(){
+  L = T[prefs.lang] || T.en;
+  const rtl = prefs.lang === "ar";
+  document.documentElement.lang = prefs.lang;
+  document.documentElement.dir = rtl ? "rtl" : "ltr";
+  $("#btnLang").textContent = rtl ? "EN" : "ع";
+  $("#q").placeholder = L.search;
+  $("#btnSave").textContent = L.save;
+  $("#btnExport").textContent = L.exp;
+  $("#btnImport").textContent = L.imp;
+  $("#btnSheet").textContent = L.sheet;
+  renderSwitch();
+  $("#lWatched").textContent = L.watchedL;
+  $("#lLeft").textContent = L.leftL;
+  $("#lTime").textContent = L.timeL;
+  $("#lNotes").textContent = L.notesL;
+  $("#empty").textContent = L.empty;
+
+  const sorts = [["position",L.sortPos],["-position",L.sortPosR],["-published",L.sortNew],
+    ["published",L.sortOld],["-duration",L.sortLong],["duration",L.sortShort],
+    ["-views",L.sortViews],["-rating",L.sortRate],["-notes",L.sortNotes]];
+  $("#sort").innerHTML = sorts.map(s =>
+    '<option value="'+s[0]+'"'+(state.sort===s[0]?" selected":"")+'>'+esc(s[1])+'</option>').join("");
+  buildTagFilter();
+}
+function renderHeader(){
+  const p = (DATA.playlists||[])[0];
+  if (p){
+    $("#plTitle").textContent = p.title || "Video List";
+    document.title = p.title || "Video List";
+    const total = DATA.videos.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    $("#plSub").textContent = [p.channelTitle,
+      DATA.videos.length+" "+L.videos, fmtHours(total)+" "+L.total].filter(Boolean).join(" · ");
+    if (p.thumbnail) $("#plArt").src = p.thumbnail; else $("#plArt").style.display = "none";
+  }
+  renderStats(); renderChips(); renderResume();
+}
+function renderStats(){
+  const vs = DATA.videos;
+  const w  = vs.filter(v=>v.status==="watched").length;
+  const g  = vs.filter(v=>v.status==="watching").length;
+  const sk = vs.filter(v=>v.status==="skipped").length;
+  const leftSecs = vs.filter(v=>v.status!=="watched" && v.status!=="skipped")
+    .reduce((a,v)=>a+(v.durationSeconds||0)-(v.progressSeconds||0),0);
+  $("#barW").style.width = (vs.length ? w/vs.length*100 : 0)+"%";
+  $("#barG").style.width = (vs.length ? g/vs.length*100 : 0)+"%";
+  $("#sWatched").textContent = w+"/"+vs.length;
+  $("#sLeft").textContent = vs.length - w - sk;
+  $("#sTime").textContent = fmtHours(Math.max(0,leftSecs));
+  $("#sNotes").textContent = vs.filter(hasNotes).length;
+}
+function renderChips(){
+  const c = {all:DATA.videos.length};
+  STATUSES.forEach(s => { c[s] = DATA.videos.filter(v=>v.status===s).length; });
+  c.starred = DATA.videos.filter(v=>v.favorite).length;
+  c.noted   = DATA.videos.filter(hasNotes).length;
+  const defs = [["all",L.all],["unwatched",L.unwatched],["watching",L.watching],
+    ["watched",L.watched],["skipped",L.skipped],["starred",L.starred],["noted",L.noted]];
+  $("#statusChips").innerHTML = defs.map(d =>
+    '<button class="chip '+(state.status===d[0]?"on":"")+'" data-status="'+d[0]+'">'
+    + esc(d[1])+'<span class="n">'+(c[d[0]]||0)+'</span></button>').join("");
+}
+function buildTagFilter(){
+  const tags = new Set();
+  DATA.videos.forEach(v => (v.tags||[]).forEach(t => tags.add(t)));
+  if (!tags.has(state.tag)) state.tag = "";
+  $("#tagFilter").innerHTML = '<option value="">'+esc(L.allTags)+'</option>' +
+    Array.from(tags).sort().map(t =>
+      '<option value="'+esc(t)+'"'+(state.tag===t?" selected":"")+'>'+esc(t)+'</option>').join("");
+}
+
+/* the next thing to watch: an in-progress video, else the first unwatched */
+function nextUp(){
+  const ordered = DATA.videos.slice().sort((a,b)=>a.position-b.position);
+  return ordered.find(v => v.status==="watching")
+      || ordered.find(v => v.status==="unwatched")
+      || null;
+}
+function renderResume(){
+  const v = nextUp();
+  const bar = $("#resume");
+  if (!v){ bar.hidden = true; return; }
+  bar.hidden = false;
+  bar.dataset.id = v.videoId;
+  const started = v.status==="watching" && v.progressSeconds > 5;
+  $("#rkLabel").textContent = started ? L.resume : L.start;
+  $("#rTitle").textContent = ((v.position??0)+1)+". "+v._short;
+  $("#rWhen").textContent = started
+    ? L.at+" "+fmtDur(v.progressSeconds)+" / "+v.duration : (v.duration||"");
+}
+
+/* ==================================================================== list */
+function matches(v){
+  if (state.tag && !(v.tags||[]).includes(state.tag)) return false;
+  const s = state.status;
+  if (s==="starred" && !v.favorite) return false;
+  if (s==="noted" && !hasNotes(v)) return false;
+  if (STATUSES.indexOf(s) !== -1 && v.status !== s) return false;
+  const q = norm(state.q).trim();
+  if (!q) return true;
+  return q.split(" ").every(w => v._key.indexOf(w) !== -1);
+}
+function sortView(list){
+  const cmp = {
+    position:(a,b)=>a.position-b.position,
+    published:(a,b)=>String(a.publishedAt||"").localeCompare(String(b.publishedAt||"")),
+    duration:(a,b)=>(a.durationSeconds||0)-(b.durationSeconds||0),
+    views:(a,b)=>(a.viewCount||0)-(b.viewCount||0),
+    rating:(a,b)=>(a.rating||0)-(b.rating||0),
+    notes:(a,b)=>noteCount(a)-noteCount(b)
+  };
+  const desc = state.sort.charAt(0) === "-";
+  const key = desc ? state.sort.slice(1) : state.sort;
+  const fn = cmp[key] || cmp.position;
+  return list.sort((a,b) => (fn(a,b) || a.position-b.position) * (desc?-1:1));
+}
+function renderSwitch(){
+  const titles = {outline:L.vOutline, tiles:L.vTiles, table:L.vTable};
+  $$("#viewSwitch button").forEach(function(b){
+    b.classList.toggle("on", b.dataset.view === prefs.view);
+    b.title = titles[b.dataset.view] || "";
+  });
+}
+function render(){
+  view = sortView(DATA.videos.filter(matches));
+  const host = $("#list");
+  if (prefs.view === "tiles"){
+    host.className = "grid";
+    host.innerHTML = view.map(cardHTML).join("");
+  } else if (prefs.view === "table"){
+    host.className = "";
+    host.innerHTML = tableHTML();
+  } else {
+    host.className = "";
+    // sections only mean anything while the list is still in course order
+    host.innerHTML = state.sort === "position" ? sectionsHTML()
+      : '<div class="sec"><div class="sec-body">'+view.map(itemHTML).join("")+'</div></div>';
+  }
+  $("#empty").hidden = view.length > 0;
+  renderStats(); renderChips(); renderResume(); renderSwitch();
+}
+function tableHTML(){
+  const head = '<tr>'
+    + '<th class="c-n">'+esc(L.colNum)+'</th>'
+    + '<th class="c-q">'+esc(L.colQ)+'</th>'
+    + '<th>'+esc(L.colTitle)+'</th>'
+    + '<th class="c-d">'+esc(L.colDur)+'</th>'
+    + '<th class="c-s">'+esc(L.colStatus)+'</th>'
+    + '<th class="c-r">'+esc(L.colRate)+'</th>'
+    + '<th class="c-m">'+esc(L.colNotes)+'</th>'
+    + '<th>'+esc(L.colSum)+'</th></tr>';
+  const body = view.map(function(v){
+    const n = noteCount(v);
+    const blurb = v.summary || v.autoSummary || "";
+    return '<tr class="'+v.status+'" data-id="'+esc(v.videoId)+'">'
+      + '<td class="c-n">'+((v.position==null?0:v.position)+1)+'</td>'
+      + '<td class="c-q">'+(v._n!=null?v._n:"")+'</td>'
+      + '<td class="c-t" dir="auto">'+esc(v._short)
+      +   '<span class="sub2">'+esc(L.secs[v._sec])+'</span></td>'
+      + '<td class="c-d">'+esc(v.duration||"")+'</td>'
+      + '<td class="c-s"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span></td>'
+      + '<td class="c-r">'+(v.favorite?"★":"")+(v.rating?" "+v.rating:"")+'</td>'
+      + '<td class="c-m">'+(n?"✎"+n:"")+'</td>'
+      + '<td class="c-x" dir="auto" title="'+esc(blurb)+'">'+esc(blurb)+'</td>'
+      + '</tr>';
+  }).join("");
+  return '<div class="tblwrap"><table class="vt"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+}
+function sectionsHTML(){
+  return SEC_ORDER.map(sec => {
+    const vs = view.filter(v => v._sec === sec);
+    if (!vs.length) return "";
+    const all  = DATA.videos.filter(v => v._sec === sec);
+    const done = all.filter(v => v.status==="watched").length;
+    const secs = all.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    return '<section class="sec'+(prefs.closed[sec]?" closed":"")+'" data-sec="'+sec+'">'
+      + '<button class="sec-h"><span class="car">▼</span>'
+      + '<span class="nm">'+esc(L.secs[sec])+'</span>'
+      + '<span class="mt">'+all.length+' · '+fmtHours(secs)+' · '+done+'/'+all.length+'</span>'
+      + '<span class="sbar"><i style="width:'+(all.length?done/all.length*100:0)+'%"></i></span>'
+      + '</button><div class="sec-body">'+vs.map(itemHTML).join("")+'</div></section>';
+  }).join("");
+}
+function itemHTML(v){
+  const n = noteCount(v);
+  const pct = v.durationSeconds ? Math.min(100,(v.progressSeconds||0)/v.durationSeconds*100) : 0;
+  return '<div class="item '+v.status+(openId===v.videoId?" active":"")+'" data-id="'+esc(v.videoId)+'">'
+    + '<span class="idx">'+((v.position??0)+1)+'</span>'
+    + '<button class="tick" data-tick="'+esc(v.videoId)+'" title="'+esc(L.watched)+'">'
+    +   (v.status==="watching" ? "▸" : v.status==="skipped" ? "–" : "✓") + '</button>'
+    + '<span class="lbl" dir="auto">'
+    +   (v._n!=null ? '<span class="qn">'+v._n+'</span>' : "")
+    +   esc(v._short)
+    +   (v.summary ? '<span class="sum">'+esc(v.summary.slice(0,90))+'</span>' : "")
+    + '</span>'
+    + '<span class="meta">'
+    +   (v.favorite ? '<span class="st">★</span>' : "")
+    +   (v.rating ? '<span class="st">'+v.rating+'★</span>' : "")
+    +   (n ? '<span class="mk">✎'+n+'</span>' : "")
+    +   '<span class="dur">'+esc(v.duration||"")+'</span>'
+    + '</span>'
+    + (pct>1 && v.status!=="watched" ? '<span class="iprog" style="width:'+pct+'%"></span>' : "")
+    + '</div>';
+}
+function cardHTML(v){
+  const n = noteCount(v);
+  return '<article class="card '+v.status+'" data-id="'+esc(v.videoId)+'">'
+    + '<div class="tw">'
+    +   (v.thumbnail ? '<img src="'+esc(v.thumbnail)+'" alt="" loading="lazy">' : "")
+    +   '<span class="badge'+(v._n!=null?" q":"")+'">'+(v._n!=null?v._n:(v.position??0)+1)+'</span>'
+    +   (v.duration ? '<span class="dur2">'+esc(v.duration)+'</span>' : "")
+    +   (v.status==="watched" ? '<div class="seen">✓</div>' : "")
+    + '</div><div class="cbody">'
+    +   '<h3 class="ctitle" dir="auto">'+esc(v._short)+'</h3>'
+    +   (v.summary ? '<div class="sum" dir="auto">'+esc(v.summary.slice(0,100))+'</div>' : "")
+    +   ((v.tags||[]).length ? '<div class="tagrow">'
+        + v.tags.slice(0,3).map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+    +   '<div class="cfoot"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span>'
+    +   '<span>'+(v.favorite?"★ ":"")+(n?"✎"+n:"")+'</span></div>'
+    + '</div></article>';
+}
+
+/* ================================================================== drawer */
+function openVideo(id){
+  const v = byId(id);
+  if (!v) return;
+  openId = id;
+  $("#dWho").textContent = "#"+((v.position??0)+1)+" · "+(v.channelTitle||"");
+  $("#dOpen").href = v.url || ("https://www.youtube.com/watch?v="+id);
+  $("#dBody").innerHTML = detailHTML(v);
+  $("#dBody").scrollTop = 0;
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden","false");
+  $("#scrim").classList.add("on");
+  mountPlayer(v);
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  const row = $('[data-id="'+(window.CSS && CSS.escape ? CSS.escape(id) : id)+'"]');
+  if (row) row.classList.add("active");
+}
+function closeVideo(){
+  openId = null;
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden","true");
+  $("#scrim").classList.remove("on");
+  destroyPlayer();
+  $("#playerHost").innerHTML = "";
+  $("#dBody").innerHTML = "";
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  if (dirty) save(true);
+}
+function stepVideo(d){
+  if (!openId) return;
+  const i = view.findIndex(v => v.videoId === openId);
+  const next = view[i+d];
+  if (next) openVideo(next.videoId);
+}
+function detailHTML(v){
+  const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+  const qtag = v._n!=null ? '<span class="qtag">'+esc(L.secs[v._sec])+' '+v._n+'</span>' : "";
+  const vlang = videoLang(v);
+  const sumOpen = prefs.showSum;
+  return ''
+  + '<div class="acts">'
+  +   '<button class="ibtn'+(sumOpen?" on":"")+'" data-act="toggleSum">'
+  +     '<span class="ic">▤</span><span>'+esc(L.autoSum)+'</span>'
+  +     (v.autoSummary ? '' : ' <span style="opacity:.5">—</span>')
+  +   '</button>'
+  + '</div>'
+  + (sumOpen ? '<div class="d-sec">'+summaryHTML(v, vlang)+'</div>' : '')
+  + '<div class="d-sec">'
+  +   '<h2 class="d-title" dir="auto">'+qtag+esc(v._short)+'</h2>'
+  +   '<div class="kv">'
+  +     '<span><b>'+esc(v.duration||"—")+'</b> '+esc(L.long)+'</span>'
+  +     '<span><b>'+fmtCount(v.viewCount)+'</b> '+esc(L.views)+'</span>'
+  +     '<span><b>'+fmtCount(v.likeCount)+'</b> '+esc(L.likes)+'</span>'
+  +     '<span><b>'+fmtCount(v.commentCount)+'</b> '+esc(L.ytc)+'</span>'
+  +     '<span>'+esc(L.published)+' <b>'+esc(fmtDate(v.publishedAt))+'</b></span>'
+  +   '</div>'
+  +   (v.watchedAt ? '<div class="hint">'+esc(L.watchedOn)+' '+esc(fmtDate(v.watchedAt))+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.status)+'</p><div class="seg">'
+  +   STATUSES.map(s => '<button class="chip '+(v.status===s?"on":"")+'" data-act="status" data-v="'+s+'">'+esc(L[s])+'</button>').join("")
+  +   '<button class="chip '+(v.favorite?"on":"")+'" data-act="fav">'+esc(v.favorite?L.starred2:L.star)+'</button>'
+  + '</div><div class="star-pick">'
+  +   [1,2,3,4,5].map(i => '<button data-act="rate" data-v="'+i+'" class="'+(v.rating>=i?"on":"")+'">★</button>').join("")
+  +   (v.rating ? '<button class="clear" data-act="rate" data-v="0">'+esc(L.clear)+'</button>' : "")
+  + '</div><div class="hint" id="progHint">'
+  +   (v.progressSeconds ? esc(L.resumeAt)+" "+fmtDur(v.progressSeconds) : esc(L.progHint))
+  + '</div><div style="margin-top:11px;display:flex;gap:6px;flex-wrap:wrap">'
+  +   '<button class="btn sm ghost" data-act="markThrough">'+esc(L.markThrough)+'</button>'
+  +   '<button class="btn sm ghost" data-act="autoplay">'+(prefs.autoplay?"☑":"☐")+' '+esc(L.autoplay)+'</button>'
+  + '</div></div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.summary)+'</p>'
+  +   '<textarea id="fSummary" rows="4" dir="auto" placeholder="'+esc(L.sumPh)+'">'+esc(v.summary)+'</textarea>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.annotations)+' <span class="count">'+ann.length+'</span></p>'
+  +   '<div>'+(ann.map(annHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noAnn)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="annIn" dir="auto" placeholder="'+esc(L.annPh)+'">'
+  +   '<button class="btn" data-act="annAdd">'+esc(L.add)+'</button></div>'
+  +   '<div class="hint">'+esc(L.annHint)+'</div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.comments)+' <span class="count">'+(v.comments||[]).length+'</span></p>'
+  +   '<div>'+((v.comments||[]).map(cmtHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noCmt)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="cmtIn" dir="auto" placeholder="'+esc(L.cmtPh)+'">'
+  +   '<button class="btn" data-act="cmtAdd">'+esc(L.add)+'</button></div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.yourTags)+'</p>'
+  +   '<div class="tagrow" style="margin-bottom:9px">'
+  +   ((v.tags||[]).map(t => '<span class="tag">'+esc(t)+' <button class="del" data-act="tagDel" data-v="'+esc(t)+'">×</button></span>').join("")
+       || '<span class="hint">'+esc(L.noTags)+'</span>')
+  +   '</div><div class="row"><input class="ti" id="tagIn" dir="auto" placeholder="'+esc(L.tagPh)+'">'
+  +   '<button class="btn" data-act="tagAdd">'+esc(L.add)+'</button></div>'
+  +   ((v.youtubeTags||[]).length ? '<p class="label" style="margin-top:15px">'+esc(L.ytTags)+'</p>'
+       + '<div class="tagrow">'+v.youtubeTags.map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec" style="border-bottom:none"><p class="label">'+esc(L.description)+'</p>'
+  +   '<div class="desc" id="desc" dir="auto">'+linkify(v.description)+'</div>'
+  +   (String(v.description||"").length>380 ? '<button class="more" data-act="moreDesc">'+esc(L.more)+'</button>' : "")
+  + '</div>';
+}
+/* Renders the transcript-derived summary in the language actually spoken in
+   the video, independent of the interface language. */
+function summaryHTML(v, vlang){
+  if (!v.autoSummary){
+    return '<div class="sumbox miss" dir="auto">'+esc(L.noSum)
+         + '<div style="margin-top:9px"><code>'+esc(L.genCmd)+'</code></div></div>';
+  }
+  const dir = vlang === "ar" ? "rtl" : "ltr";
+  const meta = [];
+  if (v.summarySource) meta.push(esc(L.srcLbl)+": "+esc(v.summarySource));
+  if (v.transcriptChars) meta.push(esc(L.charsLbl)+": "+fmtCount(v.transcriptChars));
+  return '<div class="sumbox" dir="'+dir+'" lang="'+vlang+'">'+esc(v.autoSummary)+'</div>'
+       + (meta.length ? '<div class="srcline">'+meta.join(" · ")+'</div>' : "");
+}
+function annHTML(a){
+  const stamp = (a.t ?? null) !== null
+    ? '<button class="stamp" data-act="seek" data-v="'+a.t+'">'+fmtDur(a.t)+'</button>'
+    : '<button class="stamp none" disabled>—</button>';
+  return '<div class="note">'+stamp
+    + '<div class="txt" dir="auto" data-act="editAnn" data-v="'+esc(a.id)+'">'+esc(a.text)
+    + '<div class="when">'+esc(fmtDate(a.created))+'</div></div>'
+    + '<button class="del" data-act="annDel" data-v="'+esc(a.id)+'">×</button></div>';
+}
+function cmtHTML(c){
+  return '<div class="note comment">'
+    + '<div class="txt" dir="auto" data-act="editCmt" data-v="'+esc(c.id)+'">'+esc(c.text)
+    + '<div class="when">'+esc(fmtDate(c.created))+'</div></div>'
+    + '<button class="del" data-act="cmtDel" data-v="'+esc(c.id)+'">×</button></div>';
+}
+function linkify(t){
+  return esc(t).replace(/https?:\/\/[^\s<]+/g, m => '<a href="'+m+'" target="_blank" rel="noopener">'+m+'</a>');
+}
+
+/* ================================================================== player */
+function loadYT(){
+  if (window.YT && window.YT.Player){ ytReady = true; return; }
+  if (document.getElementById("ytapi")) return;
+  const s = document.createElement("script");
+  s.id = "ytapi";
+  s.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(s);
+}
+window.onYouTubeIframeAPIReady = function(){
+  ytReady = true;
+  if (openId && !player) mountPlayer(byId(openId));
+};
+function mountPlayer(v){
+  destroyPlayer();
+  const host = $("#playerHost");
+  if (!host || !v) return;
+  host.innerHTML = '<div id="playerBox"></div>';
+  const box = $("#playerBox");
+  const start = v.status==="watching" && v.progressSeconds>5 ? Math.floor(v.progressSeconds) : 0;
+
+  if (!ytReady){
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/'+encodeURIComponent(v.videoId)
+      + '?rel=0&start='+start+'" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture"'
+      + ' allowfullscreen title="'+esc(v.title)+'"></iframe>';
+    loadYT();
+    return;
+  }
+  player = new YT.Player(box, {
+    videoId: v.videoId,
+    playerVars: {rel:0, start:start, modestbranding:1},
+    events: {
+      onStateChange: function(e){
+        if (e.data === YT.PlayerState.PLAYING){
+          if (v.status === "unwatched") setStatus(v, "watching", true);
+          startTracking(v);
+        } else {
+          stopTracking(v);
+          if (e.data === YT.PlayerState.ENDED){
+            setStatus(v, "watched", true);
+            if (prefs.autoplay) advance(v);
+          }
+        }
+      }
+    }
+  });
+}
+function advance(from){
+  const next = DATA.videos.slice().sort((a,b)=>a.position-b.position)
+    .find(v => v.position > from.position && v.status !== "watched" && v.status !== "skipped");
+  if (next) setTimeout(() => openVideo(next.videoId), 800);
+}
+function destroyPlayer(){
+  stopTracking();
+  if (player && player.destroy){ try{ player.destroy(); }catch(e){} }
+  player = null;
+}
+function startTracking(v){
+  stopTracking();
+  trackTimer = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    const t = Math.floor(player.getCurrentTime()||0);
+    if (t && Math.abs(t-(v.progressSeconds||0)) >= 5){
+      v.progressSeconds = t;
+      const h = $("#progHint");
+      if (h) h.textContent = L.resumeAt+" "+fmtDur(t);
+      markDirty();
+    }
+  }, 5000);
+}
+function stopTracking(v){
+  clearInterval(trackTimer);
+  trackTimer = null;
+  if (v && player && player.getCurrentTime){
+    try{ v.progressSeconds = Math.floor(player.getCurrentTime()||0); markDirty(); }catch(e){}
+  }
+}
+function currentTime(){
+  if (player && player.getCurrentTime){
+    try{ return Math.floor(player.getCurrentTime()||0); }catch(e){}
+  }
+  return null;
+}
+
+/* =================================================================== edits */
+function touch(v){ v.notesUpdatedAt = nowISO(); markDirty(); }
+function setStatus(v, status, quiet){
+  v.status = status;
+  if (status === "watched"){
+    v.watchedAt = v.watchedAt || nowISO();
+    if (v.durationSeconds) v.progressSeconds = v.durationSeconds;
+  }
+  if (status === "unwatched"){ v.watchedAt = null; v.progressSeconds = 0; }
+  markDirty();
+  render();
+  if (!quiet && openId === v.videoId) refreshDrawer();
+  else if (quiet && openId === v.videoId)
+    $$("[data-act='status']").forEach(b => b.classList.toggle("on", b.dataset.v === v.status));
+}
+function refreshDrawer(){
+  const v = byId(openId);
+  if (!v) return;
+  const body = $("#dBody");
+  const scroll = body.scrollTop;
+  body.innerHTML = detailHTML(v);   // the player lives outside #dBody, so it keeps playing
+  body.scrollTop = scroll;
+}
+function afterEdit(v){ touch(v); decorate(); refreshDrawer(); render(); }
+function addAnnotation(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.annotations.push({id:uid(), t:currentTime(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addComment(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.comments.push({id:uid(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addTag(v, text){
+  text = String(text||"").trim();
+  if (!text || (v.tags||[]).includes(text)) return;
+  v.tags.push(text);
+  buildTagFilter();
+  afterEdit(v);
+}
+function editNote(el, list, id){
+  const v = byId(openId);
+  if (!v) return;
+  const item = (v[list]||[]).find(x => x.id === id);
+  if (!item || el.querySelector("input")) return;
+  const input = document.createElement("input");
+  input.className = "ti";
+  input.value = item.text;
+  input.dir = "auto";
+  el.replaceChildren(input);
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+  let done = false;
+  const commit = function(){
+    if (done) return;
+    done = true;
+    const t = input.value.trim();
+    if (t && t !== item.text){ item.text = t; touch(v); decorate(); render(); }
+    refreshDrawer();
+  };
+  input.addEventListener("blur", commit);
+  input.addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if (e.key === "Enter"){ e.preventDefault(); input.blur(); }
+    if (e.key === "Escape"){ input.value = item.text; input.blur(); }
+  });
+}
+function markThrough(v){
+  let n = 0;
+  DATA.videos.forEach(function(x){
+    if (x.position < v.position && x.status === "unwatched"){
+      x.status = "watched";
+      x.watchedAt = nowISO();
+      x.progressSeconds = x.durationSeconds || 0;
+      n++;
+    }
+  });
+  markDirty();
+  render();
+  refreshDrawer();
+  toast("✓ "+n);
+}
+
+/* ============================================================= study sheet */
+function buildMarkdown(){
+  const rows = DATA.videos
+    .filter(v => hasNotes(v) || v.rating || v.favorite)
+    .sort((a,b)=>a.position-b.position);
+  if (!rows.length) return null;
+
+  const p = (DATA.playlists||[])[0] || {};
+  const md = [];
+  md.push("# "+(p.title||"Video List")+" — "+L.sheetTitle);
+  md.push("> "+(p.channelTitle||"")+" · "+rows.length+"/"+DATA.videos.length+" "+L.videos);
+
+  let lastSec = null;
+  rows.forEach(function(v){
+    if (v._sec !== lastSec){ md.push(""); md.push("## "+L.secs[v._sec]); lastSec = v._sec; }
+    md.push("");
+    md.push("### "+(v._n!=null ? v._n+" — "+v._short : v._short));
+    const bits = [L[v.status]||v.status, v.duration];
+    if (v.rating) bits.push("★".repeat(v.rating));
+    md.push("*"+bits.filter(Boolean).join(" · ")+"* — ["+L.watch+"]("+v.url+")");
+    if (v.summary){ md.push(""); md.push(v.summary); }
+    const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+    if (ann.length){
+      md.push("");
+      md.push("**"+L.annotations+"**");
+      ann.forEach(function(a){
+        const link = a.t != null
+          ? "["+fmtDur(a.t)+"](https://www.youtube.com/watch?v="+v.videoId+"&t="+a.t+"s)"
+          : "—";
+        md.push("- "+link+" "+a.text);
+      });
+    }
+    if ((v.comments||[]).length){
+      md.push("");
+      md.push("**"+L.comments+"**");
+      v.comments.forEach(function(c){ md.push("- "+c.text); });
+    }
+    if ((v.tags||[]).length){
+      md.push("");
+      md.push(v.tags.map(t=>"`"+t+"`").join(" "));
+    }
+  });
+  return md.join("\n");
+}
+function studySheet(){
+  const text = buildMarkdown();
+  if (!text) return toast(L.noNotes);
+  const p = (DATA.playlists||[])[0] || {};
+  const rtl = prefs.lang === "ar";
+  const w = window.open("", "_blank");
+  if (!w) return toast("popup blocked");
+
+  const doc = ''
+   + '<!doctype html><html lang="'+prefs.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8">'
+   + '<title>'+esc(p.title||"")+' — '+esc(L.sheetTitle)+'</title>'
+   + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'
+   + '<style>'
+   + 'body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;max-width:760px;margin:0 auto;'
+   + 'padding:30px 26px 80px;line-height:1.75;color:#16202c;background:#fff}'
+   + 'h1{font-size:25px;margin:0 0 4px}'
+   + 'h2{font-size:19px;margin:32px 0 10px;padding-bottom:6px;border-bottom:2px solid #e8b923}'
+   + 'h3{font-size:16px;margin:22px 0 3px}'
+   + 'blockquote{color:#667;margin:0 0 20px;font-size:14px;padding:0}'
+   + 'em{color:#78849a;font-size:13px;font-style:normal}a{color:#a8801a}'
+   + 'ul{margin:5px 0 14px;padding-inline-start:20px}li{margin:3px 0;font-size:14.5px}'
+   + 'code{background:#f1f2f5;padding:1px 6px;border-radius:4px;font-size:12.5px}'
+   + 'p{margin:6px 0 12px}'
+   + '.bar{position:sticky;top:0;background:#fff;padding:10px 0;border-bottom:1px solid #e6e8ee;margin-bottom:18px;display:flex;gap:8px}'
+   + '.bar button{font:inherit;font-size:13px;padding:7px 14px;border:1px solid #d5d9e0;border-radius:7px;background:#f7f8fa;cursor:pointer}'
+   + '@media print{.bar{display:none}body{padding:0}}'
+   + '</style></head><body>'
+   + '<div class="bar"><button id="dl">'+esc(L.dl)+'</button><button id="pr">'+esc(L.print)+'</button></div>'
+   + '<div id="out"></div></body></html>';
+
+  w.document.open();
+  w.document.write(doc);
+  w.document.close();
+
+  // build the DOM from the parent so no nested <script> parsing is involved
+  const render = function(){
+    const d = w.document;
+    const out = d.getElementById("out");
+    if (!out) return;
+    let html = "", inList = false;
+    text.split("\n").forEach(function(line){
+      let t = esc(line)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+      if (line.indexOf("- ") === 0){
+        if (!inList){ html += "<ul>"; inList = true; }
+        html += "<li>"+t.slice(2)+"</li>";
+        return;
+      }
+      if (inList){ html += "</ul>"; inList = false; }
+      if (line.indexOf("### ") === 0) html += "<h3>"+t.slice(4)+"</h3>";
+      else if (line.indexOf("## ") === 0) html += "<h2>"+t.slice(3)+"</h2>";
+      else if (line.indexOf("# ") === 0) html += "<h1>"+t.slice(2)+"</h1>";
+      else if (line.indexOf("> ") === 0) html += "<blockquote>"+t.slice(2)+"</blockquote>";
+      else if (line.trim()) html += "<p>"+t+"</p>";
+    });
+    if (inList) html += "</ul>";
+    out.innerHTML = html;
+
+    d.getElementById("pr").onclick = function(){ w.print(); };
+    d.getElementById("dl").onclick = function(){
+      const blob = new Blob([text], {type:"text/markdown;charset=utf-8"});
+      const a = d.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "study-sheet.md";
+      a.click();
+    };
+  };
+  if (w.document.readyState === "complete") render();
+  else w.addEventListener("load", render);
+}
+
+/* ================================================================== wiring */
+$("#list").addEventListener("click", function(e){
+  const tick = e.target.closest("[data-tick]");
+  if (tick){
+    e.stopPropagation();
+    const v = byId(tick.dataset.tick);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+    return;
+  }
+  const head = e.target.closest(".sec-h");
+  if (head){
+    const sec = head.closest(".sec").dataset.sec;
+    prefs.closed[sec] = !prefs.closed[sec];
+    savePrefs();
+    render();
+    return;
+  }
+  const row = e.target.closest("[data-id]");
+  if (row) openVideo(row.dataset.id);
+});
+$("#resume").addEventListener("click", function(e){
+  const id = e.currentTarget.dataset.id;
+  if (id) openVideo(id);
+});
+$("#scrim").addEventListener("click", closeVideo);
+$("#dClose").addEventListener("click", closeVideo);
+$("#dPrev").addEventListener("click", function(){ stepVideo(-1); });
+$("#dNext").addEventListener("click", function(){ stepVideo(1); });
+
+$("#dBody").addEventListener("click", function(e){
+  const btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  const v = byId(openId);
+  if (!v) return;
+  const val = btn.dataset.v;
+  switch (btn.dataset.act){
+    case "status": setStatus(v, val); break;
+    case "fav": v.favorite = !v.favorite; afterEdit(v); break;
+    case "rate": v.rating = Number(val); afterEdit(v); break;
+    case "seek":
+      if (player && player.seekTo){ player.seekTo(Number(val), true); player.playVideo(); }
+      break;
+    case "annAdd": addAnnotation(v, $("#annIn").value); break;
+    case "cmtAdd": addComment(v, $("#cmtIn").value); break;
+    case "tagAdd": addTag(v, $("#tagIn").value); break;
+    case "editAnn": editNote(btn, "annotations", val); break;
+    case "editCmt": editNote(btn, "comments", val); break;
+    case "annDel": v.annotations = v.annotations.filter(a => a.id !== val); afterEdit(v); break;
+    case "cmtDel": v.comments = v.comments.filter(c => c.id !== val); afterEdit(v); break;
+    case "tagDel": v.tags = v.tags.filter(t => t !== val); buildTagFilter(); afterEdit(v); break;
+    case "markThrough": markThrough(v); break;
+    case "autoplay": prefs.autoplay = !prefs.autoplay; savePrefs(); refreshDrawer(); break;
+    case "toggleSum": prefs.showSum = !prefs.showSum; savePrefs(); refreshDrawer(); break;
+    case "moreDesc":
+      $("#desc").classList.toggle("open");
+      btn.textContent = $("#desc").classList.contains("open") ? L.less : L.more;
+      break;
+  }
+});
+$("#dBody").addEventListener("keydown", function(e){
+  if (e.key !== "Enter") return;
+  const v = byId(openId);
+  if (!v) return;
+  if (e.target.id === "annIn"){ e.preventDefault(); addAnnotation(v, e.target.value); }
+  if (e.target.id === "cmtIn"){ e.preventDefault(); addComment(v, e.target.value); }
+  if (e.target.id === "tagIn"){ e.preventDefault(); addTag(v, e.target.value); }
+});
+$("#dBody").addEventListener("input", function(e){
+  if (e.target.id !== "fSummary") return;
+  const v = byId(openId);
+  if (!v) return;
+  v.summary = e.target.value;
+  touch(v);
+});
+$("#dBody").addEventListener("change", function(e){
+  if (e.target.id === "fSummary"){ decorate(); render(); }
+});
+
+$("#q").addEventListener("input", function(e){ state.q = e.target.value; render(); });
+$("#sort").addEventListener("change", function(e){ state.sort = e.target.value; render(); });
+$("#tagFilter").addEventListener("change", function(e){ state.tag = e.target.value; render(); });
+$("#statusChips").addEventListener("click", function(e){
+  const c = e.target.closest("[data-status]");
+  if (c){ state.status = c.dataset.status; render(); }
+});
+$("#viewSwitch").addEventListener("click", function(e){
+  const b = e.target.closest("[data-view]");
+  if (!b || b.dataset.view === prefs.view) return;
+  prefs.view = b.dataset.view;
+  savePrefs();
+  render();
+});
+$("#btnLang").addEventListener("click", function(){
+  prefs.lang = prefs.lang === "ar" ? "en" : "ar";
+  savePrefs();
+  applyLang();
+  renderHeader();
+  render();
+  if (openId) refreshDrawer();
+});
+$("#btnSave").addEventListener("click", function(){ save(); });
+$("#btnSheet").addEventListener("click", studySheet);
+$("#btnExport").addEventListener("click", function(){
+  const blob = new Blob([JSON.stringify({generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)}, null, 2)],
+    {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "data.json";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+});
+$("#btnImport").addEventListener("click", function(){ $("#fileIn").click(); });
+$("#fileIn").addEventListener("change", async function(e){
+  const f = e.target.files[0];
+  if (!f) return;
+  try{
+    const raw = JSON.parse(await f.text());
+    if (!Array.isArray(raw.videos)) throw new Error("no videos array");
+    adopt(raw);
+    setSaveState("dirty", L.unsaved);
+  }catch(err){ alert("Not a data.json from this tool: "+err.message); }
+  e.target.value = "";
+});
+
+document.addEventListener("keydown", function(e){
+  const typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
+  if (e.key === "Escape" && openId) return closeVideo();
+  if (typing) return;
+  if (e.key === "/"){ e.preventDefault(); $("#q").focus(); return; }
+  if (!openId) return;
+  const rtl = document.documentElement.dir === "rtl";
+  if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) stepVideo(1);
+  if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) stepVideo(-1);
+  if (e.key === "w" || e.key === "W"){
+    const v = byId(openId);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+  }
+});
+window.addEventListener("beforeunload", function(e){
+  if (!dirty) return;
+  save(true);
+  if (!serverSave){ e.preventDefault(); e.returnValue = ""; }
+});
+
+loadPrefs();
+loadYT();
+load();
+</script>
+</body>
+</html>
