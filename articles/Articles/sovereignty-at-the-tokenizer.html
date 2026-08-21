@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereignty Starts at the Tokenizer | alhaol.github.io</title>
+    <meta name="description" content="Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/sovereignty-at-the-tokenizer.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sovereignty Starts at the Tokenizer">
+    <meta property="og:description" content="Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/sovereignty-at-the-tokenizer.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_49.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_49.png" alt="Sovereignty Starts at the Tokenizer" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI / ML</span>
+                        <span class="category-badge category-architecture">Architecture</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Sovereignty Starts at the Tokenizer</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 20, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+<p>The most expensive sovereignty decision in an Arabic AI program is usually made before anyone has picked a model, by people who do not speak Arabic. It is made in the tokenizer.</p>
+
+<p>Sovereign AI is sold as geography. The data stays in the country, the GPUs sit in a national facility, the contract names a local entity, and a minister cuts a ribbon. All of that is real and all of it is the easy half. Everything running on that hardware arrived from somewhere else: the base weights, the vocabulary the model reads with, the training recipe, and the benchmark used to declare the result good. Each of those carries design choices made by teams optimizing for English, and those choices do not stop applying at the border.</p>
+
+<blockquote>Data residency decides where your text sleeps. The tokenizer decides what your language costs. Only one of those appears on every invoice, every latency budget, and every context window you will ever pay for.</blockquote>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 370" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Six layers of an AI sovereignty claim and which ones a residency contract actually covers</title>
+            <desc id="fig1-desc">A stack of six layers. The bottom two, data residency and serving infrastructure, are marked as owned. The four above them, model weights, tokenizer and vocabulary, training recipe, and evaluation, are marked as imported. A typical sovereignty contract covers only the bottom two.</desc>
+
+            <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Six layers of a sovereignty claim</text>
+            <text x="54" y="50" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">LAYER</text>
+            <text x="486" y="50" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">IN PRACTICE</text>
+
+            <rect x="40" y="62" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="62" width="4" height="38" fill="#f59e0b"/>
+            <text x="56" y="86" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Evaluation: the benchmark you are graded on</text>
+            <text x="486" y="86" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">IMPORTED</text>
+
+            <rect x="40" y="108" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="108" width="4" height="38" fill="#f59e0b"/>
+            <text x="56" y="132" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Training recipe: data mix, curriculum, tuning</text>
+            <text x="486" y="132" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">IMPORTED</text>
+
+            <rect x="40" y="154" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="154" width="4" height="38" fill="#f59e0b"/>
+            <text x="56" y="178" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Tokenizer and vocabulary</text>
+            <text x="486" y="178" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">IMPORTED</text>
+
+            <rect x="40" y="200" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="200" width="4" height="38" fill="#f59e0b"/>
+            <text x="56" y="224" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Model weights</text>
+            <text x="486" y="224" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">IMPORTED</text>
+
+            <rect x="40" y="246" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="246" width="4" height="38" fill="#60a5fa"/>
+            <text x="56" y="270" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Serving infrastructure and accelerators</text>
+            <text x="486" y="270" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#60a5fa">OWNED</text>
+
+            <rect x="40" y="292" width="430" height="38" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="40" y="292" width="4" height="38" fill="#60a5fa"/>
+            <text x="56" y="316" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Data residency: where the text is stored</text>
+            <text x="486" y="316" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#60a5fa">OWNED</text>
+
+            <text x="40" y="352" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Amber layers are the ones a data residency contract does not cover.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Most sovereignty programs buy the bottom two layers and rent the four above them. The four above are where the behaviour of the system is actually decided.</figcaption>
+</figure>
+
+<h2>What a tokenizer costs a language</h2>
+
+<p>A tokenizer is the lookup table that turns text into the numbered pieces a model consumes. It is trained on a corpus, and it learns to keep frequent sequences whole while splitting rare ones into fragments. Aleksandar Petrov and colleagues measured what happens when the same passage is translated into different languages and fed through the same tokenizer. The token counts diverged by as much as fifteen times. That gap opens before the model runs at all, and it persists in tokenizers that were built with multilingual support in mind.</p>
+
+<p>Arabic sits on the wrong side of that gap for a structural reason. Words are built from a consonantal root shaped by a pattern, and prepositions, the definite article, conjunctions and possessive pronouns all attach directly to the word rather than standing apart. A single written Arabic word can carry what English spreads across five. A vocabulary learned mostly from English text has no reason to store that word as a unit, so it arrives at the model in fragments that line up with nothing meaningful.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">One Arabic word segmented by meaning, by an English-first vocabulary, and by an Arabic-first vocabulary</title>
+            <desc id="fig2-desc">The Arabic word wabimadarisihim carries four units of meaning: and, in, schools, their. An English-first vocabulary breaks it into roughly seven fragments that do not match those units. An Arabic-first vocabulary covers it in about three, close to the morphology.</desc>
+
+            <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">One Arabic word, three ways to cut it</text>
+
+            <text x="40" y="58" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">UNITS OF MEANING</text>
+            <rect x="40" y="66" width="74" height="40" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="77" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">wa</text>
+            <text x="77" y="99" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">and</text>
+            <rect x="122" y="66" width="74" height="40" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="159" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">bi</text>
+            <text x="159" y="99" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">in</text>
+            <rect x="204" y="66" width="118" height="40" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="263" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">madaris</text>
+            <text x="263" y="99" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">schools</text>
+            <rect x="330" y="66" width="90" height="40" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="375" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">him</text>
+            <text x="375" y="99" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">their</text>
+            <text x="486" y="90" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">4 meanings</text>
+
+            <text x="40" y="134" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">ENGLISH-FIRST VOCABULARY</text>
+            <rect x="376" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="401" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1608;</text>
+            <rect x="320" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="345" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1576;</text>
+            <rect x="264" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="289" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1605;&#1583;</text>
+            <rect x="208" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="233" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1575;&#1585;</text>
+            <rect x="152" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="177" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1587;</text>
+            <rect x="96" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="121" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1607;</text>
+            <rect x="40" y="142" width="50" height="30" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="65" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1605;</text>
+            <text x="486" y="162" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#f59e0b">7 tokens</text>
+
+            <text x="40" y="198" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">ARABIC-FIRST VOCABULARY</text>
+            <rect x="270" y="206" width="74" height="30" rx="4" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="307" y="226" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1608;&#1576;</text>
+            <rect x="122" y="206" width="140" height="30" rx="4" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="192" y="226" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1605;&#1583;&#1575;&#1585;&#1587;</text>
+            <rect x="40" y="206" width="74" height="30" rx="4" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="77" y="226" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">&#1607;&#1605;</text>
+            <text x="486" y="226" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">3 tokens</text>
+
+            <text x="40" y="266" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The word is wabimadarisihim (and in their schools). The two Arabic rows read right to left.</text>
+            <text x="40" y="284" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Schematic. The exact pieces depend on the tokenizer, which is the point.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The fragments are not wrong, they are foreign. A vocabulary trained on Arabic keeps the word closer to whole, and every downstream cost is measured in those pieces.</figcaption>
+</figure>
+
+<p>That fragmentation is billed three times. It is billed in price, because commercial inference is metered per token. It is billed in latency, because output tokens are produced one after another and a longer sequence takes longer to finish. And it is billed in context, because a fixed window holds fewer Arabic words than English ones. The third bill is the one that damages systems rather than budgets. A retrieval pipeline sized for English documents quietly truncates Arabic ones, and nobody sees an error.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">How many words a fixed 128,000 token context window holds at different tokens per word</title>
+            <desc id="fig3-desc">At 1.3 tokens per word a 128,000 token window holds about 98,000 words. At 1.5 it holds about 85,000. At 2.0 it holds 64,000. At 3.0 it holds about 43,000, less than half the first case.</desc>
+
+            <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">The same 128,000 token window, measured in words</text>
+            <line x1="200" y1="54" x2="200" y2="244" stroke="#2a3f5f"/>
+
+            <text x="40" y="80" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">1.3 tokens per word</text>
+            <rect x="200" y="62" width="295" height="26" rx="3" fill="#60a5fa" opacity="0.75"/>
+            <text x="505" y="80" font-family="Inter, sans-serif" font-size="12.5" font-weight="600" fill="#60a5fa">98,000 words</text>
+
+            <text x="40" y="128" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">1.5 tokens per word</text>
+            <rect x="200" y="110" width="256" height="26" rx="3" fill="#60a5fa" opacity="0.55"/>
+            <text x="466" y="128" font-family="Inter, sans-serif" font-size="12.5" font-weight="600" fill="#60a5fa">85,000 words</text>
+
+            <text x="40" y="176" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">2.0 tokens per word</text>
+            <rect x="200" y="158" width="192" height="26" rx="3" fill="#f59e0b" opacity="0.7"/>
+            <text x="402" y="176" font-family="Inter, sans-serif" font-size="12.5" font-weight="600" fill="#f59e0b">64,000 words</text>
+
+            <text x="40" y="224" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">3.0 tokens per word</text>
+            <rect x="200" y="206" width="128" height="26" rx="3" fill="#f59e0b" opacity="0.9"/>
+            <text x="338" y="224" font-family="Inter, sans-serif" font-size="12.5" font-weight="600" fill="#f59e0b">43,000 words</text>
+
+            <text x="40" y="266" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Arithmetic only: 128,000 divided by tokens per word.</text>
+            <text x="40" y="284" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Tokens per word varies by tokenizer and by text. Measure yours on your own corpus.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> A context window is advertised in tokens and consumed in words, and the exchange rate between them is set by a file you probably did not choose. The multipliers are illustrative, the arithmetic is not. Cross-language token disparity documented in Petrov et al., NeurIPS 2023.</figcaption>
+</figure>
+
+<h2>The layers you can actually own</h2>
+
+<p>The useful move is to stop arguing about whether a system is sovereign and start listing which of the six layers in Figure 1 you control. Data residency and serving are commercial questions with commercial answers. The layer that changed recently is the weights.</p>
+
+<p>Arabic-first open models now exist and are documented in the literature. Jais, released in 2023 by Inception, MBZUAI and Cerebras, is a 13 billion parameter model pretrained on a mixture of Arabic, English and code, and it outperformed the open multilingual models of its size on Arabic. ALLaM came out of Saudi Arabia's SDAIA. Fanar was built end to end at Qatar Computing Research Institute under Hamad Bin Khalifa University, sponsored by Qatar's Ministry of Communications and Information Technology with the stated purpose of enabling sovereign AI development. Fanar Star is 7 billion parameters trained from scratch on roughly a trillion tokens. Fanar Prime is 9 billion, built by continuing training on top of Gemma-2 9B with the same corpus.</p>
+
+<p>That second variant is the pattern worth copying. You do not have to pretrain from zero to own a model. You take open weights, extend the vocabulary so your language stops being fragmented, continue training on your own corpus, and the result is a model you can serve, audit, quantize and modify without asking anyone. Sovereignty at the weights layer is now an engineering project rather than a national program.</p>
+
+<h2>Small models are what make independence affordable</h2>
+
+<p>There is a persistent assumption that a sovereign model has to be a large one, and it is the assumption that kills these programs at the budget stage. When my co-authors and I assessed the full carbon bill of Noor, a very large Arabic language model, we accounted for data collection and storage, research and development, pretraining, and projected serving. Inference and the exogenous costs around the project moved the total more than people expected. Training is the headline. Serving is the mortgage.</p>
+
+<p>Read that in money and the conclusion is the same. A 7 to 13 billion parameter Arabic-first model that fits on hardware you already have turns sovereignty into a line item. Frontier-scale sovereignty stays a slide. And because the smaller model reads Arabic with an Arabic vocabulary, it also spends fewer tokens per document than a much larger multilingual model, so it wins on latency and unit cost at the same time it wins on quality for the language you care about.</p>
+
+<h2>Evaluation is the layer nobody can sell you</h2>
+
+<p>The top of the stack is the layer most programs never budget for. ArabicMMLU, published at ACL 2024 by a team at MBZUAI, covers 40 tasks and 14,575 multiple choice questions in Modern Standard Arabic, drawn from school exams across North Africa, the Levant and the Gulf. It is the right place to start and it is not your benchmark. It does not contain your dialect, your regulations, your document formats, or the way your customers actually type when they are annoyed.</p>
+
+<p>A few hundred items written and graded by your own staff, in the dialect your users write in and on the tasks your system is bought to perform, is the one artifact no vendor can supply. It is also the artifact that makes every layer beneath it swappable. When you own the evaluation, changing model providers becomes a Tuesday afternoon. When you do not, you are choosing between vendors on the strength of their own report cards.</p>
+
+<h2>What leaders should do</h2>
+
+<ol>
+    <li>Measure tokens per word on your own corpus before you shortlist a model. Take a thousand real documents, run them through each candidate tokenizer, and multiply the result by your price per token and your context window. That number will shape your budget more than any benchmark score on the vendor's slide.</li>
+    <li>Write your sovereignty claim as the six layer table in Figure 1 and mark each layer owned, rented or imported, with a named owner. If the honest version and the publishable version differ, you have found your roadmap.</li>
+    <li>Fund the evaluation set before the model. Commission 300 to 500 items in your dialect and your domain, graded by your own people, versioned in a repository, and re-run against every candidate.</li>
+    <li>Default to the smallest Arabic-first open-weight model that passes that evaluation, extend its vocabulary on your corpus rather than pretraining from scratch, and repeat the comparison every quarter as new open weights appear.</li>
+</ol>
+
+<p>Sovereignty is not a place. It is a list of dependencies you can name, priced and owned deliberately rather than by default. The tokenizer earns first mention because it is the most invisible dependency in the stack and the one that charges you on every single request, in a currency that never appears in the procurement document.</p>
+
+<p>The encouraging part is that the layers have become cheaper to own in the past three years. Arabic-first open weights exist and are documented. Vocabulary extension is well understood. Continued pretraining on a national corpus is within reach of a competent team with a modest cluster. What remains scarce is the willingness to measure what your own language costs you, and to build the evaluation that only you can build.</p>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Sovereign Dialect Adaptation</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">An architecting blueprint for in-house small-language-model specialization under data-sovereignty constraints.</p>
+                        <a href="sovereign-dialect-adaptation.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Small Model Efficiency</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the most accurate small language model is rarely the right one to put into production.</p>
+                        <a href="small-model-efficiency.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Inference Registry</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Architecting dynamic model routers to manage the economics of extended thinking.</p>
+                        <a href="the-inference-registry.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Petrov, A., La Malfa, E., Torr, P. H. S., &amp; Bibi, A. (2023). <em>Language Model Tokenizers Introduce Unfairness Between Languages.</em> Advances in Neural Information Processing Systems 36. <a href="https://arxiv.org/abs/2305.15425" target="_blank" rel="noopener">arxiv.org/abs/2305.15425</a></li>
+                    <li class="reference-item">Sengupta, N., et al. (2023). <em>Jais and Jais-chat: Arabic-Centric Foundation and Instruction-Tuned Open Generative Large Language Models.</em> <a href="https://arxiv.org/abs/2308.16149" target="_blank" rel="noopener">arxiv.org/abs/2308.16149</a></li>
+                    <li class="reference-item">Fanar Team, Qatar Computing Research Institute (2025). <em>Fanar: An Arabic-Centric Multimodal Generative AI Platform.</em> <a href="https://arxiv.org/abs/2501.13944" target="_blank" rel="noopener">arxiv.org/abs/2501.13944</a></li>
+                    <li class="reference-item">Bari, M. S., et al. (2024). <em>ALLaM: Large Language Models for Arabic and English.</em> Saudi Data and AI Authority. <a href="https://arxiv.org/abs/2407.15390" target="_blank" rel="noopener">arxiv.org/abs/2407.15390</a></li>
+                    <li class="reference-item">Koto, F., Li, H., Shatnawi, S., et al. (2024). <em>ArabicMMLU: Assessing Massive Multitask Language Understanding in Arabic.</em> Findings of ACL 2024. <a href="https://arxiv.org/abs/2402.12840" target="_blank" rel="noopener">arxiv.org/abs/2402.12840</a></li>
+                    <li class="reference-item">Lakim, I., Almazrouei, E., Abualhaol, I., Debbah, M., &amp; Launay, J. (2022). <em>A Holistic Assessment of the Carbon Footprint of Noor, a Very Large Arabic Language Model.</em> Proceedings of BigScience Episode #5, Workshop on Challenges &amp; Perspectives in Creating Large Language Models, ACL. <a href="https://aclanthology.org/2022.bigscience-1.8/" target="_blank" rel="noopener">aclanthology.org/2022.bigscience-1.8</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
