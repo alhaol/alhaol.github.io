@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>أسماء الله الحسنى</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141922; --panel-2:#1a2029; --panel-3:#222a36;
+    --line:#262e3a; --line-2:#394454;
+    --text:#e8eef6; --dim:#93a0b3; --faint:#697585;
+    --accent:#e8b923; --accent-soft:rgba(232,185,35,.13);
+    --ok:#3fb950; --warn:#d98b22; --info:#58a6ff; --danger:#f43f5e;
+    --sans:'IBM Plex Sans Arabic','Segoe UI',system-ui,-apple-system,sans-serif;
+    --slide:105%;
+  }
+  [dir="ltr"]{--slide:105%}
+  [dir="rtl"]{--slide:-105%}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--info)}
+  ::selection{background:var(--accent-soft)}
+
+  /* ============ header ============ */
+  header{position:sticky;top:0;z-index:40;background:rgba(11,14,20,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .head-in{max-width:1280px;margin:0 auto;padding:12px 20px}
+  .head-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .pl-art{width:76px;height:43px;border-radius:7px;object-fit:cover;background:var(--panel-2);flex:none}
+  .pl-meta{flex:1;min-width:200px}
+  .pl-title{font-size:19px;font-weight:700;margin:0;line-height:1.3}
+  .pl-sub{color:var(--dim);font-size:12.5px}
+  .head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+  .btn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;transition:.15s;white-space:nowrap}
+  .btn:hover{background:var(--panel-3);border-color:var(--line-2)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#1a1400;font-weight:700}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:4px 9px;font-size:12px}
+
+  .resume{display:flex;align-items:center;gap:12px;margin-top:11px;padding:10px 14px;background:linear-gradient(90deg,var(--accent-soft),transparent);border:1px solid rgba(232,185,35,.3);border-radius:10px;cursor:pointer;transition:.15s}
+  .resume:hover{border-color:var(--accent)}
+  .resume[hidden]{display:none}
+  .resume .rk{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);font-weight:700;flex:none}
+  .resume .rt{flex:1;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .resume .rw{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums;flex:none}
+  .resume .go{font-size:19px;color:var(--accent);flex:none}
+  [dir="rtl"] .resume .go{transform:scaleX(-1)}
+
+  .stats{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .bar{flex:1;min-width:160px;height:7px;border-radius:99px;background:var(--panel-2);overflow:hidden;display:flex}
+  .bar i{display:block;height:100%;transition:width .3s}
+  .bar .w{background:var(--ok)} .bar .g{background:var(--warn)}
+  .stat{font-size:12px;color:var(--dim);white-space:nowrap}
+  .stat b{color:var(--text);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .search{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px}
+  .search:focus,select:focus{outline:none;border-color:var(--accent)}
+  select{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;max-width:180px}
+  .chips{display:flex;gap:5px;flex-wrap:wrap}
+  .chip{background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:12.5px;color:var(--dim);transition:.15s}
+  .chip:hover{color:var(--text);border-color:var(--line-2)}
+  .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .chip .n{opacity:.6;margin-inline-start:5px;font-variant-numeric:tabular-nums}
+
+  /* ============ outline ============ */
+  main{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
+
+  .sec{margin-bottom:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+  .sec-h{width:100%;display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--panel-2);border:none;text-align:start;transition:.15s}
+  .sec-h:hover{background:var(--panel-3)}
+  .sec-h .car{font-size:11px;color:var(--faint);transition:transform .18s;flex:none}
+  .sec.closed .car{transform:rotate(-90deg)}
+  [dir="rtl"] .sec.closed .car{transform:rotate(90deg)}
+  .sec-h .nm{font-weight:700;font-size:14.5px;flex:none}
+  .sec-h .mt{font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .sec-h .sbar{flex:1;min-width:50px;max-width:200px;height:5px;border-radius:99px;background:var(--panel);overflow:hidden}
+  .sec-h .sbar i{display:block;height:100%;background:var(--ok)}
+  .sec.closed .sec-body{display:none}
+
+  .item{display:flex;align-items:center;gap:11px;padding:8px 14px;border-top:1px solid var(--line);cursor:pointer;position:relative;transition:.12s}
+  .item:hover{background:var(--panel-2)}
+  .item.active{background:var(--accent-soft)}
+  .item.watched .lbl{color:var(--dim)}
+  .item.skipped{opacity:.4}
+  .item.skipped .lbl{text-decoration:line-through}
+
+  .idx{width:26px;flex:none;text-align:center;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .tick{width:24px;height:24px;flex:none;border-radius:50%;border:1.5px solid var(--line-2);background:transparent;display:grid;place-items:center;font-size:12px;color:transparent;transition:.15s;padding:0}
+  .tick:hover{border-color:var(--ok);color:var(--faint)}
+  .item.watched .tick{background:var(--ok);border-color:var(--ok);color:#08240d;font-weight:800}
+  .item.watching .tick{border-color:var(--warn);color:var(--warn)}
+  .item.skipped .tick{color:var(--faint);border-style:dashed}
+
+  .lbl{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lbl .qn{color:var(--accent);font-weight:700;margin-inline-end:7px;font-variant-numeric:tabular-nums}
+  .sum{display:block;font-size:11.5px;color:var(--faint);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .meta{display:flex;align-items:center;gap:9px;flex:none;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .meta .st{color:var(--accent)}
+  .meta .mk{color:var(--info)}
+  .meta .dur{min-width:44px;text-align:end}
+  .iprog{position:absolute;bottom:0;inset-inline-start:0;height:2px;background:var(--warn)}
+
+  /* grid view */
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:.15s}
+  .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .card.watched{opacity:.6} .card.watched:hover{opacity:1}
+  .card.skipped{opacity:.38}
+  .tw{position:relative;aspect-ratio:16/9;background:var(--panel-2)}
+  .tw img{width:100%;height:100%;object-fit:cover;display:block}
+  .badge{position:absolute;top:7px;inset-inline-start:7px;background:rgba(0,0,0,.8);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700}
+  .badge.q{background:var(--accent);color:#1a1400}
+  .dur2{position:absolute;bottom:7px;inset-inline-end:7px;background:rgba(0,0,0,.85);border-radius:5px;padding:1px 6px;font-size:11px;font-variant-numeric:tabular-nums}
+  .seen{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,14,20,.5);font-size:28px;color:var(--ok)}
+  .cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .ctitle{font-size:14px;font-weight:600;line-height:1.4;margin:0;display:-webkit-box;
+    -webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px;font-size:11.5px;color:var(--faint)}
+  .pill{border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700;border:1px solid}
+  .pill.unwatched{color:var(--faint);border-color:var(--line)}
+  .pill.watching{color:var(--warn);border-color:rgba(217,139,34,.45);background:rgba(217,139,34,.1)}
+  .pill.watched{color:var(--ok);border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.1)}
+  .pill.skipped{color:var(--faint);border-color:var(--line)}
+  .tagrow{display:flex;gap:4px;flex-wrap:wrap}
+  .tag{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:11px;color:var(--dim)}
+
+  /* view switcher */
+  .vsw{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .vsw button{background:transparent;border:none;padding:5px 10px;font-size:13px;color:var(--faint);transition:.15s;line-height:1.4}
+  .vsw button+button{border-inline-start:1px solid var(--line)}
+  .vsw button:hover{background:var(--panel-2);color:var(--text)}
+  .vsw button.on{background:var(--accent-soft);color:var(--accent)}
+
+  /* table view */
+  .tblwrap{border:1px solid var(--line);border-radius:12px;overflow-x:auto;background:var(--panel)}
+  table.vt{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+  table.vt th{background:var(--panel-2);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--faint);font-weight:800;padding:9px 12px;text-align:start;white-space:nowrap;position:sticky;top:0;z-index:1}
+  table.vt td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:middle}
+  table.vt tbody tr{cursor:pointer;transition:.12s}
+  table.vt tbody tr:hover{background:var(--panel-2)}
+  table.vt tr.watched td{opacity:.62}
+  table.vt tr.skipped{opacity:.4}
+  table.vt tr.skipped .c-t{text-decoration:line-through}
+  .c-n{width:34px;color:var(--faint);font-variant-numeric:tabular-nums;text-align:center}
+  .c-q{width:44px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+  .c-t{font-weight:500;min-width:200px}
+  .c-t .sub2{display:block;font-size:11.5px;color:var(--faint);font-weight:400;margin-top:1px}
+  .c-d,.c-r,.c-m{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:center}
+  .c-d{width:66px;color:var(--dim)}
+  .c-r{width:66px;color:var(--accent)}
+  .c-m{width:58px;color:var(--info)}
+  .c-s{width:112px}
+  .c-x{min-width:170px;max-width:300px;color:var(--dim);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .empty{text-align:center;color:var(--dim);padding:60px 20px}
+
+  /* ============ drawer ============ */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:50;opacity:0;pointer-events:none;transition:.2s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;inset-inline-end:0;height:100vh;width:min(700px,100vw);background:var(--bg);border-inline-start:1px solid var(--line);z-index:51;transform:translateX(var(--slide));transition:transform .22s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+  .drawer.on{transform:none}
+  .d-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex:none}
+  .d-head .who{flex:1;font-size:12px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icon-btn{background:transparent;border:none;color:var(--dim);font-size:18px;padding:3px 9px;border-radius:7px;line-height:1;text-decoration:none}
+  .icon-btn:hover{background:var(--panel-2);color:var(--text)}
+  [dir="rtl"] #dPrev,[dir="rtl"] #dNext{transform:scaleX(-1)}
+  .player{aspect-ratio:16/9;width:100%;background:#000;flex:none}
+  .player iframe{width:100%;height:100%;border:0;display:block}
+  #playerBox{width:100%;height:100%}
+  .d-body{overflow-y:auto;padding:0 0 40px;flex:1}
+  .acts{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ibtn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;
+    font-size:12.5px;display:flex;align-items:center;gap:7px;transition:.15s;color:var(--dim)}
+  .ibtn:hover{background:var(--panel-3);color:var(--text)}
+  .ibtn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .ibtn .ic{font-size:14px}
+  .sumbox{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--accent);
+    border-radius:9px;padding:13px 15px;font-size:14.2px;line-height:1.85;white-space:pre-wrap}
+  .why{font-size:12.5px;color:var(--dim);border-inline-start:2px solid var(--line-2);
+    padding-inline-start:10px;margin:8px 0 2px;line-height:1.6}
+  .sumbox.miss{border-inline-start-color:var(--line-2);color:var(--dim);font-size:13px;line-height:1.7;white-space:normal}
+  .sumbox code{background:var(--panel-3);padding:1px 7px;border-radius:5px;font-size:12px;
+    font-family:ui-monospace,Consolas,monospace;direction:ltr;display:inline-block}
+  .srcline{font-size:11px;color:var(--faint);margin-top:9px;display:flex;gap:8px;flex-wrap:wrap}
+  .d-sec{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .d-title{font-size:16.5px;font-weight:700;margin:0 0 6px;line-height:1.45}
+  .qtag{display:inline-block;background:var(--accent);color:#1a1400;border-radius:6px;padding:1px 9px;font-size:12px;font-weight:800;margin-inline-end:8px;vertical-align:2px}
+  .kv{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--dim);margin-top:7px}
+  .kv b{color:var(--text);font-weight:600}
+  .label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:800;margin:0 0 9px;display:flex;align-items:center;gap:8px}
+  .label .count{background:var(--panel-2);border-radius:99px;padding:1px 7px;letter-spacing:0;text-transform:none;font-size:11px;color:var(--dim)}
+  .seg{display:flex;gap:5px;flex-wrap:wrap}
+  .seg .chip{padding:6px 13px;font-size:13px}
+  .star-pick{display:flex;gap:1px;align-items:center;margin-top:11px}
+  .star-pick button{background:none;border:none;font-size:21px;color:var(--line-2);padding:0 1px;line-height:1}
+  .star-pick button.on{color:var(--accent)}
+  .star-pick .clear{font-size:12px;color:var(--faint);margin-inline-start:9px}
+
+  textarea,.ti{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:14px;resize:vertical;line-height:1.65}
+  textarea:focus,.ti:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:7px;align-items:flex-start}
+  .row .ti{flex:1}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-inline-start:2px solid var(--info);border-radius:8px;padding:8px 11px;margin-bottom:7px;font-size:13.5px;display:flex;gap:9px;align-items:flex-start}
+  .note.comment{border-inline-start-color:var(--danger)}
+  .note .txt{flex:1;white-space:pre-wrap;word-break:break-word;cursor:text}
+  .note .txt:hover{color:#fff}
+  .note .when{font-size:10.5px;color:var(--faint);margin-top:3px}
+  .stamp{background:var(--accent-soft);color:var(--accent);border:none;border-radius:5px;padding:2px 7px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+  .stamp:hover{filter:brightness(1.3)}
+  .stamp.none{background:var(--panel-2);color:var(--faint)}
+  .del{background:none;border:none;color:var(--faint);font-size:15px;padding:0 3px;line-height:1;flex:none}
+  .del:hover{color:var(--danger)}
+  .desc{font-size:13px;color:var(--dim);white-space:pre-wrap;max-height:110px;overflow:hidden;line-height:1.65}
+  .desc.open{max-height:none}
+  .more{background:none;border:none;color:var(--info);font-size:12.5px;padding:6px 0 0}
+  .hint{font-size:11.5px;color:var(--faint);margin-top:7px}
+
+  #saveState{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  #saveState b{width:7px;height:7px;border-radius:99px;background:var(--faint);display:block}
+  #saveState.dirty b{background:var(--warn)} #saveState.saved b{background:var(--ok)} #saveState.err b{background:var(--danger)}
+
+  .banner{background:rgba(217,139,34,.12);border-bottom:1px solid rgba(217,139,34,.35);color:#e3b341;font-size:13px;padding:9px 20px;display:none}
+  .banner.on{display:block}
+  .banner code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-size:12px}
+
+  .toast{position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-3);border:1px solid var(--line-2);border-radius:9px;padding:9px 18px;font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:.2s}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:700px){
+    .head-in,main{padding-left:13px;padding-right:13px}
+    .pl-art{display:none}
+    .meta .mk,.meta .st{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="banner" id="banner"></div>
+
+<header>
+  <div class="head-in">
+    <div class="head-top">
+      <img class="pl-art" id="plArt" alt="">
+      <div class="pl-meta">
+        <h1 class="pl-title" id="plTitle" dir="auto">…</h1>
+        <div class="pl-sub" id="plSub"></div>
+      </div>
+      <div class="head-actions">
+        <div id="saveState"><b></b><span>—</span></div>
+        <button class="btn ghost sm" id="btnLang">EN</button>
+        <div class="vsw" id="viewSwitch">
+          <button data-view="outline">☰</button>
+          <button data-view="tiles">▦</button>
+          <button data-view="table">▤</button>
+        </div>
+        <button class="btn ghost sm" id="btnSheet"></button>
+        <button class="btn ghost sm" id="btnExport"></button>
+        <button class="btn ghost sm" id="btnImport"></button>
+        <input type="file" id="fileIn" accept="application/json" hidden>
+        <button class="btn primary sm" id="btnSave"></button>
+      </div>
+    </div>
+
+    <div class="resume" id="resume" hidden>
+      <span class="rk" id="rkLabel"></span>
+      <span class="rt" id="rTitle" dir="auto"></span>
+      <span class="rw" id="rWhen"></span>
+      <span class="go">›</span>
+    </div>
+
+    <div class="stats">
+      <div class="bar"><i class="w" id="barW"></i><i class="g" id="barG"></i></div>
+      <div class="stat"><b id="sWatched">0</b> <span id="lWatched"></span></div>
+      <div class="stat"><b id="sLeft">0</b> <span id="lLeft"></span></div>
+      <div class="stat"><b id="sTime">0h</b> <span id="lTime"></span></div>
+      <div class="stat"><b id="sNotes">0</b> <span id="lNotes"></span></div>
+    </div>
+
+    <div class="tools">
+      <input class="search" id="q">
+      <div class="chips" id="statusChips"></div>
+      <select id="sort"></select>
+      <select id="tagFilter"></select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="list"></div>
+  <div class="empty" id="empty" hidden></div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="d-head">
+    <button class="icon-btn" id="dPrev">‹</button>
+    <button class="icon-btn" id="dNext">›</button>
+    <div class="who" id="dWho"></div>
+    <a class="icon-btn" id="dOpen" target="_blank" rel="noopener">↗</a>
+    <button class="icon-btn" id="dClose">✕</button>
+  </div>
+  <div class="player" id="playerHost"></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<!-- Playlist data, embedded so this page is self-contained: it renders from
+     file:// and from any static host, with no server and no fetch. The project
+     directory this was published from stays the source of truth; re-run
+     publish_playlist.py after editing it there. -->
+<script type="application/json" id="seedData">{"generatedAt":"2026-08-22T01:30:10+00:00","playlists":[{"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"أسماء الله الحسنى","description":"اللهم أعنا على إتمام هذا العمل، و ارزقنا الاخلاص و التوفيق و السداد يا رب العباد... و تقبل منا و اغفر لنا تقصيرنا يا أرحم الراحمين","channelTitle":"Bissan ElBaz","thumbnail":"https://i.ytimg.com/vi/Jg4mLfJp20k/maxresdefault.jpg","itemCount":47}],"videos":[{"videoId":"Jg4mLfJp20k","position":0,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله اللطيف","description":"شرح مبسط لاسم الله \"اللطيف\"\nالمرجع: موسوعة أسماء الله الحسنى: محمد راتب النابلسي\nتوضيح: عندما نقول أن الله معنا طول الوقت فالمقصود أنه معنا بعلمه و ليس بذاته، لأن ذاته علية سبحانه...\nقال الله تعالى: \"وهو معكم أينما كنتم\" بمعنى لا تخفى عليه خافية.\n\nThe English version of this video:\nhttps://youtu.be/1rk2h94YXSU\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-10-08T09:27:42Z","thumbnail":"https://i.ytimg.com/vi/Jg4mLfJp20k/maxresdefault.jpg","durationSeconds":241,"duration":"4:01","definition":"hd","viewCount":722242,"likeCount":16024,"commentCount":0,"youtubeTags":["أسماء الله الحسنى، إسم الله اللطيف، اللطيف، الله، تعليم، إيمان، إسلام، شباب"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Jg4mLfJp20k&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"xnAZcMtq7WI","position":1,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله السلام","description":"شرح مبسط لإسم الله السلام\nFor the English version of this video click the link below\nhttps://youtu.be/Vpp_Uuk3HHk\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى \nوتحتوي على ٦ كتيبات (الخالق، المجيب، السلام، الودود ، الغني، البصير)\n\nالمجموعة الثانية\nتحتوي على ٦ كتيبات (الأحد، القدوس، الشافي، السميع، الحكيم،  الهادي)\n\nالمجموعة الثالثة\nتحتوي على ٦ كتيبات (القابض الباسط، الجبار، الحفيظ، الحليم، الحي، الفتاح)\n\nالمجموعة الرابعة:\nتحتوي على ٦ كتيبات (العليم، الواسع، المتكبر، الشكور، الحميد، الغفور)\n\nسلسلة حسنى متوفرة في الدول التالية\n\nالكويت:\nحزاية: hzaya.com\nتكوين: https://takweenkw.com\n\nدول الخليج:\nمكتبة جرير www.jarir.com \nمكتبة دار هبة: https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل: https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books: \nhttps://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nArabest: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\nحزاية: hzaya.com","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-11-05T09:24:38Z","thumbnail":"https://i.ytimg.com/vi/xnAZcMtq7WI/maxresdefault.jpg","durationSeconds":298,"duration":"4:58","definition":"hd","viewCount":440905,"likeCount":10411,"commentCount":505,"youtubeTags":["Islam","Allah","God","Quran","Education","إسلام","قرآن","تعليم","أطفال","عقيدة","أسماء الله الحسنى","الله","السلام","اسم الله السلام","الرحمن"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=xnAZcMtq7WI&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"sO8kYjJCoeM","position":2,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الشكور\"","description":"شرح مبسط لاسم الله \"الشكور\"\n\nThe English version of this video: \nhttps://youtu.be/Otq3eCQEKe8\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-11-08T21:04:12Z","thumbnail":"https://i.ytimg.com/vi/sO8kYjJCoeM/maxresdefault.jpg","durationSeconds":323,"duration":"5:23","definition":"hd","viewCount":383112,"likeCount":9084,"commentCount":0,"youtubeTags":["أسماء الله الحسنى، الله، الشكور، تعليم، أطفال، إسلام، عقيدة"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=sO8kYjJCoeM&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"gKTkOqd3LkI","position":3,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"\"الحفيظ\"","description":"شرح مبسط لاسم الله”الحفيظ\"\n\nThe English version of this video\"\nالنسخة الانجليزية من هذا المقطع\nhttps://youtu.be/3sPZg5MnyMw\n\nاختبار قصير في اسم الله الحفيظ\n\nhttps://docs.google.com/forms/d/1BgeYShMDWR7sH7avQvam3sCBV5BmPbiy_zkAU7FBnIs/edit\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-11-21T15:52:08Z","thumbnail":"https://i.ytimg.com/vi/gKTkOqd3LkI/maxresdefault.jpg","durationSeconds":285,"duration":"4:45","definition":"hd","viewCount":438681,"likeCount":9687,"commentCount":466,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=gKTkOqd3LkI&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"7XesrfEVvuE","position":4,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"السميع - The All-Hearing","description":"شرح مبسط لاسم الله السميع\nُEnglish version of this video:\nhttps://youtu.be/8q13IbTvzk8\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-12-04T21:29:01Z","thumbnail":"https://i.ytimg.com/vi/7XesrfEVvuE/maxresdefault.jpg","durationSeconds":239,"duration":"3:59","definition":"hd","viewCount":500729,"likeCount":10317,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=7XesrfEVvuE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"O0jrvODEDWA","position":5,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الحليم","description":"شرح مبسط لاسم الله \"الحليم\"\n\nإليكم رابط لاختبار بسيط عن محتوى المقطع\nجزى الله العاملين عليه خير الجزاء\n\nhttps://forms.gle/ENZcwLGQKqEUBRuh9\n\n\nEnglish version of this video:\nhttps://youtu.be/Xh0P2Exqh8w\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2019-12-19T13:30:13Z","thumbnail":"https://i.ytimg.com/vi/O0jrvODEDWA/maxresdefault.jpg","durationSeconds":223,"duration":"3:43","definition":"hd","viewCount":421019,"likeCount":9074,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=O0jrvODEDWA&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"IfJeCn65NPE","position":6,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الفتاح","description":"شرح مبسط لاسم الله \"الفتاح\" \nThe English version of this video:\nhttps://youtu.be/5Esgsp02RHM\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-01-01T17:50:39Z","thumbnail":"https://i.ytimg.com/vi/IfJeCn65NPE/maxresdefault.jpg","durationSeconds":210,"duration":"3:30","definition":"hd","viewCount":350643,"likeCount":8971,"commentCount":331,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=IfJeCn65NPE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"i3Dr4KIIcko","position":7,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"البصير\"","description":"شرح مبسط لاسم الله البصير\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-01-23T22:32:57Z","thumbnail":"https://i.ytimg.com/vi/i3Dr4KIIcko/maxresdefault.jpg","durationSeconds":240,"duration":"4:00","definition":"hd","viewCount":753831,"likeCount":15334,"commentCount":555,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=i3Dr4KIIcko&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"Deat17QKWEA","position":8,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الحكيم\"","description":"شرح مبسط لاسم الله \"الحكيم\"\nThe English version of this Video:\nhttps://youtu.be/AwFwQxWNFP4\n\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-03-12T00:29:05Z","thumbnail":"https://i.ytimg.com/vi/Deat17QKWEA/maxresdefault.jpg","durationSeconds":289,"duration":"4:49","definition":"hd","viewCount":455889,"likeCount":10787,"commentCount":436,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Deat17QKWEA&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"FVq1nmIqx2Y","position":9,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"الجبار","description":"شاهد شرح اسم  الله الجبار على رابط قناة الفيسبوك\nhttps://www.facebook.com/536383246403974/videos/871104010012124/\n\nأو على الانستجرام\nhttps://www.instagram.com/tv/B8gom2AHhaV/?utm_source=ig_web_copy_link\n\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-03-12T08:51:38Z","thumbnail":"https://i.ytimg.com/vi/FVq1nmIqx2Y/maxresdefault.jpg","durationSeconds":32,"duration":"0:32","definition":"hd","viewCount":130905,"likeCount":1649,"commentCount":75,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":false,"url":"https://www.youtube.com/watch?v=FVq1nmIqx2Y&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"s0yRzZEwH5k","position":10,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الحميد","description":"شرح مبسط لاسم الله الحميد\n\nThe English version of this video:\nالنسخة الانجليزية من هذا المقطع\nhttps://www.youtube.com/watch?v=mPwdbg2M87I&t=41s\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-04-11T17:00:53Z","thumbnail":"https://i.ytimg.com/vi/s0yRzZEwH5k/maxresdefault.jpg","durationSeconds":320,"duration":"5:20","definition":"hd","viewCount":348105,"likeCount":8877,"commentCount":456,"youtubeTags":["Names of Allah","Islam","Education","Allah","أسماء الله الحسنى","الحميد"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=s0yRzZEwH5k&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"vGZlvf_PXzo","position":11,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الغني\"","description":"شرح مبسط للكبار و الصغار لاسم الله \"الغني\"\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-05-14T22:12:39Z","thumbnail":"https://i.ytimg.com/vi/vGZlvf_PXzo/maxresdefault.jpg","durationSeconds":295,"duration":"4:55","definition":"hd","viewCount":419771,"likeCount":9916,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=vGZlvf_PXzo&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"A_QjiXdvcWI","position":12,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الهادي\"","description":"شرح مبسط لاسم الله الهادي و مفهوم الهداية للصغار و الكبار\n\n:لأن الإنسان خُلق للجنة... الله الهادي هداه بكل الطرق على مراحل\n1- خلقه بفطرة سليمة فهو مهيء لمهمته \n2- هداه هداية دلالة فأرسل له الكتب و الرسل\n3-  هداه هداية معونة، فوفقه و ساعده للوصول إلى الجنة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-06-15T00:50:42Z","thumbnail":"https://i.ytimg.com/vi/A_QjiXdvcWI/maxresdefault.jpg","durationSeconds":332,"duration":"5:32","definition":"hd","viewCount":388328,"likeCount":9416,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=A_QjiXdvcWI&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"vTuVxhxf_mo","position":13,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"المجيب\"","description":"شرح مبسط لاسم الله \"المجيب\"\n\n1- في صحيحي البخاري ومسلم \" عن أبي هريرة رضي الله عنه عن النبي (صلى الله عليه وسلم) قال: \" إذَا سَمِعْتُمْ نُهَاقَ الحَمِيرِ فَتَعَوَّذُوا بالله مِنَ الشَّيْطانِ، فإنَّهَا رأتْ شَيْطاناً، وَإذا سَمِعْتُمْ صِياحَ الدّيَكَةِ فاسْأَلُوا اللَّهُ مِنْ فَضْلِهِ فإنَّها رأتْ مَلَكاً \"\n\n2- عن أَبِي هُرَيْرَةَ قَالَ : قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : ( ادْعُوا اللَّهَ وَأَنْتُمْ مُوقِنُونَ بِالْإِجَابَةِ ، وَاعْلَمُوا أَنَّ اللَّهَ لَا يَسْتَجِيبُ دُعَاءً مِنْ قَلْبٍ غَافِلٍ لَاهٍ ) والحديث حسنه الألباني في صحيح الترمذي .\n\n3- عن أَبِي هُرَيْرَةَ - رضي الله عنه - قَالَ: قَالَ رَسُولُ اللَّهِ - صلى الله عليه وسلم -: \"إنَّ اللَّهَ طَيِّبٌ لَا يَقْبَلُ إلَّا طَيِّبًا، وَإِنَّ اللَّهَ أَمَرَ الْمُؤْمِنِينَ بِمَا أَمَرَ بِهِ الْمُرْسَلِينَ فَقَالَ تَعَالَى: \"يَا أَيُّهَا الرُّسُلُ كُلُوا مِنْ الطَّيِّبَاتِ وَاعْمَلُوا صَالِحًا\"، وَقَالَ تَعَالَى: \"يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِنْ طَيِّبَاتِ مَا رَزَقْنَاكُمْ\" ثُمَّ ذَكَرَ الرَّجُلَ يُطِيلُ السَّفَرَ أَشْعَثَ أَغْبَرَ يَمُدُّ يَدَيْهِ إلَى السَّمَاءِ: يَا رَبِّ! يَا رَبِّ! وَمَطْعَمُهُ حَرَامٌ، وَمَشْرَبُهُ حَرَامٌ، وَمَلْبَسُهُ حَرَامٌ، وَغُذِّيَ بِالْحَرَامِ، فَأَنَّى يُسْتَجَابُ لَهُ؟\".\n \nرَوَاهُ مُسْلِمٌ [رقم: 1015].\n\n4- عن  أبي هريرة أَنَّ رَسُول اللَّهِ ﷺ قَالَ: يُسْتجَابُ لأَحَدِكُم مَا لَم يعْجلْ: يقُولُ قَد دَعوتُ رَبِّي، فَلم يسْتَجبْ لِي. متفقٌ عَلَيْهِ.\nوفي رِوَايَةٍ لمُسْلِمٍ: لا يزَالُ يُسْتَجَابُ لِلعَبْدِ مَا لَم يدعُ بإِثمٍ، أَوْ قَطِيعةِ رَحِمٍ، مَا لَمْ يَسْتعْجِلْ قِيلَ: يَا رسُولَ اللَّهِ مَا الاسْتِعْجَالُ؟ قَالَ: يَقُولُ: قَدْ دعَوْتُ، وَقَدْ دَعَوْتُ فَلَم أَرَ يَسْتَجِيبُ لي، فَيَسْتَحْسِرُ عِنْد ذَلِكَ، ويَدَعُ الدُّعَاءَ .\n \n5- وقد ثبت عَنْ أَبِي سَعِيدٍ الخدري رضي الله عنه ، أَنَّ النَّبِيَّ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ قَالَ : ( مَا مِنْ مُسْلِمٍ يَدْعُو بِدَعْوَةٍ لَيْسَ فِيهَا إِثْمٌ ، وَلَا قَطِيعَةُ رَحِمٍ ، إِلَّا أَعْطَاهُ اللهُ بِهَا إِحْدَى ثَلَاثٍ : إِمَّا أَنْ تُعَجَّلَ لَهُ دَعْوَتُهُ ، وَإِمَّا أَنْ يَدَّخِرَهَا لَهُ فِي الْآخِرَةِ ، وَإِمَّا أَنْ يَصْرِفَ عَنْهُ مِنَ السُّوءِ مِثْلَهَا . قَالُوا : إِذًا نُكْثِرُ . قَالَ : اللهُ أَكْثَرُ ) .\nرواه أحمد في \" المسند \" (17/ 213)\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.comسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-07-20T22:53:44Z","thumbnail":"https://i.ytimg.com/vi/vTuVxhxf_mo/maxresdefault.jpg","durationSeconds":305,"duration":"5:05","definition":"hd","viewCount":427081,"likeCount":12597,"commentCount":561,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=vTuVxhxf_mo&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"DwnehBUmGA4","position":14,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"الأحد - الإخلاص","description":"شرح مبسط لمفهوم الاخلاص من خلال اسم الله الأحد\n\n  يرجى التنويه على أننا ذكرنا في المقطع أن إخلاص النية لله وحده هي الطريقة الوحيدة التي نضمن بها الأجرلأنها الطريقة الأحوط و الأسلم و المقصد الأسمى من أعمالنا...\n:أما عن العبادات التي يقصد منها المنفعة الدنيوية: كالصدقة من أجل الشفاء و الاستغفار من أجل توسعة الرزق...\nفمن العلماء من أجازه على اعتباره توسل لله و لجوء إليه..\nو منهم من قال أن النية في الأصل يجب أن تكون لله و أما المنافع فتأتي تبعاً...\n.و منهم من قال انه اذا تعبد من أجل الرزق، فإن الرزق المتحصل يكون هو أجره و لا شيء له في الآخرة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-08-22T20:54:07Z","thumbnail":"https://i.ytimg.com/vi/DwnehBUmGA4/maxresdefault.jpg","durationSeconds":295,"duration":"4:55","definition":"hd","viewCount":663857,"likeCount":18492,"commentCount":653,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=DwnehBUmGA4&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"aPho44Fh0i4","position":15,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الخالق\"","description":"شرح مبسط لاسم الله الخالق الخلاق\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-09-24T14:26:33Z","thumbnail":"https://i.ytimg.com/vi/aPho44Fh0i4/maxresdefault.jpg","durationSeconds":327,"duration":"5:27","definition":"hd","viewCount":524109,"likeCount":13695,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=aPho44Fh0i4&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"hRZk-I-fI5Q","position":16,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الودود","description":"شرح مبسط لاسم الله الودود\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-10-25T02:33:58Z","thumbnail":"https://i.ytimg.com/vi/hRZk-I-fI5Q/maxresdefault.jpg","durationSeconds":363,"duration":"6:03","definition":"hd","viewCount":578617,"likeCount":17264,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=hRZk-I-fI5Q&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"HUFSuy8rrjE","position":17,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"الشافي\"","description":"كيف يشفينا الله؟\nو ما وظيفة الدواء إذاً؟\nشرح مبسط لاسم الله الشافي للصغار و الكبار\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى \nوتحتوي على ٦ كتيبات (الخالق، المجيب، السلام، الودود ، الغني، البصير)\nhttps://hzaya.com/product/husna-series-6-stories/\n\nالمجموعة الثانية\nتحتوي على ٦ كتيبات (الأحد، القدوس، الشافي، السميع، الحكيم،  الهادي)\nhttps://hzaya.com/product/husna-2-series-6-stories/\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-11-30T14:49:29Z","thumbnail":"https://i.ytimg.com/vi/HUFSuy8rrjE/maxresdefault.jpg","durationSeconds":367,"duration":"6:07","definition":"hd","viewCount":665665,"likeCount":17058,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=HUFSuy8rrjE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"zn2shI-dP4k","position":18,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله القدوس","description":"، شرح مبسط لاسم الله \"القدوس\" و مفهوم البدعة... ليس للصغار فقط\nالله قدوس في ذاته... و لا شيء مقدس إلا أن يقدسه الله\n\nسامحونا يا جماعة على علو الصوت... وطوا الصوت هالمرة لا تعلوه :)\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2020-12-28T19:17:07Z","thumbnail":"https://i.ytimg.com/vi/zn2shI-dP4k/maxresdefault.jpg","durationSeconds":474,"duration":"7:54","definition":"hd","viewCount":425561,"likeCount":11437,"commentCount":0,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=zn2shI-dP4k&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"z2yNDMJRoTE","position":19,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله القابض الباسط","description":"شرح مبسط لاسم الله القابض الباسط للأطفال و الكبار\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-01-30T22:06:16Z","thumbnail":"https://i.ytimg.com/vi/z2yNDMJRoTE/maxresdefault.jpg","durationSeconds":411,"duration":"6:51","definition":"hd","viewCount":2519184,"likeCount":85891,"commentCount":3917,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=z2yNDMJRoTE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"iFfSdeYPFjw","position":20,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الغفور","description":"اللهم اغفر لنا ما قدَّمنا، وما أخرنا، وما أسررنا، وما أعلنا، وما أسرفنا، وما أنت أعلم به منا\nشرح مبسط لاسم الله الغفور - ليس للصغار فقط\n\nThe English dubbed video:\nhttps://youtu.be/JjiZ2Cwft5Q\n\n\nملحوظة : بالنسبة للمثال المذكور في المقطع عن السيدة التي ترفض مشاركة الآخرين في عملها...\nيرجى العلم بأن الاستئثار بالعمل بحد ذاته ليس ذنبًا...\nو أننا نعلم بأن الله قد جازى المرأة الراغبة في المشاركة على نيتها.\n\nو إنما الاستغفار كان عن الدوافع الخفية التي تؤدي لمثل هذا الاستئثار...\nكالجهل بسعة فضل الله، و شح النفس، و عدم تطبيق أحاديث النبي (لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه)  و عدم الاكتراث بمشاعر الآخرين...\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-03-06T23:53:59Z","thumbnail":"https://i.ytimg.com/vi/iFfSdeYPFjw/maxresdefault.jpg","durationSeconds":412,"duration":"6:52","definition":"hd","viewCount":1606543,"likeCount":31713,"commentCount":1703,"youtubeTags":["Islam","Allah","Names of Allah","The Forgiving"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=iFfSdeYPFjw&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"Gej-llE4cCw","position":21,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الحي","description":"ما الفرق بين حياة الله و حياة الخلق؟\nالحلقة 22:\nشرح مبسط لاسم الله الحي \n\nالنسخة الانجليزية من هذا المقطع:\nhttps://youtu.be/eo3E1iVRb_Y\n\n\nمقطع المسلمة التي تتلفظ بالشهادة (مرخص بإعادة الاستخدام creative commons)\nhttps://youtu.be/MHz5XSeGmX0\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى \nوتحتوي على ٦ كتيبات (الخالق، المجيب، السلام، الودود ، الغني، البصير)\nhttps://hzaya.com/product/husna-series-6-stories/\n\nالمجموعة الثانية\nتحتوي على ٦ كتيبات (الأحد، القدوس، الشافي، السميع، الحكيم،  الهادي)\nhttps://hzaya.com/product/husna-2-series-6-stories/\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-03-29T23:29:02Z","thumbnail":"https://i.ytimg.com/vi/Gej-llE4cCw/maxresdefault.jpg","durationSeconds":400,"duration":"6:40","definition":"hd","viewCount":940502,"likeCount":24997,"commentCount":1341,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Gej-llE4cCw&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"TseoqEbr1NA","position":22,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله \"العليم\"","description":"تظن أنك تعرف نفسك... لكن العليم أعلم بك منك...\nالحلقة 23: اسم الله العليم\n\nشرح مبسط لاسم الله العليم لجميع أفراد الأسرة\n\nشكر خاص لضيفة الحلقة: سيلا الزعبي 😊\n\nThe English dubbed video:\nhttps://youtu.be/eo3E1iVRb_Y\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\n\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-05-09T06:45:34Z","thumbnail":"https://i.ytimg.com/vi/TseoqEbr1NA/maxresdefault.jpg","durationSeconds":457,"duration":"7:37","definition":"hd","viewCount":577967,"likeCount":16462,"commentCount":0,"youtubeTags":["Islam","Allah","Names of Allah","Education"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=TseoqEbr1NA&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"UuS7ZNbQdBE","position":23,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله النصير","description":"ألسنا على الحق؟ أليسوا على الباطل؟\nلم لا ينصرنا الله؟\nالحلقة 24: اسم الله النصير\nشرح مبسط لاسم الله النصير للصغار\n\nThe English version of this video\nhttps://youtu.be/kJREaWanuC0\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-07-02T21:28:52Z","thumbnail":"https://i.ytimg.com/vi/UuS7ZNbQdBE/maxresdefault.jpg","durationSeconds":729,"duration":"12:09","definition":"hd","viewCount":854927,"likeCount":26657,"commentCount":0,"youtubeTags":["Islam","Allah","Names Of Allah","An-Naseer","The Helper","Palestine"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=UuS7ZNbQdBE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"_dy0tWvQ5IM","position":24,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الواسع","description":"كيف يجعلك اسم الله الواسع، تعيش حياتك بشكل أفضل؟\nشاهد الحلقة 25:\nاسم الله الواسع\nشرح مبسط لاسم الله الواسع للصغار\n\nThe English Version of this episode:\nالنسخة الانجليزية من هذا المقطع\nhttps://www.youtube.com/watch?v=bUz5QCrSpF8\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-09-06T00:01:11Z","thumbnail":"https://i.ytimg.com/vi/_dy0tWvQ5IM/maxresdefault.jpg","durationSeconds":518,"duration":"8:38","definition":"hd","viewCount":847752,"likeCount":26168,"commentCount":1387,"youtubeTags":["Islam","Education","Allah","Names of Allah","Names of God","All Encompassing","Al Waasi'"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=_dy0tWvQ5IM&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"VqJUKG5DAkw","position":25,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله المتكبر","description":"و إن لله أسماء مع جلالها ، تدخل السكينة في القلوب...\nالحلقة 26: اسم الله المتكبر\nشرح مبسط لاسم الله المتكبر في 8 دقائق...\n\nThe English Version of this Video:\nالنسخة الانجليزية لهذا المقطع\nhttps://youtu.be/XFVR3-sLJbw\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2021-10-27T23:19:26Z","thumbnail":"https://i.ytimg.com/vi/VqJUKG5DAkw/maxresdefault.jpg","durationSeconds":487,"duration":"8:07","definition":"hd","viewCount":705983,"likeCount":19112,"commentCount":1124,"youtubeTags":["Islam","Names of Allah","Mutakabbir","Allah","Names of God"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=VqJUKG5DAkw&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"BxFjPEa476c","position":26,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله المصور","description":"أبدع الله في تصوير خلقه لنعرفه و نسبحه، لا لنصنف أنفسنا بناءً على صورنا...\nالحلقة 27 من اسماء الله الحسنى:\n\"اسم الله المصور\"\nشرح مبسط لجميع أفراد الأسرة\n\nاختبار بسيط لمحتوى الحلقة\nجزى الله العاملين عليه خير الجزاء\nhttps://forms.gle/TyJTKjJfeuHiDVFo9\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-01-03T15:59:28Z","thumbnail":"https://i.ytimg.com/vi/BxFjPEa476c/maxresdefault.jpg","durationSeconds":823,"duration":"13:43","definition":"hd","viewCount":1128411,"likeCount":23901,"commentCount":1363,"youtubeTags":["أسماء الله الحسنى،","Islam","Names of Allah","Allah","God","Names of God"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=BxFjPEa476c&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"b-G-cU0rqzI","position":27,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله البارئ","description":"نعمة الوجود... كيف نستشعرها و نحمد البارئ عليها؟\nالحلقة 28:\nشرح مبسط لاسم الله البارئ لجميع أفراد الأسرة.\n\nThe English version of this video\nالنسخة الانجليزية من المقطع\nhttps://youtu.be/TpMDCA-6Qxs\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-02-12T21:07:08Z","thumbnail":"https://i.ytimg.com/vi/b-G-cU0rqzI/maxresdefault.jpg","durationSeconds":491,"duration":"8:11","definition":"hd","viewCount":596488,"likeCount":16656,"commentCount":867,"youtubeTags":["Islam","Allah","God","Education","Names of Allah","Barii","Originator"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=b-G-cU0rqzI&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"g3bOKqi7pVQ","position":28,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله السبوح","description":"هل سألت نفسك من قبل ماذا تعني كلمة \"سبحان الله\"؟\nو كيف يحسن التسبيح جودة حياتنا؟\nالحلقة 29 من أسماء الله الحسنى:\nاسم الله السبوح\n. هذا الفيديو العائلي يشرح اسم الله بأسلوب مبسط\n\nThe English version of this video:\nرابط النسخة الانجليزية من هذا المقطع\nhttps://www.youtube.com/watch?v=g3bOKqi7pVQ&t=13s\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-04-28T12:19:37Z","thumbnail":"https://i.ytimg.com/vi/g3bOKqi7pVQ/maxresdefault.jpg","durationSeconds":542,"duration":"9:02","definition":"hd","viewCount":596203,"likeCount":14221,"commentCount":725,"youtubeTags":["Islam","Names of Allah","Names of God","Allah","God","Education","Religion","Subbouh","Perfect"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=g3bOKqi7pVQ&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"Dd3gbomx5KE","position":29,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الرزاق","description":"ما هو الرزق؟ و كيف يصلنا؟\nالحلقة 30 من أسماء الله الحسنى\nاسم الله الرزاق \nفيديو مبسط لجميع أفراد الأسرة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-06-17T12:52:30Z","thumbnail":"https://i.ytimg.com/vi/Dd3gbomx5KE/maxresdefault.jpg","durationSeconds":660,"duration":"11:00","definition":"hd","viewCount":871993,"likeCount":20826,"commentCount":1088,"youtubeTags":["Islam","Names of Allah","Names of God","Provider","ArRazzaq","الرزاق","Allah","Religion","عقيدة","الله"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=Dd3gbomx5KE&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"rH2mKdxXb8s","position":30,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الحق","description":"لماذا نحن مسلمون؟\nكيف نعرف أننا على صواب؟\nوماذا عن الأسئلة التي لا أجوبة لها؟\nالحلقة 31 من أسماء الله الحسنى\nاسم الله الحق\nشرح مبسط لاسم الله الحق لجميع أفراد الأسرة\n\nThe English version of this video:\nرابط النسخة الانجليزية من هذا المقطع:\nhttps://youtu.be/pcPSmoXv-sE\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-08-10T09:19:09Z","thumbnail":"https://i.ytimg.com/vi/rH2mKdxXb8s/maxresdefault.jpg","durationSeconds":497,"duration":"8:17","definition":"hd","viewCount":453697,"likeCount":12828,"commentCount":746,"youtubeTags":["Names of Allah","أسماء الله الحسنى","بيسان الباز","اسم الله الحق","الله","الحق","عقيدة","تعليم","إسلام","Islam","Names of God","Allah","The Truth","Al-Haqq"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=rH2mKdxXb8s&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"2Jwe5RmzLD8","position":31,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله المؤمن","description":"ألسنا نحن المؤمنون؟ \nإذا فلماذا الله من أسماءه المؤمن؟\nماذا يعني هذا الاسم في حق الله، و كيف يؤثر فينا؟\nالحلقة 32 من أسماء الله الحسنى\n\"اسم الله المؤمن\"\nشرح مبسط لجميع أفراد الأسرة\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2022-10-31T15:35:09Z","thumbnail":"https://i.ytimg.com/vi/2Jwe5RmzLD8/maxresdefault.jpg","durationSeconds":571,"duration":"9:31","definition":"hd","viewCount":538045,"likeCount":12878,"commentCount":800,"youtubeTags":["Islam","Allah","Names of Allah","God","Al Mu'min","AlMumin","The Giver of Security","Education","Religion"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=2Jwe5RmzLD8&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ypz7_DCpoB4","position":32,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الكبير","description":"بدأت هذه الحلقة بالحديث الشريف \"لا تغضب\"\nفما علاقة اسم الله الكبير بعدم الغضب؟\nو ما هي فائدة التكبير؟\nو ما سبب ارتباطه بالعبادات؟\n\nالحلقة 33: اسم الله الكبير\nشرح مبسط لاسم الله الكبير لجميع أفراد الأسرة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2023-01-06T10:20:50Z","thumbnail":"https://i.ytimg.com/vi/ypz7_DCpoB4/maxresdefault.jpg","durationSeconds":565,"duration":"9:25","definition":"hd","viewCount":657676,"likeCount":16427,"commentCount":1001,"youtubeTags":["Islam","Youth","Religion","Education","Allah","God","Names of Allah","Allahu Akbar","Allah is Greatest","The Grand","The Great"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=ypz7_DCpoB4&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"lizoPTxhsXo","position":33,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الرؤوف","description":"كيف يتناسب اسم الله الرؤوف مع أحداث الزلازل و الكوارث التي تقع في الأرض؟\nما هي الطريقة الصحيحة لفهم أفعال الله؟\n\nالحلقة 34 من أسماء الله الحسنى:\nاسم الله الرؤوف\nشرح مبسط لجميع أفراد الأسرة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2023-03-19T01:07:46Z","thumbnail":"https://i.ytimg.com/vi/lizoPTxhsXo/maxresdefault.jpg","durationSeconds":777,"duration":"12:57","definition":"hd","viewCount":537960,"likeCount":13359,"commentCount":896,"youtubeTags":["Islam","Allah","Names of Allah","God","Names of God","ar-Raouf","the most kind","Earthquake"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=lizoPTxhsXo&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"_9KSMrXUWno","position":34,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الوكيل","description":"هل التوكل شرط من شروط النجاح؟\nما هو التوكل أصلا؟ و ما الفائدة منه؟\nالحلقة 35 من أسماء الله الحسنى\nاسم الله الوكيل\nشرح مبسط لجميع أفراد الأسرة\n\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2023-06-16T09:39:50Z","thumbnail":"https://i.ytimg.com/vi/_9KSMrXUWno/maxresdefault.jpg","durationSeconds":912,"duration":"15:12","definition":"hd","viewCount":711959,"likeCount":17571,"commentCount":1120,"youtubeTags":["Islam","Education","Allah","God","Names of Allah","AlWakeel","Al-Wakeel","Al Wakeel","The Disposer of Affairs"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=_9KSMrXUWno&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"capsyS_2JnQ","position":35,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله القوي","description":"ما معنى لا حول ولا قوة إلا بالله\nو إذا كان الله من اسماءه القوي؟ فلماذا لا نرى قوة المسلمين؟\nيا ترى هل عبدالعزيز هو السبب😉؟!؟! \nالحلقة ٣٦ من أسماء الله الحسنى\n\"اسم الله القوي\"\nشرح مبسط لجميع أفراد الأسرة","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2023-09-08T16:40:39Z","thumbnail":"https://i.ytimg.com/vi/capsyS_2JnQ/maxresdefault.jpg","durationSeconds":776,"duration":"12:56","definition":"hd","viewCount":363994,"likeCount":9180,"commentCount":628,"youtubeTags":["إسلام","الله","عقيدة","أسماء الله الحسنى","اسم الله القوي","القوي","تربية","تعليم"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=capsyS_2JnQ&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"kpZQjR0xOlo","position":36,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله القدير","description":"أليس الله قادرا على كل شيء؟\nلماذا لا يهزم الله الكفار؟\nما الفرق بين اسم الله القادر والقدير؟\nولماذا بعض الناس ابتلائهم أشد من الآخرين؟\nالحلقة ٣٧ من أسماء الله الحسنى:\nاسم الله القادر القدير\nشرح مبسط مناسب لجميع أفراد الأسرة\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2023-11-20T09:38:23Z","thumbnail":"https://i.ytimg.com/vi/kpZQjR0xOlo/maxresdefault.jpg","durationSeconds":955,"duration":"15:55","definition":"hd","viewCount":604970,"likeCount":19465,"commentCount":1420,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=kpZQjR0xOlo&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"QQ3zaNg3Hz0","position":37,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الأول","description":"كيف تمزق بنطال عبد الهادي الجديد؟\nوما قصة شادي وفادي وهادي؟\nوما علاقة هذا كله باسم الله الأول؟\nالحلقة ٣٨ من أسماء الله الحسنى\nشرح مبسط لاسم الله الأول يناسب  جميع أفراد الأسرة.\n\nرابط سلسلة \"رحلة اليقين\" للدكتور إياد قنيبي\nhttps://youtube.com/playlist?list=PL56IcDjrf3YJr__TEOJ2UOv3jCzht1_yc&si=yZ8TAgIInhbItIJ-\n\nللحصول على كتب سلسلة حسنى إصدار مكتبة حزاية\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com\n\n\n\nرابط قناة الانستجرام instagram \nhttps://instagram.com/i_am_a_muslim_child?igshid=MzRlODBiNWFlZA==\n\nرابط قناة التلجرام telegram\nhttps://t.me/Iamamuslimchild\n\nرابط قناة الفيسبوك facebook\nhttps://www.facebook.com/profile.php?id=100064855111635&mibextid=LQQJ4d","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2024-03-30T02:22:38Z","thumbnail":"https://i.ytimg.com/vi/QQ3zaNg3Hz0/maxresdefault.jpg","durationSeconds":951,"duration":"15:51","definition":"hd","viewCount":722529,"likeCount":13811,"commentCount":944,"youtubeTags":["إسلام","عقيدة","الله","الأول","أصل الخلق","نظرية التطور","قانون السببية","اسم الله الأول","أسماء الله الحسنى"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=QQ3zaNg3Hz0&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"McFCv5yiTUs","position":38,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الآخر","description":"كيف يساعدنا اسم الله الآخر في تنظيم حياتنا؟\nوما هي التمارين التي تساعدنا على تحقيق هذا الاسم في قلوبنا؟\nالحلقة ٣٩ من أسماء الله الحسنى:\nاسم الله الآخر.\nشرح مبسط لجميع أفراد الأسرة.\n\n\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2024-07-30T12:23:08Z","thumbnail":"https://i.ytimg.com/vi/McFCv5yiTUs/maxresdefault.jpg","durationSeconds":959,"duration":"15:59","definition":"hd","viewCount":435897,"likeCount":13185,"commentCount":853,"youtubeTags":["Islam","Quran","Allah","Education","99 Names of Allah","Names of allah","Al Akhir","The Last","إسلام","عقيدة","أسماء الله الحسنى","الله","اسم الله الآخر","أطفال","تعليم"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=McFCv5yiTUs&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"YuqqoGdIVJc","position":39,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الظاهر","description":"إن لله أسماء لا نستعملها كثيرا... \nولو أننا عرفنا معناها لتعجبنا! كيف كنا نعيش بدونها؟!\nما معنى اسم الله الظاهر؟\nوما علاقته بالدعاء والطمأنينة؟\nالحلقة ٤٠ من أسماء الله الحسنى:\nاسم الله الظاهر.\nحلقة مناسبة لجميع أفراد الأسرة.\n\nسلسلة حسنى:\nالمجموعة الأولى: تحتوي على ٦ كتيبات (السلام، الغني، الودود، البصير الخالق، المجيب)\nالمجموعة الثانية: تحتوي على ٦ كتيبات (الهادي، الشافي، السميع، الأحد، القدوس، الحكيم)\nالمجموعة الثالثة: تحتوي على ٦ كتيبات (القابض الباسط، الحي، الفتاح، الحفيظ، الجبار، الحليم)\nالمجموعة الرابعة: تحتوي على ٦ كتيبات (الغفور، العليم، المتكبر، الواسع، الشكور، الحميد)\n\nسلسلة حسنى متوفرة في الدول التالية:\nالكويت:\nحزاية: https://www.hzaya.com\nتكوين: https://takweenkw.com\n\n\nدول الخليج:\nمكتبة جرير https://www.jarir.com \nمكتبة دار هبة:https://darheba.com\nمساحة: https://mesahabooks.com\n\nالسعودية: \nمكتبة بدائل https://badaelkids.com\nمكتبة فسيلة: https://darfaseelah.com\nمكتبة السهاد: https://salla.sa/alsuhad\n\nالإمارات:\nأمازون https://www.amazon.ae\nkinokuniya books : https://uae.kinokuniya.com\n\nسلطنة عمان: \nمهرة: http://muhra.om\n\nفلسطين\nمكتبة ضاد:https://daadstore.com\nمكتبة دحنون: https://dahnon.co.il\n\nمصر:\nكدزوتك: https://www.kidsotic.com\n\nالأردن:\nدار الحياة: https://daralhayat-jo.com\n\nألمانيا:\nمكتبة سام: https://sam-books.com\nأرابست: https://www.arabest-online.com\n\nالتوصيل لجميع الدول:\nسند للكتب: https://sanadbooks.com","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2024-12-17T11:43:01Z","thumbnail":"https://i.ytimg.com/vi/YuqqoGdIVJc/maxresdefault.jpg","durationSeconds":865,"duration":"14:25","definition":"hd","viewCount":244601,"likeCount":6838,"commentCount":517,"youtubeTags":["اسم الله الظاهر","أسماء الله الحسنى","إسلام","عقيدة","الله","أسماء الله","الظاهر","الباطن","الأول","الآخر","الرحمن","الرحيم","تربية","مسلم"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=YuqqoGdIVJc&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"G_WjXEVk7u0","position":40,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الباطن","description":"هل يحاسبنا الله على أفكارنا؟\nوكيف يكون الله ظاهرًا وباطناً في نفس الوقت؟\n\nالحلقة ٤١ من أسماء الله الحسنى.\nاسم الله الباطن.\nشرح مبسط لجميع أفراد الأسرة.","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2025-03-08T01:47:21Z","thumbnail":"https://i.ytimg.com/vi/G_WjXEVk7u0/maxresdefault.jpg","durationSeconds":873,"duration":"14:33","definition":"hd","viewCount":386490,"likeCount":19416,"commentCount":1224,"youtubeTags":["إسلام","عقيدة","أسماء الله الحسنى","اسم الله الظاهر","الظاهر","الباطن","الله"],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=G_WjXEVk7u0&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ZYtam3rKIQw","position":41,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الرب - الجزء الأول","description":"ربنا المصلح المربي، كيف يربينا؟ وكيف يعلمنا؟ وكيف يحاسبنا في الدنيا؟\nتعالوا معنا لنتعلم مراحل تربية الله عز وجل لعباده.\nالحلقة ٤٣ من أسماء الله الحسنى\n\"اسم الله الرب\"\nشرح مبسط لجميع أفراد الأسرة\n\nفي هذا المقطع:\n00:00 المقدمة\n1:53 تعريف اسم الله الرب\n4:18 لماذا نعبد الله؟\n6:42 مرحلة الإعداد\n9:22 مرحلة التعليم\n13:43 الامتحان\n16:35 المكافأة الدنيوية","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2025-10-22T08:54:45Z","thumbnail":"https://i.ytimg.com/vi/ZYtam3rKIQw/maxresdefault.jpg","durationSeconds":1602,"duration":"26:42","definition":"hd","viewCount":161215,"likeCount":4523,"commentCount":324,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=ZYtam3rKIQw&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"gZorZNFT6UM","position":42,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله الرب - الجزء الثاني","description":"تتمة لمراحل تربية الرب عز وجل لعباده.\nمن العقاب إلى المرحلة الأخيرة\nاللهم اجعل الحياة زيادة لنا في كل خير\nواجعل الموت راحة لنا من كل شر","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2025-10-20T18:23:39Z","thumbnail":"https://i.ytimg.com/vi/gZorZNFT6UM/maxresdefault.jpg","durationSeconds":873,"duration":"14:33","definition":"hd","viewCount":74261,"likeCount":2784,"commentCount":330,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=gZorZNFT6UM&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"jlObRg9o6oE","position":43,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"[unavailable video]","unavailable":true,"url":"https://www.youtube.com/watch?v=jlObRg9o6oE","durationSeconds":0,"duration":"","thumbnail":"","channelTitle":"","description":"","publishedAt":"","viewCount":0,"likeCount":0,"commentCount":0,"youtubeTags":[],"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"LXVJd-SkwVs","position":44,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"[unavailable video]","unavailable":true,"url":"https://www.youtube.com/watch?v=LXVJd-SkwVs","durationSeconds":0,"duration":"","thumbnail":"","channelTitle":"","description":"","publishedAt":"","viewCount":0,"likeCount":0,"commentCount":0,"youtubeTags":[],"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"cKpw_pvCcg4","position":45,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"[unavailable video]","unavailable":true,"url":"https://www.youtube.com/watch?v=cKpw_pvCcg4","durationSeconds":0,"duration":"","thumbnail":"","channelTitle":"","description":"","publishedAt":"","viewCount":0,"likeCount":0,"commentCount":0,"youtubeTags":[],"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"tgP81J4ujJ0","position":46,"playlistId":"PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","title":"اسم الله المالك","description":"اسم الله المالك، يفتح لك باب عبادة عظيمة، هي من أكبر وأعظم العبادات! وهي عبادة الرضا بقضاء الله.\nفكيف تتحقق هذه العبادة؟\nوما هي علامات عدم الرضا؟\nوهل يتناقض الرضا مع الدعاء من أجل التحسين؟\nوهل يجب علي أن أرضى بمعاصي العباد؟\n\n\n\nالحلقة 46 من أسماء الله الحسنى\n\"اسم الله المالك\"\nشرح مبسط لجميع أفراد الأسرة","channelTitle":"Bissan ElBaz","channelId":"UCkD7IZ3DZUeH-bdNAGUyIYw","publishedAt":"2026-07-27T11:06:21Z","thumbnail":"https://i.ytimg.com/vi/tgP81J4ujJ0/maxresdefault.jpg","durationSeconds":1744,"duration":"29:04","definition":"hd","viewCount":73421,"likeCount":4101,"commentCount":598,"youtubeTags":[],"audioLanguage":"ar","hasCaptions":true,"url":"https://www.youtube.com/watch?v=tgP81J4ujJ0&list=PLcitu3ZrbYgRXYg5_q5LTJHFeinSnXZc6","unavailable":false,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0}]}</script>
+<script>
+"use strict";
+
+/* ==================================================================== i18n */
+const T = {
+  ar:{
+    search:"ابحث في العناوين والملاحظات والخلاصات…",
+    all:"الكل", unwatched:"لم يُشاهد", watching:"قيد المشاهدة", watched:"تمت المشاهدة",
+    skipped:"متجاوَز", starred:"★ مميّز", noted:"له ملاحظات",
+    watchedL:"مُشاهَد", leftL:"متبقٍ", timeL:"من الوقت", notesL:"موثّق",
+    resume:"أكمل", start:"ابدأ", at:"عند",
+    save:"حفظ", exp:"تصدير", imp:"استيراد", sheet:"ورقة المذاكرة",
+    status:"الحالة", summary:"الخلاصة", annotations:"ملاحظات موقّتة",
+    comments:"تعليقات", yourTags:"وسومك", ytTags:"وسوم يوتيوب", description:"الوصف",
+    add:"إضافة", star:"☆ تمييز", starred2:"★ مميّز", clear:"مسح",
+    sumPh:"ما خلاصة هذا الدرس بكلماتك؟", annPh:"ملاحظة عند لحظة معيّنة…",
+    cmtPh:"فكرة حول الفيديو ككل…", tagPh:"أضف وسمًا ثم Enter",
+    noAnn:"لا ملاحظات بعد.", noCmt:"لا تعليقات بعد.", noTags:"لا وسوم.",
+    annHint:"يُرفق وقت التشغيل الحالي تلقائيًا. اضغط على نص الملاحظة لتعديله.",
+    resumeAt:"نقطة الاستئناف:", progHint:"يُحفظ موضع التشغيل أثناء المشاهدة.",
+    more:"عرض المزيد", less:"عرض أقل", empty:"لا نتائج مطابقة.",
+    markThrough:"تحديد كل ما سبق كمُشاهَد",
+    long:"المدة", views:"مشاهدة", likes:"إعجاب", ytc:"تعليق يوتيوب",
+    published:"نُشر في", watchedOn:"شوهد في", autoplay:"تشغيل التالي تلقائيًا",
+    sortPos:"ترتيب الدورة", sortPosR:"عكس الترتيب", sortNew:"الأحدث", sortOld:"الأقدم",
+    sortLong:"الأطول", sortShort:"الأقصر", sortViews:"الأكثر مشاهدة",
+    sortRate:"الأعلى تقييمًا", sortNotes:"الأكثر توثيقًا", allTags:"كل الوسوم",
+    savedTo:"محفوظ في data.json", unsaved:"غير محفوظ", localOnly:"محليًا فقط",
+    secs:{intro:"المقدمة", lesson:"الدروس التأسيسية", shubha:"الشبهات", extra:"ملحق"},
+    sheetTitle:"ورقة المذاكرة", noNotes:"لا توجد ملاحظات بعد — اكتب خلاصة أو ملاحظة أولًا.",
+    dl:"تحميل Markdown", print:"طباعة", videos:"فيديو", total:"الإجمالي", watch:"شاهد",
+    autoSum:"ملخص المحاضرة", myNotes:"ملاحظاتي",
+    vOutline:"مخطط الدورة", vTiles:"بطاقات", vTable:"جدول",
+    colNum:"#", colQ:"رقم", colTitle:"العنوان", colDur:"المدة",
+    colStatus:"الحالة", colRate:"التقييم",
+    colNotes:"ملاحظات", colSum:"الخلاصة",
+    noSum:"لا يوجد ملخص لهذا الفيديو بعد. هذه المحاضرات بلا ترجمة نصية على يوتيوب، لذا يُستخرج النص من الصوت أولًا:",
+    genCmd:"python make_transcripts.py", srcLbl:"المصدر", charsLbl:"طول النص"
+  },
+  en:{
+    search:"Search titles, notes, summaries…",
+    all:"All", unwatched:"Unwatched", watching:"Watching", watched:"Watched",
+    skipped:"Skipped", starred:"★ Starred", noted:"Noted",
+    watchedL:"watched", leftL:"to go", timeL:"remaining", notesL:"annotated",
+    resume:"Resume", start:"Start", at:"at",
+    save:"Save", exp:"Export", imp:"Import", sheet:"Study sheet",
+    status:"Status", summary:"Summary", annotations:"Annotations",
+    comments:"Comments", yourTags:"Your tags", ytTags:"YouTube tags", description:"Description",
+    add:"Add", star:"☆ Star", starred2:"★ Starred", clear:"clear",
+    sumPh:"What is this video about, in your words?", annPh:"Note at a moment in the video…",
+    cmtPh:"A thought about the video as a whole…", tagPh:"Add a tag and press Enter",
+    noAnn:"No annotations yet.", noCmt:"No comments yet.", noTags:"None yet.",
+    annHint:"The current playback time is attached automatically. Click a note to edit it.",
+    resumeAt:"Resume point:", progHint:"Playback position is saved as you watch.",
+    more:"Show more", less:"Show less", empty:"Nothing matches those filters.",
+    markThrough:"Mark everything before this watched",
+    long:"long", views:"views", likes:"likes", ytc:"YT comments",
+    published:"published", watchedOn:"Marked watched", autoplay:"Autoplay next",
+    sortPos:"Course order", sortPosR:"Reverse order", sortNew:"Newest first", sortOld:"Oldest first",
+    sortLong:"Longest first", sortShort:"Shortest first", sortViews:"Most viewed",
+    sortRate:"Highest rated", sortNotes:"Most annotated", allTags:"All tags",
+    savedTo:"saved to data.json", unsaved:"unsaved", localOnly:"local only",
+    secs:{intro:"Intro", lesson:"Foundation lessons", shubha:"Objections", extra:"Extras"},
+    sheetTitle:"Study sheet", noNotes:"Nothing written yet — add a summary or a note first.",
+    dl:"Download Markdown", print:"Print", videos:"videos", total:"total", watch:"watch",
+    autoSum:"Lecture summary", myNotes:"My notes",
+    vOutline:"Course outline", vTiles:"Tiles", vTable:"Table",
+    colNum:"#", colQ:"No.", colTitle:"Title", colDur:"Length", colStatus:"Status",
+    colRate:"Rating", colNotes:"Notes", colSum:"Summary",
+    noSum:"No summary for this video yet. These lectures have no captions on YouTube, so the text has to be transcribed from the audio first:",
+    genCmd:"python make_transcripts.py", srcLbl:"source", charsLbl:"transcript"
+  }
+};
+let L = T.ar;
+
+/* =================================================================== state */
+const STORE_KEY = "videoList.overlay.v1.asma-ul-husna";
+const PREF_KEY  = "videoList.prefs.v1";
+const STATUSES  = ["unwatched","watching","watched","skipped"];
+const SEC_ORDER = ["intro","lesson","shubha","extra"];
+
+let DATA = {playlists:[], videos:[]};
+let view = [];
+let openId = null;
+let serverSave = false, dirty = false, saveTimer = null;
+let player = null, ytReady = false, trackTimer = null;
+
+const prefs = {lang:"ar", view:"outline", autoplay:true, closed:{}, showSum:true};
+const state = {q:"", status:"all", sort:"position", tag:""};
+
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => Array.from(r.querySelectorAll(s));
+const byId = id => DATA.videos.find(v => v.videoId === id);
+
+/* =============================================================== utilities */
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDur(sec){
+  sec = Math.max(0, Math.round(sec||0));
+  const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60;
+  return h ? h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
+           : m+":"+String(s).padStart(2,"0");
+}
+function fmtHours(sec){
+  const h = sec/3600;
+  return h>=10 ? Math.round(h)+"h" : h>=1 ? h.toFixed(1)+"h" : Math.round(sec/60)+"m";
+}
+function fmtCount(n){
+  n = n||0;
+  if (n>=1e6) return (n/1e6).toFixed(1).replace(/\.0$/,"")+"M";
+  if (n>=1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"K";
+  return String(n);
+}
+function fmtDate(iso){
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString(prefs.lang==="ar" ? "ar-EG" : undefined,
+    {year:"numeric", month:"short", day:"numeric"});
+}
+const nowISO = () => new Date().toISOString();
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* Arabic-aware search key. Strips harakat and folds the letter shapes people
+   type interchangeably, so الاسلام finds الإسلام and عائشه finds عائشة. */
+function norm(s){
+  return String(s ?? "").toLowerCase()
+    .replace(/[ً-ْٰـ]/g,"")        // harakat, dagger alef, tatweel
+    .replace(/[آأإٱ]/g,"ا")   // آ أ إ ٱ -> ا
+    .replace(/ى/g,"ي")                       // ى -> ي
+    .replace(/ة/g,"ه")                       // ة -> ه
+    .replace(/ؤ/g,"و").replace(/ئ/g,"ي")
+    .replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660))
+    .replace(/\s+/g," ");
+}
+function arDigits(s){
+  return String(s).replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660));
+}
+
+/* ------------------------------------------------- course structure parsing
+   Derived from titles at render time, so data.json stays raw API truth. */
+/* A curated playlist declares its own curriculum: data.facets lists the sections
+   in teaching order and each video carries a facet key. Title parsing below is
+   only the fallback for playlists that arrived without one. */
+function sectionDefs(){
+  if (DATA.facets && DATA.facets.length) return DATA.facets;
+  return SEC_ORDER.map(function(k){ return {key:k, label:L.secs[k]}; });
+}
+function sectionLabel(key){
+  const d = sectionDefs().find(function(x){ return x.key === key; });
+  if (d) return d[prefs.lang] || d.label || d.key;
+  return (L.secs && L.secs[key]) || key;
+}
+function classify(v){
+  const t = arDigits(v.title || "");
+  let m = t.match(/درس\s*(\d+)/);
+  if (m) return {sec:"lesson", n:Number(m[1])};
+  m = t.match(/شبهة\s*(\d+)/);
+  if (m) return {sec:"shubha", n:Number(m[1])};
+  if (/تشويقية|trailer|intro/i.test(t)) return {sec:"intro", n:null};
+  return {sec:"extra", n:null};
+}
+function shortTitle(v){
+  const t = String(v.title || "")
+    .replace(/\s*\|[^|]*فاضل\s*سليمان\s*$/,"")   // drop the repeated presenter suffix
+    .replace(/^\s*!*\s*(?:شبهة|درس)\s*[٠-٩0-9]+\s*\|\s*/,"")
+    .replace(/\s*\|\s*$/,"")
+    .trim();
+  return t || v.title || "";
+}
+function decorate(){
+  DATA.videos.forEach(v => {
+    const c = classify(v);
+    v._sec = v.facet || c.sec;      // explicit curriculum wins over title parsing
+    v._n = v.facet ? null : c.n;
+    v._short = shortTitle(v);
+    v._key = norm([
+      v.title, v.description, v.channelTitle, v.summary, v.autoSummary,
+      (v.tags||[]).join(" "), (v.youtubeTags||[]).join(" "),
+      (v.annotations||[]).map(a=>a.text).join(" "),
+      (v.comments||[]).map(c=>c.text).join(" ")
+    ].join(" "));
+  });
+}
+/* The uploader tagged almost every video "en" while speaking Arabic, so the
+   declared audio language is useless — read the script of the title instead. */
+function videoLang(v){
+  return /[؀-ۿ]/.test(String(v.title||"")) ? "ar" : "en";
+}
+const noteCount = v => (v.annotations||[]).length + (v.comments||[]).length;
+const hasNotes  = v => noteCount(v) > 0 || !!v.summary;
+
+/* ============================================================= persistence */
+function userSlice(v){
+  return {status:v.status, progressSeconds:v.progressSeconds, rating:v.rating,
+    favorite:v.favorite, tags:v.tags, summary:v.summary, annotations:v.annotations,
+    comments:v.comments, watchedAt:v.watchedAt, notesUpdatedAt:v.notesUpdatedAt,
+    autoSummary:v.autoSummary, summaryLang:v.summaryLang,
+    summarySource:v.summarySource, transcriptChars:v.transcriptChars};
+}
+function stripDerived(v){
+  const o = {};
+  Object.keys(v).forEach(k => { if (k[0] !== "_") o[k] = v[k]; });
+  return o;
+}
+function writeOverlay(){
+  try{
+    const o = {};
+    DATA.videos.forEach(v => { o[v.videoId] = userSlice(v); });
+    localStorage.setItem(STORE_KEY, JSON.stringify({at:nowISO(), videos:o}));
+  }catch(e){}
+}
+function applyOverlay(){
+  let parsed;
+  try{ parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); }
+  catch(e){ return false; }
+  const map = parsed && parsed.videos;
+  if (!map) return false;
+  let touched = false;
+  DATA.videos.forEach(v => {
+    const o = map[v.videoId];
+    if (!o) return;
+    const n = (o.annotations||[]).length + (o.comments||[]).length;
+    if (o.status !== "unwatched" || o.summary || n || o.rating || o.favorite
+        || (o.tags||[]).length || o.progressSeconds){
+      Object.assign(v, o);
+      touched = true;
+    }
+  });
+  return touched;
+}
+function savePrefs(){
+  try{ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }catch(e){}
+}
+function loadPrefs(){
+  try{ Object.assign(prefs, JSON.parse(localStorage.getItem(PREF_KEY) || "{}")); }catch(e){}
+  if (prefs.grid !== undefined){          // migrate the old two-way toggle
+    prefs.view = prefs.grid ? "tiles" : "outline";
+    delete prefs.grid;
+  }
+  if (["outline","tiles","table"].indexOf(prefs.view) === -1) prefs.view = "outline";
+  L = T[prefs.lang] || T.ar;
+}
+
+function markDirty(){
+  dirty = true;
+  setSaveState("dirty", L.unsaved);
+  writeOverlay();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 1200);
+}
+function setSaveState(cls, text){
+  const el = $("#saveState");
+  el.className = cls;
+  el.lastElementChild.textContent = text;
+}
+async function save(silent){
+  clearTimeout(saveTimer);
+  writeOverlay();
+  const payload = {generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)};
+  try{
+    const res = await fetch("api/save", {method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    if (!res.ok) throw new Error("HTTP "+res.status);
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || "refused");
+    serverSave = true;
+    dirty = false;
+    setSaveState("saved", L.savedTo);
+    banner("");
+    return true;
+  }catch(err){
+    dirty = true;
+    setSaveState("err", L.localOnly);
+    /* The initial load calls save(true). Only say something when the reader
+       actually changed something; until then the "local only" chip is enough. */
+    if (!silent) {
+      banner("Your progress and notes are saved in this browser only. "
+           + "Press <b>"+esc(L.exp)+"</b> to keep a copy you can carry elsewhere.");
+    }
+    if (!silent) console.warn("save failed:", err);
+    return false;
+  }
+}
+function banner(html){
+  const b = $("#banner");
+  b.innerHTML = html;
+  b.classList.toggle("on", !!html);
+}
+let toastTimer;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 1900);
+}
+
+/* ==================================================================== load */
+async function load(){
+  let raw;
+  try{
+    /* Read the copy embedded in this page (#seedData) rather than fetching
+       data.json, so the tracker works from file:// and from any static host. */
+    raw = JSON.parse(document.getElementById("seedData").textContent);
+  }catch(err){
+    $("#plTitle").textContent = "Couldn't read the embedded playlist data";
+    banner("The <code>#seedData</code> block in this page is missing or invalid.");
+    return;
+  }
+  adopt(raw);
+  save(true);
+}
+function adopt(raw){
+  DATA = raw;
+  DATA.videos = (DATA.videos||[]).map(v => Object.assign({
+    status:"unwatched", progressSeconds:0, rating:0, favorite:false, tags:[],
+    summary:"", annotations:[], comments:[], watchedAt:null, notesUpdatedAt:null,
+    autoSummary:"", summaryLang:"", summarySource:"", transcriptChars:0
+  }, v));
+  const overlaid = applyOverlay();
+  decorate();
+  applyLang();
+  renderHeader();
+  render();
+  if (overlaid) markDirty();
+}
+
+/* ============================================================ chrome / i18n */
+function applyLang(){
+  L = T[prefs.lang] || T.ar;
+  const rtl = prefs.lang === "ar";
+  document.documentElement.lang = prefs.lang;
+  document.documentElement.dir = rtl ? "rtl" : "ltr";
+  $("#btnLang").textContent = rtl ? "EN" : "ع";
+  $("#q").placeholder = L.search;
+  $("#btnSave").textContent = L.save;
+  $("#btnExport").textContent = L.exp;
+  $("#btnImport").textContent = L.imp;
+  $("#btnSheet").textContent = L.sheet;
+  renderSwitch();
+  $("#lWatched").textContent = L.watchedL;
+  $("#lLeft").textContent = L.leftL;
+  $("#lTime").textContent = L.timeL;
+  $("#lNotes").textContent = L.notesL;
+  $("#empty").textContent = L.empty;
+
+  const sorts = [["position",L.sortPos],["-position",L.sortPosR],["-published",L.sortNew],
+    ["published",L.sortOld],["-duration",L.sortLong],["duration",L.sortShort],
+    ["-views",L.sortViews],["-rating",L.sortRate],["-notes",L.sortNotes]];
+  $("#sort").innerHTML = sorts.map(s =>
+    '<option value="'+s[0]+'"'+(state.sort===s[0]?" selected":"")+'>'+esc(s[1])+'</option>').join("");
+  buildTagFilter();
+}
+function renderHeader(){
+  const p = (DATA.playlists||[])[0];
+  if (p){
+    $("#plTitle").textContent = p.title || "Video List";
+    document.title = p.title || "Video List";
+    const total = DATA.videos.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    $("#plSub").textContent = [p.channelTitle,
+      DATA.videos.length+" "+L.videos, fmtHours(total)+" "+L.total].filter(Boolean).join(" · ");
+    if (p.thumbnail) $("#plArt").src = p.thumbnail; else $("#plArt").style.display = "none";
+  }
+  renderStats(); renderChips(); renderResume();
+}
+function renderStats(){
+  const vs = DATA.videos;
+  const w  = vs.filter(v=>v.status==="watched").length;
+  const g  = vs.filter(v=>v.status==="watching").length;
+  const sk = vs.filter(v=>v.status==="skipped").length;
+  const leftSecs = vs.filter(v=>v.status!=="watched" && v.status!=="skipped")
+    .reduce((a,v)=>a+(v.durationSeconds||0)-(v.progressSeconds||0),0);
+  $("#barW").style.width = (vs.length ? w/vs.length*100 : 0)+"%";
+  $("#barG").style.width = (vs.length ? g/vs.length*100 : 0)+"%";
+  $("#sWatched").textContent = w+"/"+vs.length;
+  $("#sLeft").textContent = vs.length - w - sk;
+  $("#sTime").textContent = fmtHours(Math.max(0,leftSecs));
+  $("#sNotes").textContent = vs.filter(hasNotes).length;
+}
+function renderChips(){
+  const c = {all:DATA.videos.length};
+  STATUSES.forEach(s => { c[s] = DATA.videos.filter(v=>v.status===s).length; });
+  c.starred = DATA.videos.filter(v=>v.favorite).length;
+  c.noted   = DATA.videos.filter(hasNotes).length;
+  const defs = [["all",L.all],["unwatched",L.unwatched],["watching",L.watching],
+    ["watched",L.watched],["skipped",L.skipped],["starred",L.starred],["noted",L.noted]];
+  $("#statusChips").innerHTML = defs.map(d =>
+    '<button class="chip '+(state.status===d[0]?"on":"")+'" data-status="'+d[0]+'">'
+    + esc(d[1])+'<span class="n">'+(c[d[0]]||0)+'</span></button>').join("");
+}
+function buildTagFilter(){
+  const tags = new Set();
+  DATA.videos.forEach(v => (v.tags||[]).forEach(t => tags.add(t)));
+  if (!tags.has(state.tag)) state.tag = "";
+  $("#tagFilter").innerHTML = '<option value="">'+esc(L.allTags)+'</option>' +
+    Array.from(tags).sort().map(t =>
+      '<option value="'+esc(t)+'"'+(state.tag===t?" selected":"")+'>'+esc(t)+'</option>').join("");
+}
+
+/* the next thing to watch: an in-progress video, else the first unwatched */
+function nextUp(){
+  const ordered = DATA.videos.slice().sort((a,b)=>a.position-b.position);
+  return ordered.find(v => v.status==="watching")
+      || ordered.find(v => v.status==="unwatched")
+      || null;
+}
+function renderResume(){
+  const v = nextUp();
+  const bar = $("#resume");
+  if (!v){ bar.hidden = true; return; }
+  bar.hidden = false;
+  bar.dataset.id = v.videoId;
+  const started = v.status==="watching" && v.progressSeconds > 5;
+  $("#rkLabel").textContent = started ? L.resume : L.start;
+  $("#rTitle").textContent = ((v.position??0)+1)+". "+v._short;
+  $("#rWhen").textContent = started
+    ? L.at+" "+fmtDur(v.progressSeconds)+" / "+v.duration : (v.duration||"");
+}
+
+/* ==================================================================== list */
+function matches(v){
+  if (state.tag && !(v.tags||[]).includes(state.tag)) return false;
+  const s = state.status;
+  if (s==="starred" && !v.favorite) return false;
+  if (s==="noted" && !hasNotes(v)) return false;
+  if (STATUSES.indexOf(s) !== -1 && v.status !== s) return false;
+  const q = norm(state.q).trim();
+  if (!q) return true;
+  return q.split(" ").every(w => v._key.indexOf(w) !== -1);
+}
+function sortView(list){
+  const cmp = {
+    position:(a,b)=>a.position-b.position,
+    published:(a,b)=>String(a.publishedAt||"").localeCompare(String(b.publishedAt||"")),
+    duration:(a,b)=>(a.durationSeconds||0)-(b.durationSeconds||0),
+    views:(a,b)=>(a.viewCount||0)-(b.viewCount||0),
+    rating:(a,b)=>(a.rating||0)-(b.rating||0),
+    notes:(a,b)=>noteCount(a)-noteCount(b)
+  };
+  const desc = state.sort.charAt(0) === "-";
+  const key = desc ? state.sort.slice(1) : state.sort;
+  const fn = cmp[key] || cmp.position;
+  return list.sort((a,b) => (fn(a,b) || a.position-b.position) * (desc?-1:1));
+}
+function renderSwitch(){
+  const titles = {outline:L.vOutline, tiles:L.vTiles, table:L.vTable};
+  $$("#viewSwitch button").forEach(function(b){
+    b.classList.toggle("on", b.dataset.view === prefs.view);
+    b.title = titles[b.dataset.view] || "";
+  });
+}
+function render(){
+  view = sortView(DATA.videos.filter(matches));
+  const host = $("#list");
+  if (prefs.view === "tiles"){
+    host.className = "grid";
+    host.innerHTML = view.map(cardHTML).join("");
+  } else if (prefs.view === "table"){
+    host.className = "";
+    host.innerHTML = tableHTML();
+  } else {
+    host.className = "";
+    // sections only mean anything while the list is still in course order
+    host.innerHTML = state.sort === "position" ? sectionsHTML()
+      : '<div class="sec"><div class="sec-body">'+view.map(itemHTML).join("")+'</div></div>';
+  }
+  $("#empty").hidden = view.length > 0;
+  renderStats(); renderChips(); renderResume(); renderSwitch();
+}
+function tableHTML(){
+  const head = '<tr>'
+    + '<th class="c-n">'+esc(L.colNum)+'</th>'
+    + '<th class="c-q">'+esc(L.colQ)+'</th>'
+    + '<th>'+esc(L.colTitle)+'</th>'
+    + '<th class="c-d">'+esc(L.colDur)+'</th>'
+    + '<th class="c-s">'+esc(L.colStatus)+'</th>'
+    + '<th class="c-r">'+esc(L.colRate)+'</th>'
+    + '<th class="c-m">'+esc(L.colNotes)+'</th>'
+    + '<th>'+esc(L.colSum)+'</th></tr>';
+  const body = view.map(function(v){
+    const n = noteCount(v);
+    const blurb = v.summary || v.autoSummary || "";
+    return '<tr class="'+v.status+'" data-id="'+esc(v.videoId)+'">'
+      + '<td class="c-n">'+((v.position==null?0:v.position)+1)+'</td>'
+      + '<td class="c-q">'+(v._n!=null?v._n:"")+'</td>'
+      + '<td class="c-t" dir="auto">'+esc(v._short)
+      +   '<span class="sub2">'+esc(sectionLabel(v._sec))+'</span></td>'
+      + '<td class="c-d">'+esc(v.duration||"")+'</td>'
+      + '<td class="c-s"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span></td>'
+      + '<td class="c-r">'+(v.favorite?"★":"")+(v.rating?" "+v.rating:"")+'</td>'
+      + '<td class="c-m">'+(n?"✎"+n:"")+'</td>'
+      + '<td class="c-x" dir="auto" title="'+esc(blurb)+'">'+esc(blurb)+'</td>'
+      + '</tr>';
+  }).join("");
+  return '<div class="tblwrap"><table class="vt"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+}
+function sectionsHTML(){
+  /* A playlist that arrived without a curriculum, and whose titles carry no
+     lesson numbers, lands entirely in one fallback bucket. A lone section header
+     then offers no navigation and mislabels the whole course as "Extras", so
+     drop it. Decided from DATA.videos, not the filtered view, so the header does
+     not appear and vanish as the reader filters. */
+  const populated = sectionDefs()
+    .filter(def => DATA.videos.some(v => v._sec === def.key)).length;
+  const bare = populated <= 1;
+  return sectionDefs().map(def => {
+    const sec = def.key;
+    const vs = view.filter(v => v._sec === sec);
+    if (!vs.length) return "";
+    if (bare) {
+      return '<section class="sec" data-sec="'+sec+'">'
+        + '<div class="sec-body">'+vs.map(itemHTML).join("")+'</div></section>';
+    }
+    const all  = DATA.videos.filter(v => v._sec === sec);
+    const done = all.filter(v => v.status==="watched").length;
+    const secs = all.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    return '<section class="sec'+(prefs.closed[sec]?" closed":"")+'" data-sec="'+sec+'">'
+      + '<button class="sec-h"><span class="car">▼</span>'
+      + '<span class="nm">'+esc(sectionLabel(sec))+'</span>'
+      + '<span class="mt">'+all.length+' · '+fmtHours(secs)+' · '+done+'/'+all.length+'</span>'
+      + '<span class="sbar"><i style="width:'+(all.length?done/all.length*100:0)+'%"></i></span>'
+      + '</button><div class="sec-body">'+vs.map(itemHTML).join("")+'</div></section>';
+  }).join("");
+}
+function itemHTML(v){
+  const n = noteCount(v);
+  const pct = v.durationSeconds ? Math.min(100,(v.progressSeconds||0)/v.durationSeconds*100) : 0;
+  return '<div class="item '+v.status+(openId===v.videoId?" active":"")+'" data-id="'+esc(v.videoId)+'">'
+    + '<span class="idx">'+((v.position??0)+1)+'</span>'
+    + '<button class="tick" data-tick="'+esc(v.videoId)+'" title="'+esc(L.watched)+'">'
+    +   (v.status==="watching" ? "▸" : v.status==="skipped" ? "–" : "✓") + '</button>'
+    + '<span class="lbl" dir="auto">'
+    +   (v._n!=null ? '<span class="qn">'+v._n+'</span>' : "")
+    +   esc(v._short)
+    +   (v.summary ? '<span class="sum">'+esc(v.summary.slice(0,90))+'</span>' : "")
+    + '</span>'
+    + '<span class="meta">'
+    +   (v.favorite ? '<span class="st">★</span>' : "")
+    +   (v.rating ? '<span class="st">'+v.rating+'★</span>' : "")
+    +   (n ? '<span class="mk">✎'+n+'</span>' : "")
+    +   '<span class="dur">'+esc(v.duration||"")+'</span>'
+    + '</span>'
+    + (pct>1 && v.status!=="watched" ? '<span class="iprog" style="width:'+pct+'%"></span>' : "")
+    + '</div>';
+}
+function cardHTML(v){
+  const n = noteCount(v);
+  return '<article class="card '+v.status+'" data-id="'+esc(v.videoId)+'">'
+    + '<div class="tw">'
+    +   (v.thumbnail ? '<img src="'+esc(v.thumbnail)+'" alt="" loading="lazy">' : "")
+    +   '<span class="badge'+(v._n!=null?" q":"")+'">'+(v._n!=null?v._n:(v.position??0)+1)+'</span>'
+    +   (v.duration ? '<span class="dur2">'+esc(v.duration)+'</span>' : "")
+    +   (v.status==="watched" ? '<div class="seen">✓</div>' : "")
+    + '</div><div class="cbody">'
+    +   '<h3 class="ctitle" dir="auto">'+esc(v._short)+'</h3>'
+    +   (v.summary ? '<div class="sum" dir="auto">'+esc(v.summary.slice(0,100))+'</div>' : "")
+    +   ((v.tags||[]).length ? '<div class="tagrow">'
+        + v.tags.slice(0,3).map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+    +   '<div class="cfoot"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span>'
+    +   '<span>'+(v.favorite?"★ ":"")+(n?"✎"+n:"")+'</span></div>'
+    + '</div></article>';
+}
+
+/* ================================================================== drawer */
+function openVideo(id){
+  const v = byId(id);
+  if (!v) return;
+  openId = id;
+  $("#dWho").textContent = "#"+((v.position??0)+1)+" · "+(v.channelTitle||"");
+  $("#dOpen").href = v.url || ("https://www.youtube.com/watch?v="+id);
+  $("#dBody").innerHTML = detailHTML(v);
+  $("#dBody").scrollTop = 0;
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden","false");
+  $("#scrim").classList.add("on");
+  mountPlayer(v);
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  const row = $('[data-id="'+(window.CSS && CSS.escape ? CSS.escape(id) : id)+'"]');
+  if (row) row.classList.add("active");
+}
+function closeVideo(){
+  openId = null;
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden","true");
+  $("#scrim").classList.remove("on");
+  destroyPlayer();
+  $("#playerHost").innerHTML = "";
+  $("#dBody").innerHTML = "";
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  if (dirty) save(true);
+}
+function stepVideo(d){
+  if (!openId) return;
+  const i = view.findIndex(v => v.videoId === openId);
+  const next = view[i+d];
+  if (next) openVideo(next.videoId);
+}
+function detailHTML(v){
+  const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+  const qtag = v._n != null
+    ? '<span class="qtag">'+esc(sectionLabel(v._sec))+' '+v._n+'</span>'
+    : (v.facet ? '<span class="qtag">'+esc(sectionLabel(v._sec))+'</span>' : "");
+  const vlang = videoLang(v);
+  const sumOpen = prefs.showSum;
+  return ''
+  + '<div class="acts">'
+  +   '<button class="ibtn'+(sumOpen?" on":"")+'" data-act="toggleSum">'
+  +     '<span class="ic">▤</span><span>'+esc(L.autoSum)+'</span>'
+  +     (v.autoSummary ? '' : ' <span style="opacity:.5">—</span>')
+  +   '</button>'
+  + '</div>'
+  + (sumOpen ? '<div class="d-sec">'+summaryHTML(v, vlang)+'</div>' : '')
+  + '<div class="d-sec">'
+  +   '<h2 class="d-title" dir="auto">'+qtag+esc(v._short)+'</h2>'
+  +   (v.whyIncluded ? '<div class="why" dir="auto">'+esc(v.whyIncluded)+'</div>' : "")
+  +   '<div class="kv">'
+  +     '<span><b>'+esc(v.duration||"—")+'</b> '+esc(L.long)+'</span>'
+  +     '<span><b>'+fmtCount(v.viewCount)+'</b> '+esc(L.views)+'</span>'
+  +     '<span><b>'+fmtCount(v.likeCount)+'</b> '+esc(L.likes)+'</span>'
+  +     '<span><b>'+fmtCount(v.commentCount)+'</b> '+esc(L.ytc)+'</span>'
+  +     '<span>'+esc(L.published)+' <b>'+esc(fmtDate(v.publishedAt))+'</b></span>'
+  +   '</div>'
+  +   (v.watchedAt ? '<div class="hint">'+esc(L.watchedOn)+' '+esc(fmtDate(v.watchedAt))+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.status)+'</p><div class="seg">'
+  +   STATUSES.map(s => '<button class="chip '+(v.status===s?"on":"")+'" data-act="status" data-v="'+s+'">'+esc(L[s])+'</button>').join("")
+  +   '<button class="chip '+(v.favorite?"on":"")+'" data-act="fav">'+esc(v.favorite?L.starred2:L.star)+'</button>'
+  + '</div><div class="star-pick">'
+  +   [1,2,3,4,5].map(i => '<button data-act="rate" data-v="'+i+'" class="'+(v.rating>=i?"on":"")+'">★</button>').join("")
+  +   (v.rating ? '<button class="clear" data-act="rate" data-v="0">'+esc(L.clear)+'</button>' : "")
+  + '</div><div class="hint" id="progHint">'
+  +   (v.progressSeconds ? esc(L.resumeAt)+" "+fmtDur(v.progressSeconds) : esc(L.progHint))
+  + '</div><div style="margin-top:11px;display:flex;gap:6px;flex-wrap:wrap">'
+  +   '<button class="btn sm ghost" data-act="markThrough">'+esc(L.markThrough)+'</button>'
+  +   '<button class="btn sm ghost" data-act="autoplay">'+(prefs.autoplay?"☑":"☐")+' '+esc(L.autoplay)+'</button>'
+  + '</div></div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.summary)+'</p>'
+  +   '<textarea id="fSummary" rows="4" dir="auto" placeholder="'+esc(L.sumPh)+'">'+esc(v.summary)+'</textarea>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.annotations)+' <span class="count">'+ann.length+'</span></p>'
+  +   '<div>'+(ann.map(annHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noAnn)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="annIn" dir="auto" placeholder="'+esc(L.annPh)+'">'
+  +   '<button class="btn" data-act="annAdd">'+esc(L.add)+'</button></div>'
+  +   '<div class="hint">'+esc(L.annHint)+'</div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.comments)+' <span class="count">'+(v.comments||[]).length+'</span></p>'
+  +   '<div>'+((v.comments||[]).map(cmtHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noCmt)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="cmtIn" dir="auto" placeholder="'+esc(L.cmtPh)+'">'
+  +   '<button class="btn" data-act="cmtAdd">'+esc(L.add)+'</button></div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.yourTags)+'</p>'
+  +   '<div class="tagrow" style="margin-bottom:9px">'
+  +   ((v.tags||[]).map(t => '<span class="tag">'+esc(t)+' <button class="del" data-act="tagDel" data-v="'+esc(t)+'">×</button></span>').join("")
+       || '<span class="hint">'+esc(L.noTags)+'</span>')
+  +   '</div><div class="row"><input class="ti" id="tagIn" dir="auto" placeholder="'+esc(L.tagPh)+'">'
+  +   '<button class="btn" data-act="tagAdd">'+esc(L.add)+'</button></div>'
+  +   ((v.youtubeTags||[]).length ? '<p class="label" style="margin-top:15px">'+esc(L.ytTags)+'</p>'
+       + '<div class="tagrow">'+v.youtubeTags.map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec" style="border-bottom:none"><p class="label">'+esc(L.description)+'</p>'
+  +   '<div class="desc" id="desc" dir="auto">'+linkify(v.description)+'</div>'
+  +   (String(v.description||"").length>380 ? '<button class="more" data-act="moreDesc">'+esc(L.more)+'</button>' : "")
+  + '</div>';
+}
+/* Renders the transcript-derived summary in the language actually spoken in
+   the video, independent of the interface language. */
+function summaryHTML(v, vlang){
+  if (!v.autoSummary){
+    return '<div class="sumbox miss" dir="auto">'+esc(L.noSum)
+         + '<div style="margin-top:9px"><code>'+esc(L.genCmd)+'</code></div></div>';
+  }
+  const dir = vlang === "ar" ? "rtl" : "ltr";
+  const meta = [];
+  if (v.summarySource) meta.push(esc(L.srcLbl)+": "+esc(v.summarySource));
+  if (v.transcriptChars) meta.push(esc(L.charsLbl)+": "+fmtCount(v.transcriptChars));
+  return '<div class="sumbox" dir="'+dir+'" lang="'+vlang+'">'+esc(v.autoSummary)+'</div>'
+       + (meta.length ? '<div class="srcline">'+meta.join(" · ")+'</div>' : "");
+}
+function annHTML(a){
+  const stamp = (a.t ?? null) !== null
+    ? '<button class="stamp" data-act="seek" data-v="'+a.t+'">'+fmtDur(a.t)+'</button>'
+    : '<button class="stamp none" disabled>—</button>';
+  return '<div class="note">'+stamp
+    + '<div class="txt" dir="auto" data-act="editAnn" data-v="'+esc(a.id)+'">'+esc(a.text)
+    + '<div class="when">'+esc(fmtDate(a.created))+'</div></div>'
+    + '<button class="del" data-act="annDel" data-v="'+esc(a.id)+'">×</button></div>';
+}
+function cmtHTML(c){
+  return '<div class="note comment">'
+    + '<div class="txt" dir="auto" data-act="editCmt" data-v="'+esc(c.id)+'">'+esc(c.text)
+    + '<div class="when">'+esc(fmtDate(c.created))+'</div></div>'
+    + '<button class="del" data-act="cmtDel" data-v="'+esc(c.id)+'">×</button></div>';
+}
+function linkify(t){
+  return esc(t).replace(/https?:\/\/[^\s<]+/g, m => '<a href="'+m+'" target="_blank" rel="noopener">'+m+'</a>');
+}
+
+/* ================================================================== player */
+function loadYT(){
+  if (window.YT && window.YT.Player){ ytReady = true; return; }
+  if (document.getElementById("ytapi")) return;
+  const s = document.createElement("script");
+  s.id = "ytapi";
+  s.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(s);
+}
+window.onYouTubeIframeAPIReady = function(){
+  ytReady = true;
+  if (openId && !player) mountPlayer(byId(openId));
+};
+function mountPlayer(v){
+  destroyPlayer();
+  const host = $("#playerHost");
+  if (!host || !v) return;
+  host.innerHTML = '<div id="playerBox"></div>';
+  const box = $("#playerBox");
+  const start = v.status==="watching" && v.progressSeconds>5 ? Math.floor(v.progressSeconds) : 0;
+
+  if (!ytReady){
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/'+encodeURIComponent(v.videoId)
+      + '?rel=0&start='+start+'" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture"'
+      + ' allowfullscreen title="'+esc(v.title)+'"></iframe>';
+    loadYT();
+    return;
+  }
+  player = new YT.Player(box, {
+    videoId: v.videoId,
+    playerVars: {rel:0, start:start, modestbranding:1},
+    events: {
+      onStateChange: function(e){
+        if (e.data === YT.PlayerState.PLAYING){
+          if (v.status === "unwatched") setStatus(v, "watching", true);
+          startTracking(v);
+        } else {
+          stopTracking(v);
+          if (e.data === YT.PlayerState.ENDED){
+            setStatus(v, "watched", true);
+            if (prefs.autoplay) advance(v);
+          }
+        }
+      }
+    }
+  });
+}
+function advance(from){
+  const next = DATA.videos.slice().sort((a,b)=>a.position-b.position)
+    .find(v => v.position > from.position && v.status !== "watched" && v.status !== "skipped");
+  if (next) setTimeout(() => openVideo(next.videoId), 800);
+}
+function destroyPlayer(){
+  stopTracking();
+  if (player && player.destroy){ try{ player.destroy(); }catch(e){} }
+  player = null;
+}
+function startTracking(v){
+  stopTracking();
+  trackTimer = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    const t = Math.floor(player.getCurrentTime()||0);
+    if (t && Math.abs(t-(v.progressSeconds||0)) >= 5){
+      v.progressSeconds = t;
+      const h = $("#progHint");
+      if (h) h.textContent = L.resumeAt+" "+fmtDur(t);
+      markDirty();
+    }
+  }, 5000);
+}
+function stopTracking(v){
+  clearInterval(trackTimer);
+  trackTimer = null;
+  if (v && player && player.getCurrentTime){
+    try{ v.progressSeconds = Math.floor(player.getCurrentTime()||0); markDirty(); }catch(e){}
+  }
+}
+function currentTime(){
+  if (player && player.getCurrentTime){
+    try{ return Math.floor(player.getCurrentTime()||0); }catch(e){}
+  }
+  return null;
+}
+
+/* =================================================================== edits */
+function touch(v){ v.notesUpdatedAt = nowISO(); markDirty(); }
+function setStatus(v, status, quiet){
+  v.status = status;
+  if (status === "watched"){
+    v.watchedAt = v.watchedAt || nowISO();
+    if (v.durationSeconds) v.progressSeconds = v.durationSeconds;
+  }
+  if (status === "unwatched"){ v.watchedAt = null; v.progressSeconds = 0; }
+  markDirty();
+  render();
+  if (!quiet && openId === v.videoId) refreshDrawer();
+  else if (quiet && openId === v.videoId)
+    $$("[data-act='status']").forEach(b => b.classList.toggle("on", b.dataset.v === v.status));
+}
+function refreshDrawer(){
+  const v = byId(openId);
+  if (!v) return;
+  const body = $("#dBody");
+  const scroll = body.scrollTop;
+  body.innerHTML = detailHTML(v);   // the player lives outside #dBody, so it keeps playing
+  body.scrollTop = scroll;
+}
+function afterEdit(v){ touch(v); decorate(); refreshDrawer(); render(); }
+function addAnnotation(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.annotations.push({id:uid(), t:currentTime(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addComment(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.comments.push({id:uid(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addTag(v, text){
+  text = String(text||"").trim();
+  if (!text || (v.tags||[]).includes(text)) return;
+  v.tags.push(text);
+  buildTagFilter();
+  afterEdit(v);
+}
+function editNote(el, list, id){
+  const v = byId(openId);
+  if (!v) return;
+  const item = (v[list]||[]).find(x => x.id === id);
+  if (!item || el.querySelector("input")) return;
+  const input = document.createElement("input");
+  input.className = "ti";
+  input.value = item.text;
+  input.dir = "auto";
+  el.replaceChildren(input);
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+  let done = false;
+  const commit = function(){
+    if (done) return;
+    done = true;
+    const t = input.value.trim();
+    if (t && t !== item.text){ item.text = t; touch(v); decorate(); render(); }
+    refreshDrawer();
+  };
+  input.addEventListener("blur", commit);
+  input.addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if (e.key === "Enter"){ e.preventDefault(); input.blur(); }
+    if (e.key === "Escape"){ input.value = item.text; input.blur(); }
+  });
+}
+function markThrough(v){
+  let n = 0;
+  DATA.videos.forEach(function(x){
+    if (x.position < v.position && x.status === "unwatched"){
+      x.status = "watched";
+      x.watchedAt = nowISO();
+      x.progressSeconds = x.durationSeconds || 0;
+      n++;
+    }
+  });
+  markDirty();
+  render();
+  refreshDrawer();
+  toast("✓ "+n);
+}
+
+/* ============================================================= study sheet */
+function buildMarkdown(){
+  const rows = DATA.videos
+    .filter(v => hasNotes(v) || v.rating || v.favorite)
+    .sort((a,b)=>a.position-b.position);
+  if (!rows.length) return null;
+
+  const p = (DATA.playlists||[])[0] || {};
+  const md = [];
+  md.push("# "+(p.title||"Video List")+" — "+L.sheetTitle);
+  md.push("> "+(p.channelTitle||"")+" · "+rows.length+"/"+DATA.videos.length+" "+L.videos);
+
+  let lastSec = null;
+  rows.forEach(function(v){
+    if (v._sec !== lastSec){ md.push(""); md.push("## "+sectionLabel(v._sec)); lastSec = v._sec; }
+    md.push("");
+    md.push("### "+(v._n!=null ? v._n+" — "+v._short : v._short));
+    const bits = [L[v.status]||v.status, v.duration];
+    if (v.rating) bits.push("★".repeat(v.rating));
+    md.push("*"+bits.filter(Boolean).join(" · ")+"* — ["+L.watch+"]("+v.url+")");
+    if (v.summary){ md.push(""); md.push(v.summary); }
+    const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+    if (ann.length){
+      md.push("");
+      md.push("**"+L.annotations+"**");
+      ann.forEach(function(a){
+        const link = a.t != null
+          ? "["+fmtDur(a.t)+"](https://www.youtube.com/watch?v="+v.videoId+"&t="+a.t+"s)"
+          : "—";
+        md.push("- "+link+" "+a.text);
+      });
+    }
+    if ((v.comments||[]).length){
+      md.push("");
+      md.push("**"+L.comments+"**");
+      v.comments.forEach(function(c){ md.push("- "+c.text); });
+    }
+    if ((v.tags||[]).length){
+      md.push("");
+      md.push(v.tags.map(t=>"`"+t+"`").join(" "));
+    }
+  });
+  return md.join("\n");
+}
+function studySheet(){
+  const text = buildMarkdown();
+  if (!text) return toast(L.noNotes);
+  const p = (DATA.playlists||[])[0] || {};
+  const rtl = prefs.lang === "ar";
+  const w = window.open("", "_blank");
+  if (!w) return toast("popup blocked");
+
+  const doc = ''
+   + '<!doctype html><html lang="'+prefs.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8">'
+   + '<title>'+esc(p.title||"")+' — '+esc(L.sheetTitle)+'</title>'
+   + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'
+   + '<style>'
+   + 'body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;max-width:760px;margin:0 auto;'
+   + 'padding:30px 26px 80px;line-height:1.75;color:#16202c;background:#fff}'
+   + 'h1{font-size:25px;margin:0 0 4px}'
+   + 'h2{font-size:19px;margin:32px 0 10px;padding-bottom:6px;border-bottom:2px solid #e8b923}'
+   + 'h3{font-size:16px;margin:22px 0 3px}'
+   + 'blockquote{color:#667;margin:0 0 20px;font-size:14px;padding:0}'
+   + 'em{color:#78849a;font-size:13px;font-style:normal}a{color:#a8801a}'
+   + 'ul{margin:5px 0 14px;padding-inline-start:20px}li{margin:3px 0;font-size:14.5px}'
+   + 'code{background:#f1f2f5;padding:1px 6px;border-radius:4px;font-size:12.5px}'
+   + 'p{margin:6px 0 12px}'
+   + '.bar{position:sticky;top:0;background:#fff;padding:10px 0;border-bottom:1px solid #e6e8ee;margin-bottom:18px;display:flex;gap:8px}'
+   + '.bar button{font:inherit;font-size:13px;padding:7px 14px;border:1px solid #d5d9e0;border-radius:7px;background:#f7f8fa;cursor:pointer}'
+   + '@media print{.bar{display:none}body{padding:0}}'
+   + '</style></head><body>'
+   + '<div class="bar"><button id="dl">'+esc(L.dl)+'</button><button id="pr">'+esc(L.print)+'</button></div>'
+   + '<div id="out"></div></body></html>';
+
+  w.document.open();
+  w.document.write(doc);
+  w.document.close();
+
+  // build the DOM from the parent so no nested <script> parsing is involved
+  const render = function(){
+    const d = w.document;
+    const out = d.getElementById("out");
+    if (!out) return;
+    let html = "", inList = false;
+    text.split("\n").forEach(function(line){
+      let t = esc(line)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+      if (line.indexOf("- ") === 0){
+        if (!inList){ html += "<ul>"; inList = true; }
+        html += "<li>"+t.slice(2)+"</li>";
+        return;
+      }
+      if (inList){ html += "</ul>"; inList = false; }
+      if (line.indexOf("### ") === 0) html += "<h3>"+t.slice(4)+"</h3>";
+      else if (line.indexOf("## ") === 0) html += "<h2>"+t.slice(3)+"</h2>";
+      else if (line.indexOf("# ") === 0) html += "<h1>"+t.slice(2)+"</h1>";
+      else if (line.indexOf("> ") === 0) html += "<blockquote>"+t.slice(2)+"</blockquote>";
+      else if (line.trim()) html += "<p>"+t+"</p>";
+    });
+    if (inList) html += "</ul>";
+    out.innerHTML = html;
+
+    d.getElementById("pr").onclick = function(){ w.print(); };
+    d.getElementById("dl").onclick = function(){
+      const blob = new Blob([text], {type:"text/markdown;charset=utf-8"});
+      const a = d.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "study-sheet.md";
+      a.click();
+    };
+  };
+  if (w.document.readyState === "complete") render();
+  else w.addEventListener("load", render);
+}
+
+/* ================================================================== wiring */
+$("#list").addEventListener("click", function(e){
+  const tick = e.target.closest("[data-tick]");
+  if (tick){
+    e.stopPropagation();
+    const v = byId(tick.dataset.tick);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+    return;
+  }
+  const head = e.target.closest(".sec-h");
+  if (head){
+    const sec = head.closest(".sec").dataset.sec;
+    prefs.closed[sec] = !prefs.closed[sec];
+    savePrefs();
+    render();
+    return;
+  }
+  const row = e.target.closest("[data-id]");
+  if (row) openVideo(row.dataset.id);
+});
+$("#resume").addEventListener("click", function(e){
+  const id = e.currentTarget.dataset.id;
+  if (id) openVideo(id);
+});
+$("#scrim").addEventListener("click", closeVideo);
+$("#dClose").addEventListener("click", closeVideo);
+$("#dPrev").addEventListener("click", function(){ stepVideo(-1); });
+$("#dNext").addEventListener("click", function(){ stepVideo(1); });
+
+$("#dBody").addEventListener("click", function(e){
+  const btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  const v = byId(openId);
+  if (!v) return;
+  const val = btn.dataset.v;
+  switch (btn.dataset.act){
+    case "status": setStatus(v, val); break;
+    case "fav": v.favorite = !v.favorite; afterEdit(v); break;
+    case "rate": v.rating = Number(val); afterEdit(v); break;
+    case "seek":
+      if (player && player.seekTo){ player.seekTo(Number(val), true); player.playVideo(); }
+      break;
+    case "annAdd": addAnnotation(v, $("#annIn").value); break;
+    case "cmtAdd": addComment(v, $("#cmtIn").value); break;
+    case "tagAdd": addTag(v, $("#tagIn").value); break;
+    case "editAnn": editNote(btn, "annotations", val); break;
+    case "editCmt": editNote(btn, "comments", val); break;
+    case "annDel": v.annotations = v.annotations.filter(a => a.id !== val); afterEdit(v); break;
+    case "cmtDel": v.comments = v.comments.filter(c => c.id !== val); afterEdit(v); break;
+    case "tagDel": v.tags = v.tags.filter(t => t !== val); buildTagFilter(); afterEdit(v); break;
+    case "markThrough": markThrough(v); break;
+    case "autoplay": prefs.autoplay = !prefs.autoplay; savePrefs(); refreshDrawer(); break;
+    case "toggleSum": prefs.showSum = !prefs.showSum; savePrefs(); refreshDrawer(); break;
+    case "moreDesc":
+      $("#desc").classList.toggle("open");
+      btn.textContent = $("#desc").classList.contains("open") ? L.less : L.more;
+      break;
+  }
+});
+$("#dBody").addEventListener("keydown", function(e){
+  if (e.key !== "Enter") return;
+  const v = byId(openId);
+  if (!v) return;
+  if (e.target.id === "annIn"){ e.preventDefault(); addAnnotation(v, e.target.value); }
+  if (e.target.id === "cmtIn"){ e.preventDefault(); addComment(v, e.target.value); }
+  if (e.target.id === "tagIn"){ e.preventDefault(); addTag(v, e.target.value); }
+});
+$("#dBody").addEventListener("input", function(e){
+  if (e.target.id !== "fSummary") return;
+  const v = byId(openId);
+  if (!v) return;
+  v.summary = e.target.value;
+  touch(v);
+});
+$("#dBody").addEventListener("change", function(e){
+  if (e.target.id === "fSummary"){ decorate(); render(); }
+});
+
+$("#q").addEventListener("input", function(e){ state.q = e.target.value; render(); });
+$("#sort").addEventListener("change", function(e){ state.sort = e.target.value; render(); });
+$("#tagFilter").addEventListener("change", function(e){ state.tag = e.target.value; render(); });
+$("#statusChips").addEventListener("click", function(e){
+  const c = e.target.closest("[data-status]");
+  if (c){ state.status = c.dataset.status; render(); }
+});
+$("#viewSwitch").addEventListener("click", function(e){
+  const b = e.target.closest("[data-view]");
+  if (!b || b.dataset.view === prefs.view) return;
+  prefs.view = b.dataset.view;
+  savePrefs();
+  render();
+});
+$("#btnLang").addEventListener("click", function(){
+  prefs.lang = prefs.lang === "ar" ? "en" : "ar";
+  savePrefs();
+  applyLang();
+  renderHeader();
+  render();
+  if (openId) refreshDrawer();
+});
+$("#btnSave").addEventListener("click", function(){ save(); });
+$("#btnSheet").addEventListener("click", studySheet);
+$("#btnExport").addEventListener("click", function(){
+  const blob = new Blob([JSON.stringify({generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)}, null, 2)],
+    {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "data.json";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+});
+$("#btnImport").addEventListener("click", function(){ $("#fileIn").click(); });
+$("#fileIn").addEventListener("change", async function(e){
+  const f = e.target.files[0];
+  if (!f) return;
+  try{
+    const raw = JSON.parse(await f.text());
+    if (!Array.isArray(raw.videos)) throw new Error("no videos array");
+    adopt(raw);
+    setSaveState("dirty", L.unsaved);
+  }catch(err){ alert("Not a data.json from this tool: "+err.message); }
+  e.target.value = "";
+});
+
+document.addEventListener("keydown", function(e){
+  const typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
+  if (e.key === "Escape" && openId) return closeVideo();
+  if (typing) return;
+  if (e.key === "/"){ e.preventDefault(); $("#q").focus(); return; }
+  if (!openId) return;
+  const rtl = document.documentElement.dir === "rtl";
+  if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) stepVideo(1);
+  if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) stepVideo(-1);
+  if (e.key === "w" || e.key === "W"){
+    const v = byId(openId);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+  }
+});
+window.addEventListener("beforeunload", function(e){
+  if (!dirty) return;
+  save(true);
+  if (!serverSave){ e.preventDefault(); e.returnValue = ""; }
+});
+
+loadPrefs();
+loadYT();
+load();
+</script>
+</body>
+</html>
