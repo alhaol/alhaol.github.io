@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Tenses, One Budget | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_52.png" alt="Three Tenses, One Budget" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive</span>
+                        <span class="category-badge category-ai">AI / ML</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Three Tenses, One Budget</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 23, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>You are not where you think you are. Matthew Killingsworth and Daniel Gilbert sampled people at random moments through the day and found that minds were somewhere other than the task at hand 46.9 percent of the time. The part that should get your attention is what predicted how people felt. Whether the mind was wandering explained about 10.8 percent of the variation in happiness. What the person was actually doing explained about 4.6 percent.</p>
+
+<p>Where your attention sits matters more than what you are doing with your hands. Most advice drawn from that finding collapses into a slogan about being present, which is not a model and is wrong in a specific way. Learning from a mistake is attention on the past. Planning next quarter is attention on the future. Neither is waste, and telling people to stop doing them is telling them to stop thinking.</p>
+
+<h2>Three tenses, one account</h2>
+
+<p>Treat attention as a budget with three places to spend it. <strong>Memory-driven</strong> attention runs on the past. <strong>Reality-driven</strong> attention runs on what is in front of you. <strong>Dream-driven</strong> attention runs on the future. The account is finite, so a withdrawal for one is not available to the others.</p>
+
+<p>One asymmetry makes the model worth having. The present is the only tense in which you can act. The past is closed and the future has not arrived, so any value from either has to arrive through a change you make now. That constraint is what the old saying gets right, in whichever of its dozen versions you first heard it.</p>
+
+<blockquote>You cannot change the past, but you can ruin the present by worrying too much about the future.</blockquote>
+
+<p>Read literally, that line is an accounting statement. Both of the other tenses draw on the same account the present needs, and only one of the three can convert the withdrawal into anything.</p>
+
+<h2>Each tense has a productive form and a parasitic one</h2>
+
+<p>The mistake in the slogan version is treating past and future attention as one category. Each tense has two forms that feel identical from the inside and behave nothing alike.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 366" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Each of the three tenses has a productive form and a parasitic form</title>
+            <desc id="fig1-desc">A three by two table. Past attention is productive as extraction, taking the lesson and closing the file, and parasitic as replay, running the scene again while nothing changes. Present attention is productive as engagement and parasitic as drift, being present but steered by nothing. Future attention is productive as planning in if-then form and parasitic as worry, rehearsing outcomes outside your control.</desc>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">Two forms of every tense</text>
+            <text x="136" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#60a5fa">PRODUCTIVE FORM</text>
+            <text x="388" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">PARASITIC FORM</text>
+
+            <text x="16" y="108" font-size="13" font-weight="700" fill="#f1f5f9">PAST</text>
+            <text x="16" y="128" font-size="11" fill="#64748b">memory-driven</text>
+            <rect x="136" y="76" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="152" y="108" font-size="13" font-weight="700" fill="#60a5fa">Extraction</text>
+            <text x="152" y="132" font-size="11.5" fill="#94a3b8">Take the lesson, close the file.</text>
+            <rect x="388" y="76" width="236" height="82" rx="6" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="404" y="108" font-size="13" font-weight="700" fill="#f59e0b">Replay</text>
+            <text x="404" y="132" font-size="11.5" fill="#94a3b8">Run it again. Nothing changes.</text>
+
+            <text x="16" y="200" font-size="13" font-weight="700" fill="#f1f5f9">PRESENT</text>
+            <text x="16" y="220" font-size="11" fill="#64748b">reality-driven</text>
+            <rect x="136" y="168" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="152" y="200" font-size="13" font-weight="700" fill="#60a5fa">Engagement</text>
+            <text x="152" y="224" font-size="11.5" fill="#94a3b8">Attention on what is actually here.</text>
+            <rect x="388" y="168" width="236" height="82" rx="6" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="404" y="200" font-size="13" font-weight="700" fill="#f59e0b">Drift</text>
+            <text x="404" y="224" font-size="11.5" fill="#94a3b8">Present, but steered by nothing.</text>
+
+            <text x="16" y="292" font-size="13" font-weight="700" fill="#f1f5f9">FUTURE</text>
+            <text x="16" y="312" font-size="11" fill="#64748b">dream-driven</text>
+            <rect x="136" y="260" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="152" y="292" font-size="13" font-weight="700" fill="#60a5fa">Planning</text>
+            <text x="152" y="316" font-size="11.5" fill="#94a3b8">If X happens, I will do Y.</text>
+            <rect x="388" y="260" width="236" height="82" rx="6" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="404" y="292" font-size="13" font-weight="700" fill="#f59e0b">Worry</text>
+            <text x="404" y="316" font-size="11.5" fill="#94a3b8">Rehearse what you cannot control.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> The two forms feel the same from the inside, which is why the parasitic column survives. Rumination presents itself as problem solving and worry presents itself as preparation. Terms after Nolen-Hoeksema on rumination and Seligman and colleagues on prospection.</figcaption>
+</figure>
+
+<p>Susan Nolen-Hoeksema spent a career separating the two forms on the past side. Rumination in her definition is repetitive passive attention to distress and its causes, and it predicts longer and more severe depressive episodes rather than relieving them. It is not reflection that got out of hand. It is a different process that borrows reflection's clothes.</p>
+
+<p>The future side has the same split. Martin Seligman, Peter Railton, Roy Baumeister and Chandra Sripada argue that the mind is organized around prospection, the generation and evaluation of possible futures, and that these are best understood as "if X, then Y" conditionals. Worry produces an unbounded supply of X and never attaches a Y. It runs the same machinery with the output disconnected.</p>
+
+<h2>One question sorts them</h2>
+
+<p>You do not need to diagnose which mode you are in. You need one test, and it applies to any thought about any tense.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 210" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">The single test that separates investment from leakage</title>
+            <desc id="fig2-desc">A thought about the past or the future arrives and meets one question: does this change an action available to me right now? If yes, the attention is an investment and the loop closes in an action. If no, it is leakage and the loop will simply run again.</desc>
+            <defs>
+                <marker id="fig2-arrow-b" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <polygon points="0 0, 7 3.5, 0 7" fill="#60a5fa"/>
+                </marker>
+                <marker id="fig2-arrow-a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <polygon points="0 0, 7 3.5, 0 7" fill="#f59e0b"/>
+                </marker>
+                <marker id="fig2-arrow-n" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <polygon points="0 0, 7 3.5, 0 7" fill="#2a3f5f"/>
+                </marker>
+            </defs>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">The test</text>
+
+            <rect x="20" y="101" width="130" height="50" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="85" y="121" font-size="12" fill="#f1f5f9" text-anchor="middle">A thought</text>
+            <text x="85" y="139" font-size="12" fill="#f1f5f9" text-anchor="middle">arrives</text>
+            <line x1="150" y1="126" x2="170" y2="126" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig2-arrow-n)"/>
+
+            <rect x="176" y="86" width="262" height="80" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="307" y="118" font-size="13" fill="#f1f5f9" text-anchor="middle">Does this change an action</text>
+            <text x="307" y="140" font-size="13" fill="#f1f5f9" text-anchor="middle">available to me right now?</text>
+
+            <line x1="438" y1="112" x2="474" y2="92" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#fig2-arrow-b)"/>
+            <line x1="438" y1="140" x2="474" y2="160" stroke="#f59e0b" stroke-width="1.8" marker-end="url(#fig2-arrow-a)"/>
+            <text x="441" y="91" font-size="11" fill="#60a5fa">yes</text>
+            <text x="446" y="177" font-size="11" fill="#f59e0b">no</text>
+
+            <rect x="478" y="64" width="146" height="54" rx="8" fill="#60a5fa" fill-opacity="0.10" stroke="#60a5fa"/>
+            <text x="551" y="88" font-size="13" font-weight="700" fill="#60a5fa" text-anchor="middle">Investment</text>
+            <text x="551" y="106" font-size="11" fill="#94a3b8" text-anchor="middle">ends in an action</text>
+
+            <rect x="478" y="134" width="146" height="54" rx="8" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="551" y="158" font-size="13" font-weight="700" fill="#f59e0b" text-anchor="middle">Leakage</text>
+            <text x="551" y="176" font-size="11" fill="#94a3b8" text-anchor="middle">the loop runs again</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The test does not ask whether a thought is pleasant or whether it is about something important. It asks only whether anything downstream of it changes.</figcaption>
+</figure>
+
+<p>Two examples make the edge visible. "I handled that meeting badly" becomes extraction the moment it ends in "I will send the agenda twenty four hours ahead next time." Held any longer, it is replay. "The audit is in March" becomes planning the moment it ends in "on Friday I will pull the three documents they always ask for." Held any longer, it is worry.</p>
+
+<p>Peter Gollwitzer gave the productive form its exact grammar. An implementation intention has the shape "whenever situation X arises, I will do Y," and across a large literature that simple move produces reliable gains in follow through compared with holding the same goal without it. The practical value here is as a filter rather than a technique. A thought about the future that cannot be written in that sentence has not become a plan yet.</p>
+
+<h2>What AI moves, in both directions</h2>
+
+<p>The honest account of AI here has two halves, and skipping the second one is how this topic usually gets written.</p>
+
+<p>The first half is real. Evan Risko and Sam Gilbert's review of cognitive offloading describes what happens when you use the world to carry what your head was carrying: the demand on memory drops. A good deal of replay is fear of losing a lesson, and a lesson written into a system you can query is a lesson you can stop holding. A worry can be handed to a model with instructions to split it into decisions available this week and things outside your control, and to write the first list in if-then form. That is a transformation you can specify, not a mood you have to summon. And the analysis that used to eat present-tense attention is exactly the work these systems do well.</p>
+
+<p>The second half is the part to sit with. The same tool lowers the cost of the parasitic column by the same amount. A model will generate the hundredth retrospective of a conversation you already had, and the thousandth branch of a future you do not control, faster and more fluently than you could alone. Worry conducted with a research assistant is still worry, and it now produces documents, which makes it look like work.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 285" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">AI reduces the effort of every lane, productive and parasitic alike</title>
+            <desc id="fig3-desc">Six lanes, one for each combination of tense and form. The effort each lane required before is shown as a dashed full-width track, and the effort with AI as a shorter filled bar. Every lane shrinks by the same proportion, including the three parasitic ones, so the tool does not choose the allocation for you.</desc>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">The discount applies to all six lanes</text>
+            <text x="392" y="62" font-size="11" fill="#64748b" text-anchor="middle">with AI</text>
+            <text x="600" y="62" font-size="11" fill="#64748b" text-anchor="end">before</text>
+            <line x1="392" y1="70" x2="392" y2="270" stroke="#2a3f5f" stroke-width="1" stroke-dasharray="4 5"/>
+
+            <text x="16" y="88" font-size="11.5" fill="#60a5fa">Past: extraction</text>
+            <rect x="210" y="76" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="76" width="182" height="16" rx="3" fill="#60a5fa" fill-opacity="0.75"/>
+
+            <text x="16" y="122" font-size="11.5" fill="#f59e0b">Past: replay</text>
+            <rect x="210" y="110" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="110" width="182" height="16" rx="3" fill="#f59e0b" fill-opacity="0.75"/>
+
+            <text x="16" y="156" font-size="11.5" fill="#60a5fa">Present: engagement</text>
+            <rect x="210" y="144" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="144" width="182" height="16" rx="3" fill="#60a5fa" fill-opacity="0.75"/>
+
+            <text x="16" y="190" font-size="11.5" fill="#f59e0b">Present: drift</text>
+            <rect x="210" y="178" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="178" width="182" height="16" rx="3" fill="#f59e0b" fill-opacity="0.75"/>
+
+            <text x="16" y="224" font-size="11.5" fill="#60a5fa">Future: planning</text>
+            <rect x="210" y="212" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="212" width="182" height="16" rx="3" fill="#60a5fa" fill-opacity="0.75"/>
+
+            <text x="16" y="258" font-size="11.5" fill="#f59e0b">Future: worry</text>
+            <rect x="210" y="246" width="390" height="16" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="210" y="246" width="182" height="16" rx="3" fill="#f59e0b" fill-opacity="0.75"/>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> Schematic, with no measured quantities: the bars are drawn equal on purpose. A tool that makes thinking cheaper makes both columns cheaper, so it amplifies whatever allocation you already had. The choice of lane stays with you.</figcaption>
+</figure>
+
+<p>The prompt below is the transformation in its smallest form. The last line is the one that matters, because without it a model will keep generating branches for as long as you keep reading them.</p>
+
+<pre><code>Here is something I keep circling: [situation].
+Do not reassure me and do not add possibilities.
+Split it into two lists: what I can decide or do within seven days,
+and what is outside my control.
+Rewrite the first list as "when X happens, I will do Y" sentences.
+Return the second list once, as a closed list, and do not expand it.</code></pre>
+
+<h2>What leaders should do</h2>
+
+<ol>
+    <li>Require every postmortem to end in an owned if-then sentence with a name and a date on it. A review that produces understanding and no changed action is replay running at organizational scale, and it costs a room full of people rather than one person.</li>
+    <li>Put a branch budget and a deadline on scenario work. Say how many futures the team will consider and when the exercise ends, before anyone opens a model. Without those two numbers, generation continues until someone gets tired.</li>
+    <li>Move lessons out of individual heads into a system the team can query. People keep re-holding what they are afraid of losing, and the offloading literature is clear that externalizing reduces the load. This is the cheapest of the four and the one most often skipped.</li>
+    <li>Protect blocks of present-tense attention as a scheduling matter, not an aspiration. The Killingsworth and Gilbert data is about wellbeing rather than output, so treat this as a claim about how people feel at work, which is a sufficient reason on its own.</li>
+</ol>
+
+<p>The model earns its keep by being an allocation model rather than a piece of advice about serenity. Past and future are legitimate places to spend attention. They just have to return something to the only tense where you can act, and the return has to be a change, not a feeling of having thought hard.</p>
+
+<p>What is new is the price. Thinking about anything at all has become much cheaper in the last three years, and cheaper thinking does not sort itself into useful and useless. It arrives as more of both. The saying survives the upgrade without amendment: the past is still closed, the future still has not arrived, and the only thing genuinely at stake in either direction is the hour you are in right now.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Hard Choice Quadrant</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Sorting a decision by its consequences and by how close the options stay, and knowing which quadrant a tool cannot help you in.</p>
+                        <a href="the-hard-choice-quadrant.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Happiness Loop</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">What actually moves wellbeing at work, and why the measured drivers are rarely the ones that get budget.</p>
+                        <a href="the-happiness-loop.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Focus Loop</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Attention as a system with feedback rather than a resource you simply spend down over a day.</p>
+                        <a href="the-focus-loop.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Killingsworth, M. A., &amp; Gilbert, D. T. (2010). "A Wandering Mind Is an Unhappy Mind." <em>Science</em>, 330(6006), 932. The experience-sampling study behind the 46.9 percent figure, and the finding that whether the mind wandered explained more variance in happiness than the activity being performed. <a href="https://doi.org/10.1126/science.1192439" target="_blank" rel="noopener">doi:10.1126/science.1192439</a></li>
+                    <li class="reference-item">Nolen-Hoeksema, S., Wisco, B. E., &amp; Lyubomirsky, S. (2008). "Rethinking Rumination." <em>Perspectives on Psychological Science</em>, 3(5), 400-424. Defines rumination as repetitive passive attention to distress and its causes, and reviews the evidence that it prolongs rather than resolves. <a href="https://doi.org/10.1111/j.1745-6924.2008.00088.x" target="_blank" rel="noopener">doi:10.1111/j.1745-6924.2008.00088.x</a></li>
+                    <li class="reference-item">Seligman, M. E. P., Railton, P., Baumeister, R. F., &amp; Sripada, C. (2013). "Navigating Into the Future or Driven by the Past." <em>Perspectives on Psychological Science</em>, 8(2), 119-141. Argues that prospection organizes much of mental life, and that it operates through the generation and evaluation of "if X, then Y" conditionals. <a href="https://doi.org/10.1177/1745691612474317" target="_blank" rel="noopener">doi:10.1177/1745691612474317</a></li>
+                    <li class="reference-item">Gollwitzer, P. M. (1999). "Implementation intentions: Strong effects of simple plans." <em>American Psychologist</em>, 54(7), 493-503. The source of the "whenever situation X arises, I will do Y" form and the evidence for its effect on follow through. <a href="https://doi.org/10.1037/0003-066X.54.7.493" target="_blank" rel="noopener">doi:10.1037/0003-066X.54.7.493</a></li>
+                    <li class="reference-item">Risko, E. F., &amp; Gilbert, S. J. (2016). "Cognitive Offloading." <em>Trends in Cognitive Sciences</em>, 20(9), 676-688. Reviews what changes when people use the world rather than memory to carry information, which is the mechanism behind moving a lesson out of your head. <a href="https://doi.org/10.1016/j.tics.2016.07.002" target="_blank" rel="noopener">doi:10.1016/j.tics.2016.07.002</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
