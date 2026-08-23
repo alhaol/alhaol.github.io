@@ -4,51 +4,122 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruku Hifz</title>
+  <meta name="color-scheme" content="dark light">
   <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    /* Paint the saved theme and text size before first paint, so a reader who
+       chose light never gets a dark flash. Same key the app saves to. */
+    (function () {
+      try {
+        var s = JSON.parse(localStorage.getItem('rh1:state') || '{}');
+        if (s.theme === 'light') document.documentElement.classList.add('light');
+        if (s.fsx) document.documentElement.style.setProperty('--fsx', s.fsx);
+      } catch (e) {}
+    })();
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { background-color: #020617; }
+
+    /* ---- Theme tokens. Dark is the default; .light on <html> swaps them. ----
+       Every colour below this block is a var, so the two themes never drift. */
+    :root {
+      --bg:        #020617;
+      --bg-glow:   #1e293b;
+      --panel:     rgba(30, 41, 59, 0.6);
+      --panel-bd:  rgba(255, 255, 255, 0.08);
+      --card:      rgba(2, 6, 23, 0.45);
+      --card-bd:   rgba(16, 185, 129, 0.18);
+      --txt:       #f1f5f9;
+      --txt-2:     #94a3b8;
+      --txt-3:     #64748b;
+      --accent:    #10b981;
+      --accent-2:  #6ee7b7;
+      --accent-ink:#020617;
+      --accent-w:  rgba(16, 185, 129, 0.15);
+      --field:     rgba(30, 41, 59, 0.8);
+      --field-bd:  #475569;
+      --chip:      rgba(30, 41, 59, 0.85);
+      --chip-bd:   #334155;
+      --line:      rgba(255, 255, 255, 0.10);
+      --line-soft: rgba(255, 255, 255, 0.05);
+      --track:     rgba(2, 6, 23, 0.7);
+      --warn:      #fbbf24;
+      --warn-w:    rgba(251, 191, 36, 0.18);
+      --danger:    #f87171;
+      --shadow:    0 8px 32px rgba(0, 0, 0, 0.3);
+      --sub:       rgba(2, 6, 23, 0.5);
+      --heat-0:    rgba(255, 255, 255, 0.06);
+      --fsbase:    30px;
+      --fsx:       1;
+    }
+    :root.light {
+      --bg:        #f4f6f4;
+      --bg-glow:   #dceee3;
+      --panel:     rgba(255, 255, 255, 0.82);
+      --panel-bd:  rgba(15, 23, 42, 0.10);
+      --card:      #fffdf7;                    /* warm paper for the Quran text */
+      --card-bd:   rgba(4, 120, 87, 0.22);
+      --txt:       #0f172a;
+      --txt-2:     #475569;
+      --txt-3:     #6b7280;
+      --accent:    #047857;
+      --accent-2:  #059669;
+      --accent-ink:#ffffff;
+      --accent-w:  rgba(4, 120, 87, 0.12);
+      --field:     #ffffff;
+      --field-bd:  #cbd5e1;
+      --chip:      #ffffff;
+      --chip-bd:   #cbd5e1;
+      --line:      rgba(15, 23, 42, 0.12);
+      --line-soft: rgba(15, 23, 42, 0.07);
+      --track:     rgba(15, 23, 42, 0.08);
+      --warn:      #b45309;
+      --warn-w:    rgba(180, 83, 9, 0.12);
+      --danger:    #dc2626;
+      --shadow:    0 8px 28px rgba(15, 23, 42, 0.10);
+      --sub:       rgba(255, 255, 255, 0.7);
+      --heat-0:    rgba(15, 23, 42, 0.07);
+    }
+
+    html { background-color: var(--bg); }
     body {
-      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
-      color: #f1f5f9;
+      background: radial-gradient(circle at 50% 0%, var(--bg-glow) 0%, var(--bg) 70%);
+      background-attachment: fixed;
+      color: var(--txt);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       padding: 20px;
     }
+    @media (max-width: 640px) { body { padding: 14px 12px 84px; } }
+
     .glass-panel {
-      background: rgba(30, 41, 59, 0.6);
+      background: var(--panel);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--panel-bd);
+      box-shadow: var(--shadow);
       border-radius: 14px;
     }
-    .accent-text { color: #10b981; }
-    .btn-accent {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #020617;
-      padding: 11px 20px;
-      border-radius: 10px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .accent-text { color: var(--accent); }
+    .t-main  { color: var(--txt); }
+    .t-dim   { color: var(--txt-2); }
+    .t-faint { color: var(--txt-3); }
+    .bd-line { border-color: var(--line); }
+    .bg-sub  { background: var(--sub); }
     .input-field {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid #475569;
-      color: #f1f5f9;
+      background: var(--field);
+      border: 1px solid var(--field-bd);
+      color: var(--txt);
       padding: 11px 14px;
       border-radius: 10px;
       font-size: 14px;
       width: 100%;
       transition: border-color 0.2s;
     }
-    .input-field:focus { outline: none; border-color: #10b981; }
+    .input-field:focus { outline: none; border-color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     /* ---- Quran text ---- */
     .arabic {
@@ -58,96 +129,220 @@
       font-feature-settings: "liga" 1;
     }
     .ruku-card {
-      background: rgba(2, 6, 23, 0.45);
-      border: 1px solid rgba(16, 185, 129, 0.18);
+      background: var(--card);
+      border: 1px solid var(--card-bd);
       border-radius: 14px;
       padding: 26px 24px;
     }
-    .ruku-text { font-size: 30px; line-height: 2.35; color: #f8fafc; }
-    @media (max-width: 640px) { .ruku-text { font-size: 25px; line-height: 2.2; } }
+    /* Reader text size is a multiplier the reader controls, not a fixed size,
+       so A-/A+ behaves the same on phone and desktop. */
+    .ruku-text { font-size: calc(var(--fsbase) * var(--fsx)); line-height: 2.35; color: var(--txt); }
+    @media (max-width: 640px) {
+      :root { --fsbase: 25px; }
+      .ruku-text { line-height: 2.2; }
+      .ruku-card { padding: 20px 16px; }
+    }
 
     .ayah { display: inline; border-radius: 6px; transition: background 0.15s; }
     .ayah.testing { cursor: pointer; }
-    .ayah.testing:hover { background: rgba(16, 185, 129, 0.09); }
+    .ayah.testing:hover { background: var(--accent-w); }
+    .ayah.playing { background: var(--accent-w); box-shadow: 0 0 0 3px var(--accent-w); }
     .ayah-num {
-      font-size: 0.62em; color: #10b981; margin: 0 0.18em;
-      border: 1px solid rgba(16, 185, 129, 0.45);
+      font-size: 0.62em; color: var(--accent); margin: 0 0.18em;
+      border: 1px solid var(--card-bd);
       border-radius: 999px; padding: 0.05em 0.42em;
       vertical-align: middle; white-space: nowrap;
     }
     /* Recall modes hide the words but keep the line shape, so the reader still
        sees how much text they are trying to recall. */
     .veiled, .veil-inner { filter: blur(7px); opacity: 0.55; user-select: none; }
-    .cue { color: #6ee7b7; }
+    .cue { color: var(--accent-2); }
+
+    /* ---- Flagged verses ----
+       A box you can spot from across the page, cleared by the same tap that
+       drew it. box-decoration-break keeps the box intact when the verse wraps
+       across lines, so a long ayah reads as one marked block, not three. */
+    .ayah.flagged, .ctx-flagged {
+      background: var(--warn-w);
+      border: 2px dashed var(--warn);
+      border-radius: 8px;
+      padding: 0 5px;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+    #rukuText.marking .ayah { cursor: pointer; }
+    #rukuText.marking .ayah:hover { background: var(--warn-w); }
+    .flag-row { display: grid; grid-template-columns: minmax(0,1fr) 26px; align-items: center; gap: 4px; }
+    .flag-go {
+      text-align: left; background: none; border: none; color: var(--txt-2);
+      cursor: pointer; font-size: 12.5px; padding: 6px 8px; border-radius: 8px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .flag-go:hover { background: var(--warn-w); color: var(--txt); }
+    .flag-go b { color: var(--warn); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .flag-x {
+      background: none; border: none; color: var(--txt-3); cursor: pointer;
+      font-size: 16px; line-height: 1; border-radius: 6px; padding: 2px;
+    }
+    .flag-x:hover { color: var(--danger); }
+    /* two classes so it beats .badge regardless of where the blocks sit */
+    .badge.badge-warn { background: var(--warn); color: var(--accent-ink); }
 
     /* ---- Connective context: the verse on either side of the ruku ---- */
     .ctx { padding: 12px 18px; margin: 0; }
-    .ctx-before { border-bottom: 1px dashed rgba(255,255,255,0.10); margin-bottom: 14px; padding-bottom: 16px; }
-    .ctx-after  { border-top:    1px dashed rgba(255,255,255,0.10); margin-top: 14px;    padding-top: 16px; }
+    .ctx-before { border-bottom: 1px dashed var(--line); margin-bottom: 14px; padding-bottom: 16px; }
+    .ctx-after  { border-top:    1px dashed var(--line); margin-top: 14px;    padding-top: 16px; }
     .ctx-tag {
       font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em;
-      color: #64748b; font-weight: 600; margin-bottom: 6px;
+      color: var(--txt-3); font-weight: 600; margin-bottom: 6px;
     }
     .ctx-after .ctx-tag { text-align: right; }
-    .ctx-arrow { color: #10b981; }
-    .ctx-text { font-size: 19px; line-height: 2; color: #94a3b8; }
+    .ctx-arrow { color: var(--accent); }
+    .ctx-text { font-size: calc(var(--fsbase) * var(--fsx) * 0.63); line-height: 2; color: var(--txt-2); }
+    /* Context off = a clean single-ruku page for pure recall drilling. */
+    #reader.no-ctx .ctx { display: none; }
 
     /* ---- Controls ---- */
-    .lbl { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; color: #94a3b8; font-weight: 600; }
+    .lbl { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--txt-2); font-weight: 600; }
     .chip {
-      background: rgba(30,41,59,0.85); border: 1px solid #334155; color: #cbd5e1;
+      background: var(--chip); border: 1px solid var(--chip-bd); color: var(--txt-2);
       font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 9px;
       cursor: pointer; transition: all 0.15s; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 6px;
     }
-    .chip:hover { border-color: #10b981; color: #fff; }
-    .chip.on { background: rgba(16,185,129,0.15); border-color: #10b981; color: #6ee7b7; }
-    .chip-danger:hover { border-color: #f87171; color: #fca5a5; }
+    .chip:hover { border-color: var(--accent); color: var(--txt); }
+    .chip.on { background: var(--accent-w); border-color: var(--accent); color: var(--accent); }
+    .chip-danger:hover { border-color: var(--danger); color: var(--danger); }
+    .chip-accent { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .chip-accent:hover { color: var(--accent-ink); filter: brightness(1.1); }
+    .chip:disabled { opacity: 0.4; cursor: not-allowed; }
+    .badge {
+      background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 800;
+      border-radius: 999px; padding: 1px 6px; line-height: 1.5; font-variant-numeric: tabular-nums;
+    }
+    .badge-zero { background: var(--chip-bd); color: var(--txt-3); }
+    .icon-btn {
+      background: var(--chip); border: 1px solid var(--chip-bd); color: var(--txt-2);
+      width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s; flex: none;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .navbtn {
-      background: rgba(30,41,59,0.85); border: 1px solid #334155; color: #e2e8f0;
+      background: var(--chip); border: 1px solid var(--chip-bd); color: var(--txt);
       width: 46px; height: 46px; border-radius: 12px; font-size: 20px; line-height: 1;
       cursor: pointer; flex: none; transition: all 0.15s;
     }
-    .navbtn:hover:not(:disabled) { border-color: #10b981; color: #6ee7b7; transform: translateY(-1px); }
+    .navbtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
     .navbtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    .seg { display: inline-flex; background: rgba(2,6,23,0.6); border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
+    .seg { display: inline-flex; background: var(--sub); border: 1px solid var(--chip-bd); border-radius: 10px; overflow: hidden; }
     .seg-btn {
-      background: none; border: none; color: #94a3b8; font-size: 12px; font-weight: 600;
+      background: none; border: none; color: var(--txt-2); font-size: 12px; font-weight: 600;
       padding: 7px 13px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
     }
-    .seg-btn + .seg-btn { border-left: 1px solid #334155; }
-    .seg-btn:hover { color: #f1f5f9; }
-    .seg-btn.on { background: rgba(100,116,139,0.25); color: #f1f5f9; }
-    .seg-btn.seg-learning.on  { background: rgba(251,191,36,0.18); color: #fcd34d; }
-    .seg-btn.seg-memorized.on { background: rgba(16,185,129,0.18); color: #6ee7b7; }
+    .seg-btn + .seg-btn { border-left: 1px solid var(--chip-bd); }
+    .seg-btn:hover { color: var(--txt); }
+    .seg-btn.on { background: var(--accent-w); color: var(--txt); }
+    .seg-btn.seg-learning.on  { background: var(--warn-w); color: var(--warn); }
+    .seg-btn.seg-memorized.on { background: var(--accent-w); color: var(--accent); }
 
-    /* ---- Progress ---- */
-    .track { height: 7px; background: rgba(2,6,23,0.7); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
-    .track-fill { height: 100%; background: linear-gradient(90deg, #059669, #10b981); border-radius: 999px; transition: width 0.35s ease; }
+    /* ---- Progress. The bar carries two numbers at once: memorized filled,
+       learning as a lighter shoulder, so "in progress" is visible not just counted. */
+    .track { position: relative; height: 7px; background: var(--track); border-radius: 999px; overflow: hidden; border: 1px solid var(--line-soft); }
+    .track-learn { position: absolute; top: 0; left: 0; bottom: 0; background: var(--warn); opacity: 0.35; border-radius: 999px; transition: width 0.35s ease; }
+    .track-fill { position: relative; z-index: 1; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 999px; transition: width 0.35s ease; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+    @media (max-width: 640px) { .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .stat {
+      background: var(--sub); border: 1px solid var(--line-soft); border-radius: 10px;
+      padding: 9px 10px; text-align: center;
+    }
+    .stat-n { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+    .stat-l { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--txt-3); font-weight: 600; margin-top: 2px; }
+
+    /* ---- Activity heatmap ---- */
+    .heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); gap: 3px; }
+    .heat i { width: 10px; height: 10px; border-radius: 2px; background: var(--heat-0); display: block; }
+    .heat i.l1 { background: var(--accent); opacity: 0.30; }
+    .heat i.l2 { background: var(--accent); opacity: 0.55; }
+    .heat i.l3 { background: var(--accent); opacity: 0.78; }
+    .heat i.l4 { background: var(--accent); opacity: 1; }
+    .heat i.today { box-shadow: 0 0 0 1.5px var(--txt-2); }
 
     .surah-row {
-      display: grid; grid-template-columns: 34px minmax(0,1fr) minmax(0,1fr) 74px 66px;
+      display: grid; grid-template-columns: 34px minmax(0,1fr) minmax(0,1fr) 92px 60px;
       align-items: center; gap: 10px; width: 100%; text-align: left;
-      background: none; border: none; color: #cbd5e1; cursor: pointer;
+      background: none; border: none; color: var(--txt-2); cursor: pointer;
       padding: 9px 14px; font-size: 13px; transition: background 0.12s;
     }
-    .surah-row:hover { background: rgba(16,185,129,0.08); color: #fff; }
-    .surah-id { color: #64748b; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .surah-row:hover { background: var(--accent-w); color: var(--txt); }
+    .surah-row.current { background: var(--accent-w); color: var(--txt); }
+    .surah-id { color: var(--txt-3); font-size: 11px; font-variant-numeric: tabular-nums; }
     .surah-name, .surah-ar { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .surah-ar { text-align: right; color: #94a3b8; font-size: 15px; }
-    .surah-count { font-size: 11px; color: #64748b; font-variant-numeric: tabular-nums; text-align: right; }
-    .learning-dot { color: #fbbf24; }
-    .mini { display: block; height: 5px; background: rgba(2,6,23,0.8); border-radius: 999px; overflow: hidden; }
-    .mini-fill { display: block; height: 100%; background: #10b981; border-radius: 999px; }
+    .surah-ar { text-align: right; color: var(--txt-2); font-size: 15px; }
+    .surah-count { font-size: 11px; color: var(--txt-3); font-variant-numeric: tabular-nums; text-align: right; }
+    .learning-dot { color: var(--warn); }
+    .mini { display: block; height: 5px; background: var(--track); border-radius: 999px; overflow: hidden; }
+    .mini-fill { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
     @media (max-width: 640px) {
-      .surah-row { grid-template-columns: 30px minmax(0,1fr) 60px 50px; }
+      .surah-row { grid-template-columns: 30px minmax(0,1fr) 76px 46px; }
       .surah-ar { display: none; }
     }
 
-    ::-webkit-scrollbar { width: 6px; }
+    /* ---- Per-ruku tracking strip ---- */
+    .meta { font-size: 11.5px; color: var(--txt-3); display: inline-flex; align-items: center; gap: 5px; }
+    .meta b { color: var(--txt-2); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .due-now { color: var(--warn); font-weight: 700; }
+    .dot-sep { color: var(--chip-bd); }
+
+    /* ---- Mobile action bar: prev / review / next always in thumb reach ---- */
+    .mbar {
+      display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      gap: 8px; padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+      background: var(--panel); backdrop-filter: blur(14px);
+      border-top: 1px solid var(--panel-bd);
+    }
+    @media (max-width: 640px) { .mbar { display: flex; } }
+    .mbar .navbtn { width: 52px; height: 44px; border-radius: 10px; }
+    .mbar .chip { flex: 1; justify-content: center; height: 44px; font-size: 13px; }
+
+    /* ---- Modals ---- */
+    .modal-bg.hidden { display: none; }   /* beats Tailwind's .hidden regardless of sheet order */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 200; background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal {
+      background: var(--bg); border: 1px solid var(--panel-bd); border-radius: 14px;
+      box-shadow: var(--shadow); max-width: 540px; width: 100%; max-height: 86vh;
+      overflow-y: auto; padding: 22px;
+    }
+    .kbd {
+      display: inline-block; min-width: 22px; text-align: center;
+      background: var(--chip); border: 1px solid var(--chip-bd); border-bottom-width: 2px;
+      border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 700;
+      font-family: ui-monospace, monospace; color: var(--txt);
+    }
+    .help-row { display: grid; grid-template-columns: 116px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; font-size: 13px; color: var(--txt-2); }
+
+    /* ---- Toast ---- */
+    #toast {
+      position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 14px); z-index: 300;
+      background: var(--accent); color: var(--accent-ink); font-size: 13px; font-weight: 700;
+      padding: 10px 18px; border-radius: 999px; box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 640px) { #toast { bottom: 78px; } }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--chip-bd); border-radius: 4px; }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   </style>
 </head>
 <body>
@@ -187,67 +382,126 @@
 </div>
 
 <div class="max-w-4xl mx-auto relative z-10">
-  <header class="flex items-center justify-between mb-8">
-    <div>
-      <h1 class="text-3xl font-bold text-white">Ruku Hifz</h1>
-      <p class="text-slate-400 text-sm mt-1">One ruku a page, with the verse before and after it</p>
+  <header class="flex items-start justify-between gap-3 mb-6">
+    <div class="min-w-0">
+      <h1 class="text-3xl font-bold t-main">Ruku Hifz</h1>
+      <p class="t-dim text-sm mt-1">One ruku a page, with the verse before and after it</p>
     </div>
-    <div class="text-right">
-      <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
-      <p class="text-slate-600 text-[11px] mt-1 hidden sm:block">← → ruku · 1/2/3 status · H hide · R reset</p>
+    <div class="flex flex-col items-end gap-2 flex-none">
+      <div class="flex items-center gap-2">
+        <button id="themeBtn" class="icon-btn" title="Switch between dark and light  (T)" aria-label="Switch theme">&#9789;</button>
+        <button id="helpBtn" class="icon-btn" title="Keyboard shortcuts  (?)" aria-label="Keyboard shortcuts">?</button>
+        <a href="../../links/" class="chip" title="Back to the Apps Hub">&#8592; Hub</a>
+      </div>
+      <p class="t-faint text-[11px] hidden sm:block">&#8592; &#8594; ruku &middot; 1/2/3 status &middot; Space reveal &middot; ? help</p>
     </div>
   </header>
 
   <main id="rukuHifz" class="glass-panel p-6">
-        <!-- ================= Toolbar ================= -->
-    <div class="flex flex-wrap items-center gap-3 pb-4 border-b border-white/10">
+    <!-- ================= Toolbar ================= -->
+    <div class="flex flex-wrap items-center gap-3 pb-4 border-b bd-line">
       <div class="flex items-center gap-2">
         <label for="surahSel" class="lbl">Surah</label>
-        <select id="surahSel" class="input-field" style="width:auto;min-width:210px;padding:8px 10px"></select>
+        <select id="surahSel" class="input-field" style="width:auto;min-width:200px;padding:8px 10px"></select>
       </div>
       <div class="flex items-center gap-2">
         <label for="jumpInput" class="lbl">Ruku</label>
-        <input id="jumpInput" type="text" inputmode="numeric" placeholder="120 or 2:5" title="Global ruku number (1-551), or surah:ruku like 2:5"
-               class="input-field" style="width:110px;padding:8px 10px">
+        <input id="jumpInput" type="text" inputmode="numeric" placeholder="120 or 2:5"
+               title="Global ruku number (1-551), or surah:ruku like 2:5"
+               class="input-field" style="width:106px;padding:8px 10px">
       </div>
-      <div class="ml-auto flex items-center gap-2">
-        <button id="nextNewBtn" class="chip" title="Jump to the next ruku you have not marked memorized">Next unmemorized</button>
-        <button id="panelBtn" class="chip" title="Show progress by surah">Progress</button>
+      <div class="ml-auto flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-1" title="Reader text size  (- and +)">
+          <button id="fsDec" class="icon-btn" style="width:30px;height:30px;font-size:11px" aria-label="Smaller text">A&minus;</button>
+          <button id="fsInc" class="icon-btn" style="width:30px;height:30px;font-size:14px" aria-label="Larger text">A+</button>
+        </div>
+        <button id="flagBtn" class="chip" title="Jump to the next verse you boxed for review  (V)">&#9744; Boxed <span id="flagCount" class="badge badge-zero">0</span></button>
+        <button id="dueBtn" class="chip" title="Jump to the ruku most overdue for review  (D)">Due <span id="dueCount" class="badge badge-zero">0</span></button>
+        <button id="nextNewBtn" class="chip" title="Jump to the next ruku you have not marked memorized  (N)">Next new</button>
+        <button id="panelBtn" class="chip" title="Show progress, streak and per-surah breakdown  (P)">Progress</button>
       </div>
     </div>
 
     <!-- ================= Global progress ================= -->
     <div class="mt-4">
-      <div class="flex items-end justify-between mb-1.5">
-        <span id="progLabel" class="text-xs text-slate-400">&nbsp;</span>
+      <div class="flex items-end justify-between mb-1.5 gap-3">
+        <span id="progLabel" class="text-xs t-dim">&nbsp;</span>
         <span id="progPct" class="text-xs font-semibold accent-text">0%</span>
       </div>
-      <div class="track"><div id="progBar" class="track-fill" style="width:0%"></div></div>
+      <div class="track">
+        <div id="progLearn" class="track-learn" style="width:0%"></div>
+        <div id="progBar" class="track-fill" style="width:0%"></div>
+      </div>
     </div>
 
-    <!-- ================= Surah progress panel ================= -->
-    <div id="panel" class="hidden mt-4 rounded-xl border border-white/10 bg-slate-950/50 overflow-hidden">
-      <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-        <input id="panelFilter" class="input-field" style="padding:7px 10px;font-size:13px" placeholder="Filter surahs…">
-        <button id="exportBtn" class="chip" title="Copy your progress as JSON">Export</button>
-        <button id="importBtn" class="chip" title="Paste previously exported JSON">Import</button>
+    <!-- ================= Progress panel ================= -->
+    <div id="panel" class="hidden mt-4 rounded-xl border bd-line bg-sub overflow-hidden">
+      <div class="p-4 border-b bd-line">
+        <div id="statStrip" class="stat-grid"></div>
+        <div class="mt-4">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="lbl">Last 26 weeks</span>
+            <span id="heatLabel" class="text-[11px] t-faint"></span>
+          </div>
+          <div class="overflow-x-auto pb-1"><div id="heat" class="heat"></div></div>
+        </div>
+        <div id="flagWrap" class="mt-4 hidden">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="lbl">Boxed for review</span>
+            <button id="flagClear" class="chip chip-danger" style="padding:4px 9px;font-size:11px">Unbox all</button>
+          </div>
+          <div id="flagList" class="max-h-40 overflow-y-auto rounded-lg" style="background:var(--sub)"></div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 px-4 py-3 border-b bd-line">
+        <input id="panelFilter" class="input-field" style="padding:7px 10px;font-size:13px;flex:1 1 150px;width:auto"
+               placeholder="Filter surahs by name or number...">
+        <div class="seg" id="sortSeg" title="Order the surah list">
+          <button data-sort="id" class="seg-btn" title="Quran order">Order</button>
+          <button data-sort="progress" class="seg-btn" title="Least complete first">Least done</button>
+          <button data-sort="due" class="seg-btn" title="Most rukus due for review first">Due</button>
+        </div>
+        <button id="exportBtn" class="chip" title="Copy your progress to the clipboard as JSON">Copy</button>
+        <button id="downloadBtn" class="chip" title="Download your progress as a backup file">Backup</button>
+        <button id="importBtn" class="chip" title="Restore progress from exported JSON">Restore</button>
         <button id="resetBtn" class="chip chip-danger" title="Erase all memorization progress">Reset</button>
       </div>
-      <div id="surahList" class="max-h-80 overflow-y-auto divide-y divide-white/5"></div>
+      <div id="surahList" class="max-h-80 overflow-y-auto divide-y" style="border-color:var(--line-soft)"></div>
     </div>
 
     <!-- ================= Ruku navigation ================= -->
     <div class="flex items-center gap-3 mt-6">
-      <button id="prevBtn" class="navbtn" title="Previous ruku  (←)">&#8592;</button>
+      <button id="prevBtn" class="navbtn" title="Previous ruku  (&#8592;)" aria-label="Previous ruku">&#8592;</button>
       <div class="flex-1 text-center min-w-0">
-        <div id="crumbAr" class="arabic text-2xl leading-tight text-white truncate">&nbsp;</div>
-        <div id="crumb" class="text-xs text-slate-400 mt-1">&nbsp;</div>
+        <div id="crumbAr" class="arabic text-2xl leading-tight t-main truncate" style="text-align:center">&nbsp;</div>
+        <div id="crumb" class="text-xs t-dim mt-1">&nbsp;</div>
       </div>
-      <button id="nextBtn" class="navbtn" title="Next ruku  (→)">&#8594;</button>
+      <button id="nextBtn" class="navbtn" title="Next ruku  (&#8594;)" aria-label="Next ruku">&#8594;</button>
+    </div>
+
+    <!-- ================= Recitation ================= -->
+    <div class="mt-5 flex flex-wrap items-center gap-2 px-3 py-2.5 rounded-xl border bd-line bg-sub">
+      <button id="playBtn" class="chip chip-accent" title="Play this ruku, ayah by ayah  (Space plays when audio is on)">&#9654; Play</button>
+      <button id="stopBtn" class="chip" title="Stop playback" disabled>&#9632;</button>
+      <select id="reciterSel" class="input-field" style="width:auto;padding:6px 9px;font-size:12px" title="Reciter"></select>
+      <select id="repeatSel" class="input-field" style="width:auto;padding:6px 9px;font-size:12px" title="How many times each ayah repeats before moving on">
+        <option value="1">1&times; each ayah</option>
+        <option value="2">2&times; each ayah</option>
+        <option value="3">3&times; each ayah</option>
+        <option value="5">5&times; each ayah</option>
+      </select>
+      <select id="speedSel" class="input-field" style="width:auto;padding:6px 9px;font-size:12px" title="Playback speed">
+        <option value="0.75">0.75&times;</option>
+        <option value="1">1&times;</option>
+        <option value="1.25">1.25&times;</option>
+        <option value="1.5">1.5&times;</option>
+      </select>
+      <button id="loopBtn" class="chip" title="Repeat the whole ruku when it ends">&#8635; Loop</button>
+      <span id="audioNote" class="meta ml-auto"></span>
     </div>
 
     <!-- ================= Reader ================= -->
-    <div id="reader" class="mt-5">
+    <div id="reader" class="mt-4">
 
       <!-- verse that ENDS the previous ruku -->
       <div id="beforeWrap" class="ctx ctx-before">
@@ -257,9 +511,9 @@
 
       <!-- the ruku itself -->
       <div class="ruku-card">
-        <div id="bismillah" class="arabic hidden text-center text-xl text-slate-300 mb-4 pb-4 border-b border-white/5"></div>
+        <div id="bismillah" class="arabic hidden text-center text-xl t-dim mb-4 pb-4 border-b" style="border-color:var(--line-soft)"></div>
         <p id="rukuText" class="arabic ruku-text"></p>
-        <div id="rukuStatus" class="text-center text-slate-500 text-sm py-8 hidden"></div>
+        <div id="rukuStatus" class="text-center t-faint text-sm py-8 hidden"></div>
       </div>
 
       <!-- verse that OPENS the next ruku -->
@@ -270,7 +524,7 @@
     </div>
 
     <!-- ================= Controls ================= -->
-    <div class="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center gap-x-6 gap-y-4">
+    <div class="mt-6 pt-5 border-t bd-line flex flex-wrap items-center gap-x-6 gap-y-4">
       <div class="flex items-center gap-2">
         <span class="lbl">Recall</span>
         <div class="seg" id="modeSeg">
@@ -278,8 +532,10 @@
           <button data-mode="first" class="seg-btn" title="Only the first word of each ayah  (H cycles)">First word</button>
           <button data-mode="blind" class="seg-btn" title="Hide every ayah  (H cycles)">Hide</button>
         </div>
-        <span class="text-xs text-slate-500 hidden sm:inline">tap an ayah to reveal</span>
+        <button id="ctxBtn" class="chip" title="Show or hide the verses either side of this ruku  (C)">Context</button>
+        <button id="markBtn" class="chip" title="While this is on, tapping a verse boxes it for later instead of revealing it  (F)">&#9744; Box</button>
       </div>
+      <span id="tapHint" class="text-xs t-faint w-full sm:w-auto"></span>
 
       <div class="flex items-center gap-2 ml-auto">
         <span class="lbl">Status</span>
@@ -289,9 +545,77 @@
           <button data-st="2" class="seg-btn seg-memorized" title="Memorized  (3)">Memorized</button>
         </div>
       </div>
-      <div id="reviewed" class="text-xs text-slate-500 w-full sm:w-auto">&nbsp;</div>
+
+      <!-- Review log: what turns a status into a habit you can see -->
+      <div class="w-full flex flex-wrap items-center gap-x-4 gap-y-3 pt-4 border-t bd-line">
+        <div id="trackInfo" class="meta">&nbsp;</div>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="againBtn" class="chip" title="Recalled it poorly - review again tomorrow  (X)">&#8635; Shaky</button>
+          <button id="reviewBtn" class="chip chip-accent" title="Recalled it well - push the next review further out  (Enter)">&#10003; Reviewed</button>
+        </div>
+      </div>
     </div>
   </main>
+
+  <p class="text-center text-[11px] t-faint mt-4">
+    Progress is stored in this browser only. Use <b>Backup</b> in the progress panel before clearing site data.
+  </p>
+</div>
+
+<!-- Mobile action bar -->
+<div class="mbar">
+  <button id="mPrev" class="navbtn" aria-label="Previous ruku">&#8592;</button>
+  <button id="mReview" class="chip chip-accent">&#10003; Reviewed</button>
+  <button id="mNext" class="navbtn" aria-label="Next ruku">&#8594;</button>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ================= Help ================= -->
+<div id="helpModal" class="modal-bg hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-bold t-main">Keyboard shortcuts</h2>
+      <button id="helpClose" class="icon-btn" aria-label="Close">&times;</button>
+    </div>
+    <div class="help-row"><span><span class="kbd">&#8592;</span> <span class="kbd">&#8594;</span></span><span>Previous / next ruku</span></div>
+    <div class="help-row"><span><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></span><span>Mark New / Learning / Memorized</span></div>
+    <div class="help-row"><span><span class="kbd">Enter</span></span><span>Log a good review (pushes the next one further out)</span></div>
+    <div class="help-row"><span><span class="kbd">X</span></span><span>Log a shaky review (back to tomorrow)</span></div>
+    <div class="help-row"><span><span class="kbd">H</span></span><span>Cycle recall mode: show &rarr; first word &rarr; hide</span></div>
+    <div class="help-row"><span><span class="kbd">Space</span></span><span>Reveal the next hidden ayah (or play/pause when audio is running)</span></div>
+    <div class="help-row"><span><span class="kbd">R</span></span><span>Reset the veil and show everything again</span></div>
+    <div class="help-row"><span><span class="kbd">C</span></span><span>Toggle the before / after context verses</span></div>
+    <div class="help-row"><span><span class="kbd">F</span></span><span>Box mode &mdash; while it is on, tapping a verse boxes it for later instead of revealing it</span></div>
+    <div class="help-row"><span><span class="kbd">V</span></span><span>Jump to the next boxed verse</span></div>
+    <div class="help-row"><span><span class="kbd">A</span></span><span>Play / pause the recitation</span></div>
+    <div class="help-row"><span><span class="kbd">N</span> <span class="kbd">D</span></span><span>Next unmemorized / most overdue ruku</span></div>
+    <div class="help-row"><span><span class="kbd">P</span></span><span>Open the progress panel</span></div>
+    <div class="help-row"><span><span class="kbd">T</span></span><span>Switch dark / light</span></div>
+    <div class="help-row"><span><span class="kbd">&minus;</span> <span class="kbd">+</span></span><span>Smaller / larger reader text</span></div>
+    <div class="help-row"><span><span class="kbd">G</span></span><span>Jump to a ruku (focus the jump box)</span></div>
+    <div class="help-row"><span><span class="kbd">Esc</span></span><span>Close this, the panel, or stop playback</span></div>
+    <p class="text-xs t-faint mt-4 pt-4 border-t bd-line">
+      Review scheduling is a simple expanding ladder: 1, 3, 7, 16, 35, 70, then 140 days.
+      A good review moves you one rung up; a shaky one puts you back on the bottom rung.
+    </p>
+  </div>
+</div>
+
+<!-- ================= Restore ================= -->
+<div id="ioModal" class="modal-bg hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Restore progress">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-lg font-bold t-main">Restore progress</h2>
+      <button id="ioClose" class="icon-btn" aria-label="Close">&times;</button>
+    </div>
+    <p class="text-xs t-dim mb-3">Paste exported JSON, or pick a backup file. This replaces everything currently tracked.</p>
+    <textarea id="ioText" class="input-field" rows="7" style="font-family:ui-monospace,monospace;font-size:11.5px;resize:vertical" placeholder='{"app":"ruku-hifz",...}'></textarea>
+    <div class="flex flex-wrap items-center gap-2 mt-3">
+      <input id="ioFile" type="file" accept="application/json,.json" class="text-xs t-dim" style="max-width:190px">
+      <button id="ioApply" class="chip chip-accent ml-auto">Restore</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -450,11 +774,24 @@ RUKUS.forEach(r => {
 const firstRukuOf = sid => RUKUS.find(r => r.s === sid).g;
 const nameOf = sid => DB[sid - 1].en;
 
-/* --- Persisted state ------------------------------------------------------ */
+/* --- Persisted state ------------------------------------------------------
+   p    : per-ruku record { s status, t status changed, r reviews, lr last
+          review, due next review, k rung on the interval ladder }
+   f    : { 'surah:ayah': flagged at } — individual verses boxed for a second
+          pass, keyed by verse rather than by ruku so the box follows the verse
+   days : { 'YYYY-MM-DD': reviews logged that day } — the streak and heatmap
+   Everything else is a preference. v1 saves (status only) load unchanged;
+   the new fields are all optional. */
 const KEY = 'rh1:state';
-const state = { p: {}, last: 1, mode: 'full' };
+const state = {
+  v: 2, p: {}, f: {}, days: {}, last: 1, mode: 'full',
+  theme: 'dark', fsx: 1, ctx: true,
+  reciter: 7, reps: 1, speed: 1, loop: false
+};
 try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
 if (!state.p || typeof state.p !== 'object') state.p = {};
+if (!state.days || typeof state.days !== 'object') state.days = {};
+if (!state.f || typeof state.f !== 'object') state.f = {};
 
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
 const statusOf = g => (state.p[g] && state.p[g].s) || 0;
@@ -464,6 +801,129 @@ let revealed = new Set();   // ayah numbers manually revealed in the current ruk
 let token = 0;              // guards against out-of-order fetch results
 
 const $ = id => document.getElementById(id);
+
+/* --- Small helpers -------------------------------------------------------- */
+const DAY = 86400000;
+const IVL = [1, 3, 7, 16, 35, 70, 140];   // the review ladder, in days
+
+function dayKey(d) {
+  d = d || new Date();
+  return d.getFullYear() + '-' +
+         String(d.getMonth() + 1).padStart(2, '0') + '-' +
+         String(d.getDate()).padStart(2, '0');
+}
+const fmtDate = ts => new Date(ts).toLocaleDateString(undefined,
+  { year: 'numeric', month: 'short', day: 'numeric' });
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+function relDue(due) {
+  const d = Math.round((due - Date.now()) / DAY);
+  if (d <= 0) return null;                 // null means "due now"
+  return d === 1 ? 'tomorrow' : 'in ' + plural(d, 'day');
+}
+
+let toastTimer = 0;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/* --- Boxed verses ---------------------------------------------------------
+   Flagging is per verse, not per ruku: the thing you trip over is one ayah,
+   and it stays boxed until you clear it — that is the whole "come back to
+   this" loop. Box mode is deliberately session-only, so a reload never leaves
+   you tapping to flag when you meant to reveal. */
+let markMode = false;
+let pendingAyah = 0;          // ayah to scroll to once the next render lands
+
+const flagKey = (s, a) => s + ':' + a;
+const isFlagged = (s, a) => !!state.f[flagKey(s, a)];
+const flagCount = () => Object.keys(state.f).length;
+
+function rukuOfAyah(s, a) {
+  const r = RUKUS.find(x => x.s === s && a >= x.start && a <= x.end);
+  return r ? r.g : 0;
+}
+
+function flaggedList() {
+  return Object.keys(state.f)
+    .map(k => k.split(':').map(Number))
+    .filter(v => v.length === 2 && v[0] >= 1 && v[0] <= 114 && v[1] >= 1)
+    .sort((x, y) => x[0] - y[0] || x[1] - y[1]);
+}
+
+function toggleFlag(s, a) {
+  const k = flagKey(s, a);
+  if (state.f[k]) { delete state.f[k]; toast('Unboxed ' + s + ':' + a); }
+  else { state.f[k] = Date.now(); toast('Boxed ' + s + ':' + a + ' for review'); }
+  save();
+  paintFlags();
+  paintProgress();
+  if (panelOpen) buildFlagList();
+}
+
+function paintFlags() {
+  const r = RUKUS[cur - 1];
+  $('rukuText').querySelectorAll('.ayah').forEach(el =>
+    el.classList.toggle('flagged', isFlagged(r.s, +el.dataset.a)));
+}
+
+function applyMark() {
+  $('rukuText').classList.toggle('marking', markMode);
+  $('markBtn').classList.toggle('on', markMode);
+  $('tapHint').textContent = markMode
+    ? 'Box mode on — tap a verse to box or unbox it'
+    : (state.mode === 'full' ? 'Tap Box, or press F, to mark a verse for later'
+                             : 'Tap a verse to reveal it');
+}
+
+function setMark(on) { markMode = on; applyMark(); }
+
+function scrollToAyah(a) {
+  const el = $('rukuText').querySelector('.ayah[data-a="' + a + '"]');
+  if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+/* Cycle through boxed verses in mushaf order, wrapping at the end. */
+function nextFlagged() {
+  const keys = flaggedList();
+  if (!keys.length) { toast('No verses boxed yet'); return; }
+
+  const here = RUKUS[cur - 1];
+  const pick = keys.find(v => v[0] > here.s || (v[0] === here.s && v[1] > here.end)) || keys[0];
+  const g = rukuOfAyah(pick[0], pick[1]);
+  if (!g) { toast('That verse is out of range'); return; }
+  if (g === cur) scrollToAyah(pick[1]);
+  else { pendingAyah = pick[1]; goTo(g); }
+}
+
+/* --- Appearance ----------------------------------------------------------- */
+function applyTheme() {
+  const light = state.theme === 'light';
+  document.documentElement.classList.toggle('light', light);
+  $('themeBtn').innerHTML = light ? '&#9788;' : '&#9789;';
+  $('themeBtn').title = light ? 'Switch to dark  (T)' : 'Switch to light  (T)';
+}
+function setTheme(t) { state.theme = t; save(); applyTheme(); }
+
+function applyFont() {
+  document.documentElement.style.setProperty('--fsx', state.fsx);
+}
+function bumpFont(step) {
+  state.fsx = Math.round(Math.min(Math.max((+state.fsx || 1) + step, 0.7), 2.0) * 100) / 100;
+  save(); applyFont();
+  toast('Text size ' + Math.round(state.fsx * 100) + '%');
+}
+
+function applyCtx() {
+  $('reader').classList.toggle('no-ctx', !state.ctx);
+  $('ctxBtn').classList.toggle('on', !!state.ctx);
+}
 
 /* --- Verse text: fetched once per surah, then cached in localStorage ------ */
 const mem = {};
@@ -491,6 +951,7 @@ async function render() {
   const r = RUKUS[cur - 1];
   const mine = ++token;
   revealed = new Set();
+  stopAudio();
 
   state.last = cur;
   save();
@@ -502,8 +963,8 @@ async function render() {
     '  ·  #' + r.g + ' of ' + TOTAL;
   $('surahSel').value = String(r.s);
   $('jumpInput').value = '';
-  $('prevBtn').disabled = cur === 1;
-  $('nextBtn').disabled = cur === TOTAL;
+  $('prevBtn').disabled = $('mPrev').disabled = cur === 1;
+  $('nextBtn').disabled = $('mNext').disabled = cur === TOTAL;
 
   $('bismillah').classList.toggle('hidden', !(r.start === 1 && r.s !== 1 && r.s !== 9));
   $('bismillah').textContent = BISMILLAH;
@@ -558,6 +1019,7 @@ async function render() {
   $('rukuText').querySelectorAll('.ayah').forEach(el => {
     el.addEventListener('click', () => {
       const a = +el.dataset.a;
+      if (markMode) { toggleFlag(r.s, a); return; }
       revealed.has(a) ? revealed.delete(a) : revealed.add(a);
       applyMode();
     });
@@ -567,6 +1029,9 @@ async function render() {
   fillCtx('after',  r.after,  texts, 'opens ruku #' + (r.g + 1));
 
   applyMode();
+  paintFlags();
+  applyMark();
+  if (pendingAyah) { scrollToAyah(pendingAyah); pendingAyah = 0; }
   prefetchNeighbours();
 }
 
@@ -581,9 +1046,15 @@ function fillCtx(which, ref, texts, label) {
     wrap.style.visibility = 'hidden';
     return;
   }
+  wrap.classList.remove('hidden');
   wrap.style.visibility = 'visible';
   $(which + 'Tag').textContent = label + '  ·  ' + nameOf(sid) + ' ' + sid + ':' + ayah;
-  $(which + 'Text').innerHTML = esc(text) + ' <span class="ayah-num">' + toAr(ayah) + '</span>';
+  /* A boxed verse stays boxed when it turns up as the neighbour of another
+     ruku — otherwise the mark would seem to vanish as you page across. */
+  const body = isFlagged(sid, ayah)
+    ? '<span class="ctx-flagged">' + esc(text) + '</span>'
+    : esc(text);
+  $(which + 'Text').innerHTML = body + ' <span class="ayah-num">' + toAr(ayah) + '</span>';
 }
 
 /* Warm the surahs the arrow keys are about to need, so paging feels instant. */
@@ -596,8 +1067,6 @@ function prefetchNeighbours() {
     });
   });
 }
-
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /* ------------------------------------------------------------ recall modes */
 function applyMode() {
@@ -624,37 +1093,265 @@ function applyMode() {
   });
 }
 
+/* Reveal one ayah at a time, in order — the way you actually check a recall
+   attempt: try the whole ruku, then uncover line by line to see where it broke. */
+function revealNext() {
+  const r = RUKUS[cur - 1];
+  for (let a = r.start; a <= r.end; a++) {
+    if (!revealed.has(a)) {
+      revealed.add(a);
+      applyMode();
+      const el = $('rukuText').querySelector('.ayah[data-a="' + a + '"]');
+      if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      return true;
+    }
+  }
+  return false;
+}
+
+/* ---------------------------------------------------------------- audio ---
+   Recitation is per ayah, which is what makes it useful for hifz: each ayah
+   can repeat N times before the next one starts, and the ayah being recited
+   is highlighted and uncovered even in a recall mode. */
+const RECITERS = [
+  { id: 7,  name: 'Mishary Alafasy' },
+  { id: 2,  name: 'AbdulBaset (Murattal)' },
+  { id: 1,  name: 'AbdulBaset (Mujawwad)' },
+  { id: 3,  name: 'Abdurrahman As-Sudais' },
+  { id: 4,  name: 'Abu Bakr Ash-Shatri' },
+  { id: 5,  name: 'Hani Ar-Rifai' },
+  { id: 6,  name: 'Mahmoud Al-Husary' },
+  { id: 9,  name: 'Mohamed Al-Minshawi' },
+  { id: 10, name: 'Saud Ash-Shuraim' }
+];
+
+const audio = new Audio();
+const audioMem = {};
+let playing = false, pAyah = 0, pRep = 0, pUrls = null, pToken = 0;
+
+async function surahAudio(recId, n) {
+  const k = recId + ':' + n;
+  if (audioMem[k]) return audioMem[k];
+  const res = await fetch('https://api.quran.com/api/v4/quran/recitations/' + recId + '?chapter_number=' + n);
+  const json = await res.json();
+  const arr = [];
+  (json.audio_files || []).forEach(f => {
+    const a = parseInt(String(f.verse_key).split(':')[1], 10);
+    if (!a || !f.url) return;
+    /* Most reciters return a bare path under verses.quran.com, but some
+       (Al-Husary) return an absolute or protocol-relative URL on another host. */
+    arr[a] = /^https?:/.test(f.url) ? f.url
+           : f.url.slice(0, 2) === '//' ? 'https:' + f.url
+           : 'https://verses.quran.com/' + f.url;
+  });
+  if (!arr.length) throw new Error('no audio');
+  audioMem[k] = arr;
+  return arr;
+}
+
+function paintPlayBtn() {
+  $('playBtn').innerHTML = playing ? '&#10073;&#10073; Pause' : '&#9654; Play';
+  $('stopBtn').disabled = !pUrls;
+}
+
+function highlight(a) {
+  $('rukuText').querySelectorAll('.ayah').forEach(el =>
+    el.classList.toggle('playing', +el.dataset.a === a));
+}
+
+function audioNote(msg) { $('audioNote').innerHTML = msg; }
+
+async function togglePlay() {
+  if (playing) { audio.pause(); playing = false; paintPlayBtn(); audioNote('Paused'); return; }
+  if (pUrls) { playing = true; paintPlayBtn(); audio.play().catch(() => {}); paintAudioNote(); return; }
+
+  const r = RUKUS[cur - 1];
+  const mine = ++pToken;
+  audioNote('Loading recitation…');
+  try {
+    const urls = await surahAudio(+state.reciter, r.s);
+    if (mine !== pToken) return;
+    pUrls = urls;
+    pAyah = r.start;
+    pRep = 0;
+    playing = true;
+    paintPlayBtn();
+    playCurrent();
+  } catch (e) {
+    if (mine !== pToken) return;
+    audioNote('<span class="due-now">Recitation unavailable — needs a connection</span>');
+  }
+}
+
+function playCurrent() {
+  const r = RUKUS[cur - 1];
+  const url = pUrls && pUrls[pAyah];
+  if (!url) { stopAudio(); audioNote('No audio for ' + r.s + ':' + pAyah); return; }
+  audio.src = url;
+  audio.playbackRate = +state.speed || 1;
+  audio.play().catch(() => { audioNote('<span class="due-now">Playback blocked — tap Play again</span>'); playing = false; paintPlayBtn(); });
+  highlight(pAyah);
+  revealed.add(pAyah);          // hearing it counts as revealing it
+  applyMode();
+  const el = $('rukuText').querySelector('.ayah[data-a="' + pAyah + '"]');
+  if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  paintAudioNote();
+}
+
+function paintAudioNote() {
+  const r = RUKUS[cur - 1];
+  const reps = +state.reps || 1;
+  audioNote('Ayah <b>' + pAyah + '</b> of ' + r.end +
+            (reps > 1 ? ' <span class="dot-sep">·</span> pass <b>' + (pRep + 1) + '</b>/' + reps : ''));
+}
+
+audio.addEventListener('ended', () => {
+  if (!playing) return;
+  const r = RUKUS[cur - 1];
+  const reps = +state.reps || 1;
+  pRep++;
+  if (pRep < reps) { playCurrent(); return; }
+  pRep = 0;
+  pAyah++;
+  if (pAyah > r.end) {
+    if (state.loop) { pAyah = r.start; playCurrent(); return; }
+    stopAudio();
+    audioNote('Finished this ruku');
+    return;
+  }
+  playCurrent();
+});
+
+audio.addEventListener('error', () => {
+  if (!playing) return;
+  stopAudio();
+  audioNote('<span class="due-now">Could not load that ayah</span>');
+});
+
+function stopAudio() {
+  playing = false;
+  pUrls = null;
+  pRep = 0;
+  pToken++;
+  try { audio.pause(); audio.removeAttribute('src'); } catch (e) {}
+  highlight(-1);
+  paintPlayBtn();
+  audioNote('');
+}
+
 /* ---------------------------------------------------------------- tracking */
 function paintStatus() {
   const s = statusOf(cur);
   $('statusSeg').querySelectorAll('.seg-btn')
     .forEach(b => b.classList.toggle('on', +b.dataset.st === s));
-  const entry = state.p[cur];
-  $('reviewed').textContent = entry && entry.t
-    ? 'Last marked ' + new Date(entry.t).toLocaleDateString(undefined,
-        { year: 'numeric', month: 'short', day: 'numeric' })
-    : 'Not marked yet';
+
+  const e = state.p[cur];
+  const bits = [];
+  if (e && e.r) {
+    bits.push('<span class="meta">' + plural(e.r, 'review') + '</span>');
+    if (e.lr) bits.push('<span class="meta">last <b>' + fmtDate(e.lr) + '</b></span>');
+    if (e.due) {
+      const rel = relDue(e.due);
+      bits.push(rel ? '<span class="meta">next <b>' + rel + '</b></span>'
+                    : '<span class="meta due-now">due now</span>');
+    }
+  } else if (e && e.t && s) {
+    bits.push('<span class="meta">marked ' + STATUS_NAME[s] + ' on <b>' + fmtDate(e.t) + '</b></span>');
+  } else {
+    bits.push('<span class="meta">Not reviewed yet — mark a review to start the schedule</span>');
+  }
+  $('trackInfo').innerHTML = bits.join('<span class="dot-sep" style="margin:0 8px">·</span>');
 }
 
+const STATUS_NAME = { 0: 'new', 1: 'learning', 2: 'memorized' };
+
 function setStatus(s) {
-  if (s === 0) delete state.p[cur]; else state.p[cur] = { s: s, t: Date.now() };
+  const e = state.p[cur] || (state.p[cur] = {});
+  e.s = s;
+  e.t = Date.now();
+  /* Marking something memorized with no schedule yet starts the ladder, so it
+     shows up in "Due" instead of quietly ageing out of sight. */
+  if (s === 2 && !e.due) { e.k = 0; e.due = Date.now() + IVL[0] * DAY; }
+  if (s === 0) { delete e.due; delete e.k; }
   save();
   paintStatus();
   paintProgress();
-  if (panelOpen) buildSurahList();
+  if (panelOpen) buildPanel();
+  toast('Marked ' + STATUS_NAME[s]);
+}
+
+function logDay() {
+  const k = dayKey();
+  state.days[k] = (state.days[k] || 0) + 1;
+}
+
+function logReview(good) {
+  const e = state.p[cur] || (state.p[cur] = { t: Date.now() });
+  if (!e.s) { e.s = 1; e.t = Date.now(); }     // a review implies at least "learning"
+  e.r = (e.r || 0) + 1;
+  e.lr = Date.now();
+
+  let msg;
+  if (good) {
+    const k = Math.min(e.k || 0, IVL.length - 1);
+    const days = IVL[k];
+    e.due = Date.now() + days * DAY;
+    e.k = Math.min(k + 1, IVL.length - 1);
+    msg = 'Reviewed — next in ' + plural(days, 'day');
+  } else {
+    e.k = 0;
+    e.due = Date.now() + DAY;
+    msg = 'Marked shaky — back tomorrow';
+  }
+  logDay();
+  save();
+  paintStatus();
+  paintProgress();
+  if (panelOpen) buildPanel();
+  toast(msg);
+}
+
+/* --- Aggregates ----------------------------------------------------------- */
+function tally() {
+  let learning = 0, memorized = 0, due = 0, reviews = 0;
+  const now = Date.now();
+  for (const k in state.p) {
+    const e = state.p[k];
+    if (e.s === 1) learning++; else if (e.s === 2) memorized++;
+    reviews += e.r || 0;
+    if (e.s && e.due && e.due <= now) due++;
+  }
+  return { learning, memorized, due, reviews, untouched: TOTAL - learning - memorized };
+}
+
+function streak() {
+  let n = 0;
+  const d = new Date();
+  if (!state.days[dayKey(d)]) d.setDate(d.getDate() - 1);   // today not started yet is fine
+  while (state.days[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
+  return n;
 }
 
 function paintProgress() {
-  let learning = 0, memorized = 0;
-  for (const k in state.p) {
-    const s = state.p[k].s;
-    if (s === 1) learning++; else if (s === 2) memorized++;
-  }
-  const pct = Math.round(memorized / TOTAL * 100);
+  const t = tally();
+  const pct = Math.round(t.memorized / TOTAL * 100);
+  const both = Math.round((t.memorized + t.learning) / TOTAL * 100);
   $('progBar').style.width = pct + '%';
+  $('progLearn').style.width = both + '%';
   $('progPct').textContent = pct + '%';
   $('progLabel').textContent =
-    memorized + ' of ' + TOTAL + ' rukus memorized · ' + learning + ' in progress';
+    t.memorized + ' of ' + TOTAL + ' rukus memorized · ' + t.learning + ' in progress' +
+    (t.due ? ' · ' + t.due + ' due for review' : '');
+
+  const badge = $('dueCount');
+  badge.textContent = t.due;
+  badge.classList.toggle('badge-zero', !t.due);
+
+  const fc = flagCount();
+  const fb = $('flagCount');
+  fb.textContent = fc;
+  fb.classList.toggle('badge-zero', !fc);
+  fb.classList.toggle('badge-warn', !!fc);
 }
 
 /* -------------------------------------------------------- navigation & UI */
@@ -671,45 +1368,178 @@ function nextUnmemorized() {
     const g = ((cur - 1 + i) % TOTAL) + 1;
     if (statusOf(g) !== 2) { goTo(g); return; }
   }
-  $('progLabel').textContent = 'Every ruku is marked memorized — ' + TOTAL + ' of ' + TOTAL + '.';
+  toast('Every ruku is marked memorized');
 }
 
+/* The most overdue ruku first — that is the one decaying fastest. */
+function nextDue() {
+  const now = Date.now();
+  let best = 0, bestDue = Infinity;
+  for (const k in state.p) {
+    const e = state.p[k];
+    if (!e.s || !e.due || e.due > now) continue;
+    if (e.due < bestDue) { bestDue = e.due; best = +k; }
+  }
+  if (!best) { toast('Nothing is due for review'); return; }
+  if (best === cur) { toast('This one is the most overdue'); return; }
+  goTo(best);
+}
+
+/* ------------------------------------------------------------------ panel */
 let panelOpen = false;
+let sortMode = 'id';
+
+function togglePanel(force) {
+  panelOpen = force === undefined ? !panelOpen : force;
+  $('panel').classList.toggle('hidden', !panelOpen);
+  $('panelBtn').classList.toggle('on', panelOpen);
+  if (panelOpen) buildPanel();
+}
+
+function buildPanel() { buildStats(); buildHeat(); buildFlagList(); buildSurahList(); }
+
+function buildFlagList() {
+  const keys = flaggedList();
+  $('flagWrap').classList.toggle('hidden', !keys.length);
+  if (!keys.length) return;
+
+  $('flagList').innerHTML = keys.map(v => {
+    const g = rukuOfAyah(v[0], v[1]);
+    return '<div class="flag-row">' +
+             '<button class="flag-go" data-g="' + g + '" data-a="' + v[1] + '">' +
+               '<b>' + v[0] + ':' + v[1] + '</b> · ' + esc(nameOf(v[0])) +
+               (g ? ' · ruku #' + g : '') +
+             '</button>' +
+             '<button class="flag-x" data-k="' + v[0] + ':' + v[1] + '" title="Unbox this verse">&times;</button>' +
+           '</div>';
+  }).join('');
+
+  $('flagList').querySelectorAll('.flag-go').forEach(b => b.addEventListener('click', () => {
+    const g = +b.dataset.g, a = +b.dataset.a;
+    if (!g) return;
+    if (g === cur) scrollToAyah(a); else { pendingAyah = a; goTo(g); }
+  }));
+  $('flagList').querySelectorAll('.flag-x').forEach(b => b.addEventListener('click', () => {
+    delete state.f[b.dataset.k];
+    save(); paintFlags(); paintProgress(); buildFlagList();
+  }));
+}
+
+function buildStats() {
+  const t = tally();
+  const s = streak();
+  const cells = [
+    ['Memorized', t.memorized, 'var(--accent)'],
+    ['Learning',  t.learning,  'var(--warn)'],
+    ['Not started', t.untouched, 'var(--txt-2)'],
+    ['Due now',   t.due,        t.due ? 'var(--warn)' : 'var(--txt-2)'],
+    ['Boxed',     flagCount(),  flagCount() ? 'var(--warn)' : 'var(--txt-2)'],
+    ['Day streak', s,           s ? 'var(--accent)' : 'var(--txt-2)']
+  ];
+  $('statStrip').innerHTML = cells.map(c =>
+    '<div class="stat"><div class="stat-n" style="color:' + c[2] + '">' + c[1] +
+    '</div><div class="stat-l">' + c[0] + '</div></div>').join('');
+}
+
+/* 26 weeks of review activity, one column per week starting Sunday. */
+function buildHeat() {
+  const end = new Date(); end.setHours(0, 0, 0, 0);
+  const start = new Date(end);
+  start.setDate(start.getDate() - 181);
+  start.setDate(start.getDate() - start.getDay());
+
+  const todayK = dayKey();
+  let html = '', active = 0, total = 0;
+  for (const d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const k = dayKey(d);
+    const n = state.days[k] || 0;
+    if (n) { active++; total += n; }
+    const lvl = n === 0 ? '' : n < 3 ? 'l1' : n < 6 ? 'l2' : n < 10 ? 'l3' : 'l4';
+    html += '<i class="' + lvl + (k === todayK ? ' today' : '') +
+            '" title="' + k + ': ' + plural(n, 'review') + '"></i>';
+  }
+  $('heat').innerHTML = html;
+  $('heatLabel').textContent = active
+    ? plural(active, 'active day') + ' · ' + plural(total, 'review')
+    : 'No reviews logged yet';
+}
 
 function buildSurahList() {
   const q = $('panelFilter').value.trim().toLowerCase();
+  const now = Date.now();
+  const curSurah = RUKUS[cur - 1].s;
+
   const rows = DB.filter(su =>
       !q || su.en.toLowerCase().includes(q) || su.ar.includes(q) || String(su.id) === q)
     .map(su => {
       const first = firstRukuOf(su.id);
-      let done = 0, learning = 0;
+      let done = 0, learning = 0, due = 0;
       for (let i = 0; i < su.stops.length; i++) {
-        const s = statusOf(first + i);
+        const e = state.p[first + i];
+        const s = (e && e.s) || 0;
         if (s === 2) done++; else if (s === 1) learning++;
+        if (e && e.s && e.due && e.due <= now) due++;
       }
-      const pct = Math.round(done / su.stops.length * 100);
-      return '<button class="surah-row" data-g="' + first + '">' +
-               '<span class="surah-id">' + su.id + '</span>' +
-               '<span class="surah-name">' + esc(su.en) + '</span>' +
-               '<span class="arabic surah-ar">' + esc(su.ar) + '</span>' +
-               '<span class="surah-count">' + done + '/' + su.stops.length +
-                 (learning ? ' <span class="learning-dot" title="' + learning + ' in progress">●</span>' : '') +
-               '</span>' +
-               '<span class="mini"><span class="mini-fill" style="width:' + pct + '%"></span></span>' +
-             '</button>';
-    }).join('');
-  $('surahList').innerHTML = rows || '<div class="p-4 text-sm text-slate-500">No surah matches that.</div>';
+      return { su, first, done, learning, due, pct: Math.round(done / su.stops.length * 100) };
+    });
+
+  if (sortMode === 'progress') rows.sort((a, b) => a.pct - b.pct || a.su.id - b.su.id);
+  else if (sortMode === 'due')  rows.sort((a, b) => b.due - a.due || a.su.id - b.su.id);
+
+  $('surahList').innerHTML = rows.map(r =>
+    '<button class="surah-row' + (r.su.id === curSurah ? ' current' : '') + '" data-g="' + r.first + '">' +
+      '<span class="surah-id">' + r.su.id + '</span>' +
+      '<span class="surah-name">' + esc(r.su.en) + '</span>' +
+      '<span class="arabic surah-ar">' + esc(r.su.ar) + '</span>' +
+      '<span class="surah-count">' + r.done + '/' + r.su.stops.length +
+        (r.learning ? ' <span class="learning-dot" title="' + r.learning + ' in progress">●</span>' : '') +
+        (r.due ? ' <span class="due-now" title="' + r.due + ' due for review">↺' + r.due + '</span>' : '') +
+      '</span>' +
+      '<span class="mini"><span class="mini-fill" style="width:' + r.pct + '%"></span></span>' +
+    '</button>').join('') ||
+    '<div class="p-4 text-sm t-faint">No surah matches that.</div>';
+
   $('surahList').querySelectorAll('.surah-row').forEach(b => {
     b.addEventListener('click', () => goTo(+b.dataset.g));
   });
+  $('sortSeg').querySelectorAll('.seg-btn')
+    .forEach(b => b.classList.toggle('on', b.dataset.sort === sortMode));
 }
 
+/* ------------------------------------------------------------ backup / restore */
+function exportBlob() {
+  return JSON.stringify({ app: 'ruku-hifz', v: 2, saved: new Date().toISOString(),
+                          p: state.p, f: state.f, days: state.days }, null, 0);
+}
+
+function applyImport(raw) {
+  const data = JSON.parse(raw);
+  if (!data || typeof data.p !== 'object' || !data.p) throw new Error('bad shape');
+  state.p = data.p;
+  state.days = (data.days && typeof data.days === 'object') ? data.days : {};
+  state.f = (data.f && typeof data.f === 'object') ? data.f : {};
+  save();
+  paintStatus(); paintProgress(); paintFlags();
+  if (panelOpen) buildPanel();
+}
+
+/* ------------------------------------------------------------------- init */
 function init() {
+  applyTheme();
+  applyFont();
+  applyCtx();
+
   $('surahSel').innerHTML = DB.map(su =>
     '<option value="' + su.id + '">' + su.id + '. ' + esc(su.en) + ' — ' + esc(su.ar) +
     ' (' + su.stops.length + ')</option>').join('');
-
   $('surahSel').addEventListener('change', e => goTo(firstRukuOf(+e.target.value)));
+
+  $('reciterSel').innerHTML = RECITERS.map(r =>
+    '<option value="' + r.id + '">' + r.name + '</option>').join('');
+  $('reciterSel').value = String(state.reciter);
+  $('repeatSel').value = String(state.reps);
+  $('speedSel').value = String(state.speed);
+  $('loopBtn').classList.toggle('on', !!state.loop);
 
   $('jumpInput').addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
@@ -719,9 +1549,9 @@ function init() {
       const sid = +m[1], nth = +m[2];
       if (sid >= 1 && sid <= 114 && nth >= 1 && nth <= DB[sid - 1].stops.length) {
         goTo(firstRukuOf(sid) + nth - 1);
-      }
+      } else { toast('No such ruku'); }
     } else if (/^\d+$/.test(raw)) {
-      goTo(+raw);                                        // global ruku number
+      if (+raw >= 1 && +raw <= TOTAL) goTo(+raw); else toast('Rukus run 1–' + TOTAL);
     }
     e.target.value = '';
     e.target.blur();
@@ -729,15 +1559,30 @@ function init() {
 
   $('prevBtn').addEventListener('click', () => goTo(cur - 1));
   $('nextBtn').addEventListener('click', () => goTo(cur + 1));
+  $('mPrev').addEventListener('click', () => goTo(cur - 1));
+  $('mNext').addEventListener('click', () => goTo(cur + 1));
+  $('mReview').addEventListener('click', () => logReview(true));
   $('nextNewBtn').addEventListener('click', nextUnmemorized);
-
-  $('panelBtn').addEventListener('click', () => {
-    panelOpen = !panelOpen;
-    $('panel').classList.toggle('hidden', !panelOpen);
-    $('panelBtn').classList.toggle('on', panelOpen);
-    if (panelOpen) buildSurahList();
-  });
+  $('dueBtn').addEventListener('click', nextDue);
+  $('panelBtn').addEventListener('click', () => togglePanel());
   $('panelFilter').addEventListener('input', buildSurahList);
+  $('sortSeg').querySelectorAll('.seg-btn').forEach(b => {
+    b.addEventListener('click', () => { sortMode = b.dataset.sort; buildSurahList(); });
+  });
+
+  $('themeBtn').addEventListener('click', () => setTheme(state.theme === 'light' ? 'dark' : 'light'));
+  $('fsDec').addEventListener('click', () => bumpFont(-0.1));
+  $('fsInc').addEventListener('click', () => bumpFont(0.1));
+  $('ctxBtn').addEventListener('click', () => { state.ctx = !state.ctx; save(); applyCtx(); });
+  $('markBtn').addEventListener('click', () => setMark(!markMode));
+  $('flagBtn').addEventListener('click', nextFlagged);
+  $('flagClear').addEventListener('click', () => {
+    const n = flagCount();
+    if (!n || !window.confirm('Unbox all ' + n + ' verses?')) return;
+    state.f = {};
+    save(); paintFlags(); paintProgress(); buildFlagList();
+    toast('Cleared every box');
+  });
 
   $('modeSeg').querySelectorAll('.seg-btn').forEach(b => {
     b.addEventListener('click', () => {
@@ -745,62 +1590,142 @@ function init() {
       save();
       revealed = new Set();
       applyMode();
+      applyMark();
     });
   });
   $('statusSeg').querySelectorAll('.seg-btn').forEach(b => {
     b.addEventListener('click', () => setStatus(+b.dataset.st));
   });
+  $('reviewBtn').addEventListener('click', () => logReview(true));
+  $('againBtn').addEventListener('click', () => logReview(false));
 
-  $('exportBtn').addEventListener('click', () => {
-    const blob = JSON.stringify({ app: 'ruku-hifz', v: 1, p: state.p });
-    navigator.clipboard.writeText(blob)
-      .then(() => flash('exportBtn', 'Copied'))
-      .catch(() => window.prompt('Copy your progress:', blob));
+  /* --- audio --- */
+  $('playBtn').addEventListener('click', togglePlay);
+  $('stopBtn').addEventListener('click', stopAudio);
+  $('reciterSel').addEventListener('change', e => {
+    state.reciter = +e.target.value; save();
+    const wasPlaying = playing;
+    stopAudio();
+    if (wasPlaying) togglePlay();
   });
-  $('importBtn').addEventListener('click', () => {
-    const raw = window.prompt('Paste previously exported progress JSON:');
-    if (!raw) return;
+  $('repeatSel').addEventListener('change', e => { state.reps = +e.target.value; save(); if (pUrls) paintAudioNote(); });
+  $('speedSel').addEventListener('change', e => {
+    state.speed = +e.target.value; save();
+    audio.playbackRate = state.speed;
+  });
+  $('loopBtn').addEventListener('click', () => {
+    state.loop = !state.loop; save();
+    $('loopBtn').classList.toggle('on', state.loop);
+  });
+  paintPlayBtn();
+
+  /* --- backup / restore --- */
+  $('exportBtn').addEventListener('click', () => {
+    const blob = exportBlob();
+    navigator.clipboard.writeText(blob)
+      .then(() => toast('Progress copied to the clipboard'))
+      .catch(() => { $('ioText').value = blob; openModal('ioModal'); });
+  });
+  $('downloadBtn').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([exportBlob()], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ruku-hifz-' + dayKey() + '.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    toast('Backup file saved');
+  });
+  $('importBtn').addEventListener('click', () => { $('ioText').value = ''; openModal('ioModal'); });
+  $('ioClose').addEventListener('click', () => closeModal('ioModal'));
+  $('ioFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    f.text().then(t => { $('ioText').value = t; }).catch(() => toast('Could not read that file'));
+  });
+  $('ioApply').addEventListener('click', () => {
     try {
-      const data = JSON.parse(raw);
-      if (!data || typeof data.p !== 'object') throw new Error('bad shape');
-      state.p = data.p;
-      save(); paintStatus(); paintProgress(); buildSurahList();
-      flash('importBtn', 'Imported');
-    } catch (e) { flash('importBtn', 'Invalid'); }
+      applyImport($('ioText').value.trim());
+      closeModal('ioModal');
+      toast('Progress restored');
+    } catch (e) { toast('That is not a valid Ruku Hifz backup'); }
   });
   $('resetBtn').addEventListener('click', () => {
-    if (!window.confirm('Erase memorization progress for all ' + TOTAL + ' rukus? This cannot be undone.')) return;
+    if (!window.confirm('Erase memorization progress, review history and boxed verses for all ' +
+        TOTAL + ' rukus? This cannot be undone — use Backup first.')) return;
     state.p = {};
-    save(); paintStatus(); paintProgress(); buildSurahList();
+    state.days = {};
+    state.f = {};
+    save();
+    paintStatus(); paintProgress(); paintFlags(); buildPanel();
+    toast('Progress erased');
+  });
+
+  /* --- help --- */
+  $('helpBtn').addEventListener('click', () => openModal('helpModal'));
+  $('helpClose').addEventListener('click', () => closeModal('helpModal'));
+  ['helpModal', 'ioModal'].forEach(id => {
+    $(id).addEventListener('click', e => { if (e.target.id === id) closeModal(id); });
   });
 
   document.addEventListener('keydown', e => {
-    if (e.target.matches('input, select, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === 'ArrowLeft')  { goTo(cur - 1); e.preventDefault(); }
-    if (e.key === 'ArrowRight') { goTo(cur + 1); e.preventDefault(); }
-    if (e.key === '1') setStatus(0);
-    if (e.key === '2') setStatus(1);
-    if (e.key === '3') setStatus(2);
-    if (e.key.toLowerCase() === 'h') {
+    const tgt = e.target;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (tgt && tgt.closest && tgt.closest('input, select, textarea, [contenteditable]')) return;
+    const k = e.key.toLowerCase();
+
+    if (e.key === 'Escape') {
+      if (!$('helpModal').classList.contains('hidden')) return closeModal('helpModal');
+      if (!$('ioModal').classList.contains('hidden')) return closeModal('ioModal');
+      if (playing || pUrls) return stopAudio();
+      if (markMode) return setMark(false);
+      if (panelOpen) return togglePanel(false);
+      return;
+    }
+    if (!$('helpModal').classList.contains('hidden') || !$('ioModal').classList.contains('hidden')) return;
+
+    if (e.key === 'ArrowLeft')  { goTo(cur - 1); e.preventDefault(); return; }
+    if (e.key === 'ArrowRight') { goTo(cur + 1); e.preventDefault(); return; }
+    if (e.key === '1') return setStatus(0);
+    if (e.key === '2') return setStatus(1);
+    if (e.key === '3') return setStatus(2);
+    if (e.key === 'Enter') { e.preventDefault(); return logReview(true); }
+    if (k === 'x') return logReview(false);
+    if (k === '?' || (e.key === '/' && e.shiftKey)) { e.preventDefault(); return openModal('helpModal'); }
+    if (e.key === ' ') {
+      e.preventDefault();
+      if (playing || pUrls) return togglePlay();
+      if (state.mode === 'full') return toast('Switch to First word or Hide to practise recall');
+      if (!revealNext()) toast('Everything is already revealed');
+      return;
+    }
+    if (k === 'h') {
       const order = ['full', 'first', 'blind'];
       state.mode = order[(order.indexOf(state.mode) + 1) % 3];
-      save(); revealed = new Set(); applyMode();
+      save(); revealed = new Set(); applyMode(); applyMark();
+      return;
     }
-    if (e.key.toLowerCase() === 'r') { revealed = new Set(); state.mode = 'full'; save(); applyMode(); }
+    if (k === 'r') { revealed = new Set(); state.mode = 'full'; save(); applyMode(); applyMark(); return; }
+    if (k === 'c') { state.ctx = !state.ctx; save(); applyCtx(); return; }
+    if (k === 'f') { setMark(!markMode); return; }
+    if (k === 'v') return nextFlagged();
+    if (k === 'a') { e.preventDefault(); return void togglePlay(); }
+    if (k === 'n') return nextUnmemorized();
+    if (k === 'd') return nextDue();
+    if (k === 'p') return togglePanel();
+    if (k === 't') return setTheme(state.theme === 'light' ? 'dark' : 'light');
+    if (k === 'g') { e.preventDefault(); $('jumpInput').focus(); return; }
+    if (e.key === '-' || e.key === '_') return bumpFont(-0.1);
+    if (e.key === '+' || e.key === '=') return bumpFont(0.1);
   });
 
   render();
 }
 
-function flash(id, msg) {
-  const b = $(id), old = b.textContent;
-  b.textContent = msg;
-  setTimeout(() => { b.textContent = old; }, 1200);
-}
+function openModal(id)  { $(id).classList.remove('hidden'); }
+function closeModal(id) { $(id).classList.add('hidden'); }
 
 init();
 </script>
-
 <script>
 // Shared login gate — do not modify.
 function _login() {
