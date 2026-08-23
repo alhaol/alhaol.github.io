@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Eighty, Deliver Hundred | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_53.png" alt="Promise Eighty, Deliver Hundred" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive</span>
+                        <span class="category-badge category-workflow">Workflow</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Promise Eighty, Deliver Hundred</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Most people run one number where the job needs two. The gap between them is where motivation lives.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 23, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Being told you have great potential is not a compliment. It is a loan, and the interest is paid in the work you never attempt.</p>
+
+<p>Zakary Tormala, Jayson Jia and Michael Norton ran a series of studies showing that people rate potential above achievement. An athlete who might score a lot of points next season is judged more favorably than one who already did. The mechanism they identified is uncertainty: not knowing makes evaluators pay more attention, and the extra attention produces a better impression. Potential is worth more than a record because it has not been priced yet.</p>
+
+<p>That finding has a consequence nobody puts on the motivational poster. If unproven is worth more than proven, then testing yourself is a transaction that can only lower your valuation. So people protect the asset. They take the safe project, they keep the ambition private, and they call it patience.</p>
+
+<h2>Why the trap closes</h2>
+
+<p>The usual escape attempt makes it worse. You raise your own expectations to match the story other people tell about you, so now every deliverable is a referendum on whether the story was ever true. Work done under that condition is slower and more defensive, and the fear of the test grows in proportion to the reputation.</p>
+
+<p>The way out is not a better attitude. It is noticing that you have been running one number where the job needs two.</p>
+
+<blockquote>The number you publish and the number you work toward are doing different jobs. Most people run one number and let it fail at both.</blockquote>
+
+<p>Published high and worked toward high, you burn credibility on the days it slips. Published low and worked toward low, you stagnate. The move is to pull the two apart on purpose.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 240" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Four numbers on one scale: what you publish, what others expect, what you deliver, what you work toward</title>
+            <desc id="fig1-desc">A single scale carrying four marks. You commit publicly to eighty. Other people expect around ninety, which you do not fully control. You organize the work around a private target of one hundred and twenty. You deliver one hundred, which clears both published expectations while falling short of the private target that produced it.</desc>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">Two numbers, not one</text>
+
+            <line x1="229" y1="110" x2="229" y2="162" stroke="#f59e0b" stroke-width="1.5"/>
+            <line x1="303" y1="110" x2="303" y2="162" stroke="#f59e0b" stroke-width="1.5"/>
+            <line x1="377" y1="110" x2="377" y2="162" stroke="#60a5fa" stroke-width="1.5"/>
+            <line x1="526" y1="110" x2="526" y2="162" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+            <rect x="80" y="124" width="520" height="24" rx="4" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="80" y="124" width="297" height="24" rx="4" fill="#60a5fa" fill-opacity="0.75"/>
+            <rect x="377" y="124" width="149" height="24" rx="4" fill="none" stroke="#60a5fa" stroke-opacity="0.6" stroke-dasharray="3 4"/>
+
+            <path d="M 229,113 L 229,106 L 377,106 L 377,113" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.8"/>
+
+            <text x="229" y="74" font-size="16" font-weight="700" fill="#f59e0b" text-anchor="middle">80</text>
+            <text x="229" y="94" font-size="11" fill="#94a3b8" text-anchor="middle">you commit</text>
+            <text x="377" y="74" font-size="16" font-weight="700" fill="#60a5fa" text-anchor="middle">100</text>
+            <text x="377" y="94" font-size="11" fill="#94a3b8" text-anchor="middle">you deliver</text>
+
+            <text x="303" y="190" font-size="16" font-weight="700" fill="#f59e0b" text-anchor="middle">90</text>
+            <text x="303" y="210" font-size="11" fill="#94a3b8" text-anchor="middle">others expect</text>
+            <text x="526" y="190" font-size="16" font-weight="700" fill="#60a5fa" text-anchor="middle">120</text>
+            <text x="526" y="210" font-size="11" fill="#94a3b8" text-anchor="middle">you work toward</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Illustrative numbers, not measured ones. The bracket is the whole mechanism: the distance from what you promised to what arrived. Amber marks are public and deliberately low, blue marks are private and deliberately high.</figcaption>
+</figure>
+
+<h2>Keep the target high, stop publishing it</h2>
+
+<p>The obvious objection is that expecting less of yourself should produce less. Edwin Locke and Gary Latham spent thirty five years establishing the opposite of what the objection assumes: specific and difficult goals produce higher performance than easy goals, and higher than telling someone to do their best. Lower the goal and output really does fall.</p>
+
+<p>Which is why the goal is not what you lower. Locke and Latham were studying the target that organizes the work. The number in your status update is a different object with a different job, and its job is to be beatable. Nothing in the evidence says the two have to be the same number, and considerable practice says they should not be.</p>
+
+<h2>The version of this that fails</h2>
+
+<p>There is a well-documented failure mode sitting one inch from this advice, and it deserves naming before anyone tries the model.</p>
+
+<p>In 1978 Steven Berglas and Edward Jones gave subjects a choice between a drug they were told would help performance and one they were told would hurt it, just before a retest. Subjects who had succeeded earlier without understanding why, and who therefore doubted they could repeat it, disproportionately chose the drug that would hurt. They were buying an excuse in advance. Psychologists call it <strong>self-handicapping</strong>, and it reliably damages the performance it is meant to protect.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 255" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Managing expectations and self-handicapping look identical until you check the effort</title>
+            <desc id="fig2-desc">Two rows compared across three measures. Both publish a low number. In managing expectations the effort stays at maximum and the outcome clears both the published number and what others expected. In self-handicapping the effort drops along with the published number and the outcome lands below it. The published number is the same in both rows, so it cannot tell them apart.</desc>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">The same published number, two different things</text>
+            <text x="255" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8" text-anchor="middle">PUBLISHED</text>
+            <text x="401" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8" text-anchor="middle">EFFORT</text>
+            <text x="547" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8" text-anchor="middle">OUTCOME</text>
+
+            <text x="16" y="106" font-size="13" font-weight="700" fill="#60a5fa">Managing expectations</text>
+            <text x="16" y="126" font-size="11" fill="#94a3b8">the effort does not move</text>
+            <rect x="190" y="96" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="190" y="96" width="52" height="20" rx="3" fill="#f59e0b" fill-opacity="0.8"/>
+            <rect x="336" y="96" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="336" y="96" width="126" height="20" rx="3" fill="#60a5fa" fill-opacity="0.8"/>
+            <rect x="482" y="96" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="482" y="96" width="116" height="20" rx="3" fill="#60a5fa" fill-opacity="0.8"/>
+
+            <line x1="16" y1="158" x2="620" y2="158" stroke="#2a3f5f"/>
+
+            <text x="16" y="198" font-size="13" font-weight="700" fill="#f59e0b">Self-handicapping</text>
+            <text x="16" y="218" font-size="11" fill="#94a3b8">the effort moves too</text>
+            <rect x="190" y="188" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="190" y="188" width="52" height="20" rx="3" fill="#f59e0b" fill-opacity="0.8"/>
+            <rect x="336" y="188" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="336" y="188" width="46" height="20" rx="3" fill="#f59e0b" fill-opacity="0.8"/>
+            <rect x="482" y="188" width="130" height="20" rx="3" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
+            <rect x="482" y="188" width="38" height="20" rx="3" fill="#f59e0b" fill-opacity="0.8"/>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The published column is identical in both rows, which is why nobody can audit this from the outside. The effort column is the only thing that separates a calibrated promise from an excuse bought in advance. Self-handicapping after Berglas and Jones.</figcaption>
+</figure>
+
+<p>So the model carries one test, and you have to be honest when you run it. When you lowered the number you published, did your effort change? If the answer is yes, this is not expectation management. You have bought an excuse and dressed it as humility.</p>
+
+<h2>Why eighty is usually not sandbagging</h2>
+
+<p>The last piece dissolves the guilt that stops people doing this. Committing below what others expect feels like a small dishonesty. Usually it is a correction.</p>
+
+<p>Roger Buehler, Dale Griffin and Michael Ross asked psychology students to predict when they would finish their theses. The optimistic estimate averaged 27.4 days. Asked for a worst case, assuming everything that could go wrong did, the same students averaged 48.6 days. They actually finished in 55.5 days. The pessimistic forecast was still optimistic.</p>
+
+<p>Run that against the model. The ninety other people expect is roughly the number you would have produced from the same faulty machinery. The eighty is not modesty. It is what you get when you correct for a bias that has been measured repeatedly and does not go away when you know about it.</p>
+
+<h2>Where AI actually helps</h2>
+
+<p>Three of the four jobs here are clerical, which makes them a good fit for a machine, and the fourth is where the machine will quietly hurt you.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 330" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">The calibration loop that sets the published number from your own record</title>
+            <desc id="fig3-desc">A four step cycle. Commit low and publish one number. Work toward the private high target. Log both the estimate and the actual result. Recompute your personal ratio of actual to estimate, which sets the next commitment. The last two steps are the ones a model should do. Separately, asking a model whether you can hit a number is marked as the thing that breaks the loop, because an agreeable system amplifies the planning fallacy.</desc>
+            <defs>
+                <marker id="fig3-arw" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <polygon points="0 0, 7 3.5, 0 7" fill="#2a3f5f"/>
+                </marker>
+            </defs>
+            <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">The calibration loop</text>
+
+            <rect x="60" y="60" width="190" height="64" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="76" y="84" font-size="12" font-weight="700" fill="#f1f5f9">1. Commit low</text>
+            <text x="76" y="104" font-size="11" fill="#94a3b8">publish this number only</text>
+
+            <rect x="330" y="60" width="190" height="64" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="346" y="84" font-size="12" font-weight="700" fill="#f1f5f9">2. Work to the target</text>
+            <text x="346" y="104" font-size="11" fill="#94a3b8">the private number, high</text>
+
+            <rect x="330" y="170" width="190" height="64" rx="8" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="346" y="194" font-size="12" font-weight="700" fill="#60a5fa">3. Log both</text>
+            <text x="346" y="214" font-size="11" fill="#94a3b8">estimate and actual</text>
+
+            <rect x="60" y="170" width="190" height="64" rx="8" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="76" y="194" font-size="12" font-weight="700" fill="#60a5fa">4. Recompute the ratio</text>
+            <text x="76" y="214" font-size="11" fill="#94a3b8">actual over estimate</text>
+
+            <line x1="250" y1="92" x2="322" y2="92" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig3-arw)"/>
+            <line x1="425" y1="124" x2="425" y2="162" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig3-arw)"/>
+            <line x1="330" y1="202" x2="258" y2="202" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig3-arw)"/>
+            <line x1="155" y1="170" x2="155" y2="132" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig3-arw)"/>
+
+            <rect x="60" y="254" width="460" height="58" rx="8" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="76" y="278" font-size="12" font-weight="700" fill="#f59e0b">Do not ask the model whether you can hit the number.</text>
+            <text x="76" y="298" font-size="11" fill="#94a3b8">An agreeable system amplifies the bias you are correcting for.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> Steps three and four are bookkeeping, which is exactly what to hand over. The published number then comes from your measured history rather than from how you feel on the day you are asked.</figcaption>
+</figure>
+
+<p>Log every commitment as a pair, what you estimated and what actually happened, and a model can compute your personal ratio across dozens of past items. If you finish at 1.4 times your own estimate, that is not a character flaw to fix, it is a coefficient to apply. Ask for the outside view as well: how comparable efforts actually went, rather than a plan built for the hopeful version of this one.</p>
+
+<p>The fourth job is the trap. Ask a model whether you can ship in two weeks and it will usually find a way to say yes, because agreeable answers are what fluent systems produce. A system that reflects your optimism back at you makes the planning fallacy worse. So the instruction has to forbid it from using your framing.</p>
+
+<pre><code>Here is my log of past estimates and actual outcomes: [paste].
+Compute my ratio of actual to estimate, and the spread.
+I am now estimating [X] for this task.
+Do not evaluate whether [X] is achievable and do not encourage me.
+Return one number: what I should publicly commit to,
+given my history rather than my current estimate.</code></pre>
+
+<p>Motivation takes care of itself once this runs. Teresa Amabile and Steven Kramer, working from thousands of daily diary entries, found that the strongest driver of good inner work life is making progress in meaningful work. The eighty and the hundred produce a visible clearance on a regular cadence, and a model that keeps the ledger turns those into a record you can look at rather than a feeling you forget by Friday.</p>
+
+<h2>What leaders should do</h2>
+
+<ol>
+    <li>Write the commit date and the target date as two separate fields in your planning template, and publish only the first. Teams that keep one field will keep publishing the target and missing it.</li>
+    <li>Keep a two-column log of committed against delivered for every person and project. After about twenty entries you have a ratio, and the ratio should set the next commitment rather than anyone's confidence.</li>
+    <li>Review on delivered minus committed, then check the effort column before you praise it. A person whose effort fell along with their number is handicapping, and the metric alone cannot see the difference.</li>
+    <li>Stop paying people in potential. Tormala and colleagues showed that potential language is worth more than a record, which is precisely why it is a cheap currency to hand out. Name the delivered work instead, so the asset gets spent rather than hoarded.</li>
+</ol>
+
+<p>The trap is not that people aim too low. It is that potential feels like something to protect, and protected potential does not compound. A record does. Every cycle through the loop converts a little of an asset that only pays while untested into one that pays every time someone checks.</p>
+
+<p>Eighty, ninety, one hundred is a small piece of arithmetic doing a large amount of psychological work. It lets you keep an ambitious target without staking your reputation on it every fortnight, and it gives you a clearance to look at often enough to stay in the habit. You will still be told you have potential. The point is to arrive at a stage where that is no longer the most interesting thing anyone can say about you.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Taste Gap</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">The distance between what you can judge and what you can currently produce, and why the gap is a sign of progress rather than a verdict.</p>
+                        <a href="the-taste-gap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Three Tenses, One Budget</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Attention as a single account spent across past, present and future, and the one question that tells investment from leakage.</p>
+                        <a href="three-tenses-one-budget.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Scoreboard Effect</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">What happens to behavior once a number is being watched, and how to pick one that survives being optimized against.</p>
+                        <a href="the-scoreboard-effect.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Tormala, Z. L., Jia, J. S., &amp; Norton, M. I. (2012). "The Preference for Potential." <em>Journal of Personality and Social Psychology</em>, 103(4), 567-583. Shows that people evaluate potential more favorably than equivalent achievement, and identifies uncertainty as the mechanism. <a href="https://www.hbs.edu/ris/Publication%20Files/tormala%20jia%20norton_b87536ee-13dd-464f-a65a-8dff3f6c5f8b.pdf" target="_blank" rel="noopener">hbs.edu (PDF)</a></li>
+                    <li class="reference-item">Locke, E. A., &amp; Latham, G. P. (2002). "Building a practically useful theory of goal setting and task motivation: A 35-year odyssey." <em>American Psychologist</em>, 57(9), 705-717. The evidence that specific difficult goals outperform easy goals and outperform "do your best," which is why the target you work toward must not be the number you lower. <a href="https://doi.org/10.1037/0003-066X.57.9.705" target="_blank" rel="noopener">doi:10.1037/0003-066X.57.9.705</a></li>
+                    <li class="reference-item">Berglas, S., &amp; Jones, E. E. (1978). "Drug choice as a self-handicapping strategy in response to noncontingent success." <em>Journal of Personality and Social Psychology</em>, 36(4), 405-417. The original demonstration that people buy excuses in advance when they doubt they can repeat a success. <a href="https://doi.org/10.1037/0022-3514.36.4.405" target="_blank" rel="noopener">doi:10.1037/0022-3514.36.4.405</a></li>
+                    <li class="reference-item">Buehler, R., Griffin, D., &amp; Ross, M. (1994). "Exploring the planning fallacy: Why people underestimate their task completion times." <em>Journal of Personality and Social Psychology</em>, 67(3), 366-381. Source of the thesis study: optimistic estimate 27.4 days, worst-case estimate 48.6 days, actual 55.5 days. <a href="https://doi.org/10.1037/0022-3514.67.3.366" target="_blank" rel="noopener">doi:10.1037/0022-3514.67.3.366</a></li>
+                    <li class="reference-item">Amabile, T. M., &amp; Kramer, S. J. (2011). <em>The Progress Principle: Using Small Wins to Ignite Joy, Engagement, and Creativity at Work</em>. Harvard Business Review Press. From a large daily diary study: progress in meaningful work is the strongest driver of good inner work life.</li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
