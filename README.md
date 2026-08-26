@@ -18,7 +18,7 @@ No build step, no package manager.
 
 ```
 .
-├── index.html          # Main portfolio / CV page (two foldable docks: hub bottom-right → Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets; stats bottom-left → citations, patents, conferences, journals)
+├── index.html          # Main portfolio / CV page (two foldable docks: hub bottom-right → Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets, Resources; stats bottom-left → citations, patents, conferences, journals)
 ├── conf/
 │   ├── profile.json    # Portfolio data (bio, experience, publications, patents…)
 │   └── style.json      # Theme / colour-scheme configuration
@@ -84,16 +84,18 @@ No build step, no package manager.
 ├── pages/              # Masterclass Library — self-contained interactive learning pages
 │   ├── index.html      # Static card-grid landing page (not data-driven; add a card per new class)
 │   └── NNN_slug.html   # Individual masterclass pages (001_the_synthetic_mind.html …)
-└── snippets/           # Snippet Library — short, self-contained, vetted reference scripts
-    ├── index.html      # Card-grid gallery with filter (not data-driven; add a card per new snippet)
-    └── NN_slug/         # One folder per snippet: NN_slug.html doc page + source (.py/.sh/.js)
+├── snippets/           # Snippet Library — short, self-contained, vetted reference scripts
+│   ├── index.html      # Card-grid gallery with filter (not data-driven; add a card per new snippet)
+│   └── NN_slug/        # One folder per snippet: NN_slug.html doc page + source (.py/.sh/.js)
+└── resources/          # Research Resources — filterable index of tier-one research sources
+    └── index.html      # Single self-contained page; the registry is the RESOURCES array inside it
 ```
 
 ## Pages & Apps
 
 | App | URL | Description |
 |-----|-----|-------------|
-| Portfolio | `/` | Full CV: bio, motto, experience, education, patents, publications, recent activity. The portrait is the contact link (mailto). Every section folds, one open at a time. Two docks, both starting folded: **hub** bottom-right (`+` unfolds Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets, Playlists; Presentations commented out) and **stats** bottom-left (`#` unfolds citations, patents, conferences, journals). Folding either flattens its glyph — `+` to `−`, `#` to `=` — and Esc or a click outside does the same. |
+| Portfolio | `/` | Full CV: bio, motto, experience, education, patents, publications, recent activity. The portrait is the contact link (mailto). Every section folds, one open at a time. Two docks, both starting folded: **hub** bottom-right (`+` unfolds Apps Hub, Articles, Blooms, Memory, Books, Prompts, Pages, Snippets, Resources, Playlists; Presentations commented out) and **stats** bottom-left (`#` unfolds citations, patents, conferences, journals). Folding either flattens its glyph — `+` to `−`, `#` to `=` — and Esc or a click outside does the same. |
 | Apps Hub | `/links/` | Landing page for all apps below — searchable, category-filtered card grid (data-driven via `links/links.json`) |
 | Technical Articles | `/articles/` | 53-article series on agentic AI, cognitive systems, AI security, and advanced engineering practices (dark-blue theme). Data-carrying diagrams are authored inline SVG (see `the-experience-bottleneck.html`) |
 | Bloom Classes | `/blooms/` | Single-topic learning pages structured by Bloom's Taxonomy in Peak Preview order: an opening judgment call you cannot yet defend, the foundation built underneath it, then a capstone that resolves it. Each page carries a level pyramid, sticky sidebar, freehand sketchpad and a retrieval quiz that resurfaces what you missed. |
@@ -105,6 +107,7 @@ No build step, no package manager.
 | Playlists | `/playlist/` | Video courses, one folder per playlist, each with its own tracker. The hub is a searchable, tag-filtered card grid driven by `playlist/playlists.json`; a playlist page reads its own `data.json` and keeps watch progress, ratings, tags, notes and per-video annotations in the browser. Currently 3 playlists (129 videos): Gemini Enterprise (49, English) and two Arabic courses (47 and 33). |
 | Pages | `/pages/` | Masterclass Library — 5 self-contained interactive learning pages: The Synthetic Mind (knowledge, cognitive, causal & wisdom graphs in AI agents), The Wealth Barbell (sequencing employment, investing, entrepreneurship & family business via Taleb's Barbell Strategy), The Grafted Tree (raising kids fluent in Western life and rooted in Islamic values), The AFPISH Operating System (Allah, family, profession, independence, social life & health as six scheduled processes), The Focus Loop (attention residue, implementation intentions, and an AI-held loop that turns a 23-minute restart into a 20-second one). |
 | Snippets | `/snippets/` | Snippet Library — 10 short, self-contained, vetted reference scripts (Python, Bash, JavaScript) with a filterable card gallery. Each opens a doc sheet with usage, input/output, and source. Covers hash-file, json-pretty-print, find-large-files, csv-to-json, count-lines, port-check, backup-file, disk-usage-top, uuid-gen, slugify. |
+| Research Resources | `/resources/` | Curated index of 236 tier-one research sources across AI/ML, robotics, cybersecurity and 5G/6G wireless (plus a shared core and a cross-cutting reproducibility section). Every entry says what you get from it and why it is worth the time. Filter by domain and by type, search names/descriptions/tags, `/` focuses search, and copy the visible set out as markdown. Light/dark toggle persisted in localStorage, overridable with `?theme=light` or `?theme=dark`. Colour-and-shape icons per type and domain, skip link, `aria-pressed` filters and a live result count. Single self-contained page; the registry is the `RESOURCES` array in the file. |
 | InvestStack | `http://138.197.135.196:5173/` | External — agentic investment platform with AI-powered basket analysis and investor education |
 | 21 Repetitions | `/apps/21/` | Habit-building tracker based on the 21-repetitions principle |
 | Neural Archive | `/apps/books/` | AI & data science e-book library with PDF viewer (12 books) |
