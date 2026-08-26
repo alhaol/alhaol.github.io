@@ -201,21 +201,26 @@
             visibility: visible;
             transform: none;
         }
-        /* stagger the unfold (child 1 is the toggle) */
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(2),
+        /* Stagger the unfold. In the stat dock the items are direct children of the
+           dock, so child 1 is the toggle and the numbering starts at 2. In the hub dock
+           they are children of .hub-dock-grid instead, so the numbering starts at 1 —
+           the two can no longer share one selector list. */
         .stat-dock[data-open="true"] .stat-dock-item:nth-child(2) { transition-delay: 0.03s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(3),
         .stat-dock[data-open="true"] .stat-dock-item:nth-child(3) { transition-delay: 0.06s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(4),
         .stat-dock[data-open="true"] .stat-dock-item:nth-child(4) { transition-delay: 0.09s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(5),
         .stat-dock[data-open="true"] .stat-dock-item:nth-child(5) { transition-delay: 0.12s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(6) { transition-delay: 0.15s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(7) { transition-delay: 0.18s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(8) { transition-delay: 0.21s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(9) { transition-delay: 0.24s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(10) { transition-delay: 0.27s; }
-        .hub-dock[data-open="true"] .hub-dock-item:nth-child(11) { transition-delay: 0.30s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(1) { transition-delay: 0.02s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(2) { transition-delay: 0.04s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(3) { transition-delay: 0.06s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(4) { transition-delay: 0.08s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(5) { transition-delay: 0.10s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(6) { transition-delay: 0.12s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(7) { transition-delay: 0.14s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(8) { transition-delay: 0.16s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(9) { transition-delay: 0.18s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(10) { transition-delay: 0.20s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(11) { transition-delay: 0.22s; }
+        .hub-dock[data-open="true"] .hub-dock-item:nth-child(12) { transition-delay: 0.24s; }
 
         .hub-dock-icon,
         .stat-dock-icon {
@@ -244,6 +249,74 @@
             border-color: color-mix(in srgb, var(--primary-color, #00ff41) 65%, transparent);
         }
 
+        /* Grid canvas: the hub dock's ten destinations read as a 4-across board instead
+           of a ten-deep column that ran off the top of a laptop screen. Only the hub dock
+           becomes a grid — the stat dock stays a list on the shared rules above, which is
+           why every selector here is scoped under .hub-dock-grid. */
+        .hub-dock-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.3rem;
+            padding: 0.6rem;
+            border-radius: 1.1rem;
+            color: var(--primary-color, #00ff41);
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(0, 255, 65, 0.22);
+            background: color-mix(in srgb, var(--primary-color, #00ff41) 7%, rgba(0, 0, 0, 0.45));
+            border: 1px solid color-mix(in srgb, var(--primary-color, #00ff41) 22%, transparent);
+            -webkit-backdrop-filter: blur(12px) saturate(140%);
+            backdrop-filter: blur(12px) saturate(140%);
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.94);
+            transform-origin: bottom right;
+            transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+        }
+        .hub-dock[data-open="true"] .hub-dock-grid {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+        }
+        /* Icon on top, caption under it. Source order (label first) is kept so the markup
+           still degrades to the old list if the grid rules ever fail to load; column-reverse
+           does the flipping. */
+        .hub-dock-grid .hub-dock-item {
+            flex-direction: column-reverse;
+            justify-content: flex-end;
+            gap: 0.28rem;
+            width: 100%;
+            padding: 0.4rem 0.15rem 0.35rem;
+            border-radius: 0.85rem;
+            transition: background-color 0.18s ease, opacity 0.22s ease,
+                        transform 0.22s ease, visibility 0.22s;
+        }
+        .hub-dock-grid .hub-dock-item:hover {
+            background: color-mix(in srgb, var(--primary-color, #00ff41) 12%, transparent);
+        }
+        /* The pill would draw a box inside every cell, so in the grid the caption is bare text */
+        .hub-dock-grid .hub-dock-label {
+            padding: 0;
+            border: 0;
+            background: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            font-size: 0.55rem;
+            letter-spacing: 0.01em;
+            text-align: center;
+            opacity: 0.82;
+        }
+        .hub-dock-grid .hub-dock-item:hover .hub-dock-label { opacity: 1; }
+        body.dock-light .hub-dock-grid {
+            background: rgba(255, 255, 255, 0.82);
+            border-color: color-mix(in srgb, var(--primary-color, #2563eb) 26%, transparent);
+            box-shadow: 0 12px 34px rgba(15, 23, 42, 0.18);
+        }
+        body.dock-light .hub-dock-grid .hub-dock-label {
+            color: var(--text-main, #0f172a);
+            background: none;
+        }
+
         /* Light themes: the glass needs a light base to stay readable */
         body.dock-light .hub-dock-label,
         body.dock-light .stat-dock-label {
@@ -266,9 +339,14 @@
             .stat-dock-icon { width: 42px; height: 42px; font-size: 0.72rem; }
             .hub-dock-toggle { width: 50px; height: 50px; }
             .hub-dock-icon { width: 42px; height: 42px; }
+            /* stays 4 across on a phone; the cell shrinks instead of the column count */
+            .hub-dock-grid { gap: 0.2rem; padding: 0.5rem; border-radius: 1rem; }
+            .hub-dock-grid .hub-dock-item { padding: 0.35rem 0.1rem 0.3rem; }
+            .hub-dock-grid .hub-dock-label { font-size: 0.5rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
+            .hub-dock-grid,
             .hub-dock-item,
             .stat-dock-item,
             .hub-dock-toggle svg,
@@ -321,6 +399,7 @@
             </svg>
         </button>
 
+        <div class="hub-dock-grid">
         <a href="playlist/" class="hub-dock-item" title="Video Playlists">
             <span class="hub-dock-label">// playlists</span>
             <span class="hub-dock-icon">
@@ -448,6 +527,7 @@
                 </svg>
             </span>
         </a> -->
+        </div>
     </nav>
 
     <script>
@@ -2012,7 +2092,7 @@
             app.innerHTML = `
                 <div class="min-h-screen pb-12">
                     <!-- HEADER SECTION -->
-                    <div class="header-container pt-24 pb-32 px-4">
+                    <div class="header-container pt-16 pb-12 px-4">
                         <canvas id="header-canvas"></canvas>
                         
                         <!-- THEME TOGGLE BUTTON -->
@@ -2070,7 +2150,7 @@
                     </div>
 
                     <!-- MAIN CONTENT -->
-                    <div class="max-w-6xl mx-auto px-4 mt-12 relative z-20">
+                    <div class="max-w-6xl mx-auto px-4 mt-8 relative z-20">
                         <!-- Single full-width column. Technical Expertise used to be a sticky
                              sidebar card here; it now sits inline after Professional Experience,
                              so there is no second column left to lay out. -->
