@@ -251,6 +251,39 @@
             margin-bottom: 1.1rem; line-height: 1.65; max-width: 76ch;
         }
 
+        /* Top picks: ranked, personalised recommendations. The card gets an accent
+           border and a rationale block tying the source to the reader's actual work. */
+        .res-card.is-pick {
+            border-color: color-mix(in srgb, var(--primary-color) 55%, var(--border-color));
+            background:
+                linear-gradient(color-mix(in srgb, var(--primary-color) 4%, transparent),
+                                color-mix(in srgb, var(--primary-color) 4%, transparent)),
+                var(--card-bg);
+        }
+        .rank-badge {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em;
+            padding: 0.22rem 0.42rem; border-radius: 0.3rem;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            background: color-mix(in srgb, var(--primary-color) var(--tint), transparent);
+            white-space: nowrap;
+        }
+        .res-why {
+            margin-top: 0.65rem;
+            font-size: 0.755rem; line-height: 1.6;
+            color: var(--text-main);
+            background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+            border-left: 2px solid var(--primary-color);
+            padding: 0.5rem 0.6rem; border-radius: 0 0.3rem 0.3rem 0;
+        }
+        .res-why b {
+            display: block; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--primary-color); margin-bottom: 0.22rem; font-weight: 600;
+        }
+
         .legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
         .ic { display: inline-flex; flex: none; }
 
@@ -329,6 +362,10 @@
                         <svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
                         copy as markdown
                     </button>
+                    <button id="picks-only" class="ctl-btn" type="button" aria-pressed="false">
+                        <svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="12 2.8 15 9.2 21.8 10 16.9 14.8 18.1 21.6 12 18.4 5.9 21.6 7.1 14.8 2.2 10 9 9.2"></polygon></svg>
+                        top picks only
+                    </button>
                     <button id="reset" class="ctl-btn" type="button">
                         <svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"></path></svg>
                         reset
@@ -396,6 +433,8 @@
         other:    S('<line x1="9" y1="2.5" x2="15" y2="2.5"></line><path d="M10 2.5v6.4L5.1 17.6A2 2 0 0 0 6.8 20.6h10.4a2 2 0 0 0 1.7-3L14 8.9V2.5"></path><line x1="7.6" y1="14.6" x2="16.4" y2="14.6"></line>')
     };
 
+    const STAR_ICON = S('<polygon points="12 2.8 15 9.2 21.8 10 16.9 14.8 18.1 21.6 12 18.4 5.9 21.6 7.1 14.8 2.2 10 9 9.2"></polygon>', 1.7);
+
     const WARN_ICON = S('<path d="M12 3 1.8 20.5h20.4z"></path><line x1="12" y1="9.5" x2="12" y2="14"></line><line x1="12" y1="17.2" x2="12" y2="17.3"></line>');
 
     // =====================================================================
@@ -441,7 +480,7 @@
     // =====================================================================
     const RESOURCES = [
     // ---------------- CORE ----------------
-    { n: 'arXiv', u: 'https://arxiv.org', g: 'core', t: 'papers', k: 'preprint cs.LG cs.RO cs.CR eess.SP',
+    { n: 'arXiv', u: 'https://arxiv.org', g: 'core', t: 'papers', top: 1, w: "Your four areas map onto four arXiv categories: cs.LG for agentic AI, cs.NI and eess.SP for O-RAN and network digital twins, and cs.CR for intrusion detection. One set of feeds covers the whole portfolio.", k: 'preprint cs.LG cs.RO cs.CR eess.SP',
       d: 'The venue where AI, robotics, security and signal-processing work is published first, typically months before any conference. Reading it puts you on the same timeline as the authors rather than the press cycle. Subscribe to the categories matching your work: cs.LG, cs.RO, cs.CR and eess.SP.',
       u2: 'https://arxiv.org/list/cs.LG/recent', l2: 'cs.LG feed' },
     { n: 'arXiv cs.RO (Robotics)', u: 'https://arxiv.org/list/cs.RO/recent', g: 'core', t: 'papers', k: 'feed robotics preprint',
@@ -456,11 +495,11 @@
       d: 'Systems, networking, security, HCI and theory. Its real advantage is that artifact badges are stored in the metadata, so you can filter directly for work whose code was independently checked.' },
     { n: 'OpenReview', u: 'https://openreview.net', g: 'core', t: 'papers', k: 'iclr neurips tmlr peer review rebuttals',
       d: 'Hosts live peer review for ICLR, NeurIPS and TMLR. You see the reviews, the rebuttals and the disagreements, which usually reveal a method’s real weaknesses faster than the paper itself does.' },
-    { n: 'Semantic Scholar', u: 'https://www.semanticscholar.org', g: 'core', t: 'tools', k: 's2 citation graph api free',
+    { n: 'Semantic Scholar', u: 'https://www.semanticscholar.org', g: 'core', t: 'tools', top: 3, w: "Its free bulk API lets you track citation movement across your 94 publications programmatically rather than by hand, and it is the easiest base for any internal literature tooling.", k: 's2 citation graph api free',
       d: 'The best free citation graph, with links to code and datasets and an unusually generous bulk API. Most independent literature tooling is built on top of it, so learning its API pays off repeatedly.' },
-    { n: 'Google Scholar', u: 'https://scholar.google.com', g: 'core', t: 'tools', k: 'citations alerts profiles',
+    { n: 'Google Scholar', u: 'https://scholar.google.com', g: 'core', t: 'tools', top: 4, w: "Alerts on your own name plus the specific groups working on network digital twins and agentic benchmarking. The cheapest competitive-intelligence loop available.", k: 'citations alerts profiles',
       d: 'The broadest coverage anywhere and by far the most reliable alerting. The highest-value habit is setting alerts on your own name plus three or four authors whose work consistently matters to you.' },
-    { n: 'OpenAlex', u: 'https://openalex.org', g: 'core', t: 'tools', k: 'bibliographic graph mag open api',
+    { n: 'OpenAlex', u: 'https://openalex.org', g: 'core', t: 'tools', top: 5, w: "Unmetered API access for mapping a whole research landscape, which is what both IP whitespace analysis and academic-industry partnership scouting actually require.", k: 'bibliographic graph mag open api',
       d: 'A fully open bibliographic graph and the successor to Microsoft Academic Graph. Free, unmetered API access makes it the practical choice when you need to analyse a whole field rather than read one paper.' },
     { n: 'Hugging Face', u: 'https://huggingface.co', g: 'core', t: 'code', k: 'models datasets spaces hub',
       d: 'Where released models, datasets and demos actually live. It is now the default distribution channel for AI artifacts and increasingly for robotics ones too, so a paper with no presence here often has no usable code.' },
@@ -505,6 +544,14 @@
     { n: 'Google Dataset Search', u: 'https://datasetsearch.research.google.com', g: 'core', t: 'data', k: 'dataset discovery schema.org',
       d: 'A cross-repository dataset index built on schema.org metadata. The one place to look before assuming the dataset you need does not already exist somewhere.' },
 
+    { n: 'Google Patents', u: 'https://patents.google.com', g: 'core', t: 'tools', top: 2, w: "With 42 granted patents and active IP portfolio work, this is the fastest first-pass prior-art check before a disclosure reaches counsel, and it searches non-patent literature in the same query.", k: 'prior art ip portfolio full text non patent literature',
+      d: 'Full-text search across patents from over 100 offices, with non-patent literature and Google Scholar results folded into the same query. The fastest first-pass prior-art check available at no cost.' },
+    { n: 'USPTO Patent Public Search', u: 'https://ppubs.uspto.gov/pubwebapp/', g: 'core', t: 'tools', k: 'uspto ppubs prior art examiner search us patents',
+      d: 'The official USPTO search tool, which replaced PatFT, AppFT, PubEAST and PubWEST in 2022. Its advanced query syntax is what examiners actually use, so it is the closest you can get to seeing an application the way it will be examined.' },
+    { n: 'Espacenet', u: 'https://worldwide.espacenet.com', g: 'core', t: 'tools', k: 'epo european patents families classification prior art',
+      d: 'The European Patent Office search covering more than 140 million documents, with strong patent-family and CPC classification tooling. Better than Google Patents when you need to trace a family across jurisdictions.' },
+    { n: 'Lens.org', u: 'https://www.lens.org', g: 'core', t: 'tools', k: 'patents scholarly linked analytics portfolio landscape',
+      d: 'Links patents to the scholarly literature that cites them and vice versa, with portfolio analytics on top. The best free tool for whitespace analysis and for seeing which research a patent family actually rests on.' },
     // ---------------- AI / ML ----------------
     { n: 'NeurIPS Proceedings', u: 'https://proceedings.neurips.cc', g: 'ai', t: 'papers', k: 'conference free open access datasets benchmarks',
       d: 'The complete free archive of every NeurIPS paper, including the Datasets and Benchmarks track. Nothing is paywalled, so it doubles as a teaching resource as well as a research one.' },
@@ -522,7 +569,7 @@
       d: 'CVPR, ICCV and ECCV papers with supplementary material, all free. The supplementary files often carry the implementation details that make a result reproducible at all.' },
     { n: 'AAAI Publications', u: 'https://aaai.org/aaai-publications/', g: 'ai', t: 'papers', k: 'conference artificial intelligence magazine',
       d: 'AAAI conference proceedings plus AI Magazine. Broader than the deep learning venues, and much better for symbolic, planning and knowledge-representation work.' },
-    { n: 'Anthropic Research', u: 'https://www.anthropic.com/research', g: 'ai', t: 'labs', k: 'alignment interpretability safety claude red team',
+    { n: 'Anthropic Research', u: 'https://www.anthropic.com/research', g: 'ai', t: 'labs', top: 3, w: "Agentic system design plus the only serious public interpretability work. Directly relevant to multi-agent orchestration and to defending agent behaviour in a design review.", k: 'alignment interpretability safety claude red team',
       d: 'Alignment, interpretability, economics, societal impacts and the Frontier Red Team. The mechanistic interpretability output has no real equivalent elsewhere and is the clearest public window into how these models work internally.' },
     { n: 'OpenAI Research', u: 'https://openai.com/research/index/', g: 'ai', t: 'labs', k: 'gpt publications system cards',
       d: 'The research index and publication list. Read it for capability announcements and system cards; the accompanying GitHub org carries what code is released.',
@@ -575,12 +622,12 @@
       d: 'A fully open language model: weights, pretraining data, training code, evaluations and logs released together. The reference point for what genuinely reproducible LLM research looks like.' },
     { n: 'Hugging Face Transformers', u: 'https://github.com/huggingface/transformers', g: 'ai', t: 'code', k: 'library models pytorch reference',
       d: 'The de facto model library. Beyond its practical use, its modelling files are often the clearest available description of a published architecture, because they have to actually run.' },
-    { n: 'lm-evaluation-harness', u: 'https://github.com/EleutherAI/lm-evaluation-harness', g: 'ai', t: 'bench', k: 'eval llm eleuther standard reproducible',
+    { n: 'lm-evaluation-harness', u: 'https://github.com/EleutherAI/lm-evaluation-harness', g: 'ai', t: 'bench', top: 2, w: "It standardises your internal numbers against published ones. Without a shared runner, cross-team agentic benchmarking results cannot be compared to anything outside the team.", k: 'eval llm eleuther standard reproducible',
       d: 'The de facto standard runner for LLM evaluation. If a paper reports a benchmark number, this most likely produced it, so using it is the only way to make your numbers comparable to theirs.' },
-    { n: 'Stanford HELM', u: 'https://crfm.stanford.edu/helm/', g: 'ai', t: 'bench', k: 'holistic evaluation crfm transparency raw runs',
+    { n: 'Stanford HELM', u: 'https://crfm.stanford.edu/helm/', g: 'ai', t: 'bench', top: 4, w: "It publishes every raw run rather than only headline scores. That is the transparency model to copy if your benchmarking work needs to survive external scrutiny.", k: 'holistic evaluation crfm transparency raw runs',
       d: 'Holistic evaluation across many metrics at once, with every raw model run published rather than just headline scores. That transparency lets you check whether a reported win holds on the dimension you actually care about.',
       u2: 'https://github.com/stanford-crfm/helm', l2: 'github' },
-    { n: 'SWE-bench', u: 'https://www.swebench.com', g: 'ai', t: 'bench', k: 'agents coding github issues real repos',
+    { n: 'SWE-bench', u: 'https://www.swebench.com', g: 'ai', t: 'bench', top: 1, w: "You lead multi-modal agentic AI benchmarking, and this is the benchmark the community converged on for agentic capability. Its harness design is worth borrowing even where your task set differs.", k: 'agents coding github issues real repos',
       d: 'Real GitHub issues resolved against real repositories and verified by the projects’ own test suites. It is the benchmark agentic coding is now judged on, and the closest public proxy for whether an agent can do useful engineering work.' },
     { n: 'LMArena', u: 'https://lmarena.ai', g: 'ai', t: 'bench', k: 'chatbot arena elo human preference blind',
       d: 'Live blind head-to-head human preference rankings. Because votes are cast before model identity is revealed, it is the least gameable public signal on general model quality.' },
@@ -664,10 +711,20 @@
     { n: 'Quanta Magazine', u: 'https://www.quantamagazine.org', g: 'ai', t: 'news', k: 'science journalism math physics cs',
       d: 'The best science journalism on mathematics, physics and computer science. Rigorous enough that researchers cite it, and written well enough to explain results outside your own field.' },
 
+    { n: 'PyTorch Geometric (PyG)', u: 'https://pyg.org', g: 'ai', t: 'code', top: 5, w: "The standard GNN library, and the shortest path from a GNN-based digital twin design to a running prototype on your existing DGX hardware.", k: 'gnn graph neural network library pytorch message passing',
+      d: 'The standard graph neural network library for PyTorch, covering message passing, heterogeneous and temporal graphs, and scaling to graphs that do not fit in memory. Most published GNN architectures ship a PyG implementation.',
+      u2: 'https://github.com/pyg-team/pytorch_geometric', l2: 'github' },
+    { n: 'Deep Graph Library (DGL)', u: 'https://www.dgl.ai', g: 'ai', t: 'code', k: 'gnn graph neural network framework agnostic distributed',
+      d: 'A framework-agnostic GNN library with strong distributed training support for billion-edge graphs. The better choice than PyG when graph size, rather than architecture variety, is the binding constraint.' },
+    { n: 'Open Graph Benchmark (OGB)', u: 'https://ogb.stanford.edu', g: 'ai', t: 'bench', k: 'gnn benchmark datasets leaderboards node link graph prediction',
+      d: 'Realistic large-scale graph datasets with standardised splits, evaluators and maintained leaderboards, loading directly into PyG and DGL. It is what makes GNN results comparable across papers instead of each using its own split.' },
+    { n: 'Microsoft GraphRAG', u: 'https://github.com/microsoft/graphrag', g: 'ai', t: 'code', k: 'knowledge graph rag retrieval llm entity extraction community',
+      d: 'A pipeline that builds a knowledge graph from unstructured text with an LLM, then answers over the graph rather than over raw chunks. The most complete public reference implementation of the GraphRAG pattern, at 35,700 stars.',
+      f: 'Now in maintenance mode: bug fixes and security updates only, no new features or PRs. Still the clearest reference architecture, but fork it rather than depending on upstream.' },
     // ---------------- ROBOTICS ----------------
-    { n: 'RSS Proceedings', u: 'https://www.roboticsproceedings.org', g: 'robotics', t: 'papers', k: 'robotics science systems free open archive 2005',
+    { n: 'RSS Proceedings', u: 'https://www.roboticsproceedings.org', g: 'robotics', t: 'papers', top: 2, w: "Fully free and single-track, so signal density per paper is high. The right choice if you only have time to track one robotics venue.", k: 'robotics science systems free open archive 2005',
       d: 'Robotics: Science and Systems, completely free with a full archive back to the first conference in 2005. It is the best open robotics corpus in existence, and its single-track selectivity means the hit rate per paper is unusually high.' },
-    { n: 'CoRL', u: 'https://www.corl.org', g: 'robotics', t: 'papers', k: 'conference robot learning pmlr austin',
+    { n: 'CoRL', u: 'https://www.corl.org', g: 'robotics', t: 'papers', top: 3, w: "Where robot learning and machine learning actually meet, which makes it the robotics venue closest to your agentic AI work.", k: 'conference robot learning pmlr austin',
       d: 'The Conference on Robot Learning, where robotics and machine learning actually meet. Proceedings publish through PMLR so they are free. CoRL 2026 runs 9 to 12 November in Austin, Texas.',
       u2: 'https://proceedings.mlr.press', l2: 'proceedings' },
     { n: 'IEEE ICRA', u: 'https://www.ieee-ras.org/conferences-workshops/fully-sponsored/icra', g: 'robotics', t: 'papers', k: 'conference automation largest',
@@ -689,14 +746,14 @@
       u2: 'https://index.ros.org', l2: 'package index' },
     { n: 'Gazebo', u: 'https://gazebosim.org', g: 'robotics', t: 'code', k: 'simulator open source ros integration',
       d: 'The standard open robotics simulator, tightly integrated with ROS. The default choice when you need a simulation that maps cleanly onto a real ROS deployment.' },
-    { n: 'MuJoCo', u: 'https://mujoco.org', g: 'robotics', t: 'code', k: 'physics engine deepmind rl contact free',
+    { n: 'MuJoCo', u: 'https://mujoco.org', g: 'robotics', t: 'code', top: 5, w: "Fast, accurate contact physics, now free and open source. Useful as a general simulation-in-the-loop reference even well outside robotics.", k: 'physics engine deepmind rl contact free',
       d: 'Fast and accurate contact physics, and the engine behind most robot reinforcement learning results. Now free and open source, which removed the last barrier to reproducing that entire literature.',
       u2: 'https://github.com/google-deepmind/mujoco', l2: 'github' },
     { n: 'NVIDIA Isaac Sim and Isaac Lab', u: 'https://developer.nvidia.com/isaac', g: 'robotics', t: 'code', k: 'simulation gpu reinforcement learning omniverse sim2real',
       d: 'GPU-accelerated simulation with a large library of reinforcement learning environments and sim-to-real tooling. Its throughput makes training runs feasible that would be impractical on CPU simulators.' },
-    { n: 'LeRobot (Hugging Face)', u: 'https://github.com/huggingface/lerobot', g: 'robotics', t: 'code', k: 'robot learning policies dataset format so100 imitation iclr',
+    { n: 'LeRobot (Hugging Face)', u: 'https://github.com/huggingface/lerobot', g: 'robotics', t: 'code', top: 1, w: "The clearest working example of foundation models driving a real control loop. That is the same orchestration problem as your multi-agent frameworks, in a domain where failures are visible immediately.", k: 'robot learning policies dataset format so100 imitation iclr',
       d: 'A hardware-agnostic robot learning library providing state-of-the-art policies, the LeRobotDataset format, and support for SO100, Koch, Reachy2 and Unitree G1. It lowers the entry cost to robot learning more than anything else available: 26,900 stars, an ICLR 2026 paper, and very active maintenance.' },
-    { n: 'Open X-Embodiment', u: 'https://robotics-transformer-x.github.io', g: 'robotics', t: 'data', k: 'rt-x cross embodiment trajectories deepmind unified format',
+    { n: 'Open X-Embodiment', u: 'https://robotics-transformer-x.github.io', g: 'robotics', t: 'data', top: 4, w: "A working model for pooling heterogeneous data from 34 labs into one schema. Structurally the same problem as unifying telemetry across a network estate.", k: 'rt-x cross embodiment trajectories deepmind unified format',
       d: 'More than one million real robot trajectories across 22 embodiments, pooled from 60 datasets and 34 labs into a single unified format. It is the largest open real-robot dataset, and the reason cross-embodiment policy transfer became a tractable research question.',
       u2: 'https://github.com/google-deepmind/open_x_embodiment', l2: 'github' },
     { n: 'DROID', u: 'https://droid-dataset.github.io', g: 'robotics', t: 'data', k: 'manipulation in the wild rss 2024 diverse scenes',
@@ -717,11 +774,11 @@
     // ---------------- CYBERSECURITY ----------------
     { n: 'IEEE S&P (Oakland)', u: 'https://www.ieee-security.org', g: 'security', t: 'papers', k: 'symposium security privacy top venue',
       d: 'The IEEE Symposium on Security and Privacy, one of the four top security venues. Papers are distributed through IEEE Xplore, though most authors also post preprints worth searching for.' },
-    { n: 'USENIX Security', u: 'https://www.usenix.org/conferences/byname/108', g: 'security', t: 'papers', k: 'top venue free open access artifacts systems',
+    { n: 'USENIX Security', u: 'https://www.usenix.org/conferences/byname/108', g: 'security', t: 'papers', top: 2, w: "Free papers with artifact badges attached, and the strongest venue for the intrusion detection and malware analysis research you can actually run rather than only cite.", k: 'top venue free open access artifacts systems',
       d: 'All papers are free and artifact badges are attached to them. Systems-heavy and consistently the most reproducible of the four top venues, which makes it the best one to actually build on.' },
     { n: 'ACM CCS', u: 'https://www.sigsac.org/ccs.html', g: 'security', t: 'papers', k: 'sigsac top venue computer communications security',
       d: 'The ACM Conference on Computer and Communications Security, one of the four top venues. Particularly strong on applied cryptography and protocol security.' },
-    { n: 'NDSS Symposium', u: 'https://www.ndss-symposium.org', g: 'security', t: 'papers', k: 'network distributed system top venue free recordings',
+    { n: 'NDSS Symposium', u: 'https://www.ndss-symposium.org', g: 'security', t: 'papers', top: 5, w: "Free papers, slides and recordings, and the venue where BGP security and routing research most often lands. Pairs directly with MANRS on your routing security work.", k: 'network distributed system top venue free recordings',
       d: 'Network and Distributed System Security, run by the Internet Society for more than 30 years. Papers, slides and full talk recordings are all free, making it the most accessible of the four top venues by a wide margin.' },
     { n: 'IACR ePrint Archive', u: 'https://eprint.iacr.org', g: 'security', t: 'papers', k: 'cryptology preprints free crypto post-quantum',
       d: 'Cryptology preprints, all free. New cryptographic results appear here first, often years before formal publication, which matters a great deal when tracking post-quantum migration.' },
@@ -731,13 +788,13 @@
       d: 'The Annual Computer Security Applications Conference: applied, practitioner-adjacent research with open proceedings. Closer to real deployment problems than the four top venues usually get.' },
     { n: 'MITRE ATT&CK', u: 'https://attack.mitre.org', g: 'security', t: 'data', k: 'tactics techniques procedures adversary matrix vocabulary',
       d: 'The knowledge base of adversary tactics and techniques, and the shared vocabulary of the entire defensive field. Learning it first makes every other security resource easier to use, because they all map back to it.' },
-    { n: 'MITRE ATLAS', u: 'https://atlas.mitre.org', g: 'security', t: 'data', k: 'adversarial ai machine learning threat landscape case studies',
+    { n: 'MITRE ATLAS', u: 'https://atlas.mitre.org', g: 'security', t: 'data', top: 1, w: "Your AI and security tracks meet here. Structured tactics for attacking and defending ML systems, which is exactly the gap that opens once agentic systems reach production.", k: 'adversarial ai machine learning threat landscape case studies',
       d: 'ATT&CK applied to AI systems: adversarial machine learning tactics, techniques and documented real-world case studies. The most structured resource available for anyone securing AI rather than only building it.' },
     { n: 'CVE Program', u: 'https://www.cve.org', g: 'security', t: 'data', k: 'vulnerability identifiers mitre',
       d: 'The vulnerability identifier system of record. Every other vulnerability source keys off these identifiers, so it is effectively the join key for the whole ecosystem.' },
     { n: 'NIST NVD', u: 'https://nvd.nist.gov', g: 'security', t: 'data', k: 'national vulnerability database cvss cpe api',
       d: 'Enriched CVE data with CVSS severity scores, CPE product mapping and a free API. The standard reference for severity, though the scores need local context before you act on them.' },
-    { n: 'CISA KEV Catalog', u: 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog', g: 'security', t: 'data', k: 'known exploited vulnerabilities prioritization free',
+    { n: 'CISA KEV Catalog', u: 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog', g: 'security', t: 'data', top: 4, w: "Free, and the single best prioritisation signal in existence. It collapses a patch backlog to what is genuinely being exploited far better than CVSS does.", k: 'known exploited vulnerabilities prioritization free',
       d: 'Vulnerabilities confirmed to be exploited in the wild. This is the single best prioritisation signal available, it is free, and it cuts a patch backlog down to what genuinely matters far better than CVSS scores do.' },
     { n: 'OSV', u: 'https://osv.dev', g: 'security', t: 'data', k: 'open source vulnerabilities google api version ranges automation',
       d: 'An open-source vulnerability database with precise affected-version ranges and a clean API. Built for automation in a way NVD is not, which makes it the better choice for dependency scanning.' },
@@ -753,7 +810,7 @@
       d: 'The Computer Security Resource Center: the SP 800 series, cryptographic standards and post-quantum guidance. What most compliance regimes ultimately point back to.' },
     { n: 'OWASP', u: 'https://owasp.org', g: 'security', t: 'standards', k: 'top 10 asvs testing guide application security audits',
       d: 'Application security standards including the Top 10, ASVS and the testing guides. Most security audits are measured against these, so knowing them tells you in advance what you will be judged on.' },
-    { n: 'OWASP GenAI Security', u: 'https://genai.owasp.org', g: 'security', t: 'standards', k: 'llm top 10 agentic prompt injection',
+    { n: 'OWASP GenAI Security', u: 'https://genai.owasp.org', g: 'security', t: 'standards', top: 3, w: "The Top 10 for LLM and agentic applications, specific enough to convert directly into engineering requirements for an agent framework.", k: 'llm top 10 agentic prompt injection',
       d: 'The Top 10 for LLM Applications plus agentic security guidance. The closest thing to a shared standard for AI application security, and increasingly what enterprise reviews expect you to have followed.' },
     { n: 'NIST AI Risk Management Framework', u: 'https://www.nist.gov/itl/ai-risk-management-framework', g: 'security', t: 'standards', k: 'ai rmf governance risk enterprise audit',
       d: 'The reference framework for governing AI risk, and increasingly the yardstick enterprise AI programmes are audited against. Worth reading before you design the programme rather than after.' },
@@ -778,8 +835,12 @@
     { n: 'Risky Business', u: 'https://risky.biz', g: 'security', t: 'news', k: 'podcast news weekly industry candid',
       d: 'A weekly podcast and newsletter with unusually candid industry analysis. Good for hearing what practitioners say when vendors are not in the room.' },
 
+    { n: 'OpenDP', u: 'https://opendp.org', g: 'security', t: 'code', k: 'differential privacy harvard library vetted proofs',
+      d: 'A Harvard-based community project building vetted differential privacy tooling, where each primitive ships with a proof of its privacy guarantee. Using it means your privacy claims rest on reviewed mathematics rather than a hand-tuned noise parameter.' },
+    { n: 'MANRS', u: 'https://manrs.org', g: 'security', t: 'standards', k: 'bgp routing security rpki route origin validation hijack leak internet society',
+      d: 'The Internet Society routing security initiative that publishes the expected norms for RPKI, route origin validation and filtering. It is the closest thing to an agreed baseline for what a network operator must do about BGP hijacks and route leaks.' },
     // ---------------- 5G / 6G WIRELESS ----------------
-    { n: '3GPP', u: 'https://www.3gpp.org', g: 'wireless', t: 'standards', k: 'specifications releases nr lte primary source',
+    { n: '3GPP', u: 'https://www.3gpp.org', g: 'wireless', t: 'standards', top: 2, w: "The source everything else comments on. Your energy-efficiency and digital-twin patents sit directly on top of these procedures, so spec-level fluency is what makes the claims defensible.", k: 'specifications releases nr lte primary source',
       d: 'The specifications themselves. Everything written about 5G and 6G elsewhere is commentary on these documents, so going to the source removes an entire layer of second-hand interpretation.' },
     { n: '3GPP Spec Portal', u: 'https://portal.3gpp.org', g: 'wireless', t: 'standards', k: 'searchable database work items ts tr change requests',
       d: 'A searchable database of every specification, work item and change request with release status. This is how you find out what is being decided now rather than what was decided three years ago.' },
@@ -789,7 +850,7 @@
       d: 'Published 3GPP and ETSI deliverables, free to download. It also covers NFV and MEC, which 3GPP does not, so it completes the picture for edge and virtualised networks.' },
     { n: 'ITU-R IMT-2030 (6G)', u: 'https://www.itu.int/en/ITU-R/study-groups/rsg5/rwp5d/imt-2030/', g: 'wireless', t: 'standards', k: '6g requirements framework vision wp5d',
       d: 'The 6G requirements framework. Draft IMT-2030 technical performance requirements for evaluating 6G radio interfaces were agreed in 2026, and those numbers define what every 6G proposal must hit.' },
-    { n: 'O-RAN Alliance Specifications', u: 'https://www.o-ran.org/specifications', g: 'wireless', t: 'standards', k: 'open ran ric interfaces e2 a1 o1',
+    { n: 'O-RAN Alliance Specifications', u: 'https://www.o-ran.org/specifications', g: 'wireless', t: 'standards', top: 1, w: "O-RAN sits on your skills list and in your patents. These are the interface definitions any RIC or xApp work has to conform to, so they bound the design space before you start.", k: 'open ran ric interfaces e2 a1 o1',
       d: 'Open RAN interface specifications covering E2, A1, O1 and the RIC architecture, free after registration. Required reading if you intend to put intelligence inside the radio access network.' },
     { n: 'GSMA', u: 'https://www.gsma.com', g: 'wireless', t: 'standards', k: 'operators mwc requirements network apis',
       d: 'Operator-side requirements, network APIs and the research published around Mobile World Congress. This is where you learn what carriers will actually deploy, as opposed to what is technically possible.' },
@@ -826,7 +887,7 @@
       d: 'An open-source 5G core and EPC that achieves the lowest control-plane latency of the three main open cores. The default choice when signalling performance is what you are measuring.' },
     { n: 'free5GC', u: 'https://free5gc.org', g: 'wireless', t: 'code', k: '5g core sba resource efficient',
       d: 'An open-source 5G core built on the 3GPP service-based architecture, and the most resource-efficient of the three. Best suited to constrained lab hardware.' },
-    { n: 'O-RAN Software Community', u: 'https://o-ran-sc.org', g: 'wireless', t: 'code', k: 'near-rt ric smo xapps reference implementation',
+    { n: 'O-RAN Software Community', u: 'https://o-ran-sc.org', g: 'wireless', t: 'code', top: 5, w: "Reference RIC, SMO and xApp code. The practical way to test a spec interpretation before an architecture decision is committed to it.", k: 'near-rt ric smo xapps reference implementation',
       d: 'Reference code for the Near-RT RIC, SMO and xApps. It is the implementation counterpart to the O-RAN specifications, and the practical way to test whether a spec means what you think it means.' },
     { n: 'Magma', u: 'https://magmacore.org', g: 'wireless', t: 'code', k: 'linux foundation mobile core access agnostic',
       d: 'A Linux Foundation mobile packet core that is access-agnostic across LTE, 5G and Wi-Fi. Designed for deployments where connectivity is heterogeneous and infrastructure is sparse.' },
@@ -834,7 +895,7 @@
       d: 'The network simulator of record for academic networking research. Using it means your results can be compared directly against a very large body of existing published work.' },
     { n: '5G-LENA', u: 'https://5g-lena.cttc.es', g: 'wireless', t: 'code', k: 'ns-3 nr module cttc 3gpp compliant coexistence',
       d: 'A 3GPP-compliant 5G NR module for ns-3 modelling the full stack from application layer down to PHY, with NR, LTE and Wi-Fi coexistence for spectrum-sharing studies. Released under GPLv2, maintained by CTTC, and backed by InterDigital, NIST, Huawei and Meta, which is why its calibration can be trusted.' },
-    { n: 'NVIDIA Sionna', u: 'https://nvlabs.github.io/sionna/', g: 'wireless', t: 'code', k: 'differentiable link level ray tracing ai native air interface',
+    { n: 'NVIDIA Sionna', u: 'https://nvlabs.github.io/sionna/', g: 'wireless', t: 'code', top: 4, w: "Differentiable link-level simulation with GPU ray tracing: the closest public tooling to a GNN-based network digital twin, and it runs on the DGX hardware you already have.", k: 'differentiable link level ray tracing ai native air interface',
       d: 'Differentiable link-level simulation with GPU ray tracing. It is the main toolkit for putting machine learning training loops around the air interface, which is the practical foundation of AI-native radio research.' },
     { n: 'GNU Radio', u: 'https://www.gnuradio.org', g: 'wireless', t: 'code', k: 'sdr software defined radio framework',
       d: 'The software-defined radio framework sitting beneath most experimental wireless work. It becomes necessary as soon as you move from simulation to real signals.' },
@@ -872,7 +933,7 @@
       d: 'Technical white papers and reports, including the widely cited Mobility Report. Written for decision-makers, so useful when you need to justify a direction rather than implement one.' },
     { n: 'Qualcomm Research', u: 'https://www.qualcomm.com/research', g: 'wireless', t: 'labs', k: 'modem ai on device wireless silicon',
       d: 'Wireless, on-device AI and modem research from the vendor that shapes much of the air interface in practice. Its constraints tend to become everyone else’s constraints.' },
-    { n: 'AI-RAN Alliance', u: 'https://ai-ran.org', g: 'wireless', t: 'testbed', k: 'ai native ran nvidia convergence 6g',
+    { n: 'AI-RAN Alliance', u: 'https://ai-ran.org', g: 'wireless', t: 'testbed', top: 3, w: "The formal convergence point of your AI and wireless tracks, and the clearest available signal of where AI-native RAN is heading commercially rather than academically.", k: 'ai native ran nvidia convergence 6g',
       d: 'The industry body for AI-native radio access networks. It is the formal home of AI and wireless convergence, which otherwise forces you to track two disconnected literatures.' },
     { n: 'Light Reading', u: 'https://www.lightreading.com', g: 'wireless', t: 'news', k: 'telecom industry analysis operators deployments',
       d: 'Telecom industry analysis with genuine technical depth on operator deployments. Good for the gap between what vendors announce and what actually gets switched on.' },
@@ -886,7 +947,7 @@
     // ---------------- CROSS-CUTTING ----------------
     { n: 'ACM Artifact Review and Badging', u: 'https://www.acm.org/publications/policies/artifact-review-and-badging-current', g: 'cross', t: 'repro', k: 'badges available evaluated results validated metadata',
       d: 'Three independent badges: Artifacts Available, Artifacts Evaluated and Results Validated. Because they are stored in ACM Digital Library metadata, you can filter directly for work whose results were independently verified rather than merely claimed.' },
-    { n: 'USENIX Artifact Evaluation', u: 'https://www.usenix.org/conferences/computer-science-artifact-evaluation', g: 'cross', t: 'repro', k: 'available functional reproduced badges committee',
+    { n: 'USENIX Artifact Evaluation', u: 'https://www.usenix.org/conferences/computer-science-artifact-evaluation', g: 'cross', t: 'repro', top: 5, w: "The Reproduced badge is the strongest reproducibility signal available. Worth adopting as an internal bar before your team builds on an external result.", k: 'available functional reproduced badges committee',
       d: 'Available, Functional and Reproduced badges, with every artifact reviewed by at least two committee members. The Reproduced badge is the strongest reproducibility signal in systems and security, and worth treating as a filter.' },
     { n: 'Artifact Evaluation community hub', u: 'https://artifact-eval.org', g: 'cross', t: 'repro', k: 'process guidelines participating venues authors',
       d: 'The cross-conference artifact evaluation process, author guidelines and the list of participating venues. Read it before packaging your own artifact, because it tells you exactly what reviewers will check.' },
@@ -912,15 +973,15 @@
       d: 'The format most machine learning artifacts and tutorials actually ship in, with free GPU for small experiments. Often the difference between a reader trying your method and merely reading about it.' },
     { n: 'protocols.io', u: 'https://www.protocols.io', g: 'cross', t: 'repro', k: 'versioned citable methods procedures',
       d: 'Versioned, citable method protocols for both wet lab and computational work. Useful for capturing the procedural detail that a methods section compresses away.' },
-    { n: 'IEEE COMST for ML and networks', u: 'https://www.comsoc.org/publications/journals/ieee-comst', g: 'cross', t: 'papers', k: 'survey ai wireless intersection tutorial',
+    { n: 'IEEE COMST for ML and networks', u: 'https://www.comsoc.org/publications/journals/ieee-comst', g: 'cross', t: 'papers', top: 4, w: "Its surveys compress a whole AI-and-wireless subfield into one read, which is the fastest way to brief a team or ground a patent disclosure in the state of the art.", k: 'survey ai wireless intersection tutorial',
       d: 'The best single entry point when AI and wireless intersect. Its survey articles summarise a whole subfield in one read, which is exactly what you need when crossing between two literatures you do not know equally well.' },
-    { n: 'MITRE ATLAS for AI security', u: 'https://atlas.mitre.org', g: 'cross', t: 'data', k: 'ai security adversarial ml attack techniques case studies',
+    { n: 'MITRE ATLAS for AI security', u: 'https://atlas.mitre.org', g: 'cross', t: 'data', top: 1, w: "The one resource that speaks to both halves of your role at once, and gives AI and security teams a shared vocabulary they otherwise lack entirely.", k: 'ai security adversarial ml attack techniques case studies',
       d: 'Attacking and defending machine learning systems, structured exactly like ATT&CK. It sits squarely between AI and security work and gives both communities a shared vocabulary they otherwise lack.' },
     { n: 'OWASP GenAI Security Project', u: 'https://genai.owasp.org', g: 'cross', t: 'standards', k: 'llm agentic security top 10 practical',
       d: 'LLM and agentic application security. The practical standard for anyone shipping AI features, and specific enough to translate directly into engineering requirements.' },
-    { n: 'AI-RAN Alliance for AI in networks', u: 'https://ai-ran.org', g: 'cross', t: 'testbed', k: 'ai native radio access network convergence',
+    { n: 'AI-RAN Alliance for AI in networks', u: 'https://ai-ran.org', g: 'cross', t: 'testbed', top: 2, w: "AI running inside the RAN. This is your specific intersection, and tracking it here beats following two disconnected literatures separately.", k: 'ai native radio access network convergence',
       d: 'AI running inside the radio access network. The formal convergence point of AI and wireless research, and the clearest signal of where the two fields are merging commercially.' },
-    { n: 'NVIDIA Sionna for differentiable wireless', u: 'https://nvlabs.github.io/sionna/', g: 'cross', t: 'code', k: 'differentiable wireless machine learning air interface',
+    { n: 'NVIDIA Sionna for differentiable wireless', u: 'https://nvlabs.github.io/sionna/', g: 'cross', t: 'code', top: 3, w: "Where gradient-based learning and the physical air interface meet in runnable code. The natural substrate for digital-twin and energy-optimisation work.", k: 'differentiable wireless machine learning air interface',
       d: 'Differentiable wireless simulation: the point where gradient-based machine learning and the physical air interface meet in actual runnable code rather than in a diagram.' },
     { n: 'LeRobot for AI and robotics', u: 'https://github.com/huggingface/lerobot', g: 'cross', t: 'code', k: 'foundation models robot control embodied convergence',
       d: 'Foundation models applied to robot control, with datasets and policies in one place. The most accessible convergence point between AI and robotics, and the fastest way to test whether a model transfers to embodiment.' },
@@ -966,6 +1027,7 @@
     let activeDomain = 'all';
     let activeType   = 'all';
     let activeSearch = '';
+    let picksOnly    = false;
 
     document.getElementById('total-count').textContent = RESOURCES.length;
 
@@ -1064,6 +1126,7 @@
     function visible() {
         const q = activeSearch.trim().toLowerCase();
         return RESOURCES.filter(r => {
+            if (picksOnly && !r.top) return false;
             if (activeDomain !== 'all' && r.g !== activeDomain) return false;
             if (activeType !== 'all' && r.t !== activeType) return false;
             if (!q) return true;
@@ -1082,8 +1145,14 @@
         const flag = r.f
             ? '<p class="res-flag">' + box(13, '', WARN_ICON) + '<span>' + esc(r.f) + '</span></p>'
             : '';
+        const rank = r.top
+            ? '<span class="rank-badge">' + box(11, '', STAR_ICON) + 'pick ' + r.top + '</span>'
+            : '';
+        const why = r.w
+            ? '<p class="res-why"><b>Why this matters for your work</b>' + esc(r.w) + '</p>'
+            : '';
         return '' +
-            '<li class="res-card">' +
+            '<li class="res-card' + (r.top ? ' is-pick' : '') + '">' +
                 '<a class="res-link" href="' + esc(r.u) + '" target="_blank" rel="noopener noreferrer"' +
                    ' aria-label="' + esc(r.n) + ', ' + esc(TYPE_LABEL[r.t]) + ', opens in a new tab">' +
                     '<span class="res-top">' +
@@ -1097,8 +1166,10 @@
                     '</span>' +
                     '<span class="res-desc">' + esc(r.d) + '</span>' +
                 '</a>' +
+                why +
                 flag +
                 '<div class="res-foot">' +
+                    rank +
                     '<span class="badge" style="color:' + c + ';border:1px solid ' + c + ';background:color-mix(in srgb, ' + c + ' var(--tint), transparent);">' +
                         box(12, '', TYPE_ICON[r.t]) + esc(TYPE_LABEL[r.t]) +
                     '</span>' +
@@ -1122,7 +1193,9 @@
         const searching = activeSearch.trim().length > 0;
         let html = '';
         DOMAINS.forEach(dom => {
-            const group = items.filter(r => r.g === dom.k);
+            // Ranked picks lead each section; everything else keeps registry order.
+            const group = items.filter(r => r.g === dom.k)
+                .sort((a, b) => (a.top || 99) - (b.top || 99));
             if (!group.length) return;
             html += '' +
                 '<section aria-labelledby="sec-' + dom.k + '">' +
@@ -1151,11 +1224,15 @@
         const items = visible();
         let md = '# Research Resources\n\n';
         DOMAINS.forEach(dom => {
-            const group = items.filter(r => r.g === dom.k);
+            // Ranked picks lead each section; everything else keeps registry order.
+            const group = items.filter(r => r.g === dom.k)
+                .sort((a, b) => (a.top || 99) - (b.top || 99));
             if (!group.length) return;
             md += '## ' + dom.title + '\n\n';
             group.forEach(r => {
-                md += '- [' + r.n + '](' + r.u + ') (' + TYPE_LABEL[r.t] + '): ' + r.d;
+                md += '- ' + (r.top ? '**[Pick ' + r.top + ']** ' : '') +
+                      '[' + r.n + '](' + r.u + ') (' + TYPE_LABEL[r.t] + '): ' + r.d;
+                if (r.w) md += ' _Why: ' + r.w + '_';
                 if (r.u2) md += ' [' + (r.l2 || 'more') + '](' + r.u2 + ')';
                 if (r.f) md += ' _Note: ' + r.f + '_';
                 md += '\n';
@@ -1183,10 +1260,24 @@
         }
     });
 
+    const picksBtn = document.getElementById('picks-only');
+    function paintPicksBtn() {
+        picksBtn.setAttribute('aria-pressed', picksOnly ? 'true' : 'false');
+        picksBtn.style.color = picksOnly ? 'var(--primary-color)' : '';
+        picksBtn.style.borderColor = picksOnly ? 'var(--primary-color)' : '';
+    }
+    picksBtn.addEventListener('click', () => {
+        picksOnly = !picksOnly;
+        paintPicksBtn();
+        render();
+    });
+
     document.getElementById('reset').addEventListener('click', () => {
         activeDomain = 'all';
         activeType = 'all';
         activeSearch = '';
+        picksOnly = false;
+        paintPicksBtn();
         searchEl.value = '';
         domainWrap.querySelectorAll('.filter-btn').forEach((b, i) => b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'));
         typeWrap.querySelectorAll('.filter-btn').forEach((b, i) => b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'));
