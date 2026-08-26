@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Balance System: health, work and a life that fits together</title>
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141922; --panel-2:#1a2029; --panel-3:#222a36;
+    --line:#262e3a; --line-2:#394454;
+    --text:#e8eef6; --dim:#93a0b3; --faint:#697585;
+    --accent:#e8b923; --accent-soft:rgba(232,185,35,.13);
+    --ok:#3fb950; --warn:#d98b22; --info:#58a6ff; --danger:#f43f5e;
+    --sans:'IBM Plex Sans Arabic','Segoe UI',system-ui,-apple-system,sans-serif;
+    --slide:105%;
+  }
+  [dir="ltr"]{--slide:105%}
+  [dir="rtl"]{--slide:-105%}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--info)}
+  ::selection{background:var(--accent-soft)}
+
+  /* ============ header ============ */
+  header{position:sticky;top:0;z-index:40;background:rgba(11,14,20,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .head-in{max-width:1280px;margin:0 auto;padding:12px 20px}
+  .head-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .pl-art{width:76px;height:43px;border-radius:7px;object-fit:cover;background:var(--panel-2);flex:none}
+  .pl-meta{flex:1;min-width:200px}
+  .pl-title{font-size:19px;font-weight:700;margin:0;line-height:1.3}
+  .pl-sub{color:var(--dim);font-size:12.5px}
+  .head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+  .btn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;transition:.15s;white-space:nowrap}
+  .btn:hover{background:var(--panel-3);border-color:var(--line-2)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#1a1400;font-weight:700}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:4px 9px;font-size:12px}
+
+  .resume{display:flex;align-items:center;gap:12px;margin-top:11px;padding:10px 14px;background:linear-gradient(90deg,var(--accent-soft),transparent);border:1px solid rgba(232,185,35,.3);border-radius:10px;cursor:pointer;transition:.15s}
+  .resume:hover{border-color:var(--accent)}
+  .resume[hidden]{display:none}
+  .resume .rk{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);font-weight:700;flex:none}
+  .resume .rt{flex:1;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .resume .rw{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums;flex:none}
+  .resume .go{font-size:19px;color:var(--accent);flex:none}
+  [dir="rtl"] .resume .go{transform:scaleX(-1)}
+
+  .stats{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .bar{flex:1;min-width:160px;height:7px;border-radius:99px;background:var(--panel-2);overflow:hidden;display:flex}
+  .bar i{display:block;height:100%;transition:width .3s}
+  .bar .w{background:var(--ok)} .bar .g{background:var(--warn)}
+  .stat{font-size:12px;color:var(--dim);white-space:nowrap}
+  .stat b{color:var(--text);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+
+  .tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:11px}
+  .search{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px}
+  .search:focus,select:focus{outline:none;border-color:var(--accent)}
+  select{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;max-width:180px}
+  .chips{display:flex;gap:5px;flex-wrap:wrap}
+  .chip{background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:12.5px;color:var(--dim);transition:.15s}
+  .chip:hover{color:var(--text);border-color:var(--line-2)}
+  .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .chip .n{opacity:.6;margin-inline-start:5px;font-variant-numeric:tabular-nums}
+
+  /* ============ outline ============ */
+  main{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
+
+  .sec{margin-bottom:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+  .sec-h{width:100%;display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--panel-2);border:none;text-align:start;transition:.15s}
+  .sec-h:hover{background:var(--panel-3)}
+  .sec-h .car{font-size:11px;color:var(--faint);transition:transform .18s;flex:none}
+  .sec.closed .car{transform:rotate(-90deg)}
+  [dir="rtl"] .sec.closed .car{transform:rotate(90deg)}
+  .sec-h .nm{font-weight:700;font-size:14.5px;flex:none}
+  .sec-h .mt{font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .sec-h .sbar{flex:1;min-width:50px;max-width:200px;height:5px;border-radius:99px;background:var(--panel);overflow:hidden}
+  .sec-h .sbar i{display:block;height:100%;background:var(--ok)}
+  .sec.closed .sec-body{display:none}
+
+  .item{display:flex;align-items:center;gap:11px;padding:8px 14px;border-top:1px solid var(--line);cursor:pointer;position:relative;transition:.12s}
+  .item:hover{background:var(--panel-2)}
+  .item.active{background:var(--accent-soft)}
+  .item.watched .lbl{color:var(--dim)}
+  .item.skipped{opacity:.4}
+  .item.skipped .lbl{text-decoration:line-through}
+
+  .idx{width:26px;flex:none;text-align:center;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .tick{width:24px;height:24px;flex:none;border-radius:50%;border:1.5px solid var(--line-2);background:transparent;display:grid;place-items:center;font-size:12px;color:transparent;transition:.15s;padding:0}
+  .tick:hover{border-color:var(--ok);color:var(--faint)}
+  .item.watched .tick{background:var(--ok);border-color:var(--ok);color:#08240d;font-weight:800}
+  .item.watching .tick{border-color:var(--warn);color:var(--warn)}
+  .item.skipped .tick{color:var(--faint);border-style:dashed}
+
+  .lbl{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lbl .qn{color:var(--accent);font-weight:700;margin-inline-end:7px;font-variant-numeric:tabular-nums}
+  .sum{display:block;font-size:11.5px;color:var(--faint);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .meta{display:flex;align-items:center;gap:9px;flex:none;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .meta .st{color:var(--accent)}
+  .meta .mk{color:var(--info)}
+  .meta .dur{min-width:44px;text-align:end}
+  .iprog{position:absolute;bottom:0;inset-inline-start:0;height:2px;background:var(--warn)}
+
+  /* grid view */
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:.15s}
+  .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .card.watched{opacity:.6} .card.watched:hover{opacity:1}
+  .card.skipped{opacity:.38}
+  .tw{position:relative;aspect-ratio:16/9;background:var(--panel-2)}
+  .tw img{width:100%;height:100%;object-fit:cover;display:block}
+  .badge{position:absolute;top:7px;inset-inline-start:7px;background:rgba(0,0,0,.8);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700}
+  .badge.q{background:var(--accent);color:#1a1400}
+  .dur2{position:absolute;bottom:7px;inset-inline-end:7px;background:rgba(0,0,0,.85);border-radius:5px;padding:1px 6px;font-size:11px;font-variant-numeric:tabular-nums}
+  .seen{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,14,20,.5);font-size:28px;color:var(--ok)}
+  .cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .ctitle{font-size:14px;font-weight:600;line-height:1.4;margin:0;display:-webkit-box;
+    -webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px;font-size:11.5px;color:var(--faint)}
+  .pill{border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700;border:1px solid}
+  .pill.unwatched{color:var(--faint);border-color:var(--line)}
+  .pill.watching{color:var(--warn);border-color:rgba(217,139,34,.45);background:rgba(217,139,34,.1)}
+  .pill.watched{color:var(--ok);border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.1)}
+  .pill.skipped{color:var(--faint);border-color:var(--line)}
+  .tagrow{display:flex;gap:4px;flex-wrap:wrap}
+  .tag{background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:11px;color:var(--dim)}
+
+  /* view switcher */
+  .vsw{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .vsw button{background:transparent;border:none;padding:5px 10px;font-size:13px;color:var(--faint);transition:.15s;line-height:1.4}
+  .vsw button+button{border-inline-start:1px solid var(--line)}
+  .vsw button:hover{background:var(--panel-2);color:var(--text)}
+  .vsw button.on{background:var(--accent-soft);color:var(--accent)}
+
+  /* table view */
+  .tblwrap{border:1px solid var(--line);border-radius:12px;overflow-x:auto;background:var(--panel)}
+  table.vt{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+  table.vt th{background:var(--panel-2);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--faint);font-weight:800;padding:9px 12px;text-align:start;white-space:nowrap;position:sticky;top:0;z-index:1}
+  table.vt td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:middle}
+  table.vt tbody tr{cursor:pointer;transition:.12s}
+  table.vt tbody tr:hover{background:var(--panel-2)}
+  table.vt tr.watched td{opacity:.62}
+  table.vt tr.skipped{opacity:.4}
+  table.vt tr.skipped .c-t{text-decoration:line-through}
+  .c-n{width:34px;color:var(--faint);font-variant-numeric:tabular-nums;text-align:center}
+  .c-q{width:44px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+  .c-t{font-weight:500;min-width:200px}
+  .c-t .sub2{display:block;font-size:11.5px;color:var(--faint);font-weight:400;margin-top:1px}
+  .c-d,.c-r,.c-m{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:center}
+  .c-d{width:66px;color:var(--dim)}
+  .c-r{width:66px;color:var(--accent)}
+  .c-m{width:58px;color:var(--info)}
+  .c-s{width:112px}
+  .c-x{min-width:170px;max-width:300px;color:var(--dim);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .empty{text-align:center;color:var(--dim);padding:60px 20px}
+
+  /* ============ drawer ============ */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:50;opacity:0;pointer-events:none;transition:.2s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;inset-inline-end:0;height:100vh;width:min(700px,100vw);background:var(--bg);border-inline-start:1px solid var(--line);z-index:51;transform:translateX(var(--slide));transition:transform .22s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+  .drawer.on{transform:none}
+  .d-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex:none}
+  .d-head .who{flex:1;font-size:12px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icon-btn{background:transparent;border:none;color:var(--dim);font-size:18px;padding:3px 9px;border-radius:7px;line-height:1;text-decoration:none}
+  .icon-btn:hover{background:var(--panel-2);color:var(--text)}
+  [dir="rtl"] #dPrev,[dir="rtl"] #dNext{transform:scaleX(-1)}
+  .player{aspect-ratio:16/9;width:100%;background:#000;flex:none}
+  .player iframe{width:100%;height:100%;border:0;display:block}
+  #playerBox{width:100%;height:100%}
+  .d-body{overflow-y:auto;padding:0 0 40px;flex:1}
+  .acts{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ibtn{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;
+    font-size:12.5px;display:flex;align-items:center;gap:7px;transition:.15s;color:var(--dim)}
+  .ibtn:hover{background:var(--panel-3);color:var(--text)}
+  .ibtn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .ibtn .ic{font-size:14px}
+  .sumbox{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--accent);
+    border-radius:9px;padding:13px 15px;font-size:14.2px;line-height:1.85;white-space:pre-wrap}
+  .why{font-size:12.5px;color:var(--dim);border-inline-start:2px solid var(--line-2);
+    padding-inline-start:10px;margin:8px 0 2px;line-height:1.6}
+  .sumbox.miss{border-inline-start-color:var(--line-2);color:var(--dim);font-size:13px;line-height:1.7;white-space:normal}
+  .sumbox code{background:var(--panel-3);padding:1px 7px;border-radius:5px;font-size:12px;
+    font-family:ui-monospace,Consolas,monospace;direction:ltr;display:inline-block}
+  .srcline{font-size:11px;color:var(--faint);margin-top:9px;display:flex;gap:8px;flex-wrap:wrap}
+  .d-sec{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .d-title{font-size:16.5px;font-weight:700;margin:0 0 6px;line-height:1.45}
+  .qtag{display:inline-block;background:var(--accent);color:#1a1400;border-radius:6px;padding:1px 9px;font-size:12px;font-weight:800;margin-inline-end:8px;vertical-align:2px}
+  .kv{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--dim);margin-top:7px}
+  .kv b{color:var(--text);font-weight:600}
+  .label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:800;margin:0 0 9px;display:flex;align-items:center;gap:8px}
+  .label .count{background:var(--panel-2);border-radius:99px;padding:1px 7px;letter-spacing:0;text-transform:none;font-size:11px;color:var(--dim)}
+  .seg{display:flex;gap:5px;flex-wrap:wrap}
+  .seg .chip{padding:6px 13px;font-size:13px}
+  .star-pick{display:flex;gap:1px;align-items:center;margin-top:11px}
+  .star-pick button{background:none;border:none;font-size:21px;color:var(--line-2);padding:0 1px;line-height:1}
+  .star-pick button.on{color:var(--accent)}
+  .star-pick .clear{font-size:12px;color:var(--faint);margin-inline-start:9px}
+
+  textarea,.ti{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:14px;resize:vertical;line-height:1.65}
+  textarea:focus,.ti:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:7px;align-items:flex-start}
+  .row .ti{flex:1}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-inline-start:2px solid var(--info);border-radius:8px;padding:8px 11px;margin-bottom:7px;font-size:13.5px;display:flex;gap:9px;align-items:flex-start}
+  .note.comment{border-inline-start-color:var(--danger)}
+  .note .txt{flex:1;white-space:pre-wrap;word-break:break-word;cursor:text}
+  .note .txt:hover{color:#fff}
+  .note .when{font-size:10.5px;color:var(--faint);margin-top:3px}
+  .stamp{background:var(--accent-soft);color:var(--accent);border:none;border-radius:5px;padding:2px 7px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+  .stamp:hover{filter:brightness(1.3)}
+  .stamp.none{background:var(--panel-2);color:var(--faint)}
+  .del{background:none;border:none;color:var(--faint);font-size:15px;padding:0 3px;line-height:1;flex:none}
+  .del:hover{color:var(--danger)}
+  .desc{font-size:13px;color:var(--dim);white-space:pre-wrap;max-height:110px;overflow:hidden;line-height:1.65}
+  .desc.open{max-height:none}
+  .more{background:none;border:none;color:var(--info);font-size:12.5px;padding:6px 0 0}
+  .hint{font-size:11.5px;color:var(--faint);margin-top:7px}
+
+  #saveState{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  #saveState b{width:7px;height:7px;border-radius:99px;background:var(--faint);display:block}
+  #saveState.dirty b{background:var(--warn)} #saveState.saved b{background:var(--ok)} #saveState.err b{background:var(--danger)}
+
+  .banner{background:rgba(217,139,34,.12);border-bottom:1px solid rgba(217,139,34,.35);color:#e3b341;font-size:13px;padding:9px 20px;display:none}
+  .banner.on{display:block}
+  .banner code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-size:12px}
+
+  .toast{position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-3);border:1px solid var(--line-2);border-radius:9px;padding:9px 18px;font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:.2s}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:700px){
+    .head-in,main{padding-left:13px;padding-right:13px}
+    .pl-art{display:none}
+    .meta .mk,.meta .st{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="banner" id="banner"></div>
+
+<header>
+  <div class="head-in">
+    <div class="head-top">
+      <img class="pl-art" id="plArt" alt="">
+      <div class="pl-meta">
+        <h1 class="pl-title" id="plTitle" dir="auto">…</h1>
+        <div class="pl-sub" id="plSub"></div>
+      </div>
+      <div class="head-actions">
+        <div id="saveState"><b></b><span>—</span></div>
+        <button class="btn ghost sm" id="btnLang">EN</button>
+        <div class="vsw" id="viewSwitch">
+          <button data-view="outline">☰</button>
+          <button data-view="tiles">▦</button>
+          <button data-view="table">▤</button>
+        </div>
+        <button class="btn ghost sm" id="btnSheet"></button>
+        <button class="btn ghost sm" id="btnExport"></button>
+        <button class="btn ghost sm" id="btnImport"></button>
+        <input type="file" id="fileIn" accept="application/json" hidden>
+        <button class="btn primary sm" id="btnSave"></button>
+      </div>
+    </div>
+
+    <div class="resume" id="resume" hidden>
+      <span class="rk" id="rkLabel"></span>
+      <span class="rt" id="rTitle" dir="auto"></span>
+      <span class="rw" id="rWhen"></span>
+      <span class="go">›</span>
+    </div>
+
+    <div class="stats">
+      <div class="bar"><i class="w" id="barW"></i><i class="g" id="barG"></i></div>
+      <div class="stat"><b id="sWatched">0</b> <span id="lWatched"></span></div>
+      <div class="stat"><b id="sLeft">0</b> <span id="lLeft"></span></div>
+      <div class="stat"><b id="sTime">0h</b> <span id="lTime"></span></div>
+      <div class="stat"><b id="sNotes">0</b> <span id="lNotes"></span></div>
+    </div>
+
+    <div class="tools">
+      <input class="search" id="q">
+      <div class="chips" id="statusChips"></div>
+      <select id="sort"></select>
+      <select id="tagFilter"></select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="list"></div>
+  <div class="empty" id="empty" hidden></div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="d-head">
+    <button class="icon-btn" id="dPrev">‹</button>
+    <button class="icon-btn" id="dNext">›</button>
+    <div class="who" id="dWho"></div>
+    <a class="icon-btn" id="dOpen" target="_blank" rel="noopener">↗</a>
+    <button class="icon-btn" id="dClose">✕</button>
+  </div>
+  <div class="player" id="playerHost"></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<!-- Playlist data, embedded so this page is self-contained: it renders from
+     file:// and from any static host, with no server and no fetch. The project
+     directory this was published from stays the source of truth; re-run
+     publish_playlist.py after editing it there. -->
+<script type="application/json" id="seedData">{"generatedAt":"2026-08-26T22:40:47+00:00","source":"curated","topic":"The Balance System: health, work and a life that fits together","facets":[{"key":"orientation","label":"1. Start here: what balance actually means"},{"key":"sleep","label":"2. Sleep - the foundation everything sits on"},{"key":"rest","label":"3. Rest and recovery (which is not sleep)"},{"key":"movement","label":"4. Movement on a full schedule"},{"key":"food","label":"5. Eating well without cooking every night"},{"key":"focus","label":"6. Attention - finish work inside work hours"},{"key":"digital","label":"7. Reclaiming the phone hours"},{"key":"time","label":"8. The calendar system"},{"key":"habits","label":"9. Making it automatic"},{"key":"boundaries","label":"10. Boundaries that protect the system"},{"key":"stress","label":"11. Stress and burnout recovery"},{"key":"review","label":"12. The weekly loop that keeps it alive"}],"playlists":[{"playlistId":"curated","title":"The Balance System: health, work and a life that fits together","description":"A twelve-part, follow-along system: fix energy first (sleep, rest, movement, food), then attention, then the calendar, then the boundaries and habits that keep it standing - closing with the weekly loop that stops it drifting.","channelTitle":"31 sources","thumbnail":"https://i.ytimg.com/vi/cfKFbh8LPvU/maxresdefault.jpg","itemCount":35}],"videos":[{"videoId":"cfKFbh8LPvU","position":0,"playlistId":"","title":"How to Reclaim Your Life From Work | Simone Stolzoff | TED","description":"Where do you draw the line between work and life? Writer Simone Stolzoff explores the problem with defining yourself by your job — and shows what it takes to reclaim your time and sense of meaning beyond the office. (Recorded at TEDNext 2024 on October 23, 2024)\n\nIf you love watching TED Talks like this one, become a TED Member to support our mission of spreading ideas: https://ted.com/membership\n\nFollow TED! \nX: https://twitter.com/TEDTalks\nInstagram: https://www.instagram.com/ted\nFacebook: https://facebook.com/TED\nLinkedIn: https://www.linkedin.com/company/ted-conferences\nTikTok: https://www","channelTitle":"TED","channelId":"UCAuUUnT6oDeKwE6v1NGQxug","publishedAt":"2025-01-13T12:00:54Z","thumbnail":"https://i.ytimg.com/vi/cfKFbh8LPvU/maxresdefault.jpg","durationSeconds":513,"duration":"8:33","definition":"","viewCount":109999,"likeCount":3140,"commentCount":77,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=cfKFbh8LPvU","unavailable":false,"facet":"orientation","whyIncluded":"Eight minutes to separate who you are from what you do - the reframe the rest of this course is built on.","curationScore":0.9235,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"5Dwehd66whc","position":1,"playlistId":"","title":"THE MYTH OF WORK/LIFE BALANCE: Self-care is not enough","description":"Time Stamps:\n0:00 Intro\n0:37 When people tell you to just “reduce stress”\n2:24 The modern-day work schedule does not allow time for self-care\n4:49 A 40-hour work week only works if your career is your biggest passion ever\n6:49 Should you put in more or less effort if you’re not happy at work?\n10:20 Work to live vs. live to work?\n11:30 I feel powerless. Now what?\n\nIntro music: Church of 8 Wheels by Otis McDonald","channelTitle":"Psychology with Dr. Ana","channelId":"UCOxhlNofmYH-MRC36TURUGw","publishedAt":"2022-11-25T17:00:04Z","thumbnail":"https://i.ytimg.com/vi/5Dwehd66whc/maxresdefault.jpg","durationSeconds":858,"duration":"14:18","definition":"","viewCount":43515,"likeCount":2691,"commentCount":193,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=5Dwehd66whc","unavailable":false,"facet":"orientation","whyIncluded":"Kills the 50/50 balance fantasy and explains why self-care alone never fixes it. You need a system, which is what follows.","curationScore":0.8356,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"khsEeuJdPjI","position":2,"playlistId":"","title":"5 Habits to Follow for Better Work Life Balance","description":"5 Habits to Follow for Better Work Life Balance\n\nTIME STAMPS\n\nSCRAP THE NOTES E BOOK \nhttps://www.fayebate.online/shop/p/the-faye-bate-method-scrap-the-notes-ace-your-exams\n\nOTHER USEFUL VIDEOS\nHow I make notes - https://www.youtube.com/watch?v=F4emLmgrgmo&t=86s\nHarnessing the fear of failure - https://youtu.be/QA6UEO19OKk\nCommon study mistakes - https://www.youtube.com/watch?v=qk4GnIxJGdM&t=117s\nHow I use Notion to organise my life - https://youtu.be/5lvTviZMUBo\n7 Habits that made me more successful - https://youtu.be/HAuJrYRP_Ek\nHow I manifested my dream life \nHow to make yourself study when","channelTitle":"Dr Faye Bate","channelId":"UCq8EwIdN0pmgs-EymfaiO5g","publishedAt":"2024-04-21T17:00:36Z","thumbnail":"https://i.ytimg.com/vi/khsEeuJdPjI/maxresdefault.jpg","durationSeconds":588,"duration":"9:48","definition":"","viewCount":73007,"likeCount":2719,"commentCount":124,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=khsEeuJdPjI","unavailable":false,"facet":"orientation","whyIncluded":"Your first five concrete moves, before any theory - start these today while you work through the rest.","curationScore":0.8841,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"5MuIMqhT8DM","position":3,"playlistId":"","title":"Sleep Is Your Superpower | Matt Walker | TED","description":"Sleep is your life-support system and Mother Nature's best effort yet at immortality, says sleep scientist Matt Walker. In this deep dive into the science of slumber, Walker shares the wonderfully good things that happen when you get sleep -- and the alarmingly bad things that happen when you don't, for both your brain and body. Learn more about sleep's impact on your learning, memory, immune system and even your genetic code -- as well as some helpful tips for getting some shut-eye.\n\nIf you love watching TED Talks like this one, become a TED Member to support our mission of spreading ideas: h","channelTitle":"TED","channelId":"UCAuUUnT6oDeKwE6v1NGQxug","publishedAt":"2019-06-03T15:27:56Z","thumbnail":"https://i.ytimg.com/vi/5MuIMqhT8DM/maxresdefault.jpg","durationSeconds":1159,"duration":"19:19","definition":"","viewCount":17003288,"likeCount":419423,"commentCount":11546,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=5MuIMqhT8DM","unavailable":false,"facet":"sleep","whyIncluded":"Watch this before touching your calendar: nothing else in the system works on a sleep debt.","curationScore":0.8705,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"WDv4AWk0J3U","position":4,"playlistId":"","title":"How to Feel Energized & Sleep Better With One Morning Activity | Dr. Andrew Huberman","description":"Dubbed by ElevenLabs\n\nDr. Andrew Huberman discusses how you can feel more energized and sleep better by doing one thing every morning—getting bright sunlight.\n\nDr. Andrew Huberman is a tenured professor of neurobiology and ophthalmology at Stanford University School of Medicine and host of the Huberman Lab podcast.\n\nUse Ask Huberman Lab, our new AI-powered platform, for a summary, clips, and insights from this episode: https://ai.hubermanlab.com/s/d43YAzQ0\n\nWatch the full episode: https://youtu.be/h2aWYjSA1Jc\nShow notes: https://hubermanlab.com/sleep-toolkit-tools-for-optimizing-sleep-and-slee","channelTitle":"Huberman Lab Clips","channelId":"UCkZjTZNvuxq1CYMS3cwZa1Q","publishedAt":"2022-08-10T15:45:01Z","thumbnail":"https://i.ytimg.com/vi/WDv4AWk0J3U/maxresdefault.jpg","durationSeconds":392,"duration":"6:32","definition":"","viewCount":6686172,"likeCount":149659,"commentCount":2474,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=WDv4AWk0J3U","unavailable":false,"facet":"sleep","whyIncluded":"Six minutes for the single highest-leverage change - morning light. Do this one thing if you do nothing else this week.","curationScore":0.8728,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"Wk9p3dhMYdk","position":5,"playlistId":"","title":"How I FIXED My Terrible Sleep - 10 Habits","description":"Sleep will give you superpowers. It’s the cornerstone of my Blueprint routine, and the most important thing I do every day.\n\n🥦 Start your Blueprint protocol: https://blueprint.bryanjohnson.com/?&utm_source=youtube&utm_medium=video&utm_content=Wk9p3dhMYdk\n\n✅ SLEEP CHECKLIST\nhttps://drive.google.com/file/d/1H8atNCEa3DI9c8GBm4wBJUlk69hNs_d6/view?usp=sharing\n\n🫒Blueprint Olive Oil: https://blueprint.bryanjohnson.com//products/premium-extra-virgin-olive-oil\n🔬Blueprint Protocol: https://protocol.bryanjohnson.co/\n\n🧪 WHAT IS BLUEPRINT\nI’ve invested millions of dollars building the world’s leading anti-","channelTitle":"Bryan Johnson","channelId":"UCnRVL1-HJnXWB_Xi2dAoTcg","publishedAt":"2024-03-23T16:00:18Z","thumbnail":"https://i.ytimg.com/vi/Wk9p3dhMYdk/maxresdefault.jpg","durationSeconds":612,"duration":"10:12","definition":"","viewCount":3597203,"likeCount":134063,"commentCount":4712,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=Wk9p3dhMYdk","unavailable":false,"facet":"sleep","whyIncluded":"The full checklist version, so you can pick two or three habits rather than overhaul your night all at once.","curationScore":0.9429,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"1k_C_kj6m2Q","position":6,"playlistId":"","title":"7 Types of Rest You Never Knew You Needed for a Healthy Life","description":"Visit https://betterhelp.com/lauriewang and enjoy 10% discount on your first month. Thanks to Betterhelp as the paid partner for this video.\nDownload my free Productivity Matrix to focus on what truly matters in your life: https://lauriewang.kit.com/productivitymatrix\n\nIn this video, I share why more sleep isn’t fixing your exhaustion, and what actually will. Learn the 7 types of rest for every area of your life, and practical ways to restore your energy to make you rest deeply.\n\nYou'll also enjoy watching these videos:\nHow to manage dopamine: https://youtu.be/wG-JfY9nn8k\nLife is short, how to","channelTitle":"Laurie Wang","channelId":"UCl0Na-giucIFjh2I9cqOnmw","publishedAt":"2025-08-03T13:00:06Z","thumbnail":"https://i.ytimg.com/vi/1k_C_kj6m2Q/maxresdefault.jpg","durationSeconds":792,"duration":"13:12","definition":"","viewCount":10206,"likeCount":523,"commentCount":47,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=1k_C_kj6m2Q","unavailable":false,"facet":"rest","whyIncluded":"Explains why you can sleep eight hours and still feel wrecked - you have been resting one way and depleting six others.","curationScore":0.8695,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"BXhpMpLwkS8","position":7,"playlistId":"","title":"7 Things I Did to Stop Feeling Drained After Work","description":"7 Things I Did to Stop Feeling Drained After Work\n\n😩 Tired of feeling completely drained after work?\nI used to come home exhausted—zero energy, zero motivation, and stuck in a cycle of burnout. Until I made a few small changes that changed everything.\n\nIn this video, I’m sharing the 7 simple things I did to stop feeling mentally and physically wiped out after work. These tips are easy, realistic, and actually work—even if you're super busy.\n\n🧠 You’ll learn:\n• How to recharge your energy after work\n• Simple evening habits that fight burnout\n• How to reset your mind and body after a long day\n• W","channelTitle":"WISE JOE","channelId":"UCLrrzccqsqby97ZLlJhE98g","publishedAt":"2025-03-26T12:45:39Z","thumbnail":"https://i.ytimg.com/vi/BXhpMpLwkS8/maxresdefault.jpg","durationSeconds":569,"duration":"9:29","definition":"","viewCount":651007,"likeCount":23414,"commentCount":655,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=BXhpMpLwkS8","unavailable":false,"facet":"rest","whyIncluded":"The specific fix for the drained hour between finishing work and starting your evening.","curationScore":0.9461,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ku8mtHFbvzQ","position":8,"playlistId":"","title":"6 things I did to *finally* stop wasting my evenings after work","description":"Try the Hubspot digital detox challenge and get your evenings on track! https://clickhubspot.com/350x\n\n💌 Get (e)mails from me! https://link.feelgoodstudios.co/yt-news\n📚 My second channel https://youtube.com/@coffeeswithangel\n🎧 Feel Good Podcast: https://youtube.com/@feelgoodlab\n\n• Things Mentioned\n→All my tools & gear: https://bit.ly/3QINYLv\n→My wallpaper: https://bit.ly/3QOpRen \n\nYou can also find me here: \n→ Instagram: http://instagram.com/speakoftheangel\n→ Tiktok: https://tiktok.com/@angelzzheng\n→ Join my discord: https://discord.gg/6nZsCKM5Un\n\n• BUSINESS INQUIRIES\nangel@speakoftheangel.com","channelTitle":"Angel Zheng","channelId":"UChgNGLBeUG7yC-3SxaZlSBg","publishedAt":"2025-02-09T14:00:55Z","thumbnail":"https://i.ytimg.com/vi/ku8mtHFbvzQ/maxresdefault.jpg","durationSeconds":781,"duration":"13:01","definition":"","viewCount":400069,"likeCount":11125,"commentCount":131,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=ku8mtHFbvzQ","unavailable":false,"facet":"rest","whyIncluded":"Your evenings are where the life half actually lives. This is how to stop losing them to the couch.","curationScore":0.9324,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"vSSkDos2hzo","position":9,"playlistId":"","title":"We Need to Rethink Exercise (Updated Version)","description":"Go to https://brilliant.org/nutshell/ to dive deeper into these topics and more with a free 30-day trial + 20% off the premium subscription! \nThis video was sponsored by Brilliant. Thanks a lot for the support!\n\nGrab your ✨Curiosity Guide ✨ now, only available from the kurzgesagt shop: https://shop.kgs.link/im-curious \nIt’s lovingly packed with epic quests to get you moving, thinking, and seeing the world in a whole new way.\n\nAll changes and the link to the original video are listed in \nSources & further reading:\nhttps://sites.google.com/view/sources-workoutparadox\n\nExercising doesn’t help you","channelTitle":"Kurzgesagt – In a Nutshell","channelId":"UCsXVk37bltHxD1rDPwtNM8Q","publishedAt":"2024-09-12T14:01:11Z","thumbnail":"https://i.ytimg.com/vi/vSSkDos2hzo/maxresdefault.jpg","durationSeconds":788,"duration":"13:08","definition":"","viewCount":5780032,"likeCount":189066,"commentCount":6425,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=vSSkDos2hzo","unavailable":false,"facet":"movement","whyIncluded":"The motivation layer, in Kurzgesagt's visual style - what inactivity is actually costing you.","curationScore":0.9526,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"iGzEB3Ka39o","position":10,"playlistId":"","title":"How much time should a person spend exercising?","description":"“How much time do I need to spend exercising?” It’s a question I hear often, and it is the subject of countless research studies and popular press articles. And yet, this question misses the point.\n\nWhen it comes to exercise, we should only concern ourselves with duration insofar as it influences what we really care about: results. Exercise is not a goal in itself – rather, it is a means of achieving good cardiorespiratory fitness, strength, and metabolic health, and the ultimate indicators of sufficient exercise are therefore a good VO2 max and adequate muscle mass.\n\n--------\nAbout:\n\nThe Pete","channelTitle":"Peter Attia MD","channelId":"UC8kGsMa0LygSX9nkBcBH1Sg","publishedAt":"2024-05-04T14:00:34Z","thumbnail":"https://i.ytimg.com/vi/iGzEB3Ka39o/maxresdefault.jpg","durationSeconds":397,"duration":"6:37","definition":"","viewCount":588172,"likeCount":12430,"commentCount":861,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=iGzEB3Ka39o","unavailable":false,"facet":"movement","whyIncluded":"Six minutes from a longevity physician answering the only question that matters here: how little is enough?","curationScore":0.8887,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"eMjyvIQbn9M","position":11,"playlistId":"","title":"The Best Science-Based Minimalist Workout Plan (Under 45 Mins)","description":"My new ESSENTIALS Training Program: https://jeffnippard.com/products/the-essentials-program\n\nLet’s goo!!! My long-awaited Essentials Program (short and intense workouts that take 45 mins) is available at the link above 😤📘 \n\nHere is a brief overview of The Essentials Program:\n\n1️⃣ - The workouts are designed to take no longer than 45 mins. These are perfect for anyone who wants to make the most of their time in the gym, but not spend half their day there.\n\n2️⃣ - This program focuses on QUALITY over quantity. We will be training at a high intensity and focusing on individual set execution to dri","channelTitle":"Jeff Nippard","channelId":"UC68TLK0mAEzUyHx5x5k-S1Q","publishedAt":"2022-11-01T16:00:05Z","thumbnail":"https://i.ytimg.com/vi/eMjyvIQbn9M/maxresdefault.jpg","durationSeconds":788,"duration":"13:08","definition":"","viewCount":5769476,"likeCount":147080,"commentCount":2297,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=eMjyvIQbn9M","unavailable":false,"facet":"movement","whyIncluded":"The actual minimum-effective programme, so you stop improvising in the gym and start following something.","curationScore":0.9178,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"li6KnvJGvf0","position":12,"playlistId":"","title":"workout advice for busy people","description":"If you're in a busy season of life (new job, new to parenthood, trying to make changes, etc), here are some ways you can still maintain your fitness!\n\nA good fitness plan can and should improve your life, helping your health and happiness. Even if you have no interest in strength and muscle, you may want to maintain a basic fitness plan for longevity and health.\n\nSome people may seem unsympathetic. It's common to hear \"you have time - you just don't want it enough.\" While I agree that we make time for our priorities, I also understand how our schedules can seem very full (and overwhelming) som","channelTitle":"Hybrid Calisthenics","channelId":"UCeJFgNahi--FKs0oJyeRDEw","publishedAt":"2024-09-17T01:10:44Z","thumbnail":"https://i.ytimg.com/vi/li6KnvJGvf0/maxresdefault.jpg","durationSeconds":809,"duration":"13:29","definition":"","viewCount":151309,"likeCount":8462,"commentCount":333,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=li6KnvJGvf0","unavailable":false,"facet":"movement","whyIncluded":"Your fallback for the weeks when the plan above is impossible - no gym, no equipment, no excuse left.","curationScore":0.9197,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ZJe3yL7NHdA","position":13,"playlistId":"","title":"How to 'Meal Prep'...if you hate Meal Prepping (like I do)","description":"Want to become a more confident and creative home cook? Check out our Cook Well app: https://apps.apple.com/us/app/cook-well-for-home-cooks/id6748092442\n\nhttps://play.google.com/store/apps/details?id=com.cookwell.app&hl=en_US Thank you to Made In for sponsoring this video! I highly recommend taking advantage of their Holiday Sale (up to 30% off): https://madein.cc/ETHAN10\n\n📃 RECIPE Link(s):\nBanh Mi ➡️ https://www.ethanchlebowski.com/cooking-techniques-recipes/bahn-mi-style-sandwich-with-braised-meat\nTinga Tostada ➡️https://www.ethanchlebowski.com/cooking-techniques-recipes/tinga-poblana-tostad","channelTitle":"Ethan Chlebowski","channelId":"UCDq5v10l4wkV5-ZBIJJFbzQ","publishedAt":"2022-11-20T16:00:27Z","thumbnail":"https://i.ytimg.com/vi/ZJe3yL7NHdA/maxresdefault.jpg","durationSeconds":1069,"duration":"17:49","definition":"","viewCount":2177272,"likeCount":55876,"commentCount":1870,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=ZJe3yL7NHdA","unavailable":false,"facet":"food","whyIncluded":"Meal prep for people who hate meal prep - components rather than five identical containers. Start the food pillar here.","curationScore":0.9187,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ERysyFbJH7w","position":14,"playlistId":"","title":"MEAL PREP | 10 healthy meals in 1 HOUR (+ PDF guide)","description":"🌿📖 Pre-order our debut cookbook SIMPLY PLANTS (🥹!!): https://www.pickuplimes.com/book/simply-plants/\n👩🏻‍🌾 Free PDF (at the bottom of the page): https://www.pickuplimes.com/video/meal-prep-10-healthy-meals-in-1-hour-317\n📲 Try our app FREE for 1 week! https://pickuplimes.com/app\n🌱 NEW nutrition eBooks!: https://www.pickuplimes.com/ecommerce/ebooks/\n💌 Sign up for our FREE newsletters: https://pickuplimes.com/newsletter\n🎥 Film & photography gear we use: https://bit.ly/PUL_filming_gear\n🎶 The music we recommend: http://bit.ly/YTube_music (great for YouTube creators) \n\nTIMELINE  \n00:00 The meal prep ","channelTitle":"Pick Up Limes","channelId":"UCq2E1mIwUKMWzCA4liA_XGQ","publishedAt":"2024-09-26T15:16:23Z","thumbnail":"https://i.ytimg.com/vi/ERysyFbJH7w/maxresdefault.jpg","durationSeconds":607,"duration":"10:07","definition":"","viewCount":1496899,"likeCount":45313,"commentCount":992,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=ERysyFbJH7w","unavailable":false,"facet":"food","whyIncluded":"The execution session: one hour, ten meals, a downloadable plan. Do it once and judge whether it earns its Sunday.","curationScore":0.9534,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"pl_O5iTfgT8","position":15,"playlistId":"","title":"How to Actually Eat Healthy When You're Busy as *#!?","description":"Eating healthy with a busy lifestyle is hard - but it doesn't have to be! \nCheck out FlexiSpot and use my code KIANADOCHERTY for extra $30 off on their E7 standing desk series E7 PRO standing desk: https://bit.ly/KianaDocherty3\n\nWe are all BUSY - and it can be hard to find the time to eat healthy food. Many scientists agree that eating more whole foods and eating less ultra-processed foods is the most simple way to describe a healthy diet. The biggest problem is that shopping for groceries, prepping ingredients and cooking healthy meals takes time and energy.  This is such a big problem that F","channelTitle":"Kiana Docherty","channelId":"UCNGkAYEhcVdlwJITJSnB73A","publishedAt":"2024-05-29T19:25:22Z","thumbnail":"https://i.ytimg.com/vi/pl_O5iTfgT8/maxresdefault.jpg","durationSeconds":1217,"duration":"20:17","definition":"","viewCount":249114,"likeCount":10739,"commentCount":819,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=pl_O5iTfgT8","unavailable":false,"facet":"food","whyIncluded":"Handles the real obstacle the two above skip - eating well on the days that get away from you entirely.","curationScore":0.9183,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"f7V76Ky-_v8","position":16,"playlistId":"","title":"Avoiding Distractions & Doing Deep Work | Dr. Cal Newport & Dr. Andrew Huberman","description":"Dr. Cal Newport and Dr. Andrew Huberman discuss the role of technology, social media, and internet usage in our lives, highlighting both the positive aspects of these tools and critically examining the negative impacts they can have on our cognitive and emotional health.\n\nCal Newport, Ph.D. (@CalNewportMedia), is a professor of computer science at Georgetown University and bestselling author of numerous books on focus and productivity and how to access the deepest possible layers of your cognitive abilities in order to do quality work and lead a more balanced life. Dr. Andrew Huberman is a ten","channelTitle":"Huberman Lab Clips","channelId":"UCkZjTZNvuxq1CYMS3cwZa1Q","publishedAt":"2024-04-16T17:27:31Z","thumbnail":"https://i.ytimg.com/vi/f7V76Ky-_v8/maxresdefault.jpg","durationSeconds":595,"duration":"9:55","definition":"","viewCount":708061,"likeCount":18523,"commentCount":187,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=f7V76Ky-_v8","unavailable":false,"facet":"focus","whyIncluded":"Cal Newport in nine minutes with Huberman. The premise of the whole middle of this course: finish work inside work hours.","curationScore":0.9429,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"sAHlZMDHYhY","position":17,"playlistId":"","title":"Deep Work in 15 minutes","description":"Why do some people outshine others and achieve 10 times more with the same 24 hours?\n\n\nThis is a short summary of Cal Newport’s amazing book “Deep Work”\n\n(This channel would not exist if I had never read this book ~ 7 years ago.)\n\n===========================================\n\nI highly recommend buying a copy of this book which goes into much greater detail and wouldn't be possible to cover in a 15 minute video.\n\nI hope this video inspires you to go and get a copy of the book.\n\nCheck out Cal Newport's full book here\n📕Deep Work  https://amzn.to/4lKdqOg\n\nI have used this Planner by Cal Newport for","channelTitle":"Escaping Ordinary (B.C Marx) ","channelId":"UCcf1t1tH-Pp5bmu4hbAytwA","publishedAt":"2025-07-29T13:29:12Z","thumbnail":"https://i.ytimg.com/vi/sAHlZMDHYhY/maxresdefault.jpg","durationSeconds":918,"duration":"15:18","definition":"","viewCount":578839,"likeCount":26329,"commentCount":701,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=sAHlZMDHYhY","unavailable":false,"facet":"focus","whyIncluded":"The full Deep Work method distilled, so you have the whole framework rather than the highlight.","curationScore":0.9723,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"u7EieqIvNsU","position":18,"playlistId":"","title":"How I Became a Digital Minimalist | Start Here","description":"✏️ Get my favorite iPad accessory:  https://paperlike.com/garofola/2512\n\nToday I go over some of the things I implemented to help me a adopt and stick to a more digital minimalist lifestyle.\n\n\n🔗 Links\n \n👕 - My Clothes:  https://prf.hn/click/camref:1100lqXnW/\n⚙️ - My Essentials: https://www.amazon.com/shop/nicholasgarofola\n🎵 - Where I Get My Music:  https://share.epidemicsound.com/33qfvc\n🎨 - Wallpaper Store:  https://ko-fi.com/nicholasgarofola\n\nThese are affiliate links where I may earn a small commission on sales.\n\nHey everyone.  My name is Nicholas and I make videos most about my experiences ","channelTitle":"Nicholas Garofola","channelId":"UCLiAWvpRFtNiVOu6OyEfmDA","publishedAt":"2025-11-30T15:02:09Z","thumbnail":"https://i.ytimg.com/vi/u7EieqIvNsU/maxresdefault.jpg","durationSeconds":602,"duration":"10:02","definition":"","viewCount":99672,"likeCount":3628,"commentCount":156,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=u7EieqIvNsU","unavailable":false,"facet":"digital","whyIncluded":"The hours you are looking for are already in your day - this is the audit and the reset that recovers them.","curationScore":0.9392,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"6BQOU-v4c3g","position":19,"playlistId":"","title":"15 tips to stop doom scrolling ✧ end your phone addiction *✧･ﾟ:*","description":"Hey♥ In this Video i will show you 15 tips to stop doom scrolling\n\n*✧･ﾟ\nSocials:\nInstagram: https://www.instagram.com/leyla.tavas...\nPinterest: https://pin.it/1cHHQO9\nTiktok: https://www.tiktok.com/@leyla.tavas?_...\nSpotify:\n\nTimestamps:\n\n0:00 intro\n0:36 change your settings\n1:02 out of sight out if mind\n1:19 don’t use it in the morning\n1:46 set up your homescreen\n2:15 find things to do instead\n2:48 use the 10 minute rule\n3:28 get clear on your goals\n4:01 download useful apps\n4:32 make your phone benefit you\n5:04 define the deeper issue\n5:37 understand your phone addiction\n6:24 plan your day\n6","channelTitle":"Leyla Tavas","channelId":"UCcMFbMCrHzukG8BvavDYSCQ","publishedAt":"2024-02-29T16:16:34Z","thumbnail":"https://i.ytimg.com/vi/6BQOU-v4c3g/maxresdefault.jpg","durationSeconds":532,"duration":"8:52","definition":"","viewCount":1289550,"likeCount":59729,"commentCount":1198,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=6BQOU-v4c3g","unavailable":false,"facet":"digital","whyIncluded":"Fifteen specific tactics for the scroll itself. Pick three; the list is meant to be raided, not completed.","curationScore":0.9416,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"SxbDsuC-Ch4","position":20,"playlistId":"","title":"We’re Overcomplicating Time Management | Samantha Lane | TEDxJohnsonCity","description":"After a medical crisis radically reshaped her understanding of time management, Samantha Lane set out to simplify what we often overcomplicate. Tired of burnout, endless productivity tools, and an overwhelming to-do list, she introduces a simple but transformative framework: Prioritize, Plan, Protect. Through personal stories—including a life-altering surgery and recovery—she reveals how we’re overcomplicating time and missing what truly matters. Learn how intentional weekly planning and protecting your priorities can help you live with more clarity, presence, and purpose. This talk is a must-","channelTitle":"TEDx Talks","channelId":"UCsT0YIqwnpJCM-mx7-gSA4Q","publishedAt":"2025-07-09T16:34:58Z","thumbnail":"https://i.ytimg.com/vi/SxbDsuC-Ch4/maxresdefault.jpg","durationSeconds":835,"duration":"13:55","definition":"","viewCount":329424,"likeCount":28057,"commentCount":556,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=SxbDsuC-Ch4","unavailable":false,"facet":"time","whyIncluded":"Before you build a calendar system, hear the case that you are overcomplicating it. Saves you from the elaborate setup you would abandon in a fortnight.","curationScore":0.969,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"oO9GLC2iKy8","position":21,"playlistId":"","title":"The Productivity System I Taught to 6,642 Googlers","description":"📑 My blogpost on the CORE #workflow: https://www.jeffsu.org/i-taught-6-642-googlers-this-productivity-system\n\nI'm sharing the exact #productivity system I taught to over 6,600 Google employees over nine years.\n\nThe CORE workflow handles all four types of workplace information through a simple four-step process: Capture everything immediately, Organize with minimal friction, Review during scheduled sessions, and Engage by blocking time to execute.\n\nTrust me when I tell you it works with any tool you already use and becomes automatic within two weeks. No more relying on memory or willpower alone","channelTitle":"Jeff Su","channelId":"UCwAnu01qlnVg1Ai2AbtTMaA","publishedAt":"2025-10-21T13:01:38Z","thumbnail":"https://i.ytimg.com/vi/oO9GLC2iKy8/maxresdefault.jpg","durationSeconds":492,"duration":"8:12","definition":"","viewCount":589322,"likeCount":18208,"commentCount":712,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=oO9GLC2iKy8","unavailable":false,"facet":"time","whyIncluded":"The simplest complete system in this course, taught to thousands of Googlers. If you adopt one thing here, make it this.","curationScore":0.9779,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"6o2tm00Ar8A","position":22,"playlistId":"","title":"How I Manage My Time - The Trident Calendar System","description":"Check out Huel and get a free shaker and t-shirt here: https://my.huel.com/aliabdaal\n\n🧠 Superfocus: Our Ultimate Productivity System for People with More Ambition than Time → https://superfocus.me/?utm_source=youtube&utm_medium=organic_social&utm_campaign=ali_yt&utm_term=desc-sweep-2026-07&utm_content=6o2tm00Ar8A\n🚀 Lifestyle Business Academy: Our MBA alternative to build a 6-figure online business → https://lifestylebusiness.com/academy?utm_source=youtube&utm_medium=organic_social&utm_campaign=ali_yt&utm_term=desc-sweep-2026-07&utm_content=6o2tm00Ar8A\n\nMY OTHER PRODUCTS\n🦄 My Productivity Cours","channelTitle":"Ali Abdaal","channelId":"UCoOae5nYA7VqaXzerajD0lg","publishedAt":"2023-04-24T16:00:03Z","thumbnail":"https://i.ytimg.com/vi/6o2tm00Ar8A/maxresdefault.jpg","durationSeconds":1142,"duration":"19:02","definition":"","viewCount":4261936,"likeCount":137773,"commentCount":1975,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=6o2tm00Ar8A","unavailable":false,"facet":"time","whyIncluded":"Time blocking made concrete - where work, health and life each get their own defended territory on one calendar.","curationScore":0.9259,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"AeV5F0ppaGw","position":23,"playlistId":"","title":"Productivity is Hard Until You Build Systems Like This","description":"Join my Learning Drops newsletter (free): https://go.icanstudy.com/newsletter-simpleproductivitysystem\nIn this video, I teach you a simple 4-part productivity system I've used for years to make being productive easier and more consistent, even with a busy schedule.\n\nTake my Learning Diagnostic Quiz (free): https://go.icanstudy.com/diagnostic-simpleproductivitysystem\n\n=== Guided Training Program ===\nI’ve distilled my 13 years of experience as a learning coach into a step-by-step learning skills program. \n\nIf you want to be able to master new knowledge and skills in half the time, check out: htt","channelTitle":"Justin Sung","channelId":"UC2Zs9v2hL2qZZ7vsAENsg4w","publishedAt":"2026-06-27T22:40:06Z","thumbnail":"https://i.ytimg.com/vi/AeV5F0ppaGw/maxresdefault.jpg","durationSeconds":1465,"duration":"24:25","definition":"","viewCount":297328,"likeCount":11144,"commentCount":163,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=AeV5F0ppaGw","unavailable":false,"facet":"time","whyIncluded":"The why-systems-beat-willpower argument, which is what you will need on the week motivation runs out.","curationScore":0.9956,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"75d_29QWELk","position":24,"playlistId":"","title":"Change Your Life – One Tiny Step at a Time","description":"Change Your Life – One Tiny Step at a Time\nGet your Habit Journal here: https://kgs.link/shop-162\n\nSources & further reading:\nhttps://sites.google.com/view/sources-change/\n\nIf you are like most people, there is a gap between the person you are and the person you wish to be. There are little things you think you should do and big things you ought to achieve.\nFrom working out regularly, eating healthy, learning a language, working on your novel, reading more or simply actually doing your hobby instead of browsing reddit.\nBut it can seem that to achieve your goals, you have to become a different ","channelTitle":"Kurzgesagt – In a Nutshell","channelId":"UCsXVk37bltHxD1rDPwtNM8Q","publishedAt":"2022-06-07T14:00:05Z","thumbnail":"https://i.ytimg.com/vi/75d_29QWELk/maxresdefault.jpg","durationSeconds":691,"duration":"11:31","definition":"","viewCount":15517815,"likeCount":741238,"commentCount":12995,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=75d_29QWELk","unavailable":false,"facet":"habits","whyIncluded":"Why tiny steps beat dramatic overhauls - the mechanism behind everything you have just scheduled.","curationScore":0.9114,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"1gdkBt9it84","position":25,"playlistId":"","title":"ATOMIC HABITS - Tiny Changes that Create Remarkable Results - James Clear","description":"Go to http://www.audible.com/afterskool or text afterskool to 500 500 to get your free trial.\n\nJames Clear is a writer and speaker focused on habits, decision making, and continuous improvement. He is the author of the #1 New York Times bestseller, Atomic Habits. The book has sold over 7 million copies worldwide and has been translated into more than 50 languages.\n\nLearn more about James Clear at https://jamesclear.com/\n\nQuick Techniques to Dramatically Improve Your Life. Atomic Habits - Tiny Changes, Remarkable Results. \n\nPlease consider supporting After Skool on Patreon https://www.patreon.c","channelTitle":"After Skool","channelId":"UC1KmNKYC1l0stjctkGswl6g","publishedAt":"2022-11-22T17:00:02Z","thumbnail":"https://i.ytimg.com/vi/1gdkBt9it84/maxresdefault.jpg","durationSeconds":545,"duration":"9:05","definition":"","viewCount":1616155,"likeCount":46066,"commentCount":565,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=1gdkBt9it84","unavailable":false,"facet":"habits","whyIncluded":"Atomic Habits in nine animated minutes: the four laws you will apply to each pillar above.","curationScore":0.9188,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"ObA4ne4TVsE","position":26,"playlistId":"","title":"How to Build Habits That Actually Last: A Neuroscience Approach","description":"✨ UNLOCK YOUR BRAIN'S FULL POTENTIAL! My free 2-minute quiz reveals your unique \"Brain Operating System\" and gives you a personalized guide to master your focus, handle stress, and perform at your best. Take the Quiz → https://drmarks.co/BrainQuiz-yt\n\nWhy do some people stick to good habits while others fall off track? This video breaks down the brain-based differences between successful and struggling habit-builders—and how you can apply those insights to create lasting behavior change. Learn how identity, planning, and environment shape your habits and make consistency easier.\n\n🧠 Supporting ","channelTitle":"Dr. Tracey Marks","channelId":"UCL2QpphEeZFYwk6-WXD6hpA","publishedAt":"2025-04-23T12:45:10Z","thumbnail":"https://i.ytimg.com/vi/ObA4ne4TVsE/maxresdefault.jpg","durationSeconds":611,"duration":"10:11","definition":"","viewCount":395796,"likeCount":19754,"commentCount":475,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=ObA4ne4TVsE","unavailable":false,"facet":"habits","whyIncluded":"A psychiatrist on why habits actually stick, so you can diagnose the ones that keep failing rather than blaming yourself.","curationScore":0.9644,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"gqwjBEf3znc","position":27,"playlistId":"","title":"Boundaries Don't Work - Here's Why","description":"See NordPass Business in action now with a 3-month free trial here: http://nordpass.com/healthygamergg with code healthygamergg\n\nToday's discussion might challenge a common belief – the effectiveness of setting healthy boundaries. Contrary to popular advice, setting healthy boundaries can sometimes yield less effective results, especially in situations where power dynamics play a crucial role.\n\nIn this video, we'll explore the complexities surrounding the efficacy of establishing healthy boundaries. We'll delve into why, despite its positive intent, setting boundaries might not always yield th","channelTitle":"HealthyGamerGG","channelId":"UClHVl2N3jPEbkNJVx-ItQIQ","publishedAt":"2023-07-31T16:00:27Z","thumbnail":"https://i.ytimg.com/vi/gqwjBEf3znc/maxresdefault.jpg","durationSeconds":1577,"duration":"26:17","definition":"","viewCount":860590,"likeCount":40516,"commentCount":3435,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=gqwjBEf3znc","unavailable":false,"facet":"boundaries","whyIncluded":"Start the hard pillar with the uncomfortable truth: boundaries announced as rules for other people do not work. Here is what does.","curationScore":0.9278,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"q5J5sRgbBYI","position":28,"playlistId":"","title":"How To Avoid Burnout: 5 Work Boundaries You Need NOW","description":"Hi Hottieee!!!\n\nYou can check out my BOOK, Clock In here: https://emilydurham.org/clock-in\nMy podcast:https://pod.link/1505520809\n\nHow To Avoid Burnout: 5 Work Boundaries You Need NOW\nIf you are reading this on a Sunday night dreading tomorrow, this video is for you. We need to talk about burnout—not just \"stress,\" but the real, soul-crushing exhaustion that comes from having zero boundaries. As your internet big sister, I'm giving you the tough love you need today: it is time to stop hating your life and start protecting your peace.\nIn this video, I'm breaking down 5 non-negotiable work bound","channelTitle":"Emily Durham","channelId":"UCUApm5FZ_Z523Tr45rWZxog","publishedAt":"2026-02-02T22:17:05Z","thumbnail":"https://i.ytimg.com/vi/q5J5sRgbBYI/maxresdefault.jpg","durationSeconds":760,"duration":"12:40","definition":"","viewCount":13840,"likeCount":777,"commentCount":37,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=q5J5sRgbBYI","unavailable":false,"facet":"boundaries","whyIncluded":"The five specific work boundaries worth defending, named and scripted - the practical follow-up to the video above.","curationScore":0.8986,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"zUbJWUoeIYY","position":29,"playlistId":"","title":"How to Set Boundaries With Work (Without Feeling Guilty) | Therapist’s Tips","description":"▶️ Watch the Free Training: Achieve a Calm Mind, Balanced Life, and Empowered Confidence in 90 Days: https://calmlycoping.com/workshop\n\n\n💬 Submit a message, question, or suggestion to the podcast: https://calmlycoping.com/message\n\n\nEver feel like work is creeping into every part of your life? Your boss emails you on weekends, clients expect instant replies, or—even if you’re your own boss—you find yourself working at all hours? Setting boundaries at work can feel impossible… and if you do set them, guilt kicks in. But here’s the truth: You can set boundaries and still be seen as dedicated and ","channelTitle":"Calmly Coping","channelId":"UCwvCjEgRnLtCP6WAlRTQmDA","publishedAt":"2025-04-09T11:01:22Z","thumbnail":"https://i.ytimg.com/vi/zUbJWUoeIYY/maxresdefault.jpg","durationSeconds":644,"duration":"10:44","definition":"","viewCount":3684,"likeCount":91,"commentCount":9,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=zUbJWUoeIYY","unavailable":false,"facet":"boundaries","whyIncluded":"Deals with the part that actually stops people: the guilt that arrives the moment you hold one.","curationScore":0.8087,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"FpiWSFcL3-c","position":30,"playlistId":"","title":"How to Calm Your Anxiety, From a Neuroscientist | The Way We Work, a TED series","description":"What if you could transform your anxiety into something you can actually use during your work day? Neuroscientist Wendy Suzuki shares two evidence-based activities -- breathing and movement -- that can soothe your nervous system and fuel creativity and connection.\n\nVisit http://TED.com to get our entire library of TED Talks, transcripts, translations, personalized talk recommendations and more.\n\nThe TED Talks channel features the best talks and performances from the TED Conference, where the world's leading thinkers and doers give the talk of their lives in 18 minutes (or less). Look for talks","channelTitle":"TED","channelId":"UCAuUUnT6oDeKwE6v1NGQxug","publishedAt":"2023-03-22T14:30:07Z","thumbnail":"https://i.ytimg.com/vi/FpiWSFcL3-c/maxresdefault.jpg","durationSeconds":439,"duration":"7:19","definition":"","viewCount":1139427,"likeCount":32161,"commentCount":646,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=FpiWSFcL3-c","unavailable":false,"facet":"stress","whyIncluded":"Seven minutes, one breathing technique you can use in a meeting today. The emergency tool before the deeper kit.","curationScore":0.9158,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"qUz93CyNIz0","position":31,"playlistId":"","title":"Tools for Managing Stress & Anxiety | Huberman Lab Essentials","description":"In this Huberman Lab Essentials episode, I explain strategies for managing stress, both in the short and long term, to enhance overall well-being.\n\nI explain how the mind and body respond to stress and how acute stress has immune-boosting benefits. I discuss science-supported tools and supplements to better manage stress in real time and protocols for raising one's stress threshold to build resilience to life’s inevitable challenges. I also describe practices to reduce chronic stress and maintain a balanced, healthy life. \n\nEpisode show notes: https://go.hubermanlab.com/D9nUxLz\n\nHuberman Lab E","channelTitle":"Andrew Huberman","channelId":"UC2D2CMWXMOVWx7giW1n3LIg","publishedAt":"2025-01-16T13:01:20Z","thumbnail":"https://i.ytimg.com/vi/qUz93CyNIz0/maxresdefault.jpg","durationSeconds":1949,"duration":"32:29","definition":"","viewCount":947798,"likeCount":25841,"commentCount":757,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=qUz93CyNIz0","unavailable":false,"facet":"stress","whyIncluded":"The full toolkit for short-term and chronic stress - the longest video here and the one worth the half hour.","curationScore":0.9601,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"P6-tXIHYyZ8","position":32,"playlistId":"","title":"How to Recover From Burnout: 10 Tactics That Really Work","description":"Do you experience memory lapses, constant worry, or irritability? These are common burnout symptoms and critical warning signals that your body is heading towards burnout, not signs of weakness or personal failure. In this video, I explain how to recognise these signs of stress impacting your mental health and provide practical advice to help you manage burnout before it escalates.\n\nAs a former charity CEO, I know exactly how heavy the load can feel. I’m sharing the specific strategies that pulled me out of my own burnout, and how to manage your energy, not just your time. If you are a purpose","channelTitle":"Lucy on Life","channelId":"UCE1-AwL_CUdQCZ3aaXyh--w","publishedAt":"2025-12-10T17:45:00Z","thumbnail":"https://i.ytimg.com/vi/P6-tXIHYyZ8/maxresdefault.jpg","durationSeconds":908,"duration":"15:08","definition":"","viewCount":25165,"likeCount":1519,"commentCount":129,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=P6-tXIHYyZ8","unavailable":false,"facet":"stress","whyIncluded":"If you are already past stressed and into burnt out, start here instead: recovery tactics, not prevention advice.","curationScore":0.8812,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"jozNEpY8iik","position":33,"playlistId":"","title":"How to Plan Your Week Effectively","description":"Get the full illustration HERE: https://email.artofimprovement.co.uk/how-to-plan-your-week-effectively\n\nNo matter what productivity or organization system you use in your life,  hopefully, you can implement some of these tips to make your system even more effective & make your life that much easier.\n\n📺 More to Watch:\n21 Tiny Habits That Improve Your Life → https://www.youtube.com/watch?v=ZXTy_dKwMa0\n10 Difficult Skills That Pay Off Forever → https://www.youtube.com/watch?v=oC5nhc_eEH8\n\n⏱ TIMESTAMPS\n0:00 - Intro\n1:28 - Tip #1\n3:08 - Tip #2\n4:11 - Tip #3\n5:01 - Tip #4\n6:08 - Tip #5\n7:12 - Conclu","channelTitle":"The Art of Improvement","channelId":"UCtYzVCmNxrshH4_bPO_-Y-A","publishedAt":"2022-01-23T14:30:04Z","thumbnail":"https://i.ytimg.com/vi/jozNEpY8iik/maxresdefault.jpg","durationSeconds":487,"duration":"8:07","definition":"","viewCount":2561371,"likeCount":71134,"commentCount":364,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=jozNEpY8iik","unavailable":false,"facet":"review","whyIncluded":"The weekly ritual that turns all of the above from a course you watched into a system that runs. Nine minutes, every Sunday.","curationScore":0.9059,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0},{"videoId":"pOFhdWvKsXI","position":34,"playlistId":"","title":"Monthly planning & reset routine for productivity  (+ WORKSHEET)","description":"get your life together for a new month! download the worksheet here →  https://theblissbean.ck.page/52ae1ddd9e\n\n♡ subscribe here: https://www.youtube.com/c/theblissbean\n♡ instagram: https://www.instagram.com/theblissbean\n\n💌 read my weekly newsletter for honest advice, insights & reflections! https://www.buhtreechat.com/newsletter\n\n⏰ timestamps\n0:00 intro \n1:05 review highlights\n2:09 rate \"areas of life\"\n4:46 prepare for the new month\n5:46 set new projects & goals\n8:29 summary\n\n💐 helpful resources\n\nDay One journaling app - https://dayoneapp.com/\nProductive habit tracker - https://apple.co/3dTHG","channelTitle":"The Bliss Bean","channelId":"UCnlA6utKwEkshWt_fJavl8Q","publishedAt":"2023-07-22T01:05:59Z","thumbnail":"https://i.ytimg.com/vi/pOFhdWvKsXI/maxresdefault.jpg","durationSeconds":585,"duration":"9:45","definition":"","viewCount":146332,"likeCount":4610,"commentCount":120,"youtubeTags":[],"audioLanguage":"en","hasCaptions":false,"url":"https://www.youtube.com/watch?v=pOFhdWvKsXI","unavailable":false,"facet":"review","whyIncluded":"The monthly zoom-out that catches the slow drift a weekly review is too close to see. Your last video, and your recurring one.","curationScore":0.8689,"status":"unwatched","progressSeconds":0,"rating":0,"favorite":false,"tags":[],"summary":"","annotations":[],"comments":[],"watchedAt":null,"notesUpdatedAt":null,"autoSummary":"","summaryLang":"","summarySource":"","transcriptChars":0}]}</script>
+<script>
+"use strict";
+
+/* ==================================================================== i18n */
+const T = {
+  ar:{
+    search:"ابحث في العناوين والملاحظات والخلاصات…",
+    all:"الكل", unwatched:"لم يُشاهد", watching:"قيد المشاهدة", watched:"تمت المشاهدة",
+    skipped:"متجاوَز", starred:"★ مميّز", noted:"له ملاحظات",
+    watchedL:"مُشاهَد", leftL:"متبقٍ", timeL:"من الوقت", notesL:"موثّق",
+    resume:"أكمل", start:"ابدأ", at:"عند",
+    save:"حفظ", exp:"تصدير", imp:"استيراد", sheet:"ورقة المذاكرة",
+    status:"الحالة", summary:"الخلاصة", annotations:"ملاحظات موقّتة",
+    comments:"تعليقات", yourTags:"وسومك", ytTags:"وسوم يوتيوب", description:"الوصف",
+    add:"إضافة", star:"☆ تمييز", starred2:"★ مميّز", clear:"مسح",
+    sumPh:"ما خلاصة هذا الدرس بكلماتك؟", annPh:"ملاحظة عند لحظة معيّنة…",
+    cmtPh:"فكرة حول الفيديو ككل…", tagPh:"أضف وسمًا ثم Enter",
+    noAnn:"لا ملاحظات بعد.", noCmt:"لا تعليقات بعد.", noTags:"لا وسوم.",
+    annHint:"يُرفق وقت التشغيل الحالي تلقائيًا. اضغط على نص الملاحظة لتعديله.",
+    resumeAt:"نقطة الاستئناف:", progHint:"يُحفظ موضع التشغيل أثناء المشاهدة.",
+    more:"عرض المزيد", less:"عرض أقل", empty:"لا نتائج مطابقة.",
+    markThrough:"تحديد كل ما سبق كمُشاهَد",
+    long:"المدة", views:"مشاهدة", likes:"إعجاب", ytc:"تعليق يوتيوب",
+    published:"نُشر في", watchedOn:"شوهد في", autoplay:"تشغيل التالي تلقائيًا",
+    sortPos:"ترتيب الدورة", sortPosR:"عكس الترتيب", sortNew:"الأحدث", sortOld:"الأقدم",
+    sortLong:"الأطول", sortShort:"الأقصر", sortViews:"الأكثر مشاهدة",
+    sortRate:"الأعلى تقييمًا", sortNotes:"الأكثر توثيقًا", allTags:"كل الوسوم",
+    savedTo:"محفوظ في data.json", unsaved:"غير محفوظ", localOnly:"محليًا فقط",
+    secs:{intro:"المقدمة", lesson:"الدروس التأسيسية", shubha:"الشبهات", extra:"ملحق"},
+    sheetTitle:"ورقة المذاكرة", noNotes:"لا توجد ملاحظات بعد — اكتب خلاصة أو ملاحظة أولًا.",
+    dl:"تحميل Markdown", print:"طباعة", videos:"فيديو", total:"الإجمالي", watch:"شاهد",
+    autoSum:"ملخص المحاضرة", myNotes:"ملاحظاتي",
+    vOutline:"مخطط الدورة", vTiles:"بطاقات", vTable:"جدول",
+    colNum:"#", colQ:"رقم", colTitle:"العنوان", colDur:"المدة",
+    colStatus:"الحالة", colRate:"التقييم",
+    colNotes:"ملاحظات", colSum:"الخلاصة",
+    noSum:"لا يوجد ملخص لهذا الفيديو بعد. هذه المحاضرات بلا ترجمة نصية على يوتيوب، لذا يُستخرج النص من الصوت أولًا:",
+    genCmd:"python make_transcripts.py", srcLbl:"المصدر", charsLbl:"طول النص"
+  },
+  en:{
+    search:"Search titles, notes, summaries…",
+    all:"All", unwatched:"Unwatched", watching:"Watching", watched:"Watched",
+    skipped:"Skipped", starred:"★ Starred", noted:"Noted",
+    watchedL:"watched", leftL:"to go", timeL:"remaining", notesL:"annotated",
+    resume:"Resume", start:"Start", at:"at",
+    save:"Save", exp:"Export", imp:"Import", sheet:"Study sheet",
+    status:"Status", summary:"Summary", annotations:"Annotations",
+    comments:"Comments", yourTags:"Your tags", ytTags:"YouTube tags", description:"Description",
+    add:"Add", star:"☆ Star", starred2:"★ Starred", clear:"clear",
+    sumPh:"What is this video about, in your words?", annPh:"Note at a moment in the video…",
+    cmtPh:"A thought about the video as a whole…", tagPh:"Add a tag and press Enter",
+    noAnn:"No annotations yet.", noCmt:"No comments yet.", noTags:"None yet.",
+    annHint:"The current playback time is attached automatically. Click a note to edit it.",
+    resumeAt:"Resume point:", progHint:"Playback position is saved as you watch.",
+    more:"Show more", less:"Show less", empty:"Nothing matches those filters.",
+    markThrough:"Mark everything before this watched",
+    long:"long", views:"views", likes:"likes", ytc:"YT comments",
+    published:"published", watchedOn:"Marked watched", autoplay:"Autoplay next",
+    sortPos:"Course order", sortPosR:"Reverse order", sortNew:"Newest first", sortOld:"Oldest first",
+    sortLong:"Longest first", sortShort:"Shortest first", sortViews:"Most viewed",
+    sortRate:"Highest rated", sortNotes:"Most annotated", allTags:"All tags",
+    savedTo:"saved to data.json", unsaved:"unsaved", localOnly:"local only",
+    secs:{intro:"Intro", lesson:"Foundation lessons", shubha:"Objections", extra:"Extras"},
+    sheetTitle:"Study sheet", noNotes:"Nothing written yet — add a summary or a note first.",
+    dl:"Download Markdown", print:"Print", videos:"videos", total:"total", watch:"watch",
+    autoSum:"Lecture summary", myNotes:"My notes",
+    vOutline:"Course outline", vTiles:"Tiles", vTable:"Table",
+    colNum:"#", colQ:"No.", colTitle:"Title", colDur:"Length", colStatus:"Status",
+    colRate:"Rating", colNotes:"Notes", colSum:"Summary",
+    noSum:"No summary for this video yet. These lectures have no captions on YouTube, so the text has to be transcribed from the audio first:",
+    genCmd:"python make_transcripts.py", srcLbl:"source", charsLbl:"transcript"
+  }
+};
+let L = T.ar;
+
+/* =================================================================== state */
+const STORE_KEY = "videoList.overlay.v1.work-life-balance";
+const PREF_KEY  = "videoList.prefs.v1";
+const STATUSES  = ["unwatched","watching","watched","skipped"];
+const SEC_ORDER = ["intro","lesson","shubha","extra"];
+
+let DATA = {playlists:[], videos:[]};
+let view = [];
+let openId = null;
+let serverSave = false, dirty = false, saveTimer = null;
+let player = null, ytReady = false, trackTimer = null;
+
+const prefs = {lang:"ar", view:"outline", autoplay:true, closed:{}, showSum:true};
+const state = {q:"", status:"all", sort:"position", tag:""};
+
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => Array.from(r.querySelectorAll(s));
+const byId = id => DATA.videos.find(v => v.videoId === id);
+
+/* =============================================================== utilities */
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDur(sec){
+  sec = Math.max(0, Math.round(sec||0));
+  const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60;
+  return h ? h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")
+           : m+":"+String(s).padStart(2,"0");
+}
+function fmtHours(sec){
+  const h = sec/3600;
+  return h>=10 ? Math.round(h)+"h" : h>=1 ? h.toFixed(1)+"h" : Math.round(sec/60)+"m";
+}
+function fmtCount(n){
+  n = n||0;
+  if (n>=1e6) return (n/1e6).toFixed(1).replace(/\.0$/,"")+"M";
+  if (n>=1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"K";
+  return String(n);
+}
+function fmtDate(iso){
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString(prefs.lang==="ar" ? "ar-EG" : undefined,
+    {year:"numeric", month:"short", day:"numeric"});
+}
+const nowISO = () => new Date().toISOString();
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* Arabic-aware search key. Strips harakat and folds the letter shapes people
+   type interchangeably, so الاسلام finds الإسلام and عائشه finds عائشة. */
+function norm(s){
+  return String(s ?? "").toLowerCase()
+    .replace(/[ً-ْٰـ]/g,"")        // harakat, dagger alef, tatweel
+    .replace(/[آأإٱ]/g,"ا")   // آ أ إ ٱ -> ا
+    .replace(/ى/g,"ي")                       // ى -> ي
+    .replace(/ة/g,"ه")                       // ة -> ه
+    .replace(/ؤ/g,"و").replace(/ئ/g,"ي")
+    .replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660))
+    .replace(/\s+/g," ");
+}
+function arDigits(s){
+  return String(s).replace(/[٠-٩]/g, d => String(d.charCodeAt(0)-0x0660));
+}
+
+/* ------------------------------------------------- course structure parsing
+   Derived from titles at render time, so data.json stays raw API truth. */
+/* A curated playlist declares its own curriculum: data.facets lists the sections
+   in teaching order and each video carries a facet key. Title parsing below is
+   only the fallback for playlists that arrived without one. */
+function sectionDefs(){
+  if (DATA.facets && DATA.facets.length) return DATA.facets;
+  return SEC_ORDER.map(function(k){ return {key:k, label:L.secs[k]}; });
+}
+function sectionLabel(key){
+  const d = sectionDefs().find(function(x){ return x.key === key; });
+  if (d) return d[prefs.lang] || d.label || d.key;
+  return (L.secs && L.secs[key]) || key;
+}
+function classify(v){
+  const t = arDigits(v.title || "");
+  let m = t.match(/درس\s*(\d+)/);
+  if (m) return {sec:"lesson", n:Number(m[1])};
+  m = t.match(/شبهة\s*(\d+)/);
+  if (m) return {sec:"shubha", n:Number(m[1])};
+  if (/تشويقية|trailer|intro/i.test(t)) return {sec:"intro", n:null};
+  return {sec:"extra", n:null};
+}
+function shortTitle(v){
+  const t = String(v.title || "")
+    .replace(/\s*\|[^|]*فاضل\s*سليمان\s*$/,"")   // drop the repeated presenter suffix
+    .replace(/^\s*!*\s*(?:شبهة|درس)\s*[٠-٩0-9]+\s*\|\s*/,"")
+    .replace(/\s*\|\s*$/,"")
+    .trim();
+  return t || v.title || "";
+}
+function decorate(){
+  DATA.videos.forEach(v => {
+    const c = classify(v);
+    v._sec = v.facet || c.sec;      // explicit curriculum wins over title parsing
+    v._n = v.facet ? null : c.n;
+    v._short = shortTitle(v);
+    v._key = norm([
+      v.title, v.description, v.channelTitle, v.summary, v.autoSummary,
+      (v.tags||[]).join(" "), (v.youtubeTags||[]).join(" "),
+      (v.annotations||[]).map(a=>a.text).join(" "),
+      (v.comments||[]).map(c=>c.text).join(" ")
+    ].join(" "));
+  });
+}
+/* The uploader tagged almost every video "en" while speaking Arabic, so the
+   declared audio language is useless — read the script of the title instead. */
+function videoLang(v){
+  return /[؀-ۿ]/.test(String(v.title||"")) ? "ar" : "en";
+}
+const noteCount = v => (v.annotations||[]).length + (v.comments||[]).length;
+const hasNotes  = v => noteCount(v) > 0 || !!v.summary;
+
+/* ============================================================= persistence */
+function userSlice(v){
+  return {status:v.status, progressSeconds:v.progressSeconds, rating:v.rating,
+    favorite:v.favorite, tags:v.tags, summary:v.summary, annotations:v.annotations,
+    comments:v.comments, watchedAt:v.watchedAt, notesUpdatedAt:v.notesUpdatedAt,
+    autoSummary:v.autoSummary, summaryLang:v.summaryLang,
+    summarySource:v.summarySource, transcriptChars:v.transcriptChars};
+}
+function stripDerived(v){
+  const o = {};
+  Object.keys(v).forEach(k => { if (k[0] !== "_") o[k] = v[k]; });
+  return o;
+}
+function writeOverlay(){
+  try{
+    const o = {};
+    DATA.videos.forEach(v => { o[v.videoId] = userSlice(v); });
+    localStorage.setItem(STORE_KEY, JSON.stringify({at:nowISO(), videos:o}));
+  }catch(e){}
+}
+function applyOverlay(){
+  let parsed;
+  try{ parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); }
+  catch(e){ return false; }
+  const map = parsed && parsed.videos;
+  if (!map) return false;
+  let touched = false;
+  DATA.videos.forEach(v => {
+    const o = map[v.videoId];
+    if (!o) return;
+    const n = (o.annotations||[]).length + (o.comments||[]).length;
+    if (o.status !== "unwatched" || o.summary || n || o.rating || o.favorite
+        || (o.tags||[]).length || o.progressSeconds){
+      Object.assign(v, o);
+      touched = true;
+    }
+  });
+  return touched;
+}
+function savePrefs(){
+  try{ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }catch(e){}
+}
+function loadPrefs(){
+  try{ Object.assign(prefs, JSON.parse(localStorage.getItem(PREF_KEY) || "{}")); }catch(e){}
+  if (prefs.grid !== undefined){          // migrate the old two-way toggle
+    prefs.view = prefs.grid ? "tiles" : "outline";
+    delete prefs.grid;
+  }
+  if (["outline","tiles","table"].indexOf(prefs.view) === -1) prefs.view = "outline";
+  L = T[prefs.lang] || T.ar;
+}
+
+function markDirty(){
+  dirty = true;
+  setSaveState("dirty", L.unsaved);
+  writeOverlay();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 1200);
+}
+function setSaveState(cls, text){
+  const el = $("#saveState");
+  el.className = cls;
+  el.lastElementChild.textContent = text;
+}
+async function save(silent){
+  clearTimeout(saveTimer);
+  writeOverlay();
+  const payload = {generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)};
+  try{
+    const res = await fetch("api/save", {method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    if (!res.ok) throw new Error("HTTP "+res.status);
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || "refused");
+    serverSave = true;
+    dirty = false;
+    setSaveState("saved", L.savedTo);
+    banner("");
+    return true;
+  }catch(err){
+    dirty = true;
+    setSaveState("err", L.localOnly);
+    /* The initial load calls save(true). Only say something when the reader
+       actually changed something; until then the "local only" chip is enough. */
+    if (!silent) {
+      banner("Your progress and notes are saved in this browser only. "
+           + "Press <b>"+esc(L.exp)+"</b> to keep a copy you can carry elsewhere.");
+    }
+    if (!silent) console.warn("save failed:", err);
+    return false;
+  }
+}
+function banner(html){
+  const b = $("#banner");
+  b.innerHTML = html;
+  b.classList.toggle("on", !!html);
+}
+let toastTimer;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 1900);
+}
+
+/* ==================================================================== load */
+async function load(){
+  let raw;
+  try{
+    /* Read the copy embedded in this page (#seedData) rather than fetching
+       data.json, so the tracker works from file:// and from any static host. */
+    raw = JSON.parse(document.getElementById("seedData").textContent);
+  }catch(err){
+    $("#plTitle").textContent = "Couldn't read the embedded playlist data";
+    banner("The <code>#seedData</code> block in this page is missing or invalid.");
+    return;
+  }
+  adopt(raw);
+  save(true);
+}
+function adopt(raw){
+  DATA = raw;
+  DATA.videos = (DATA.videos||[]).map(v => Object.assign({
+    status:"unwatched", progressSeconds:0, rating:0, favorite:false, tags:[],
+    summary:"", annotations:[], comments:[], watchedAt:null, notesUpdatedAt:null,
+    autoSummary:"", summaryLang:"", summarySource:"", transcriptChars:0
+  }, v));
+  const overlaid = applyOverlay();
+  decorate();
+  applyLang();
+  renderHeader();
+  render();
+  if (overlaid) markDirty();
+}
+
+/* ============================================================ chrome / i18n */
+function applyLang(){
+  L = T[prefs.lang] || T.ar;
+  const rtl = prefs.lang === "ar";
+  document.documentElement.lang = prefs.lang;
+  document.documentElement.dir = rtl ? "rtl" : "ltr";
+  $("#btnLang").textContent = rtl ? "EN" : "ع";
+  $("#q").placeholder = L.search;
+  $("#btnSave").textContent = L.save;
+  $("#btnExport").textContent = L.exp;
+  $("#btnImport").textContent = L.imp;
+  $("#btnSheet").textContent = L.sheet;
+  renderSwitch();
+  $("#lWatched").textContent = L.watchedL;
+  $("#lLeft").textContent = L.leftL;
+  $("#lTime").textContent = L.timeL;
+  $("#lNotes").textContent = L.notesL;
+  $("#empty").textContent = L.empty;
+
+  const sorts = [["position",L.sortPos],["-position",L.sortPosR],["-published",L.sortNew],
+    ["published",L.sortOld],["-duration",L.sortLong],["duration",L.sortShort],
+    ["-views",L.sortViews],["-rating",L.sortRate],["-notes",L.sortNotes]];
+  $("#sort").innerHTML = sorts.map(s =>
+    '<option value="'+s[0]+'"'+(state.sort===s[0]?" selected":"")+'>'+esc(s[1])+'</option>').join("");
+  buildTagFilter();
+}
+function renderHeader(){
+  const p = (DATA.playlists||[])[0];
+  if (p){
+    $("#plTitle").textContent = p.title || "Video List";
+    document.title = p.title || "Video List";
+    const total = DATA.videos.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    $("#plSub").textContent = [p.channelTitle,
+      DATA.videos.length+" "+L.videos, fmtHours(total)+" "+L.total].filter(Boolean).join(" · ");
+    if (p.thumbnail) $("#plArt").src = p.thumbnail; else $("#plArt").style.display = "none";
+  }
+  renderStats(); renderChips(); renderResume();
+}
+function renderStats(){
+  const vs = DATA.videos;
+  const w  = vs.filter(v=>v.status==="watched").length;
+  const g  = vs.filter(v=>v.status==="watching").length;
+  const sk = vs.filter(v=>v.status==="skipped").length;
+  const leftSecs = vs.filter(v=>v.status!=="watched" && v.status!=="skipped")
+    .reduce((a,v)=>a+(v.durationSeconds||0)-(v.progressSeconds||0),0);
+  $("#barW").style.width = (vs.length ? w/vs.length*100 : 0)+"%";
+  $("#barG").style.width = (vs.length ? g/vs.length*100 : 0)+"%";
+  $("#sWatched").textContent = w+"/"+vs.length;
+  $("#sLeft").textContent = vs.length - w - sk;
+  $("#sTime").textContent = fmtHours(Math.max(0,leftSecs));
+  $("#sNotes").textContent = vs.filter(hasNotes).length;
+}
+function renderChips(){
+  const c = {all:DATA.videos.length};
+  STATUSES.forEach(s => { c[s] = DATA.videos.filter(v=>v.status===s).length; });
+  c.starred = DATA.videos.filter(v=>v.favorite).length;
+  c.noted   = DATA.videos.filter(hasNotes).length;
+  const defs = [["all",L.all],["unwatched",L.unwatched],["watching",L.watching],
+    ["watched",L.watched],["skipped",L.skipped],["starred",L.starred],["noted",L.noted]];
+  $("#statusChips").innerHTML = defs.map(d =>
+    '<button class="chip '+(state.status===d[0]?"on":"")+'" data-status="'+d[0]+'">'
+    + esc(d[1])+'<span class="n">'+(c[d[0]]||0)+'</span></button>').join("");
+}
+function buildTagFilter(){
+  const tags = new Set();
+  DATA.videos.forEach(v => (v.tags||[]).forEach(t => tags.add(t)));
+  if (!tags.has(state.tag)) state.tag = "";
+  $("#tagFilter").innerHTML = '<option value="">'+esc(L.allTags)+'</option>' +
+    Array.from(tags).sort().map(t =>
+      '<option value="'+esc(t)+'"'+(state.tag===t?" selected":"")+'>'+esc(t)+'</option>').join("");
+}
+
+/* the next thing to watch: an in-progress video, else the first unwatched */
+function nextUp(){
+  const ordered = DATA.videos.slice().sort((a,b)=>a.position-b.position);
+  return ordered.find(v => v.status==="watching")
+      || ordered.find(v => v.status==="unwatched")
+      || null;
+}
+function renderResume(){
+  const v = nextUp();
+  const bar = $("#resume");
+  if (!v){ bar.hidden = true; return; }
+  bar.hidden = false;
+  bar.dataset.id = v.videoId;
+  const started = v.status==="watching" && v.progressSeconds > 5;
+  $("#rkLabel").textContent = started ? L.resume : L.start;
+  $("#rTitle").textContent = ((v.position??0)+1)+". "+v._short;
+  $("#rWhen").textContent = started
+    ? L.at+" "+fmtDur(v.progressSeconds)+" / "+v.duration : (v.duration||"");
+}
+
+/* ==================================================================== list */
+function matches(v){
+  if (state.tag && !(v.tags||[]).includes(state.tag)) return false;
+  const s = state.status;
+  if (s==="starred" && !v.favorite) return false;
+  if (s==="noted" && !hasNotes(v)) return false;
+  if (STATUSES.indexOf(s) !== -1 && v.status !== s) return false;
+  const q = norm(state.q).trim();
+  if (!q) return true;
+  return q.split(" ").every(w => v._key.indexOf(w) !== -1);
+}
+function sortView(list){
+  const cmp = {
+    position:(a,b)=>a.position-b.position,
+    published:(a,b)=>String(a.publishedAt||"").localeCompare(String(b.publishedAt||"")),
+    duration:(a,b)=>(a.durationSeconds||0)-(b.durationSeconds||0),
+    views:(a,b)=>(a.viewCount||0)-(b.viewCount||0),
+    rating:(a,b)=>(a.rating||0)-(b.rating||0),
+    notes:(a,b)=>noteCount(a)-noteCount(b)
+  };
+  const desc = state.sort.charAt(0) === "-";
+  const key = desc ? state.sort.slice(1) : state.sort;
+  const fn = cmp[key] || cmp.position;
+  return list.sort((a,b) => (fn(a,b) || a.position-b.position) * (desc?-1:1));
+}
+function renderSwitch(){
+  const titles = {outline:L.vOutline, tiles:L.vTiles, table:L.vTable};
+  $$("#viewSwitch button").forEach(function(b){
+    b.classList.toggle("on", b.dataset.view === prefs.view);
+    b.title = titles[b.dataset.view] || "";
+  });
+}
+function render(){
+  view = sortView(DATA.videos.filter(matches));
+  const host = $("#list");
+  if (prefs.view === "tiles"){
+    host.className = "grid";
+    host.innerHTML = view.map(cardHTML).join("");
+  } else if (prefs.view === "table"){
+    host.className = "";
+    host.innerHTML = tableHTML();
+  } else {
+    host.className = "";
+    // sections only mean anything while the list is still in course order
+    host.innerHTML = state.sort === "position" ? sectionsHTML()
+      : '<div class="sec"><div class="sec-body">'+view.map(itemHTML).join("")+'</div></div>';
+  }
+  $("#empty").hidden = view.length > 0;
+  renderStats(); renderChips(); renderResume(); renderSwitch();
+}
+function tableHTML(){
+  const head = '<tr>'
+    + '<th class="c-n">'+esc(L.colNum)+'</th>'
+    + '<th class="c-q">'+esc(L.colQ)+'</th>'
+    + '<th>'+esc(L.colTitle)+'</th>'
+    + '<th class="c-d">'+esc(L.colDur)+'</th>'
+    + '<th class="c-s">'+esc(L.colStatus)+'</th>'
+    + '<th class="c-r">'+esc(L.colRate)+'</th>'
+    + '<th class="c-m">'+esc(L.colNotes)+'</th>'
+    + '<th>'+esc(L.colSum)+'</th></tr>';
+  const body = view.map(function(v){
+    const n = noteCount(v);
+    const blurb = v.summary || v.autoSummary || "";
+    return '<tr class="'+v.status+'" data-id="'+esc(v.videoId)+'">'
+      + '<td class="c-n">'+((v.position==null?0:v.position)+1)+'</td>'
+      + '<td class="c-q">'+(v._n!=null?v._n:"")+'</td>'
+      + '<td class="c-t" dir="auto">'+esc(v._short)
+      +   '<span class="sub2">'+esc(sectionLabel(v._sec))+'</span></td>'
+      + '<td class="c-d">'+esc(v.duration||"")+'</td>'
+      + '<td class="c-s"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span></td>'
+      + '<td class="c-r">'+(v.favorite?"★":"")+(v.rating?" "+v.rating:"")+'</td>'
+      + '<td class="c-m">'+(n?"✎"+n:"")+'</td>'
+      + '<td class="c-x" dir="auto" title="'+esc(blurb)+'">'+esc(blurb)+'</td>'
+      + '</tr>';
+  }).join("");
+  return '<div class="tblwrap"><table class="vt"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+}
+function sectionsHTML(){
+  /* A playlist that arrived without a curriculum, and whose titles carry no
+     lesson numbers, lands entirely in one fallback bucket. A lone section header
+     then offers no navigation and mislabels the whole course as "Extras", so
+     drop it. Decided from DATA.videos, not the filtered view, so the header does
+     not appear and vanish as the reader filters. */
+  const populated = sectionDefs()
+    .filter(def => DATA.videos.some(v => v._sec === def.key)).length;
+  const bare = populated <= 1;
+  return sectionDefs().map(def => {
+    const sec = def.key;
+    const vs = view.filter(v => v._sec === sec);
+    if (!vs.length) return "";
+    if (bare) {
+      return '<section class="sec" data-sec="'+sec+'">'
+        + '<div class="sec-body">'+vs.map(itemHTML).join("")+'</div></section>';
+    }
+    const all  = DATA.videos.filter(v => v._sec === sec);
+    const done = all.filter(v => v.status==="watched").length;
+    const secs = all.reduce((a,v)=>a+(v.durationSeconds||0),0);
+    return '<section class="sec'+(prefs.closed[sec]?" closed":"")+'" data-sec="'+sec+'">'
+      + '<button class="sec-h"><span class="car">▼</span>'
+      + '<span class="nm">'+esc(sectionLabel(sec))+'</span>'
+      + '<span class="mt">'+all.length+' · '+fmtHours(secs)+' · '+done+'/'+all.length+'</span>'
+      + '<span class="sbar"><i style="width:'+(all.length?done/all.length*100:0)+'%"></i></span>'
+      + '</button><div class="sec-body">'+vs.map(itemHTML).join("")+'</div></section>';
+  }).join("");
+}
+function itemHTML(v){
+  const n = noteCount(v);
+  const pct = v.durationSeconds ? Math.min(100,(v.progressSeconds||0)/v.durationSeconds*100) : 0;
+  return '<div class="item '+v.status+(openId===v.videoId?" active":"")+'" data-id="'+esc(v.videoId)+'">'
+    + '<span class="idx">'+((v.position??0)+1)+'</span>'
+    + '<button class="tick" data-tick="'+esc(v.videoId)+'" title="'+esc(L.watched)+'">'
+    +   (v.status==="watching" ? "▸" : v.status==="skipped" ? "–" : "✓") + '</button>'
+    + '<span class="lbl" dir="auto">'
+    +   (v._n!=null ? '<span class="qn">'+v._n+'</span>' : "")
+    +   esc(v._short)
+    +   (v.summary ? '<span class="sum">'+esc(v.summary.slice(0,90))+'</span>' : "")
+    + '</span>'
+    + '<span class="meta">'
+    +   (v.favorite ? '<span class="st">★</span>' : "")
+    +   (v.rating ? '<span class="st">'+v.rating+'★</span>' : "")
+    +   (n ? '<span class="mk">✎'+n+'</span>' : "")
+    +   '<span class="dur">'+esc(v.duration||"")+'</span>'
+    + '</span>'
+    + (pct>1 && v.status!=="watched" ? '<span class="iprog" style="width:'+pct+'%"></span>' : "")
+    + '</div>';
+}
+function cardHTML(v){
+  const n = noteCount(v);
+  return '<article class="card '+v.status+'" data-id="'+esc(v.videoId)+'">'
+    + '<div class="tw">'
+    +   (v.thumbnail ? '<img src="'+esc(v.thumbnail)+'" alt="" loading="lazy">' : "")
+    +   '<span class="badge'+(v._n!=null?" q":"")+'">'+(v._n!=null?v._n:(v.position??0)+1)+'</span>'
+    +   (v.duration ? '<span class="dur2">'+esc(v.duration)+'</span>' : "")
+    +   (v.status==="watched" ? '<div class="seen">✓</div>' : "")
+    + '</div><div class="cbody">'
+    +   '<h3 class="ctitle" dir="auto">'+esc(v._short)+'</h3>'
+    +   (v.summary ? '<div class="sum" dir="auto">'+esc(v.summary.slice(0,100))+'</div>' : "")
+    +   ((v.tags||[]).length ? '<div class="tagrow">'
+        + v.tags.slice(0,3).map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+    +   '<div class="cfoot"><span class="pill '+v.status+'">'+esc(L[v.status]||v.status)+'</span>'
+    +   '<span>'+(v.favorite?"★ ":"")+(n?"✎"+n:"")+'</span></div>'
+    + '</div></article>';
+}
+
+/* ================================================================== drawer */
+function openVideo(id){
+  const v = byId(id);
+  if (!v) return;
+  openId = id;
+  $("#dWho").textContent = "#"+((v.position??0)+1)+" · "+(v.channelTitle||"");
+  $("#dOpen").href = v.url || ("https://www.youtube.com/watch?v="+id);
+  $("#dBody").innerHTML = detailHTML(v);
+  $("#dBody").scrollTop = 0;
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden","false");
+  $("#scrim").classList.add("on");
+  mountPlayer(v);
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  const row = $('[data-id="'+(window.CSS && CSS.escape ? CSS.escape(id) : id)+'"]');
+  if (row) row.classList.add("active");
+}
+function closeVideo(){
+  openId = null;
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden","true");
+  $("#scrim").classList.remove("on");
+  destroyPlayer();
+  $("#playerHost").innerHTML = "";
+  $("#dBody").innerHTML = "";
+  $$(".item.active").forEach(e => e.classList.remove("active"));
+  if (dirty) save(true);
+}
+function stepVideo(d){
+  if (!openId) return;
+  const i = view.findIndex(v => v.videoId === openId);
+  const next = view[i+d];
+  if (next) openVideo(next.videoId);
+}
+function detailHTML(v){
+  const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+  const qtag = v._n != null
+    ? '<span class="qtag">'+esc(sectionLabel(v._sec))+' '+v._n+'</span>'
+    : (v.facet ? '<span class="qtag">'+esc(sectionLabel(v._sec))+'</span>' : "");
+  const vlang = videoLang(v);
+  const sumOpen = prefs.showSum;
+  return ''
+  + '<div class="acts">'
+  +   '<button class="ibtn'+(sumOpen?" on":"")+'" data-act="toggleSum">'
+  +     '<span class="ic">▤</span><span>'+esc(L.autoSum)+'</span>'
+  +     (v.autoSummary ? '' : ' <span style="opacity:.5">—</span>')
+  +   '</button>'
+  + '</div>'
+  + (sumOpen ? '<div class="d-sec">'+summaryHTML(v, vlang)+'</div>' : '')
+  + '<div class="d-sec">'
+  +   '<h2 class="d-title" dir="auto">'+qtag+esc(v._short)+'</h2>'
+  +   (v.whyIncluded ? '<div class="why" dir="auto">'+esc(v.whyIncluded)+'</div>' : "")
+  +   '<div class="kv">'
+  +     '<span><b>'+esc(v.duration||"—")+'</b> '+esc(L.long)+'</span>'
+  +     '<span><b>'+fmtCount(v.viewCount)+'</b> '+esc(L.views)+'</span>'
+  +     '<span><b>'+fmtCount(v.likeCount)+'</b> '+esc(L.likes)+'</span>'
+  +     '<span><b>'+fmtCount(v.commentCount)+'</b> '+esc(L.ytc)+'</span>'
+  +     '<span>'+esc(L.published)+' <b>'+esc(fmtDate(v.publishedAt))+'</b></span>'
+  +   '</div>'
+  +   (v.watchedAt ? '<div class="hint">'+esc(L.watchedOn)+' '+esc(fmtDate(v.watchedAt))+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.status)+'</p><div class="seg">'
+  +   STATUSES.map(s => '<button class="chip '+(v.status===s?"on":"")+'" data-act="status" data-v="'+s+'">'+esc(L[s])+'</button>').join("")
+  +   '<button class="chip '+(v.favorite?"on":"")+'" data-act="fav">'+esc(v.favorite?L.starred2:L.star)+'</button>'
+  + '</div><div class="star-pick">'
+  +   [1,2,3,4,5].map(i => '<button data-act="rate" data-v="'+i+'" class="'+(v.rating>=i?"on":"")+'">★</button>').join("")
+  +   (v.rating ? '<button class="clear" data-act="rate" data-v="0">'+esc(L.clear)+'</button>' : "")
+  + '</div><div class="hint" id="progHint">'
+  +   (v.progressSeconds ? esc(L.resumeAt)+" "+fmtDur(v.progressSeconds) : esc(L.progHint))
+  + '</div><div style="margin-top:11px;display:flex;gap:6px;flex-wrap:wrap">'
+  +   '<button class="btn sm ghost" data-act="markThrough">'+esc(L.markThrough)+'</button>'
+  +   '<button class="btn sm ghost" data-act="autoplay">'+(prefs.autoplay?"☑":"☐")+' '+esc(L.autoplay)+'</button>'
+  + '</div></div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.summary)+'</p>'
+  +   '<textarea id="fSummary" rows="4" dir="auto" placeholder="'+esc(L.sumPh)+'">'+esc(v.summary)+'</textarea>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.annotations)+' <span class="count">'+ann.length+'</span></p>'
+  +   '<div>'+(ann.map(annHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noAnn)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="annIn" dir="auto" placeholder="'+esc(L.annPh)+'">'
+  +   '<button class="btn" data-act="annAdd">'+esc(L.add)+'</button></div>'
+  +   '<div class="hint">'+esc(L.annHint)+'</div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.comments)+' <span class="count">'+(v.comments||[]).length+'</span></p>'
+  +   '<div>'+((v.comments||[]).map(cmtHTML).join("") || '<div class="hint" style="margin:0 0 9px">'+esc(L.noCmt)+'</div>')+'</div>'
+  +   '<div class="row"><input class="ti" id="cmtIn" dir="auto" placeholder="'+esc(L.cmtPh)+'">'
+  +   '<button class="btn" data-act="cmtAdd">'+esc(L.add)+'</button></div>'
+  + '</div>'
+
+  + '<div class="d-sec"><p class="label">'+esc(L.yourTags)+'</p>'
+  +   '<div class="tagrow" style="margin-bottom:9px">'
+  +   ((v.tags||[]).map(t => '<span class="tag">'+esc(t)+' <button class="del" data-act="tagDel" data-v="'+esc(t)+'">×</button></span>').join("")
+       || '<span class="hint">'+esc(L.noTags)+'</span>')
+  +   '</div><div class="row"><input class="ti" id="tagIn" dir="auto" placeholder="'+esc(L.tagPh)+'">'
+  +   '<button class="btn" data-act="tagAdd">'+esc(L.add)+'</button></div>'
+  +   ((v.youtubeTags||[]).length ? '<p class="label" style="margin-top:15px">'+esc(L.ytTags)+'</p>'
+       + '<div class="tagrow">'+v.youtubeTags.map(t=>'<span class="tag">'+esc(t)+'</span>').join("")+'</div>' : "")
+  + '</div>'
+
+  + '<div class="d-sec" style="border-bottom:none"><p class="label">'+esc(L.description)+'</p>'
+  +   '<div class="desc" id="desc" dir="auto">'+linkify(v.description)+'</div>'
+  +   (String(v.description||"").length>380 ? '<button class="more" data-act="moreDesc">'+esc(L.more)+'</button>' : "")
+  + '</div>';
+}
+/* Renders the transcript-derived summary in the language actually spoken in
+   the video, independent of the interface language. */
+function summaryHTML(v, vlang){
+  if (!v.autoSummary){
+    return '<div class="sumbox miss" dir="auto">'+esc(L.noSum)
+         + '<div style="margin-top:9px"><code>'+esc(L.genCmd)+'</code></div></div>';
+  }
+  const dir = vlang === "ar" ? "rtl" : "ltr";
+  const meta = [];
+  if (v.summarySource) meta.push(esc(L.srcLbl)+": "+esc(v.summarySource));
+  if (v.transcriptChars) meta.push(esc(L.charsLbl)+": "+fmtCount(v.transcriptChars));
+  return '<div class="sumbox" dir="'+dir+'" lang="'+vlang+'">'+esc(v.autoSummary)+'</div>'
+       + (meta.length ? '<div class="srcline">'+meta.join(" · ")+'</div>' : "");
+}
+function annHTML(a){
+  const stamp = (a.t ?? null) !== null
+    ? '<button class="stamp" data-act="seek" data-v="'+a.t+'">'+fmtDur(a.t)+'</button>'
+    : '<button class="stamp none" disabled>—</button>';
+  return '<div class="note">'+stamp
+    + '<div class="txt" dir="auto" data-act="editAnn" data-v="'+esc(a.id)+'">'+esc(a.text)
+    + '<div class="when">'+esc(fmtDate(a.created))+'</div></div>'
+    + '<button class="del" data-act="annDel" data-v="'+esc(a.id)+'">×</button></div>';
+}
+function cmtHTML(c){
+  return '<div class="note comment">'
+    + '<div class="txt" dir="auto" data-act="editCmt" data-v="'+esc(c.id)+'">'+esc(c.text)
+    + '<div class="when">'+esc(fmtDate(c.created))+'</div></div>'
+    + '<button class="del" data-act="cmtDel" data-v="'+esc(c.id)+'">×</button></div>';
+}
+function linkify(t){
+  return esc(t).replace(/https?:\/\/[^\s<]+/g, m => '<a href="'+m+'" target="_blank" rel="noopener">'+m+'</a>');
+}
+
+/* ================================================================== player */
+function loadYT(){
+  if (window.YT && window.YT.Player){ ytReady = true; return; }
+  if (document.getElementById("ytapi")) return;
+  const s = document.createElement("script");
+  s.id = "ytapi";
+  s.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(s);
+}
+window.onYouTubeIframeAPIReady = function(){
+  ytReady = true;
+  if (openId && !player) mountPlayer(byId(openId));
+};
+function mountPlayer(v){
+  destroyPlayer();
+  const host = $("#playerHost");
+  if (!host || !v) return;
+  host.innerHTML = '<div id="playerBox"></div>';
+  const box = $("#playerBox");
+  const start = v.status==="watching" && v.progressSeconds>5 ? Math.floor(v.progressSeconds) : 0;
+
+  if (!ytReady){
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/'+encodeURIComponent(v.videoId)
+      + '?rel=0&start='+start+'" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture"'
+      + ' allowfullscreen title="'+esc(v.title)+'"></iframe>';
+    loadYT();
+    return;
+  }
+  player = new YT.Player(box, {
+    videoId: v.videoId,
+    playerVars: {rel:0, start:start, modestbranding:1},
+    events: {
+      onStateChange: function(e){
+        if (e.data === YT.PlayerState.PLAYING){
+          if (v.status === "unwatched") setStatus(v, "watching", true);
+          startTracking(v);
+        } else {
+          stopTracking(v);
+          if (e.data === YT.PlayerState.ENDED){
+            setStatus(v, "watched", true);
+            if (prefs.autoplay) advance(v);
+          }
+        }
+      }
+    }
+  });
+}
+function advance(from){
+  const next = DATA.videos.slice().sort((a,b)=>a.position-b.position)
+    .find(v => v.position > from.position && v.status !== "watched" && v.status !== "skipped");
+  if (next) setTimeout(() => openVideo(next.videoId), 800);
+}
+function destroyPlayer(){
+  stopTracking();
+  if (player && player.destroy){ try{ player.destroy(); }catch(e){} }
+  player = null;
+}
+function startTracking(v){
+  stopTracking();
+  trackTimer = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    const t = Math.floor(player.getCurrentTime()||0);
+    if (t && Math.abs(t-(v.progressSeconds||0)) >= 5){
+      v.progressSeconds = t;
+      const h = $("#progHint");
+      if (h) h.textContent = L.resumeAt+" "+fmtDur(t);
+      markDirty();
+    }
+  }, 5000);
+}
+function stopTracking(v){
+  clearInterval(trackTimer);
+  trackTimer = null;
+  if (v && player && player.getCurrentTime){
+    try{ v.progressSeconds = Math.floor(player.getCurrentTime()||0); markDirty(); }catch(e){}
+  }
+}
+function currentTime(){
+  if (player && player.getCurrentTime){
+    try{ return Math.floor(player.getCurrentTime()||0); }catch(e){}
+  }
+  return null;
+}
+
+/* =================================================================== edits */
+function touch(v){ v.notesUpdatedAt = nowISO(); markDirty(); }
+function setStatus(v, status, quiet){
+  v.status = status;
+  if (status === "watched"){
+    v.watchedAt = v.watchedAt || nowISO();
+    if (v.durationSeconds) v.progressSeconds = v.durationSeconds;
+  }
+  if (status === "unwatched"){ v.watchedAt = null; v.progressSeconds = 0; }
+  markDirty();
+  render();
+  if (!quiet && openId === v.videoId) refreshDrawer();
+  else if (quiet && openId === v.videoId)
+    $$("[data-act='status']").forEach(b => b.classList.toggle("on", b.dataset.v === v.status));
+}
+function refreshDrawer(){
+  const v = byId(openId);
+  if (!v) return;
+  const body = $("#dBody");
+  const scroll = body.scrollTop;
+  body.innerHTML = detailHTML(v);   // the player lives outside #dBody, so it keeps playing
+  body.scrollTop = scroll;
+}
+function afterEdit(v){ touch(v); decorate(); refreshDrawer(); render(); }
+function addAnnotation(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.annotations.push({id:uid(), t:currentTime(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addComment(v, text){
+  text = String(text||"").trim(); if (!text) return;
+  v.comments.push({id:uid(), text:text, created:nowISO()});
+  afterEdit(v);
+}
+function addTag(v, text){
+  text = String(text||"").trim();
+  if (!text || (v.tags||[]).includes(text)) return;
+  v.tags.push(text);
+  buildTagFilter();
+  afterEdit(v);
+}
+function editNote(el, list, id){
+  const v = byId(openId);
+  if (!v) return;
+  const item = (v[list]||[]).find(x => x.id === id);
+  if (!item || el.querySelector("input")) return;
+  const input = document.createElement("input");
+  input.className = "ti";
+  input.value = item.text;
+  input.dir = "auto";
+  el.replaceChildren(input);
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+  let done = false;
+  const commit = function(){
+    if (done) return;
+    done = true;
+    const t = input.value.trim();
+    if (t && t !== item.text){ item.text = t; touch(v); decorate(); render(); }
+    refreshDrawer();
+  };
+  input.addEventListener("blur", commit);
+  input.addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if (e.key === "Enter"){ e.preventDefault(); input.blur(); }
+    if (e.key === "Escape"){ input.value = item.text; input.blur(); }
+  });
+}
+function markThrough(v){
+  let n = 0;
+  DATA.videos.forEach(function(x){
+    if (x.position < v.position && x.status === "unwatched"){
+      x.status = "watched";
+      x.watchedAt = nowISO();
+      x.progressSeconds = x.durationSeconds || 0;
+      n++;
+    }
+  });
+  markDirty();
+  render();
+  refreshDrawer();
+  toast("✓ "+n);
+}
+
+/* ============================================================= study sheet */
+function buildMarkdown(){
+  const rows = DATA.videos
+    .filter(v => hasNotes(v) || v.rating || v.favorite)
+    .sort((a,b)=>a.position-b.position);
+  if (!rows.length) return null;
+
+  const p = (DATA.playlists||[])[0] || {};
+  const md = [];
+  md.push("# "+(p.title||"Video List")+" — "+L.sheetTitle);
+  md.push("> "+(p.channelTitle||"")+" · "+rows.length+"/"+DATA.videos.length+" "+L.videos);
+
+  let lastSec = null;
+  rows.forEach(function(v){
+    if (v._sec !== lastSec){ md.push(""); md.push("## "+sectionLabel(v._sec)); lastSec = v._sec; }
+    md.push("");
+    md.push("### "+(v._n!=null ? v._n+" — "+v._short : v._short));
+    const bits = [L[v.status]||v.status, v.duration];
+    if (v.rating) bits.push("★".repeat(v.rating));
+    md.push("*"+bits.filter(Boolean).join(" · ")+"* — ["+L.watch+"]("+v.url+")");
+    if (v.summary){ md.push(""); md.push(v.summary); }
+    const ann = (v.annotations||[]).slice().sort((a,b)=>(a.t??1e9)-(b.t??1e9));
+    if (ann.length){
+      md.push("");
+      md.push("**"+L.annotations+"**");
+      ann.forEach(function(a){
+        const link = a.t != null
+          ? "["+fmtDur(a.t)+"](https://www.youtube.com/watch?v="+v.videoId+"&t="+a.t+"s)"
+          : "—";
+        md.push("- "+link+" "+a.text);
+      });
+    }
+    if ((v.comments||[]).length){
+      md.push("");
+      md.push("**"+L.comments+"**");
+      v.comments.forEach(function(c){ md.push("- "+c.text); });
+    }
+    if ((v.tags||[]).length){
+      md.push("");
+      md.push(v.tags.map(t=>"`"+t+"`").join(" "));
+    }
+  });
+  return md.join("\n");
+}
+function studySheet(){
+  const text = buildMarkdown();
+  if (!text) return toast(L.noNotes);
+  const p = (DATA.playlists||[])[0] || {};
+  const rtl = prefs.lang === "ar";
+  const w = window.open("", "_blank");
+  if (!w) return toast("popup blocked");
+
+  const doc = ''
+   + '<!doctype html><html lang="'+prefs.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8">'
+   + '<title>'+esc(p.title||"")+' — '+esc(L.sheetTitle)+'</title>'
+   + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'
+   + '<style>'
+   + 'body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;max-width:760px;margin:0 auto;'
+   + 'padding:30px 26px 80px;line-height:1.75;color:#16202c;background:#fff}'
+   + 'h1{font-size:25px;margin:0 0 4px}'
+   + 'h2{font-size:19px;margin:32px 0 10px;padding-bottom:6px;border-bottom:2px solid #e8b923}'
+   + 'h3{font-size:16px;margin:22px 0 3px}'
+   + 'blockquote{color:#667;margin:0 0 20px;font-size:14px;padding:0}'
+   + 'em{color:#78849a;font-size:13px;font-style:normal}a{color:#a8801a}'
+   + 'ul{margin:5px 0 14px;padding-inline-start:20px}li{margin:3px 0;font-size:14.5px}'
+   + 'code{background:#f1f2f5;padding:1px 6px;border-radius:4px;font-size:12.5px}'
+   + 'p{margin:6px 0 12px}'
+   + '.bar{position:sticky;top:0;background:#fff;padding:10px 0;border-bottom:1px solid #e6e8ee;margin-bottom:18px;display:flex;gap:8px}'
+   + '.bar button{font:inherit;font-size:13px;padding:7px 14px;border:1px solid #d5d9e0;border-radius:7px;background:#f7f8fa;cursor:pointer}'
+   + '@media print{.bar{display:none}body{padding:0}}'
+   + '</style></head><body>'
+   + '<div class="bar"><button id="dl">'+esc(L.dl)+'</button><button id="pr">'+esc(L.print)+'</button></div>'
+   + '<div id="out"></div></body></html>';
+
+  w.document.open();
+  w.document.write(doc);
+  w.document.close();
+
+  // build the DOM from the parent so no nested <script> parsing is involved
+  const render = function(){
+    const d = w.document;
+    const out = d.getElementById("out");
+    if (!out) return;
+    let html = "", inList = false;
+    text.split("\n").forEach(function(line){
+      let t = esc(line)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+      if (line.indexOf("- ") === 0){
+        if (!inList){ html += "<ul>"; inList = true; }
+        html += "<li>"+t.slice(2)+"</li>";
+        return;
+      }
+      if (inList){ html += "</ul>"; inList = false; }
+      if (line.indexOf("### ") === 0) html += "<h3>"+t.slice(4)+"</h3>";
+      else if (line.indexOf("## ") === 0) html += "<h2>"+t.slice(3)+"</h2>";
+      else if (line.indexOf("# ") === 0) html += "<h1>"+t.slice(2)+"</h1>";
+      else if (line.indexOf("> ") === 0) html += "<blockquote>"+t.slice(2)+"</blockquote>";
+      else if (line.trim()) html += "<p>"+t+"</p>";
+    });
+    if (inList) html += "</ul>";
+    out.innerHTML = html;
+
+    d.getElementById("pr").onclick = function(){ w.print(); };
+    d.getElementById("dl").onclick = function(){
+      const blob = new Blob([text], {type:"text/markdown;charset=utf-8"});
+      const a = d.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "study-sheet.md";
+      a.click();
+    };
+  };
+  if (w.document.readyState === "complete") render();
+  else w.addEventListener("load", render);
+}
+
+/* ================================================================== wiring */
+$("#list").addEventListener("click", function(e){
+  const tick = e.target.closest("[data-tick]");
+  if (tick){
+    e.stopPropagation();
+    const v = byId(tick.dataset.tick);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+    return;
+  }
+  const head = e.target.closest(".sec-h");
+  if (head){
+    const sec = head.closest(".sec").dataset.sec;
+    prefs.closed[sec] = !prefs.closed[sec];
+    savePrefs();
+    render();
+    return;
+  }
+  const row = e.target.closest("[data-id]");
+  if (row) openVideo(row.dataset.id);
+});
+$("#resume").addEventListener("click", function(e){
+  const id = e.currentTarget.dataset.id;
+  if (id) openVideo(id);
+});
+$("#scrim").addEventListener("click", closeVideo);
+$("#dClose").addEventListener("click", closeVideo);
+$("#dPrev").addEventListener("click", function(){ stepVideo(-1); });
+$("#dNext").addEventListener("click", function(){ stepVideo(1); });
+
+$("#dBody").addEventListener("click", function(e){
+  const btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  const v = byId(openId);
+  if (!v) return;
+  const val = btn.dataset.v;
+  switch (btn.dataset.act){
+    case "status": setStatus(v, val); break;
+    case "fav": v.favorite = !v.favorite; afterEdit(v); break;
+    case "rate": v.rating = Number(val); afterEdit(v); break;
+    case "seek":
+      if (player && player.seekTo){ player.seekTo(Number(val), true); player.playVideo(); }
+      break;
+    case "annAdd": addAnnotation(v, $("#annIn").value); break;
+    case "cmtAdd": addComment(v, $("#cmtIn").value); break;
+    case "tagAdd": addTag(v, $("#tagIn").value); break;
+    case "editAnn": editNote(btn, "annotations", val); break;
+    case "editCmt": editNote(btn, "comments", val); break;
+    case "annDel": v.annotations = v.annotations.filter(a => a.id !== val); afterEdit(v); break;
+    case "cmtDel": v.comments = v.comments.filter(c => c.id !== val); afterEdit(v); break;
+    case "tagDel": v.tags = v.tags.filter(t => t !== val); buildTagFilter(); afterEdit(v); break;
+    case "markThrough": markThrough(v); break;
+    case "autoplay": prefs.autoplay = !prefs.autoplay; savePrefs(); refreshDrawer(); break;
+    case "toggleSum": prefs.showSum = !prefs.showSum; savePrefs(); refreshDrawer(); break;
+    case "moreDesc":
+      $("#desc").classList.toggle("open");
+      btn.textContent = $("#desc").classList.contains("open") ? L.less : L.more;
+      break;
+  }
+});
+$("#dBody").addEventListener("keydown", function(e){
+  if (e.key !== "Enter") return;
+  const v = byId(openId);
+  if (!v) return;
+  if (e.target.id === "annIn"){ e.preventDefault(); addAnnotation(v, e.target.value); }
+  if (e.target.id === "cmtIn"){ e.preventDefault(); addComment(v, e.target.value); }
+  if (e.target.id === "tagIn"){ e.preventDefault(); addTag(v, e.target.value); }
+});
+$("#dBody").addEventListener("input", function(e){
+  if (e.target.id !== "fSummary") return;
+  const v = byId(openId);
+  if (!v) return;
+  v.summary = e.target.value;
+  touch(v);
+});
+$("#dBody").addEventListener("change", function(e){
+  if (e.target.id === "fSummary"){ decorate(); render(); }
+});
+
+$("#q").addEventListener("input", function(e){ state.q = e.target.value; render(); });
+$("#sort").addEventListener("change", function(e){ state.sort = e.target.value; render(); });
+$("#tagFilter").addEventListener("change", function(e){ state.tag = e.target.value; render(); });
+$("#statusChips").addEventListener("click", function(e){
+  const c = e.target.closest("[data-status]");
+  if (c){ state.status = c.dataset.status; render(); }
+});
+$("#viewSwitch").addEventListener("click", function(e){
+  const b = e.target.closest("[data-view]");
+  if (!b || b.dataset.view === prefs.view) return;
+  prefs.view = b.dataset.view;
+  savePrefs();
+  render();
+});
+$("#btnLang").addEventListener("click", function(){
+  prefs.lang = prefs.lang === "ar" ? "en" : "ar";
+  savePrefs();
+  applyLang();
+  renderHeader();
+  render();
+  if (openId) refreshDrawer();
+});
+$("#btnSave").addEventListener("click", function(){ save(); });
+$("#btnSheet").addEventListener("click", studySheet);
+$("#btnExport").addEventListener("click", function(){
+  const blob = new Blob([JSON.stringify({generatedAt:DATA.generatedAt, savedAt:nowISO(),
+    playlists:DATA.playlists, videos:DATA.videos.map(stripDerived)}, null, 2)],
+    {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "data.json";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+});
+$("#btnImport").addEventListener("click", function(){ $("#fileIn").click(); });
+$("#fileIn").addEventListener("change", async function(e){
+  const f = e.target.files[0];
+  if (!f) return;
+  try{
+    const raw = JSON.parse(await f.text());
+    if (!Array.isArray(raw.videos)) throw new Error("no videos array");
+    adopt(raw);
+    setSaveState("dirty", L.unsaved);
+  }catch(err){ alert("Not a data.json from this tool: "+err.message); }
+  e.target.value = "";
+});
+
+document.addEventListener("keydown", function(e){
+  const typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
+  if (e.key === "Escape" && openId) return closeVideo();
+  if (typing) return;
+  if (e.key === "/"){ e.preventDefault(); $("#q").focus(); return; }
+  if (!openId) return;
+  const rtl = document.documentElement.dir === "rtl";
+  if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) stepVideo(1);
+  if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) stepVideo(-1);
+  if (e.key === "w" || e.key === "W"){
+    const v = byId(openId);
+    setStatus(v, v.status === "watched" ? "unwatched" : "watched");
+  }
+});
+window.addEventListener("beforeunload", function(e){
+  if (!dirty) return;
+  save(true);
+  if (!serverSave){ e.preventDefault(); e.returnValue = ""; }
+});
+
+loadPrefs();
+loadYT();
+load();
+</script>
+</body>
+</html>
