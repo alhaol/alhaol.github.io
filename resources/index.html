@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Resources | alhaol.github.io</title>
-    <meta name="description" content="A curated, filterable index of tier-one research sources across AI/ML, robotics, cybersecurity and 5G/6G wireless: papers, code, datasets, benchmarks, standards, testbeds and newsletters.">
+    <meta name="description" content="A curated, filterable index of tier-one research sources across AI/ML, robotics, cybersecurity and 5G/6G wireless: papers, code, datasets, benchmarks, standards, testbeds and newsletters, plus 21 technology influencers worth reading daily.">
     <link rel="icon" type="image/png" href="../assets/ibrahim-image-circle.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,6 +28,7 @@
             --c-data: #fbbf24;  --c-bench: #f472b6; --c-standards: #22d3ee;
             --c-testbed: #fb923c; --c-repro: #2dd4bf; --c-news: #f87171;
             --c-tools: #a3e635;  --c-warn: #fbbf24;
+            --c-people: #f0abfc;
             --tint: 14%;
         }
 
@@ -50,6 +51,7 @@
             --c-data: #92400e;  --c-bench: #be185d; --c-standards: #0e7490;
             --c-testbed: #c2410c; --c-repro: #0f766e; --c-news: #b91c1c;
             --c-tools: #4d7c0f;  --c-warn: #92400e;
+            --c-people: #a21caf;
             --tint: 10%;
         }
 
@@ -136,6 +138,23 @@
             display: flex; align-items: center; justify-content: center;
             border-radius: 0.5rem;
         }
+        /* People cards swap the type glyph for a portrait. The monogram sits
+           underneath as the container's own content, so when the remote avatar
+           404s the image simply removes itself and the initials are already
+           there: no broken-image icon, no layout shift, no JS state. */
+        .res-icon.avatar { position: relative; overflow: hidden; border-radius: 50%; }
+        .avatar-mono {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.66rem; font-weight: 700; letter-spacing: 0.02em;
+        }
+        .avatar-mono.len3 { font-size: 0.55rem; letter-spacing: 0; }
+        .res-icon.avatar img {
+            position: relative; width: 100%; height: 100%;
+            object-fit: cover; border-radius: 50%;
+        }
+
         .res-name { font-weight: 600; font-size: 0.95rem; line-height: 1.35; display: block; }
         .res-host {
             font-family: 'JetBrains Mono', monospace;
@@ -341,7 +360,9 @@
             benchmarks, standards bodies, testbeds and analysis. The focus is
             <strong style="color: var(--text-main);">AI and machine learning, robotics, cybersecurity, and 5G/6G wireless</strong>.
             Every entry is either a primary source or an index rigorous enough to trust, and each one explains
-            what you actually get from it and why that is worth your time.
+            what you actually get from it and why that is worth your time. The
+            <a href="#sec-people" style="color: var(--primary-color);">Technology Influencers</a>
+            section adds the people layer: twenty-one individuals worth reading as they publish.
         </p>
 
         <div class="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs mono" style="color: var(--text-muted);" id="legend" aria-label="Resource type key"></div>
@@ -395,7 +416,7 @@
     <footer class="border-t py-8" style="border-color: var(--border-color);">
         <div class="max-w-7xl mx-auto px-6 text-center text-sm space-y-2" style="color: var(--text-muted);">
             <p class="mono">// alhaol.github.io &middot; research resources</p>
-            <p class="mono text-xs">last verified 2026-08-26 &middot; <span id="total-count"></span> entries</p>
+            <p class="mono text-xs">last verified 2026-08-28 &middot; <span id="total-count"></span> entries</p>
         </div>
     </footer>
 
@@ -420,7 +441,8 @@
         testbed:   S('<line x1="12" y1="21" x2="12" y2="12"></line><circle cx="12" cy="9.5" r="2.2"></circle><path d="M7.4 14.1a6.5 6.5 0 0 1 0-9.2"></path><path d="M16.6 4.9a6.5 6.5 0 0 1 0 9.2"></path><path d="M4.6 17a10.5 10.5 0 0 1 0-15"></path><path d="M19.4 2a10.5 10.5 0 0 1 0 15"></path>'),
         repro:     S('<polyline points="20 4 20 9 15 9"></polyline><path d="M18.6 9a7.5 7.5 0 1 0-.9 7.6"></path><polyline points="9 12 11.2 14.2 15.2 10.2"></polyline>'),
         tools:     S('<circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.2" y1="15.2" x2="21" y2="21"></line><line x1="10.5" y1="7.6" x2="10.5" y2="13.4"></line><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"></line>'),
-        news:      S('<path d="M3 5h13v15H4.5A1.5 1.5 0 0 1 3 18.5z"></path><path d="M16 8h4v10.5a1.5 1.5 0 0 1-3 0V8"></path><line x1="6" y1="9" x2="13" y2="9"></line><line x1="6" y1="13" x2="13" y2="13"></line><line x1="6" y1="16.5" x2="10.5" y2="16.5"></line>')
+        news:      S('<path d="M3 5h13v15H4.5A1.5 1.5 0 0 1 3 18.5z"></path><path d="M16 8h4v10.5a1.5 1.5 0 0 1-3 0V8"></path><line x1="6" y1="9" x2="13" y2="9"></line><line x1="6" y1="13" x2="13" y2="13"></line><line x1="6" y1="16.5" x2="10.5" y2="16.5"></line>'),
+        people:    S('<circle cx="12" cy="7.8" r="4.3"></circle><path d="M4.5 20.5v-1.2c0-3.1 3.4-5.3 7.5-5.3s7.5 2.2 7.5 5.3v1.2"></path>')
     };
 
     const DOMAIN_ICON = {
@@ -430,7 +452,8 @@
         security: S('<path d="M12 2.5 4.5 5.5v6c0 5 3.3 8.6 7.5 10 4.2-1.4 7.5-5 7.5-10v-6z"></path><polyline points="8.7 11.8 11.2 14.3 15.4 9.7"></polyline>'),
         wireless: S('<circle cx="12" cy="12" r="2.1"></circle><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6"></path><path d="M15.8 8.2a5.4 5.4 0 0 1 0 7.6"></path><path d="M5.2 18.8a9.6 9.6 0 0 1 0-13.6"></path><path d="M18.8 5.2a9.6 9.6 0 0 1 0 13.6"></path>'),
         cross:    S('<circle cx="8.6" cy="12" r="5.6"></circle><circle cx="15.4" cy="12" r="5.6"></circle>'),
-        other:    S('<line x1="9" y1="2.5" x2="15" y2="2.5"></line><path d="M10 2.5v6.4L5.1 17.6A2 2 0 0 0 6.8 20.6h10.4a2 2 0 0 0 1.7-3L14 8.9V2.5"></path><line x1="7.6" y1="14.6" x2="16.4" y2="14.6"></line>')
+        other:    S('<line x1="9" y1="2.5" x2="15" y2="2.5"></line><path d="M10 2.5v6.4L5.1 17.6A2 2 0 0 0 6.8 20.6h10.4a2 2 0 0 0 1.7-3L14 8.9V2.5"></path><line x1="7.6" y1="14.6" x2="16.4" y2="14.6"></line>'),
+        people:   S('<circle cx="8.6" cy="8.2" r="3.6"></circle><path d="M2.5 20v-1c0-2.5 2.7-4.2 6.1-4.2s6.1 1.7 6.1 4.2v1"></path><path d="M15.6 5.1a3.6 3.6 0 0 1 0 6.9"></path><path d="M16.6 14.9c2.8.4 4.9 2 4.9 4.1v1"></path>')
     };
 
     const STAR_ICON = S('<polygon points="12 2.8 15 9.2 21.8 10 16.9 14.8 18.1 21.6 12 18.4 5.9 21.6 7.1 14.8 2.2 10 9 9.2"></polygon>', 1.7);
@@ -454,7 +477,9 @@
         { k: 'cross', label: 'Cross-cutting', title: 'Cross-cutting: artifacts, reproducibility and convergence',
           note: 'Where the four domains meet, plus the artifact-evaluation and archival infrastructure that separates a published claim from a verified result. If you adopt one habit from this page, make it checking for an artifact badge before you build on someone else’s numbers.' },
         { k: 'other', label: 'Other Sciences', title: 'Other Sciences',
-          note: 'Domain artifact repositories outside the four focus areas. Worth knowing when a project crosses into biology, chemistry, materials or neuroscience, which happens more often than expected once models get involved.' }
+          note: 'Domain artifact repositories outside the four focus areas. Worth knowing when a project crosses into biology, chemistry, materials or neuroscience, which happens more often than expected once models get involved.' },
+        { k: 'people', label: 'People', title: 'Technology Influencers',
+          note: 'The daily-signal layer. Twenty-one individuals whose posts and essays are worth reading as they appear, chosen for standing in the field and for what they have given back to it rather than for follower count. Read each card\u2019s primary link carefully: for several of these people X is not where they actually publish, so the link points at a blog instead and the amber note says why.' }
     ];
 
     const TYPES = [
@@ -467,7 +492,8 @@
         { k: 'testbed',   label: 'testbeds',        hint: 'Testbeds and research programmes' },
         { k: 'repro',     label: 'reproducibility', hint: 'Artifact evaluation and archival' },
         { k: 'tools',     label: 'discovery',       hint: 'Search and literature tooling' },
-        { k: 'news',      label: 'newsletters',     hint: 'Newsletters, blogs and analysis' }
+        { k: 'news',      label: 'newsletters',     hint: 'Newsletters, blogs and analysis' },
+        { k: 'people',    label: 'people',          hint: 'Individuals worth following daily' }
     ];
 
     // =====================================================================
@@ -477,6 +503,8 @@
     //   u2 / l2 optional secondary link and its label
     //   f  caveat rendered in amber (archived, superseded, access notes)
     //   k  extra search keywords
+    //   people entries also carry: ro role shown in place of the hostname,
+    //   x X handle used to fetch the avatar, m monogram fallback initials
     // =====================================================================
     const RESOURCES = [
     // ---------------- CORE ----------------
@@ -1006,7 +1034,158 @@
     { n: 'PhysioNet', u: 'https://physionet.org', g: 'other', t: 'data', k: 'physiological signals clinical ecg mimic critical care',
       d: 'Physiological signal and clinical datasets, including the MIMIC critical-care databases. The main route to real clinical data for research without a hospital partnership.' },
     { n: 'Bioconductor', u: 'https://www.bioconductor.org', g: 'other', t: 'code', k: 'r packages genomics analysis peer reviewed',
-      d: 'Peer-reviewed R packages for genomic data analysis. Peer review of the software itself is rare, and it makes this toolchain unusually trustworthy.' }
+      d: 'Peer-reviewed R packages for genomic data analysis. Peer review of the software itself is rare, and it makes this toolchain unusually trustworthy.' },
+
+    // ---------------- PEOPLE ----------------
+    // Verified 2026-08-28. Where someone's real publishing happens away from X,
+    // u points at that instead and f says so, which is what keeps this section
+    // from quietly going stale.
+
+    // Foundations
+    { n: 'Yann LeCun', u: 'https://x.com/ylecun', g: 'people', t: 'people',
+      ro: 'Executive Chair, AMI Labs \u00b7 Turing Award', x: 'ylecun', m: 'YL',
+      u2: 'http://yann.lecun.com', l2: 'homepage',
+      k: 'ylecun turing award meta fair convolutional jepa world models open weights ami labs paris threads',
+      f: 'He describes his own X use as posting links rather than thoughts. The substantive writing goes to Threads and LinkedIn.',
+      d: 'A Turing Award laureate and the most forceful credible voice arguing that frontier models should stay open. Left Meta in November 2025 to found AMI Labs, and keeps up a running technical argument that scaling language models alone will not get to machine intelligence.' },
+
+    { n: 'Geoffrey Hinton', u: 'https://x.com/geoffreyhinton', g: 'people', t: 'people',
+      ro: 'Professor Emeritus, Toronto \u00b7 Turing + Nobel', x: 'geoffreyhinton', m: 'GH',
+      u2: 'https://www.cs.toronto.edu/~hinton/', l2: 'homepage',
+      k: 'hinton backpropagation boltzmann alexnet nobel physics 2024 turing ai safety risk toronto vector institute',
+      f: 'Several imposter accounts use variations of his name. This is the verified one.',
+      d: 'Backpropagation, Boltzmann machines and AlexNet all trace back to him, and he holds both a Turing Award and the 2024 Nobel Prize in Physics. Since leaving Google he has spent his public voice almost entirely on the risks of the field he built, which makes him the clearest read on how seriously its founders take them.' },
+
+    { n: 'Yoshua Bengio', u: 'https://yoshuabengio.org/en/blog/', g: 'people', t: 'people',
+      ro: 'Founder, LawZero \u00b7 Mila \u00b7 Turing Award', x: 'Yoshua_Bengio', m: 'YB',
+      u2: 'https://x.com/Yoshua_Bengio', l2: 'X',
+      k: 'bengio mila turing lawzero scientist ai international ai safety report montreal deep learning governance',
+      f: 'Post volume on X is low. The blog is where the arguments actually appear.',
+      d: 'The most cited living computer scientist, and the one who turned his Turing Award into institution building: Mila, the International AI Safety Report, and now LawZero, a nonprofit pursuing non-agentic "Scientist AI". His essays are the most carefully argued case for caution written by someone who can do the mathematics.' },
+
+    { n: 'Fei-Fei Li', u: 'https://x.com/drfeifei', g: 'people', t: 'people',
+      ro: 'Co-founder and CEO, World Labs \u00b7 Stanford', x: 'drfeifei', m: 'FL',
+      u2: 'https://www.worldlabs.ai', l2: 'World Labs',
+      k: 'feifei li imagenet stanford hai ai4all world labs spatial intelligence world models human centered vision',
+      d: 'ImageNet made modern computer vision possible, and she has spent the years since arguing that the field needs spatial and embodied understanding rather than more text. Founded Stanford HAI and AI4ALL, and now builds world models at World Labs.' },
+
+    { n: 'Demis Hassabis', u: 'https://x.com/demishassabis', g: 'people', t: 'people',
+      ro: 'Chief Scientist, Alphabet \u00b7 Nobel Prize', x: 'demishassabis', m: 'DH',
+      u2: 'https://deepmind.google/research/', l2: 'DeepMind',
+      k: 'hassabis deepmind alphafold alphago gemini nobel chemistry 2024 alphabet chief scientist protein folding',
+      f: 'Stepped down as Google DeepMind CEO in August 2026 to become Alphabet Chief Scientist.',
+      d: 'Founded DeepMind, led it through AlphaGo, AlphaFold and Gemini, and shared the 2024 Nobel Prize in Chemistry. AlphaFold\u2019s predicted structures were released free to the world rather than licensed, which remains the single largest deliberate gift from an AI lab to science.' },
+
+    // Builders
+    { n: 'Andrew Ng', u: 'https://x.com/AndrewYNg', g: 'people', t: 'people',
+      ro: 'Founder, DeepLearning.AI \u00b7 AI Fund', x: 'AndrewYNg', m: 'AN',
+      u2: 'https://www.deeplearning.ai/the-batch/', l2: 'The Batch',
+      k: 'andrew ng coursera deeplearning.ai the batch landing ai ai fund stanford education mooc newsletter',
+      d: 'His Coursera machine learning course taught the subject to millions of people who had no other route into it, and The Batch is still the most consistently useful weekly summary of what shipped and what it means. Reliably pragmatic about what the technology can actually do this quarter.' },
+
+    { n: 'Andrej Karpathy', u: 'https://x.com/karpathy', g: 'people', t: 'people', top: 1,
+      ro: 'Pre-training research, Anthropic', x: 'karpathy', m: 'AK',
+      u2: 'https://karpathy.bearblog.dev', l2: 'blog',
+      k: 'karpathy nanogpt micrograd zero to hero tesla autopilot openai anthropic pretraining transformers teaching',
+      w: 'He explains transformer internals at exactly the level you need to defend an architecture choice in a design review, and does it in public for free. nanoGPT and the Zero to Hero series are the fastest route from using a model to knowing what it is doing.',
+      d: 'Built Tesla Autopilot\u2019s vision stack, was a founding member of OpenAI, and joined Anthropic in May 2026 to lead a pre-training team. Gives away the teaching most of the field charges for: nanoGPT, micrograd, and the Neural Networks: Zero to Hero course.' },
+
+    { n: 'Dario Amodei', u: 'https://www.darioamodei.com', g: 'people', t: 'people',
+      ro: 'CEO, Anthropic', x: 'DarioAmodei', m: 'DA',
+      u2: 'https://x.com/DarioAmodei', l2: 'X',
+      k: 'dario amodei anthropic claude essays machines of loving grace adolescence of technology scaling laws policy alignment',
+      f: 'Publishes essays rather than a feed. The site is the primary source.',
+      d: 'Runs the lab whose interpretability and alignment work you actually cite, and writes long essays setting out where he thinks this goes, for both the upside and the risks. Worth reading precisely because he has every commercial reason to be optimistic and argues the hard cases anyway.' },
+
+    // Robotics and embodied AI
+    { n: 'Rodney Brooks', u: 'https://rodneybrooks.com', g: 'people', t: 'people',
+      ro: 'Co-founder and CTO, Robust.AI \u00b7 MIT Emeritus', x: 'rodneyabrooks', m: 'RB',
+      u2: 'https://x.com/rodneyabrooks', l2: 'X',
+      k: 'rodney brooks irobot roomba rethink robotics robust.ai mit subsumption predictions scorecard hype calibration',
+      f: 'The blog is the substance; his X feed drifts off topic. He is also on Bluesky.',
+      d: 'Put subsumption architecture into real robots, then put robots into millions of homes through iRobot and the Roomba. His annual Predictions Scorecard grades his own dated forecasts in public, which makes him the most honest calibration instrument the field has.' },
+
+    { n: 'Chelsea Finn', u: 'https://x.com/chelseabfinn', g: 'people', t: 'people',
+      ro: 'Stanford \u00b7 Co-founder, Physical Intelligence', x: 'chelseabfinn', m: 'CF',
+      u2: 'https://ai.stanford.edu/~cbfinn/', l2: 'homepage',
+      k: 'chelsea finn maml meta learning stanford physical intelligence robot learning manipulation imitation policies',
+      d: 'MAML made meta-learning practical, and her group is among the few genuinely closing the loop from large-scale robot data to general manipulation policies. Co-founded Physical Intelligence to do it at a scale universities cannot fund.' },
+
+    { n: 'Jim Fan', u: 'https://x.com/DrJimFan', g: 'people', t: 'people',
+      ro: 'Director of Robotics, NVIDIA \u00b7 GEAR Lab', x: 'DrJimFan', m: 'JF',
+      u2: 'https://research.nvidia.com', l2: 'NVIDIA Research',
+      k: 'jim fan nvidia gear lab groot voyager minedojo embodied agents sim2real simulation isaac foundation models robotics',
+      d: 'Co-leads NVIDIA\u2019s GEAR lab on foundation models for robots, including GR00T. Posts the clearest running explanation anywhere of how simulation, sim-to-real transfer and embodied agents fit together, usually with the video that proves the claim.' },
+
+    // Daily practitioner signal
+    { n: 'Simon Willison', u: 'https://simonwillison.net', g: 'people', t: 'people', top: 2,
+      ro: 'Independent researcher \u00b7 Datasette', x: 'simonw', m: 'SW',
+      u2: 'https://x.com/simonw', l2: 'X',
+      k: 'simon willison datasette django llm cli prompt injection tools weblog annotated releases evaluation',
+      w: 'The single highest-yield daily read for anyone shipping LLM features. He tests things the day they land, publishes what broke, and names prompt-injection classes precisely enough that you can design against them.',
+      d: 'Co-created Django, builds Datasette, and writes the most reliable running log of what large language models can and cannot do in practice. Every claim arrives with the actual transcript, and he is consistently first to name a new failure mode.' },
+
+    { n: 'Ethan Mollick', u: 'https://www.oneusefulthing.org', g: 'people', t: 'people',
+      ro: 'Professor, Wharton', x: 'emollick', m: 'EM',
+      u2: 'https://x.com/emollick', l2: 'X',
+      k: 'ethan mollick one useful thing wharton co-intelligence adoption organizations experiments centaur cyborg productivity',
+      d: 'Runs actual controlled studies on what AI does to real work and real organisations, then writes them up without hype in either direction. The best available counterweight to both vendor claims and blanket dismissal.' },
+
+    // Cybersecurity
+    { n: 'Bruce Schneier', u: 'https://www.schneier.com/blog/', g: 'people', t: 'people',
+      ro: 'Security technologist \u00b7 Harvard Kennedy School', m: 'BrS',
+      u2: 'https://www.schneier.com/crypto-gram/', l2: 'Crypto-Gram',
+      k: 'bruce schneier crypto-gram security theatre applied cryptography harvard public interest technology policy trust',
+      f: 'Not on X. The @schneierblog account is an automated feed of this blog that he never reads. Use the blog or its RSS.',
+      d: 'Thirty years of writing that connects cryptography to policy to how people actually behave. He is the reason "security theatre" is a phrase, and he is unusually good at explaining why a technically sound control still fails once it meets an organisation.' },
+
+    { n: 'Mikko Hypp\u00f6nen', u: 'https://x.com/mikko', g: 'people', t: 'people',
+      ro: 'Chief Research Officer, Sensofusion', x: 'mikko', m: 'MH',
+      u2: 'https://mikko.com', l2: 'homepage',
+      k: 'mikko hypponen withsecure f-secure malware museum brain virus counter drone sensofusion threat research',
+      f: 'Left WithSecure in June 2025 after 34 years; now works on counter-drone security at Sensofusion.',
+      d: 'Has been reverse-engineering malware since the early nineties and is the rare researcher who can present the same finding to a SOC team and to a parliament. Preserved the Malware Museum so early viruses stay studyable rather than merely remembered.' },
+
+    { n: 'Troy Hunt', u: 'https://www.troyhunt.com', g: 'people', t: 'people',
+      ro: 'Founder, Have I Been Pwned', x: 'troyhunt', m: 'TH',
+      u2: 'https://haveibeenpwned.com', l2: 'HIBP',
+      k: 'troy hunt have i been pwned hibp breach credentials passwords k-anonymity microsoft regional director disclosure',
+      d: 'Built and still runs Have I Been Pwned, which lets anyone check whether their credentials sit in a breach corpus, free, at internet scale, and which now feeds dozens of governments. He writes up every breach and every operational decision in unusual detail.' },
+
+    { n: 'Katie Moussouris', u: 'https://x.com/k8em0', g: 'people', t: 'people',
+      ro: 'Founder and CEO, Luta Security', x: 'k8em0', m: 'KM',
+      u2: 'https://www.lutasecurity.com', l2: 'Luta Security',
+      k: 'katie moussouris luta security bug bounty vulnerability disclosure iso 29147 30111 hack the pentagon microsoft vdp',
+      f: 'Also on Mastodon at infosec.exchange, which she names as her main platform.',
+      d: 'Wrote the ISO standards for vulnerability disclosure, ran Microsoft\u2019s first bug bounty and then the Pentagon\u2019s, and is a large part of why security research can happen without a lawsuit. Blunt about where bounty programmes get used as a substitute for actually fixing things.' },
+
+    // 5G and 6G wireless
+    { n: 'Ted Rappaport', u: 'https://wireless.engineering.nyu.edu', g: 'people', t: 'people',
+      ro: 'Founding Director, NYU WIRELESS', m: 'TR',
+      u2: 'https://engineering.nyu.edu/faculty/theodore-rappaport', l2: 'faculty page',
+      k: 'ted rappaport nyu wireless mmwave millimeter wave propagation channel models 5g 6g terahertz sub-thz measurement',
+      f: 'No public X account. Follow NYU WIRELESS and his publications instead; this is a reference figure rather than a feed.',
+      d: 'His millimetre-wave propagation measurements are the empirical basis on which 5G above 24 GHz was standardised, and the same body of work underpins the current sub-terahertz argument in 6G. Founded NYU WIRELESS and has kept its measurement data and channel models open to the whole field.' },
+
+    { n: 'Dean Bubley', u: 'https://x.com/disruptivedean', g: 'people', t: 'people', top: 3,
+      ro: 'Founder, Disruptive Analysis', x: 'disruptivedean', m: 'DB',
+      u2: 'https://disruptivewireless.blogspot.com', l2: 'blog',
+      k: 'dean bubley disruptive analysis wireless 6g reset spectrum policy network slicing telco skeptic private networks fwa',
+      w: 'The 5G and 6G literature is written largely by people selling 5G and 6G. He is the most rigorous public sceptic, and reading him before a standards or architecture claim reaches your slides stops you defending a vendor position by accident.',
+      d: 'Independent telecoms analyst who argues, with evidence, against most of the industry\u2019s own 6G narrative: network slicing, spectrum policy, and the gap between standardised capability and deployed reality. Convenes the "6G Reset" initiative.' },
+
+    { n: 'Zahid Ghadialy', u: 'https://blog.3g4g.co.uk', g: 'people', t: 'people',
+      ro: 'Founder, 3G4G \u00b7 Free 6G Training', x: 'zahidtg', m: 'ZG',
+      u2: 'https://www.free6gtraining.com', l2: 'Free 6G Training',
+      k: 'zahid ghadialy 3g4g free 6g training open ran o-ran 3gpp releases tutorials operator watch private networks explainers',
+      d: 'Produces more free, accurate, entry-level explanation of 3GPP releases, Open RAN and 6G than most organisations manage: slide decks, videos and tutorials, all given away. The fastest way to get current on a release feature you have not touched before.' },
+
+    // Accountability
+    { n: 'Joy Buolamwini', u: 'https://poetofcode.com', g: 'people', t: 'people',
+      ro: 'Founder, Algorithmic Justice League', x: 'jovialjoy', m: 'JB',
+      u2: 'https://www.ajl.org', l2: 'AJL',
+      k: 'joy buolamwini algorithmic justice league gender shades coded bias unmasking ai facial recognition audit bias mit media lab',
+      d: 'Her Gender Shades audit measured how much worse commercial face recognition performed on darker-skinned women, and the finding moved several major vendors to withdraw or restrict those products. The clearest case study the field has of an audit that changed what shipped.' },
     ];
 
     // =====================================================================
@@ -1135,8 +1314,27 @@
         });
     }
 
+    // Avatars come from unavatar with fallback=false. That parameter is
+    // load-bearing: without it the service answers 200 with a generic grey
+    // silhouette, onerror never fires, and every unmatched person renders as the
+    // same blob. With it a miss is a real 404, the image removes itself, and the
+    // monogram already sitting underneath shows through.
+    function avatarHtml(r, c) {
+        const mono = '<span class="avatar-mono' + ((r.m || '').length > 2 ? ' len3' : '') +
+                     '" aria-hidden="true">' + esc(r.m || '') + '</span>';
+        const img = r.x
+            ? '<img src="https://unavatar.io/x/' + encodeURIComponent(r.x) + '?fallback=false"' +
+              ' alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"' +
+              ' width="34" height="34" onerror="this.remove();">'
+            : '';
+        return '<span class="res-icon avatar" style="color:' + c +
+               ';background:color-mix(in srgb, ' + c + ' var(--tint), transparent);">' +
+               mono + img + '</span>';
+    }
+
     function cardHtml(r) {
         const c = tint(r.t);
+        const person = r.t === 'people';
         const alt = r.u2
             ? '<a class="res-alt" href="' + esc(r.u2) + '" target="_blank" rel="noopener noreferrer"' +
               ' aria-label="' + esc(r.n) + ': ' + esc(r.l2 || 'more') + ', opens in a new tab">' +
@@ -1154,14 +1352,18 @@
         return '' +
             '<li class="res-card' + (r.top ? ' is-pick' : '') + '">' +
                 '<a class="res-link" href="' + esc(r.u) + '" target="_blank" rel="noopener noreferrer"' +
-                   ' aria-label="' + esc(r.n) + ', ' + esc(TYPE_LABEL[r.t]) + ', opens in a new tab">' +
+                   ' aria-label="' + esc(r.n) + ', ' + esc(person ? (r.ro || 'person') : TYPE_LABEL[r.t]) + ', opens in a new tab">' +
                     '<span class="res-top">' +
-                        '<span class="res-icon" style="color:' + c + ';background:color-mix(in srgb, ' + c + ' var(--tint), transparent);">' +
-                            box(18, '', TYPE_ICON[r.t]) +
-                        '</span>' +
+                        (person
+                            ? avatarHtml(r, c)
+                            : '<span class="res-icon" style="color:' + c + ';background:color-mix(in srgb, ' + c + ' var(--tint), transparent);">' +
+                              box(18, '', TYPE_ICON[r.t]) +
+                              '</span>') +
                         '<span style="min-width:0;">' +
                             '<span class="res-name">' + esc(r.n) + ' <span aria-hidden="true" style="color:var(--primary-color);font-weight:400;">&#8599;</span></span>' +
-                            '<span class="res-host">' + esc(host(r.u)) + '</span>' +
+                            // A person's hostname would just read "x.com", which says nothing.
+                            // Their role carries the information instead.
+                            '<span class="res-host">' + esc(person ? (r.ro || '') : host(r.u)) + '</span>' +
                         '</span>' +
                     '</span>' +
                     '<span class="res-desc">' + esc(r.d) + '</span>' +
