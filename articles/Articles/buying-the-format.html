@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buying the Format | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_54.svg" alt="Buying the Format" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI &amp; Robotics</span>
+                        <span class="category-badge category-architecture">Architecture</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Buying the Format</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">NVIDIA is reportedly paying $12.9 billion for Hugging Face, and the asset that matters most for robotics is a file format.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 28, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~8 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+<p>The most valuable thing Hugging Face ever built was not a model. It was an agreement about what a model file looks like.</p>
+
+<p>That agreement is why <code>from_pretrained()</code> behaves identically against a language model, a speech encoder, and an image segmenter published by three organizations that have never spoken to each other. The weights are commodities. The convention that lets you load them without reading anyone's README is not.</p>
+
+<p>NVIDIA has reportedly agreed to buy Hugging Face for $12.9 billion. The Information broke the story on August 26, 2026, and CNBC, Forbes and TechCrunch followed within a day. No signed agreement has been confirmed publicly, and TechCrunch notes the deal could still collapse. Most of the coverage reads this as a chip company buying a model repository. That reading misses where the asset sits, and it misses robotics almost completely.</p>
+
+<blockquote>Hugging Face standardized the unit of exchange for digital AI. LeRobot is doing the same thing for physical AI, and a standard unit of exchange is the one asset in this industry that compounds.</blockquote>
+
+<h2>Robotics never had an import statement</h2>
+
+<p>The LeRobot paper, accepted at ICLR 2026, names two reasons the field stayed fragmented. Control middleware is written for specific robots and resists adaptation, so every lab builds its own motor bridge. Datasets lack a common format, so a demonstration recorded in one lab is close to useless in another. Both problems are plumbing. Neither is glamorous. Together they meant that a decade of robot demonstrations could not be pooled into anything resembling a training corpus.</p>
+
+<p>LeRobot answers with two unremarkable pieces of infrastructure: a single Python middleware API covering arms from a 3D-printed manipulator up to a humanoid, and <code>LeRobotDataset</code>, one multimodal format for recording, storing and streaming episodes at high frame rates. Streaming matters more than it sounds. You can train against a remotely hosted corpus without downloading it, which removes the disk and bandwidth barrier that quietly excluded most of the world from robot learning research.</p>
+
+<p>The adoption curve says the plumbing worked. By September 2025 the paper counted more than 16,000 datasets from over 2,200 individual contributors published in the format. By May 2026, LeRobot datasets on the Hugging Face Hub had passed 58,000, up from 1,145 at the end of 2024. Robotics became the fastest-growing dataset category on the Hub, and it got there in about eighteen months.</p>
+
+<h2>Cheap arms buy variety, expensive arms buy volume</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">Datasets, episodes and downloads for low-cost SO-10X arms compared with the industrial Franka Panda</title>
+            <desc id="fig1-desc">Low-cost SO-100 and SO-101 arms account for 9,126 distinct datasets against the Panda 588, a factor of about fifteen. The Panda leads on episodes recorded, 926,776 against 136,809, and on downloads, 1.88 million against 598,283. Cheap accessible hardware produces variety from many contributors; expensive lab hardware produces volume from a few large collection efforts.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Two contribution regimes inside one dataset format</text>
+            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Each band is scaled to its own maximum. Three different units, not comparable across bands.</text>
+
+            <text x="30" y="80" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">DISTINCT DATASETS CONTRIBUTED</text>
+            <text x="30" y="101" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">SO-10X &#183; ~&#8364;225/arm</text>
+            <rect x="190" y="88" width="340" height="18" fill="#60a5fa" rx="2"/>
+            <text x="538" y="101" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">9,126</text>
+            <text x="30" y="125" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">Panda &#183; lab-grade</text>
+            <rect x="190" y="112" width="22" height="18" fill="#f59e0b" rx="2"/>
+            <text x="220" y="125" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">588</text>
+
+            <text x="30" y="152" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">EPISODES RECORDED</text>
+            <text x="30" y="173" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">SO-10X</text>
+            <rect x="190" y="160" width="50" height="18" fill="#60a5fa" rx="2"/>
+            <text x="248" y="173" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">136,809</text>
+            <text x="30" y="197" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">Panda</text>
+            <rect x="190" y="184" width="340" height="18" fill="#f59e0b" rx="2"/>
+            <text x="538" y="197" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">926,776</text>
+
+            <text x="30" y="224" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">DATASET DOWNLOADS</text>
+            <text x="30" y="245" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">SO-10X</text>
+            <rect x="190" y="232" width="108" height="18" fill="#60a5fa" rx="2"/>
+            <text x="306" y="245" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">598,283</text>
+            <text x="30" y="269" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="11">Panda</text>
+            <rect x="190" y="256" width="340" height="18" fill="#f59e0b" rx="2"/>
+            <text x="538" y="269" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">1,878,395</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Accessibility buys variety, budget buys volume. SO-10X totals combine SO-100 and SO-101. Source: Cadene et al., LeRobot, ICLR 2026, Table 1b.</figcaption>
+</figure>
+
+<p>The hardware costs in the paper explain the split. An SO-100 or SO-101 arm runs about 225 euros. LeKiwi, a mobile manipulator, is about 230. The HopeJR humanoid arm and hand is around 500. An ALOHA bimanual setup is about 21,000, and the Franka Emika Panda sits in that same class. The gap between 225 and 21,000 is not a discount. It is a different distribution model.</p>
+
+<p>Look at what each class of hardware produced. The Panda has 588 datasets in the format but 926,776 episodes and 1.88 million downloads. SO-100 and SO-101 together have 9,126 datasets and 136,809 episodes. Expensive arms live in a small number of well-funded labs that run large centralized collection campaigns, and everyone downloads the result. Cheap arms live on thousands of desks, and each one records a different kitchen and a different pair of clumsy hands. More than half of all community-contributed datasets in the format come from SO-10X hardware.</p>
+
+<p>Generalization needs the second kind. ImageNet did not come from one laboratory photographing a million objects, and a robot policy that works in one lighting rig is a demo. The paper is explicit that decentralized contribution is powered by accessibility: low cost, open designs, 3D-printable parts. Price is a data strategy.</p>
+
+<h2>The wall an open library could not knock down</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 310" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Inference latency per forward pass for four LeRobot policies on a laptop CPU and on an RTX 4090</title>
+            <desc id="fig2-desc">On an RTX 4090 all four policies complete a forward pass in 5 to 370 milliseconds. On a MacBook Pro M1 CPU, ACT takes 182 milliseconds and SmolVLA takes 2,028 milliseconds, while Diffusion Policy and pi-zero fail to finish a single forward pass inside the 5 second cutoff. The largest and most capable policies are the ones that cannot run on hardware people already own.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Where each open policy can actually run</text>
+
+            <circle cx="205" cy="55" r="5" fill="#60a5fa"/>
+            <text x="216" y="59" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">RTX 4090</text>
+            <circle cx="300" cy="55" r="5" fill="#f59e0b"/>
+            <text x="311" y="59" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">MacBook Pro M1, CPU only</text>
+
+            <line x1="200" y1="76" x2="200" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="285" y1="76" x2="285" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="370" y1="76" x2="370" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="455" y1="76" x2="455" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="540" y1="76" x2="540" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="514" y1="76" x2="514" y2="252" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.7"/>
+
+            <text x="30" y="100" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">ACT &#183; 52M</text>
+            <text x="260" y="84" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">5 ms</text>
+            <circle cx="260" cy="96" r="6" fill="#60a5fa"/>
+            <text x="392" y="84" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">182 ms</text>
+            <circle cx="392" cy="96" r="6" fill="#f59e0b"/>
+
+            <text x="30" y="144" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Diffusion Policy &#183; 263M</text>
+            <text x="418" y="128" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">370 ms</text>
+            <circle cx="418" cy="140" r="6" fill="#60a5fa"/>
+            <text x="606" y="144" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="end">timed out</text>
+
+            <text x="30" y="188" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">SmolVLA &#183; 450M</text>
+            <text x="370" y="172" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">99 ms</text>
+            <circle cx="370" cy="184" r="6" fill="#60a5fa"/>
+            <text x="481" y="172" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">2,028 ms</text>
+            <circle cx="481" cy="184" r="6" fill="#f59e0b"/>
+
+            <text x="30" y="232" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">&#960;0 &#183; 3.5B</text>
+            <text x="397" y="216" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">209 ms</text>
+            <circle cx="397" cy="228" r="6" fill="#60a5fa"/>
+            <text x="606" y="232" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="end">timed out</text>
+
+            <line x1="200" y1="252" x2="570" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+            <text x="200" y="270" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">1 ms</text>
+            <text x="285" y="270" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">10 ms</text>
+            <text x="370" y="270" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">100 ms</text>
+            <text x="455" y="270" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">1 s</text>
+            <text x="540" y="270" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">10 s</text>
+            <text x="514" y="290" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">5 s cutoff</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The open weights are free; the hardware that runs them is not. Mean latency over 100 forward passes at fp32, log axis. Source: Cadene et al., LeRobot, ICLR 2026, Table 3.</figcaption>
+</figure>
+
+<p>Here is where the open-source story stops being sufficient. The paper benchmarks its own supported policies across four platforms. ACT, at 52 million parameters, returns a forward pass in about 5 milliseconds on an RTX 4090, roughly 100 to 200 Hz and fast enough for real control. SmolVLA at 450 million takes 99 milliseconds. And <code>&#960;0</code>, the 3.5-billion-parameter vision-language-action model, takes 209 milliseconds on the 4090 and fails to complete a single forward pass inside a 5 second limit on a laptop CPU or on Apple's MPS backend. Diffusion Policy fails the same way on CPU.</p>
+
+<p>So the format is public, the arm is 225 euros, the weights are downloadable, and the most capable policy still cannot run on anything you already own. No license fixes that. The constraint is silicon, and it lands hardest on exactly the population LeRobot went to such trouble to include.</p>
+
+<p>The library's own workaround came from engineering rather than parameters. LeRobot decouples action prediction from action execution, computing the next action chunk while the robot is still executing the current one. Running SmolVLA on an SO-100 across three cube-manipulation tasks, that change took the robot from 9 completed cubes in a fixed 60 second window to 19, with success rates roughly flat at 78.3 percent synchronous against 73.3 percent asynchronous. Doubling throughput without touching the model is the kind of win that belongs to whoever owns the runtime.</p>
+
+<h2>What the money actually buys</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 340" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">Five layers of the robot learning stack, showing which LeRobot standardized and which NVIDIA supplies</title>
+            <desc id="fig3-desc">LeRobot standardized motor middleware, the dataset format and streaming, and the policy library. It left simulation thin by design and cannot address on-robot compute at all. Those two remaining layers map onto NVIDIA Isaac Lab-Arena and Jetson Thor, both integrated into LeRobot in July 2026.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">The two layers open source left on the table</text>
+            <text x="30" y="58" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">LAYER OF THE ROBOT LEARNING STACK</text>
+            <text x="390" y="58" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHAT NVIDIA SUPPLIES</text>
+
+            <rect x="30" y="72" width="330" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <rect x="30" y="72" width="4" height="44" fill="#60a5fa"/>
+            <text x="46" y="91" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Motor middleware and control</text>
+            <text x="46" y="107" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11">standardized by LeRobot</text>
+            <line x1="364" y1="94" x2="380" y2="94" stroke="#2a3f5f" stroke-width="1.5"/>
+            <polygon points="380,90 388,94 380,98" fill="#2a3f5f"/>
+            <rect x="390" y="72" width="220" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <text x="402" y="99" fill="#64748b" font-family="Inter, sans-serif" font-size="12">no new dependency</text>
+
+            <rect x="30" y="124" width="330" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <rect x="30" y="124" width="4" height="44" fill="#60a5fa"/>
+            <text x="46" y="143" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Dataset format and streaming</text>
+            <text x="46" y="159" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11">standardized by LeRobot</text>
+            <line x1="364" y1="146" x2="380" y2="146" stroke="#2a3f5f" stroke-width="1.5"/>
+            <polygon points="380,142 388,146 380,150" fill="#2a3f5f"/>
+            <rect x="390" y="124" width="220" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <text x="402" y="151" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Isaac Teleop capture</text>
+
+            <rect x="30" y="176" width="330" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <rect x="30" y="176" width="4" height="44" fill="#60a5fa"/>
+            <text x="46" y="195" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Policy library and open weights</text>
+            <text x="46" y="211" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11">standardized by LeRobot</text>
+            <line x1="364" y1="198" x2="380" y2="198" stroke="#2a3f5f" stroke-width="1.5"/>
+            <polygon points="380,194 388,198 380,202" fill="#2a3f5f"/>
+            <rect x="390" y="176" width="220" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <text x="402" y="203" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">GR00T 1.7, Cosmos 3</text>
+
+            <rect x="30" y="228" width="330" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <rect x="30" y="228" width="4" height="44" fill="#f59e0b"/>
+            <text x="46" y="247" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Simulation environments</text>
+            <text x="46" y="263" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11">deliberately thin in LeRobot</text>
+            <line x1="364" y1="250" x2="380" y2="250" stroke="#f59e0b" stroke-width="1.5"/>
+            <polygon points="380,246 388,250 380,254" fill="#f59e0b"/>
+            <rect x="390" y="228" width="220" height="44" fill="#1a2942" stroke="#f59e0b" rx="3"/>
+            <text x="402" y="255" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Isaac Lab-Arena</text>
+
+            <rect x="30" y="280" width="330" height="44" fill="#1a2942" stroke="#2a3f5f" rx="3"/>
+            <rect x="30" y="280" width="4" height="44" fill="#f59e0b"/>
+            <text x="46" y="299" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">On-robot compute</text>
+            <text x="46" y="315" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11">outside the library entirely</text>
+            <line x1="364" y1="302" x2="380" y2="302" stroke="#f59e0b" stroke-width="1.5"/>
+            <polygon points="380,298 388,302 380,306" fill="#f59e0b"/>
+            <rect x="390" y="280" width="220" height="44" fill="#1a2942" stroke="#f59e0b" rx="3"/>
+            <text x="402" y="307" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Jetson Thor</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> Three of five layers were commoditized by an open library. The two that were not are the two NVIDIA sells. Sources: Cadene et al., ICLR 2026; NVIDIA developer blog, July 6, 2026.</figcaption>
+</figure>
+
+<p>The integration predates the acquisition report by seven weeks. On July 6, 2026, NVIDIA shipped Isaac GR00T 1.7 and Isaac Teleop into LeRobot, registered Isaac Lab-Arena in LeRobot's environment hub so simulation environments could be prototyped and shared like any other artifact, and demonstrated a Jetson Thor board running vision-language-action policies on a Reachy 2 humanoid. It also released an open physical AI dataset of more than 350,000 trajectories and 57 million grasps. Cosmos 3, a world foundation model, was announced as the next piece.</p>
+
+<p>Read that against the stack and the logic is plain. Buying Hugging Face gives NVIDIA no robotics capability it lacked. What it gives NVIDIA is the registry where those capabilities become the default: roughly 3 million robotics developers on one side meeting roughly 16 million AI builders on the other, joined at a format. When a student in Amman downloads a LeRobotDataset, fine-tunes a policy and deploys it, the deployment target is now shaped by whoever governs the tooling.</p>
+
+<h2>The part that should make you cautious</h2>
+
+<p>Hugging Face's position came from being nobody's vendor. A format that no chip company owns gets adopted by every chip company. Once the registry belongs to a silicon vendor, every design decision in the format carries a second question underneath it: does this make deployment easier or harder on someone else's accelerator?</p>
+
+<p>Nothing in the July integration suggests bad faith. GR00T 1.7 shipped as an open, commercially usable model, and LeRobot remains Apache-2.0. Governance is the thing to watch, not intent, and it is checkable. Track whether <code>LeRobotDataset</code> tooling stays free of vendor-specific dependencies, whether non-CUDA runtimes stay first-class in the inference stack, and whether published model cards keep listing deployment paths that do not end at a Jetson.</p>
+
+<h3>A portability check worth automating</h3>
+
+<pre><code>from lerobot.datasets.streaming_dataset import StreamingLeRobotDataset
+
+# Run this in CI on a CPU-only runner, with no CUDA available.
+ds = StreamingLeRobotDataset("lerobot/svla_so101_pickplace")
+frame = next(iter(ds))
+
+# The day this needs a GPU present to succeed, the format
+# has stopped being neutral. Make that alert loud.</code></pre>
+
+<p>Robotics spent forty years unable to pool its own experience because nobody agreed on what an episode looked like. That problem is now solved, in public, by a library, and the evidence is 58,000 datasets and a 225 euro arm that outproduces a 21,000 euro one in variety. This is the same sequence that turned language models from a research curiosity into infrastructure, running roughly eight years behind.</p>
+
+<p>The acquisition accelerates the physical half of it, because the layer open source could not commoditize is precisely the layer NVIDIA has been building for a decade. It also concentrates that half under one company. Both things are true, and the second is the one to watch, because formats are far easier to adopt than to leave.</p>
+
+<h2>What leaders should do</h2>
+
+<ol class="list-decimal">
+    <li>Buy two SO-101 arms and a Jetson-class board this quarter, roughly the cost of one engineer-week, and have a team record 50 real episodes of a task in your own environment. The output is not a product. It is an answer to how much of your operational knowledge is capturable as demonstrations, before a competitor answers it first.</li>
+    <li>Publish your internal robot data in <code>LeRobotDataset</code> format even when it stays private. Format choice is cheap to reverse today and expensive to reverse in two years, and this format now has 58,000 datasets of network effect behind it.</li>
+    <li>Add a CPU-only, no-CUDA job to your robotics CI that loads your datasets and runs your smallest policy. That job is your early warning that the open stack has quietly acquired a hardware dependency.</li>
+    <li>Benchmark inference latency on the board that will sit on the robot before you commit to a policy architecture, not on a workstation GPU. A 3.5-billion-parameter model that cannot close a control loop on your hardware is not a candidate, whatever its benchmark scores say.</li>
+</ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Experience Bottleneck</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Language models inherited a corpus. Robots have to earn every hour of theirs, and that changes the arithmetic behind every AGI forecast.</p>
+                        <a href="the-experience-bottleneck.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Knowledge as Plain Files</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Google's Open Knowledge Format bets that markdown files, not proprietary catalogs, will become the memory of AI agents.</p>
+                        <a href="open-knowledge-format.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Sovereignty Starts at the Tokenizer</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.</p>
+                        <a href="sovereignty-at-the-tokenizer.html">Read &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Cadene, R., Aliberts, S., Capuano, F., Aractingi, M., Zouitine, A., Kooijmans, P., Choghari, J., Russi, M., Pascal, C., Palma, S., Shukor, M., Moss, J., Soare, A., Aubakirova, D., Lhoest, Q., Gallou&eacute;dec, Q., &amp; Wolf, T. (2026). <em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em>. Published as a conference paper at ICLR 2026. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arxiv.org/abs/2602.22818</a></li>
+                    <li class="reference-item">Shukor, M., Aubakirova, D., Capuano, F., Kooijmans, P., Palma, S., et al. (2025). <em>SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</em>. arXiv:2506.01844. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">arxiv.org/abs/2506.01844</a></li>
+                    <li class="reference-item">NVIDIA (July 6, 2026). <em>NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community</em>. NVIDIA Blog. <a href="https://blogs.nvidia.com/blog/hugging-face-lerobot-models-frameworks-open-robotics/" target="_blank" rel="noopener">blogs.nvidia.com</a></li>
+                    <li class="reference-item">CNBC (August 27, 2026). <em>Nvidia agrees to buy Hugging Face for $12.9 billion, report says</em>. Reporting the original story from The Information. <a href="https://www.cnbc.com/2026/08/27/nvidia-hugging-face-acquisition.html" target="_blank" rel="noopener">cnbc.com</a></li>
+                    <li class="reference-item">TechCrunch (August 26, 2026). <em>Nvidia closes in on Hugging Face acquisition</em>. Notes that no signed agreement had been reached at time of reporting. <a href="https://techcrunch.com/2026/08/26/nvidia-closes-in-on-hugging-face-acquisition/" target="_blank" rel="noopener">techcrunch.com</a></li>
+                    <li class="reference-item">Hugging Face. <em>LeRobot Community Datasets: The "ImageNet" of Robotics, When and How?</em> Hugging Face Blog. <a href="https://huggingface.co/blog/lerobot-datasets" target="_blank" rel="noopener">huggingface.co/blog/lerobot-datasets</a></li>
+                    <li class="reference-item">Hugging Face. <em>LeRobotDataset v3.0 documentation</em>. <a href="https://huggingface.co/docs/lerobot/lerobot-dataset-v3" target="_blank" rel="noopener">huggingface.co/docs/lerobot</a></li>
+                    <li class="reference-item">NVIDIA. <em>Isaac GR00T: Generalist Robot 00 Technology</em>. NVIDIA Developer. <a href="https://developer.nvidia.com/isaac/gr00t" target="_blank" rel="noopener">developer.nvidia.com/isaac/gr00t</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
