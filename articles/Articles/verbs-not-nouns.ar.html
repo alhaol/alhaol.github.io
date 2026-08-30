@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أفعال لا أسماء | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Kufi+Arabic:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1, h2, h3, h4, .kufi { font-family: 'Noto Kufi Arabic', 'Inter', sans-serif; }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.7rem; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.6; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.75rem; line-height: 1.6; }
+        .prose p { margin-bottom: 1.25rem; line-height: 2.1; color: var(--text-muted); font-size: 1.05rem; }
+
+        /* RTL mirroring: every directional rule from the English template is flipped here. */
+        .prose blockquote {
+            border-right: 4px solid var(--primary-color);
+            border-left: none;
+            padding: 1.25rem;
+            font-style: normal;
+            color: var(--text-muted);
+            background-color: var(--card-bg);
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+            line-height: 2;
+        }
+        .prose ul, .prose ol { padding-right: 1.5rem; padding-left: 0; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; line-height: 2; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; margin-left: 0.75rem; margin-right: 0; margin-bottom: 0.5rem; font-family: 'Noto Kufi Arabic', sans-serif; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-right: 1.5rem; padding-left: 0; color: var(--text-muted); line-height: 1.9; }
+        .reference-item a { color: var(--primary-color); }
+
+        /* Code stays left-to-right. Arabic prose direction must not leak into source. */
+        code, pre { direction: ltr; text-align: left; unicode-bidi: isolate; font-family: 'JetBrains Mono', monospace; }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.9em; color: var(--primary-color); display: inline-block; }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        pre code { background: none; padding: 0; display: block; }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Figures are authored in mirrored RTL geometry for this edition, not reused from
+           the English page. Model names and numerals stay Latin because that is how they
+           appear in the sources; every label word is Arabic. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.9rem; line-height: 1.9; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 700; }
+
+        .lang-switch { font-family: 'Inter', sans-serif; font-size: 0.8rem; border: 1px solid var(--border-color); padding: 0.35rem 0.7rem; border-radius: 0.3rem; color: var(--text-muted); text-decoration: none; }
+        .lang-switch:hover { color: var(--primary-color); border-color: var(--primary-color); }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link kufi">📚 مقالات أخرى</a>
+            <a href="verbs-not-nouns.html" class="lang-switch">Read in English</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_55.png" alt="أفعال لا أسماء" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">الذكاء الاصطناعي والروبوتات</span>
+                        <span class="category-badge category-architecture">البُنى والمعمارية</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4" style="line-height: 1.5;">أفعال لا أسماء</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted); line-height: 1.9;">سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">إبراهيم أبو الهول، دكتوراه، مهندس محترف، عضو أول في IEEE</p>
+                            <p>قائد تقني في الذكاء الاصطناعي</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>تاريخ النشر: 30 أغسطس 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>زمن القراءة: 8 دقائق تقريبًا</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+<p>يستطيع نموذج الرؤية واللغة والفعل أن ينظر إلى طاولة ويحدّد أيُّ الأجسام هو الكأس. لكن ادفع الكأس نحو الحافة واسأله عمّا سيحدث بعد ذلك، فستجده على أرض هشّة، لأن شيئًا في تدريبه لم يُلزِمه يومًا بأن يعرف.</p>
+
+<p>هذه ليست فجوة في الحجم، بل فجوة في النَّسَب. فنموذج الرؤية واللغة والفعل (<code>VLA</code>) يُبنى بأخذ نموذج رؤية ولغة دُرِّب مسبقًا على صور مقترنة بنصوص، ثم يُركَّب عليه رأس فعل (action head). وأوزان النظام كلّها تقريبًا اكتُسبت أثناء تعلُّم العلاقة بين الصور والكلمات. لذلك يرث النموذج فهمًا متينًا للأسماء والفئات، ولا يكاد يرث شيئًا عن كيفية حركة الأشياء.</p>
+
+<blockquote>النموذج بارع في ما أجبره هدف تدريبه المسبق على البراعة فيه. التنبّؤ بالوصف النصّي يجعله فصيحًا في الأسماء. أمّا التنبّؤ بالإطار التالي فهو وحده ما يجعله فصيحًا في الأفعال.</blockquote>
+
+<h2>ما الذي يورِّثه النموذج الأساس</h2>
+
+<p>الطريقة المفيدة لقراءة أي سياسة روبوت هي أن تسأل: ماذا كان هذا النموذج قبل أن يصبح سياسة روبوت؟ المخطّطات المعمارية ترسم رأس الفعل في نهاية المسار، فيبدو وكأنه الجزء المهم. وهو في الحقيقة أصغر الأجزاء. النموذج الأساس (backbone) هو ما يحدّد ما يعرفه النظام، أمّا الرأس فيحدّد كيفية التعبير عن تلك المعرفة فحسب.</p>
+
+<p>وتضع NVIDIA الفارق على هذا الخط تحديدًا. فنموذج العالم والفعل (<code>WAM</code>) يُعرَّف بأنه سياسة «تبدأ من نموذج عالَم أو نموذج فيديو مُدرَّب مسبقًا، ثم تُكيَّف لتمثيل أو توقّع كيفية تغيّر المشهد عبر الزمن وإصدار الأفعال المقابلة». أمّا نموذج الرؤية واللغة والفعل فيبدأ من نموذج أساس للصور والنصوص. الرأس نفسه، والسَّلف مختلف، وهذا الاختلاف في السَّلف هو الحُجّة كلّها.</p>
+
+<p>مدوَّنة الصور والنصوص فهرسٌ لأشياء موجودة. أمّا مدوَّنة الفيديو فسِجلٌّ لأحداث تقع. وواحدة فقط من هاتين تحتوي على المعلومة القائلة إن السائل المسكوب يسقط، وإن الكُمّ المطويّ يبقى مطويًّا، وإن الورقة تنزلق على أختها قبل أن تنفصل عنها. ولا يمكنك استخراج ذلك من الأوصاف النصّية مهما كبر حجمها، لأن تلك الأوصاف لم يُطلب منها يومًا أن ترمِّز هذه المعلومة.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg direction="rtl" viewBox="0 0 640 272" role="img" aria-labelledby="arfig1-title arfig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="arfig1-title">ما يورّثه النموذج الأساس اللغوي مقابل النموذج الأساس المرئي لسياسة الروبوت</title>
+            <desc id="arfig1-desc">نموذج الرؤية واللغة والفعل يُدرَّب مسبقًا على صور مقترنة بنصوص، فيرث الأسماء والفئات ودلالات الأجسام، ويضعف في الديناميكا والتلامس. أمّا نموذج العالم والفعل فيُدرَّب مسبقًا على فيديو واسع النطاق، فيرث ديناميكا المشهد وكيفية تغيّر الأشياء، ويضعف في الربط اللغوي الدقيق. رأس الفعل واحد في الحالتين، والمختلف هو السَّلف.</desc>
+
+            <text x="610" y="30" text-anchor="start" fill="#f1f5f9" font-family="Noto Kufi Arabic, sans-serif" font-size="15" font-weight="700">نَسَبان اثنان، كفاءتان مختلفتان</text>
+
+            <text x="610" y="54" text-anchor="start" fill="#94a3b8" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="600">مدوَّنة التدريب المسبق</text>
+            <text x="408" y="54" text-anchor="start" fill="#94a3b8" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="600">يَرِث</text>
+            <text x="200" y="54" text-anchor="start" fill="#94a3b8" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="600">يَضعُف في</text>
+
+            <rect x="432" y="68" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="598" y="88" text-anchor="start" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700">VLA</text>
+            <text x="598" y="108" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">صور مقترنة بنصوص</text>
+            <text x="598" y="126" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">فهرس لأشياء موجودة</text>
+
+            <rect x="224" y="68" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="404" y="68" width="4" height="64" fill="#60a5fa"/>
+            <text x="392" y="94" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">الأسماء والفئات</text>
+            <text x="392" y="116" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">دلالات الأجسام</text>
+
+            <rect x="30" y="68" width="170" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="196" y="68" width="4" height="64" fill="#f59e0b"/>
+            <text x="184" y="94" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">الديناميكا والتلامس</text>
+            <text x="184" y="116" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">ما يحدث تاليًا</text>
+
+            <rect x="432" y="152" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="598" y="172" text-anchor="start" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700">WAM</text>
+            <text x="598" y="192" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">فيديو واسع النطاق</text>
+            <text x="598" y="210" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">سجل لأحداث تقع</text>
+
+            <rect x="224" y="152" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="404" y="152" width="4" height="64" fill="#60a5fa"/>
+            <text x="392" y="178" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">ديناميكا المشهد</text>
+            <text x="392" y="200" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">كيف تتغيّر الأشياء</text>
+
+            <rect x="30" y="152" width="170" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="196" y="152" width="4" height="64" fill="#f59e0b"/>
+            <text x="184" y="178" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">الربط اللغوي</text>
+            <text x="184" y="200" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">الدقيق</text>
+
+            <text x="610" y="248" text-anchor="start" fill="#94a3b8" font-family="Noto Naskh Arabic, serif" font-size="12">رأس الفعل واحد في الحالتين. المختلف هو السَّلف وحده.</text>
+        </svg>
+    </div>
+    <figcaption><b>الشكل 1.</b> الكفاءة موروثة من مدوَّنة التدريب المسبق، لا مضافة عبر رأس الفعل. المصدر: NVIDIA، <span dir="ltr">«Pretrained to Imagine, Fine-Tuned to Act»</span>، 2026.</figcaption>
+</figure>
+
+<h2>تنبّأ بالعالم أولًا، ثم تصرَّف</h2>
+
+<p>يمثّل DreamZero أوضح تجسيد لهذا التصحيح. فهو محوّل انتشار انحداري ذاتي (autoregressive diffusion transformer) بحجم 14 مليار معامل، مبني على <code>Wan2.1-I2V-14B</code>، وهو نموذج أساس لتوليد الفيديو. يتلقّى ثلاثة مدخلات: السياق البصري عبر مُرمِّز تبايني، والتعليمة اللغوية عبر مُرمِّز نصّي، وحالة مفاصل الروبوت نفسه عبر مُرمِّز حالة. ثم يزيل الضوضاء عن الفيديو المستقبلي والأفعال المستقبلية معًا عبر كتل محوّل مشتركة، مع مُفكِّك ترميز منفصل لكلٍّ منهما، ويعمل في حلقة مغلقة بتردّد 7 هرتز.</p>
+
+<p>ونتيجة هذا التصميم تغيُّرٌ في ما يُطلب من النموذج أن يتعلّمه. فالسياسة التقليدية تتعلّم تخطيطًا كثيفًا من الحالات إلى الأفعال عبر محاكاة العروض التوضيحية. أمّا نموذج العالم والفعل فيتنبّأ بما سيبدو عليه المشهد بعد قليل، ثم يستنتج أوامر المحرّكات المتّسقة مع ذلك المستقبل. وتصف NVIDIA هذا الانتقال بأنه تحويل لتعلُّم الفعل باتجاه الديناميكا العكسية (inverse dynamics)، وهي مسألة أفضل صياغةً بكثير: سؤال «أيّ حركة تُنتج هذه النتيجة» أيسر من سؤال «أيّ حركة ينبغي أن أقوم بها».</p>
+
+<p>ويحمل البحث اسم Jim Fan بين مؤلّفيه، وهذا مهم عند قراءته. فالحجّة نفسها تظهر في محاضرته لدى Sequoia بصيغة أوسع، والصيغتان لا تقولان الشيء ذاته. المحاضرة هي تسويق الفكرة. أمّا البحث فهو الدليل عليها، والدليل أضيق.</p>
+
+<h2>ماذا تُظهر الأرقام فعلًا</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg direction="rtl" viewBox="0 0 640 300" role="img" aria-labelledby="arfig2-title arfig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="arfig2-title">متوسط تقدّم المهمة في مهام لم يرها النموذج، لـ DreamZero مقابل خطوط الأساس</title>
+            <desc id="arfig2-desc">يبلغ DreamZero نسبة 39.5 بالمئة من متوسط تقدّم المهمة في عشر مهام جديدة. ويبلغ GR00T N1.6 المُدرَّب مسبقًا 16.3 بالمئة. أمّا GR00T N1.6 وpi-0.5 حين يُدرَّبان من الصفر فيسجّلان أقل من واحد بالمئة. انهيار الحالتين المُدرَّبتين من الصفر هو الدليل على أن التدريب المسبق، لا رأس الفعل، هو ما يقوم بالعمل كلّه تقريبًا.</desc>
+
+            <text x="610" y="30" text-anchor="start" fill="#f1f5f9" font-family="Noto Kufi Arabic, sans-serif" font-size="15" font-weight="700">مهام لم يرها النموذج: ما الذي يصمد دون بيانات خاصة بالمهمة</text>
+            <text x="610" y="50" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">متوسط تقدّم المهمة على 10 مهام جديدة، 80 تشغيلة. الأعلى أفضل.</text>
+
+            <line x1="390" y1="66" x2="390" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="314" y1="66" x2="314" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="239" y1="66" x2="239" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="163" y1="66" x2="163" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="88" y1="66" x2="88" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+
+            <text x="610" y="91" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">DreamZero (نموذج عالَم وفعل)</text>
+            <rect x="92" y="76" width="298" height="22" rx="2" fill="#60a5fa"/>
+            <text x="84" y="91" text-anchor="start" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">39.5%</text>
+
+            <text x="610" y="133" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">GR00T N1.6 مع تدريب مسبق</text>
+            <rect x="267" y="118" width="123" height="22" rx="2" fill="#f59e0b"/>
+            <text x="259" y="133" text-anchor="start" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">16.3%</text>
+
+            <text x="610" y="175" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">GR00T N1.6 من الصفر</text>
+            <rect x="384" y="160" width="6" height="22" rx="2" fill="#f59e0b"/>
+            <text x="376" y="175" direction="ltr" text-anchor="end" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">&lt;1%</text>
+
+            <text x="610" y="217" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">&#960;0.5 من الصفر</text>
+            <rect x="384" y="202" width="6" height="22" rx="2" fill="#f59e0b"/>
+            <text x="376" y="217" direction="ltr" text-anchor="end" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">&lt;1%</text>
+
+            <line x1="50" y1="236" x2="390" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <text x="390" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">0</text>
+            <text x="314" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">10%</text>
+            <text x="239" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">20%</text>
+            <text x="163" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">30%</text>
+            <text x="88" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">40%</text>
+            <text x="610" y="282" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">تقدّم المهمة: مراحل الطيّ من 5، وثمار مُعبَّأة من 10، وأغراض تُزال.</text>
+        </svg>
+    </div>
+    <figcaption><b>الشكل 2.</b> الحالتان المُدرَّبتان من الصفر تنهاران إلى ما يقارب الصفر، وهذا هو الاكتشاف: النموذج الأساس هو المنتج. المصدر: Ye وآخرون، <span dir="ltr">«World Action Models are Zero-shot Policies»</span>، <span dir="ltr">arXiv:2602.15922</span>، الشكل 9.</figcaption>
+</figure>
+
+<p>عبر عشر مهام لم يرها النموذج من قبل، أنجز DreamZero نسبة 39.5 بالمئة من تقدّم المهمة المحدَّد. أمّا أقوى مقارنة، وهي GR00T N1.6 بتدريبه المسبق الخاص، فبلغت 16.3 بالمئة. وفي تقييم منفصل على DROID-Franka سجّل 49 بالمئة تقدّمًا في المهمة ونسبة نجاح 22.5 بالمئة، مقابل 31 بالمئة و12.5 بالمئة لـ GR00T N1.6. وعلى لوحة صدارة RoboArena يقف عند 1750 نقطة إيلو، متقدّمًا على Pi-0.5 عند 1622.</p>
+
+<p>والصفّان الأهم هما الصفّان في أسفل الرسم. فـ GR00T N1.6 وPi-0.5 حين يُدرَّبان من الصفر، دون أي تدريب مسبق، يسجّلان معًا أقل من واحد بالمئة. ومهما كان ما تفعله هاتان المعماريتان، فهما لا تتعلّمانه من عروض الروبوت التوضيحية. تلك العروض طبقة تكييف رقيقة فوق شيء كان موجودًا سلفًا، والخلاف بين نماذج الرؤية واللغة والفعل ونماذج العالم والفعل هو خلاف حول ماهية ذلك الشيء.</p>
+
+<p>وكفاءة البيانات تشير إلى الاتجاه نفسه. فقد حقّق DreamZero تحسّنًا نسبيًا يزيد على 42 بالمئة في المهام الجديدة انطلاقًا من 10 إلى 20 دقيقة من عروض الفيديو وحدها، وتكيّف مع جسم روبوتي مختلف تمامًا من 30 دقيقة من بيانات اللعب. وهذه أرقام لا تراها إلّا حين تكون معظم الكفاءة سابقة للمهمة نفسها.</p>
+
+<h2>الجزء الذي لا يزال فرضية</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg direction="rtl" viewBox="0 0 640 296" role="img" aria-labelledby="arfig3-title arfig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="arfig3-title">ثلاث دعاوى تُساق لنماذج العالم والفعل، مرتّبة بحسب قوة الدليل عليها</title>
+            <desc id="arfig3-desc">الدعوى بأن النموذج الأساس المرئي يتفوق على النموذج الأساس اللغوي في المهام الجديدة مقيسة في البحث. والدعوى بأن التنبّؤ بالعالم أولًا يجعل توليد الفعل مسألة أفضل صياغة تطرحها NVIDIA بوصفها فرضية. أمّا الدعوى بأن نماذج الفيديو تتعلّم الجاذبية والاحتكاك والطفو من التنبّؤ بالإطارات فتظهر في المحاضرات ولا يثبتها البحث.</desc>
+
+            <text x="610" y="30" text-anchor="start" fill="#f1f5f9" font-family="Noto Kufi Arabic, sans-serif" font-size="15" font-weight="700">ما هو مَقيس، وما لا يزال مُدَّعى</text>
+            <text x="610" y="54" text-anchor="start" fill="#94a3b8" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="600">الدعوى</text>
+            <text x="170" y="54" text-anchor="start" fill="#94a3b8" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="600">الحالة</text>
+
+            <rect x="190" y="68" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="606" y="68" width="4" height="58" fill="#60a5fa"/>
+            <text x="594" y="93" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">نموذج أساس مرئي يتفوّق على نموذج أساس لغوي</text>
+            <text x="594" y="114" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">في مهام لم يرها النموذج قط</text>
+            <rect x="30" y="68" width="140" height="58" rx="4" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="100" y="94" fill="#60a5fa" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">مَقيسة</text>
+            <text x="100" y="112" direction="ltr" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
+
+            <rect x="190" y="136" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="606" y="136" width="4" height="58" fill="#f59e0b"/>
+            <text x="594" y="161" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">التنبّؤ بالعالم أولًا يجعل توليد الفعل</text>
+            <text x="594" y="182" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">مسألة أيسر وأفضل صياغة</text>
+            <rect x="30" y="136" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="100" y="162" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">فرضية</text>
+            <text x="100" y="180" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="11" text-anchor="middle">بصياغة NVIDIA</text>
+
+            <rect x="190" y="204" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="606" y="204" width="4" height="58" fill="#f59e0b"/>
+            <text x="594" y="229" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">نماذج الفيديو تتعلّم الجاذبية والاحتكاك والطفو</text>
+            <text x="594" y="250" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">بمجرّد التنبّؤ بالإطار التالي</text>
+            <rect x="30" y="204" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="100" y="230" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">ليست في</text>
+            <text x="100" y="248" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">البحث</text>
+
+            <text x="610" y="286" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">أقوى صيغ الحُجّة هي الأسرع انتشارًا والأقل سندًا.</text>
+        </svg>
+    </div>
+    <figcaption><b>الشكل 3.</b> الصيغة الشائعة تسبق الدليل بخطوتين. المصادر: <span dir="ltr">arXiv:2602.15922</span>، ومدوّنة مطوّري NVIDIA 2026، ومحاضرة <span dir="ltr">Sequoia AI Ascent 2026</span>.</figcaption>
+</figure>
+
+<p>الصيغة التي تنتشر على وسائل التواصل تقول إن نماذج الفيديو تكتشف تلقائيًا الجاذبية والاحتكاك والطفو بمجرّد تعلّمها التنبّؤ بالإطارات. وهي عبارة جميلة. لكن البحث لا يقولها.</p>
+
+<p>ما يقوله البحث هو أن النموذج يُهيَّأ من أوزان انتشار فيديو دُرِّبت على فيديو واسع النطاق، وأن ذلك يمنحه أولويّات مكانية زمانية نافعة. وكتابة NVIDIA نفسها حذرة على نحو لا تلتزم به المحاضرة. فهي تطرح ثلاث فرضيات، كلٌّ منها مشروطة: أن التنبّؤ بالديناميكا العكسية «أيسر غالبًا» من توليد الفعل مباشرة، وأن الفجوة بين الفيديو والفعل «قد تكون أصغر» من الفجوة بين اللغة والفعل، وأن بيانات الفيديو تُنظِّم سياسات الروبوت. هذه تخمينات معقولة تتّسق معها نتيجة مقيسة. لكنها ليست برهانًا على أن قانونًا فيزيائيًا بعينه قد جرى تعلُّمه.</p>
+
+<p>ويستحق هذا التمييز أن نتمسّك به، لأن هذا الموقع ناقش الحالة العامة بإسهاب في <a href="intelligence-is-applied-causality.html">Intelligence Is Applied Causality</a>. فالنظام الذي يتنبّأ بالحالة التالية بدقّة ليس بالضرورة نظامًا يحمل نموذجًا للآلية السببية، والاثنان ينفصلان بأوضح ما يكون خارج توزيع التدريب، وهو بالضبط الموضع الذي يثبت فيه الروبوت جدواه. والخلاصة الأمينة عن DreamZero أن النموذج الأساس المرئي ينتقل أفضل من النموذج اللغوي بفارق واسع، وأن سبب تفوّقه لا يزال استنتاجًا لا برهانًا.</p>
+
+<h3>تجربة الحذف التي تحسم الأمر في منظومتك أنت</h3>
+
+<pre><code># Hold the action head, the robot data and the tasks fixed.
+# Vary only what the policy was before it was a policy.
+
+for backbone in ["none", "vision_language", "video_world_model"]:
+    policy = train(backbone=backbone, robot_data=SMALL_SLICE)
+    score(policy, tasks=UNSEEN_TASKS)   # never present in robot_data
+
+# If the "none" arm collapses toward zero and the other two
+# do not, your pretraining is the product and the head is a
+# detail. Budget accordingly.</code></pre>
+
+<p>تظلّ الروبوتات تكتشف من جديد أن القرارات المهمة تُتَّخذ قبل أن يدخل الروبوت في الصورة. رأس الفعل ينال اهتمام المهندسين لأنه الموضع الذي يظهر فيه الروبوت في المخطّط، وهو الجزء الأقل أهمية. فمعماريّتان بالرأس نفسه وسَلَفين مختلفين تفترقان بأكثر من الضعف في المهام الجديدة، وتنهاران معًا إلى لا شيء حين لا يكون هناك سَلَف أصلًا.</p>
+
+<p>والقراءة العملية لمن يموّل هذا العمل هي أن سياسة الروبوت في جوهرها رهان على مدوَّنة تدريب مسبق. والاختيار بين نموذج أساس لغوي ونموذج أساس مرئي هو اختيار بين أن يكون النظام أفضل في التعرّف على العالم أو أفضل في استباقه. وبالنسبة لآلة عليها أن تتصرّف، فالاستباق هو المهارة الأنفع، والأدلّة اليوم ترجّحه بوضوح يكفي للتخطيط على أساسه، شرط ألّا يبالغ أحد في تفسير سبب نجاحه.</p>
+
+<h2>ما الذي ينبغي على القادة فعله</h2>
+
+<ol class="list-decimal">
+    <li>اسأل أي مورّد روبوتات عمّا دُرِّبت عليه سياسته مسبقًا قبل أن ترى روبوتًا قط، واعتبر الإجابة المبهمة إجابةً بحد ذاتها. فالنموذج الأساس يتنبّأ بالسلوك في المهام خارج العرض التوضيحي أفضل بكثير من أي رقم في لوحة النتائج.</li>
+    <li>نفّذ تجربة الحذف الثلاثية أعلاه على مهامك أنت قبل الالتزام بأي معمارية: بلا تدريب مسبق، ثم بتدريب لغوي، ثم بتدريب مرئي، مع تثبيت كل شيء آخر. تكلفتها دورة تدريب واحدة، وهي النسخة الوحيدة من هذه المقارنة التي تعكس بياناتك.</li>
+    <li>قيِّم على مهام غائبة فعلًا عن مجموعة تدريبك، وأبلغ عن تقدّم المهمة لا عن نسبة النجاح وحدها. فالمقياس الثنائي يخفي الكفاءة الجزئية التي تفصل السياسة القابلة للانتقال عن السياسة التي حفظت عن ظهر قلب.</li>
+    <li>حين يقول مورّد إن نموذجه تعلّم الفيزياء، اسأل: أيّ كمية فيزيائية، ومقيسة كيف؟ فالأدلّة المنشورة تدعم انتقالًا أفضل من التدريب المسبق على الفيديو، لا اكتشاف قانون فيزيائي، والعقود ينبغي أن تُكتب على أساس الدعوى الأولى.</li>
+</ol>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6 kufi">مقالات ذات صلة</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Buying the Format</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">صفقة NVIDIA وHugging Face، والأصل الأهم فيها بالنسبة للروبوتات هو صيغة ملف.</p>
+                        <a href="buying-the-format.html">اقرأ &larr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Intelligence Is Applied Causality</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">تعريف عملي يضع السببية والقرار والفعل في قلب الذكاء.</p>
+                        <a href="intelligence-is-applied-causality.html">اقرأ &larr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Experience Bottleneck</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">النماذج اللغوية ورثت مدوَّنة جاهزة، أمّا الروبوتات فتكسب كل ساعة من ساعاتها بعرق.</p>
+                        <a href="the-experience-bottleneck.html">اقرأ &larr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6 kufi">المراجع والقراءات الموسّعة</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Ye, S., Ge, Y., Zheng, K., Gao, S., Yu, S., ومعهم Fan, L. وJang, J. (2026). <em>World Action Models are Zero-shot Policies</em>. <span dir="ltr">arXiv:2602.15922</span>. مصدر نموذج DreamZero وخطوط الأساس وكل أرقام تقدّم المهمة الواردة هنا. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener">arxiv.org/abs/2602.15922</a></li>
+                    <li class="reference-item">NVIDIA (2026). <em>Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models</em>. مصدر تعريف نموذج العالم والفعل والفرضيات الثلاث المشروطة. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener">developer.nvidia.com</a></li>
+                    <li class="reference-item">NVIDIA. <em>What Is a World Action Model (WAM)?</em> <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener">nvidia.com/en-us/glossary/world-action-model</a></li>
+                    <li class="reference-item">Fan, L. (2026). <em>Robotics: Endgame</em>. Sequoia Capital AI Ascent. المحاضرة التي تُعرض فيها الصيغة الأقوى عن تعلّم الفيزياء من الفيديو. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener">youtube.com/watch?v=3Y8aq_ofEVs</a></li>
+                    <li class="reference-item">Shukor, M., Aubakirova, D., Capuano, F., وآخرون (2025). <em>SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</em>. arXiv:2506.01844. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">arxiv.org/abs/2506.01844</a></li>
+                    <li class="reference-item">Cadene, R., Aliberts, S., Capuano, F., وآخرون (2026). <em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em>. ICLR 2026. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arxiv.org/abs/2602.22818</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>

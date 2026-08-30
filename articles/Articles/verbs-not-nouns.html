@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbs, Not Nouns | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+            <a href="verbs-not-nouns.ar.html" style="font-size:0.8rem;border:1px solid var(--border-color);padding:0.35rem 0.7rem;border-radius:0.3rem;color:var(--text-muted);text-decoration:none;">اقرأ بالعربية</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_55.png" alt="Verbs, Not Nouns" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI &amp; Robotics</span>
+                        <span class="category-badge category-architecture">Architecture</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Verbs, Not Nouns</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: August 30, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~8 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+
+<p>A vision-language-action model can look at a table and tell you which object is the glass. Nudge the glass toward the edge and ask what happens next, and the model is on much thinner ice, because nothing in its training ever required it to know.</p>
+
+<p>That is not a gap in scale. It is a gap in ancestry. A vision-language-action model, or <code>VLA</code>, is built by taking a vision-language model that was pretrained on pictures paired with text and attaching an action head to it. Nearly every parameter in the finished system earned its weights learning how images relate to words. The model inherits a strong grasp of nouns and categories, and almost nothing about how things move.</p>
+
+<blockquote>A model is good at whatever its pretraining objective forced it to be good at. Predicting captions makes a system fluent in nouns. Predicting the next frame is what makes it fluent in verbs.</blockquote>
+
+<h2>What a backbone hands down</h2>
+
+<p>The useful way to read any robot policy is to ask what it was before it was a robot policy. Architecture diagrams draw the action head at the end, which makes it look like the important part. It is the smallest part. The backbone decides what the system knows, and the head decides only how that knowledge is expressed.</p>
+
+<p>NVIDIA draws the distinction along exactly this line. A world action model, or <code>WAM</code>, is defined as a policy that "starts from a pretrained world-model or video backbone and adapts it to represent or predict how the scene changes over time and emit corresponding actions." A VLA starts from an image-and-text backbone instead. Same action head, different ancestor, and the difference in ancestor is the whole argument.</p>
+
+<p>An image-text corpus is a catalogue of things that exist. A video corpus is a record of things happening. Only one of those contains the information that a poured liquid falls, that a folded sleeve stays folded, that a card slides against another card before it separates. You cannot recover that from captions at any scale, because the captions were never asked to encode it.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 272" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">What a vision-language backbone and a video backbone each hand down to a robot policy</title>
+            <desc id="fig1-desc">A VLA is pretrained on images paired with captions, so it inherits nouns, categories and object semantics, and is weak on dynamics and contact. A WAM is pretrained on web video, so it inherits scene dynamics and how things change over time, and is weaker on fine language grounding. The action head is identical in both; the ancestor is what differs.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Two ancestries, two competences</text>
+
+            <text x="30" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">PRETRAINING CORPUS</text>
+            <text x="232" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">INHERITS</text>
+            <text x="440" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WEAK ON</text>
+
+            <rect x="30" y="68" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="42" y="88" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">VLA</text>
+            <text x="42" y="107" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Images paired with text</text>
+            <text x="42" y="124" fill="#64748b" font-family="Inter, sans-serif" font-size="11">a catalogue of things</text>
+            <rect x="232" y="68" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="232" y="68" width="4" height="64" fill="#60a5fa"/>
+            <text x="248" y="94" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Nouns and categories</text>
+            <text x="248" y="114" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Object semantics</text>
+            <rect x="440" y="68" width="170" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="440" y="68" width="4" height="64" fill="#f59e0b"/>
+            <text x="456" y="94" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Dynamics, contact</text>
+            <text x="456" y="114" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">What happens next</text>
+
+            <rect x="30" y="152" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="42" y="172" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WAM</text>
+            <text x="42" y="191" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Web-scale video</text>
+            <text x="42" y="208" fill="#64748b" font-family="Inter, sans-serif" font-size="11">a record of events</text>
+            <rect x="232" y="152" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="232" y="152" width="4" height="64" fill="#60a5fa"/>
+            <text x="248" y="178" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Scene dynamics</text>
+            <text x="248" y="198" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">How things change</text>
+            <rect x="440" y="152" width="170" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="440" y="152" width="4" height="64" fill="#f59e0b"/>
+            <text x="456" y="178" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Fine-grained</text>
+            <text x="456" y="198" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">language grounding</text>
+
+            <text x="30" y="246" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">The action head is the same in both. Only the ancestor differs.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Competence is inherited from the pretraining corpus, not added by the action head. Source: NVIDIA, "Pretrained to Imagine, Fine-Tuned to Act", 2026.</figcaption>
+</figure>
+
+<h2>Predict the world, then act</h2>
+
+<p>DreamZero is the clearest instance of the correction. It is a 14-billion-parameter autoregressive diffusion transformer built on <code>Wan2.1-I2V-14B</code>, a video generation backbone. It takes three inputs: visual context through a variational encoder, a language instruction through a text encoder, and the robot's own joint state through a state encoder. It then denoises future video and future actions together through shared transformer blocks, with a separate decoder for each, and runs closed-loop at 7 Hz.</p>
+
+<p>The consequence of that design is a change in what the model is asked to learn. A conventional policy learns a dense mapping from states to actions by copying demonstrations. A world action model predicts what the scene is about to look like, then works out which motor commands are consistent with that future. NVIDIA describes the shift as moving action learning toward inverse dynamics, and inverse dynamics is a much better-posed problem: it is easier to ask "what movement would produce this outcome" than to ask "what movement should I make."</p>
+
+<p>The paper carries Jim Fan's name among its authors, which matters for reading it. The same argument appears in his Sequoia talk in a more sweeping form, and the two versions do not make identical claims. The talk is the marketing of the idea. The paper is the evidence for it, and the evidence is narrower.</p>
+
+<h2>What the numbers show</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Average task progress on unseen tasks for DreamZero against GR00T N1.6 and pi-0.5 baselines</title>
+            <desc id="fig2-desc">DreamZero reaches 39.5 percent average task progress on ten unseen tasks. GR00T N1.6 with pretraining reaches 16.3 percent. Both GR00T N1.6 and pi-0.5 trained from scratch score under 1 percent. The collapse of the from-scratch arms shows that pretraining, not the action head, is doing nearly all of the work.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Unseen tasks: what survives without task-specific data</text>
+            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Average task progress over 10 unseen tasks, 80 rollouts. Higher is better.</text>
+
+            <line x1="250" y1="66" x2="250" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="326" y1="66" x2="326" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="401" y1="66" x2="401" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="477" y1="66" x2="477" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="552" y1="66" x2="552" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+
+            <text x="30" y="91" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">DreamZero (WAM)</text>
+            <rect x="250" y="76" width="299" height="22" rx="2" fill="#60a5fa"/>
+            <text x="557" y="91" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">39.5%</text>
+
+            <text x="30" y="133" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">GR00T N1.6, pretrained</text>
+            <rect x="250" y="118" width="123" height="22" rx="2" fill="#f59e0b"/>
+            <text x="381" y="133" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">16.3%</text>
+
+            <text x="30" y="175" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">GR00T N1.6, from scratch</text>
+            <rect x="250" y="160" width="6" height="22" rx="2" fill="#f59e0b"/>
+            <text x="264" y="175" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">&lt;1%</text>
+
+            <text x="30" y="217" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">&#960;0.5, from scratch</text>
+            <rect x="250" y="202" width="6" height="22" rx="2" fill="#f59e0b"/>
+            <text x="264" y="217" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">&lt;1%</text>
+
+            <line x1="250" y1="236" x2="590" y2="236" stroke="#2a3f5f" stroke-width="1"/>
+            <text x="250" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">0</text>
+            <text x="326" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">10%</text>
+            <text x="401" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">20%</text>
+            <text x="477" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">30%</text>
+            <text x="552" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">40%</text>
+            <text x="30" y="282" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Task progress: folding stages out of 5, fruits packed out of 10, items cleared.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The from-scratch arms collapse to near zero, which is the finding: the backbone is the product. Source: Ye et al., "World Action Models are Zero-shot Policies", arXiv:2602.15922, Figure 9.</figcaption>
+</figure>
+
+<p>Across ten tasks the model had never seen, DreamZero completed 39.5 percent of the defined task progress. The strongest comparison, GR00T N1.6 with its own pretraining, reached 16.3 percent. On a separate DROID-Franka evaluation it recorded 49 percent task progress and a 22.5 percent success rate, against 31 percent and 12.5 percent for GR00T N1.6. On the RoboArena leaderboard it sits at 1750 Elo, ahead of Pi-0.5 at 1622.</p>
+
+<p>The two rows that matter most are the ones at the bottom of the chart. GR00T N1.6 and Pi-0.5 trained from scratch, with no pretraining at all, both score under one percent. Whatever these architectures are doing, they are not learning it from the robot demonstrations. The demonstrations are a thin adaptation layer on top of something that was already there, and the argument between VLAs and WAMs is an argument about what that something should be.</p>
+
+<p>Data efficiency points the same way. DreamZero picked up more than 42 percent relative improvement on unseen tasks from 10 to 20 minutes of video-only demonstrations, and adapted to an entirely new robot body from 30 minutes of play data. Those are numbers you only see when most of the competence predates the task.</p>
+
+<h2>The part that is still a hypothesis</h2>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 296" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">Three claims made for world action models, sorted by how well each is evidenced</title>
+            <desc id="fig3-desc">The claim that a video backbone outperforms a language backbone on unseen tasks is measured in the paper. The claim that predicting the world first makes action generation better posed is stated by NVIDIA as a hypothesis. The claim that video models learn gravity, friction and buoyancy from frame prediction appears in talks but is not established in the paper.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">What is measured, and what is still being asserted</text>
+            <text x="30" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CLAIM</text>
+            <text x="470" y="54" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">STATUS</text>
+
+            <rect x="30" y="68" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="30" y="68" width="4" height="58" fill="#60a5fa"/>
+            <text x="46" y="93" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">A video backbone beats a language backbone</text>
+            <text x="46" y="112" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">on tasks the model has never seen</text>
+            <rect x="470" y="68" width="140" height="58" rx="4" fill="#1a2942" stroke="#60a5fa"/>
+            <text x="540" y="94" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">MEASURED</text>
+            <text x="540" y="110" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
+
+            <rect x="30" y="136" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="30" y="136" width="4" height="58" fill="#f59e0b"/>
+            <text x="46" y="161" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Predicting the world first makes action generation</text>
+            <text x="46" y="180" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">an easier, better-posed problem</text>
+            <rect x="470" y="136" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="540" y="162" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">HYPOTHESIS</text>
+            <text x="540" y="178" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">NVIDIA wording</text>
+
+            <rect x="30" y="204" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="30" y="204" width="4" height="58" fill="#f59e0b"/>
+            <text x="46" y="229" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Video models learn gravity, friction and buoyancy</text>
+            <text x="46" y="248" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">just by predicting the next frame</text>
+            <rect x="470" y="204" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
+            <text x="540" y="230" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">NOT IN THE</text>
+            <text x="540" y="246" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">PAPER</text>
+
+            <text x="30" y="286" fill="#64748b" font-family="Inter, sans-serif" font-size="11">The strongest version of the argument travels fastest and is supported least.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> The popular framing outruns the evidence by two steps. Sources: arXiv:2602.15922; NVIDIA developer blog, 2026; Sequoia AI Ascent talk, 2026.</figcaption>
+</figure>
+
+<p>The version of this argument that circulates on social media says video models spontaneously discover gravity, friction and buoyancy simply by learning to predict frames. It is a wonderful line. The paper does not make it.</p>
+
+<p>What the paper says is that the model is initialized from video diffusion weights trained on web-scale video, and that this supplies useful spatiotemporal priors. NVIDIA's own write-up is careful in a way the talk is not. It offers three hypotheses, each hedged: that inverse dynamics prediction is "often easier" than pure action generation, that the video-to-action gap "may be smaller" than the language-to-action gap, and that video data regularizes robot policies. Those are reasonable conjectures with a measured outcome consistent with them. They are not a demonstration that any named physical law has been learned.</p>
+
+<p>The distinction is worth holding onto, because this site has argued the general case at length in <a href="intelligence-is-applied-causality.html">Intelligence Is Applied Causality</a>. A system that predicts the next state accurately is not thereby a system that holds a model of mechanism, and the two come apart most visibly off the training distribution, which is exactly where a robot earns its keep. The honest summary of DreamZero is that a video backbone transfers better than a language backbone by a wide margin, and that why it transfers better is still inference.</p>
+
+<h3>The ablation that settles it for your own stack</h3>
+
+<pre><code># Hold the action head, the robot data and the tasks fixed.
+# Vary only what the policy was before it was a policy.
+
+for backbone in ["none", "vision_language", "video_world_model"]:
+    policy = train(backbone=backbone, robot_data=SMALL_SLICE)
+    score(policy, tasks=UNSEEN_TASKS)   # never present in robot_data
+
+# If the "none" arm collapses toward zero and the other two
+# do not, your pretraining is the product and the head is a
+# detail. Budget accordingly.</code></pre>
+
+<p>Robotics keeps rediscovering that the interesting decisions are made before the robot is involved. The action head gets the engineering attention because it is where the robot appears in the diagram, and it is the part that matters least. Two architectures with the same head and different ancestors differ by more than a factor of two on unseen tasks, and both fall to nothing with no ancestor at all.</p>
+
+<p>The practical reading for anyone funding this work is that a robot policy is mostly a bet on a pretraining corpus. Choosing between a language backbone and a video backbone is choosing whether the system will be better at recognizing the world or at anticipating it. For a machine that has to act, anticipation is the more useful skill, and the evidence now favours it clearly enough to plan around, provided nobody oversells why it works.</p>
+
+<h2>What leaders should do</h2>
+
+<ol class="list-decimal">
+    <li>Ask any robotics vendor what their policy was pretrained on before it ever saw a robot, and treat a vague answer as the answer. The backbone predicts behaviour on tasks outside the demo far better than the headline benchmark does.</li>
+    <li>Run the three-arm ablation above on your own tasks before committing to an architecture: no pretraining, language pretraining, video pretraining, everything else held constant. It costs one training cycle and it is the only version of this comparison that reflects your data.</li>
+    <li>Evaluate on tasks genuinely absent from your training set, and report task progress rather than success rate alone. A binary metric hides the partial competence that separates a transferable policy from a memorized one.</li>
+    <li>When a supplier says their model has learned physics, ask which physical quantity, measured how. The published evidence supports better transfer from video pretraining, not the discovery of physical law, and contracts should be written against the first claim.</li>
+</ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Buying the Format</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">NVIDIA is reportedly paying $12.9 billion for Hugging Face, and the asset that matters most for robotics is a file format.</p>
+                        <a href="buying-the-format.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Intelligence Is Applied Causality</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">A working definition that puts cause and effect, decisions, and action at the center of intelligence.</p>
+                        <a href="intelligence-is-applied-causality.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Experience Bottleneck</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Language models inherited a corpus. Robots have to earn every hour of theirs, and that changes the arithmetic behind every AGI forecast.</p>
+                        <a href="the-experience-bottleneck.html">Read &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Ye, S., Ge, Y., Zheng, K., Gao, S., Yu, S., et al., including Fan, L. and Jang, J. (2026). <em>World Action Models are Zero-shot Policies</em>. arXiv:2602.15922. The DreamZero model, its baselines and all task-progress figures cited here. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener">arxiv.org/abs/2602.15922</a></li>
+                    <li class="reference-item">NVIDIA (2026). <em>Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models</em>. NVIDIA Technical Blog. Source of the WAM definition and the three hedged hypotheses. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener">developer.nvidia.com</a></li>
+                    <li class="reference-item">NVIDIA. <em>What Is a World Action Model (WAM)?</em> NVIDIA Glossary. <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener">nvidia.com/en-us/glossary/world-action-model</a></li>
+                    <li class="reference-item">Fan, L. (2026). <em>Robotics: Endgame</em>. Sequoia Capital AI Ascent. The talk in which the stronger "video models learn physics" framing is presented. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener">youtube.com/watch?v=3Y8aq_ofEVs</a></li>
+                    <li class="reference-item">Shukor, M., Aubakirova, D., Capuano, F., Kooijmans, P., Palma, S., et al. (2025). <em>SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</em>. arXiv:2506.01844. Representative of the VLA lineage discussed here. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">arxiv.org/abs/2506.01844</a></li>
+                    <li class="reference-item">Cadene, R., Aliberts, S., Capuano, F., et al. (2026). <em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em>. ICLR 2026. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arxiv.org/abs/2602.22818</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
