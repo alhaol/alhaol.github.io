@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Track</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: #020617;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 0;
+      overflow: hidden;
+    }
+    .accent-text { color: #10b981; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    /* ---- Board: four quadrants filling the viewport, 2 x 2 ---- */
+    #lifeTrackApp {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      background: rgba(148, 163, 184, 0.16);   /* shows through as the quadrant seams */
+    }
+
+    /* ---- Quadrant: seven boxes, four over three ---- */
+    .quad {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 1fr 1fr;
+      background: #020617;
+    }
+    .quad-tag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      padding: 0.3rem 0.7rem 0.35rem;
+      border-radius: 0 0 0.7rem 0;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(8px);
+      border-right: 1px solid rgba(148, 163, 184, 0.14);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      font-size: clamp(0.55rem, 1.1vh, 0.7rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .quad-tag .quad-score {
+      font-size: 0.9em;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- Box: one of seven, fills bottom-up over seven taps ---- */
+    .box {
+      grid-column: span 3;               /* row 1: four boxes x 3 cols */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      padding: 1.6rem 0.5rem 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      font-family: inherit;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+      background: #070c16;
+      border: 1px solid rgba(148, 163, 184, 0.09);
+      color: #64748b;
+      transition: border-color 220ms ease, box-shadow 260ms ease, color 220ms ease;
+    }
+    .box:nth-child(n+6) { grid-column: span 4; }   /* row 2: three boxes x 4 cols (child 1 is the tag) */
+    .box:hover { color: #cbd5e1; border-color: rgba(148, 163, 184, 0.22); }
+    .box:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+
+    .box .fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      background: linear-gradient(to top, var(--fill-strong), var(--fill-soft));
+      border-top: 1px solid var(--fill-line);
+      transition: height 340ms cubic-bezier(.2, .8, .2, 1), border-color 240ms ease;
+      pointer-events: none;
+    }
+
+    .box .badge,
+    .box .name,
+    .box .sub,
+    .box .count { position: relative; z-index: 1; }
+
+    .box .badge {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.55rem;
+      font-size: clamp(0.5rem, 1.1vh, 0.65rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: rgba(148, 163, 184, 0.55);
+    }
+    .box .name {
+      font-size: clamp(0.62rem, 1.8vh, 1.05rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #e2e8f0;
+      letter-spacing: -0.01em;
+    }
+    .box .sub {
+      font-family: 'Amiri', 'Segoe UI', serif;
+      font-size: clamp(0.7rem, 2.1vh, 1.25rem);
+      line-height: 1.45;
+      color: #94a3b8;
+      max-width: 96%;
+    }
+    .box .count {
+      margin-top: 0.15rem;
+      font-size: clamp(0.5rem, 1.15vh, 0.7rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #475569;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .box.started .name { color: #f8fafc; }
+    .box.started .sub { color: #cbd5e1; }
+    .box.started .count { color: #cbd5e1; }
+
+    .box.full {
+      border-color: var(--fill-line);
+      box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.10), 0 0 30px var(--fill-glow);
+    }
+    .box.full .name, .box.full .sub { color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
+    .box.full .count { color: var(--accent); }
+    .box.full .badge { color: rgba(255, 255, 255, 0.7); }
+
+    /* ---- Floating status pill: sits over the board, never takes a box ---- */
+    #hud {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(2, 6, 23, 0.86);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.65);
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+    #hud .count { font-weight: 700; color: #10b981; font-variant-numeric: tabular-nums; }
+    #hud a, #hud button {
+      color: #94a3b8;
+      background: rgba(148, 163, 184, 0.10);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 9999px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.66rem;
+      font-weight: 600;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+    }
+    #hud a:hover, #hud button:hover { color: #fff; background: rgba(148, 163, 184, 0.22); }
+
+    @media (max-width: 900px) {
+      #lifeTrackApp { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); }
+      #hud { top: auto; bottom: 0.7rem; transform: translate(-50%, 0); }
+    }
+    @media (max-width: 520px) {
+      .box { padding: 1.25rem 0.25rem 0.35rem; }
+      .box .sub { display: none; }
+      .box .name { font-size: clamp(0.55rem, 1.5vh, 0.8rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<main id="lifeTrackApp" aria-label="Life Track board"></main>
+
+<div id="hud">
+  <span><strong style="color:#fff">Life Track</strong></span>
+  <span><span class="count" id="hudCount">0</span><span style="color:#64748b">/28</span></span>
+  <button id="hudReset" type="button" title="Empty every box">Reset</button>
+  <a href="../../links/">&larr; Hub</a>
+</div>
+
+<script>
+// === App logic ===
+(function () {
+  var STORE_KEY = 'life-track.v2';
+  var TARGET = 7;               // taps to fill one box
+  var PER_GROUP = 7;            // boxes per group
+  var TOTAL = 28;               // 4 groups x 7 boxes
+
+  var GROUPS = [
+    {
+      id: 'life',
+      title: 'Life',
+      accent: '16, 185, 129',                                  // emerald
+      boxes: [
+        { key: 'allah',        badge: 'A', name: 'Allah',        sub: 'الصلاة' },
+        { key: 'family',       badge: 'F', name: 'Family',       sub: 'الأهل' },
+        { key: 'profession',   badge: 'P', name: 'Profession',   sub: 'العمل' },
+        { key: 'independence', badge: 'I', name: 'Independence', sub: 'الاستقلال' },
+        { key: 'social',       badge: 'S', name: 'Social',       sub: 'الصلة' },
+        { key: 'health',       badge: 'H', name: 'Health',       sub: 'الصحة' },
+        { key: 'finance',      badge: 'F', name: 'Finance',      sub: 'المال' }
+      ]
+    },
+    {
+      id: 'quran',
+      title: 'Quran',
+      accent: '251, 191, 36',                                   // gold
+      boxes: [
+        { key: 'yaseen',  badge: '36', name: 'Yaseen',     sub: 'يس' },
+        { key: 'dukhan',  badge: '44', name: 'Ad-Dukhan',  sub: 'الدخان' },
+        { key: 'qaf',     badge: '50', name: 'Qaf',        sub: 'ق' },
+        { key: 'qamar',   badge: '54', name: 'Al-Qamar',   sub: 'القمر' },
+        { key: 'rahman',  badge: '55', name: 'Ar-Rahman',  sub: 'الرحمن' },
+        { key: 'waqiah',  badge: '56', name: 'Al-Waqi‘ah', sub: 'الواقعة' },
+        { key: 'mulk',    badge: '67', name: 'Al-Mulk',    sub: 'تبارك' }
+      ]
+    },
+    {
+      id: 'body',
+      title: 'Body',
+      accent: '96, 165, 250',                                   // sky
+      boxes: [
+        { key: 'pullup',   badge: 'P1', name: 'Pull-up',      sub: '' },
+        { key: 'pushup',   badge: 'P2', name: 'Push-up',      sub: '' },
+        { key: 'plank',    badge: 'P3', name: 'Plank',        sub: '' },
+        { key: 'squat',    badge: 'S1', name: 'Squat',        sub: '' },
+        { key: 'wallsit',  badge: 'S2', name: 'Wall Sit',     sub: '' },
+        { key: 'dips',     badge: 'D',  name: 'Dips',         sub: '' },
+        { key: 'invrow',   badge: 'I',  name: 'Inverted Row', sub: '' }
+      ]
+    },
+    {
+      id: 'dhikr',
+      title: 'Dhikr',
+      accent: '167, 139, 250',                                  // violet
+      boxes: [
+        { key: 'tasbih',    badge: '1', name: 'Tasbih',        sub: 'سبحان الله' },
+        { key: 'hamd',      badge: '2', name: 'Hamd',          sub: 'الحمد لله' },
+        { key: 'tahlil',    badge: '3', name: 'Tahlil',        sub: 'لا إله إلا الله' },
+        { key: 'maghfira',  badge: '4', name: 'Maghfira',      sub: 'اللهم اغفر لي وارحمني وعافني وارزقني' },
+        { key: 'faqr',      badge: '5', name: 'Faqr &amp; Kufr',   sub: 'اللهم إني أعوذ بك من الفقر والكفر' },
+        { key: 'nar',       badge: '6', name: 'An-Nar',        sub: 'اللهم إني أعوذ بك من النار' },
+        { key: 'hasbuna',   badge: '7', name: 'Hasbunallah',   sub: 'حسبنا الله ونعم الوكيل' }
+      ]
+    }
+  ];
+
+  // Session-scoped on purpose: the board clears when the browser session ends.
+  function load() {
+    try {
+      var raw = sessionStorage.getItem(STORE_KEY);
+      var parsed = raw ? JSON.parse(raw) : {};
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function save() {
+    try {
+      sessionStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (e) { /* private mode — board still works, it just won't persist */ }
+  }
+
+  var state = load();
+  var board = document.getElementById('lifeTrackApp');
+  var hudCount = document.getElementById('hudCount');
+
+  function countOf(box) {
+    var n = state[box.key];
+    return (typeof n === 'number' && n > 0) ? Math.min(n, TARGET) : 0;
+  }
+
+  function paint(box) {
+    var n = countOf(box);
+    box.el.querySelector('.fill').style.height = (n / TARGET * 100) + '%';
+    box.el.querySelector('.count').textContent = n + '/' + TARGET;
+    box.el.classList.toggle('started', n > 0);
+    box.el.classList.toggle('full', n === TARGET);
+    box.el.setAttribute('aria-valuenow', n);
+  }
+
+  function paintGroup(group) {
+    var done = group.boxes.filter(function (b) { return countOf(b) === TARGET; }).length;
+    group.scoreEl.textContent = done + '/' + PER_GROUP;
+  }
+
+  function paintTotal() {
+    var done = 0;
+    GROUPS.forEach(function (g) {
+      g.boxes.forEach(function (b) { if (countOf(b) === TARGET) done++; });
+    });
+    hudCount.textContent = done;
+  }
+
+  // A tap adds one of seven. A tap on a full box empties it. Shift-tap steps back one.
+  function bump(box, group, back) {
+    var n = countOf(box);
+    if (back) n = Math.max(0, n - 1);
+    else n = (n >= TARGET) ? 0 : n + 1;
+
+    if (n === 0) delete state[box.key];
+    else state[box.key] = n;
+
+    save();
+    paint(box);
+    paintGroup(group);
+    paintTotal();
+  }
+
+  GROUPS.forEach(function (group) {
+    var quad = document.createElement('section');
+    quad.className = 'quad';
+    quad.style.setProperty('--accent', 'rgb(' + group.accent + ')');
+    quad.style.setProperty('--fill-strong', 'rgba(' + group.accent + ', 0.82)');
+    quad.style.setProperty('--fill-soft', 'rgba(' + group.accent + ', 0.30)');
+    quad.style.setProperty('--fill-line', 'rgba(' + group.accent + ', 0.85)');
+    quad.style.setProperty('--fill-glow', 'rgba(' + group.accent + ', 0.35)');
+    quad.setAttribute('aria-label', group.title);
+
+    var tag = document.createElement('div');
+    tag.className = 'quad-tag';
+    tag.innerHTML = group.title + ' <span class="quad-score">0/' + PER_GROUP + '</span>';
+    quad.appendChild(tag);
+    group.scoreEl = tag.querySelector('.quad-score');
+
+    group.boxes.forEach(function (box) {
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'box';
+      el.setAttribute('role', 'progressbar');
+      el.setAttribute('aria-valuemin', '0');
+      el.setAttribute('aria-valuemax', String(TARGET));
+      el.setAttribute('aria-label', group.title + ' — ' + box.name);
+      el.innerHTML =
+        '<span class="fill"></span>' +
+        '<span class="badge">' + box.badge + '</span>' +
+        '<span class="name">' + box.name + '</span>' +
+        (box.sub ? '<span class="sub">' + box.sub + '</span>' : '') +
+        '<span class="count">0/' + TARGET + '</span>';
+      el.addEventListener('click', function (e) { bump(box, group, e.shiftKey); });
+      box.el = el;
+      quad.appendChild(el);
+      paint(box);
+    });
+
+    paintGroup(group);
+    board.appendChild(quad);
+  });
+
+  document.getElementById('hudReset').addEventListener('click', function () {
+    state = {};
+    save();
+    GROUPS.forEach(function (g) {
+      g.boxes.forEach(paint);
+      paintGroup(g);
+    });
+    paintTotal();
+  });
+
+  paintTotal();
+})();
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>

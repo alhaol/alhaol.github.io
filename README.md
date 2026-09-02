@@ -139,6 +139,7 @@ No build step, no package manager.
 | Thinking Habits | `/apps/thinking-habits/` | Spaced-repetition flashcard trainer for Dr Justin Sung's nine habits for clearer thinking — the anatomy of confusion, five habits to stop and four to start — with a taxonomy map and knowledge graph; based on his video 9 Habits For Clearer Thinking (I Wish I Knew Sooner) |
 | Memory Ladder | `/apps/memory-ladder/` | Spaced-repetition flashcard trainer for Dr Justin Sung's Memory Ladder — the six conditions for enduring memory and the three rungs (repetition, diverse retrieval, evaluation and synthesis) you choose between by asking how much a memory is worth, with a taxonomy map and knowledge graph |
 | Ruku Hifz | `/apps/ruku-hifz/` | Quran memorization workspace that shows one ruku a page with the verse before it and the verse after it for continuity — seamless paging across surah boundaries, jump by surah or ruku number, blur-to-recall self-testing, boxing individual verses for a second pass, per-ayah recitation with repeat counts, a spaced review schedule with due queue, streak and activity heatmap, dark/light modes, and per-ruku progress across all 551 rukus |
+| Life Track | `/apps/life-track/` | Full-screen board of four groups of seven — Life (Allah, Family, Profession, Independence, Social, Health, Finance), seven Suras, seven bodyweight exercises, seven adhkar — each of the 28 boxes fills bottom-up over seven taps and empties on a tap when full; held for the browser session only |
 
 
 ## Updating Content
