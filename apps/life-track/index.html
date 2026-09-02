@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Life Track</title>
   <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { background-color: #020617; }
@@ -19,7 +17,6 @@
       padding: 0;
       overflow: hidden;
     }
-    .accent-text { color: #10b981; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
@@ -31,17 +28,25 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      gap: 2px;
-      background: rgba(148, 163, 184, 0.16);   /* shows through as the quadrant seams */
+      gap: 7px;
+      padding: 7px;
+      background: #020617;
     }
 
-    /* ---- Quadrant: seven boxes, four over three ---- */
+    /* ---- Quadrant: seven boxes, four over three, framed in the group's accent ---- */
     .quad {
       position: relative;
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       grid-template-rows: 1fr 1fr;
-      background: #020617;
+      /* 1px gap + this background = single hairlines BETWEEN boxes only.
+         Nothing is drawn at the perimeter, so the accent frame never doubles. */
+      gap: 1px;
+      background: rgba(148, 163, 184, 0.13);
+      border: 6px solid var(--quad-line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 26px var(--quad-halo);
     }
     .quad-tag {
       position: absolute;
@@ -52,7 +57,7 @@
       align-items: baseline;
       gap: 0.4rem;
       padding: 0.3rem 0.7rem 0.35rem;
-      border-radius: 0 0 0.7rem 0;
+      border-radius: 7px 0 0.7rem 0;
       background: rgba(2, 6, 23, 0.78);
       backdrop-filter: blur(8px);
       border-right: 1px solid rgba(148, 163, 184, 0.14);
@@ -89,13 +94,21 @@
       font-family: inherit;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
-      background: #070c16;
-      border: 1px solid rgba(148, 163, 184, 0.09);
+      background-color: #070c16;
+      /* Six hairlines at each seventh — the fill level lands on one, so the
+         count reads at a glance without anyone squinting at the number. */
+      background-image: repeating-linear-gradient(
+        to top,
+        transparent 0,
+        transparent calc(100% / 7 - 1px),
+        rgba(148, 163, 184, 0.14) calc(100% / 7 - 1px),
+        rgba(148, 163, 184, 0.14) calc(100% / 7)
+      );
       color: #64748b;
-      transition: border-color 220ms ease, box-shadow 260ms ease, color 220ms ease;
+      transition: box-shadow 260ms ease, color 220ms ease;
     }
     .box:nth-child(n+6) { grid-column: span 4; }   /* row 2: three boxes x 4 cols (child 1 is the tag) */
-    .box:hover { color: #cbd5e1; border-color: rgba(148, 163, 184, 0.22); }
+    .box:hover { color: #cbd5e1; background-color: #0c1626; }
     .box:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
 
     .box .fill {
@@ -152,19 +165,19 @@
     .box.started .count { color: #cbd5e1; }
 
     .box.full {
-      border-color: var(--fill-line);
-      box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.10), 0 0 30px var(--fill-glow);
+      box-shadow: inset 0 0 0 1px var(--fill-line), inset 0 0 60px rgba(255, 255, 255, 0.10);
     }
     .box.full .name, .box.full .sub { color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
     .box.full .count { color: var(--accent); }
     .box.full .badge { color: rgba(255, 255, 255, 0.7); }
 
     /* ---- Floating status pill: sits over the board, never takes a box ---- */
+    /* Corner-anchored: dead centre sat on the point where all four groups meet
+       and stole taps from four boxes at once. */
     #hud {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      bottom: 0.85rem;
+      right: 0.85rem;
       z-index: 50;
       display: flex;
       align-items: center;
@@ -195,8 +208,9 @@
     #hud a:hover, #hud button:hover { color: #fff; background: rgba(148, 163, 184, 0.22); }
 
     @media (max-width: 900px) {
-      #lifeTrackApp { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); }
-      #hud { top: auto; bottom: 0.7rem; transform: translate(-50%, 0); }
+      #lifeTrackApp { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 5px; padding: 5px; }
+      .quad { border-width: 4px; }
+      #hud { bottom: 0.6rem; right: 0.6rem; }
     }
     @media (max-width: 520px) {
       .box { padding: 1.25rem 0.25rem 0.35rem; }
@@ -253,10 +267,10 @@
 <script>
 // === App logic ===
 (function () {
-  var STORE_KEY = 'life-track.v2';
+  var STORE_KEY = 'life-track.v3';
   var TARGET = 7;               // taps to fill one box
   var PER_GROUP = 7;            // boxes per group
-  var TOTAL = 28;               // 4 groups x 7 boxes
+  var UNIT = 'rounds';          // what one tap counts as, in every group
 
   var GROUPS = [
     {
@@ -317,12 +331,22 @@
     }
   ];
 
-  // Session-scoped on purpose: the board clears when the browser session ends.
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + '-' +
+           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + d.getDate()).slice(-2);
+  }
+
+  // Stored with the day it belongs to: the board survives closing the browser
+  // but empties itself at midnight, which is the boundary a day board cares about.
   function load() {
     try {
-      var raw = sessionStorage.getItem(STORE_KEY);
-      var parsed = raw ? JSON.parse(raw) : {};
-      return (parsed && typeof parsed === 'object') ? parsed : {};
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return {};
+      var parsed = JSON.parse(raw);
+      if (!parsed || parsed.date !== today()) return {};
+      return parsed.counts || {};
     } catch (e) {
       return {};
     }
@@ -330,7 +354,7 @@
 
   function save() {
     try {
-      sessionStorage.setItem(STORE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORE_KEY, JSON.stringify({ date: today(), counts: state }));
     } catch (e) { /* private mode — board still works, it just won't persist */ }
   }
 
@@ -388,11 +412,14 @@
     quad.style.setProperty('--fill-soft', 'rgba(' + group.accent + ', 0.30)');
     quad.style.setProperty('--fill-line', 'rgba(' + group.accent + ', 0.85)');
     quad.style.setProperty('--fill-glow', 'rgba(' + group.accent + ', 0.35)');
+    quad.style.setProperty('--quad-line', 'rgba(' + group.accent + ', 0.55)');
+    quad.style.setProperty('--quad-halo', 'rgba(' + group.accent + ', 0.16)');
     quad.setAttribute('aria-label', group.title);
 
     var tag = document.createElement('div');
     tag.className = 'quad-tag';
-    tag.innerHTML = group.title + ' <span class="quad-score">0/' + PER_GROUP + '</span>';
+    tag.innerHTML = group.title + ' &middot; ' + UNIT +
+                    ' <span class="quad-score">0/' + PER_GROUP + '</span>';
     quad.appendChild(tag);
     group.scoreEl = tag.querySelector('.quad-score');
 
@@ -420,14 +447,28 @@
     board.appendChild(quad);
   });
 
-  document.getElementById('hudReset').addEventListener('click', function () {
-    state = {};
-    save();
+  function repaintAll() {
     GROUPS.forEach(function (g) {
       g.boxes.forEach(paint);
       paintGroup(g);
     });
     paintTotal();
+  }
+
+  document.getElementById('hudReset').addEventListener('click', function () {
+    state = {};
+    save();
+    repaintAll();
+  });
+
+  // A tab left open overnight should come back to a fresh board, not yesterday's.
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    var fresh = load();
+    if (JSON.stringify(fresh) !== JSON.stringify(state)) {
+      state = fresh;
+      repaintAll();
+    }
   });
 
   paintTotal();
