@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Spec Is the Architecture | alhaol.github.io</title>
+    <title>Freeze Three Constraints First | alhaol.github.io</title>
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
     <main class="max-w-4xl mx-auto px-6 py-12">
         <article class="theme-card rounded-xl shadow-sm overflow-hidden">
             <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_56.png" alt="The Spec Is the Architecture" class="hero-image">
+                <img src="../Post_Images/Image_56.png" alt="Freeze Three Constraints First" class="hero-image">
 
                 <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
                     <div class="mb-4 flex flex-wrap">
@@ -93,8 +93,8 @@
                         <span class="category-badge category-engineering">Engineering</span>
                     </div>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Spec Is the Architecture</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">Generation got cheap, so ambiguity stopped being a one-time cost. Constraints are now the scarce input.</p>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Freeze Three Constraints First</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Agents will renegotiate your architecture to ship a feature unless something in the build fails when they do.</p>
 
                     <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
                         <div>
@@ -312,22 +312,21 @@
 
 <p>Production systems live in exactly that gap. A spec discarded after the first generation cannot govern the second. Hartwig Grabowski named the resulting failure <strong>silent spec-code drift</strong>: code evolves, the specification does not, and the divergence stays invisible until repair is expensive. His proposed fix is a drift gate that turns divergence into a blocking merge condition, structurally the same move as a fitness function in evolutionary architecture. An automated check fails the build when a stated property stops holding.</p>
 
-<p>Two cautions before anyone builds a business case on this. The first-pass success multipliers circulating for spec-driven tooling come from vendors and early adopters rather than controlled studies, and they should be read that way. Grabowski's paper, for all that it names the failure precisely, is a design proposal and carries no benchmarks. The argument for writing specifications does not rest on those numbers. It rests on the cost structure, which you can check against your own rework rate without anyone's marketing.</p>
+<p>One caution before anyone builds a business case. The first-pass success multipliers circulating for spec-driven tooling come from vendors and early adopters, not controlled studies, and Grabowski's paper carries no benchmarks at all. The argument does not rest on those numbers. It rests on the cost structure, which you can check against your own rework rate without anyone's marketing.</p>
 
 <p>An unenforced specification is a comment. Enforcement is what turns a document into a contract, and only a contract survives contact with an agent that is optimizing to pass tests.</p>
 
-<h2>What a production specification contains</h2>
+<h2>The three worth freezing first</h2>
 
-<p>Four things, in the order Figure 2 puts them, because that is the order of what it costs to get them wrong.</p>
+<p>A rule in a wiki is advice. The same rule in the test suite is a specification. Nobody has time to make an entire architecture executable in one pass, and you do not need to: three constraints cover most of what agents actually break, and each is checkable in a few lines.</p>
 
 <ol>
-    <li>Invariants written as executable checks rather than prose. A rule in a wiki is advice. The same rule in the test suite is a specification.</li>
-    <li>Interface contracts with explicit versions, because these are the promises other teams have already built against and cannot renegotiate on your schedule.</li>
-    <li>Behavioral criteria in a constrained grammar. One testable statement per requirement, in EARS or something like it, so that every "the system shall" has a subject, a trigger, and an observable result.</li>
-    <li>Named non-goals. The cheapest constraint you will ever write is the one that stops an agent from helpfully expanding scope.</li>
+    <li>A data boundary: which records may not leave a region, a tenant, or a service. The check inspects what crosses the line and fails when something does. Write this one first, because it is the one with a regulator attached to it.</li>
+    <li>A module dependency rule. Agents break this one constantly, because reaching across a boundary is usually the shortest path to a passing test.</li>
+    <li>A degradation requirement: what the system does when a dependency is gone. Remove the dependency inside the test and assert that the system sheds load rather than cascades.</li>
 </ol>
 
-<p>The first item does the most work and gets skipped most often, usually because it sounds harder than it is. An architectural boundary you can state in one sentence can normally be checked in about ten lines.</p>
+<p>The second one looks like this.</p>
 
 <pre><code># spec/invariants/test_boundaries.py
 FORBIDDEN = {"billing": {"reporting", "marketing"}}
@@ -343,17 +342,21 @@ def test_module_boundaries():
 
 <p>That test is now part of the specification. Every agent that runs the suite reads it, and it fails loudly instead of drifting quietly. It also points back to the prose, which is what lets a person decide whether the boundary was wrong rather than just deleting the assertion.</p>
 
+<p>Three checks is an afternoon of work. After it, every generated change is measured against them before it merges, and the agent that would have quietly restructured your schema has to fail a build to do it. The number matters less than the principle: pick the constraints whose violation is most expensive to reverse, and make breaking them noisy.</p>
+
+<p>Two more things cost almost nothing to add. Interface contracts need explicit versions, because they are promises other teams already build against. And name your non-goals, since the cheapest constraint you will ever write is the one that stops an agent from helpfully expanding scope.</p>
+
 <h2>Efficiency and efficacy are different purchases</h2>
 
-<p>Most organizations adopting spec-driven tooling have bought efficacy and assumed efficiency came with it. They see faster first drafts and higher first-pass success, and they conclude the method works. The bill for the other half arrives later, at the point where a system has to survive its own rate of change rather than impress in a review. A team can be highly effective and deeply inefficient at the same time: every feature works, and the fourth one required rewriting the first three.</p>
+<p>Most organizations adopting spec-driven tooling have bought efficacy and assumed efficiency came with it. They see faster first drafts and conclude the method works. The bill for the other half arrives when a system has to survive its own rate of change rather than impress in a review: every feature works, and the fourth one required rewriting the first three.</p>
 
-<p>Specification engineering is not documentation with better branding. It is the practice of deciding, once and in writing, which parts of a system may be regenerated and which parts may not. The parts that may not are your architecture whether or not anyone wrote them down. Writing them down is the only thing that makes them hold.</p>
+<p>Specification engineering is not documentation with better branding. It is deciding, once and in writing, which parts of a system may be regenerated and which may not. The parts that may not are your architecture whether or not anyone wrote them down. Writing them down is the only thing that makes them hold.</p>
 
 <h2>What leaders should do</h2>
 
 <ol>
     <li>Ask your teams to show you the structural half of a spec, not the acceptance criteria. If the only artifact is a list of behaviors, your architecture is undocumented and every agent is free to redesign it. Assign an owner and a date.</li>
-    <li>Move three architectural constraints out of prose and into the test suite this quarter. Pick the three whose violation would be most expensive: a data residency rule, a module dependency rule, and a degradation requirement.</li>
+    <li>Give one engineer an afternoon this quarter to move the three constraints above into the test suite. That is the whole intervention, and it outlives whichever tool you adopt next.</li>
     <li>Find out which of the three levels your tooling actually operates at, rather than which one the vendor claims. If specs are created on a branch and merged away, you are at level 1 and your specs are scaffolding.</li>
     <li>Change what you measure. Track rework rate, meaning the share of generated code replaced within thirty days, next to throughput. Throughput on its own rewards the exact failure you are trying to prevent.</li>
 </ol>

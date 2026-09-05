@@ -40,7 +40,7 @@ No build step, no package manager.
 │   ├── LinkedIn_Posts/ # Companion LinkedIn post drafts (one per article)
 │   └── Articles/       # Individual article pages
 │       └── _not_approved/  # Gitignored: draft articles staged here until approved
-│       └── # 56 article pages, the-paradigm-shift.html … the-spec-is-architecture.html (plus verbs-not-nouns.ar.html, the first Arabic RTL edition)
+│       └── # 56 article pages, the-paradigm-shift.html … freeze-three-constraints.html (plus verbs-not-nouns.ar.html, the first Arabic RTL edition)
 ├── playlist/           # Playlists Hub
 │   ├── index.html      # Playlists landing page (card grid, gold accent)
 │   ├── playlists.json  # Playlist registry (edit to surface a new playlist)
