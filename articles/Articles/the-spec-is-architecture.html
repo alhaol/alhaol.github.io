@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spec Is the Architecture | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_56.png" alt="The Spec Is the Architecture" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-engineering">Engineering</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Spec Is the Architecture</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Generation got cheap, so ambiguity stopped being a one-time cost. Constraints are now the scarce input.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 5, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 8 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>An unclear requirement used to cost you once. Someone built the wrong thing, review caught it, the fix was cheap, and the misunderstanding was then resolved permanently in code that a person had read. You paid for the ambiguity a single time.</p>
+
+<p>That accounting has stopped working. When a coding agent regenerates a module, it re-reads the requirement and re-resolves the ambiguity from nothing, and no mechanism forces it to resolve that ambiguity the same way twice. Birgitta B&#246;ckeler found exactly this while testing the Tessl framework in October 2025: identical specifications produced different output across repeated runs. What used to be a one-time tax is now charged per generation, and teams running agents generate constantly.</p>
+
+<p>This is why specification engineering hardened into a discipline in 2026 instead of staying a slogan. Writing things down did not suddenly become virtuous. The cost structure inverted. Implementation fell toward zero, and ambiguity started to compound.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 344" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">The same ambiguous requirement under expensive and near-free implementation</title>
+            <desc id="fig1-desc">When implementation was expensive, an ambiguous requirement was built once, reviewed by a person, and resolved permanently. When implementation is nearly free, the same requirement is re-read and re-resolved on every generation, and different runs settle on different readings, so the cost of the ambiguity compounds instead of being paid once.</desc>
+
+            <defs>
+                <marker id="fig1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#2a3f5f"/>
+                </marker>
+            </defs>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">One ambiguity, two cost structures</text>
+            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">The requirement is equally unclear in both rows. Only the number of resolutions changes.</text>
+
+            <text x="30" y="82" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHEN IMPLEMENTATION WAS EXPENSIVE</text>
+            <rect x="30" y="94" width="150" height="56" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="30" y="94" width="4" height="56" fill="#f59e0b"/>
+            <text x="46" y="118" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Ambiguous</text>
+            <text x="46" y="138" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">requirement</text>
+            <line x1="188" y1="122" x2="220" y2="122" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+            <rect x="230" y="94" width="190" height="56" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="230" y="94" width="4" height="56" fill="#60a5fa"/>
+            <text x="246" y="118" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Built once, then read</text>
+            <text x="246" y="138" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">by a person</text>
+            <line x1="428" y1="122" x2="460" y2="122" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+            <rect x="470" y="94" width="140" height="56" rx="4" fill="#0d1c33" stroke="#2a3f5f"/>
+            <text x="484" y="118" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">Resolved once</text>
+            <text x="484" y="138" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">and frozen</text>
+
+            <line x1="30" y1="176" x2="610" y2="176" stroke="#2a3f5f" stroke-width="1"/>
+
+            <text x="30" y="206" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHEN IMPLEMENTATION IS NEARLY FREE</text>
+            <rect x="30" y="218" width="150" height="80" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="30" y="218" width="4" height="80" fill="#f59e0b"/>
+            <text x="46" y="250" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Ambiguous</text>
+            <text x="46" y="270" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">requirement</text>
+
+            <line x1="188" y1="227" x2="220" y2="227" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+            <line x1="188" y1="257" x2="220" y2="257" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+            <line x1="188" y1="287" x2="220" y2="287" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+
+            <rect x="230" y="216" width="190" height="22" rx="3" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="230" y="216" width="3" height="22" fill="#60a5fa"/>
+            <text x="244" y="232" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Run 1 picks reading A</text>
+            <rect x="230" y="246" width="190" height="22" rx="3" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="230" y="246" width="3" height="22" fill="#60a5fa"/>
+            <text x="244" y="262" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Run 2 picks reading B</text>
+            <rect x="230" y="276" width="190" height="22" rx="3" fill="#1a2942" stroke="#2a3f5f"/>
+            <rect x="230" y="276" width="3" height="22" fill="#60a5fa"/>
+            <text x="244" y="292" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Run 3 picks reading C</text>
+
+            <line x1="428" y1="257" x2="460" y2="257" stroke="#2a3f5f" stroke-width="1.5" marker-end="url(#fig1-arrow)"/>
+            <rect x="470" y="216" width="140" height="82" rx="4" fill="#0d1c33" stroke="#f59e0b"/>
+            <text x="484" y="246" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">Re-resolved</text>
+            <text x="484" y="266" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">every run</text>
+            <text x="484" y="288" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">Cost compounds</text>
+
+            <text x="30" y="328" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Nondeterminism is the mechanism: the same spec need not produce the same reading twice.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Cheap generation did not make ambiguity cheaper. It removed the single point where ambiguity used to get resolved for good. Source: B&#246;ckeler, "Understanding Spec-Driven-Development", martinfowler.com, 15 October 2025.</figcaption>
+</figure>
+
+<blockquote>A specification is not a faster way to say what you want. It is the only place where a decision gets made once instead of once per run.</blockquote>
+
+<h2>The half of the spec that nobody writes</h2>
+
+<p>Most specifications written for agents describe behavior: what the feature does, what the user sees, which edge cases matter. Tooling handles this part well. AWS Kiro runs a requirements-to-design-to-tasks flow across three markdown files. GitHub Spec Kit gives you specify, plan, and tasks.</p>
+
+<p>Kiro also pulled <code>EARS</code> notation into the loop, a constrained requirements grammar that Alistair Mavin and colleagues published in 2009 after analyzing jet engine control requirements at Rolls-Royce. They found eight recurring defects in ordinary prose requirements, running from ambiguity through to untestability, and cut all eight by forcing every requirement into one of five sentence patterns. Airbus, NASA and Bosch adopted it long before agents existed.</p>
+
+<p>But behavior is only the efficacy half of a specification. Efficacy is whether the system does the right thing, and acceptance criteria are how you buy it. Behavior says nothing about what has to stay true while forty other features are generated alongside it.</p>
+
+<p>The other half is structural: the boundary that may not be crossed, the data that may not leave a region, the interface three other teams already build against, the failure that must degrade instead of cascade. David Parnas argued in 1972 that a module should be defined by the decision it hides rather than by the steps it performs. A module's real specification is what it refuses to expose.</p>
+
+<p>Write only the behavioral half and you get working features sitting on a system that has to be rebuilt before it can carry production traffic. That is the efficiency half, where efficiency means how little you rebuild on the way to production. It never appears in a demo.</p>
+
+<h2>Architecture is the part of the spec you freeze</h2>
+
+<p>Here is a definition worth adopting. Architecture is the subset of the specification that nobody may renegotiate to ship a feature.</p>
+
+<p>That subset used to be protected by economics. Rewriting the persistence layer to add a form field was too expensive to propose, so nobody proposed it. The constraint held because violating it was slow, not because anyone had written it down.</p>
+
+<p>Agents removed the protection. Ask one to add a field and it will restructure the schema if that is the shortest path to a green test run, and the diff will look reasonable on review. Nothing in the request said the schema was load bearing, because nobody had ever needed to say so. The cost of violating an architectural decision fell to roughly the cost of any other change, so the decision quietly stopped being architectural while everyone kept treating it as settled.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 366" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Change rate plotted against blast radius for the three layers of a specification</title>
+            <desc id="fig2-desc">The three layers of a specification fall on a downward diagonal. Invariants and boundaries change rarely but break the whole system, and undoing one costs a rebuild. Interface contracts change per release and break every consuming team, costing a migration. Behaviors change per feature, break only that feature, and cost a retest. The layer an agent may safely regenerate is the one that breaks the least.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Change rate and blast radius move in opposite directions</text>
+            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">The layer an agent may regenerate freely is the one that breaks the least when it is wrong.</text>
+
+            <text x="30" y="72" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">HOW MUCH BREAKS</text>
+
+            <line x1="130" y1="80" x2="130" y2="292" stroke="#2a3f5f" stroke-width="1"/>
+            <line x1="130" y1="292" x2="600" y2="292" stroke="#2a3f5f" stroke-width="1"/>
+
+            <text x="120" y="112" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="end">Whole system</text>
+            <text x="120" y="184" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="end">Many teams</text>
+            <text x="120" y="256" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="end">One feature</text>
+
+            <g stroke="#2a3f5f" stroke-width="1" stroke-dasharray="2 4">
+                <line x1="130" y1="108" x2="180" y2="108"/>
+                <line x1="130" y1="180" x2="325" y2="180"/>
+                <line x1="130" y1="252" x2="470" y2="252"/>
+                <line x1="180" y1="108" x2="180" y2="292"/>
+                <line x1="325" y1="180" x2="325" y2="292"/>
+                <line x1="470" y1="252" x2="470" y2="292"/>
+            </g>
+
+            <circle cx="180" cy="108" r="13" fill="#f59e0b" fill-opacity="0.16"/>
+            <circle cx="180" cy="108" r="7" fill="#f59e0b"/>
+            <text x="198" y="96" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Invariants and boundaries</text>
+            <text x="198" y="115" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">Data residency, module dependencies</text>
+            <text x="198" y="133" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="600">Undo cost: a rebuild</text>
+
+            <circle cx="325" cy="180" r="13" fill="#f59e0b" fill-opacity="0.16"/>
+            <circle cx="325" cy="180" r="7" fill="#f59e0b"/>
+            <text x="343" y="168" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Interface contracts</text>
+            <text x="343" y="187" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">Schemas other teams depend on</text>
+            <text x="343" y="205" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="600">Undo cost: a migration</text>
+
+            <circle cx="470" cy="252" r="13" fill="#60a5fa" fill-opacity="0.16"/>
+            <circle cx="470" cy="252" r="7" fill="#60a5fa"/>
+            <text x="488" y="240" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Behaviors</text>
+            <text x="488" y="259" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">What one feature does</text>
+            <text x="488" y="277" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="600">Undo cost: a retest</text>
+
+            <text x="180" y="312" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Rarely</text>
+            <text x="325" y="312" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Per release</text>
+            <text x="470" y="312" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Per feature</text>
+            <text x="130" y="334" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">HOW OFTEN IT CHANGES</text>
+
+            <text x="30" y="356" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Spec tooling covers the bottom-right point well and the other two barely at all.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The cheapest layer to regenerate is also the safest, which is why agents look reliable until they touch the other two. Layer framing follows Parnas on information hiding (1972); undo costs are the ordinary consequences of changing each layer, not measured figures.</figcaption>
+</figure>
+
+<p>Fred Brooks separated essential from accidental complexity in 1987 and argued that no single advance would deliver an order of magnitude on the essential part. Agents are the strongest attack on accidental complexity anyone has shipped. They do nothing about the essential part, which is deciding what a system must be and must not become. That work moved. It did not disappear, and specification engineering is where it landed.</p>
+
+<h2>Why most spec tooling stops short of production</h2>
+
+<p>B&#246;ckeler's survey gave the field its vocabulary by separating three levels. In spec-first, a spec is written before the task and effectively discarded once the feature ships. In spec-anchored, the spec survives and governs how that feature evolves. In spec-as-source, humans edit only the spec and never touch generated code.</p>
+
+<p>Her finding is uncomfortable. Almost everything shipping today is spec-first while marketing itself higher. Spec Kit creates a branch for every spec, which ties a spec's lifespan to a change request rather than to the feature it describes. Kiro's own examples target a single story with no guidance on reuse. Only Tessl, then in private beta, aspired past the first rung.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 356" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">How far each spec-driven tool climbs the three levels of specification maturity</title>
+            <desc id="fig3-desc">The three levels are cumulative, so each column fills from the bottom up. Kiro and GitHub Spec Kit fill only level one, spec-first, where the spec is written and then discarded. Tessl fills level one and level two, spec-anchored, and reaches level three, spec-as-source, only as a dashed aspiration. No shipping tool reaches the top.</desc>
+
+            <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Three levels of spec-driven development</text>
+            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Each level contains the one below it, so a column fills from the bottom up.</text>
+
+            <rect x="200" y="78" width="420" height="56" fill="#1a2942" fill-opacity="0.45"/>
+            <rect x="200" y="140" width="420" height="56" fill="#1a2942" fill-opacity="0.45"/>
+            <rect x="200" y="202" width="420" height="70" fill="#1a2942" fill-opacity="0.45"/>
+
+            <text x="30" y="104" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Level 3: spec-as-source</text>
+            <text x="30" y="122" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Only the spec is edited</text>
+            <text x="30" y="166" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Level 2: spec-anchored</text>
+            <text x="30" y="184" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Kept as the feature evolves</text>
+            <text x="30" y="234" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600">Level 1: spec-first</text>
+            <text x="30" y="252" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Written, then discarded</text>
+
+            <rect x="210" y="202" width="120" height="70" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+            <rect x="350" y="202" width="120" height="70" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+            <rect x="490" y="202" width="120" height="70" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+
+            <rect x="490" y="140" width="120" height="56" rx="3" fill="#f59e0b" fill-opacity="0.34" stroke="#f59e0b" stroke-width="1.6" stroke-opacity="0.9"/>
+
+            <rect x="490" y="78" width="120" height="56" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="6 5" stroke-opacity="0.75"/>
+            <text x="550" y="111" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" fill-opacity="0.9">exploring</text>
+
+            <line x1="200" y1="272" x2="620" y2="272" stroke="#2a3f5f" stroke-width="1.5"/>
+
+            <text x="270" y="294" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Kiro</text>
+            <text x="270" y="312" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">shipping</text>
+            <text x="410" y="294" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Spec Kit</text>
+            <text x="410" y="312" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">shipping</text>
+            <text x="550" y="294" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Tessl</text>
+            <text x="550" y="312" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">private beta</text>
+
+            <text x="30" y="344" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Production systems need level 2. Most teams buy level 1 and hear it described as level 3.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> The gap between the level a tool reaches and the level it is sold at is where spec-code drift starts. Source: B&#246;ckeler, "Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl", martinfowler.com, 15 October 2025.</figcaption>
+</figure>
+
+<p>Production systems live in exactly that gap. A spec discarded after the first generation cannot govern the second. Hartwig Grabowski named the resulting failure <strong>silent spec-code drift</strong>: code evolves, the specification does not, and the divergence stays invisible until repair is expensive. His proposed fix is a drift gate that turns divergence into a blocking merge condition, structurally the same move as a fitness function in evolutionary architecture. An automated check fails the build when a stated property stops holding.</p>
+
+<p>Two cautions before anyone builds a business case on this. The first-pass success multipliers circulating for spec-driven tooling come from vendors and early adopters rather than controlled studies, and they should be read that way. Grabowski's paper, for all that it names the failure precisely, is a design proposal and carries no benchmarks. The argument for writing specifications does not rest on those numbers. It rests on the cost structure, which you can check against your own rework rate without anyone's marketing.</p>
+
+<p>An unenforced specification is a comment. Enforcement is what turns a document into a contract, and only a contract survives contact with an agent that is optimizing to pass tests.</p>
+
+<h2>What a production specification contains</h2>
+
+<p>Four things, in the order Figure 2 puts them, because that is the order of what it costs to get them wrong.</p>
+
+<ol>
+    <li>Invariants written as executable checks rather than prose. A rule in a wiki is advice. The same rule in the test suite is a specification.</li>
+    <li>Interface contracts with explicit versions, because these are the promises other teams have already built against and cannot renegotiate on your schedule.</li>
+    <li>Behavioral criteria in a constrained grammar. One testable statement per requirement, in EARS or something like it, so that every "the system shall" has a subject, a trigger, and an observable result.</li>
+    <li>Named non-goals. The cheapest constraint you will ever write is the one that stops an agent from helpfully expanding scope.</li>
+</ol>
+
+<p>The first item does the most work and gets skipped most often, usually because it sounds harder than it is. An architectural boundary you can state in one sentence can normally be checked in about ten lines.</p>
+
+<pre><code># spec/invariants/test_boundaries.py
+FORBIDDEN = {"billing": {"reporting", "marketing"}}
+
+def test_module_boundaries():
+    for package, banned in FORBIDDEN.items():
+        for module in imports_of(package):
+            assert module.root not in banned, (
+                f"{package} imported {module.root}. "
+                "See spec/architecture.md, boundary B-04."
+            )
+</code></pre>
+
+<p>That test is now part of the specification. Every agent that runs the suite reads it, and it fails loudly instead of drifting quietly. It also points back to the prose, which is what lets a person decide whether the boundary was wrong rather than just deleting the assertion.</p>
+
+<h2>Efficiency and efficacy are different purchases</h2>
+
+<p>Most organizations adopting spec-driven tooling have bought efficacy and assumed efficiency came with it. They see faster first drafts and higher first-pass success, and they conclude the method works. The bill for the other half arrives later, at the point where a system has to survive its own rate of change rather than impress in a review. A team can be highly effective and deeply inefficient at the same time: every feature works, and the fourth one required rewriting the first three.</p>
+
+<p>Specification engineering is not documentation with better branding. It is the practice of deciding, once and in writing, which parts of a system may be regenerated and which parts may not. The parts that may not are your architecture whether or not anyone wrote them down. Writing them down is the only thing that makes them hold.</p>
+
+<h2>What leaders should do</h2>
+
+<ol>
+    <li>Ask your teams to show you the structural half of a spec, not the acceptance criteria. If the only artifact is a list of behaviors, your architecture is undocumented and every agent is free to redesign it. Assign an owner and a date.</li>
+    <li>Move three architectural constraints out of prose and into the test suite this quarter. Pick the three whose violation would be most expensive: a data residency rule, a module dependency rule, and a degradation requirement.</li>
+    <li>Find out which of the three levels your tooling actually operates at, rather than which one the vendor claims. If specs are created on a branch and merged away, you are at level 1 and your specs are scaffolding.</li>
+    <li>Change what you measure. Track rework rate, meaning the share of generated code replaced within thirty days, next to throughput. Throughput on its own rewards the exact failure you are trying to prevent.</li>
+</ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Harness Advantage</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the scaffolding around a model, not the model itself, is what turns a demo into something you can operate.</p>
+                        <a href="the-harness-advantage.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Verification Tax</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Generation got cheap and checking did not, so the cost of trusting output moved to the review step.</p>
+                        <a href="the-verification-tax.html">Read &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Structured RPI Workflows</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Research, plan, implement as an explicit sequence, and what each phase has to produce before the next one starts.</p>
+                        <a href="structured-rpi-workflows.html">Read &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">B&#246;ckeler, B. "Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl." Exploring Gen AI, martinfowler.com, 15 October 2025. <a href="https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html" target="_blank" rel="noopener">martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html</a></li>
+                    <li class="reference-item">Grabowski, H. "The Spec Growth Engine: Spec-Anchored, Code-Coupled, Drift-Enforced Architecture for AI-Assisted Software Development." arXiv:2606.27045 [cs.SE], 25 June 2026. <a href="https://arxiv.org/abs/2606.27045" target="_blank" rel="noopener">arxiv.org/abs/2606.27045</a></li>
+                    <li class="reference-item">Mavin, A., Wilkinson, P., Harwood, A., and Novak, M. "Easy Approach to Requirements Syntax (EARS)." 17th IEEE International Requirements Engineering Conference (RE 2009), pp. 317-322. DOI <a href="https://doi.org/10.1109/RE.2009.9" target="_blank" rel="noopener">10.1109/RE.2009.9</a></li>
+                    <li class="reference-item">Parnas, D. L. "On the Criteria To Be Used in Decomposing Systems into Modules." Communications of the ACM, 15(12), December 1972, pp. 1053-1058. DOI <a href="https://doi.org/10.1145/361598.361623" target="_blank" rel="noopener">10.1145/361598.361623</a></li>
+                    <li class="reference-item">Brooks, F. P. "No Silver Bullet: Essence and Accidents of Software Engineering." IEEE Computer, 20(4), April 1987, pp. 10-19. DOI <a href="https://doi.org/10.1109/MC.1987.1663532" target="_blank" rel="noopener">10.1109/MC.1987.1663532</a></li>
+                    <li class="reference-item">Ford, N., Parsons, R., and Kua, P. <em>Building Evolutionary Architectures: Support Constant Change.</em> O&#39;Reilly Media, 2017. Source of the fitness function pattern referenced above.</li>
+                    <li class="reference-item">GitHub. "Spec Kit: Toolkit to help you get started with Spec-Driven Development." Open-sourced September 2025. <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">github.com/github/spec-kit</a></li>
+                    <li class="reference-item">AWS. "Kiro: The AI IDE for prototype to production." Spec mode, EARS notation, and the requirements-to-design-to-tasks flow. <a href="https://kiro.dev/" target="_blank" rel="noopener">kiro.dev</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
