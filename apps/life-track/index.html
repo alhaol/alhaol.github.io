@@ -131,7 +131,20 @@
     .box .badge,
     .box .name,
     .box .sub,
+    .box .icon,
     .box .count { position: relative; z-index: 1; }
+
+    /* Body has no Arabic line, so the exercise figure sits in that slot. Stroke-only
+       and sized in vh, so it takes the box text colour and stays sharp at 2x on hover. */
+    .box .icon {
+      display: block;
+      flex: 0 0 auto;
+      width: clamp(24px, 6vh, 46px);
+      height: clamp(24px, 6vh, 46px);
+      color: #8296ae;
+      transition: color 220ms ease;
+    }
+    .box .icon svg { display: block; width: 100%; height: 100%; }
 
     .box .badge {
       position: absolute;
@@ -167,12 +180,14 @@
 
     .box.started .name { color: #f8fafc; }
     .box.started .sub { color: #cbd5e1; }
+    .box.started .icon { color: #cbd5e1; }
     .box.started .count { color: #cbd5e1; }
 
     .box.full {
       box-shadow: inset 0 0 0 1px var(--fill-line), inset 0 0 60px rgba(255, 255, 255, 0.10);
     }
     .box.full .name, .box.full .sub { color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
+    .box.full .icon { color: #fff; }
     .box.full .count { color: var(--accent); }
     .box.full .badge { color: rgba(255, 255, 255, 0.7); }
 
@@ -245,6 +260,9 @@
     @media (max-width: 520px) {
       .box { padding: 1.25rem 0.25rem 0.35rem; }
       .box .sub { display: none; }
+      /* The figure survives where the Arabic line does not: on a small screen it
+         identifies the exercise faster than the name does. */
+      .box .icon { width: clamp(20px, 4.6vh, 30px); height: clamp(20px, 4.6vh, 30px); }
       .box .name { font-size: clamp(0.55rem, 1.5vh, 0.8rem); }
     }
   </style>
@@ -300,6 +318,64 @@
   var STORE_KEY = 'life-track.v3';
   var DEFAULT_TARGET = 7;       // taps to fill one box, where a group does not say otherwise
   var PER_GROUP = 7;            // boxes per group, in every group
+
+  // Exercise figures, one per Body box. Drawn on a 48x48 grid as stroke-only line art
+  // so they inherit the box text colour and stay sharp when a box doubles on hover.
+  // Each is read from its context rather than the stick figure alone: a bar overhead
+  // means you hang from it, a line underfoot means you press against the floor, a wall
+  // at the side means you lean on it, and two short bars mean you hold yourself between
+  // them. That is what keeps the three floor positions apart at this size.
+  var SVG_OPEN = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" ' +
+                 'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">';
+  // Floor, bar and wall are drawn thinner and dimmer than the body. Without that the
+  // figure and its surroundings carry equal weight and a push-up reads as a triangle.
+  function env(d) {
+    return '<path d="' + d + '" stroke-width="1.5" stroke-opacity="0.5"/>';
+  }
+  function head(x, y) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="3.2" fill="currentColor" stroke="none"/>';
+  }
+
+  var ICONS = {
+    // Hanging from a bar, arms pulling the chin up to it.
+    pullup: SVG_OPEN + env('M6 8h36') +
+      '<path d="M17 9l5 12"/><path d="M31 9l-5 12"/>' + head(24, 15) +
+      '<path d="M24 18v13"/><path d="M24 31l-4 9"/><path d="M24 31l4 9"/></svg>',
+
+    // Face down, body straight, arm locked out to the floor. The neck stub matters:
+    // without it the head floats free and the whole figure collapses into a triangle.
+    pushup: SVG_OPEN + env('M4 41h40') + head(12, 23) +
+      '<path d="M15 24.5L18 26"/><path d="M18 26l11 4.5L40 35"/>' +
+      '<path d="M18 26l-1 14"/><path d="M40 35l3 4"/></svg>',
+
+    // Same body line as the push-up, but the arm folds onto the floor at the elbow.
+    plank: SVG_OPEN + env('M4 41h40') + head(12, 23) +
+      '<path d="M15 24.5L18 26"/><path d="M18 26l11 4.5L40 35"/>' +
+      '<path d="M18 26v11l-9 3"/><path d="M40 35l3 4"/></svg>',
+
+    // Free standing, so no wall: the torso leans forward over a horizontal thigh
+    // and the arms swing out front to counterbalance.
+    squat: SVG_OPEN + env('M5 41h38') + head(18, 10) +
+      '<path d="M19 13l4 12"/><path d="M21 18l12-2"/>' +
+      '<path d="M23 25h10"/><path d="M33 26l-1 14"/><path d="M32 40h5"/></svg>',
+
+    // The wall is the whole point, so it is what the eye should catch first: back
+    // flat against it, torso vertical rather than leaning.
+    wallsit: SVG_OPEN + env('M7 5v36') + env('M7 41h36') + head(13, 12) +
+      '<path d="M13 15v12"/><path d="M13 19l9 2"/>' +
+      '<path d="M13 27h14"/><path d="M27 27v13"/><path d="M27 40h5"/></svg>',
+
+    // Held between two bars with nothing underfoot. The missing floor is the tell.
+    dips: SVG_OPEN + env('M4 26h13') + env('M31 26h13') + head(24, 12) +
+      '<path d="M19 18h10"/><path d="M19 18l-4 7"/><path d="M29 18l4 7"/>' +
+      '<path d="M24 15v12"/><path d="M24 27l-3 12"/><path d="M24 27l3 12"/></svg>',
+
+    // Face up beneath a bar, heels on the floor. Mirrored so it never reads as a
+    // push-up: here the body runs down to the left and the arm reaches up.
+    invrow: SVG_OPEN + env('M5 9h38') + env('M5 41h38') + head(36, 24) +
+      '<path d="M33 25.5L31 26.8"/><path d="M31 27l-11 6L9 39"/>' +
+      '<path d="M31 27l-4-17"/><path d="M9 39l-3 2"/></svg>'
+  };
 
   // How many taps a box takes is a property of the group, not of the board. Life and
   // Quran are done or not done, so one tap settles them. Body and Dhikr are counted in
@@ -490,6 +566,7 @@
         '<span class="badge">' + box.badge + '</span>' +
         '<span class="name">' + box.name + '</span>' +
         (box.sub ? '<span class="sub">' + box.sub + '</span>' : '') +
+        (ICONS[box.key] ? '<span class="icon" aria-hidden="true">' + ICONS[box.key] + '</span>' : '') +
         '<span class="count">0/' + group.target + '</span>';
       el.addEventListener('click', function (e) { bump(box, group, e.shiftKey); });
       box.el = el;
