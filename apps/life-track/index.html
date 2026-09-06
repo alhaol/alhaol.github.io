@@ -52,7 +52,6 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 5;
       display: flex;
       align-items: baseline;
       gap: 0.4rem;
@@ -69,6 +68,8 @@
       color: var(--accent);
       pointer-events: none;
       white-space: nowrap;
+      /* Above a popped box (z-index 10) so the group score stays readable while hovering. */
+      z-index: 20;
     }
     .quad-tag .quad-score {
       font-size: 0.9em;
@@ -105,11 +106,15 @@
         rgba(148, 163, 184, 0.14) calc(100% / 7)
       );
       color: #64748b;
-      transition: box-shadow 260ms ease, color 220ms ease;
+      transition: transform 200ms cubic-bezier(.2, .8, .2, 1),
+                  box-shadow 260ms ease, color 220ms ease, background-color 200ms ease;
     }
     .box:nth-child(n+6) { grid-column: span 4; }   /* row 2: three boxes x 4 cols (child 1 is the tag) */
     .box:hover { color: #cbd5e1; background-color: #0c1626; }
     .box:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+
+    /* A one-tap box has nothing to divide into sevenths, so drop the level lines. */
+    .box.single { background-image: none; }
 
     .box .fill {
       position: absolute;
@@ -170,6 +175,31 @@
     .box.full .name, .box.full .sub { color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
     .box.full .count { color: var(--accent); }
     .box.full .badge { color: rgba(255, 255, 255, 0.7); }
+
+    /* ---- Hover pop: the box doubles in place so it can be read before it is tapped ----
+       transform-origin is pinned per position rather than left at centre. A box is half
+       a quadrant tall and a quarter (row 1) or a third (row 2) of it wide, so at 2x it
+       lands exactly inside its own quadrant when anchored to the edge it already sits on.
+       Centre-origin would push the corner boxes off the viewport instead.
+       Mouse only: touch has no hover, and :hover sticks after a tap there. */
+    .box:nth-child(-n+5) { transform-origin: top center; }
+    .box:nth-child(n+6)  { transform-origin: bottom center; }
+    .box:nth-child(2)    { transform-origin: top left; }
+    .box:nth-child(5)    { transform-origin: top right; }
+    .box:nth-child(6)    { transform-origin: bottom left; }
+    .box:nth-child(8)    { transform-origin: bottom right; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .box:hover,
+      .box:focus-visible {
+        transform: scale(2);
+        z-index: 10;
+        border-radius: 5px;
+        box-shadow: 0 0 0 1px var(--accent), 0 8px 22px rgba(0, 0, 0, 0.72);
+      }
+      /* The box is opaque, so an enlarged one hides the neighbours it covers.
+         What you see under the pointer is always what a click will hit. */
+    }
 
     /* ---- Floating status pill: sits over the board, never takes a box ---- */
     /* Corner-anchored: dead centre sat on the point where all four groups meet
@@ -268,14 +298,17 @@
 // === App logic ===
 (function () {
   var STORE_KEY = 'life-track.v3';
-  var TARGET = 7;               // taps to fill one box
-  var PER_GROUP = 7;            // boxes per group
-  var UNIT = 'rounds';          // what one tap counts as, in every group
+  var DEFAULT_TARGET = 7;       // taps to fill one box, where a group does not say otherwise
+  var PER_GROUP = 7;            // boxes per group, in every group
 
+  // How many taps a box takes is a property of the group, not of the board. Life and
+  // Quran are done or not done, so one tap settles them. Body and Dhikr are counted in
+  // rounds, so they keep seven. Older saves are clamped, never migrated.
   var GROUPS = [
     {
       id: 'life',
       title: 'Life',
+      target: 1,
       accent: '16, 185, 129',                                  // emerald
       boxes: [
         { key: 'allah',        badge: 'A', name: 'Allah',        sub: 'الصلاة' },
@@ -290,6 +323,7 @@
     {
       id: 'quran',
       title: 'Quran',
+      target: 1,
       accent: '251, 191, 36',                                   // gold
       boxes: [
         { key: 'yaseen',  badge: '36', name: 'Yaseen',     sub: 'يس' },
@@ -304,6 +338,7 @@
     {
       id: 'body',
       title: 'Body',
+      target: 7,
       accent: '96, 165, 250',                                   // sky
       boxes: [
         { key: 'pullup',   badge: 'P1', name: 'Pull-up',      sub: '' },
@@ -318,6 +353,7 @@
     {
       id: 'dhikr',
       title: 'Dhikr',
+      target: 7,
       accent: '167, 139, 250',                                  // violet
       boxes: [
         { key: 'tasbih',    badge: '1', name: 'Tasbih',        sub: 'سبحان الله' },
@@ -362,38 +398,49 @@
   var board = document.getElementById('lifeTrackApp');
   var hudCount = document.getElementById('hudCount');
 
+  function targetOf(box) {
+    return box.target || DEFAULT_TARGET;
+  }
+
   function countOf(box) {
     var n = state[box.key];
-    return (typeof n === 'number' && n > 0) ? Math.min(n, TARGET) : 0;
+    return (typeof n === 'number' && n > 0) ? Math.min(n, targetOf(box)) : 0;
+  }
+
+  function isFull(box) {
+    return countOf(box) === targetOf(box);
   }
 
   function paint(box) {
+    var t = targetOf(box);
     var n = countOf(box);
-    box.el.querySelector('.fill').style.height = (n / TARGET * 100) + '%';
-    box.el.querySelector('.count').textContent = n + '/' + TARGET;
+    box.el.querySelector('.fill').style.height = (n / t * 100) + '%';
+    box.el.querySelector('.count').textContent = n + '/' + t;
     box.el.classList.toggle('started', n > 0);
-    box.el.classList.toggle('full', n === TARGET);
+    box.el.classList.toggle('full', n === t);
     box.el.setAttribute('aria-valuenow', n);
   }
 
   function paintGroup(group) {
-    var done = group.boxes.filter(function (b) { return countOf(b) === TARGET; }).length;
+    var done = group.boxes.filter(isFull).length;
     group.scoreEl.textContent = done + '/' + PER_GROUP;
   }
 
   function paintTotal() {
     var done = 0;
     GROUPS.forEach(function (g) {
-      g.boxes.forEach(function (b) { if (countOf(b) === TARGET) done++; });
+      g.boxes.forEach(function (b) { if (isFull(b)) done++; });
     });
     hudCount.textContent = done;
   }
 
-  // A tap adds one of seven. A tap on a full box empties it. Shift-tap steps back one.
+  // A tap adds one. A tap on a full box empties it. Shift-tap steps back one.
+  // Where the target is 1 that makes the box a straight on/off toggle.
   function bump(box, group, back) {
+    var t = targetOf(box);
     var n = countOf(box);
     if (back) n = Math.max(0, n - 1);
-    else n = (n >= TARGET) ? 0 : n + 1;
+    else n = (n >= t) ? 0 : n + 1;
 
     if (n === 0) delete state[box.key];
     else state[box.key] = n;
@@ -405,6 +452,8 @@
   }
 
   GROUPS.forEach(function (group) {
+    group.target = group.target || DEFAULT_TARGET;
+
     var quad = document.createElement('section');
     quad.className = 'quad';
     quad.style.setProperty('--accent', 'rgb(' + group.accent + ')');
@@ -418,25 +467,30 @@
 
     var tag = document.createElement('div');
     tag.className = 'quad-tag';
-    tag.innerHTML = group.title + ' &middot; ' + UNIT +
+    // The tag says what one box costs, so the two one-tap groups read differently
+    // from the two seven-round ones without anyone having to click to find out.
+    tag.innerHTML = group.title + ' &middot; ' +
+                    (group.target === 1 ? 'once' : group.target + ' rounds') +
                     ' <span class="quad-score">0/' + PER_GROUP + '</span>';
     quad.appendChild(tag);
     group.scoreEl = tag.querySelector('.quad-score');
 
     group.boxes.forEach(function (box) {
+      box.target = group.target;
+
       var el = document.createElement('button');
       el.type = 'button';
-      el.className = 'box';
+      el.className = 'box' + (group.target === 1 ? ' single' : '');
       el.setAttribute('role', 'progressbar');
       el.setAttribute('aria-valuemin', '0');
-      el.setAttribute('aria-valuemax', String(TARGET));
+      el.setAttribute('aria-valuemax', String(group.target));
       el.setAttribute('aria-label', group.title + ' — ' + box.name);
       el.innerHTML =
         '<span class="fill"></span>' +
         '<span class="badge">' + box.badge + '</span>' +
         '<span class="name">' + box.name + '</span>' +
         (box.sub ? '<span class="sub">' + box.sub + '</span>' : '') +
-        '<span class="count">0/' + TARGET + '</span>';
+        '<span class="count">0/' + group.target + '</span>';
       el.addEventListener('click', function (e) { bump(box, group, e.shiftKey); });
       box.el = el;
       quad.appendChild(el);
