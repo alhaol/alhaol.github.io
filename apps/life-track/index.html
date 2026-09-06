@@ -145,6 +145,9 @@
       transition: color 220ms ease;
     }
     .box .icon svg { display: block; width: 100%; height: 100%; }
+    /* Life boxes keep their Arabic line, so the symbol sits smaller there than the
+       Body figures do, which have the slot to themselves. */
+    .box .icon.icon-sm { width: clamp(18px, 4.2vh, 32px); height: clamp(18px, 4.2vh, 32px); }
 
     .box .badge {
       position: absolute;
@@ -263,6 +266,7 @@
       /* The figure survives where the Arabic line does not: on a small screen it
          identifies the exercise faster than the name does. */
       .box .icon { width: clamp(20px, 4.6vh, 30px); height: clamp(20px, 4.6vh, 30px); }
+      .box .icon.icon-sm { width: clamp(16px, 3.6vh, 24px); height: clamp(16px, 3.6vh, 24px); }
       .box .name { font-size: clamp(0.55rem, 1.5vh, 0.8rem); }
     }
   </style>
@@ -332,11 +336,50 @@
   function env(d) {
     return '<path d="' + d + '" stroke-width="1.5" stroke-opacity="0.5"/>';
   }
-  function head(x, y) {
-    return '<circle cx="' + x + '" cy="' + y + '" r="3.2" fill="currentColor" stroke="none"/>';
+  function head(x, y, r) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="' + (r || 3.2) +
+           '" fill="currentColor" stroke="none"/>';
   }
 
   var ICONS = {
+    // ---- Life. Objects and symbols rather than figures, because these are ideas
+    // rather than movements. Quran and Dhikr get none: the Arabic already names them,
+    // and there is no honest picture of a surah or of a phrase of remembrance.
+    allah: SVG_OPEN + env('M8 41h32') +
+      '<path d="M13 41V25C13 16 18 10 24 8C30 10 35 16 35 25v16"/></svg>',
+
+    // Two adults set wide with the child low between them. They must not touch:
+    // heads are filled and shoulders are stroked in the same colour, so any overlap
+    // merges into one blob rather than reading as three people.
+    family: SVG_OPEN +
+      head(11, 16, 3.8) + '<path d="M4.5 33a6.5 6.5 0 0 1 13 0"/>' +
+      head(37, 16, 3.8) + '<path d="M30.5 33a6.5 6.5 0 0 1 13 0"/>' +
+      head(24, 29, 3.2) + '<path d="M18.5 43a5.5 5.5 0 0 1 11 0"/></svg>',
+
+    profession: SVG_OPEN +
+      '<rect x="6" y="17" width="36" height="21" rx="3"/>' +
+      '<path d="M18 17v-3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"/>' +
+      env('M6 26h36') + '</svg>',
+
+    independence: SVG_OPEN +
+      '<circle cx="14" cy="24" r="7"/><path d="M21 24h20"/>' +
+      '<path d="M34 24v5"/><path d="M39 24v5"/></svg>',
+
+    social: SVG_OPEN +
+      '<path d="M15 15h18"/><path d="M14 19l8 13"/><path d="M34 19l-8 13"/>' +
+      head(12, 15, 3.6) + head(36, 15, 3.6) + head(24, 35, 3.6) + '</svg>',
+
+    health: SVG_OPEN +
+      '<path d="M41.68 9.22a11 11 0 0 0-15.56 0L24 11.34l-2.12-2.12a11 11 0 0 0-15.56 ' +
+      '15.56l2.12 2.12L24 42.46l15.56-15.56 2.12-2.12a11 11 0 0 0 0-15.56z"/>' +
+      '<path d="M12 24h5l2.5-5L24 29l2.5-5h9"/></svg>',
+
+    finance: SVG_OPEN +
+      '<ellipse cx="24" cy="13" rx="13" ry="5"/>' +
+      '<path d="M11 13v18c0 2.8 5.8 5 13 5s13-2.2 13-5V13"/>' +
+      env('M11 22c0 2.8 5.8 5 13 5s13-2.2 13-5') + '</svg>',
+
+    // ---- Body
     // Hanging from a bar, arms pulling the chin up to it.
     pullup: SVG_OPEN + env('M6 8h36') +
       '<path d="M17 9l5 12"/><path d="M31 9l-5 12"/>' + head(24, 15) +
@@ -388,12 +431,12 @@
       accent: '16, 185, 129',                                  // emerald
       boxes: [
         { key: 'allah',        badge: 'A', name: 'Allah',        sub: 'الصلاة' },
-        { key: 'family',       badge: 'F', name: 'Family',       sub: 'الأهل' },
+        { key: 'family',       badge: 'FA', name: 'Family',      sub: 'الأهل' },
         { key: 'profession',   badge: 'P', name: 'Profession',   sub: 'العمل' },
         { key: 'independence', badge: 'I', name: 'Independence', sub: 'الاستقلال' },
         { key: 'social',       badge: 'S', name: 'Social',       sub: 'الصلة' },
         { key: 'health',       badge: 'H', name: 'Health',       sub: 'الصحة' },
-        { key: 'finance',      badge: 'F', name: 'Finance',      sub: 'المال' }
+        { key: 'finance',      badge: 'FI', name: 'Finance',     sub: 'المال' }
       ]
     },
     {
@@ -565,8 +608,11 @@
         '<span class="fill"></span>' +
         '<span class="badge">' + box.badge + '</span>' +
         '<span class="name">' + box.name + '</span>' +
+        (ICONS[box.key]
+          ? '<span class="icon' + (box.sub ? ' icon-sm' : '') + '" aria-hidden="true">' +
+            ICONS[box.key] + '</span>'
+          : '') +
         (box.sub ? '<span class="sub">' + box.sub + '</span>' : '') +
-        (ICONS[box.key] ? '<span class="icon" aria-hidden="true">' + ICONS[box.key] + '</span>' : '') +
         '<span class="count">0/' + group.target + '</span>';
       el.addEventListener('click', function (e) { bump(box, group, e.shiftKey); });
       box.el = el;
