@@ -1,0 +1,814 @@
+<!--
+  alhaol.github.io app template
+  Placeholders Claude must replace before writing the final file:
+    Habit Tracker        Human-readable title shown in <title> and the header (e.g. "Calorie Tracker")
+    Nine micro-habits, three pillars, one day at a time      Short subtitle under the header (e.g. "Daily intake & macros")
+    10b981       Primary accent colour as a hex string, no '#' (e.g. "10b981" emerald, "fbbf24" gold, "60a5fa" blue)
+    059669  A softer companion colour for gradients (e.g. "059669" or "f59e0b")
+    habitTrackerApp          camelCase id for the mount node — used by the page JS (e.g. "calorieApp")
+    <style>
+    /* Pillars carry the colours habit-cards already gave them, so the two apps read
+       as being about the same nine habits. The emerald shell is what tells them apart. */
+    .pillar { border-left: 3px solid var(--p); padding-left: 14px; }
+    .pillar-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.7rem; }
+    .pillar-name { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p); }
+    .pillar-score { font-size: 0.7rem; font-weight: 600; color: #64748b; font-variant-numeric: tabular-nums; }
+    .pillar-gist { font-size: 0.65rem; color: #475569; margin-left: auto; }
+
+    .habit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    .habit {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 12px 12px 10px;
+      text-align: left;
+      font-family: inherit;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 200ms cubic-bezier(.2, .8, .2, 1),
+                  box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
+    }
+    .habit:focus-visible { outline: 2px solid var(--p); outline-offset: 2px; }
+
+    /* Same trick as the Life Track board: pin the origin per column so a card grows
+       inward and never escapes the panel. Centre origin pushes the outer two off it. */
+    .habit:nth-child(1) { transform-origin: left center; }
+    .habit:nth-child(2) { transform-origin: center center; }
+    .habit:nth-child(3) { transform-origin: right center; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .habit:hover {
+        transform: scale(1.35);
+        z-index: 20;
+        border-color: var(--p);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.72), 0 0 0 1px var(--p);
+      }
+    }
+
+    .habit .ico { width: 26px; height: 26px; color: var(--p); opacity: 0.72; transition: opacity 220ms ease; }
+    .habit .ico svg { display: block; width: 100%; height: 100%; }
+    .habit .nm { font-size: 0.8rem; font-weight: 700; line-height: 1.25; color: #e2e8f0; }
+    .habit .ky { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.14em; color: #64748b; }
+    .habit .gist { font-size: 0.66rem; line-height: 1.4; color: #64748b; }
+
+    .habit .strip { display: flex; gap: 3px; margin-top: auto; }
+    .habit .strip span { flex: 1 1 0; height: 6px; border-radius: 2px; background: rgba(148, 163, 184, 0.16); }
+    .habit .strip span.on { background: var(--p); }
+    .habit .strip span.today { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4); }
+    .habit .dlab { display: flex; gap: 3px; }
+    .habit .dlab span { flex: 1 1 0; text-align: center; font-size: 0.5rem; font-weight: 700; color: #475569; }
+
+    .habit .foot { display: flex; align-items: center; justify-content: space-between; font-size: 0.6rem; color: #64748b; }
+    .habit .stk { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .habit .stk svg { width: 10px; height: 10px; }
+    .habit.done { background: rgba(15, 23, 42, 0.95); border-color: var(--p); }
+    .habit.done .nm { color: #fff; }
+    .habit.done .ico { opacity: 1; }
+    .habit.done .stk { color: var(--p); }
+
+    @media (max-width: 640px) {
+      .habit-grid { grid-template-columns: 1fr; }
+      .habit .gist { display: none; }
+    }
+  </style>
+
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-6">
+    <div>
+      <p class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Done today</p>
+      <p class="text-3xl font-bold leading-none mt-1">
+        <span id="todayCount" class="accent-text">0</span><span class="text-slate-600 text-xl">/9</span>
+      </p>
+    </div>
+    <div class="flex items-end gap-4">
+      <div class="text-right">
+        <p class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Perfect days</p>
+        <p class="text-xl font-bold text-slate-200 leading-none mt-1" id="perfectDays">0</p>
+      </div>
+      <button id="clearToday" type="button"
+        class="text-xs text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-lg px-3 py-2 transition-colors">
+        Clear today
+      </button>
+    </div>
+  </div>
+
+  <div id="pillars" class="space-y-6"></div>
+
+  <p class="text-xs text-slate-600 mt-7 leading-relaxed">
+    Tap a habit to mark it done today, tap again to undo. The seven bars are the last seven days,
+    today on the right. A streak counts back from today, or from yesterday while today is still open,
+    so an unfinished day does not look like a broken one. Saved in this browser only.
+  </p>         The actual app markup that lives inside <main>. Leave hero/header alone.
+    (function () {
+  var STORE = 'habit-tracker.v1';
+  var KEEP_DAYS = 180;          // how far back history is retained
+  var WINDOW = 7;               // bars shown per habit
+
+  // Same stroke system as the Life Track figures: one 48x48 grid, stroke only, so an
+  // icon takes the pillar colour and stays sharp when a card scales up on hover.
+  var S = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" ' +
+          'stroke-linecap="round" stroke-linejoin="round">';
+  function dot(x, y, r) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="currentColor" stroke="none"/>';
+  }
+  function env(d) {
+    return '<path d="' + d + '" stroke-width="1.5" stroke-opacity="0.5"/>';
+  }
+
+  var PILLARS = [
+    { id: 'attention', label: 'Attention', color: '#60a5fa', gist: 'Protect what you point your mind at' },
+    { id: 'energy',    label: 'Energy',    color: '#fbbf24', gist: 'Make starting cheap and recovery real' },
+    { id: 'happiness', label: 'Happiness', color: '#a78bfa', gist: 'Small acts that reset how you feel' }
+  ];
+
+  // The nine micro-habits, matching apps/habit-cards so both pages describe the same set.
+  var HABITS = [
+    { id: 'click', pillar: 'attention', name: 'Correct After the Click', key: 'CATCH',
+      gist: 'Slip happens, attach a good action right after',
+      // A slip, then a U-turn: you cannot stop the reflex, you redirect what follows it.
+      icon: S + dot(11, 40, 3) + '<path d="M11 36V22a10 10 0 0 1 20 0v12"/>' +
+            '<path d="M24 28l7 7 7-7"/></svg>' },
+
+    { id: 'input', pillar: 'attention', name: 'Control Your Input', key: 'BATCH',
+      gist: 'Batch inputs into windows, touch each once',
+      icon: S + '<path d="M7 10h34L28 25v13l-8-4V25z"/></svg>' },
+
+    { id: 'write', pillar: 'attention', name: 'Write to Think', key: 'INK',
+      gist: 'Hand-write three questions before any hard call',
+      icon: S + '<path d="M32 7l9 9-21 21-11 2 2-11z"/><path d="M28 11l9 9"/>' +
+            env('M8 43h32') + '</svg>' },
+
+    { id: 'quantize', pillar: 'energy', name: 'Quantize the Action', key: 'SHRINK',
+      gist: 'Shrink it to the smallest possible start',
+      icon: S + '<rect x="19" y="19" width="10" height="10" rx="2"/>' +
+            '<path d="M7 7l8 8"/><path d="M7 14V7h7"/>' +
+            '<path d="M41 7l-8 8"/><path d="M41 14V7h-7"/>' +
+            '<path d="M7 41l8-8"/><path d="M7 34v7h7"/>' +
+            '<path d="M41 41l-8-8"/><path d="M41 34v7h-7"/></svg>' },
+
+    { id: 'caffeine', pillar: 'energy', name: 'Cut Caffeine Before Bed', key: 'CUTOFF',
+      gist: 'Last coffee at least six hours before sleep',
+      icon: S + '<path d="M9 15h22v13a11 11 0 0 1-22 0z"/>' +
+            '<path d="M31 18h4a5 5 0 0 1 0 10h-4"/>' + env('M7 42h28') +
+            '<path d="M8 8l32 32"/></svg>' },
+
+    { id: 'waves', pillar: 'energy', name: 'Ride the Waves', key: 'WAVE',
+      gist: 'Focus about 90 minutes, then a real break',
+      icon: S + '<path d="M6 24c4-10 8-10 12 0s8 10 12 0 8-10 12 0"/></svg>' },
+
+    { id: 'lookup', pillar: 'happiness', name: 'Look Up', key: 'SKY',
+      gist: 'Look up at the night sky, let it be bigger than you',
+      icon: S + '<path d="M22 8l3.2 9.8L35 21l-9.8 3.2L22 34l-3.2-9.8L9 21l9.8-3.2z"/>' +
+            '<path d="M37 27l1.6 4.4L43 33l-4.4 1.6L37 39l-1.6-4.4L31 33l4.4-1.6z"/></svg>' },
+
+    { id: 'mirror', pillar: 'happiness', name: 'Look in the Mirror', key: 'MIRROR',
+      gist: 'Name one thing you are grateful for, out loud',
+      icon: S + '<ellipse cx="24" cy="19" rx="12" ry="14"/>' +
+            '<path d="M17 13a9 11 0 0 0-2 8"/><path d="M24 33v7"/>' + env('M15 42h18') + '</svg>' },
+
+    { id: 'forgive', pillar: 'happiness', name: 'Forgive Yourself', key: 'FORGIVE',
+      gist: 'Streak broke? Note it and begin again, no spiral',
+      // Begin again, kindly: the loop comes back round to a heart rather than a scold.
+      icon: S + '<path d="M38 24a14 14 0 1 1-4.1-9.9"/><path d="M28 9l6 6-6 6"/>' +
+            '<path d="M24 32c-5.2-3.5-8.2-6-8.2-9.1a4.2 4.2 0 0 1 8.2-1.4 4.2 4.2 0 0 1 8.2 1.4' +
+            'c0 3.1-3 5.6-8.2 9.1z"/></svg>' }
+  ];
+
+  var FLAME = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" ' +
+              'stroke-linejoin="round"><path d="M24 43c-7 0-12-5-12-11 0-8 8-12 8-22 0 0 8 5 8 13' +
+              '1.5-2 2-5 2-5s6 5 6 14c0 6-5 11-12 11z"/></svg>';
+
+  // Dates are handled as local YYYY-MM-DD strings and stepped with setDate, never as UTC
+  // millisecond maths, so a day boundary lands where the user actually is.
+  function iso(d) {
+    return d.getFullYear() + '-' +
+           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + d.getDate()).slice(-2);
+  }
+  function today() { return iso(new Date()); }
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function shift(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return iso(d); }
+  function letterOf(s) { return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][parse(s).getDay()]; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      var parsed = raw ? JSON.parse(raw) : null;
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* private mode */ }
+  }
+
+  var state = load();
+  var mounted = today();
+
+  function daysOf(id) {
+    if (!Array.isArray(state[id])) state[id] = [];
+    return state[id];
+  }
+  function isDone(id, d) { return daysOf(id).indexOf(d) !== -1; }
+
+  function toggle(id) {
+    var d = today();
+    var a = daysOf(id);
+    var i = a.indexOf(d);
+    if (i === -1) a.push(d); else a.splice(i, 1);
+    var cutoff = shift(d, -KEEP_DAYS);
+    state[id] = a.filter(function (x) { return x >= cutoff; }).sort();
+    save();
+  }
+
+  // Counts back from today, or from yesterday while today is still open. An unfinished
+  // day should not read as a broken streak until the day is actually over.
+  function streakOf(id) {
+    var d = today();
+    if (!isDone(id, d)) d = shift(d, -1);
+    var n = 0;
+    while (isDone(id, d)) { n++; d = shift(d, -1); }
+    return n;
+  }
+
+  function windowDays() {
+    var out = [], d = today(), i;
+    for (i = WINDOW - 1; i >= 0; i--) out.push(shift(d, -i));
+    return out;
+  }
+
+  function doneToday() {
+    var d = today();
+    return HABITS.filter(function (h) { return isDone(h.id, d); }).length;
+  }
+
+  function perfectDays() {
+    var tally = {}, n = 0, d;
+    HABITS.forEach(function (h) {
+      daysOf(h.id).forEach(function (day) { tally[day] = (tally[day] || 0) + 1; });
+    });
+    for (d in tally) if (tally[d] === HABITS.length) n++;
+    return n;
+  }
+
+  var host = document.getElementById('pillars');
+
+  function render() {
+    var days = windowDays();
+    var t = today();
+    host.innerHTML = '';
+
+    PILLARS.forEach(function (p) {
+      var mine = HABITS.filter(function (h) { return h.pillar === p.id; });
+      var done = mine.filter(function (h) { return isDone(h.id, t); }).length;
+
+      var sec = document.createElement('section');
+      sec.className = 'pillar';
+      sec.style.setProperty('--p', p.color);
+
+      var head = document.createElement('div');
+      head.className = 'pillar-head';
+      head.innerHTML = '<span class="pillar-name">' + p.label + '</span>' +
+                       '<span class="pillar-score">' + done + '/' + mine.length + '</span>' +
+                       '<span class="pillar-gist">' + p.gist + '</span>';
+      sec.appendChild(head);
+
+      var grid = document.createElement('div');
+      grid.className = 'habit-grid';
+
+      mine.forEach(function (h) {
+        var on = isDone(h.id, t);
+        var bars = days.map(function (d) {
+          return '<span class="' + (isDone(h.id, d) ? 'on' : '') + (d === t ? ' today' : '') +
+                 '" title="' + d + '"></span>';
+        }).join('');
+        var labels = days.map(function (d) { return '<span>' + letterOf(d) + '</span>'; }).join('');
+        var n = streakOf(h.id);
+
+        var el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'habit' + (on ? ' done' : '');
+        el.setAttribute('aria-pressed', on ? 'true' : 'false');
+        el.setAttribute('aria-label', h.name + ', ' + p.label + '. ' + h.gist);
+        el.innerHTML =
+          '<span class="ico" aria-hidden="true">' + h.icon + '</span>' +
+          '<span class="nm">' + h.name + '</span>' +
+          '<span class="ky">' + h.key + '</span>' +
+          '<span class="gist">' + h.gist + '</span>' +
+          '<span class="strip">' + bars + '</span>' +
+          '<span class="dlab">' + labels + '</span>' +
+          '<span class="foot"><span>last 7 days</span>' +
+          '<span class="stk">' + FLAME + n + '</span></span>';
+
+        el.addEventListener('click', function () { toggle(h.id); render(); });
+        grid.appendChild(el);
+      });
+
+      sec.appendChild(grid);
+      host.appendChild(sec);
+    });
+
+    document.getElementById('todayCount').textContent = doneToday();
+    document.getElementById('perfectDays').textContent = perfectDays();
+  }
+
+  document.getElementById('clearToday').addEventListener('click', function () {
+    var d = today();
+    HABITS.forEach(function (h) {
+      var a = daysOf(h.id);
+      var i = a.indexOf(d);
+      if (i !== -1) a.splice(i, 1);
+    });
+    save();
+    render();
+  });
+
+  // A tab left open overnight should roll onto the new day rather than keep filling
+  // yesterday, and another tab may have written since this one last painted.
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    state = load();
+    mounted = today();
+    render();
+  });
+  window.addEventListener('focus', function () {
+    if (today() !== mounted) { mounted = today(); render(); }
+  });
+
+  render();
+})();       The vanilla JS module that powers the app. Pure JS, no build tools.
+
+  Do NOT edit the login overlay block or the _login() script — they are the project's
+  shared access gate (credentials ibrahim / ibrahimwin). The CLAUDE.md contract for
+  /apps/<slug>/ pages requires this overlay verbatim.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Tracker</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: #10b981; }
+    .btn-accent {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #10b981; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-3xl mx-auto relative z-10">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Habit Tracker</h1>
+      <p class="text-slate-400 text-sm mt-1">Nine micro-habits, three pillars, one day at a time</p>
+    </div>
+    <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
+  </header>
+
+  <main id="habitTrackerApp" class="glass-panel p-6">
+    <style>
+    /* Pillars carry the colours habit-cards already gave them, so the two apps read
+       as being about the same nine habits. The emerald shell is what tells them apart. */
+    .pillar { border-left: 3px solid var(--p); padding-left: 14px; }
+    .pillar-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.7rem; }
+    .pillar-name { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p); }
+    .pillar-score { font-size: 0.7rem; font-weight: 600; color: #64748b; font-variant-numeric: tabular-nums; }
+    .pillar-gist { font-size: 0.65rem; color: #475569; margin-left: auto; }
+
+    .habit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    .habit {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 12px 12px 10px;
+      text-align: left;
+      font-family: inherit;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 200ms cubic-bezier(.2, .8, .2, 1),
+                  box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
+    }
+    .habit:focus-visible { outline: 2px solid var(--p); outline-offset: 2px; }
+
+    /* Same trick as the Life Track board: pin the origin per column so a card grows
+       inward and never escapes the panel. Centre origin pushes the outer two off it. */
+    .habit:nth-child(1) { transform-origin: left center; }
+    .habit:nth-child(2) { transform-origin: center center; }
+    .habit:nth-child(3) { transform-origin: right center; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .habit:hover {
+        transform: scale(1.35);
+        z-index: 20;
+        border-color: var(--p);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.72), 0 0 0 1px var(--p);
+      }
+    }
+
+    .habit .ico { width: 26px; height: 26px; color: var(--p); opacity: 0.72; transition: opacity 220ms ease; }
+    .habit .ico svg { display: block; width: 100%; height: 100%; }
+    .habit .nm { font-size: 0.8rem; font-weight: 700; line-height: 1.25; color: #e2e8f0; }
+    .habit .ky { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.14em; color: #64748b; }
+    .habit .gist { font-size: 0.66rem; line-height: 1.4; color: #64748b; }
+
+    .habit .strip { display: flex; gap: 3px; margin-top: auto; }
+    .habit .strip span { flex: 1 1 0; height: 6px; border-radius: 2px; background: rgba(148, 163, 184, 0.16); }
+    .habit .strip span.on { background: var(--p); }
+    .habit .strip span.today { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4); }
+    .habit .dlab { display: flex; gap: 3px; }
+    .habit .dlab span { flex: 1 1 0; text-align: center; font-size: 0.5rem; font-weight: 700; color: #475569; }
+
+    .habit .foot { display: flex; align-items: center; justify-content: space-between; font-size: 0.6rem; color: #64748b; }
+    .habit .stk { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .habit .stk svg { width: 10px; height: 10px; }
+    .habit.done { background: rgba(15, 23, 42, 0.95); border-color: var(--p); }
+    .habit.done .nm { color: #fff; }
+    .habit.done .ico { opacity: 1; }
+    .habit.done .stk { color: var(--p); }
+
+    @media (max-width: 640px) {
+      .habit-grid { grid-template-columns: 1fr; }
+      .habit .gist { display: none; }
+    }
+  </style>
+
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-6">
+    <div>
+      <p class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Done today</p>
+      <p class="text-3xl font-bold leading-none mt-1">
+        <span id="todayCount" class="accent-text">0</span><span class="text-slate-600 text-xl">/9</span>
+      </p>
+    </div>
+    <div class="flex items-end gap-4">
+      <div class="text-right">
+        <p class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Perfect days</p>
+        <p class="text-xl font-bold text-slate-200 leading-none mt-1" id="perfectDays">0</p>
+      </div>
+      <button id="clearToday" type="button"
+        class="text-xs text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-lg px-3 py-2 transition-colors">
+        Clear today
+      </button>
+    </div>
+  </div>
+
+  <div id="pillars" class="space-y-6"></div>
+
+  <p class="text-xs text-slate-600 mt-7 leading-relaxed">
+    Tap a habit to mark it done today, tap again to undo. The seven bars are the last seven days,
+    today on the right. A streak counts back from today, or from yesterday while today is still open,
+    so an unfinished day does not look like a broken one. Saved in this browser only.
+  </p>
+  </main>
+</div>
+
+<script>
+// === App logic ===
+(function () {
+  var STORE = 'habit-tracker.v1';
+  var KEEP_DAYS = 180;          // how far back history is retained
+  var WINDOW = 7;               // bars shown per habit
+
+  // Same stroke system as the Life Track figures: one 48x48 grid, stroke only, so an
+  // icon takes the pillar colour and stays sharp when a card scales up on hover.
+  var S = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" ' +
+          'stroke-linecap="round" stroke-linejoin="round">';
+  function dot(x, y, r) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="currentColor" stroke="none"/>';
+  }
+  function env(d) {
+    return '<path d="' + d + '" stroke-width="1.5" stroke-opacity="0.5"/>';
+  }
+
+  var PILLARS = [
+    { id: 'attention', label: 'Attention', color: '#60a5fa', gist: 'Protect what you point your mind at' },
+    { id: 'energy',    label: 'Energy',    color: '#fbbf24', gist: 'Make starting cheap and recovery real' },
+    { id: 'happiness', label: 'Happiness', color: '#a78bfa', gist: 'Small acts that reset how you feel' }
+  ];
+
+  // The nine micro-habits, matching apps/habit-cards so both pages describe the same set.
+  var HABITS = [
+    { id: 'click', pillar: 'attention', name: 'Correct After the Click', key: 'CATCH',
+      gist: 'Slip happens, attach a good action right after',
+      // A slip, then a U-turn: you cannot stop the reflex, you redirect what follows it.
+      icon: S + dot(11, 40, 3) + '<path d="M11 36V22a10 10 0 0 1 20 0v12"/>' +
+            '<path d="M24 28l7 7 7-7"/></svg>' },
+
+    { id: 'input', pillar: 'attention', name: 'Control Your Input', key: 'BATCH',
+      gist: 'Batch inputs into windows, touch each once',
+      icon: S + '<path d="M7 10h34L28 25v13l-8-4V25z"/></svg>' },
+
+    { id: 'write', pillar: 'attention', name: 'Write to Think', key: 'INK',
+      gist: 'Hand-write three questions before any hard call',
+      icon: S + '<path d="M32 7l9 9-21 21-11 2 2-11z"/><path d="M28 11l9 9"/>' +
+            env('M8 43h32') + '</svg>' },
+
+    { id: 'quantize', pillar: 'energy', name: 'Quantize the Action', key: 'SHRINK',
+      gist: 'Shrink it to the smallest possible start',
+      icon: S + '<rect x="19" y="19" width="10" height="10" rx="2"/>' +
+            '<path d="M7 7l8 8"/><path d="M7 14V7h7"/>' +
+            '<path d="M41 7l-8 8"/><path d="M41 14V7h-7"/>' +
+            '<path d="M7 41l8-8"/><path d="M7 34v7h7"/>' +
+            '<path d="M41 41l-8-8"/><path d="M41 34v7h-7"/></svg>' },
+
+    { id: 'caffeine', pillar: 'energy', name: 'Cut Caffeine Before Bed', key: 'CUTOFF',
+      gist: 'Last coffee at least six hours before sleep',
+      icon: S + '<path d="M9 15h22v13a11 11 0 0 1-22 0z"/>' +
+            '<path d="M31 18h4a5 5 0 0 1 0 10h-4"/>' + env('M7 42h28') +
+            '<path d="M8 8l32 32"/></svg>' },
+
+    { id: 'waves', pillar: 'energy', name: 'Ride the Waves', key: 'WAVE',
+      gist: 'Focus about 90 minutes, then a real break',
+      icon: S + '<path d="M6 24c4-10 8-10 12 0s8 10 12 0 8-10 12 0"/></svg>' },
+
+    { id: 'lookup', pillar: 'happiness', name: 'Look Up', key: 'SKY',
+      gist: 'Look up at the night sky, let it be bigger than you',
+      icon: S + '<path d="M22 8l3.2 9.8L35 21l-9.8 3.2L22 34l-3.2-9.8L9 21l9.8-3.2z"/>' +
+            '<path d="M37 27l1.6 4.4L43 33l-4.4 1.6L37 39l-1.6-4.4L31 33l4.4-1.6z"/></svg>' },
+
+    { id: 'mirror', pillar: 'happiness', name: 'Look in the Mirror', key: 'MIRROR',
+      gist: 'Name one thing you are grateful for, out loud',
+      icon: S + '<ellipse cx="24" cy="19" rx="12" ry="14"/>' +
+            '<path d="M17 13a9 11 0 0 0-2 8"/><path d="M24 33v7"/>' + env('M15 42h18') + '</svg>' },
+
+    { id: 'forgive', pillar: 'happiness', name: 'Forgive Yourself', key: 'FORGIVE',
+      gist: 'Streak broke? Note it and begin again, no spiral',
+      // Begin again, kindly: the loop comes back round to a heart rather than a scold.
+      icon: S + '<path d="M38 24a14 14 0 1 1-4.1-9.9"/><path d="M28 9l6 6-6 6"/>' +
+            '<path d="M24 32c-5.2-3.5-8.2-6-8.2-9.1a4.2 4.2 0 0 1 8.2-1.4 4.2 4.2 0 0 1 8.2 1.4' +
+            'c0 3.1-3 5.6-8.2 9.1z"/></svg>' }
+  ];
+
+  var FLAME = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" ' +
+              'stroke-linejoin="round"><path d="M24 43c-7 0-12-5-12-11 0-8 8-12 8-22 0 0 8 5 8 13' +
+              '1.5-2 2-5 2-5s6 5 6 14c0 6-5 11-12 11z"/></svg>';
+
+  // Dates are handled as local YYYY-MM-DD strings and stepped with setDate, never as UTC
+  // millisecond maths, so a day boundary lands where the user actually is.
+  function iso(d) {
+    return d.getFullYear() + '-' +
+           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + d.getDate()).slice(-2);
+  }
+  function today() { return iso(new Date()); }
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function shift(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return iso(d); }
+  function letterOf(s) { return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][parse(s).getDay()]; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      var parsed = raw ? JSON.parse(raw) : null;
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* private mode */ }
+  }
+
+  var state = load();
+  var mounted = today();
+
+  function daysOf(id) {
+    if (!Array.isArray(state[id])) state[id] = [];
+    return state[id];
+  }
+  function isDone(id, d) { return daysOf(id).indexOf(d) !== -1; }
+
+  function toggle(id) {
+    var d = today();
+    var a = daysOf(id);
+    var i = a.indexOf(d);
+    if (i === -1) a.push(d); else a.splice(i, 1);
+    var cutoff = shift(d, -KEEP_DAYS);
+    state[id] = a.filter(function (x) { return x >= cutoff; }).sort();
+    save();
+  }
+
+  // Counts back from today, or from yesterday while today is still open. An unfinished
+  // day should not read as a broken streak until the day is actually over.
+  function streakOf(id) {
+    var d = today();
+    if (!isDone(id, d)) d = shift(d, -1);
+    var n = 0;
+    while (isDone(id, d)) { n++; d = shift(d, -1); }
+    return n;
+  }
+
+  function windowDays() {
+    var out = [], d = today(), i;
+    for (i = WINDOW - 1; i >= 0; i--) out.push(shift(d, -i));
+    return out;
+  }
+
+  function doneToday() {
+    var d = today();
+    return HABITS.filter(function (h) { return isDone(h.id, d); }).length;
+  }
+
+  function perfectDays() {
+    var tally = {}, n = 0, d;
+    HABITS.forEach(function (h) {
+      daysOf(h.id).forEach(function (day) { tally[day] = (tally[day] || 0) + 1; });
+    });
+    for (d in tally) if (tally[d] === HABITS.length) n++;
+    return n;
+  }
+
+  var host = document.getElementById('pillars');
+
+  function render() {
+    var days = windowDays();
+    var t = today();
+    host.innerHTML = '';
+
+    PILLARS.forEach(function (p) {
+      var mine = HABITS.filter(function (h) { return h.pillar === p.id; });
+      var done = mine.filter(function (h) { return isDone(h.id, t); }).length;
+
+      var sec = document.createElement('section');
+      sec.className = 'pillar';
+      sec.style.setProperty('--p', p.color);
+
+      var head = document.createElement('div');
+      head.className = 'pillar-head';
+      head.innerHTML = '<span class="pillar-name">' + p.label + '</span>' +
+                       '<span class="pillar-score">' + done + '/' + mine.length + '</span>' +
+                       '<span class="pillar-gist">' + p.gist + '</span>';
+      sec.appendChild(head);
+
+      var grid = document.createElement('div');
+      grid.className = 'habit-grid';
+
+      mine.forEach(function (h) {
+        var on = isDone(h.id, t);
+        var bars = days.map(function (d) {
+          return '<span class="' + (isDone(h.id, d) ? 'on' : '') + (d === t ? ' today' : '') +
+                 '" title="' + d + '"></span>';
+        }).join('');
+        var labels = days.map(function (d) { return '<span>' + letterOf(d) + '</span>'; }).join('');
+        var n = streakOf(h.id);
+
+        var el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'habit' + (on ? ' done' : '');
+        el.setAttribute('aria-pressed', on ? 'true' : 'false');
+        el.setAttribute('aria-label', h.name + ', ' + p.label + '. ' + h.gist);
+        el.innerHTML =
+          '<span class="ico" aria-hidden="true">' + h.icon + '</span>' +
+          '<span class="nm">' + h.name + '</span>' +
+          '<span class="ky">' + h.key + '</span>' +
+          '<span class="gist">' + h.gist + '</span>' +
+          '<span class="strip">' + bars + '</span>' +
+          '<span class="dlab">' + labels + '</span>' +
+          '<span class="foot"><span>last 7 days</span>' +
+          '<span class="stk">' + FLAME + n + '</span></span>';
+
+        el.addEventListener('click', function () { toggle(h.id); render(); });
+        grid.appendChild(el);
+      });
+
+      sec.appendChild(grid);
+      host.appendChild(sec);
+    });
+
+    document.getElementById('todayCount').textContent = doneToday();
+    document.getElementById('perfectDays').textContent = perfectDays();
+  }
+
+  document.getElementById('clearToday').addEventListener('click', function () {
+    var d = today();
+    HABITS.forEach(function (h) {
+      var a = daysOf(h.id);
+      var i = a.indexOf(d);
+      if (i !== -1) a.splice(i, 1);
+    });
+    save();
+    render();
+  });
+
+  // A tab left open overnight should roll onto the new day rather than keep filling
+  // yesterday, and another tab may have written since this one last painted.
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    state = load();
+    mounted = today();
+    render();
+  });
+  window.addEventListener('focus', function () {
+    if (today() !== mounted) { mounted = today(); render(); }
+  });
+
+  render();
+})();
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
