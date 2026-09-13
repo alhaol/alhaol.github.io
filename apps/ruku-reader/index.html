@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruku Reader</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: #a78bfa; }
+    .btn-accent {
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #a78bfa; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    /* ---------------- Ruku Reader additions ---------------------------------
+       Theme tokens. Dark is the default; .light on <html> swaps them, so no
+       colour below is written twice. The template's own rules stay as-is;
+       these override the few that need to follow the theme.                  */
+    :root {
+      --bg:        #020617;
+      --bg-glow:   #1e1b4b;
+      --panel:     rgba(30, 41, 59, 0.6);
+      --panel-bd:  rgba(255, 255, 255, 0.08);
+      --card:      rgba(2, 6, 23, 0.45);
+      --card-bd:   rgba(167, 139, 250, 0.18);
+      --paper:     #0b1020;
+      --txt:       #f1f5f9;
+      --txt-2:     #94a3b8;
+      --txt-3:     #64748b;
+      --accent:    #a78bfa;
+      --accent-2:  #8b5cf6;
+      --accent-w:  rgba(167, 139, 250, 0.15);
+      --field:     rgba(30, 41, 59, 0.8);
+      --field-bd:  #475569;
+      --chip:      rgba(30, 41, 59, 0.85);
+      --chip-bd:   #334155;
+      --line:      rgba(255, 255, 255, 0.10);
+      --track:     rgba(2, 6, 23, 0.7);
+      --read:      #fbbf24;
+      --done:      #34d399;
+      --shadow:    0 8px 32px rgba(0, 0, 0, 0.3);
+      --fsx:       1;
+    }
+    html.light {
+      --bg:        #f5f4f8;
+      --bg-glow:   #e6e2f7;
+      --panel:     rgba(255, 255, 255, 0.85);
+      --panel-bd:  rgba(15, 23, 42, 0.10);
+      --card:      #ffffff;
+      --card-bd:   rgba(109, 40, 217, 0.20);
+      --paper:     #fffdf7;                    /* warm paper for the Arabic */
+      --txt:       #0f172a;
+      --txt-2:     #475569;
+      --txt-3:     #6b7280;
+      --accent:    #6d28d9;
+      --accent-2:  #7c3aed;
+      --accent-w:  rgba(109, 40, 217, 0.12);
+      --field:     #ffffff;
+      --field-bd:  #cbd5e1;
+      --chip:      #ffffff;
+      --chip-bd:   #cbd5e1;
+      --line:      rgba(15, 23, 42, 0.12);
+      --track:     rgba(15, 23, 42, 0.08);
+      --read:      #b45309;
+      --done:      #047857;
+      --shadow:    0 8px 28px rgba(15, 23, 42, 0.10);
+    }
+
+    html { background-color: var(--bg); }
+    body {
+      background: radial-gradient(circle at 50% 0%, var(--bg-glow) 0%, var(--bg) 70%);
+      background-attachment: fixed;
+      color: var(--txt);
+    }
+    .glass-panel { background: var(--panel); border-color: var(--panel-bd); box-shadow: var(--shadow); }
+    .accent-text { color: var(--accent); }
+    .t-main  { color: var(--txt); }
+    .t-dim   { color: var(--txt-2); }
+    .t-faint { color: var(--txt-3); }
+    .input-field { background: var(--field); border-color: var(--field-bd); color: var(--txt); }
+    .input-field:focus { border-color: var(--accent); }
+    header h1 { color: var(--txt) !important; }
+    header p, header a { color: var(--txt-2) !important; }
+    header a:hover { color: var(--accent) !important; }
+
+    .chip {
+      background: var(--chip); border: 1px solid var(--chip-bd); color: var(--txt-2);
+      padding: 6px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; transition: all .18s; white-space: nowrap;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--txt); }
+    .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    html.light .chip.on { color: #fff; }
+    .icon-btn {
+      background: transparent; border: 1px solid var(--chip-bd); color: var(--txt-2);
+      width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 15px;
+      display: inline-flex; align-items: center; justify-content: center; transition: all .18s;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ---- Surah grid ---- */
+    .s-grid {
+      display: grid; gap: 11px;
+      grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+    }
+    .s-card {
+      position: relative; text-align: left; cursor: pointer;
+      background: var(--card); border: 1px solid var(--card-bd);
+      border-radius: 12px; padding: 13px 14px 12px; overflow: hidden;
+      transition: transform .16s, border-color .16s, box-shadow .16s;
+    }
+    .s-card:hover {
+      transform: translateY(-2px); border-color: var(--accent);
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    }
+    .s-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .s-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 26px; height: 26px; padding: 0 6px; border-radius: 8px;
+      background: var(--accent-w); color: var(--accent);
+      font-size: 12px; font-weight: 700;
+    }
+    .s-ar {
+      font-family: 'Amiri', serif; font-size: 21px; line-height: 1.5;
+      color: var(--txt); direction: rtl;
+    }
+    .s-en { font-size: 13.5px; font-weight: 600; color: var(--txt); margin-top: 3px; }
+    .s-meta { font-size: 11px; color: var(--txt-3); margin-top: 2px; }
+    /* Progress rail sits flush on the card's bottom edge. */
+    .s-rail { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--track); }
+    .s-fill { height: 100%; background: var(--done); transition: width .3s; }
+    .s-fill.part { background: var(--read); }
+
+    /* ---- Ruku list inside the popup ---- */
+    .r-row {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      background: transparent; border: 1px solid transparent; border-bottom: 1px solid var(--line);
+      padding: 11px 10px; cursor: pointer; text-align: left; color: var(--txt);
+      transition: background .15s, border-color .15s;
+    }
+    .r-row:hover { background: var(--accent-w); border-color: var(--card-bd); border-radius: 9px; }
+    .r-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; border: 1.5px solid var(--txt-3); }
+    .r-dot.s1 { background: var(--read); border-color: var(--read); }
+    .r-dot.s2 { background: var(--done); border-color: var(--done); }
+    .r-n { font-size: 13px; font-weight: 700; min-width: 62px; }
+    .r-range { font-size: 12px; color: var(--txt-2); }
+    .r-count { font-size: 11px; color: var(--txt-3); margin-left: auto; }
+
+    /* ---- Modal ---- */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 60; background: rgba(2, 6, 23, .72);
+      backdrop-filter: blur(4px); display: flex; align-items: center;
+      justify-content: center; padding: 18px;
+    }
+    html.light .modal-bg { background: rgba(15, 23, 42, .45); }
+    .modal {
+      width: 100%; max-width: 520px; max-height: 84vh; overflow: auto;
+      background: var(--panel); backdrop-filter: blur(14px);
+      border: 1px solid var(--panel-bd); border-radius: 16px;
+      padding: 20px; box-shadow: var(--shadow);
+    }
+
+    /* ---- Full-page reader ----
+       z-index stays under the login overlay's 9999 so the gate always wins. */
+    .reader {
+      position: fixed; inset: 0; z-index: 70; overflow-y: auto;
+      background: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, var(--bg-glow) 0%, var(--bg) 62%);
+    }
+    .reader-bar {
+      position: sticky; top: 0; z-index: 2;
+      display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+      padding: 11px 16px; border-bottom: 1px solid var(--line);
+      background: var(--panel); backdrop-filter: blur(12px);
+    }
+    .reader-inner { max-width: 940px; margin: 0 auto; padding: 26px 18px 120px; }
+    .page {
+      background: var(--paper); border: 1px solid var(--card-bd);
+      border-radius: 16px; padding: 34px 30px; box-shadow: var(--shadow);
+    }
+    @media (max-width: 640px) { .page { padding: 22px 16px; } .reader-inner { padding: 16px 11px 120px; } }
+
+    .bismillah {
+      font-family: 'Amiri', serif; direction: rtl; text-align: center;
+      font-size: calc(26px * var(--fsx)); color: var(--accent);
+      padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--line);
+    }
+    /* Flowing mushaf-style text: verses run together, separated by end markers. */
+    .ayat {
+      font-family: 'Amiri', serif; direction: rtl; text-align: justify;
+      font-size: calc(30px * var(--fsx)); line-height: 2.15; color: var(--txt);
+      word-spacing: .06em;
+    }
+    .ayah { transition: background .18s; border-radius: 6px; }
+    .ayah:hover { background: var(--accent-w); }
+    .amark {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: calc(29px * var(--fsx)); height: calc(29px * var(--fsx));
+      margin: 0 5px; padding: 0 4px; border-radius: 50%;
+      border: 1.5px solid var(--accent); color: var(--accent);
+      font-family: 'Amiri', serif; font-size: calc(14px * var(--fsx));
+      line-height: 1; vertical-align: middle; user-select: none;
+    }
+
+    .seg { display: inline-flex; gap: 0; border: 1px solid var(--chip-bd); border-radius: 999px; overflow: hidden; }
+    .seg button {
+      background: transparent; border: none; color: var(--txt-2); cursor: pointer;
+      padding: 6px 13px; font-size: 12px; font-weight: 600; transition: all .16s;
+    }
+    .seg button:hover { color: var(--txt); }
+    .seg button.on { background: var(--accent); color: #fff; }
+
+    .hidden { display: none !important; }
+    .spin { width: 22px; height: 22px; border: 2px solid var(--line); border-top-color: var(--accent);
+            border-radius: 50%; animation: sp .7s linear infinite; margin: 30px auto; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    #toast {
+      position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(14px);
+      z-index: 200; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600;
+      padding: 9px 18px; border-radius: 999px; opacity: 0; pointer-events: none;
+      transition: opacity .2s, transform .2s;
+    }
+    #toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-6xl mx-auto relative z-10">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Ruku Reader</h1>
+      <p class="text-slate-400 text-sm mt-1">114 surahs → 551 rukus → one page of Quran</p>
+    </div>
+    <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
+  </header>
+
+  <main id="rukuReader" class="glass-panel p-5 md:p-6">
+        <!-- ============================ Surah grid ============================ -->
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <input id="q" class="input-field" style="max-width:290px" autocomplete="off"
+             placeholder="Search surah — name, Arabic, or number">
+      <div class="flex gap-2 flex-wrap">
+        <button class="chip on" data-f="all">All</button>
+        <button class="chip" data-f="new">Untouched</button>
+        <button class="chip" data-f="part">In progress</button>
+        <button class="chip" data-f="done">Complete</button>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <button id="resumeBtn" class="chip hidden">Resume</button>
+        <button id="themeBtn" class="icon-btn" aria-label="Toggle light and dark">◐</button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 mb-5">
+      <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:var(--track)">
+        <div id="allFill" class="h-full rounded-full" style="width:0;background:var(--done);transition:width .35s"></div>
+      </div>
+      <div id="allNum" class="text-xs t-dim whitespace-nowrap"></div>
+    </div>
+
+    <div id="grid" class="s-grid"></div>
+    <p id="noHits" class="hidden text-center text-sm t-faint py-10">No surah matches that search.</p>
+
+    <!-- ==================== Ruku popup (moved to <body>) ==================== -->
+    <div id="rukuModal" class="modal-bg hidden">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+        <div class="flex items-start justify-between gap-3 mb-1">
+          <div>
+            <h2 id="mTitle" class="text-lg font-bold t-main"></h2>
+            <p id="mMeta" class="text-xs t-dim mt-0.5"></p>
+          </div>
+          <div class="text-right flex-none">
+            <div id="mAr" class="s-ar" style="font-size:26px"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 my-3">
+          <button id="mAllRead" class="chip">Mark surah complete</button>
+          <button id="mReset" class="chip">Reset</button>
+          <button id="mClose" class="icon-btn ml-auto" aria-label="Close">&times;</button>
+        </div>
+        <p class="text-[11px] t-faint mb-1">Click a ruku to read it · click its dot to change status</p>
+        <div id="mList"></div>
+      </div>
+    </div>
+
+    <!-- ================== Full-page reader (moved to <body>) ================== -->
+    <div id="reader" class="reader hidden">
+      <div class="reader-bar">
+        <button id="rBack" class="chip">← All surahs</button>
+        <button id="rList" class="chip">Rukus</button>
+        <div class="seg" role="group" aria-label="Ruku status">
+          <button data-st="0">New</button>
+          <button data-st="1">Reading</button>
+          <button data-st="2">Done</button>
+        </div>
+        <div class="ml-auto flex items-center gap-1.5">
+          <button id="rSmall" class="icon-btn" aria-label="Smaller text">A−</button>
+          <button id="rBig" class="icon-btn" aria-label="Larger text">A+</button>
+          <button id="rTheme" class="icon-btn" aria-label="Toggle light and dark">◐</button>
+          <button id="rPrev" class="icon-btn" aria-label="Previous ruku">‹</button>
+          <button id="rNext" class="icon-btn" aria-label="Next ruku">›</button>
+        </div>
+      </div>
+
+      <div class="reader-inner">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
+          <h2 id="rAr" class="s-ar" style="font-size:30px"></h2>
+          <div>
+            <div id="rTitle" class="text-base font-bold t-main"></div>
+            <div id="rCrumb" class="text-xs t-dim"></div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div id="rBism" class="bismillah hidden"></div>
+          <div id="rSpin" class="spin hidden"></div>
+          <p id="rErr" class="hidden text-center text-sm t-dim py-8"></p>
+          <div id="rText" class="ayat"></div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-5">
+          <button id="rPrev2" class="chip">‹ Previous ruku</button>
+          <button id="rDone" class="btn-accent" style="padding:9px 18px;font-size:13px">Mark done &amp; next ›</button>
+          <button id="rNext2" class="chip">Next ruku ›</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+  </main>
+</div>
+
+<script>
+// === App logic ===
+'use strict';
+
+/* ---------------------------------------------------------------------------
+   Ruku boundary table: [surah id, English name, Arabic name, end-verse of each
+   ruku]. 114 surahs, 551 rukus. Ships with the page, so the grid, the popup and
+   all progress work with no network at all — only the verse text is fetched.
+--------------------------------------------------------------------------- */
+const DB = [
+  {id:1,en:"Al-Fatiha",ar:"الفاتحة",stops:[7]},
+  {id:2,en:"Al-Baqarah",ar:"البقرة",stops:[7,20,29,39,46,59,61,71,82,86,96,103,112,121,129,141,147,152,163,167,176,182,188,196,210,216,221,228,231,235,242,248,253,257,260,266,273,281,283,286]},
+  {id:3,en:"Al-Imran",ar:"آل عمران",stops:[9,20,30,41,54,62,71,80,91,101,109,120,129,143,148,155,171,180,189,200]},
+  {id:4,en:"An-Nisa",ar:"النساء",stops:[10,14,22,25,33,42,50,59,70,76,87,91,96,100,104,112,115,126,134,141,152,162,171,176]},
+  {id:5,en:"Al-Ma'idah",ar:"المائدة",stops:[5,11,19,26,34,43,50,56,66,77,86,93,100,108,115,120]},
+  {id:6,en:"Al-An'am",ar:"الأنعام",stops:[10,20,30,41,50,55,60,70,82,90,94,100,110,121,129,140,144,150,154,165]},
+  {id:7,en:"Al-A'raf",ar:"الأعراف",stops:[10,25,31,39,47,53,58,64,72,84,93,99,108,126,129,141,147,151,157,162,171,181,188,206]},
+  {id:8,en:"Al-Anfal",ar:"الأنفال",stops:[10,19,28,37,44,48,58,64,69,75]},
+  {id:9,en:"At-Tawbah",ar:"التوبة",stops:[6,16,24,29,37,42,59,66,72,80,89,99,110,118,122,129]},
+  {id:10,en:"Yunus",ar:"يونس",stops:[10,20,30,40,53,60,70,82,92,103,109]},
+  {id:11,en:"Hud",ar:"هود",stops:[8,24,35,49,60,68,83,95,109,123]},
+  {id:12,en:"Yusuf",ar:"يوسف",stops:[6,20,29,35,42,49,57,68,79,93,104,111]},
+  {id:13,en:"Ar-Ra'd",ar:"الرعد",stops:[7,18,26,31,37,43]},
+  {id:14,en:"Ibrahim",ar:"إبراهيم",stops:[6,12,21,27,34,41,52]},
+  {id:15,en:"Al-Hijr",ar:"الحجر",stops:[15,25,44,60,79,99]},
+  {id:16,en:"An-Nahl",ar:"النحل",stops:[10,21,34,50,65,76,83,89,100,110,119,128]},
+  {id:17,en:"Al-Isra",ar:"الإسراء",stops:[10,22,30,40,52,60,70,77,84,93,100,111]},
+  {id:18,en:"Al-Kahf",ar:"الكهف",stops:[12,22,31,44,53,59,70,82,98,101,110]},
+  {id:19,en:"Maryam",ar:"مريم",stops:[15,40,50,65,82,98]},
+  {id:20,en:"Ta-Ha",ar:"طه",stops:[24,54,76,89,104,115,128,135]},
+  {id:21,en:"Al-Anbiya",ar:"الأنبياء",stops:[10,29,47,75,93,105,112]},
+  {id:22,en:"Al-Hajj",ar:"الحج",stops:[10,22,33,41,48,57,64,72,78]},
+  {id:23,en:"Al-Mu'minun",ar:"المؤمنون",stops:[22,32,50,77,92,118]},
+  {id:24,en:"An-Nur",ar:"النور",stops:[10,20,26,34,40,52,57,61,64]},
+  {id:25,en:"Al-Furqan",ar:"الفرقان",stops:[9,20,34,44,60,77]},
+  {id:26,en:"Ash-Shu'ara",ar:"الشعراء",stops:[9,33,51,68,104,122,140,159,175,191,227]},
+  {id:27,en:"An-Naml",ar:"النمل",stops:[14,31,44,58,66,82,93]},
+  {id:28,en:"Al-Qasas",ar:"القصص",stops:[13,21,28,42,50,60,75,82,88]},
+  {id:29,en:"Al-Ankabut",ar:"العنكبوت",stops:[13,22,30,44,52,63,69]},
+  {id:30,en:"Ar-Rum",ar:"الروم",stops:[10,19,27,40,53,60]},
+  {id:31,en:"Luqman",ar:"لقمان",stops:[11,19,34]},
+  {id:32,en:"As-Sajdah",ar:"السجدة",stops:[11,22,30]},
+  {id:33,en:"Al-Ahzab",ar:"الأحزاب",stops:[8,20,27,34,40,52,58,68,73]},
+  {id:34,en:"Saba",ar:"سبأ",stops:[9,21,30,36,45,54]},
+  {id:35,en:"Fatir",ar:"فاطر",stops:[7,14,26,37,45]},
+  {id:36,en:"Ya-Sin",ar:"يس",stops:[12,32,50,67,83]},
+  {id:37,en:"As-Saffat",ar:"الصافات",stops:[21,74,113,138,182]},
+  {id:38,en:"Sad",ar:"ص",stops:[14,26,40,64,88]},
+  {id:39,en:"Az-Zumar",ar:"الزمر",stops:[9,21,31,41,52,63,70,75]},
+  {id:40,en:"Ghafir",ar:"غافر",stops:[9,20,27,37,50,60,68,78,85]},
+  {id:41,en:"Fussilat",ar:"فصلت",stops:[8,18,25,32,44,54]},
+  {id:42,en:"Ash-Shura",ar:"الشورى",stops:[9,19,29,43,53]},
+  {id:43,en:"Az-Zukhruf",ar:"الزخرف",stops:[15,25,35,45,56,67,89]},
+  {id:44,en:"Ad-Dukhan",ar:"الدخان",stops:[29,42,59]},
+  {id:45,en:"Al-Jathiyah",ar:"الجاثية",stops:[11,21,26,37]},
+  {id:46,en:"Al-Ahqaf",ar:"الأحقاف",stops:[10,20,26,35]},
+  {id:47,en:"Muhammad",ar:"محمد",stops:[11,19,28,38]},
+  {id:48,en:"Al-Fath",ar:"الفتح",stops:[10,17,26,29]},
+  {id:49,en:"Al-Hujurat",ar:"الحجرات",stops:[10,18]},
+  {id:50,en:"Qaf",ar:"ق",stops:[15,29,45]},
+  {id:51,en:"Ad-Dhariyat",ar:"الذاريات",stops:[23,46,60]},
+  {id:52,en:"At-Tur",ar:"الطور",stops:[28,49]},
+  {id:53,en:"An-Najm",ar:"النجم",stops:[25,42,62]},
+  {id:54,en:"Al-Qamar",ar:"القمر",stops:[22,40,55]},
+  {id:55,en:"Ar-Rahman",ar:"الرحمن",stops:[25,45,78]},
+  {id:56,en:"Al-Waqi'ah",ar:"الواقعة",stops:[38,74,96]},
+  {id:57,en:"Al-Hadid",ar:"الحديد",stops:[10,19,25,29]},
+  {id:58,en:"Al-Mujadila",ar:"المجادلة",stops:[6,13,22]},
+  {id:59,en:"Al-Hashr",ar:"الحشر",stops:[10,17,24]},
+  {id:60,en:"Al-Mumtahanah",ar:"الممتحنة",stops:[6,13]},
+  {id:61,en:"As-Saff",ar:"الصف",stops:[9,14]},
+  {id:62,en:"Al-Jumu'ah",ar:"الجمعة",stops:[8,11]},
+  {id:63,en:"Al-Munafiqun",ar:"المنافقون",stops:[8,11]},
+  {id:64,en:"At-Taghabun",ar:"التغابن",stops:[10,18]},
+  {id:65,en:"At-Talaq",ar:"الطلاق",stops:[7,12]},
+  {id:66,en:"At-Tahrim",ar:"التحريم",stops:[7,12]},
+  {id:67,en:"Al-Mulk",ar:"الملك",stops:[14,30]},
+  {id:68,en:"Al-Qalam",ar:"القلم",stops:[33,52]},
+  {id:69,en:"Al-Haqqah",ar:"الحاقة",stops:[37,52]},
+  {id:70,en:"Al-Ma'arij",ar:"المعارج",stops:[35,44]},
+  {id:71,en:"Nuh",ar:"نوح",stops:[20,28]},
+  {id:72,en:"Al-Jinn",ar:"الجن",stops:[19,28]},
+  {id:73,en:"Al-Muzzammil",ar:"المزمل",stops:[19,20]},
+  {id:74,en:"Al-Muddathir",ar:"المدثر",stops:[31,56]},
+  {id:75,en:"Al-Qiyamah",ar:"القيامة",stops:[30,40]},
+  {id:76,en:"Al-Insan",ar:"الإنسان",stops:[22,31]},
+  {id:77,en:"Al-Mursalat",ar:"المرسلات",stops:[40,50]},
+  {id:78,en:"An-Naba",ar:"النبأ",stops:[30,40]},
+  {id:79,en:"An-Nazi'at",ar:"النازعات",stops:[26,46]},
+  {id:80,en:"Abasa",ar:"عبس",stops:[42]},
+  {id:81,en:"At-Takwir",ar:"التكوير",stops:[29]},
+  {id:82,en:"Al-Infitar",ar:"الإنفطار",stops:[19]},
+  {id:83,en:"Al-Mutaffifin",ar:"المطففين",stops:[36]},
+  {id:84,en:"Al-Inshiqaq",ar:"الإنشقاق",stops:[25]},
+  {id:85,en:"Al-Buruj",ar:"البروج",stops:[22]},
+  {id:86,en:"At-Tariq",ar:"الطارق",stops:[17]},
+  {id:87,en:"Al-A'la",ar:"الأعلى",stops:[19]},
+  {id:88,en:"Al-Ghashiyah",ar:"الغاشية",stops:[26]},
+  {id:89,en:"Al-Fajr",ar:"الفجر",stops:[30]},
+  {id:90,en:"Al-Balad",ar:"البلد",stops:[20]},
+  {id:91,en:"Ash-Shams",ar:"الشمس",stops:[15]},
+  {id:92,en:"Al-Lail",ar:"الليل",stops:[21]},
+  {id:93,en:"Ad-Duha",ar:"الضحى",stops:[11]},
+  {id:94,en:"Ash-Sharh",ar:"الشرح",stops:[8]},
+  {id:95,en:"At-Tin",ar:"التين",stops:[8]},
+  {id:96,en:"Al-Alaq",ar:"العلق",stops:[19]},
+  {id:97,en:"Al-Qadr",ar:"القدر",stops:[5]},
+  {id:98,en:"Al-Bayyinah",ar:"البينة",stops:[8]},
+  {id:99,en:"Az-Zalzalah",ar:"الزلزلة",stops:[8]},
+  {id:100,en:"Al-Adiyat",ar:"العاديات",stops:[11]},
+  {id:101,en:"Al-Qari'ah",ar:"القارعة",stops:[11]},
+  {id:102,en:"At-Takathur",ar:"التكاثر",stops:[8]},
+  {id:103,en:"Al-Asr",ar:"العصر",stops:[3]},
+  {id:104,en:"Al-Humazah",ar:"الهمزة",stops:[9]},
+  {id:105,en:"Al-Fil",ar:"الفيل",stops:[5]},
+  {id:106,en:"Quraysh",ar:"قريش",stops:[4]},
+  {id:107,en:"Al-Ma'un",ar:"الماعون",stops:[7]},
+  {id:108,en:"Al-Kawthar",ar:"الكوثر",stops:[3]},
+  {id:109,en:"Al-Kafirun",ar:"الكافرون",stops:[6]},
+  {id:110,en:"An-Nasr",ar:"النصر",stops:[3]},
+  {id:111,en:"Al-Masad",ar:"المسد",stops:[5]},
+  {id:112,en:"Al-Ikhlas",ar:"الإخلاص",stops:[4]},
+  {id:113,en:"Al-Falaq",ar:"الفلق",stops:[5]},
+  {id:114,en:"An-Nas",ar:"الناس",stops:[6]}
+];
+
+/* Flatten the stop table into one 1-based list of rukus. Each entry knows its
+   global number (g), its surah, and its ayah span — that is everything the
+   grid, the popup and the reader need. */
+const RUKUS = [];
+DB.forEach(su => {
+  let prev = 0;
+  su.stops.forEach((end, i) => {
+    RUKUS.push({
+      g: RUKUS.length + 1, s: su.id, en: su.en, ar: su.ar,
+      n: i + 1, of: su.stops.length, start: prev + 1, end: end
+    });
+    prev = end;
+  });
+});
+const TOTAL = RUKUS.length;
+
+/* Per-surah summary, plus the global number of each surah's first ruku so the
+   popup can address rukus without re-scanning RUKUS. */
+const SURAHS = DB.map(su => ({
+  id: su.id, en: su.en, ar: su.ar,
+  ayahs: su.stops[su.stops.length - 1],
+  rukus: su.stops.length,
+  firstG: RUKUS.find(r => r.s === su.id).g
+}));
+
+const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+const STATUS_NAME = ['new', 'reading', 'done'];
+const arNum = n => String(n).replace(/\d/g, d => AR_DIGITS[+d]);
+const $ = id => document.getElementById(id);
+
+/* ------------------------------------------------------------------- state */
+const KEY = 'rr1:state';
+let state = { st: {}, last: 0, theme: 'dark', fsx: 1 };
+try {
+  const raw = JSON.parse(localStorage.getItem(KEY) || '{}');
+  state = Object.assign(state, raw);
+  state.st = raw.st || {};
+} catch (e) {}
+
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const statusOf = g => state.st[g] || 0;
+
+let filter = 'all';
+let query = '';
+let openSid = 0;      // surah shown in the popup, 0 when closed
+let cur = 0;          // ruku shown in the reader, 0 when closed
+let token = 0;        // guards against out-of-order fetch results
+
+/* -------------------------------------------------------------------- misc */
+let toastT;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('on'), 1500);
+}
+
+function applyTheme() {
+  document.documentElement.classList.toggle('light', state.theme === 'light');
+}
+function toggleTheme() {
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
+  applyTheme(); save();
+}
+function applyFsx() {
+  document.documentElement.style.setProperty('--fsx', state.fsx);
+}
+function bumpFsx(d) {
+  state.fsx = Math.min(1.7, Math.max(0.7, Math.round((state.fsx + d) * 100) / 100));
+  applyFsx(); save();
+  toast('Text size ' + Math.round(state.fsx * 100) + '%');
+}
+
+/* Count how many of a surah's rukus are done / touched. */
+function surahProgress(su) {
+  let done = 0, touched = 0;
+  for (let g = su.firstG; g < su.firstG + su.rukus; g++) {
+    const v = statusOf(g);
+    if (v === 2) done++;
+    if (v > 0) touched++;
+  }
+  return { done: done, touched: touched };
+}
+
+/* --------------------------------------------------------------- surah grid */
+function renderGrid() {
+  const q = query.trim().toLowerCase();
+  const frag = document.createDocumentFragment();
+  let shown = 0;
+
+  SURAHS.forEach(su => {
+    if (q && !(String(su.id) === q || su.en.toLowerCase().includes(q) || su.ar.includes(q))) return;
+
+    const p = surahProgress(su);
+    const complete = p.done === su.rukus;
+    if (filter === 'new'  && p.touched > 0) return;
+    if (filter === 'done' && !complete) return;
+    if (filter === 'part' && (p.touched === 0 || complete)) return;
+    shown++;
+
+    const card = document.createElement('button');
+    card.className = 's-card';
+    card.type = 'button';
+    card.setAttribute('aria-label', su.en + ', ' + su.rukus + ' rukus, ' + p.done + ' done');
+    card.innerHTML =
+      '<div class="flex items-start justify-between gap-2">' +
+        '<span class="s-num">' + su.id + '</span>' +
+        '<span class="s-ar">' + su.ar + '</span>' +
+      '</div>' +
+      '<div class="s-en">' + su.en + '</div>' +
+      '<div class="s-meta">' + su.ayahs + ' ayahs · ' + su.rukus + ' ruku' + (su.rukus > 1 ? 's' : '') +
+        (p.done ? ' · <span style="color:var(--' + (complete ? 'done' : 'read') + ')">' + p.done + ' done</span>' : '') +
+      '</div>' +
+      '<div class="s-rail"><div class="s-fill' + (complete ? '' : ' part') + '" style="width:' +
+        (p.done / su.rukus * 100) + '%"></div></div>';
+    card.addEventListener('click', () => openSurah(su.id));
+    frag.appendChild(card);
+  });
+
+  const grid = $('grid');
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+  $('noHits').classList.toggle('hidden', shown > 0);
+
+  const doneAll = Object.keys(state.st).reduce((a, k) => a + (state.st[k] === 2 ? 1 : 0), 0);
+  $('allFill').style.width = (doneAll / TOTAL * 100) + '%';
+  $('allNum').textContent = doneAll + ' / ' + TOTAL + ' rukus read';
+  $('resumeBtn').classList.toggle('hidden', !state.last);
+}
+
+/* -------------------------------------------------------------- ruku popup */
+function openSurah(sid) {
+  openSid = sid;
+  const su = SURAHS[sid - 1];
+  $('mTitle').textContent = su.id + '. ' + su.en;
+  $('mAr').textContent = su.ar;
+  $('mMeta').textContent = su.ayahs + ' ayahs · ' + su.rukus + ' ruku' + (su.rukus > 1 ? 's' : '');
+  paintList();
+  $('rukuModal').classList.remove('hidden');
+}
+function closeSurah() { openSid = 0; $('rukuModal').classList.add('hidden'); }
+
+function paintList() {
+  const su = SURAHS[openSid - 1];
+  const list = $('mList');
+  list.innerHTML = '';
+
+  for (let i = 0; i < su.rukus; i++) {
+    const r = RUKUS[su.firstG - 1 + i];
+    const st = statusOf(r.g);
+    const row = document.createElement('div');
+    row.className = 'r-row';
+    row.innerHTML =
+      '<span class="r-dot s' + st + '" role="button" tabindex="0" title="Status: ' + STATUS_NAME[st] +
+        ' — click to change"></span>' +
+      '<span class="r-n">Ruku ' + r.n + '</span>' +
+      '<span class="r-range">' + r.s + ':' + r.start + (r.end > r.start ? '–' + r.end : '') + '</span>' +
+      '<span class="r-count">' + (r.end - r.start + 1) + ' ayah' + (r.end > r.start ? 's' : '') + '</span>';
+
+    const dot = row.firstElementChild;
+    const cycle = e => {
+      e.stopPropagation();
+      setStatus(r.g, (statusOf(r.g) + 1) % 3);
+      paintList();
+    };
+    dot.addEventListener('click', cycle);
+    dot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') cycle(e); });
+    row.addEventListener('click', () => { closeSurah(); openReader(r.g); });
+    list.appendChild(row);
+  }
+}
+
+function setStatus(g, v) {
+  if (v) state.st[g] = v; else delete state.st[g];
+  save();
+  renderGrid();
+  if (cur === g) paintStatusSeg();
+}
+
+/* ------------------------------------------------- verse text: fetch + cache */
+const mem = {};
+async function surahVerses(n) {
+  if (mem[n]) return mem[n];
+  try {
+    const cached = localStorage.getItem('rr1:s:' + n);
+    if (cached) return (mem[n] = JSON.parse(cached));
+  } catch (e) {}
+
+  const res = await fetch('https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=' + n);
+  const json = await res.json();
+  const arr = [];                        // indexed by ayah number; slot 0 unused
+  (json.verses || []).forEach(v => {
+    const k = parseInt(String(v.verse_key).split(':')[1], 10);
+    if (k && v.text_uthmani) arr[k] = v.text_uthmani.trim();
+  });
+  if (!arr.length) throw new Error('empty surah ' + n);
+
+  mem[n] = arr;
+  // Quota failures are fine — the in-memory copy still serves this session.
+  try { localStorage.setItem('rr1:s:' + n, JSON.stringify(arr)); } catch (e) {}
+  return arr;
+}
+
+/* ------------------------------------------------------------- full reader */
+function paintStatusSeg() {
+  const st = statusOf(cur);
+  document.querySelectorAll('#reader .seg button').forEach(b => {
+    b.classList.toggle('on', +b.dataset.st === st);
+  });
+}
+
+async function openReader(g) {
+  cur = g;
+  const r = RUKUS[g - 1];
+  const mine = ++token;
+
+  state.last = g; save();
+  $('reader').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  $('reader').scrollTop = 0;
+
+  $('rAr').textContent = r.ar;
+  $('rTitle').textContent = r.s + '. ' + r.en;
+  $('rCrumb').textContent =
+    'Ruku ' + r.n + ' of ' + r.of + ' · ' + r.s + ':' + r.start +
+    (r.end > r.start ? '–' + r.end : '') + ' · #' + r.g + ' of ' + TOTAL;
+  $('rPrev').disabled = $('rPrev2').disabled = g === 1;
+  $('rNext').disabled = $('rNext2').disabled = g === TOTAL;
+  paintStatusSeg();
+
+  // Bismillah heads every surah except Al-Fatiha (where it is ayah 1) and At-Tawbah.
+  const bism = r.start === 1 && r.s !== 1 && r.s !== 9;
+  $('rBism').classList.toggle('hidden', !bism);
+  $('rBism').textContent = BISMILLAH;
+
+  $('rText').innerHTML = '';
+  $('rErr').classList.add('hidden');
+  $('rSpin').classList.remove('hidden');
+
+  let verses;
+  try {
+    verses = await surahVerses(r.s);
+  } catch (e) {
+    if (mine !== token) return;
+    $('rSpin').classList.add('hidden');
+    $('rErr').classList.remove('hidden');
+    $('rErr').innerHTML = 'Could not load the verse text — check your connection. ' +
+      'Rukus you have opened before still work offline.';
+    return;
+  }
+  if (mine !== token) return;                 // a newer ruku won the race
+
+  $('rSpin').classList.add('hidden');
+  let html = '';
+  for (let a = r.start; a <= r.end; a++) {
+    const t = verses[a];
+    if (!t) continue;
+    html += '<span class="ayah" title="' + r.s + ':' + a + '">' + t +
+            '<span class="amark">' + arNum(a) + '</span></span> ';
+  }
+  $('rText').innerHTML = html;
+}
+
+function closeReader() {
+  cur = 0; token++;
+  $('reader').classList.add('hidden');
+  document.body.style.overflow = '';
+  renderGrid();
+}
+function step(d) {
+  const g = cur + d;
+  if (g >= 1 && g <= TOTAL) openReader(g);
+}
+
+/* ------------------------------------------------------------------- wiring */
+function init() {
+  /* .glass-panel carries backdrop-filter, which makes it the containing block
+     for any position:fixed descendant. The popup and the reader are authored
+     inside <main> for readability, then reparented to <body> so they really do
+     cover the viewport. */
+  document.body.appendChild($('rukuModal'));
+  document.body.appendChild($('reader'));
+  document.body.appendChild($('toast'));
+
+  applyTheme();
+  applyFsx();
+  renderGrid();
+
+  $('q').addEventListener('input', e => { query = e.target.value; renderGrid(); });
+  document.querySelectorAll('[data-f]').forEach(b => {
+    b.addEventListener('click', () => {
+      filter = b.dataset.f;
+      document.querySelectorAll('[data-f]').forEach(x => x.classList.toggle('on', x === b));
+      renderGrid();
+    });
+  });
+  $('themeBtn').addEventListener('click', toggleTheme);
+  $('rTheme').addEventListener('click', toggleTheme);
+  $('resumeBtn').addEventListener('click', () => { if (state.last) openReader(state.last); });
+
+  $('mClose').addEventListener('click', closeSurah);
+  $('rukuModal').addEventListener('click', e => { if (e.target.id === 'rukuModal') closeSurah(); });
+  $('mAllRead').addEventListener('click', () => {
+    const su = SURAHS[openSid - 1];
+    for (let g = su.firstG; g < su.firstG + su.rukus; g++) state.st[g] = 2;
+    save(); paintList(); renderGrid();
+    toast(su.en + ' marked complete');
+  });
+  $('mReset').addEventListener('click', () => {
+    const su = SURAHS[openSid - 1];
+    for (let g = su.firstG; g < su.firstG + su.rukus; g++) delete state.st[g];
+    save(); paintList(); renderGrid();
+    toast(su.en + ' reset');
+  });
+
+  $('rBack').addEventListener('click', closeReader);
+  $('rList').addEventListener('click', () => { const s = RUKUS[cur - 1].s; closeReader(); openSurah(s); });
+  $('rPrev').addEventListener('click', () => step(-1));
+  $('rNext').addEventListener('click', () => step(1));
+  $('rPrev2').addEventListener('click', () => step(-1));
+  $('rNext2').addEventListener('click', () => step(1));
+  $('rSmall').addEventListener('click', () => bumpFsx(-0.1));
+  $('rBig').addEventListener('click', () => bumpFsx(0.1));
+  $('rDone').addEventListener('click', () => {
+    setStatus(cur, 2);
+    if (cur < TOTAL) step(1); else toast('That was the last ruku');
+  });
+  document.querySelectorAll('#reader .seg button').forEach(b => {
+    b.addEventListener('click', () => { setStatus(cur, +b.dataset.st); toast('Marked ' + STATUS_NAME[+b.dataset.st]); });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('loginView').style.display !== 'none') return;
+    if (e.key === 'Escape') { if (cur) closeReader(); else if (openSid) closeSurah(); return; }
+    if (!cur) return;
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
