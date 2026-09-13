@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zikr Tracker</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: #020617;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 0;
+      /* A board app owns the viewport. Nothing scrolls; if content does not fit,
+         the type shrinks (every size below is in vh) rather than the page growing. */
+      overflow: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    /* ---- Board: the group panels, filling the viewport ----
+       Shape comes from --cols / --rows, which the JS sets from BOARD, so the grid
+       is data-driven and there is only one place to change it. */
+    #zikrTrackerApp {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(var(--cols), 1fr);
+      grid-template-rows: repeat(var(--rows), 1fr);
+      gap: 7px;
+      padding: 7px;
+      background: #020617;
+    }
+
+    /* ---- Panel: one group of boxes, framed in the group's accent ---- */
+    .panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(var(--pcols), 1fr);
+      grid-template-rows: repeat(var(--prows), 1fr);
+      /* Grid items default to min-width/min-height auto, so one long label would push
+         its track past 1fr and shove the last panel off screen. This is the single
+         most common way a board like this breaks — do not remove it. */
+      min-width: 0;
+      min-height: 0;
+      /* 1px gap + this background = single hairlines BETWEEN boxes only.
+         Nothing is drawn at the perimeter, so the accent frame never doubles. */
+      gap: 1px;
+      background: rgba(148, 163, 184, 0.13);
+      border: 6px solid var(--panel-line);
+      border-radius: 14px;
+      box-shadow: 0 0 26px var(--panel-halo);
+    }
+    /* A group the board deliberately does not score. It is tappable and keeps its
+       history like any other, but it is left out of the HUD total and out of perfect
+       days, because a situational set (travel, a du'a you only say on the road) would
+       otherwise pin those counters at zero and read as failure on every ordinary day.
+       The dashed frame is the visual half of that promise. */
+    .panel.optional { border-style: dashed; }
+    /* Such a box states which days it happened - the strip - and nothing else. A
+       week ratio and a cold flame on a situational item are two channels that can
+       only ever report failure, so they are dropped rather than explained away. */
+    .box.optional .count { display: none; }
+    /* The panel does NOT clip: a popped box has to be able to leave it. So the boxes
+       sitting in the frame's corners round themselves to match it instead. Which boxes
+       those are depends on the current shape, so roundCorners() sets these classes. */
+    .box.r-tl { border-top-left-radius: 7px; }
+    .box.r-tr { border-top-right-radius: 7px; }
+    .box.r-br { border-bottom-right-radius: 7px; }
+    .box.r-bl { border-bottom-left-radius: 7px; }
+
+    .panel-tag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      padding: 0.3rem 0.7rem 0.35rem;
+      border-radius: 7px 0 0.7rem 0;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(8px);
+      border-right: 1px solid rgba(148, 163, 184, 0.14);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      font-size: clamp(0.55rem, 1.1vh, 0.7rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      pointer-events: none;
+      white-space: nowrap;
+      /* Above a popped box (z-index 10) so the group score stays readable while hovering. */
+      z-index: 20;
+    }
+    .panel-tag .panel-score {
+      font-size: 0.9em;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- Box: one item, fills bottom-up over its target ---- */
+    .box {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      padding: 1.6rem 0.5rem 0.5rem;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      font-family: inherit;
+      text-align: center;
+      border: 0;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #070c16;
+      /* One hairline per day of the window, set from --steps. The fill level lands on
+         one, so the week reads at a glance without anyone counting bars. */
+      background-image: repeating-linear-gradient(
+        to top,
+        transparent 0,
+        transparent calc(100% / var(--steps) - 1px),
+        rgba(148, 163, 184, 0.14) calc(100% / var(--steps) - 1px),
+        rgba(148, 163, 184, 0.14) calc(100% / var(--steps))
+      );
+      color: #64748b;
+      transition: transform 200ms cubic-bezier(.2, .8, .2, 1),
+                  box-shadow 260ms ease, color 220ms ease, background-color 200ms ease;
+    }
+    .box:hover { color: #cbd5e1; background-color: #0c1626; }
+    .box:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+
+    .box .fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      background: linear-gradient(to top, var(--fill-strong), var(--fill-soft));
+      border-top: 1px solid var(--fill-line);
+      transition: height 340ms cubic-bezier(.2, .8, .2, 1), border-color 240ms ease;
+      pointer-events: none;
+    }
+
+    .box .badge,
+    .box .name,
+    .box .sub,
+    .box .detail,
+    .box .icon,
+    .box .week,
+    .box .count { position: relative; z-index: 1; }
+
+    /* Stroke-only and sized in vh, so it takes the box text colour and stays sharp
+       when the box scales up on hover. */
+    .box .icon {
+      display: block;
+      flex: 0 0 auto;
+      width: clamp(22px, 5.4vh, 42px);
+      height: clamp(22px, 5.4vh, 42px);
+      color: #8296ae;
+      transition: color 220ms ease;
+    }
+    .box .icon svg { display: block; width: 100%; height: 100%; }
+    /* Where a box also carries a sub line, the symbol yields room to it. */
+    .box .icon.icon-sm { width: clamp(18px, 4.2vh, 32px); height: clamp(18px, 4.2vh, 32px); }
+
+    .box .badge {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.6rem;
+      font-size: clamp(0.5rem, 1.1vh, 0.65rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: rgba(148, 163, 184, 0.55);
+    }
+    /* The panel tag sits in the top-left corner of the panel, which is also the first
+       box's badge corner. That box gives the corner up and takes the other one. */
+    .panel > .box:first-of-type .badge { left: auto; right: 0.6rem; }
+
+    .box .name {
+      font-family: 'Inter', 'Amiri', sans-serif;
+      font-size: clamp(0.62rem, 1.8vh, 1.05rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #e2e8f0;
+      letter-spacing: -0.01em;
+    }
+    .box .sub {
+      font-family: 'Amiri', 'Segoe UI', serif;
+      font-size: clamp(0.7rem, 2.1vh, 1.25rem);
+      line-height: 1.45;
+      color: #94a3b8;
+      max-width: 96%;
+    }
+    /* Extended text for a box that carries one: hidden by default, and shown only
+       while the box is popped (see Hover pop below), replacing the icon so the two
+       never fight for the same space. The box does not scroll, so a board author
+       curates the length rather than relying on truncation — full text for a short
+       line, the opening lines only for something long enough to run past the pop. */
+    .box .detail {
+      display: none;
+      font-family: 'Amiri', 'Segoe UI', serif;
+      font-size: clamp(0.6rem, 1.55vh, 0.92rem);
+      line-height: 1.65;
+      color: #cbd5e1;
+      max-width: 94%;
+      overflow: hidden;
+    }
+    /* ---- The week: one bar per day, today on the right ---- */
+    .box .week {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: min(78%, 190px);
+      margin-top: 0.15rem;
+    }
+    .box .strip { display: flex; gap: 3px; }
+    .box .strip span {
+      flex: 1 1 0;
+      height: clamp(4px, 0.85vh, 7px);
+      border-radius: 2px;
+      background: rgba(148, 163, 184, 0.18);
+      transition: background 200ms ease;
+    }
+    .box .strip span.on { background: var(--fill-line); }
+    .box .strip span.today { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45); }
+    .box .dlab { display: flex; gap: 3px; }
+    .box .dlab span {
+      flex: 1 1 0;
+      text-align: center;
+      font-size: clamp(0.44rem, 0.95vh, 0.58rem);
+      font-weight: 700;
+      color: #475569;
+    }
+    /* The day letters go first when the board gets short: the strip still shows the
+       pattern, and the fill still shows how much of the window is done. */
+    @media (max-height: 560px) {
+      .box .dlab { display: none; }
+    }
+
+    .box .count {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 0.1rem;
+      font-size: clamp(0.5rem, 1.15vh, 0.7rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #475569;
+      font-variant-numeric: tabular-nums;
+    }
+    .box .count .flame { display: inline-flex; align-items: center; gap: 0.2rem; }
+    .box .count .flame svg { width: 0.85em; height: 0.85em; }
+
+    /* Done today: the one state a tap actually changes, so it gets the ring. */
+    .box.done { box-shadow: inset 0 0 0 2px var(--fill-line); }
+    .box.done .name { color: #f8fafc; }
+    .box.done .sub { color: #cbd5e1; }
+    .box.done .icon { color: #cbd5e1; }
+    .box.done .count { color: #cbd5e1; }
+    .box.done .badge { color: var(--accent); }
+
+    .box.full {
+      box-shadow: inset 0 0 0 1px var(--fill-line), inset 0 0 60px rgba(255, 255, 255, 0.10);
+    }
+    .box.full .name, .box.full .sub { color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
+    .box.full .icon { color: #fff; }
+    .box.full .count { color: var(--accent); }
+    .box.full .badge { color: rgba(255, 255, 255, 0.7); }
+
+    /* ---- Hover pop ----
+       The box grows in place so it can be read before it is tapped. transform-origin
+       is NOT left at centre: it is solved per box in pinOrigins() so the scaled box
+       always lands inside the viewport. Mouse only — touch has no hover, and :hover
+       sticks after a tap there. */
+    @media (hover: hover) and (pointer: fine) {
+      .box:hover,
+      .box:focus-visible {
+        transform: scale(var(--pop));
+        z-index: 10;
+        border-radius: 6px;
+        box-shadow: 0 0 0 1px var(--accent), 0 8px 22px rgba(0, 0, 0, 0.72);
+      }
+      /* A popped box replaces its own box-shadow, so the done ring is restated here.
+         Without this it vanishes exactly while the box is being read. */
+      .box.done:hover,
+      .box.done:focus-visible {
+        box-shadow: 0 0 0 2px var(--fill-line), 0 8px 22px rgba(0, 0, 0, 0.72);
+      }
+      /* The box is opaque, so an enlarged one hides the neighbours it covers.
+         What you see under the pointer is always what a click will hit. */
+      /* A box that carries detail text trades its icon for it once popped: the
+         pop is exactly the extra room the detail needs to be worth showing. */
+      .box.has-detail:hover .icon,
+      .box.has-detail:focus-visible .icon { display: none; }
+      .box.has-detail:hover .detail,
+      .box.has-detail:focus-visible .detail { display: block; }
+    }
+
+    /* ---- Floating status pill: sits over the board, never takes a box ---- */
+    /* Corner-anchored: dead centre sits on the point where panels meet and steals
+       taps from several boxes at once. */
+    #hud {
+      position: fixed;
+      bottom: 0.85rem;
+      right: 0.85rem;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(2, 6, 23, 0.86);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.65);
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+    #hud .count { font-weight: 700; color: #34d399; font-variant-numeric: tabular-nums; }
+    #hud .perfect { color: #64748b; }
+    #hud .perfect span { color: #e2e8f0; font-weight: 700; font-variant-numeric: tabular-nums; }
+    #hud a, #hud button {
+      color: #94a3b8;
+      background: rgba(148, 163, 184, 0.10);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 9999px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.66rem;
+      font-weight: 600;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+    }
+    #hud a:hover, #hud button:hover { color: #fff; background: rgba(148, 163, 184, 0.22); }
+
+    /* Below the split the board restacks; JS swaps --cols/--rows and --pcols/--prows
+       to match, and re-solves the pop origins for the new shape. */
+    @media (max-width: 900px) {
+      #zikrTrackerApp { gap: 5px; padding: 5px; }
+      .panel { border-width: 4px; }
+      #hud { bottom: 0.6rem; right: 0.6rem; }
+      /* The tag is absolutely positioned and nowrap, so once a box is phone-narrow a
+         full-length tag paints straight across its neighbour and clips that box's
+         badge. It sheds the score first — the HUD already carries the total and every
+         box shows its own state — then tightens, which buys back roughly 40%. */
+      .panel-tag {
+        padding: 0.25rem 0.45rem 0.3rem;
+        font-size: clamp(0.46rem, 0.95vh, 0.6rem);
+        letter-spacing: 0.08em;
+      }
+      .panel-tag .panel-score { display: none; }
+    }
+    @media (max-width: 520px) {
+      .box { padding: 1.25rem 0.25rem 0.35rem; }
+      /* The symbol survives where the sub line does not: on a small screen it
+         identifies the item faster than a second line of text does. */
+      .box .sub { display: none; }
+      .box .icon { width: clamp(20px, 4.6vh, 30px); height: clamp(20px, 4.6vh, 30px); }
+      .box .icon.icon-sm { width: clamp(16px, 3.6vh, 24px); height: clamp(16px, 3.6vh, 24px); }
+      .box .name { font-size: clamp(0.55rem, 1.5vh, 0.8rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<main id="zikrTrackerApp" aria-label="Zikr Tracker board"></main>
+
+<div id="hud">
+  <span><strong style="color:#fff">Zikr Tracker</strong></span>
+  <span><span class="count" id="hudCount">0</span><span style="color:#64748b" id="hudTotal">/0</span></span>
+  <span class="perfect"><span id="hudPerfect">0</span> perfect</span>
+  <button id="hudClear" type="button" title="Unmark every item for today">Clear</button>
+  <a href="../../links/">&larr; Hub</a>
+</div>
+
+<script>
+// === App logic ===
+(function () {
+  var STORE_KEY = 'zikr-tracker.v1';
+
+  // The only user-visible strings the engine itself emits. An Arabic or RTL board
+  // overrides these rather than translating them at every call site.
+  var DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
+  var WK_SUFFIX = ' wk';      // after "5/7" in the count line
+  var TODAY_SUFFIX = ' today';  // after "/9" in the HUD
+  var STREAK_LABEL = 'Current streak';  // tooltip on the flame
+
+  // ---- Symbols. One 48x48 grid, stroke only, so each takes the box text colour and
+  // stays sharp when the box scales up. env() draws context (ground, wall, frame)
+  // thinner and dimmer than the subject, so the two never carry equal weight.
+  var SVG_OPEN = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" ' +
+                 'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">';
+  function env(d) {
+    return '<path d="' + d + '" stroke-width="1.5" stroke-opacity="0.5"/>';
+  }
+  function dot(x, y, r) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="' + (r || 3.2) +
+           '" fill="currentColor" stroke="none"/>';
+  }
+  // The streak marker. Heavier stroke than the box symbols because it renders at
+  // roughly a third of their size, where a 2.4 stroke disappears.
+  var FLAME = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" ' +
+              'stroke-width="4" stroke-linejoin="round"><path d="M24 43c-7 0-12-5-12-11 ' +
+              '0-8 8-12 8-22 0 0 8 5 8 13 1.5-2 2-5 2-5s6 5 6 14c0 6-5 11-12 11z"/></svg>';
+
+  // Five panels: the four daily sets, plus Safar as a situational one. Each holds four
+  // adhkar — the widely-transmitted core, not an exhaustive list: a board earns its keep
+  // by being finishable, and twenty boxes is already a full day. Anything longer belongs
+  // in a reading app, not a tracker.
+  //
+  // Safar is marked `optional`, which is the whole reason that flag exists. Travel azkar
+  // are said on the road and nowhere else, so scoring them alongside the daily sets would
+  // hold "perfect" at zero for good and show a cold flame every morning you are home.
+  // An optional panel still records which days it happened and still shows its du'a; it
+  // simply is not counted, and its dashed frame says so.
+  var BOARD = {
+    cols: 5, rows: 1, pcols: 1, prows: 4,               // wide: five columns, four stacked boxes each
+    narrow: { cols: 1, rows: 5, pcols: 4, prows: 1 },   // under 900px: each column becomes a row of four
+    pop: 1.7,
+    window: 7,
+    keepDays: 180
+  };
+
+  var ICONS = {
+    // An open mushaf: the verse is read from the page, so the page is the symbol.
+    mushaf: SVG_OPEN +
+      '<path d="M24 14c-4-3-9-4-15-4v26c6 0 11 1 15 4"/>' +
+      '<path d="M24 14c4-3 9-4 15-4v26c-6 0-11 1-15 4"/>' +
+      '<path d="M24 14v30"/></svg>',
+
+    // A closed surah read end to end, lines showing it is text rather than a box.
+    mulk: SVG_OPEN +
+      '<path d="M13 8h18a4 4 0 0 1 4 4v28H17a4 4 0 0 1-4-4z"/>' +
+      '<path d="M13 36h22"/>' +
+      env('M20 17h9') + env('M20 24h9') + '</svg>',
+
+    // Cupped palms: the posture the mu'awwidhat are recited into.
+    hands: SVG_OPEN +
+      '<path d="M11 21c0 11 6 18 13 18s13-7 13-18"/>' +
+      '<path d="M11 21v-5"/><path d="M37 21v-5"/>' +
+      env('M6 43h36') + '</svg>',
+
+    // The same palms with breath above them: recite, then blow into the hands.
+    nafth: SVG_OPEN +
+      '<path d="M13 26c0 9 5 15 11 15s11-6 11-15"/>' +
+      '<path d="M13 26v-4"/><path d="M35 26v-4"/>' +
+      env('M15 16c2.5-3 5-3 7.5 0s5 3 7.5 0') +
+      env('M17 9c2-2.4 4-2.4 6 0s4 2.4 6 0') + '</svg>',
+
+    // Turning back: the arc returns to where it started, which is what istighfar is.
+    istighfar: SVG_OPEN +
+      '<path d="M38 24a14 14 0 1 1-4.1-9.9"/>' +
+      '<path d="M28 9l6 6-6 6"/></svg>',
+
+    // Prayer beads: the count is the point, so the beads are counted, not suggested.
+    beads: SVG_OPEN +
+      env('M24 10a13 13 0 1 1 0 26 13 13 0 1 1 0-26') +
+      dot(24, 10, 2.6) + dot(33, 14, 2.6) + dot(37, 23, 2.6) + dot(33, 32, 2.6) +
+      dot(24, 36, 2.6) + dot(15, 32, 2.6) + dot(11, 23, 2.6) + dot(15, 14, 2.6) + '</svg>',
+
+    // Sun clearing the horizon, rays above it.
+    sunrise: SVG_OPEN +
+      '<path d="M15 33a9 9 0 0 1 18 0"/>' +
+      env('M6 33h36') +
+      '<path d="M24 14v-5"/><path d="M12 21l-3.5-3.5"/><path d="M36 21l3.5-3.5"/></svg>',
+
+    // The same sun on the horizon, with the arrow pointing down instead of rays up.
+    sunset: SVG_OPEN +
+      '<path d="M15 29a9 9 0 0 1 18 0"/>' +
+      env('M6 29h36') +
+      '<path d="M24 35v8"/><path d="M20 39l4 4 4-4"/></svg>',
+
+    // A shelter arched over someone standing under it: seeking refuge, drawn literally.
+    shelter: SVG_OPEN +
+      '<path d="M10 36V25a14 14 0 0 1 28 0v11"/>' +
+      dot(24, 28, 3.4) +
+      env('M6 42h36') + '</svg>',
+
+    // Speech leaving the mouth: the du'a is said, not thought.
+    speak: SVG_OPEN +
+      '<path d="M10 11h28v19H25l-9 8v-8h-6z"/>' +
+      env('M18 20h12') + '</svg>',
+
+    // A bed seen from the side: headboard, mattress, pillow.
+    bed: SVG_OPEN +
+      '<path d="M8 34V18"/>' +
+      '<path d="M8 25h27a6 6 0 0 1 6 6v3"/>' +
+      '<path d="M14 25v-4h9v4"/>' +
+      env('M5 38h38') + '</svg>',
+
+    // ---- Safar ----
+    // The du'a of travel is said on mounting whatever carries you, so the thing that
+    // carries you is the symbol. The ground line is what makes it a journey and not a box.
+    ride: SVG_OPEN +
+      '<path d="M12 29h24l-3-10H15z"/>' +
+      '<circle cx="17" cy="36" r="4"/>' +
+      '<circle cx="33" cy="36" r="4"/>' +
+      env('M4 41h40') + '</svg>',
+
+    // Stopping for the night: a tent pitched on the ground, its doorway open.
+    tent: SVG_OPEN +
+      '<path d="M24 9L38 36H10z"/>' +
+      '<path d="M19 36l5-11 5 11"/>' +
+      env('M5 40h38') + '</svg>',
+
+    // Ascending ground, with the arrow that separates climbing from descending —
+    // without it the same steps read as either.
+    climb: SVG_OPEN +
+      '<path d="M9 38h9v-8h9v-8h9v-8"/>' +
+      '<path d="M32 18l4-4 4 4"/>' +
+      env('M5 42h38') + '</svg>',
+
+    // Coming home: a house with its door, which is the thing being returned to.
+    iyab: SVG_OPEN +
+      '<path d="M13 25l11-10 11 10v12H13z"/>' +
+      '<path d="M21 37v-7h6v7"/>' +
+      env('M5 41h38') + '</svg>'
+  };
+
+  // Arabic on the name line — this is a dhikr app, so the Arabic is what the box is,
+  // not a footnote to it — with the transliteration demoted to the sub line as an
+  // identifying aid (and the first thing dropped below 520px, where space is tight).
+  // A popped box (see the shared "Hover pop" rule) trades its icon for `detail`: the
+  // full du'a for anything short enough to fit, the opening lines only for the two
+  // full recitations (Ayat al-Kursi, Al-Mulk) — the box does not scroll, so length is
+  // curated here rather than clipped in CSS.
+  var KURSI_DETAIL = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ …';
+  var MUAWWIDHAT_DETAIL = 'قُلْ هُوَ اللَّهُ أَحَدٌ … قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ … قُلْ أَعُوذُ بِرَبِّ النَّاسِ';
+
+  var GROUPS = [
+    { id: 'morning', title: 'Morning', accent: '251, 191, 36', boxes: [
+        { key: 'mushaf',    badge: 'KURSI',  name: 'آية الكرسي',            sub: 'Ayat al-Kursi', detail: KURSI_DETAIL },
+        { key: 'hands',     badge: 'x3',     name: 'المعوذات ثلاثا',        sub: 'Muawwidhat',    detail: MUAWWIDHAT_DETAIL },
+        { key: 'istighfar', badge: 'SAYYID', name: 'سيد الاستغفار',         sub: 'Sayyid',        detail: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ' },
+        { key: 'sunrise',   badge: 'DAWN',   name: 'أصبحنا وأصبح الملك لله', sub: 'Asbahna',       detail: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ' }
+    ]},
+    { id: 'evening', title: 'Evening', accent: '167, 139, 250', boxes: [
+        { key: 'mushaf',  badge: 'KURSI', name: 'آية الكرسي',           sub: 'Ayat al-Kursi', detail: KURSI_DETAIL },
+        { key: 'hands',   badge: 'x3',    name: 'المعوذات ثلاثا',       sub: 'Muawwidhat',    detail: MUAWWIDHAT_DETAIL },
+        { key: 'sunset',  badge: 'DUSK',  name: 'أمسينا وأمسى الملك لله', sub: 'Amsayna',      detail: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ' },
+        { key: 'shelter', badge: 'REFUGE', name: 'أعوذ بكلمات الله التامات', sub: 'Taawwudh',  detail: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ' }
+    ]},
+    { id: 'salah', title: 'After Salah', accent: '52, 211, 153', boxes: [
+        { key: 'istighfar', badge: 'x3',    name: 'أستغفر الله',                        sub: 'Istighfar', detail: 'أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ، أَسْتَغْفِرُ اللَّهَ' },
+        { key: 'beads',     badge: '33',    name: 'سبحان الله والحمد لله والله أكبر',    sub: 'Tasbih',    detail: 'سُبْحَانَ اللَّهِ (٣٣) وَالْحَمْدُ لِلَّهِ (٣٣) وَاللَّهُ أَكْبَرُ (٣٣)' },
+        { key: 'mushaf',    badge: 'KURSI', name: 'آية الكرسي',                          sub: 'Ayat al-Kursi', detail: KURSI_DETAIL },
+        { key: 'speak',     badge: 'DUA',   name: 'اللهم أعني على ذكرك وشكرك',           sub: 'Dua',       detail: 'اللَّهُمَّ أَعِنِّي عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ' }
+    ]},
+    { id: 'night', title: 'Before Sleep', accent: '56, 189, 248', boxes: [
+        { key: 'mushaf', badge: 'KURSI', name: 'آية الكرسي',              sub: 'Ayat al-Kursi', detail: KURSI_DETAIL },
+        { key: 'nafth',  badge: 'NAFTH', name: 'المعوذات مع النفث',       sub: 'Nafth',         detail: MUAWWIDHAT_DETAIL },
+        { key: 'bed',    badge: 'BISM',  name: 'باسمك اللهم أموت وأحيا',  sub: 'Bismika',       detail: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا' },
+        { key: 'mulk',   badge: 'MULK',  name: 'سورة الملك',              sub: 'Al-Mulk',       detail: 'تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ ۝ الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا …' }
+    ]},
+    // Said on the road and nowhere else, so it is recorded but never scored.
+    { id: 'safar', title: 'Safar', accent: '244, 114, 182', optional: true, boxes: [
+        { key: 'ride',  badge: 'RIDE',   name: 'دعاء الركوب',        sub: 'Rukub',  detail: 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ' },
+        { key: 'tent',  badge: 'STOP',   name: 'دعاء نزول المنزل',   sub: 'Manzil', detail: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ' },
+        { key: 'climb', badge: 'CLIMB',  name: 'التكبير في الصعود',  sub: 'Suud',   detail: 'كُنَّا إِذَا صَعِدْنَا كَبَّرْنَا، وَإِذَا نَزَلْنَا سَبَّحْنَا' },
+        { key: 'iyab',  badge: 'RETURN', name: 'دعاء الرجوع',        sub: 'Iyab',   detail: 'آيِبُونَ تَائِبُونَ عَابِدُونَ لِرَبِّنَا حَامِدُونَ' }
+    ]}
+  ];
+
+  // ---- History state. Unlike the day board this is NOT thrown away at midnight: it is
+  // a map of box id to the sorted list of days that box was done, so a rolling window
+  // and a streak can be read back out of it.
+  var WINDOW = BOARD.window || 7;         // days shown per box, and the height of a full box
+  var KEEP_DAYS = BOARD.keepDays || 180;  // how far back history is retained
+
+  // Dates are local YYYY-MM-DD strings stepped with setDate, never UTC millisecond
+  // maths, so a day boundary lands where the user actually is.
+  function iso(d) {
+    return d.getFullYear() + '-' +
+           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + d.getDate()).slice(-2);
+  }
+  function today() { return iso(new Date()); }
+  function parseDay(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function shift(s, n) { var d = parseDay(s); d.setDate(d.getDate() + n); return iso(d); }
+  function letterOf(s) { return DAY_LETTERS[parseDay(s).getDay()]; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      var parsed = raw ? JSON.parse(raw) : null;
+      return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (e) { /* private mode - board still works, it just won't persist */ }
+  }
+
+  var state = load();
+  var board = document.getElementById('zikrTrackerApp');
+  var hudCount = document.getElementById('hudCount');
+  var hudPerfect = document.getElementById('hudPerfect');
+  var mounted = today();
+
+  // Keyed on group.id + box.key, never key alone: box.key names a symbol in ICONS and
+  // two groups may legitimately reuse one.
+  function daysOf(id) {
+    if (!Array.isArray(state[id])) state[id] = [];
+    return state[id];
+  }
+  function isDone(id, d) { return daysOf(id).indexOf(d) !== -1; }
+
+  function windowDays() {
+    var days = [], d = today(), i;
+    for (i = WINDOW - 1; i >= 0; i--) days.push(shift(d, -i));
+    return days;
+  }
+
+  // Counts back from today, or from yesterday while today is still open: an unfinished
+  // day should not read as a broken streak until the day is actually over.
+  function streakOf(id) {
+    var d = today();
+    if (!isDone(id, d)) d = shift(d, -1);
+    var n = 0;
+    while (isDone(id, d)) { n++; d = shift(d, -1); }
+    return n;
+  }
+
+  // A day on which every box on the board was done. Optional groups are excluded:
+  // one situational set would otherwise hold this at zero for good.
+  function perfectDays() {
+    var tally = {}, total = 0, n = 0, d;
+    GROUPS.forEach(function (g) {
+      if (g.optional) return;
+      g.boxes.forEach(function (b) {
+        total++;
+        daysOf(b.id).forEach(function (day) { tally[day] = (tally[day] || 0) + 1; });
+      });
+    });
+    for (d in tally) if (tally[d] === total) n++;
+    return n;
+  }
+
+  function paint(box) {
+    var days = windowDays();
+    var t = today();
+    var done = 0, i;
+    for (i = 0; i < days.length; i++) if (isDone(box.id, days[i])) done++;
+    var onToday = isDone(box.id, t);
+    var el = box.el;
+
+    // A tracked box fills with how much of the window is done; an optional one is a
+    // plain today-toggle, since a rare event measured against seven days is always
+    // near-empty and would read as neglect rather than as not-today.
+    el.querySelector('.fill').style.height =
+      (box.optional ? (onToday ? 100 : 0) : (done / WINDOW * 100)) + '%';
+    el.querySelector('.strip').innerHTML = days.map(function (d) {
+      return '<span class="' + (isDone(box.id, d) ? 'on' : '') +
+             (d === t ? ' today' : '') + '" title="' + d + '"></span>';
+    }).join('');
+    el.querySelector('.dlab').innerHTML = days.map(function (d) {
+      return '<span>' + letterOf(d) + '</span>';
+    }).join('');
+    el.querySelector('.wk').textContent = done + '/' + WINDOW + WK_SUFFIX;
+    el.querySelector('.stk').textContent = streakOf(box.id);
+
+    el.classList.toggle('done', onToday);
+    el.classList.toggle('full', box.optional ? onToday : (done === WINDOW));
+    el.setAttribute('aria-pressed', onToday ? 'true' : 'false');
+  }
+
+  // The panel score is today, not the window: it is the number a person acts on.
+  function paintGroup(group) {
+    var t = today();
+    var done = group.boxes.filter(function (b) { return isDone(b.id, t); }).length;
+    group.scoreEl.textContent = done + '/' + group.boxes.length;
+  }
+
+  function paintTotal() {
+    var t = today(), done = 0;
+    GROUPS.forEach(function (g) {
+      if (g.optional) return;
+      g.boxes.forEach(function (b) { if (isDone(b.id, t)) done++; });
+    });
+    hudCount.textContent = done;
+    hudPerfect.textContent = perfectDays();
+  }
+
+  // A tap marks today done; a tap on a box already done today unmarks it. There is no
+  // partial state to step through, so there is no shift-tap here.
+  function toggle(box, group) {
+    var d = today();
+    var a = daysOf(box.id);
+    var i = a.indexOf(d);
+    if (i === -1) a.push(d); else a.splice(i, 1);
+    var cutoff = shift(d, -KEEP_DAYS);
+    state[box.id] = a.filter(function (x) { return x >= cutoff; }).sort();
+    save();
+    paint(box);
+    paintGroup(group);
+    paintTotal();
+  }
+
+  // ---- Build ----
+  var total = 0;
+  board.style.setProperty('--pop', String(BOARD.pop || 1.6));
+
+  GROUPS.forEach(function (group) {
+    var panel = document.createElement('section');
+    panel.className = 'panel' + (group.optional ? ' optional' : '');
+    panel.style.setProperty('--accent', 'rgb(' + group.accent + ')');
+    panel.style.setProperty('--fill-strong', 'rgba(' + group.accent + ', 0.82)');
+    panel.style.setProperty('--fill-soft', 'rgba(' + group.accent + ', 0.30)');
+    panel.style.setProperty('--fill-line', 'rgba(' + group.accent + ', 0.85)');
+    panel.style.setProperty('--panel-line', 'rgba(' + group.accent + ', 0.55)');
+    panel.style.setProperty('--panel-halo', 'rgba(' + group.accent + ', 0.16)');
+    panel.setAttribute('aria-label', group.title);
+
+    var tag = document.createElement('div');
+    tag.className = 'panel-tag';
+    // Keep this short. It sits over the first box's corner, and a tag wider than one
+    // box paints across its neighbour.
+    tag.innerHTML = group.title +
+                    ' <span class="panel-score">0/' + group.boxes.length + '</span>';
+    panel.appendChild(tag);
+    group.scoreEl = tag.querySelector('.panel-score');
+    group.el = panel;
+
+    group.boxes.forEach(function (box) {
+      box.id = group.id + '.' + box.key;
+      box.optional = !!group.optional;
+      if (!group.optional) total++;
+
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'box' + (group.optional ? ' optional' : '') +
+        (box.detail ? ' has-detail' : '');
+      el.style.setProperty('--steps', String(WINDOW));
+      // A toggle, not a progressbar: today is either done or it is not, and the
+      // window behind it is reported in the label rather than as a value.
+      el.setAttribute('aria-pressed', 'false');
+      el.setAttribute('aria-label', group.title + ' — ' + box.name);
+      el.innerHTML =
+        '<span class="fill"></span>' +
+        (box.badge ? '<span class="badge">' + box.badge + '</span>' : '') +
+        '<span class="name">' + box.name + '</span>' +
+        (ICONS[box.key]
+          ? '<span class="icon' + (box.sub ? ' icon-sm' : '') + '" aria-hidden="true">' +
+            ICONS[box.key] + '</span>'
+          : '') +
+        (box.sub ? '<span class="sub">' + box.sub + '</span>' : '') +
+        (box.detail ? '<span class="detail" dir="rtl" lang="ar">' + box.detail + '</span>' : '') +
+        '<span class="week"><span class="strip"></span><span class="dlab"></span></span>' +
+        '<span class="count"><span class="wk">0/' + WINDOW + WK_SUFFIX + '</span>' +
+        '<span class="flame" title="' + STREAK_LABEL + '">' + FLAME +
+        '<span class="stk">0</span></span></span>';
+      el.addEventListener('click', function () { toggle(box, group); });
+      box.el = el;
+      panel.appendChild(el);
+      paint(box);
+    });
+
+    paintGroup(group);
+    board.appendChild(panel);
+  });
+
+  document.getElementById('hudTotal').textContent = '/' + total + TODAY_SUFFIX;
+
+  // ---- Shape + pop geometry ----
+  // The board reshapes below the split, and the pop origin depends on the shape, so
+  // both are solved together and re-solved on resize.
+  function shape() {
+    var narrow = window.matchMedia('(max-width: 900px)').matches;
+    var s = (narrow && BOARD.narrow) ? BOARD.narrow : BOARD;
+    board.style.setProperty('--cols', String(s.cols));
+    board.style.setProperty('--rows', String(s.rows));
+    GROUPS.forEach(function (g) {
+      g.el.style.setProperty('--pcols', String(s.pcols));
+      g.el.style.setProperty('--prows', String(s.prows));
+    });
+  }
+
+  // Solve the transform-origin instead of guessing it.
+  //
+  // Scaling a box of width w by s about a point p from its left edge puts its new left
+  // edge at left + p(1 - s) and its new right edge at that plus w*s. Requiring both to
+  // stay on screen gives a range for p; we take the middle of that range, so the box
+  // grows as evenly as it can while never leaving the viewport. Centre-origin fails for
+  // every box that is not in the middle of the board, and hand-written per-position
+  // rules have to be rewritten for each breakpoint. This does neither.
+  function solve(near, size, viewport, s) {
+    if (s <= 1) return size / 2;
+    var lo = Math.max(0, (near + size * s - viewport) / (s - 1));
+    var hi = Math.min(size, near / (s - 1));
+    if (lo > hi) return size / 2;            // scaled box exceeds the viewport; centre it
+    return (lo + hi) / 2;
+  }
+
+  function pinOrigins() {
+    var s = BOARD.pop || 1.6;
+    GROUPS.forEach(function (g) {
+      g.boxes.forEach(function (box) {
+        var r = box.el.getBoundingClientRect();
+        box.el.style.transformOrigin =
+          solve(r.left, r.width, window.innerWidth, s) + 'px ' +
+          solve(r.top, r.height, window.innerHeight, s) + 'px';
+      });
+    });
+  }
+
+  // Which boxes sit in the panel's corners changes with the shape, so it is decided
+  // from the laid-out rects rather than from DOM order. The slack covers the panel's
+  // border plus the 1px hairline gap.
+  function roundCorners() {
+    GROUPS.forEach(function (g) {
+      var p = g.el.getBoundingClientRect();
+      g.boxes.forEach(function (box) {
+        var r = box.el.getBoundingClientRect();
+        var top = r.top - p.top < 12, bottom = p.bottom - r.bottom < 12;
+        var left = r.left - p.left < 12, right = p.right - r.right < 12;
+        box.el.classList.toggle('r-tl', top && left);
+        box.el.classList.toggle('r-tr', top && right);
+        box.el.classList.toggle('r-br', bottom && right);
+        box.el.classList.toggle('r-bl', bottom && left);
+      });
+    });
+  }
+
+  function relayout() { shape(); pinOrigins(); roundCorners(); }
+
+  window.addEventListener('resize', relayout);
+  relayout();
+
+  function repaintAll() {
+    GROUPS.forEach(function (g) {
+      g.boxes.forEach(paint);
+      paintGroup(g);
+    });
+    paintTotal();
+  }
+
+  // Today only. A board that keeps history must never offer a one-tap wipe of it;
+  // the undo for a mistaken tap is another tap on the same box.
+  document.getElementById('hudClear').addEventListener('click', function () {
+    var d = today();
+    GROUPS.forEach(function (g) {
+      g.boxes.forEach(function (b) {
+        var a = daysOf(b.id);
+        var i = a.indexOf(d);
+        if (i !== -1) a.splice(i, 1);
+      });
+    });
+    save();
+    repaintAll();
+  });
+
+  // A tab left open overnight has to repaint even when nothing was stored: the
+  // window and every streak are computed from today(), so they all shift at midnight.
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    var fresh = load();
+    var rolled = today() !== mounted;
+    if (rolled || JSON.stringify(fresh) !== JSON.stringify(state)) {
+      state = fresh;
+      mounted = today();
+      repaintAll();
+    }
+  });
+
+  paintTotal();
+})();
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
