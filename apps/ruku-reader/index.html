@@ -233,6 +233,25 @@
     }
     .ayah { transition: background .18s; border-radius: 6px; }
     .ayah:hover { background: var(--accent-w); }
+
+    /* ---- Hide-to-recall ----------------------------------------------------
+       Two modes on the text container: .h1 blurs each ayah, .h2 leaves only its
+       opening word. Either way an ayah reveals on click and keeps .shown, so the
+       reader tests recall one ayah at a time. The ayah marker never hides, so
+       you always know which verse you are being asked for. */
+    .ayat.h1 .ayah:not(.shown), .ayat.h2 .ayah:not(.shown) { cursor: pointer; }
+    .ayat.h1 .ayah:not(.shown) > .w1,
+    .ayat.h1 .ayah:not(.shown) > .rest {
+      filter: blur(7px); user-select: none; transition: filter .18s;
+    }
+    /* Ease the blur on hover: a nudge toward the answer without giving it. */
+    .ayat.h1 .ayah:not(.shown):hover > .w1,
+    .ayat.h1 .ayah:not(.shown):hover > .rest { filter: blur(4px); }
+    .ayat.h2 .ayah:not(.shown) > .rest { display: none; }
+    .ayat.h2 .ayah:not(.shown) > .w1::after {
+      content: ' ⋯'; color: var(--accent); opacity: .75;
+    }
+    .ayah.shown > .w1, .ayah.shown > .rest { filter: none; }
     .amark {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: calc(29px * var(--fsx)); height: calc(29px * var(--fsx));
@@ -262,7 +281,6 @@
       transition: opacity .2s, transform .2s;
     }
     #toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
-
   </style>
 </head>
 <body>
@@ -310,7 +328,7 @@
     <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
   </header>
 
-  <main id="rukuReader" class="glass-panel p-5 md:p-6">
+  <main id="rukuReader" class="glass-panel p-6">
         <!-- ============================ Surah grid ============================ -->
     <div class="flex flex-wrap items-center gap-3 mb-4">
       <input id="q" class="input-field" style="max-width:290px" autocomplete="off"
@@ -369,6 +387,9 @@
           <button data-st="1">Reading</button>
           <button data-st="2">Done</button>
         </div>
+        <button id="rHide" class="chip" title="Cycle hide mode (h)">Show all</button>
+        <button id="rReveal" class="chip hidden" title="Reveal or re-hide every ayah (r)">Reveal all</button>
+        <span id="rRevealed" class="text-xs t-faint hidden"></span>
         <div class="ml-auto flex items-center gap-1.5">
           <button id="rSmall" class="icon-btn" aria-label="Smaller text">A−</button>
           <button id="rBig" class="icon-btn" aria-label="Larger text">A+</button>
@@ -561,12 +582,13 @@ const SURAHS = DB.map(su => ({
 const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 const STATUS_NAME = ['new', 'reading', 'done'];
+const HIDE_NAME = ['Show all', 'Blurred', 'First word'];
 const arNum = n => String(n).replace(/\d/g, d => AR_DIGITS[+d]);
 const $ = id => document.getElementById(id);
 
 /* ------------------------------------------------------------------- state */
 const KEY = 'rr1:state';
-let state = { st: {}, last: 0, theme: 'dark', fsx: 1 };
+let state = { st: {}, last: 0, theme: 'dark', fsx: 1, hide: 0 };
 try {
   const raw = JSON.parse(localStorage.getItem(KEY) || '{}');
   state = Object.assign(state, raw);
@@ -739,6 +761,36 @@ async function surahVerses(n) {
 }
 
 /* ------------------------------------------------------------- full reader */
+/* ---------------------------------------------------- hide-to-recall modes */
+function applyHide() {
+  const t = $('rText');
+  t.classList.remove('h1', 'h2');
+  if (state.hide) t.classList.add('h' + state.hide);
+  $('rHide').textContent = HIDE_NAME[state.hide];
+  $('rHide').classList.toggle('on', state.hide > 0);
+  $('rReveal').classList.toggle('hidden', !state.hide);
+  $('rRevealed').classList.toggle('hidden', !state.hide);
+  paintRevealed();
+}
+
+function paintRevealed() {
+  if (!state.hide) return;
+  const all = $('rText').querySelectorAll('.ayah').length;
+  const shown = $('rText').querySelectorAll('.ayah.shown').length;
+  $('rRevealed').textContent = shown + ' / ' + all + ' shown';
+  $('rReveal').textContent = all && shown === all ? 'Hide all' : 'Reveal all';
+}
+
+/* One button for both directions: reveal everything, or put it all back once
+   the whole ruku is showing. */
+function revealAll() {
+  if (!state.hide) return;
+  const all = [...$('rText').querySelectorAll('.ayah')];
+  const putBack = all.length > 0 && all.every(a => a.classList.contains('shown'));
+  all.forEach(a => a.classList.toggle('shown', !putBack));
+  paintRevealed();
+}
+
 function paintStatusSeg() {
   const st = statusOf(cur);
   document.querySelectorAll('#reader .seg button').forEach(b => {
@@ -792,10 +844,19 @@ async function openReader(g) {
   for (let a = r.start; a <= r.end; a++) {
     const t = verses[a];
     if (!t) continue;
-    html += '<span class="ayah" title="' + r.s + ':' + a + '">' + t +
-            '<span class="amark">' + arNum(a) + '</span></span> ';
+    // Split the opening word out so "first word" mode has a prompt to leave
+    // on screen. Single-word ayahs simply get an empty rest.
+    const sp = t.indexOf(' ');
+    const w1 = sp < 0 ? t : t.slice(0, sp);
+    const rest = sp < 0 ? '' : t.slice(sp);
+    html += '<span class="ayah" title="' + r.s + ':' + a + '">' +
+              '<span class="w1">' + w1 + '</span>' +
+              '<span class="rest">' + rest + '</span>' +
+              '<span class="amark">' + arNum(a) + '</span>' +
+            '</span> ';
   }
   $('rText').innerHTML = html;
+  applyHide();          // a new ruku starts hidden again in either recall mode
 }
 
 function closeReader() {
@@ -856,6 +917,20 @@ function init() {
   $('rNext').addEventListener('click', () => step(1));
   $('rPrev2').addEventListener('click', () => step(-1));
   $('rNext2').addEventListener('click', () => step(1));
+  $('rHide').addEventListener('click', () => {
+    state.hide = (state.hide + 1) % 3;
+    save(); applyHide();
+    toast(HIDE_NAME[state.hide]);
+  });
+  $('rReveal').addEventListener('click', revealAll);
+  // Delegated, so it survives every re-render of the verse text.
+  $('rText').addEventListener('click', e => {
+    if (!state.hide) return;
+    const a = e.target.closest('.ayah');
+    if (!a) return;
+    a.classList.toggle('shown');
+    paintRevealed();
+  });
   $('rSmall').addEventListener('click', () => bumpFsx(-0.1));
   $('rBig').addEventListener('click', () => bumpFsx(0.1));
   $('rDone').addEventListener('click', () => {
@@ -870,8 +945,11 @@ function init() {
     if (document.getElementById('loginView').style.display !== 'none') return;
     if (e.key === 'Escape') { if (cur) closeReader(); else if (openSid) closeSurah(); return; }
     if (!cur) return;
+    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'h' || e.key === 'H') $('rHide').click();
+    if (e.key === 'r' || e.key === 'R') revealAll();
   });
 }
 
