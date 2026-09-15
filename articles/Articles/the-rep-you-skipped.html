@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rep You Skipped | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_57.png" alt="The Rep You Skipped" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive Systems</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Rep You Skipped</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Your memory is a library with a librarian. Only the librarian can get out of practice.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~6 min read</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Three causes of bad memory are commonly attributed to Ibn Sina: illness, distraction, and laziness. The attribution travels a lot further than anyone can source it, so treat it as inherited folk wisdom rather than a quotation. It is still worth a look, because two of those causes have nothing to do with the device in your hand, and the third one that device made much worse.</p>
+
+                    <p>Illness is a doctor's business. Distraction is about how you handle information in the moment it arrives, and I wrote about that in <a href="the-memory-workbench.html">The Memory Workbench</a>.</p>
+
+                    <p>That leaves laziness. Most people skip past it, because it sounds like an insult. It is not. It describes something quite specific, and it is the one thing your tools quietly take away from you.</p>
+
+                    <h2>A library and a librarian</h2>
+
+                    <p>Ibn Sina (980 to 1037) was a Muslim polymath who wrote in Arabic. A thousand years ago he described memory as two separate things, and the split has held up remarkably well.</p>
+
+                    <p>Picture a library.</p>
+
+                    <p>The first part is the shelves. Everything you have ever learned is filed there. Ibn Sina called this <em>al-hafiza</em>. The shelves are passive. They hold books and do nothing else.</p>
+
+                    <p>The second part is the librarian. When you need something, the librarian walks the aisles and brings it back. Ibn Sina called this <em>al-dhakira</em>, and he was careful to say it is not a place where anything is kept. It is an act. It is the walk.</p>
+
+                    <p>Walk that aisle often and the path stays worn and easy to follow. Stop walking it and nothing on the shelves changes at all. Every book sits exactly where you left it. The only thing that fades is the trail between them.</p>
+
+                    <p>That is the whole idea. Everything else follows from it.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 290" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">The two parts of memory Ibn Sina kept separate</title>
+                                <desc id="fig1-desc">The shelves hold everything you have learned and never do any work. The librarian walks the aisles and brings a book back when you need it. Because only the librarian does anything, only the librarian can get out of practice.</desc>
+
+                                <defs>
+                                    <marker id="arrowF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Two parts, only one of them works</text>
+
+                                <rect x="30" y="76" width="240" height="140" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="50" y="100" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">AL-HAFIZA</text>
+                                <text x="50" y="126" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">The shelves</text>
+                                <text x="50" y="148" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Everything you have learned</text>
+                                <text x="50" y="166" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">is filed here</text>
+                                <text x="50" y="196" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">Passive. Does nothing.</text>
+
+                                <rect x="370" y="76" width="240" height="140" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="390" y="100" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">AL-DHAKIRA</text>
+                                <text x="390" y="126" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600">The librarian</text>
+                                <text x="390" y="148" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Walks the aisles and</text>
+                                <text x="390" y="166" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">brings the book back</text>
+                                <text x="390" y="196" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">Active. Can get rusty.</text>
+
+                                <text x="320" y="130" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">fetches from</text>
+                                <line x1="366" y1="150" x2="278" y2="150" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF1)"/>
+
+                                <text x="30" y="252" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Only one of these two can get out of practice.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Ibn Sina separated the part of memory that keeps things from the part that goes and gets them. Sources: Stanford Encyclopedia of Philosophy, "Arabic and Islamic Psychology and Philosophy of Mind"; Encyclopaedia Iranica, "Avicenna vi. Psychology."</figcaption>
+                    </figure>
+
+                    <blockquote>Shelves do not get out of shape. Librarians do.</blockquote>
+
+                    <h2>Why laziness is the one that bites</h2>
+
+                    <p>Read the three causes again with that picture in mind and they stop being a flat list. Illness damages the building. Distraction means the book never got filed at all. Laziness is something else: the librarian stops walking.</p>
+
+                    <p>Shelves cannot weaken, because they never do anything in the first place. The librarian is the only part of the system that works, which makes it the only part that can get slow, and the only part that can get faster.</p>
+
+                    <p>Science arrived at the same place much later. In 2006 Henry Roediger and Jeffrey Karpicke showed that testing yourself on something makes you remember it far longer than reading it again, even though reading again feels more productive while you do it. What helps is not putting information in. It is pulling it back out. Robert and Elizabeth Bjork gave the principle a name, a desirable difficulty: the effort of retrieving is the thing that works, so removing the effort removes the benefit.</p>
+
+                    <p>Ibn Sina ran no experiments. He simply noticed which part of memory does the walking.</p>
+
+                    <h2>The four hundred millisecond problem</h2>
+
+                    <p>Here is where your tools come in.</p>
+
+                    <p>You are reading something and cannot remember what a word means. For most of human history, what happened next was this. You paused. You reached for it. You either got it or you did not, and then you looked it up. That reach takes two or three seconds, and that reach is the exercise.</p>
+
+                    <p>An AI answers in about four hundred milliseconds. The answer arrives before the reach has even started.</p>
+
+                    <p>That is the entire problem, and it is worth saying precisely, because the usual worry about AI and thinking is too vague to act on. Nothing is wrong with the answer. The answer is often better than what you would have remembered. The trouble is when it arrives. It lands in the exact moment your librarian would have stood up, so the librarian stays seated. Do that forty times a day and you have not lost a single book. You have stopped sending anyone to fetch them.</p>
+
+                    <p>You will not notice for a long time, because the shelves are fine. Everything is still there. What fades is your ability to reach it on your own, and you tend to find that out at the worst possible moment: in an interview, in front of a customer, in a conversation where pulling out your phone would look strange.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 450" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Three ways to get an answer and what each does to your librarian</title>
+                                <desc id="fig2-desc">Remembering on your own sends your librarian down the aisle, which counts as practice. Asking a model gets the same answer while your librarian stays seated. Having the model ask you sends your librarian down the aisle under harder conditions, which counts as practice and more of it.</desc>
+
+                                <defs>
+                                    <marker id="arrowF2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Same answer, three different effects on your librarian</text>
+
+                                <text x="30" y="64" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">YOU REMEMBER IT YOURSELF</text>
+                                <rect x="30" y="82" width="110" height="36" rx="5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="85" y="104" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">a question</text>
+                                <line x1="144" y1="100" x2="246" y2="100" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="250" y="82" width="140" height="36" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="1.8"/>
+                                <text x="320" y="104" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">your librarian</text>
+                                <line x1="394" y1="100" x2="496" y2="100" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="500" y="82" width="110" height="36" rx="5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="555" y="104" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">the answer</text>
+                                <text x="30" y="140" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Slow, sometimes wrong, and it counts as practice.</text>
+
+                                <text x="30" y="176" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">YOU ASK THE MACHINE</text>
+                                <rect x="30" y="194" width="110" height="36" rx="5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="85" y="216" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">a question</text>
+                                <line x1="144" y1="212" x2="246" y2="212" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="250" y="194" width="140" height="36" rx="5" fill="#1a2942" stroke="#60a5fa" stroke-width="1.8"/>
+                                <text x="320" y="216" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">the machine</text>
+                                <line x1="394" y1="212" x2="496" y2="212" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="500" y="194" width="110" height="36" rx="5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="555" y="216" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">the answer</text>
+                                <rect x="250" y="238" width="140" height="26" rx="5" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+                                <text x="320" y="255" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">your librarian, seated</text>
+                                <text x="30" y="286" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Fast, usually right, and no practice happened.</text>
+
+                                <text x="30" y="324" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">THE MACHINE ASKS YOU</text>
+                                <rect x="30" y="342" width="110" height="36" rx="5" fill="#1a2942" stroke="#60a5fa" stroke-width="1.3"/>
+                                <text x="85" y="364" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">its question</text>
+                                <line x1="144" y1="360" x2="246" y2="360" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="250" y="342" width="140" height="36" rx="5" fill="#1a2942" stroke="#f59e0b" stroke-width="2.6"/>
+                                <text x="320" y="364" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">your librarian</text>
+                                <line x1="394" y1="360" x2="496" y2="360" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowF2)"/>
+                                <rect x="500" y="342" width="110" height="36" rx="5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="555" y="364" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">your answer</text>
+                                <text x="30" y="398" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Harder than you would pick, and it counts double.</text>
+
+                                <text x="30" y="430" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Amber is you. Blue is the machine. Only the direction of the question changes.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The middle row is what almost everyone does by default, and it is the only one of the three that leaves your librarian sitting down. Sources: Roediger and Karpicke (2006); Bjork and Bjork (2011).</figcaption>
+                    </figure>
+
+                    <h2>Let it ask instead</h2>
+
+                    <p>The same tool is also the best memory trainer ever made, and almost nobody sets it up that way.</p>
+
+                    <p>Quizzing yourself with flashcards has been around forever, and most people give up on it, because making the cards is boring and they go out of date. An AI fixes both problems. It can read what you read this week, ask you about it in words you have not seen before, tell whether your answer was genuinely right or only close, and come back later to the ones you missed.</p>
+
+                    <p>It takes one instruction and one habit.</p>
+
+                    <pre><code>You are in quiz mode.
+
+When I ask about something I have already read, do
+not answer it. Ask the question back to me, wait for
+my attempt, then tell me what I got wrong.
+
+Answer directly only if I say "just tell me".</code></pre>
+
+                    <p>The habit is the harder half. When you feel the pull to ask, wait. Say your answer out loud first, even a bad one, and then ask. The bad answer is the exercise. Getting it wrong still counts: guessing and missing, then seeing the right answer, beats reading the right answer twice.</p>
+
+                    <h2>The old idea that held up</h2>
+
+                    <p>Ibn Sina thought the brain worked through chambers and humours, and that part is simply wrong. The idea underneath it is not. He separated the part of memory that keeps things from the part that goes and gets them, and he put all the effort on the second one. A thousand years of research later, that is still where the effort lives.</p>
+
+                    <p>Which leaves AI with two settings that look identical from the outside. Both hand you a correct answer in about a second. Only one of them leaves you able to answer without it next year. The difference comes down to who asked the question.</p>
+
+                    <h3>What to do this week</h3>
+
+                    <ol>
+                        <li>Before you look up something you have read before, say your answer out loud first. Even a wrong one. That guess is the whole exercise.</li>
+                        <li>Put a quiz mode into whatever assistant you use, with a phrase that switches it on, so choosing it costs you no thought.</li>
+                        <li>Pick five things you should know cold for your work, and have the AI test you on them once a week instead of explaining them to you.</li>
+                        <li>Every so often, answer a real question with the laptop shut. If that keeps getting harder, you now know which part of you is out of practice.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is the brief window before new information decays.</p>
+                        <a href="the-memory-workbench.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Fluency Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why output that reads well is the hardest kind of work to evaluate honestly.</p>
+                        <a href="the-fluency-trap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Augmentation Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">What a team gives up when the tool becomes the only route to the answer.</p>
+                        <a href="the-augmentation-trap.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Stanford Encyclopedia of Philosophy. <em>"Arabic and Islamic Psychology and Philosophy of Mind."</em> Stanford University.
+                        <a href="https://plato.stanford.edu/entries/arabic-islamic-mind/" target="_blank">https://plato.stanford.edu/entries/arabic-islamic-mind/</a>
+                    </li>
+                    <li class="reference-item">
+                        Encyclopaedia Iranica. <em>"Avicenna vi. Psychology."</em>
+                        <a href="https://www.iranicaonline.org/articles/avicenna-vi/" target="_blank">https://www.iranicaonline.org/articles/avicenna-vi/</a>
+                    </li>
+                    <li class="reference-item">
+                        Black, D. L. <em>"Rational Imagination: Avicenna on the Cogitative Power."</em> University of Toronto.
+                        <a href="http://individual.utoronto.ca/dlblack/articles/Aviccogitart.pdf" target="_blank">http://individual.utoronto.ca/dlblack/articles/Aviccogitart.pdf</a>
+                    </li>
+                    <li class="reference-item">
+                        Roediger, H. L., III, and Karpicke, J. D. (2006). <em>"Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention."</em> Psychological Science, 17(3), 249 to 255.
+                        <a href="https://doi.org/10.1111/j.1467-9280.2006.01693.x" target="_blank">https://doi.org/10.1111/j.1467-9280.2006.01693.x</a>
+                    </li>
+                    <li class="reference-item">
+                        Bjork, E. L., and Bjork, R. A. (2011). <em>"Making Things Hard on Yourself, But in a Good Way: Creating Desirable Difficulties to Enhance Learning."</em> In Psychology and the Real World. Worth Publishers.
+                        <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2016/04/EBjork_RBjork_2011.pdf" target="_blank">https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2016/04/EBjork_RBjork_2011.pdf</a>
+                    </li>
+                    <li class="reference-item">
+                        Internet Encyclopedia of Philosophy. <em>"Avicenna (Ibn Sina)."</em>
+                        <a href="https://iep.utm.edu/avicenna-ibn-sina/" target="_blank">https://iep.utm.edu/avicenna-ibn-sina/</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
