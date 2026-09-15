@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sheep Knows | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_60.png" alt="The Sheep Knows" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive Systems</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Sheep Knows</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">The eye sees the shape. Something else sees the danger. AI lives in that gap.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~5 min read</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>A sheep sees a wolf and runs. Ibn Sina asked a question about that which nobody had quite asked before. What did the sheep actually see?</p>
+
+                    <p>Not a wolf. Light hit its eye carrying shape, colour and movement, and that is all light can carry. The danger was never in the light.</p>
+
+                    <h2>The faculty he had to invent</h2>
+
+                    <p>His answer was that something else must be doing the work. Sight delivers the form. A separate faculty grasps what the form means. He called it <em>wahm</em>, usually translated as estimation, and Latin translators later rendered it <em>estimatio</em>.</p>
+
+                    <p>This one is his own. The other inner faculties he inherited from Aristotle and the Greek commentators and rearranged. Estimation appears in no earlier Greek, Christian or Muslim philosopher. He needed something for a job nothing in the existing scheme could do, so he added it.</p>
+
+                    <p>The job is this. Part of what you perceive arrives in the sensory signal and part of it does not. The wolf's grey coat is in the signal. The wolf's hostility is not. Ibn Sina called the second kind <em>ma'ani</em>, meanings, and held that one faculty perceives them and another stores them. The storing faculty is the one I wrote about in <a href="the-rep-you-skipped.html">The Rep You Skipped</a>.</p>
+
+                    <blockquote>The grey of the coat is in the light. The danger is not.</blockquote>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 282" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Two sources combine before the sheep acts</title>
+                                <desc id="fig1-desc">The senses supply shape, colour and movement. Estimation supplies hostility, which was never present in the light. Only when the two are combined does the animal act.</desc>
+
+                                <defs>
+                                    <marker id="arrowG1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Only half of it arrived through the eye</text>
+
+                                <rect x="30" y="66" width="250" height="68" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="48" y="90" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">FROM THE SENSES</text>
+                                <text x="48" y="116" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">shape, colour, movement</text>
+
+                                <rect x="30" y="158" width="250" height="68" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="48" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">FROM ESTIMATION</text>
+                                <text x="48" y="208" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">hostility</text>
+
+                                <path d="M 284 100 H 360 V 146" fill="none" stroke="#94a3b8" stroke-width="1.6"/>
+                                <path d="M 284 192 H 360 V 146" fill="none" stroke="#94a3b8" stroke-width="1.6"/>
+                                <circle cx="360" cy="146" r="3.5" fill="#94a3b8"/>
+                                <line x1="360" y1="146" x2="414" y2="146" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowG1)"/>
+
+                                <rect x="420" y="112" width="190" height="68" rx="6" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="515" y="152" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">the sheep runs</text>
+
+                                <text x="30" y="262" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Remove the amber box and nothing in the signal tells the animal to move.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Estimation supplies a meaning the senses never carried. Sources: Stanford Encyclopedia of Philosophy; Encyclopaedia Iranica, "Avicenna vi. Psychology."</figcaption>
+                    </figure>
+
+                    <h2>Meaning is not in the signal</h2>
+
+                    <p>That sounds like a technicality. It is the whole thing.</p>
+
+                    <p>Think about what it takes to read a two line message from your manager that says, can we talk tomorrow. The words are the form and every letter is right there in front of you. What it means depends on what happened in yesterday's meeting, whether your project slipped, how this person usually phrases things, and whether they used your first name. None of that is in the message.</p>
+
+                    <p>You do not reason your way to the meaning either. You arrive at it immediately, the way the sheep arrives at danger. Ibn Sina would say your estimation did that, working on inputs the words never carried.</p>
+
+                    <h2>Where AI sits</h2>
+
+                    <p>Now the useful part.</p>
+
+                    <p>A language model is extraordinarily good at form. It may be the best form reader ever built. Pattern, structure, style, the shape of an argument, the statistical texture of how sentences go: that is what it was trained on and what it does superbly.</p>
+
+                    <p>What it does not have is your afternoon. It was not in yesterday's meeting. It does not know that this manager writes short sentences when annoyed, or that the deadline moved on Tuesday. Paste the message in and ask what it means, and the model reads the form beautifully, then fills in the meaning from the average of every similar message ever written.</p>
+
+                    <p>Often that average is fine. Sometimes it is precisely wrong, and it will be wrong fluently, because nothing in the text announces that the missing context existed.</p>
+
+                    <h2>Two things worth taking from this</h2>
+
+                    <p>The first concerns your own judgment.</p>
+
+                    <p>Intuition has a poor reputation at work. It sounds like the opposite of evidence. Ibn Sina's account suggests something more careful: a gut feeling is a faculty operating on real inputs and producing a real reading faster than you can put it into words. That does not make it right. Estimation misfires constantly, which he knew too, and he used the same faculty to explain why animals fear harmless things. But it is information rather than noise, and the useful response is to ask what it picked up on instead of waving it away.</p>
+
+                    <p>The second is a rule for using AI. Ask one question before trusting an answer: does this depend on something that is not in the text I gave it?</p>
+
+                    <p>If no, the model is on home ground and will often do better than you. If yes, you have asked a form reader for a meaning, and what comes back is a well written hypothesis rather than an answer.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">One question to ask before trusting a model's answer</title>
+                                <desc id="fig2-desc">If the answer depends only on what is written in the text supplied, the model is working on form and will often outperform you. If the answer depends on context that was never in the text, the reply is a hypothesis rather than an answer.</desc>
+
+                                <defs>
+                                    <marker id="arrowG2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+                                    </marker>
+                                </defs>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">The one question worth asking first</text>
+
+                                <rect x="150" y="62" width="340" height="50" rx="6" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.4"/>
+                                <text x="320" y="92" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12.5" text-anchor="middle">Does the answer need something not in the text?</text>
+
+                                <line x1="252" y1="116" x2="176" y2="152" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowG2)"/>
+                                <line x1="388" y1="116" x2="464" y2="152" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrowG2)"/>
+
+                                <rect x="30" y="158" width="270" height="94" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="50" y="182" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">NO</text>
+                                <text x="50" y="208" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Hand it over.</text>
+                                <text x="50" y="230" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">It will often beat you.</text>
+
+                                <rect x="340" y="158" width="270" height="94" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="360" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">YES</text>
+                                <text x="360" y="208" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Treat it as a hypothesis.</text>
+                                <text x="360" y="230" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">The context never arrived.</text>
+
+                                <text x="30" y="282" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Fluency tells you how well it read the form, not how well it read the situation.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The form and meaning split, turned into a single check you can run before trusting any generated answer.</figcaption>
+                    </figure>
+
+                    <h2>The gap that has not closed</h2>
+
+                    <p>Ibn Sina added a faculty to his model of the mind because the model he inherited could not explain how a sheep knows to run. A thousand years later we have built machines that do the form half of his scheme superbly and the meaning half by imitation.</p>
+
+                    <p>That is not a permanent limit, and I would not bet on it holding for long. For now it is the most reliable line to reason along. Whatever depends only on what is written, hand over. Whatever depends on what was in the room, keep.</p>
+
+                    <h3>What to do this week</h3>
+
+                    <ol>
+                        <li>Before pasting something into an AI, ask what the answer depends on. If it needs context that is not in the text, either supply that context or discount the answer.</li>
+                        <li>When you get a gut reaction in a meeting, write it down before you talk yourself out of it, then ask what specifically set it off. That is usually recoverable and usually real.</li>
+                        <li>Watch for the moments a model sounds most confident. Fluency measures how well it read the form, never how well it read the situation.</li>
+                        <li>For anything turning on history, relationships or intent, brief the model the way you would brief someone joining on Monday. Everything a new colleague would need, it needs too.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Rep You Skipped</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Your memory is a library with a librarian. Only the librarian can get out of practice.</p>
+                        <a href="the-rep-you-skipped.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Oldest Checklist</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Ibn Sina wrote seven tests for whether a remedy works. They still catch bad claims.</p>
+                        <a href="the-oldest-checklist.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Plausibility Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">An answer that sounds right is the hardest kind to check.</p>
+                        <a href="the-plausibility-trap.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Stanford Encyclopedia of Philosophy. <em>"Arabic and Islamic Psychology and Philosophy of Mind."</em> Stanford University.
+                        <a href="https://plato.stanford.edu/entries/arabic-islamic-mind/" target="_blank">https://plato.stanford.edu/entries/arabic-islamic-mind/</a>
+                    </li>
+                    <li class="reference-item">
+                        Encyclopaedia Iranica. <em>"Avicenna vi. Psychology."</em>
+                        <a href="https://www.iranicaonline.org/articles/avicenna-vi/" target="_blank">https://www.iranicaonline.org/articles/avicenna-vi/</a>
+                    </li>
+                    <li class="reference-item">
+                        Black, D. L. (1993). <em>"Estimation (Wahm) in Avicenna: The Logical and Psychological Dimensions."</em> Dialogue, 32(2).
+                    </li>
+                    <li class="reference-item">
+                        Black, D. L. <em>"Rational Imagination: Avicenna on the Cogitative Power."</em> University of Toronto.
+                        <a href="http://individual.utoronto.ca/dlblack/articles/Aviccogitart.pdf" target="_blank">http://individual.utoronto.ca/dlblack/articles/Aviccogitart.pdf</a>
+                    </li>
+                    <li class="reference-item">
+                        Avicenna (Ibn Sina). <em>Kitab al-Shifa, Kitab al-Nafs (The Book of Healing, On the Soul)</em>, on the internal senses.
+                    </li>
+                    <li class="reference-item">
+                        Internet Encyclopedia of Philosophy. <em>"Avicenna (Ibn Sina)."</em>
+                        <a href="https://iep.utm.edu/avicenna-ibn-sina/" target="_blank">https://iep.utm.edu/avicenna-ibn-sina/</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
