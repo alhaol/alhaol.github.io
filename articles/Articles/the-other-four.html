@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Other Four | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_58.png" alt="The Other Four" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Health &amp; Mind</span>
+                        <span class="category-badge category-workflow">Habits</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Other Four</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Ibn Sina named six daily levers for health. Your tracker handles two of them.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~5 min read</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>A thousand years ago Ibn Sina wrote down six things that decide whether you stay healthy. Not six treatments. Six things you adjust every day, usually without thinking about them.</p>
+
+                    <p>The list has aged well. The balance of it has not. We now measure two of the six very precisely, take a rough guess at a third, and quietly ignore the rest. The ones we ignore happen to be the ones that cost nothing.</p>
+
+                    <h2>The six</h2>
+
+                    <p>Ibn Sina set them out in the Canon of Medicine, finished around 1025. Later European physicians called them the non-naturals, which is a confusing label. It never meant unnatural. It meant the things that are not part of your body itself but act on it constantly.</p>
+
+                    <p>He did not invent the list. Versions of it run back to Galen, eight centuries earlier. What Ibn Sina did was organise it into something a physician could work through in order, and the Canon then taught medicine across Europe and the Islamic world for roughly six hundred years. Here it is.</p>
+
+                    <ol>
+                        <li>The air around you</li>
+                        <li>What you eat and drink</li>
+                        <li>Sleep and waking</li>
+                        <li>Movement and rest</li>
+                        <li>What your body takes in and lets go</li>
+                        <li>Your emotional state</li>
+                    </ol>
+
+                    <p>The order shifts between manuscripts. The membership does not.</p>
+
+                    <h2>What your watch actually sees</h2>
+
+                    <p>Lay a modern fitness tracker against that list.</p>
+
+                    <p>Sleep it measures well. Movement it measures very well, because counting steps and heart rate is what the hardware was built for. That is two.</p>
+
+                    <p>Your emotional state it guesses at, usually from heart rate variability, and hands back a stress score or a readiness number. Useful as a rough proxy. Not a reading.</p>
+
+                    <p>The air you breathe it cannot see. What you eat and drink, only if you type it in, which almost nobody keeps up past the third week. What your body takes in and lets go, nothing at all.</p>
+
+                    <p>So the honest tally is two measured, one inferred, three invisible. A device you paid a few hundred for covers a third of the list.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 372" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">The six levers and how much of each a fitness tracker can see</title>
+                                <desc id="fig1-desc">Of Ibn Sina's six factors, a modern tracker measures sleep and movement well, infers emotional state from heart rate variability, and cannot see air quality, food and drink, or what the body takes in and lets go.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Six levers, and how much of each a tracker sees</text>
+
+                                <text x="30" y="80" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">The air around you</text>
+                                <rect x="250" y="68" width="220" height="16" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5 4" stroke-opacity="0.75"/>
+                                <text x="486" y="80" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">not seen</text>
+
+                                <text x="30" y="126" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">What you eat and drink</text>
+                                <rect x="250" y="114" width="220" height="16" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5 4" stroke-opacity="0.75"/>
+                                <text x="486" y="126" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">not seen</text>
+
+                                <text x="30" y="172" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Sleep and waking</text>
+                                <rect x="250" y="160" width="220" height="16" rx="4" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <rect x="250" y="160" width="200" height="16" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <text x="486" y="172" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">measured</text>
+
+                                <text x="30" y="218" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Movement and rest</text>
+                                <rect x="250" y="206" width="220" height="16" rx="4" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <rect x="250" y="206" width="214" height="16" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <text x="486" y="218" fill="#60a5fa" font-family="Inter, sans-serif" font-size="12" font-weight="600">measured</text>
+
+                                <text x="30" y="264" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">What you take in and let go</text>
+                                <rect x="250" y="252" width="220" height="16" rx="4" fill="none" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5 4" stroke-opacity="0.75"/>
+                                <text x="486" y="264" fill="#f59e0b" font-family="Inter, sans-serif" font-size="12" font-weight="600">not seen</text>
+
+                                <text x="30" y="310" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Your emotional state</text>
+                                <rect x="250" y="298" width="220" height="16" rx="4" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <rect x="250" y="298" width="84" height="16" rx="4" fill="#60a5fa" fill-opacity="0.38"/>
+                                <text x="486" y="310" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" font-weight="600">inferred</text>
+
+                                <text x="30" y="352" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Two measured, one inferred, three invisible. Amber is the part left to you.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The six factors as set out in the Canon of Medicine, matched against what consumer wearables actually record. Sources: Avicenna, Canon of Medicine, c. 1025; "From Galen's De Sanitate Tuenda to Holistic Health."</figcaption>
+                    </figure>
+
+                    <h2>Managing what you measure</h2>
+
+                    <p>There is an old management line about how what gets measured gets managed. The uncomfortable half of it is the reverse. What does not get measured tends not to get managed at all.</p>
+
+                    <p>That is the real cost here. Not that your watch is missing data, but that your attention quietly rearranges itself around the numbers you can see. You close the rings. You chase the sleep score. Meanwhile the stale air in the room you sit in for nine hours, the water you did not drink, and the argument you are still carrying at eleven at night are all doing their work on you, unrecorded and unmanaged.</p>
+
+                    <p>Ibn Sina put emotional state on the same list as food and sleep on purpose. He wrote a separate treatise on the heart and the emotions, and in the Canon he described melancholy as something that shows up in the body as much as the mind. He was not being poetic. He treated how you feel as a cause of physical illness, sitting level with what you eat.</p>
+
+                    <blockquote>The two your device measures are the two that are hardest to change. The four it ignores are the cheapest.</blockquote>
+
+                    <h2>Where the opportunity is</h2>
+
+                    <p>This is the part worth acting on.</p>
+
+                    <p>Sleep fights your job and your children. Movement fights your calendar. Both are measured to three decimal places and both are genuinely hard to shift.</p>
+
+                    <p>The four nobody measures are, for most people, the cheapest things on the whole list. Opening a window. Drinking water. Keeping email out of the bedroom. Putting an argument down before you sleep on it. None of that needs a subscription, a gym, or another device, and all four sat on a list written a thousand years before anyone sold you a wearable.</p>
+
+                    <p>That asymmetry is the opportunity. The expensive half of the list is already instrumented and already difficult. The free half is uninstrumented and mostly easy, and nobody is selling it to you, which is exactly why it goes unnoticed.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 322" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">The instrumented two against the uninstrumented four</title>
+                                <desc id="fig2-desc">The two factors a tracker measures are the two hardest to change and already hold your attention. The four it does not measure are cheap to change, need no device, and go unnoticed because nobody sells them to you.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">The measured two are the hard two</text>
+
+                                <rect x="30" y="66" width="270" height="200" rx="6" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+                                <text x="50" y="90" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">INSTRUMENTED</text>
+                                <text x="50" y="120" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Sleep and waking</text>
+                                <text x="50" y="144" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Movement and rest</text>
+                                <text x="50" y="206" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Hard to change.</text>
+                                <text x="50" y="228" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Already has your attention.</text>
+
+                                <rect x="340" y="66" width="270" height="200" rx="6" fill="#1a2942" stroke="#f59e0b" stroke-width="1.5"/>
+                                <text x="360" y="90" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">LEFT TO YOU</text>
+                                <text x="360" y="120" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">The air around you</text>
+                                <text x="360" y="144" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">What you eat and drink</text>
+                                <text x="360" y="168" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">What you take in and let go</text>
+                                <text x="360" y="192" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Your emotional state</text>
+                                <text x="360" y="228" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Cheap to change.</text>
+                                <text x="360" y="250" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Nobody is selling it to you.</text>
+
+                                <text x="30" y="302" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Four of the six need no device at all, which is why they go unnoticed.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The uninstrumented majority of the list is also the cheap majority. That mismatch is the whole opportunity.</figcaption>
+                    </figure>
+
+                    <h2>The part that outlived the rest</h2>
+
+                    <p>Ibn Sina's medicine got plenty wrong. The four humours are not real. His anatomy was inherited and often mistaken. But the six-item list has outlived nearly everything else in the book, because it is not really a theory about the body. It is an inventory of the levers a person actually has.</p>
+
+                    <p>A thousand years on, the levers have not changed. Only our ability to measure two of them has. It would be an odd result if better instruments left us worse at the four they cannot read.</p>
+
+                    <h3>What to do this week</h3>
+
+                    <ol>
+                        <li>Write the six down and mark each one measured, guessed, or invisible. Most people end up with four in the last two columns.</li>
+                        <li>Pick one from the invisible group rather than the measured group. The measured ones already have your attention.</li>
+                        <li>Give it a marker you can see without a device: a glass of water on the desk, a window opened at a fixed hour, a rule about when the phone leaves the bedroom.</li>
+                        <li>Leave the sleep score alone for a fortnight. Chasing a number you cannot directly control is how people end up sleeping worse.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Rep You Skipped</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Your memory is a library with a librarian. Only the librarian can get out of practice.</p>
+                        <a href="the-rep-you-skipped.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Scoreboard Effect</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">What happens to behaviour once a number is put on it.</p>
+                        <a href="the-scoreboard-effect.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Happiness Loop</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">The feedback cycle that decides how a day actually goes.</p>
+                        <a href="the-happiness-loop.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Avicenna (Ibn Sina). <em>Al-Qanun fi al-Tibb (The Canon of Medicine)</em>, c. 1025. Internet Encyclopedia of Philosophy overview:
+                        <a href="https://iep.utm.edu/avicenna-ibn-sina/" target="_blank">https://iep.utm.edu/avicenna-ibn-sina/</a>
+                    </li>
+                    <li class="reference-item">
+                        <em>"From Galen's De Sanitate Tuenda to Holistic Health: A Historical Study of the Six Non-Natural Factors."</em> Traditional Medicine.
+                        <a href="https://traditionalmedicine.actabotanica.org/from-galens-de-sanitate-tuenda-to-holistic-health-a-historical-study-of-the-six-non-natural-factors/" target="_blank">https://traditionalmedicine.actabotanica.org/</a>
+                    </li>
+                    <li class="reference-item">
+                        <em>"Sleep and Wakefulness Correction in Different Seasons From Avicenna's Perspective."</em> PMC3745764.
+                        <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3745764/" target="_blank">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3745764/</a>
+                    </li>
+                    <li class="reference-item">
+                        Psychiatric Times. <em>"How Avicenna Recognized Melancholia and Mixed States 1000 Years Before Modern Psychiatry."</em>
+                        <a href="https://www.psychiatrictimes.com/view/how-avicenna-recognized-melancholia-mixed-states-1000-years-before-modern-psychiatry" target="_blank">https://www.psychiatrictimes.com/view/how-avicenna-recognized-melancholia-mixed-states-1000-years-before-modern-psychiatry</a>
+                    </li>
+                    <li class="reference-item">
+                        Pormann, P. E. <em>Introduction, 1001 Cures: Contributions in Medicine and Healthcare from Muslim Civilisation.</em>
+                        <a href="https://www.1001cures.net/chapters/introduction" target="_blank">https://www.1001cures.net/chapters/introduction</a>
+                    </li>
+                    <li class="reference-item">
+                        Encyclopaedia Iranica. <em>"Avicenna vi. Psychology."</em>
+                        <a href="https://www.iranicaonline.org/articles/avicenna-vi/" target="_blank">https://www.iranicaonline.org/articles/avicenna-vi/</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
