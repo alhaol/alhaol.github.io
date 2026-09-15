@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Oldest Checklist | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_59.png" alt="The Oldest Checklist" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Critical Thinking</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Oldest Checklist</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Ibn Sina wrote seven tests for whether a remedy works. They still catch bad claims.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~5 min read</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Ibn Sina had a problem that will sound familiar. People kept telling him a remedy worked, and he had no reliable way to separate a remedy that worked from a good story about one.</p>
+
+                    <p>So a thousand years ago he wrote down seven rules for settling it. They sit in Book Two of the Canon of Medicine, in a chapter on learning what a drug can do through <em>tajribah</em>, meaning experiment, as opposed to <em>qiyas</em>, meaning reasoning by analogy. He closes the passage by telling the reader these are the rules to observe, and adds two words: take note.</p>
+
+                    <h2>The seven</h2>
+
+                    <p>In plain language, and in his order.</p>
+
+                    <ol>
+                        <li>Test the thing itself. A substance that has been heated, chilled, left to spoil or stored against something else is no longer the thing you meant to test.</li>
+                        <li>Test it on one clear problem. If someone has two illnesses at once and improves, you cannot say which one the remedy touched.</li>
+                        <li>Test it on opposite problems. If it appears to help a cold illness and a hot one equally, you have learned nothing about what it does.</li>
+                        <li>Match the strength of the remedy to the strength of the problem. Too weak against something severe and you will see nothing and conclude wrongly. Begin with the smallest dose and work up.</li>
+                        <li>Watch when the effect arrives. Help that comes immediately probably acted on the illness. Help that arrives much later, or arrives and then reverses, is doubtful.</li>
+                        <li>It has to happen again. The effect should hold in every case, or at least in most, because what happens by nature happens regularly and what happens by accident does not.</li>
+                        <li>Test it on people. A substance may behave one way in a horse or a lion and another way in a human being, so a result from a different body can mislead.</li>
+                    </ol>
+
+                    <h2>That is a clinical trial</h2>
+
+                    <p>Read the list again and notice what is actually in it. Isolate your variable. Exclude confounded cases. Escalate the dose. Watch for delayed and reversing effects. Demand that the result repeat. Check that your test population resembles the one you care about.</p>
+
+                    <p>The first controlled trial most people can name is James Lind's scurvy experiment aboard the Salisbury in 1747. The randomised controlled trial as we run it now dates to the 1940s. Ibn Sina's rules come roughly seven hundred years before the first of those.</p>
+
+                    <p>He managed it without statistics, without a control group in the modern sense, and without any theory of bias. He got there by asking one question repeatedly: if I saw an improvement, what else could have caused it?</p>
+
+                    <h2>The same seven catch a sales pitch</h2>
+
+                    <p>Here is the useful part. The rules were written for medicine, but they are not really about medicine. They are about telling a real effect apart from a story. That makes them work on nearly anything being sold to you, software included.</p>
+
+                    <p>Take the AI tool someone is pitching to your team.</p>
+
+                    <p>Rule one asks whether you are testing the tool, or testing the tool plus a new process plus the two most enthusiastic people on the team. Rule two asks whether it was tried on one clear task or dropped into a messy quarter in which five other things changed.</p>
+
+                    <p>Rule three is the sharpest. If a tool is reported to help with writing and planning and debugging and hiring, you have learned nothing about what it does.</p>
+
+                    <blockquote>A remedy that seems to help everything has told you nothing.</blockquote>
+
+                    <p>Rule five asks when the benefit showed up. Gains in the first week are probably the tool. Gains in month five, after a reorganisation and two new hires, are probably not. Rule six is the one most demos fail, because you were shown the run that worked and Ibn Sina would want to know how many runs there were.</p>
+
+                    <p>Rule seven is the one this industry keeps relearning. A benchmark is not your work. A model that scores well on a public test set is, in his terms, a drug that was tested on a lion.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 448" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Ibn Sina's seven rules and the modern claim each one catches</title>
+                                <desc id="fig1-desc">Each of the seven rules for testing a remedy maps onto a specific way that claims about software and tools go wrong today, from bundled trials and tangled pilots to cherry-picked demos and benchmark scores that do not resemble your actual work.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">The same seven rules, a thousand years apart</text>
+
+                                <text x="30" y="62" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">HIS RULE</text>
+                                <text x="320" y="62" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHAT IT CATCHES NOW</text>
+                                <line x1="30" y1="74" x2="610" y2="74" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <text x="30" y="106" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">1. Test the thing itself</text>
+                                <text x="320" y="106" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Was it bundled with other changes?</text>
+
+                                <text x="30" y="154" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">2. Use one clear problem</text>
+                                <text x="320" y="154" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Too tangled to credit anything</text>
+
+                                <text x="30" y="202" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">3. Try it on opposite cases</text>
+                                <text x="320" y="202" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Helps everything, proves nothing</text>
+
+                                <text x="30" y="250" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">4. Match strength to problem</text>
+                                <text x="320" y="250" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Start small, then raise it</text>
+
+                                <text x="30" y="298" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">5. Watch when the effect lands</text>
+                                <text x="320" y="298" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Gains that show up months later</text>
+
+                                <text x="30" y="346" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">6. It must repeat</text>
+                                <text x="320" y="346" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">The one impressive demo</text>
+
+                                <text x="30" y="394" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">7. Test on the real subject</text>
+                                <text x="320" y="394" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">A benchmark is not your work</text>
+
+                                <text x="30" y="430" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Written for plants and minerals. They transfer without modification.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The seven rules as set out in Book Two of the Canon, paired with the modern claim each one is still good at catching. Source: Nasser, Tibi and Savage-Smith (2009).</figcaption>
+                    </figure>
+
+                    <h2>The rule everyone skips</h2>
+
+                    <p>If you keep only one of the seven, keep the sixth.</p>
+
+                    <p>Almost every claim that later turns out to be wrong survives because nobody asked how many times it was tried. The supplement that worked for one person. The trading strategy backtested until it fit. The agent demo recorded on the eleventh attempt.</p>
+
+                    <p>His reasoning here is worth reading slowly. The effect should hold in all cases, or at least in most, because what happens by nature happens regularly and what happens by accident does not. That is a working definition of evidence written in the eleventh century, and it still produces the fastest question you can ask in a meeting. How many times did you run it?</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 292" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">One successful run shown, against a result that would actually count</title>
+                                <desc id="fig2-desc">A demo typically shows a single successful run out of many attempts. Ibn Sina's sixth rule asks for the effect to hold in all cases or at least most of them, which looks completely different when the runs are laid out side by side.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Rule six, drawn</text>
+
+                                <text x="30" y="68" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHAT YOU WERE SHOWN</text>
+                                <rect x="30" y="82" width="28" height="28" rx="4" fill="#f59e0b" fill-opacity="0.95"/>
+                                <rect x="64" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="98" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="132" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="166" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="200" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="234" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="268" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="302" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="336" y="82" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <text x="30" y="134" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">One run in ten, and the nine are not in the slide deck.</text>
+
+                                <text x="30" y="176" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WHAT WOULD COUNT</text>
+                                <rect x="30" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="64" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="98" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="132" y="190" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="166" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="200" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="234" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="268" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="302" y="190" width="28" height="28" rx="4" fill="none" stroke="#2a3f5f" stroke-width="1.3"/>
+                                <rect x="336" y="190" width="28" height="28" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+                                <text x="30" y="242" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Holds in all cases, or at least in most of them.</text>
+
+                                <text x="30" y="276" fill="#64748b" font-family="Inter, sans-serif" font-size="12">Amber is the run you were shown. Blue is a run that happened.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> Ibn Sina's sixth rule asks for regularity, because what happens by nature repeats and what happens by accident does not. Source: Nasser, Tibi and Savage-Smith (2009).</figcaption>
+                    </figure>
+
+                    <h2>What outlasted the pharmacy</h2>
+
+                    <p>Ibn Sina's pharmacology is obsolete. Most of the specific remedies in Book Two were abandoned long ago, and his theory of why any of them worked was wrong. The seven rules survived all of it, because they were never claims about substances. They were a procedure for not fooling yourself.</p>
+
+                    <p>The claims have changed. A thousand years ago it was a plant that cured a fever. Today it is a tool that doubles your output. The procedure for checking runs exactly the same way.</p>
+
+                    <h3>What to do this week</h3>
+
+                    <ol>
+                        <li>When someone shows you a result, ask how many times they ran it before that one. That is rule six in eight words.</li>
+                        <li>When you trial a tool, change one thing only. Change the tool, the process and the team together and you have bought a story instead of a test.</li>
+                        <li>Ask where it was tested. If the answer is a public benchmark and your work looks nothing like that benchmark, treat the score as a starting point rather than evidence.</li>
+                        <li>Distrust anything reported to help with everything. Rule three has never had a richer hunting ground than the current AI market.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Benchmark You Build</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the test that matters is the one made out of your own work.</p>
+                        <a href="the-benchmark-you-build.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Other Four</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Ibn Sina named six daily levers for health. Your tracker handles two of them.</p>
+                        <a href="the-other-four.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Plausibility Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">An answer that sounds right is the hardest kind to check.</p>
+                        <a href="the-plausibility-trap.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Nasser, M., Tibi, A., and Savage-Smith, E. (2009). <em>"Ibn Sina's Canon of Medicine: 11th century rules for assessing the effects of drugs."</em> Journal of the Royal Society of Medicine, 102, 78 to 80.
+                        <a href="https://doi.org/10.1258/jrsm.2008.08k040" target="_blank">https://doi.org/10.1258/jrsm.2008.08k040</a>
+                    </li>
+                    <li class="reference-item">
+                        The James Lind Library. <em>"Ibn Sina's Canon of Medicine: 11th century rules for assessing the effects of drugs."</em> Full open text of the commentary above.
+                        <a href="https://www.jameslindlibrary.org/articles/ibn-sinas-canon-of-medicine-11th-century-rules-for-assessing-the-effects-of-drugs/" target="_blank">https://www.jameslindlibrary.org/articles/</a>
+                    </li>
+                    <li class="reference-item">
+                        Avicenna (Ibn Sina). <em>Al-Qanun fi al-Tibb (The Canon of Medicine)</em>, Book Two, on knowing the potency of drugs through experiment.
+                    </li>
+                    <li class="reference-item">
+                        Perel, P., Roberts, I., Sena, E., et al. (2007). <em>"Comparison of treatment effects between animal experiments and clinical trials: systematic review."</em> BMJ, 334, 197. Cited by Nasser and colleagues as the modern echo of the seventh rule.
+                        <a href="https://doi.org/10.1136/bmj.39048.407928.BE" target="_blank">https://doi.org/10.1136/bmj.39048.407928.BE</a>
+                    </li>
+                    <li class="reference-item">
+                        Internet Encyclopedia of Philosophy. <em>"Avicenna (Ibn Sina)."</em>
+                        <a href="https://iep.utm.edu/avicenna-ibn-sina/" target="_blank">https://iep.utm.edu/avicenna-ibn-sina/</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
