@@ -80,6 +80,11 @@
       --done:      #34d399;
       --shadow:    0 8px 32px rgba(0, 0, 0, 0.3);
       --fsx:       1;
+      /* Quran typeface, swapped by the reader's font button. Each face needs its
+         own line-height and size trim, so all three travel together. */
+      --qfont:     'Amiri', serif;
+      --qlh:       2.15;
+      --qsz:       1;
     }
     html.light {
       --bg:        #f5f4f8;
@@ -213,52 +218,119 @@
       padding: 11px 16px; border-bottom: 1px solid var(--line);
       background: var(--panel); backdrop-filter: blur(12px);
     }
-    .reader-inner { max-width: 940px; margin: 0 auto; padding: 26px 18px 120px; }
+    /* Bottom padding clears the docked player, whose height is republished by
+       syncPlayerPad() — the control row wraps to three lines on a 320px screen,
+       so a fixed value here would let the player cover the last ayah. */
+    .reader-inner { max-width: 940px; margin: 0 auto; padding: 26px 18px calc(var(--player-h, 100px) + 26px); }
     .page {
       background: var(--paper); border: 1px solid var(--card-bd);
       border-radius: 16px; padding: 34px 30px; box-shadow: var(--shadow);
     }
-    @media (max-width: 640px) { .page { padding: 22px 16px; } .reader-inner { padding: 16px 11px 120px; } }
+    @media (max-width: 640px) {
+      .page { padding: 22px 16px; }
+      .reader-inner { padding: 16px 11px calc(var(--player-h, 100px) + 22px); }
+    }
 
     .bismillah {
-      font-family: 'Amiri', serif; direction: rtl; text-align: center;
-      font-size: calc(26px * var(--fsx)); color: var(--accent);
+      font-family: var(--qfont); direction: rtl; text-align: center;
+      font-size: calc(26px * var(--fsx) * var(--qsz)); color: var(--accent);
       padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--line);
     }
     /* Flowing mushaf-style text: verses run together, separated by end markers. */
     .ayat {
-      font-family: 'Amiri', serif; direction: rtl; text-align: justify;
-      font-size: calc(30px * var(--fsx)); line-height: 2.15; color: var(--txt);
+      font-family: var(--qfont); direction: rtl; text-align: justify;
+      font-size: calc(30px * var(--fsx) * var(--qsz)); line-height: var(--qlh); color: var(--txt);
       word-spacing: .06em;
     }
     .ayah { transition: background .18s; border-radius: 6px; }
     .ayah:hover { background: var(--accent-w); }
 
     /* ---- Hide-to-recall ----------------------------------------------------
-       Two modes on the text container: .h1 blurs each ayah, .h2 leaves only its
-       opening word. Either way an ayah reveals on click and keeps .shown, so the
-       reader tests recall one ayah at a time. The ayah marker never hides, so
-       you always know which verse you are being asked for. */
+       Two modes on the text container — .h1 blurs each ayah, .h2 removes it
+       outright — and in both, an ayah opens in two clicks rather than one:
+
+         click 1 (.peek)  the first few words only, as a memory cue
+         click 2 (.shown) the whole verse
+         click 3          back to hidden, so the same ayah can be drilled again
+
+       Splitting the reveal is the point: recalling from a cue is the rep that
+       sticks, and going straight to the full text skips it. The ayah marker
+       never hides, so you always know which verse is being asked for. */
     .ayat.h1 .ayah:not(.shown), .ayat.h2 .ayah:not(.shown) { cursor: pointer; }
-    .ayat.h1 .ayah:not(.shown) > .w1,
+    .ayat.h1 .ayah:not(.peek):not(.shown) > .lead,
     .ayat.h1 .ayah:not(.shown) > .rest {
       filter: blur(7px); user-select: none; transition: filter .18s;
     }
     /* Ease the blur on hover: a nudge toward the answer without giving it. */
-    .ayat.h1 .ayah:not(.shown):hover > .w1,
+    .ayat.h1 .ayah:not(.peek):not(.shown):hover > .lead,
     .ayat.h1 .ayah:not(.shown):hover > .rest { filter: blur(4px); }
+    .ayat.h2 .ayah:not(.peek):not(.shown) > .lead { display: none; }
     .ayat.h2 .ayah:not(.shown) > .rest { display: none; }
-    .ayat.h2 .ayah:not(.shown) > .w1::after {
-      content: ' ⋯'; color: var(--accent); opacity: .75;
-    }
-    .ayah.shown > .w1, .ayah.shown > .rest { filter: none; }
+    /* Stands in for whatever is still hidden, so a blank ayah still occupies a
+       readable slot in the line rather than collapsing onto its marker. */
+    .dots { display: none; color: var(--accent); opacity: .75; }
+    .ayat.h2 .ayah:not(.shown) > .dots { display: inline; }
+    .ayah.shown > .lead, .ayah.shown > .rest, .ayah.peek > .lead { filter: none; }
     .amark {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: calc(29px * var(--fsx)); height: calc(29px * var(--fsx));
       margin: 0 5px; padding: 0 4px; border-radius: 50%;
       border: 1.5px solid var(--accent); color: var(--accent);
-      font-family: 'Amiri', serif; font-size: calc(14px * var(--fsx));
+      font-family: var(--qfont); font-size: calc(14px * var(--fsx));
       line-height: 1; vertical-align: middle; user-select: none;
+    }
+
+    /* ---- Next-ruku hook ----------------------------------------------------
+       Rukus are memorised one at a time but recited in sequence, and the seam
+       between them is where recall breaks. This panel carries the opening words
+       of the next ruku in small type — enough to rehearse the join without
+       leaving the page, expandable to its full first ayah. */
+    .nxt {
+      margin-top: 18px; padding: 12px 15px 13px;
+      background: var(--card); border: 1px dashed var(--card-bd); border-radius: 12px;
+    }
+    .nxt-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 7px; }
+    .nxt-lbl {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .nxt-crumb { font-size: 11.5px; color: var(--txt-3); }
+    .nxt-ar {
+      font-family: var(--qfont); direction: rtl; text-align: right; cursor: pointer;
+      font-size: calc(17px * var(--fsx) * var(--qsz)); line-height: 1.95;
+      color: var(--txt-2); transition: color .18s;
+    }
+    .nxt-ar:hover { color: var(--txt); }
+    .nxt-ar.full { color: var(--txt); }
+    .nxt-ar .amark {
+      min-width: calc(20px * var(--fsx)); height: calc(20px * var(--fsx));
+      font-size: calc(11px * var(--fsx)); border-width: 1px;
+    }
+
+    /* ---- Recitation player -------------------------------------------------
+       Docked to the foot of the reader rather than folded into the top bar,
+       which already wraps to six rows on a phone. The repeat unit here is the
+       whole ruku — one pass is start to end — because that is the unit being
+       memorised; the per-ayah drill lives in the sibling ruku-hifz app. */
+    .player {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 3;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--line);
+      background: var(--panel); backdrop-filter: blur(12px);
+    }
+    .player select {
+      background: var(--field); border: 1px solid var(--field-bd); color: var(--txt);
+      padding: 6px 9px; border-radius: 9px; font-size: 12px; cursor: pointer;
+    }
+    .player select:focus { outline: none; border-color: var(--accent); }
+    .p-note { font-size: 12px; color: var(--txt-2); margin-left: auto; white-space: nowrap; }
+    .p-warn { color: var(--read); }
+    /* The ayah currently being recited. Outline rather than a background fill so
+       it stays legible over the blur of an unrevealed ayah. */
+    .ayah.playing {
+      background: var(--accent-w);
+      box-shadow: 0 0 0 3px var(--accent-w);
     }
 
     .seg { display: inline-flex; gap: 0; border: 1px solid var(--chip-bd); border-radius: 999px; overflow: hidden; }
@@ -391,6 +463,7 @@
         <button id="rReveal" class="chip hidden" title="Reveal or re-hide every ayah (r)">Reveal all</button>
         <span id="rRevealed" class="text-xs t-faint hidden"></span>
         <div class="ml-auto flex items-center gap-1.5">
+          <button id="rFont" class="chip" title="Cycle Arabic typeface (f)">Amiri</button>
           <button id="rSmall" class="icon-btn" aria-label="Smaller text">A−</button>
           <button id="rBig" class="icon-btn" aria-label="Larger text">A+</button>
           <button id="rTheme" class="icon-btn" aria-label="Toggle light and dark">◐</button>
@@ -415,11 +488,42 @@
           <div id="rText" class="ayat"></div>
         </div>
 
+        <div id="rNext3" class="nxt hidden">
+          <div class="nxt-head">
+            <span class="nxt-lbl">Next ruku starts</span>
+            <span id="nxtCrumb" class="nxt-crumb"></span>
+            <button id="nxtMore" class="chip ml-auto" style="padding:4px 11px;font-size:11.5px">Show ayah</button>
+          </div>
+          <div id="nxtAr" class="nxt-ar"></div>
+        </div>
+
         <div class="flex flex-wrap items-center gap-2 mt-5">
           <button id="rPrev2" class="chip">‹ Previous ruku</button>
           <button id="rDone" class="btn-accent" style="padding:9px 18px;font-size:13px">Mark done &amp; next ›</button>
           <button id="rNext2" class="chip">Next ruku ›</button>
         </div>
+      </div>
+
+      <div class="player">
+        <button id="pPlay" class="btn-accent" style="padding:8px 16px;font-size:13px" title="Play the whole ruku (space)">▶ Play</button>
+        <button id="pStop" class="icon-btn" aria-label="Stop" disabled>■</button>
+        <select id="pRec" title="Reciter"></select>
+        <select id="pReps" title="How many times the whole ruku repeats">
+          <option value="1">1× through</option>
+          <option value="2">2× through</option>
+          <option value="3">3× through</option>
+          <option value="5">5× through</option>
+          <option value="10">10× through</option>
+          <option value="0">Loop ∞</option>
+        </select>
+        <select id="pSpeed" title="Playback speed">
+          <option value="0.75">0.75×</option>
+          <option value="1">1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+        </select>
+        <button id="pChain" class="chip" title="When the repeats finish, roll straight into the next ruku">Continue on</button>
+        <span id="pNote" class="p-note"></span>
       </div>
     </div>
 
@@ -582,13 +686,49 @@ const SURAHS = DB.map(su => ({
 const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 const STATUS_NAME = ['new', 'reading', 'done'];
-const HIDE_NAME = ['Show all', 'Blurred', 'First word'];
+const HIDE_NAME = ['Show all', 'Blurred', 'Hidden'];
 const arNum = n => String(n).replace(/\d/g, d => AR_DIGITS[+d]);
 const $ = id => document.getElementById(id);
 
+/* How many words a peek gives away. Capped at half the ayah below, so a
+   three-word verse never hands over the whole thing as its own cue. */
+const LEAD_WORDS = 3;
+const NEXT_LEAD = 4;
+
+/* Arabic typefaces offered in the reader. The verse text itself is always the
+   Uthmani rasm from api.quran.com; these only change how it is drawn — and the
+   faces differ enough in x-height and diacritic stacking that each carries its
+   own line-height (lh) and size trim (sz). Only Amiri ships with the page; the
+   rest load on first use, so picking one costs a download but the default
+   never does. 'Uthmani' is Amiri Quran, the Quranic cut of Amiri. */
+const FONTS = [
+  { label: 'Amiri',        css: "'Amiri', serif",                       lh: 2.15, sz: 1.00, href: null },
+  { label: 'Uthmani',      css: "'Amiri Quran', 'Amiri', serif",        lh: 2.65, sz: 0.95,
+    href: 'https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap' },
+  { label: 'Naskh',        css: "'Noto Naskh Arabic', 'Amiri', serif",  lh: 2.40, sz: 0.94,
+    href: 'https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&display=swap' },
+  { label: 'Scheherazade', css: "'Scheherazade New', 'Amiri', serif",   lh: 2.30, sz: 1.08,
+    href: 'https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap' }
+];
+
+/* Reciters, ids as api.quran.com numbers them. Kept in step with the sibling
+   ruku-hifz app so a voice you settle on there is the same voice here. */
+const RECITERS = [
+  { id: 7,  name: 'Mishary Alafasy' },
+  { id: 2,  name: 'AbdulBaset (Murattal)' },
+  { id: 1,  name: 'AbdulBaset (Mujawwad)' },
+  { id: 3,  name: 'Abdurrahman As-Sudais' },
+  { id: 4,  name: 'Abu Bakr Ash-Shatri' },
+  { id: 5,  name: 'Hani Ar-Rifai' },
+  { id: 6,  name: 'Mahmoud Al-Husary' },
+  { id: 9,  name: 'Mohamed Al-Minshawi' },
+  { id: 10, name: 'Saud Ash-Shuraim' }
+];
+
 /* ------------------------------------------------------------------- state */
 const KEY = 'rr1:state';
-let state = { st: {}, last: 0, theme: 'dark', fsx: 1, hide: 0 };
+let state = { st: {}, last: 0, theme: 'dark', fsx: 1, hide: 0, font: 0,
+              reciter: 7, reps: 1, speed: 1, chain: false };
 try {
   const raw = JSON.parse(localStorage.getItem(KEY) || '{}');
   state = Object.assign(state, raw);
@@ -603,6 +743,14 @@ let query = '';
 let openSid = 0;      // surah shown in the popup, 0 when closed
 let cur = 0;          // ruku shown in the reader, 0 when closed
 let token = 0;        // guards against out-of-order fetch results
+let nxtText = '';     // first ayah of the next ruku, '' when there is none
+let nxtNum = 0;       // its ayah number, for the end marker when expanded
+let nxtFull = false;  // is that ayah expanded past its opening words?
+
+/* Recitation. pPass counts completed passes over the whole ruku, not ayahs. */
+const audio = new Audio();
+const audioMem = {};
+let playing = false, pAyah = 0, pPass = 0, pUrls = null, pToken = 0, chaining = false;
 
 /* -------------------------------------------------------------------- misc */
 let toastT;
@@ -628,6 +776,52 @@ function bumpFsx(d) {
   state.fsx = Math.min(1.7, Math.max(0.7, Math.round((state.fsx + d) * 100) / 100));
   applyFsx(); save();
   toast('Text size ' + Math.round(state.fsx * 100) + '%');
+}
+
+/* Republish the docked player's height so .reader-inner can pad past it. The
+   control row wraps to three lines on a 320px screen, so this is measured
+   rather than assumed. Called on open, on resize, and — where the browser
+   runs them — from a ResizeObserver, since the row can also rewrap when a
+   longer reciter name lands in the select. */
+function syncPlayerPad() {
+  const pl = document.querySelector('.player');
+  if (!pl) return;
+  const h = Math.round(pl.getBoundingClientRect().height);
+  if (h) document.documentElement.style.setProperty('--player-h', h + 'px');
+}
+
+/* Pull in a webfont once, the first time it is chosen. */
+const fontLinks = {};
+function loadFont(f) {
+  if (!f.href || fontLinks[f.href]) return;
+  const el = document.createElement('link');
+  el.rel = 'stylesheet';
+  el.href = f.href;
+  document.head.appendChild(el);
+  fontLinks[f.href] = true;
+}
+function applyFont() {
+  const f = FONTS[state.font] || FONTS[0];
+  loadFont(f);
+  const rs = document.documentElement.style;
+  rs.setProperty('--qfont', f.css);
+  rs.setProperty('--qlh', f.lh);
+  rs.setProperty('--qsz', f.sz);
+  $('rFont').textContent = f.label;
+  $('rFont').classList.toggle('on', state.font > 0);
+}
+function cycleFont() {
+  state.font = ((state.font | 0) + 1) % FONTS.length;
+  applyFont(); save();
+  toast(FONTS[state.font].label);
+}
+
+/* Split an ayah into its opening cue and the remainder. The cue never runs past
+   half the verse, so short ayahs still leave something to recall. */
+function splitLead(text, want) {
+  const w = text.split(/\s+/);
+  const n = Math.max(1, Math.min(want, Math.ceil(w.length / 2)));
+  return { lead: w.slice(0, n).join(' '), rest: w.length > n ? ' ' + w.slice(n).join(' ') : '' };
 }
 
 /* Count how many of a surah's rukus are done / touched. */
@@ -760,6 +954,139 @@ async function surahVerses(n) {
   return arr;
 }
 
+/* ------------------------------------------------ recitation: fetch + cache */
+async function surahAudio(recId, n) {
+  const k = recId + ':' + n;
+  if (audioMem[k]) return audioMem[k];
+
+  const res = await fetch('https://api.quran.com/api/v4/quran/recitations/' + recId + '?chapter_number=' + n);
+  const json = await res.json();
+  const arr = [];                        // indexed by ayah number; slot 0 unused
+  (json.audio_files || []).forEach(f => {
+    const a = parseInt(String(f.verse_key).split(':')[1], 10);
+    if (!a || !f.url) return;
+    /* Most reciters return a bare path under verses.quran.com, but some
+       (Al-Husary) return an absolute or protocol-relative URL on another host. */
+    arr[a] = /^https?:/.test(f.url) ? f.url
+           : f.url.slice(0, 2) === '//' ? 'https:' + f.url
+           : 'https://verses.quran.com/' + f.url;
+  });
+  if (!arr.length) throw new Error('no audio for surah ' + n);
+  audioMem[k] = arr;
+  return arr;
+}
+
+/* ------------------------------------------------------- recitation: player */
+function paintPlayBtn() {
+  $('pPlay').innerHTML = playing ? '❚❚ Pause' : '▶ Play';
+  $('pStop').disabled = !pUrls;
+}
+function pNote(msg, warn) {
+  $('pNote').innerHTML = msg;
+  $('pNote').classList.toggle('p-warn', !!warn);
+}
+function paintPassNote() {
+  const r = RUKUS[cur - 1];
+  const reps = +state.reps || 0;                      // 0 means loop forever
+  $('pNote').classList.remove('p-warn');
+  $('pNote').innerHTML =
+    'Ayah <b>' + pAyah + '</b> of ' + r.end +
+    ' · pass <b>' + (pPass + 1) + '</b>' + (reps ? ' of ' + reps : ' of ∞');
+}
+function highlightAyah(a) {
+  $('rText').querySelectorAll('.ayah').forEach(el =>
+    el.classList.toggle('playing', +el.dataset.a === a));
+}
+
+async function togglePlay() {
+  if (!cur) return;
+  if (playing) { audio.pause(); playing = false; paintPlayBtn(); pNote('Paused'); return; }
+  if (pUrls) {                                        // resume where we paused
+    playing = true; paintPlayBtn();
+    audio.play().catch(() => {});
+    paintPassNote();
+    return;
+  }
+  const r = RUKUS[cur - 1];
+  const mine = ++pToken;
+  pNote('Loading recitation…');
+  try {
+    const urls = await surahAudio(+state.reciter, r.s);
+    if (mine !== pToken) return;
+    pUrls = urls; pAyah = r.start; pPass = 0; playing = true;
+    paintPlayBtn();
+    playCurrent();
+  } catch (e) {
+    if (mine !== pToken) return;
+    pNote('Recitation needs a connection', true);
+  }
+}
+
+function playCurrent() {
+  const r = RUKUS[cur - 1];
+  const url = pUrls && pUrls[pAyah];
+  if (!url) { stopAudio(); pNote('No audio for ' + r.s + ':' + pAyah, true); return; }
+  audio.src = url;
+  audio.playbackRate = +state.speed || 1;
+  audio.play().catch(() => {
+    playing = false; paintPlayBtn();
+    pNote('Playback blocked — press Play again', true);
+  });
+  highlightAyah(pAyah);
+  // Hearing an ayah counts as revealing it, matching ruku-hifz: audio is for
+  // learning the ruku, the hide modes are for testing it afterwards.
+  const el = $('rText').querySelector('.ayah[data-a="' + pAyah + '"]');
+  if (el) {
+    setAyahLevel(el, 2);
+    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    paintRevealed();
+  }
+  paintPassNote();
+}
+
+/* End of one ayah: walk to the next, and at the end of the ruku decide whether
+   to start another pass, roll into the next ruku, or stop. */
+audio.addEventListener('ended', () => {
+  if (!playing) return;
+  const r = RUKUS[cur - 1];
+  pAyah++;
+  if (pAyah <= r.end) { playCurrent(); return; }
+
+  pPass++;
+  const reps = +state.reps || 0;                      // 0 = loop forever
+  if (!reps || pPass < reps) { pAyah = r.start; playCurrent(); return; }
+
+  if (state.chain && cur < TOTAL) {                   // keep going into the next ruku
+    chaining = true;
+    openReader(cur + 1).then(() => {
+      chaining = false;
+      if (!playing) return;
+      const nr = RUKUS[cur - 1];
+      pPass = 0; pAyah = nr.start;
+      surahAudio(+state.reciter, nr.s)
+        .then(urls => { pUrls = urls; playCurrent(); })
+        .catch(() => { stopAudio(); pNote('Recitation needs a connection', true); });
+    });
+    return;
+  }
+  stopAudio();
+  pNote(reps > 1 ? 'Finished ' + reps + ' passes' : 'Finished this ruku');
+});
+
+audio.addEventListener('error', () => {
+  if (!playing) return;
+  stopAudio();
+  pNote('Could not load that ayah', true);
+});
+
+function stopAudio() {
+  playing = false; pUrls = null; pPass = 0; pToken++;
+  try { audio.pause(); audio.removeAttribute('src'); } catch (e) {}
+  highlightAyah(-1);
+  paintPlayBtn();
+  pNote('');
+}
+
 /* ------------------------------------------------------------- full reader */
 /* ---------------------------------------------------- hide-to-recall modes */
 function applyHide() {
@@ -777,8 +1104,15 @@ function paintRevealed() {
   if (!state.hide) return;
   const all = $('rText').querySelectorAll('.ayah').length;
   const shown = $('rText').querySelectorAll('.ayah.shown').length;
-  $('rRevealed').textContent = shown + ' / ' + all + ' shown';
+  const peek = $('rText').querySelectorAll('.ayah.peek').length;
+  $('rRevealed').textContent = shown + ' / ' + all + ' shown' + (peek ? ' · ' + peek + ' cued' : '');
   $('rReveal').textContent = all && shown === all ? 'Hide all' : 'Reveal all';
+}
+
+/* Move one ayah to a given step of the reveal: 0 hidden, 1 cue, 2 full. */
+function setAyahLevel(el, lvl) {
+  el.classList.toggle('peek', lvl === 1);
+  el.classList.toggle('shown', lvl === 2);
 }
 
 /* One button for both directions: reveal everything, or put it all back once
@@ -787,7 +1121,7 @@ function revealAll() {
   if (!state.hide) return;
   const all = [...$('rText').querySelectorAll('.ayah')];
   const putBack = all.length > 0 && all.every(a => a.classList.contains('shown'));
-  all.forEach(a => a.classList.toggle('shown', !putBack));
+  all.forEach(a => setAyahLevel(a, putBack ? 0 : 2));
   paintRevealed();
 }
 
@@ -799,6 +1133,9 @@ function paintStatusSeg() {
 }
 
 async function openReader(g) {
+  // Moving to another ruku by hand cancels playback; the player's own
+  // roll-forward sets `chaining` so it survives the jump.
+  if (!chaining) stopAudio();
   cur = g;
   const r = RUKUS[g - 1];
   const mine = ++token;
@@ -807,6 +1144,7 @@ async function openReader(g) {
   $('reader').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
   $('reader').scrollTop = 0;
+  syncPlayerPad();                 // the player only has a box once the reader is shown
 
   $('rAr').textContent = r.ar;
   $('rTitle').textContent = r.s + '. ' + r.en;
@@ -844,22 +1182,67 @@ async function openReader(g) {
   for (let a = r.start; a <= r.end; a++) {
     const t = verses[a];
     if (!t) continue;
-    // Split the opening word out so "first word" mode has a prompt to leave
-    // on screen. Single-word ayahs simply get an empty rest.
-    const sp = t.indexOf(' ');
-    const w1 = sp < 0 ? t : t.slice(0, sp);
-    const rest = sp < 0 ? '' : t.slice(sp);
-    html += '<span class="ayah" title="' + r.s + ':' + a + '">' +
-              '<span class="w1">' + w1 + '</span>' +
-              '<span class="rest">' + rest + '</span>' +
+    // The opening words are split off so a hidden ayah has a cue to offer on
+    // the first click; .dots stands in for whatever is still covered.
+    const p = splitLead(t, LEAD_WORDS);
+    html += '<span class="ayah" data-a="' + a + '" title="' + r.s + ':' + a + ' — click to reveal">' +
+              '<span class="lead">' + p.lead + '</span>' +
+              '<span class="rest">' + p.rest + '</span>' +
+              '<span class="dots">⋯</span>' +
               '<span class="amark">' + arNum(a) + '</span>' +
             '</span> ';
   }
   $('rText').innerHTML = html;
   applyHide();          // a new ruku starts hidden again in either recall mode
+  paintNextPeek(g, mine);
+}
+
+/* ------------------------------------------------- the seam to the next ruku */
+async function paintNextPeek(g, mine) {
+  const box = $('rNext3');
+  box.classList.add('hidden');
+  nxtText = '';
+  nxtNum = 0;
+  nxtFull = false;
+  if (g >= TOTAL) return;
+
+  const n = RUKUS[g];                       // RUKUS is 0-based, so [g] is g+1
+  const crosses = n.s !== RUKUS[g - 1].s;
+  $('nxtCrumb').textContent =
+    (crosses ? n.s + '. ' + n.en + ' · ' : '') +
+    'Ruku ' + n.n + ' of ' + n.of + ' · ' + n.s + ':' + n.start +
+    (n.end > n.start ? '–' + n.end : '');
+
+  let verses;
+  try {
+    verses = await surahVerses(n.s);        // usually the same surah, already cached
+  } catch (e) {
+    return;                                 // offline: the ruku itself still reads
+  }
+  if (mine !== token || !verses[n.start]) return;
+
+  nxtText = verses[n.start];
+  nxtNum = n.start;
+  paintNextText();
+  box.classList.remove('hidden');
+}
+
+function paintNextText() {
+  if (!nxtText) return;
+  $('nxtAr').innerHTML = nxtFull
+    ? nxtText + ' <span class="amark">' + arNum(nxtNum) + '</span>'
+    : splitLead(nxtText, NEXT_LEAD).lead + ' <span class="dots" style="display:inline">⋯</span>';
+  $('nxtAr').classList.toggle('full', nxtFull);
+  $('nxtMore').textContent = nxtFull ? 'Show cue' : 'Show ayah';
+}
+function toggleNext() {
+  if (!nxtText) return;
+  nxtFull = !nxtFull;
+  paintNextText();
 }
 
 function closeReader() {
+  stopAudio();
   cur = 0; token++;
   $('reader').classList.add('hidden');
   document.body.style.overflow = '';
@@ -882,6 +1265,7 @@ function init() {
 
   applyTheme();
   applyFsx();
+  applyFont();
   renderGrid();
 
   $('q').addEventListener('input', e => { query = e.target.value; renderGrid(); });
@@ -920,7 +1304,8 @@ function init() {
   $('rHide').addEventListener('click', () => {
     state.hide = (state.hide + 1) % 3;
     save(); applyHide();
-    toast(HIDE_NAME[state.hide]);
+    toast(state.hide ? HIDE_NAME[state.hide] + ' — click an ayah for its opening words'
+                     : HIDE_NAME[0]);
   });
   $('rReveal').addEventListener('click', revealAll);
   // Delegated, so it survives every re-render of the verse text.
@@ -928,8 +1313,49 @@ function init() {
     if (!state.hide) return;
     const a = e.target.closest('.ayah');
     if (!a) return;
-    a.classList.toggle('shown');
+    // hidden → cue → whole verse → hidden again
+    const lvl = a.classList.contains('shown') ? 2 : a.classList.contains('peek') ? 1 : 0;
+    setAyahLevel(a, (lvl + 1) % 3);
     paintRevealed();
+  });
+  $('rFont').addEventListener('click', cycleFont);
+  $('nxtMore').addEventListener('click', toggleNext);
+  $('nxtAr').addEventListener('click', toggleNext);
+
+  /* ---- player ---- */
+  $('pRec').innerHTML = RECITERS.map(r =>
+    '<option value="' + r.id + '">' + r.name + '</option>').join('');
+  $('pRec').value = String(state.reciter);
+  $('pReps').value = String(state.reps);
+  $('pSpeed').value = String(state.speed);
+  $('pChain').classList.toggle('on', !!state.chain);
+  paintPlayBtn();
+
+  window.addEventListener('resize', syncPlayerPad);
+  if (window.ResizeObserver) new ResizeObserver(syncPlayerPad).observe(document.querySelector('.player'));
+
+  $('pPlay').addEventListener('click', togglePlay);
+  $('pStop').addEventListener('click', stopAudio);
+  $('pRec').addEventListener('change', e => {
+    state.reciter = +e.target.value; save();
+    // A different voice means different files, so restart the pass cleanly.
+    const wasPlaying = playing;
+    stopAudio();
+    if (wasPlaying) togglePlay();
+  });
+  $('pReps').addEventListener('change', e => {
+    state.reps = +e.target.value; save();
+    if (playing) paintPassNote();
+    toast(+e.target.value ? e.target.value + ' passes per ruku' : 'Looping this ruku');
+  });
+  $('pSpeed').addEventListener('change', e => {
+    state.speed = +e.target.value; save();
+    audio.playbackRate = state.speed;
+  });
+  $('pChain').addEventListener('click', () => {
+    state.chain = !state.chain; save();
+    $('pChain').classList.toggle('on', state.chain);
+    toast(state.chain ? 'Rolling on through the next rukus' : 'Stopping at the end of this ruku');
   });
   $('rSmall').addEventListener('click', () => bumpFsx(-0.1));
   $('rBig').addEventListener('click', () => bumpFsx(0.1));
@@ -945,11 +1371,14 @@ function init() {
     if (document.getElementById('loginView').style.display !== 'none') return;
     if (e.key === 'Escape') { if (cur) closeReader(); else if (openSid) closeSurah(); return; }
     if (!cur) return;
-    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;   // let the player's selects keep their own keys
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
     if (e.key === 'h' || e.key === 'H') $('rHide').click();
     if (e.key === 'r' || e.key === 'R') revealAll();
+    if (e.key === 'f' || e.key === 'F') cycleFont();
+    if (e.key === 'n' || e.key === 'N') toggleNext();
+    if (e.key === ' ') { e.preventDefault(); togglePlay(); }   // else space scrolls
   });
 }
 
