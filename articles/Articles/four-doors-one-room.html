@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four Doors, One Room | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_61.png" alt="Four Doors, One Room" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Cognitive Science</span>
+                        <span class="category-badge category-workflow">Learning</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Four Doors, One Room</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Same reading budget: four sources read once beat one source read four times.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 18, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>You read the chapter four times. Someone else read four different explanations of the same thing, once each. Same hours, same number of pages. Next week, in a test neither of you knew was coming, they will remember more than you will.</p>
+
+                    <p>Rereading feels like the safer investment. The text gets smoother on every pass, the sentences stop surprising you, and by the fourth time through you could almost recite the argument. That feeling is real. It is just measuring the wrong thing.</p>
+
+                    <h2>What the second pass actually buys</h2>
+
+                    <p>Rereading is the most popular study technique in the world and one of the weakest. When John Dunlosky and colleagues reviewed ten common learning techniques for the journal <em>Psychological Science in the Public Interest</em>, they rated rereading <strong>low utility</strong>, alongside highlighting and summarizing. Aimee Callender and Mark McDaniel had already shown why: across several experiments with real textbook chapters, a second reading produced no reliable gain on comprehension measures, and what small benefit appeared was confined to immediate, surface-level recall.</p>
+
+                    <p>None of that says repetition is worthless. It says the returns arrive fast and then flatten. The fourth pass costs exactly what the first one cost and returns almost nothing, which makes it the most expensive reading you do.</p>
+
+                    <p>Now hold the cost fixed and spend it differently. Your reading budget is the product of two numbers: how many distinct sources you open, and how many passes you make over each. Four readings of one source, two readings each of two sources, and one reading each of four sources all cost the same. They do not return the same thing.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 420" role="img" aria-labelledby="fig1-title fig1-desc"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Understanding plotted against number of sources and number of passes per source</title>
+                                <desc id="fig1-desc">A grid of circles where circle size stands for understanding. Moving right, adding more passes over a single source, grows the circles only slightly before they flatten. Moving up, adding more distinct sources, grows them much more. A dashed line connects the three cells that cost the same four total readings: one source read four times, two sources read twice each, and four sources read once each. The circle at four sources and one pass is far larger than the circle at one source and four passes.</desc>
+
+                                <text x="24" y="28" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Two ways to spend four readings</text>
+                                <text x="24" y="54" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">SOURCES</text>
+
+                                <line x1="112" y1="68" x2="112" y2="330" stroke="#2a3f5f" stroke-width="1"/>
+                                <line x1="112" y1="330" x2="410" y2="330" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <line x1="112" y1="100" x2="410" y2="100" stroke="#2a3f5f" stroke-width="1" stroke-opacity="0.45"/>
+                                <line x1="112" y1="166" x2="410" y2="166" stroke="#2a3f5f" stroke-width="1" stroke-opacity="0.45"/>
+                                <line x1="112" y1="232" x2="410" y2="232" stroke="#2a3f5f" stroke-width="1" stroke-opacity="0.45"/>
+                                <line x1="112" y1="298" x2="410" y2="298" stroke="#2a3f5f" stroke-width="1" stroke-opacity="0.45"/>
+
+                                <text x="100" y="104" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">4</text>
+                                <text x="100" y="170" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">3</text>
+                                <text x="100" y="236" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">2</text>
+                                <text x="100" y="302" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">1</text>
+
+                                <text x="150" y="350" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">1</text>
+                                <text x="226" y="350" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">2</text>
+                                <text x="302" y="350" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">3</text>
+                                <text x="378" y="350" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">4</text>
+                                <text x="261" y="374" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">PASSES OVER EACH SOURCE</text>
+
+                                <path d="M 378,298 L 226,232 L 150,100" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 5" stroke-opacity="0.85"/>
+
+                                <circle cx="150" cy="298" r="8" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="226" cy="298" r="11" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="302" cy="298" r="12.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="378" cy="298" r="13" fill="#f59e0b" fill-opacity="0.22" stroke="#f59e0b" stroke-width="2"/>
+
+                                <circle cx="150" cy="232" r="14" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="226" cy="232" r="17" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-width="1.6" stroke-opacity="0.7"/>
+                                <circle cx="302" cy="232" r="18.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="378" cy="232" r="19" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <circle cx="150" cy="166" r="19" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="226" cy="166" r="21.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="302" cy="166" r="23" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="378" cy="166" r="23.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <circle cx="150" cy="100" r="23" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-width="2"/>
+                                <circle cx="226" cy="100" r="25.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="302" cy="100" r="27" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+                                <circle cx="378" cy="100" r="27.5" fill="#1a2942" stroke="#2a3f5f" stroke-width="1"/>
+
+                                <text x="430" y="92" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">EQUAL READING BUDGET</text>
+                                <line x1="430" y1="112" x2="456" y2="112" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 5"/>
+                                <text x="466" y="116" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">four readings in total</text>
+
+                                <circle cx="444" cy="148" r="12" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-width="2"/>
+                                <text x="464" y="144" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">4 sources, 1 pass</text>
+                                <text x="464" y="164" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">four routes to one idea</text>
+
+                                <circle cx="444" cy="208" r="7" fill="#f59e0b" fill-opacity="0.22" stroke="#f59e0b" stroke-width="2"/>
+                                <text x="464" y="204" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">1 source, 4 passes</text>
+                                <text x="464" y="224" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">one route, worn deeper</text>
+
+                                <line x1="430" y1="252" x2="616" y2="252" stroke="#2a3f5f" stroke-width="1"/>
+                                <text x="430" y="278" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">TESTED ONE WEEK LATER</text>
+                                <text x="430" y="302" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Vertical beats horizontal</text>
+                                <text x="430" y="322" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">once the test is delayed.</text>
+
+                                <text x="24" y="402" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Circle size is schematic, not measured. The ordering follows Seban et al. (2025).</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Understanding rises faster along the sources axis than along the repetition axis. The dashed line joins three ways to spend an identical budget of four readings, and they do not pay out equally. Sources: Seban, Urban and Sikl (2025); Callender and McDaniel (2009).</figcaption>
+                    </figure>
+
+                    <h2>Four doors to the same room</h2>
+
+                    <p>The mechanism has a name. <strong>Encoding variability</strong>, proposed by Edwin Martin in 1968, holds that a memory is not stored as a bare fact but as a fact plus the circumstances of meeting it: the words that were used, the example that was given, the order the argument came in, the diagram that sat on the page. Those circumstances become retrieval cues. Meet an idea in four different settings and you store four different cue sets pointing at the same idea.</p>
+
+                    <p>Read the same page four times and you get one cue set, reinforced. That is a real gain, and it is why the circles in the bottom row of Figure 1 do grow. But it is one path, and paths are only useful if you happen to be standing at the right end of them.</p>
+
+                    <blockquote>Rereading deepens one route to an idea. Four sources build four. At retrieval you do not get to choose which door you walk in through.</blockquote>
+
+                    <p>An example. Suppose you want to understand why caching a language model prompt saves money. One source explains it with a billing table. Another draws the transformer's attention computation. A third is an engineer's post-mortem about a bill that dropped by eighty percent overnight. A fourth is the vendor's documentation, formal and precise. Six months later a colleague asks you an unrelated question about latency, and the post-mortem is what surfaces, because it happened to be the version that shared a cue with the question. If you had only read the billing table four times, nothing would have surfaced at all.</p>
+
+                    <p>Charles Perfetti, Jean-François Rouet and Anne Britt describe a second thing multiple sources give you, which they call the documents model. Reading several accounts builds a representation of the content and, separately, a representation of who said what and how the accounts relate. That second layer is what lets you say "this is contested" or "that author is arguing against this one," and a single source cannot produce it at any number of passes.</p>
+
+                    <h2>The gap takes a week to open</h2>
+
+                    <p>This was tested directly last year. Petr Seban, Kamil Urban and Radovan Sikl ran 186 psychology students through three conditions: read a text once, reread the same text across three sessions, or read three different but conceptually compatible texts across three sessions. Everyone then sat a knowledge test one day later and another one week later.</p>
+
+                    <p>At one day, the rereading group and the multiple-text group looked about the same, and both beat single reading by a little. At one week they separated. The multiple-text group held its score almost flat between the two tests. The rereading group did not.</p>
+
+                    <p>That timing matters more than the size of the gap. The horizontal axis wins the test you take tomorrow. The vertical axis wins the test you take next week, which in working life is the only test there is. Nobody asks you about the architecture document the afternoon you read it.</p>
+
+                    <h2>The strategy that feels worse</h2>
+
+                    <p>The same study asked students to predict their own performance, and the predictions went the wrong way. The rereading group grew more confident after every pass and then overestimated what they knew, badly so on the one-day test. The multiple-text group's confidence stayed flat, and they underestimated themselves.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Reported confidence compared with one-week retention for two study strategies</title>
+                                <desc id="fig2-desc">Two rows of bars. Rereading one source produces high reported confidence and low retention at one week. Reading four sources once each produces low reported confidence and high retention at one week. Confidence and retention point in opposite directions for both strategies.</desc>
+
+                                <text x="24" y="28" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Confidence and retention move in opposite directions</text>
+
+                                <text x="24" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">STRATEGY</text>
+                                <text x="214" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">FELT LIKE IT WORKED</text>
+                                <text x="414" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">STILL THERE AT ONE WEEK</text>
+
+                                <rect x="214" y="98" width="190" height="20" rx="3" fill="#1a2942"/>
+                                <rect x="414" y="98" width="190" height="20" rx="3" fill="#1a2942"/>
+                                <rect x="214" y="98" width="166" height="20" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+                                <rect x="414" y="98" width="84" height="20" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+                                <text x="24" y="110" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Reread one source</text>
+                                <text x="24" y="130" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">four passes, one text</text>
+
+                                <line x1="24" y1="148" x2="604" y2="148" stroke="#2a3f5f" stroke-width="1" stroke-opacity="0.7"/>
+
+                                <rect x="214" y="168" width="190" height="20" rx="3" fill="#1a2942"/>
+                                <rect x="414" y="168" width="190" height="20" rx="3" fill="#1a2942"/>
+                                <rect x="214" y="168" width="88" height="20" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+                                <rect x="414" y="168" width="148" height="20" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+                                <text x="24" y="180" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Read four sources</text>
+                                <text x="24" y="200" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">one pass each, same total</text>
+
+                                <text x="24" y="240" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">The group that felt worse about its learning kept more of it.</text>
+                                <text x="24" y="272" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Bars show reported direction and ordering, not effect sizes. Seban et al. (2025).</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> Students who reread grew steadily more confident while holding onto less, and students who read multiple sources did the reverse. Confidence during study is a poor signal of what will survive the week. Source: Seban, Urban and Sikl (2025).</figcaption>
+                    </figure>
+
+                    <p>The reason is fluency. A second pass through familiar prose runs smoothly, and the brain reads smoothness as knowledge. A fresh source is bumpy: different vocabulary, different order, an example you have to work to map onto the one you already had. The bumps are the work. They feel like failure and they are the part that is building something.</p>
+
+                    <h2>Where this stops being true</h2>
+
+                    <p>Two honest limits.</p>
+
+                    <p>First, encoding variability is disputed as the general explanation for why spaced repetition works. When researchers tested Martin's hypothesis on identical repetitions in the 1970s, the results came back negative more often than not, and competing accounts have held up better in imaging work. What is not disputed is the case here, where the encodings genuinely differ because the texts genuinely differ. That is the strong form of the idea, and the retention data supports it even where the mechanism is argued over.</p>
+
+                    <p>Second, the study used texts chosen to be conceptually compatible. Real multi-source reading is messier. Four sources that contradict each other, or three that are wrong, raise the cost of integration and can leave you with four confident half-explanations instead of one solid one. Breadth helps when the sources are about the same thing and at least one of them is right. Choosing them is the part that takes judgment, and it is the part an executive summary cannot do for you.</p>
+
+                    <h2>Running it</h2>
+
+                    <p>Pick three or four accounts that differ in form, not just in author: a paper, a talk, a worked example, someone's blog post explaining why the paper is wrong. Different forms produce different cues, which is the whole point. Four survey articles covering the same ground in the same register give you far less variety than a paper plus a code walkthrough.</p>
+
+                    <p>Read each one once, properly. Do not skim four things. The comparison that holds is one careful pass each, not four shallow ones.</p>
+
+                    <p>Between sources, write a sentence about where the new one disagrees with the last. That sentence is the documents model, externalized, and it takes about twenty seconds. It also forces the integration that makes breadth pay rather than just accumulate.</p>
+
+                    <p>Expect to finish less confident than the version of you who read one thing four times. The confidence was the part that was not real.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Change what your team's learning budget buys. Replace "read this book" with three or four shorter sources covering the same ground from different angles, holding total reading time constant.</li>
+                        <li>Stop treating one canonical internal document as sufficient onboarding. Pair it with an outside explanation and a recorded walkthrough, then ask the new engineer where the three disagree.</li>
+                        <li>Move the comprehension check to a week after the session, not the same afternoon. The two strategies look identical on day one and only separate later.</li>
+                        <li>Treat rising confidence during study as a warning rather than progress. Ask people to predict their week-later score before they see it, and compare.</li>
+                    </ol>
+
+                    <p>None of this makes repetition wrong. It makes it a second-order tool. The first decision is how many doors you build into the room, and only after that does it matter how well you know the way through any one of them.</p>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Fluency Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">AI makes you feel like you're learning faster than ever. Mostly, it's the model doing the understanding.</p>
+                        <a href="the-fluency-trap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Friction Advantage</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the smoothest path to knowledge is usually the one where you learn the least.</p>
+                        <a href="the-friction-advantage.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Rep You Skipped</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Your memory is a library with a librarian. Only the librarian can get out of practice.</p>
+                        <a href="the-rep-you-skipped.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Seban, P., Urban, K., &amp; Sikl, R. (2025). <em>"Comparing the effectiveness of multiple text reading and rereading on knowledge retention and metacognitive accuracy."</em> Instructional Science, 53(3), 337&ndash;364.
+                        <a href="https://doi.org/10.1007/s11251-024-09686-4" target="_blank">https://doi.org/10.1007/s11251-024-09686-4</a>
+                    </li>
+                    <li class="reference-item">
+                        Callender, A. A., &amp; McDaniel, M. A. (2009). <em>"The limited benefits of rereading educational texts."</em> Contemporary Educational Psychology, 34(1), 30&ndash;41.
+                        <a href="https://doi.org/10.1016/j.cedpsych.2008.07.001" target="_blank">https://doi.org/10.1016/j.cedpsych.2008.07.001</a>
+                    </li>
+                    <li class="reference-item">
+                        Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). <em>"Improving Students' Learning With Effective Learning Techniques."</em> Psychological Science in the Public Interest, 14(1), 4&ndash;58.
+                        <a href="https://doi.org/10.1177/1529100612453266" target="_blank">https://doi.org/10.1177/1529100612453266</a>
+                    </li>
+                    <li class="reference-item">
+                        Martin, E. (1968). <em>"Stimulus meaningfulness and paired-associate transfer: An encoding variability hypothesis."</em> Psychological Review, 75(5), 421&ndash;441.
+                        <a href="https://doi.org/10.1037/h0026301" target="_blank">https://doi.org/10.1037/h0026301</a>
+                    </li>
+                    <li class="reference-item">
+                        Perfetti, C. A., Rouet, J.-F., &amp; Britt, M. A. (1999). <em>"Toward a theory of documents representation."</em> In H. van Oostendorp &amp; S. R. Goldman (Eds.), The Construction of Mental Representations During Reading (pp. 99&ndash;122). Lawrence Erlbaum Associates.
+                        <a href="https://www.taylorfrancis.com/chapters/edit/10.4324/9781410603050-5" target="_blank">https://www.taylorfrancis.com/chapters/edit/10.4324/9781410603050-5</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
