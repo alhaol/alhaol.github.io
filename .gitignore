@@ -40,10 +40,18 @@ diagrams/
 # Local-only publications working folder — never pushed.
 publications/
 
-# Local-only X posts archive. Drafts, cards and the registry are kept here and read
-# by the create-x-post skill, but the area is not published with the site: there is
-# no dock link and nothing under /posts/ ships.
-posts/
+# X posts workbench. The drafts, the markdown, the registry and the hub stay local.
+# Only the landing pages and the rendered cards ship, because every post on x.com
+# links to its landing page and that link has to resolve for everyone.
+#
+# A bare `posts/` cannot work here: git will not re-include a path whose parent
+# directory is excluded, so the exclusion is a glob over the children instead.
+posts/*
+!posts/x-html/
+!posts/x-images/
+# The card sources stay private; only the rendered PNGs are public.
+posts/x-images/*.card.html
+posts/x-images/*.art.svg
 
 # npx skills CLI lockfile. The skills it tracks install into .agents/ and
 # .claude/, both gitignored, so the lockfile would reference files absent

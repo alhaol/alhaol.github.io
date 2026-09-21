@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe for a laptop, not a body | alhaol.github.io</title>
+<meta name="description" content="Your laptop locking you out is a safety feature. An insulin pump locking you out is not.">
+<link rel="canonical" href="https://alhaol.github.io/posts/x-html/01-safe-for-a-laptop-not-a-body.html">
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+<!--
+  Landing page for a post on x.com/ialhaol. Rendered by scripts/render_page.py.
+
+  This is the ONLY part of posts/ that ships. The post on X carries one image, one
+  line and a link to this page, so this page is the post; the 280 characters are the
+  teaser.
+
+  Deliberately NOT login-gated. Every app and presentation on the site sits behind the
+  shared overlay, but a login wall on the page an X reader just clicked through to
+  throws away the click. This follows articles/, blooms/ and memory/, which are open.
+
+  Deliberately a single fixed dark theme with no toggle. The site stores two
+  incompatible value formats under localStorage['theme'] (articles write "theme-*",
+  blooms and memory classes write "dark"/"light"), and a page that reads that key
+  inherits the collision. A two-minute read does not need a toggle enough to be worth
+  it, and fixed dark matches the dark card above it.
+-->
+
+<!-- Link preview, for anywhere this gets shared without the card attached. -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Safe for a laptop, not a body">
+<meta property="og:description" content="Your laptop locking you out is a safety feature. An insulin pump locking you out is not.">
+<meta property="og:image" content="https://alhaol.github.io/posts/x-images/01-safe-for-a-laptop-not-a-body-dark.png">
+<meta property="og:url" content="https://alhaol.github.io/posts/x-html/01-safe-for-a-laptop-not-a-body.html">
+<meta property="og:site_name" content="alhaol.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ialhaol">
+<meta name="twitter:creator" content="@ialhaol">
+<meta name="twitter:title" content="Safe for a laptop, not a body">
+<meta name="twitter:description" content="Your laptop locking you out is a safety feature. An insulin pump locking you out is not.">
+<meta name="twitter:image" content="https://alhaol.github.io/posts/x-images/01-safe-for-a-laptop-not-a-body-dark.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #0a1628;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    /* Rose, the card accent. Page and image have to read as one object. */
+    --primary-color: #f43f5e;
+    --card-bg: #1a2942;
+    --border-color: #2a3f5f;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .prose { color: var(--text-muted); }
+  .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.5rem; margin-top: 2.25rem; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
+  .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.7rem; }
+  .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+  .prose strong { color: var(--text-main); font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose a { color: var(--primary-color); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { text-decoration-thickness: 2px; }
+  .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
+  .prose li { margin-bottom: 0.6rem; line-height: 1.75; }
+  .prose blockquote { border-left: 3px solid var(--primary-color); padding: 1rem 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+  .prose code { background-color: var(--card-bg); padding: 0.2rem 0.45rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88em; color: var(--primary-color); }
+
+  .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+  .nav-link { color: var(--text-main); text-decoration: none; }
+  .nav-link:hover { color: var(--primary-color); }
+
+  .pillar-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(244, 63, 94, 0.14);
+    color: var(--primary-color);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  /* The card, at the top, exactly as it appears on X. The reader arriving from the
+     timeline should recognise the page as the thing they clicked. */
+  .hero-card {
+    width: 100%;
+    display: block;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  /* The post's own line, set larger than the body: it is the claim everything below
+     is spent defending. */
+  .lede {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .onward { border-left: 3px solid var(--primary-color); }
+  .x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+  .x-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  @media (max-width: 768px) {
+    .lede { font-size: 1.12rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="border-b py-4" style="border-color: var(--border-color); background-color: var(--card-bg);">
+  <div class="max-w-3xl mx-auto px-6 flex justify-between items-center gap-4">
+    <a href="../../" class="font-bold text-lg tracking-tight nav-link">&#8592; alhaol.github.io</a>
+    <a href="https://x.com/ialhaol" class="nav-link text-sm" rel="me">@ialhaol</a>
+  </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 py-10 md:py-14">
+
+  <img src="../x-images/01-safe-for-a-laptop-not-a-body-dark.png" alt="Safe for a laptop, not a body" class="hero-card mb-8">
+
+  <header class="mb-8">
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <span class="pillar-badge">Architecture</span>
+      <span class="text-sm" style="color: var(--text-muted);">2026-09-21</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5" style="color: var(--text-main); letter-spacing: -0.025em;">Safe for a laptop, not a body</h1>
+    <p class="lede">Your laptop locking you out is a safety feature. An insulin pump locking you out is not.</p>
+  </header>
+
+  <hr class="mb-8" style="border-color: var(--border-color);">
+
+  <article class="prose">
+    <p>Four kinds of engineering that used to live in separate buildings now sit inside the same small object.</p>
+    <p>A glucose monitor on someone's arm measures, decides what the number means, and sends it onward. A surgical arm holds a model, a radio and a motor at the same time. A pacemaker is a computer you cannot switch off and on again. Each one is, all at once, a piece of artificial intelligence, a wireless device, a robot, and something worth attacking.</p>
+    <p>That combination is usually described as an opportunity. It is also a collision between rules that were written separately, and the collision is the interesting part.</p>
+    <h2>The rule every computer follows</h2>
+    <p>Computers have a simple rule for uncertainty: when you cannot be sure, stop.</p>
+    <p>Your bank freezes the card. Your laptop asks for the password again. The login fails and you are locked out. It feels annoying, and it is almost always right, because the cost of stopping for a minute is much smaller than the cost of being wrong.</p>
+    <p>Now attach that same rule to a person.</p>
+    <p>An insulin pump that shuts down because a security certificate expired has not kept anyone safe. It has simply chosen a different way to cause harm. A robotic arm that freezes partway through a procedure is not neutral. A monitor that stops reporting because it lost confidence in the network is not being careful, it is being absent at the one moment somebody needed it.</p>
+    <p>There is no "off" for a device that is already part of how a person is working. Stopping is not a pause. It is an action, with its own consequences.</p>
+    <h2>The obvious alternative is worse</h2>
+    <p>The other option is to let the device carry on whenever it cannot verify something. That is worse, and not by a little. It means anyone who can interfere with the signal gets a say in somebody's treatment.</p>
+    <p>So the real question is not "stop or continue". It is harder and more useful:</p>
+    <p><strong>What is the smallest thing this device can keep doing safely, entirely on its own, with no network, no update, and nobody watching?</strong></p>
+    <p>That question has an answer, and building toward it asks something different from each of the four fields:</p>
+    <ul><li>From robotics, a reduced mode that is still safe to be attached to, not just a stop.</li><li>From wireless, behaviour defined for the connection being gone, because it will be gone.</li><li>From AI, a small local fallback whose limits are known, instead of a cloud service whose absence nobody planned for.</li><li>From security, decisions with more than two outcomes, weighed against what the device is doing at that moment.</li></ul>
+    <p>None of those is exotic. The difficulty is that they have to agree with each other.</p>
+    <h2>The part nobody owns</h2>
+    <p>This usually fails as an organisational problem before it fails as a technical one. The security review covers the device. The clinical review covers the treatment. Very little covers the sentence "the device refused to act, exactly as designed, and the patient was harmed."</p>
+    <p>If you build in this space, put that sentence in the risk assessment as an outcome in its own right, next to being hacked and losing data. A shutdown you designed on purpose can still hurt somebody. It deserves the same scrutiny as an attack.</p>
+  </article>
+
+    <aside class="onward theme-card rounded-lg p-6 mt-10">
+    <div class="text-xs uppercase tracking-widest mb-2" style="color: var(--text-muted);">Going deeper</div>
+    <a href="../../articles/Articles/the-trust-gradient.html" style="color: var(--primary-color);" class="font-semibold">Read the long version on alhaol.github.io</a>
+  </aside>
+
+  <div class="mt-10 pt-8 border-t" style="border-color: var(--border-color);">
+    <!-- render_page.py points this at the profile; publish.py swaps it for the
+         post's own permalink once you hand one over. -->
+    <a id="discuss" class="x-link" href="https://x.com/ialhaol">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Discuss this on X
+    </a>
+  </div>
+
+</main>
+
+<footer class="border-t py-8 mt-8" style="border-color: var(--border-color);">
+  <div class="max-w-3xl mx-auto px-6 text-sm" style="color: var(--text-muted);">
+    Ibrahim AbuAlhaol &middot;
+    <a href="../../" style="color: var(--primary-color);">alhaol.github.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
