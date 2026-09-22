@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Save the lesson, not the transcript | alhaol.github.io</title>
+<meta name="description" content="Logging taught us to keep everything. Agent memory punishes you for it.">
+<link rel="canonical" href="https://alhaol.github.io/posts/x-html/02-save-the-lesson.html">
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+<!--
+  Landing page for a post on x.com/ialhaol. Rendered by scripts/render_page.py.
+
+  This is the ONLY part of posts/ that ships. The post on X carries one image, one
+  line and a link to this page, so this page is the post; the 280 characters are the
+  teaser.
+
+  Deliberately NOT login-gated. Every app and presentation on the site sits behind the
+  shared overlay, but a login wall on the page an X reader just clicked through to
+  throws away the click. This follows articles/, blooms/ and memory/, which are open.
+
+  Deliberately a single fixed dark theme with no toggle. The site stores two
+  incompatible value formats under localStorage['theme'] (articles write "theme-*",
+  blooms and memory classes write "dark"/"light"), and a page that reads that key
+  inherits the collision. A two-minute read does not need a toggle enough to be worth
+  it, and fixed dark matches the dark card above it.
+-->
+
+<!-- Link preview, for anywhere this gets shared without the card attached. -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Save the lesson, not the transcript">
+<meta property="og:description" content="Logging taught us to keep everything. Agent memory punishes you for it.">
+<meta property="og:image" content="https://alhaol.github.io/posts/x-images/02-save-the-lesson-dark.png">
+<meta property="og:url" content="https://alhaol.github.io/posts/x-html/02-save-the-lesson.html">
+<meta property="og:site_name" content="alhaol.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ialhaol">
+<meta name="twitter:creator" content="@ialhaol">
+<meta name="twitter:title" content="Save the lesson, not the transcript">
+<meta name="twitter:description" content="Logging taught us to keep everything. Agent memory punishes you for it.">
+<meta name="twitter:image" content="https://alhaol.github.io/posts/x-images/02-save-the-lesson-dark.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #0a1628;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    /* Rose, the card accent. Page and image have to read as one object. */
+    --primary-color: #f43f5e;
+    --card-bg: #1a2942;
+    --border-color: #2a3f5f;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .prose { color: var(--text-muted); }
+  .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.5rem; margin-top: 2.25rem; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
+  .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.7rem; }
+  .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+  .prose strong { color: var(--text-main); font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose a { color: var(--primary-color); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { text-decoration-thickness: 2px; }
+  .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
+  .prose li { margin-bottom: 0.6rem; line-height: 1.75; }
+  .prose blockquote { border-left: 3px solid var(--primary-color); padding: 1rem 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+  .prose code { background-color: var(--card-bg); padding: 0.2rem 0.45rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88em; color: var(--primary-color); }
+
+  .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+  .nav-link { color: var(--text-main); text-decoration: none; }
+  .nav-link:hover { color: var(--primary-color); }
+
+  .pillar-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(244, 63, 94, 0.14);
+    color: var(--primary-color);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  /* The card, at the top, exactly as it appears on X. The reader arriving from the
+     timeline should recognise the page as the thing they clicked. */
+  .hero-card {
+    width: 100%;
+    display: block;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  /* The post's own line, set larger than the body: it is the claim everything below
+     is spent defending. */
+  .lede {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .onward { border-left: 3px solid var(--primary-color); }
+  .x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+  .x-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  @media (max-width: 768px) {
+    .lede { font-size: 1.12rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="border-b py-4" style="border-color: var(--border-color); background-color: var(--card-bg);">
+  <div class="max-w-3xl mx-auto px-6 flex justify-between items-center gap-4">
+    <a href="../../" class="font-bold text-lg tracking-tight nav-link">&#8592; alhaol.github.io</a>
+    <a href="https://x.com/ialhaol" class="nav-link text-sm" rel="me">@ialhaol</a>
+  </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 py-10 md:py-14">
+
+  <img src="../x-images/02-save-the-lesson-dark.png" alt="Save the lesson, not the transcript" class="hero-card mb-8">
+
+  <header class="mb-8">
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <span class="pillar-badge">Architecture</span>
+      <span class="text-sm" style="color: var(--text-muted);">2026-09-22</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5" style="color: var(--text-main); letter-spacing: -0.025em;">Save the lesson, not the transcript</h1>
+    <p class="lede">Logging taught us to keep everything. Agent memory punishes you for it.</p>
+  </header>
+
+  <hr class="mb-8" style="border-color: var(--border-color);">
+
+  <article class="prose">
+    <p>Observability trained a generation of engineers on one rule. Capture everything, index it, work out later what mattered. Storage is cheap, and the log you did not keep is the one you need at three in the morning.</p>
+    <p>That rule does not survive the move to agent memory. The reason is structural, not a question of cost.</p>
+    <h2>The problem it is trying to solve is real</h2>
+    <p>Somewhere in your company this week, an agent worked out that the integration tests hang unless they run one at a time. It fixed the command, finished the job, and the session closed. The lesson went with it. Tomorrow another agent spends the same twenty minutes learning the same thing.</p>
+    <p>That knowledge dies at three separate boundaries. The session, because an agent's working notes are thrown away when the task ends. The agent, because two agents on the same repository cannot see each other's findings. The harness, because a lesson learned inside one vendor's tool is saved in that vendor's format and read by that vendor's tools alone.</p>
+    <p>The cost is not one rediscovery. It is one per agent, per harness, every time the fact is needed again.</p>
+    <h2>Keeping everything is the wrong fix</h2>
+    <p>The obvious build is to store the recordings and let the next agent search for the closest match. Testing exactly that across sequential tasks in two agent benchmarks, Hu, Long and Wang found that short abstracted procedures transfer reliably while detailed recordings do not. The distilled procedure beats the verbatim log.</p>
+    <p>They also found the damage is not spread evenly. When a retrieved memory misleads an agent, it does so mostly on the hard tasks, which is where the help was needed. An easy task shrugs off a bad hint. A hard one follows it.</p>
+    <p>So a memory store filled with raw sessions is not a neutral asset waiting to be useful. It is a pile of dead ends and confident wrong turns sitting next to the one good discovery, and it will teach the next agent the mistakes with exactly the same authority.</p>
+    <h2>The constraint moved, it did not leave</h2>
+    <p>Here is the part worth sitting with. A memory layer looks like it escapes the old tradeoff between keeping what you know and taking in what is new. The same team found that it does not. The context window is finite, so old and new memories compete for room at the moment of retrieval. The hard part moves from what gets written down to what gets surfaced.</p>
+    <p>Which inverts the instinct observability gave you. Every item you promote competes for space against every other item you promoted. Volume is a cost, not an asset.</p>
+    <p>Three things follow. Instrument the runtime rather than asking agents to write their own summaries, because an agent asked to reflect does so when it has the least context left. Promote short procedures rather than transcripts, and pay for the distilling step instead of treating storage as the finish line. Give every promoted item an owner and an expiry date, because much of what an agent learns holds only until the next dependency upgrade, and a reviewed, confident, out of date instruction is worse than none at all.</p>
+  </article>
+
+    <aside class="onward theme-card rounded-lg p-6 mt-10">
+    <div class="text-xs uppercase tracking-widest mb-2" style="color: var(--text-muted);">Going deeper</div>
+    <a href="../../articles/Articles/the-rediscovery-tax.html" style="color: var(--primary-color);" class="font-semibold">Read the long version on alhaol.github.io</a>
+  </aside>
+
+  <div class="mt-10 pt-8 border-t" style="border-color: var(--border-color);">
+    <!-- render_page.py points this at the profile; publish.py swaps it for the
+         post's own permalink once you hand one over. -->
+    <a id="discuss" class="x-link" href="https://x.com/ialhaol">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Discuss this on X
+    </a>
+  </div>
+
+</main>
+
+<footer class="border-t py-8 mt-8" style="border-color: var(--border-color);">
+  <div class="max-w-3xl mx-auto px-6 text-sm" style="color: var(--text-muted);">
+    Ibrahim AbuAlhaol &middot;
+    <a href="../../" style="color: var(--primary-color);">alhaol.github.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
