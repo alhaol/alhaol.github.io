@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rediscovery Tax | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        /* A quoted raster artifact from the project being discussed. Same min-width contract as
+           the SVG figures so it scrolls in its own box rather than widening the page. */
+        .fig-scroll img { display: block; width: 100%; min-width: 580px; height: auto; border-radius: 0.25rem; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_63.png" alt="The Rediscovery Tax" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-engineering">Engineering</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Rediscovery Tax</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">A problem solved by one agent should not have to be learned from scratch by the next one. Closing that gap takes more than storage.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 22, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Somewhere in your company this week, an agent worked out that the integration tests hang unless they run one at a time. It fixed the command, finished the job, and the session closed. The lesson went with it. Tomorrow another agent will spend the same twenty minutes learning the same thing.</p>
+
+                    <p>That is a tax, and almost nobody has it on a line item.</p>
+
+                    <h2>Knowledge dies in three places</h2>
+
+                    <p>The loss happens at three boundaries, and they are not the same boundary.</p>
+
+                    <ul class="list-disc space-y-3">
+                        <li>The session. An agent's working notes are thrown away when the task ends, and everything it worked out along the way goes with them.</li>
+                        <li>The agent. Two agents running on the same repository at the same moment cannot see each other's findings.</li>
+                        <li>The <strong>harness</strong>, meaning the loop that hands a model its tools and decides when it is done. A lesson learned inside one vendor's agent is saved, if at all, in that vendor's format, and read only by that vendor's tools.</li>
+                    </ul>
+
+                    <p>These multiply. The cost is not one rediscovery. It is one per agent, per harness, every time the fact is needed again.</p>
+
+                    <blockquote>Documentation records what people decided. Agent memory has to hold what agents found out, which is exactly the set of things nobody thought was worth writing down.</blockquote>
+
+                    <h2>A bigger context window does not help</h2>
+
+                    <p>The reflex answer is a longer context window. It does not apply. Context is what a model holds during one task. Memory is what survives after the task ends. Making the first bigger does nothing for the second, because the agent did not forget halfway through. The run finished.</p>
+
+                    <p>Benchmarks have already split the two. Du's 2026 survey of agent memory describes the move away from static recall tests toward multi-session tests, where memory and decisions interleave, and reports that current systems still fail them. A longer window does not reach that far.</p>
+
+                    <h2>Watch what agents do, do not ask them to write it up</h2>
+
+                    <p>Ask agents to record what they learned and you get compliance theatre. The summary gets written to satisfy the instruction, at the moment the model has the least context left and the weakest sense of what mattered. The reliable path is to watch the run and keep what actually happened.</p>
+
+                    <p>Agent Beacon, an MIT-licensed project from Asymptote Labs, works this way. It collects from wherever agents already run, using OpenTelemetry traces, hooks, polling, editor plugins or browser extensions depending on the tool, then puts it all in one format. It keeps what the agent did rather than the agent's account of it: prompts, tool calls, shell commands, file changes, approvals, token use. The default destination is a plain local file, readable without the product that wrote it.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <img src="../Post_Images/Fig_63_beacon_wordmark.png"
+                                 alt="The Agent Beacon project wordmark, rendered as blue LED dots on black, above the tagline: The cross-harness self-improving memory layer for AI agents.">
+                        </div>
+                        <figcaption><b>Figure 1.</b> The project's own framing, and the first word is the one doing the work. A memory layer that only sees one harness learns that harness's habits. The research below says breadth of source is what makes captured knowledge travel. Image from the Agent Beacon repository (MIT).</figcaption>
+                    </figure>
+
+                    <p>Capture is the easy half. A raw recording holds dead ends and confident wrong turns next to the useful discovery, and promoting all of it teaches the next agent the mistakes just as firmly. Beacon puts a human review step between what was captured and what an agent can retrieve, then serves the approved material back through MCP and Agent Skills, interfaces most harnesses already speak. Nothing inside the agent has to change to read it.</p>
+
+                                        <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 320" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Capture is wide and automatic, promotion is narrow and reviewed</title>
+                                <desc id="fig2-desc">A four-stage funnel. Raw sessions and normalized events are captured automatically and in high volume. Candidate lessons and approved knowledge are far fewer, and pass through human review. The narrowing between the second and third stage is where a memory layer either earns its value or becomes a landfill.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">Where a memory layer is cheap, and where it is not</text>
+
+                                <text x="180" y="72" fill="#60a5fa" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="middle">AUTOMATIC, HIGH VOLUME</text>
+                                <text x="460" y="72" fill="#f59e0b" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="middle">REVIEWED, LOW VOLUME</text>
+
+                                <line x1="320" y1="84" x2="320" y2="252" stroke="#2a3f5f" stroke-dasharray="4 6"/>
+
+                                <rect x="60" y="95" width="100" height="150" rx="4" fill="#60a5fa" fill-opacity="0.75"/>
+                                <rect x="200" y="110" width="100" height="120" rx="4" fill="#60a5fa" fill-opacity="0.55"/>
+                                <rect x="340" y="140" width="100" height="60" rx="4" fill="#f59e0b" fill-opacity="0.75"/>
+                                <rect x="480" y="157" width="100" height="26" rx="4" fill="#f59e0b" fill-opacity="0.95"/>
+
+                                <path d="M 166 170 L 194 170" stroke="#2a3f5f" stroke-width="2"/>
+                                <path d="M 188 165 L 196 170 L 188 175 Z" fill="#2a3f5f"/>
+                                <path d="M 306 170 L 334 170" stroke="#2a3f5f" stroke-width="2"/>
+                                <path d="M 328 165 L 336 170 L 328 175 Z" fill="#2a3f5f"/>
+                                <path d="M 446 170 L 474 170" stroke="#2a3f5f" stroke-width="2"/>
+                                <path d="M 468 165 L 476 170 L 468 175 Z" fill="#2a3f5f"/>
+
+                                <text x="110" y="270" fill="#f1f5f9" font-size="12" text-anchor="middle">Raw</text>
+                                <text x="110" y="286" fill="#f1f5f9" font-size="12" text-anchor="middle">sessions</text>
+                                <text x="250" y="270" fill="#f1f5f9" font-size="12" text-anchor="middle">Normalized</text>
+                                <text x="250" y="286" fill="#f1f5f9" font-size="12" text-anchor="middle">events</text>
+                                <text x="390" y="270" fill="#f1f5f9" font-size="12" text-anchor="middle">Candidate</text>
+                                <text x="390" y="286" fill="#f1f5f9" font-size="12" text-anchor="middle">lessons</text>
+                                <text x="530" y="270" fill="#f1f5f9" font-size="12" text-anchor="middle">Approved</text>
+                                <text x="530" y="286" fill="#f1f5f9" font-size="12" text-anchor="middle">knowledge</text>
+
+                                <text x="30" y="310" fill="#64748b" font-size="11">Bar heights are illustrative. The shape of the narrowing is the claim, not the ratios.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> Watching agents is cheap and scales by itself. Deciding what deserves to be taught to the next agent does not, and that step is where the value is won or lost.</figcaption>
+                    </figure>
+
+                    <h2>Save the lesson, not the transcript</h2>
+
+                    <p>The obvious build is to store the recording and let the next agent search for the closest match. The research says that is the wrong shape.</p>
+
+                    <p>Hu, Long and Wang tested exactly this on sequential tasks across two agent benchmarks. Short, abstracted procedures transferred reliably. Detailed recordings did not.</p>
+
+                    <p>They also found the damage is not spread evenly. When a retrieved memory misleads an agent, it does so mostly on the hard tasks, which is where the help was needed. An easy task shrugs off a bad hint. A hard one follows it.</p>
+
+                    <p>A separate group put a number on the upside. Skills distilled from traces across several models scored 73.1% when used on a model they had not come from, beating every version drawn from a single source. Narrow experience produced skills that only worked where they were born.</p>
+
+                    <p>That is the argument for capturing across harnesses rather than inside one. Record a single agent and you learn that agent's habits. Record several and you get something that survives the move.</p>
+
+                    <h2>The problem moves, it does not leave</h2>
+
+                    <p>The same team found something more awkward, and it is worth sitting with. A memory layer looks like it escapes the old tradeoff between keeping what you know and taking in what is new. It does not.</p>
+
+                    <p>Their conclusion is that the difficulty comes back one level up. The context window is finite, so old and new memories compete for room at the moment of retrieval. The hard part moves from what gets written down to what gets surfaced.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 262" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig3-title">Adding a memory layer relocates the constraint from writing to reading</title>
+                                <desc id="fig3-desc">Without a shared memory layer, the constrained step is writing knowledge down, because nothing persists past the session, while reading is unconstrained since there is nothing to read. With a shared layer, writing becomes open but reading becomes the constrained step, because the finite context window forces old and new experiences to compete at retrieval time.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">The hard part does not vanish. It changes ends.</text>
+
+                                <text x="250" y="72" fill="#94a3b8" font-size="12" text-anchor="middle">Writing it down</text>
+                                <text x="485" y="72" fill="#94a3b8" font-size="12" text-anchor="middle">Reading it back</text>
+
+                                <line x1="375" y1="84" x2="375" y2="215" stroke="#2a3f5f" stroke-dasharray="4 6"/>
+
+                                <text x="30" y="114" fill="#94a3b8" font-size="12">Without a</text>
+                                <text x="30" y="130" fill="#94a3b8" font-size="12">shared layer</text>
+                                <rect x="170" y="108" width="60" height="22" rx="3" fill="#f59e0b" fill-opacity="0.9"/>
+                                <text x="240" y="124" fill="#f59e0b" font-size="11">the bottleneck</text>
+                                <rect x="400" y="108" width="170" height="22" rx="3" fill="#60a5fa" fill-opacity="0.8"/>
+                                <text x="580" y="124" fill="#94a3b8" font-size="11">open</text>
+
+                                <text x="30" y="184" fill="#94a3b8" font-size="12">With a</text>
+                                <text x="30" y="200" fill="#94a3b8" font-size="12">shared layer</text>
+                                <rect x="170" y="178" width="160" height="22" rx="3" fill="#60a5fa" fill-opacity="0.8"/>
+                                <text x="340" y="194" fill="#94a3b8" font-size="11">open</text>
+                                <rect x="400" y="178" width="60" height="22" rx="3" fill="#f59e0b" fill-opacity="0.9"/>
+                                <text x="470" y="194" fill="#f59e0b" font-size="11">the bottleneck</text>
+
+                                <text x="30" y="240" fill="#64748b" font-size="11">Bar length is how open the step is, not a measured quantity.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 3.</b> A memory layer turns a capture problem into a retrieval problem. That is progress, because retrieval is the easier one to engineer. It is not the same as solved. Source: Hu, Long and Wang (2026).</figcaption>
+                    </figure>
+
+                    <p>So a memory layer is not a database you fill and forget. Every item you promote competes for room against every other item you promoted. Volume is a cost, not an asset, which is the opposite of the instinct most teams bring from logging.</p>
+
+                    <h2>What this does not fix</h2>
+
+                    <p>It helps to know the edges. Beacon keeps knowledge inside your own environment, with optional forwarding to your logging or storage systems. There is no shared public index, no publishing between companies, and no signature or reputation attached to a lesson. The trust model is the review step and the boundary of your organization.</p>
+
+                    <p>Two gaps need planning. Nothing merges duplicates, so one lesson captured from four agents becomes four entries until somebody combines them. Nothing expires either, and much of what an agent learns holds only until the next dependency upgrade. A reviewed, confident, out-of-date instruction is worse than none, because it gets retrieved with exactly the authority of a correct one.</p>
+
+                    <h2>What leaders should do</h2>
+                    <ol class="list-decimal space-y-3">
+                        <li>Instrument your agent sessions before you design the memory format. You cannot tell which discoveries are worth keeping until you can see what your agents keep rediscovering, and capture is the part that works without anyone's cooperation.</li>
+                        <li>Promote short procedures, not transcripts. Distilled procedures transfer and full recordings do not, so pay for the summarising step instead of treating storage as the finish line.</li>
+                        <li>Capture across more than one agent and one model. Skills drawn from varied sources scored 73.1% on a model they had not come from, while narrow ones overfit, so recording a single tool quietly limits how far the knowledge travels.</li>
+                        <li>Give every promoted item an owner and an expiry date. Retrieval competes for a finite window, so this needs eviction as much as ingestion. A stale entry helps nobody and crowds out something true.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Routing Above the Model</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Model routing optimizes the smaller variable. The harness around the model moves cost, and often capability, much further.</p>
+                        <a href="routing-above-the-model.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">Extended Working Memory</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Model Context Protocol as external cognition: bridging ephemeral and persistent state.</p>
+                        <a href="extended-working-memory.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Harness Advantage</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
+                        <a href="the-harness-advantage.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Asymptote Labs. Agent Beacon: a cross-harness memory layer for AI agents (MIT licence). <a href="https://github.com/Asymptote-Labs/agent-beacon" target="_blank" rel="noopener">github.com/Asymptote-Labs/agent-beacon</a></li>
+                    <li class="reference-item">Hu, Q., Long, Q., &amp; Wang, W. (2026). When Continual Learning Moves to Memory: A Study of Experience Reuse in LLM Agents. arXiv:2604.27003. <a href="https://arxiv.org/abs/2604.27003" target="_blank" rel="noopener">arxiv.org/abs/2604.27003</a></li>
+                    <li class="reference-item">Belikova, J., Parchiev, R., Egorov, E., Davydenko, G., Gusev, G., Savchenko, A., &amp; Makarenko, M. (2026). Managing Procedural Memory in LLM Agents: Control, Adaptation, and Evaluation. arXiv:2606.23127. <a href="https://arxiv.org/abs/2606.23127" target="_blank" rel="noopener">arxiv.org/abs/2606.23127</a></li>
+                    <li class="reference-item">Du, P. (2026). Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers. arXiv:2603.07670. Survey of the write, manage and read formalization and the move to multi-session agentic benchmarks. <a href="https://arxiv.org/abs/2603.07670" target="_blank" rel="noopener">arxiv.org/abs/2603.07670</a></li>
+                    <li class="reference-item">Model Context Protocol specification, the retrieval interface most agent harnesses already implement. <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">modelcontextprotocol.io</a></li>
+                    <li class="reference-item">OpenTelemetry specification, the trace and event model Beacon normalizes captured agent activity into. <a href="https://opentelemetry.io/docs/specs/otel/" target="_blank" rel="noopener">opentelemetry.io/docs/specs/otel</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
