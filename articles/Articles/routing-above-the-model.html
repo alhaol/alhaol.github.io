@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing Above the Model | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        /* A quoted raster figure from a source that publishes on a light ground. The mat is
+           deliberate: it frames the artifact as borrowed rather than letting a white GIF glare
+           against the dark page. Same min-width contract as the SVG figures. */
+        .fig-scroll.fig-mat { background-color: #eef2f9; padding: 0.75rem; }
+        .fig-scroll img { display: block; width: 100%; min-width: 580px; height: auto; border-radius: 0.25rem; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_62.png" alt="Routing Above the Model" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-ai">AI Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Routing Above the Model</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Model routing optimizes the smaller variable. The harness around the model moves cost, and often capability, much further.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 22, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: 6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Put six frontier models behind the same standardized scaffold, run them against SWE-bench Pro, and they finish within 4.9 points of each other. Hold one of those models fixed and change only the scaffold around it, and the spread widens to 9.5 points. Scale's own analysis of that leaderboard attributes swings of 10 to 20 points to harness choice alone.</p>
+
+                    <p>Most routing infrastructure in production optimizes the first number.</p>
+
+                    <h2>The unit of routing is out of date</h2>
+
+                    <p>A model router accepts a request, scores it for difficulty or cost or domain, and picks a set of weights. That abstraction was correct when the thing behind the endpoint was one forward pass returning text. It is not what runs anymore. What runs is a loop: something that issues tool calls, reads and writes files, holds session state across turns, decides when the job is finished, and retries when a test fails. The model sits inside that loop as one component among several. The whole assembly is the <strong>harness</strong>.</p>
+
+                    <p>Two products running identical weights are not running the same system. One may re-read the file it just edited before declaring success; the other may not. One may compact its context at 80% of the window; the other may truncate from the front and quietly lose the task description. Those are harness decisions, and they are invisible to any router that only knows the model name.</p>
+
+                    <blockquote>A model router asks which brain should answer the question. A harness router asks which workshop the job should go to. The workshop contains a brain. It also contains the tools, the bench, and the habit of checking the work before handing it back.</blockquote>
+
+                    <h2>What the measurements actually say</h2>
+
+                    <p>The evidence splits cleanly, and the split is more useful than any single headline.</p>
+
+                    <p>On cost, the case is settled. Vats and Golev ran two models through three open-source harnesses on a stratified slice of Terminal-Bench Pro and found up to a 40x difference in tokens per solved task. HarnessRouter's own comparison of eight harness and model configurations on a single task reports 223 credits against 0.47, and 4 minutes 36 seconds against 1 minute 25. That is a best-against-worst comparison, and the repository says so plainly, which is the right disclosure. The number to take from it is not 99.8%. It is that configurations which all complete the same task can differ in cost by two or three orders of magnitude.</p>
+
+                    <p>On quality, the case is conditional. The same Terminal-Bench study found pass-rate differences of 0 to 8 points, with bootstrap confidence intervals covering zero for every comparison but one. Change the task family and the picture inverts: on HAL's SWE-bench Verified Mini, Claude Sonnet 4.5 resolved 68% of instances under one scaffold and 34% under another. Zhang and colleagues call the pattern the Binding Constraint Thesis, arguing that for long-horizon work among models of comparable capability, the harness matters more than the model does.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 312" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Spread in resolve rate across models versus across harnesses</title>
+                                <desc id="fig1-desc">On SWE-bench Pro, six frontier models evaluated under one standardized harness span 4.9 percentage points of resolve rate, from 41.0 to 45.9 percent. A single model, Claude Opus 4.5, evaluated across three different harnesses spans 9.5 points, from 45.9 to 55.4 percent. The harness choice accounts for roughly twice the spread of the model choice.</desc>
+
+                                <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">Which variable has the wider spread?</text>
+                                <text x="30" y="50" fill="#94a3b8" font-size="11">SWE-bench Pro, resolve rate on the public dataset</text>
+
+                                <line x1="150" y1="70" x2="150" y2="232" stroke="#2a3f5f" stroke-opacity="0.55" stroke-dasharray="3 6"/>
+                                <line x1="275" y1="70" x2="275" y2="232" stroke="#2a3f5f" stroke-opacity="0.55" stroke-dasharray="3 6"/>
+                                <line x1="400" y1="70" x2="400" y2="232" stroke="#2a3f5f" stroke-opacity="0.55" stroke-dasharray="3 6"/>
+                                <line x1="525" y1="70" x2="525" y2="232" stroke="#2a3f5f" stroke-opacity="0.55" stroke-dasharray="3 6"/>
+
+                                <text x="30" y="107" fill="#60a5fa" font-size="12">Six models,</text>
+                                <text x="30" y="123" fill="#60a5fa" font-size="12">one harness</text>
+                                <text x="175" y="94" fill="#94a3b8" font-size="11">41.0</text>
+                                <text x="298" y="94" fill="#94a3b8" font-size="11" text-anchor="end">45.9</text>
+                                <rect x="175" y="100" width="123" height="26" rx="3" fill="#60a5fa" fill-opacity="0.85"/>
+                                <text x="310" y="118" fill="#60a5fa" font-size="12" font-weight="600">4.9 pt spread</text>
+
+                                <text x="30" y="182" fill="#f59e0b" font-size="12">One model,</text>
+                                <text x="30" y="198" fill="#f59e0b" font-size="12">three harnesses</text>
+                                <text x="298" y="169" fill="#94a3b8" font-size="11">45.9</text>
+                                <text x="535" y="169" fill="#94a3b8" font-size="11" text-anchor="end">55.4</text>
+                                <rect x="298" y="175" width="237" height="26" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+                                <text x="548" y="193" fill="#f59e0b" font-size="12" font-weight="600">9.5 pt</text>
+
+                                <line x1="150" y1="232" x2="600" y2="232" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <line x1="150" y1="232" x2="150" y2="238" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <line x1="275" y1="232" x2="275" y2="238" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <line x1="400" y1="232" x2="400" y2="238" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <line x1="525" y1="232" x2="525" y2="238" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <text x="150" y="252" fill="#94a3b8" font-size="11" text-anchor="middle">40</text>
+                                <text x="275" y="252" fill="#94a3b8" font-size="11" text-anchor="middle">45</text>
+                                <text x="400" y="252" fill="#94a3b8" font-size="11" text-anchor="middle">50</text>
+                                <text x="525" y="252" fill="#94a3b8" font-size="11" text-anchor="middle">55</text>
+                                <text x="375" y="274" fill="#94a3b8" font-size="11" text-anchor="middle">resolve rate (%)</text>
+
+                                <text x="30" y="298" fill="#64748b" font-size="11">Each bar is a range, not an error bar. Wider means more of the outcome rides on that choice.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Holding the harness constant compresses the gap between frontier models. Holding the model constant and changing the harness roughly doubles it. Source: Scale SWE-bench Pro public leaderboard and its accompanying analysis, which attributes swings of 10 to 20 points to harness choice.</figcaption>
+                    </figure>
+
+                    <p>Both findings can hold at once. Short, well-specified terminal tasks give the harness little room to help or hurt, so accuracy converges while cost does not. Long-horizon repository work gives the harness many chances to lose the thread, and accuracy diverges.</p>
+
+                    <h2>Variance is an argument for routing, not for standardizing</h2>
+
+                    <p>The obvious response to harness variance is to find the best harness and adopt it. That works only if one harness dominates everywhere, and the measurements say it does not. HarnessRouter states plainly that the cheapest and fastest configurations vary by task. Vats and Golev found failure signatures attached to harnesses rather than to models: one scaffold reasons itself into a corner, another exhausts its turn limit during verification, a third idles until it times out. The same signatures appeared under both models they tested.</p>
+
+                    <p>When the best option depends on the input, you have a routing problem by definition. Standardizing on one harness means accepting the worst case on every task family that harness handles badly, in exchange for not having to choose. That is a fair trade at low volume and an expensive one at scale.</p>
+
+                    <h2>The integration tax nobody benchmarks</h2>
+
+                    <p>There is a second efficiency argument that does not depend on any benchmark being correct.</p>
+
+                    <p>Supporting a harness inside a product is not one integration. It is a set of infrastructure responsibilities repeated per harness, and HarnessRouter enumerates nine of them: deploy, sandbox, task and run, session, streaming, files, artifacts, recovery, traces. Four harnesses therefore cost 36 responsibilities and five cost 45. The work grows with the product of harnesses and responsibilities, and the second factor never shrinks on its own.</p>
+
+                    <p>A shared contract collapses that product into a sum. You implement the nine responsibilities once against the protocol, and each additional harness costs an adapter instead of a column. HarnessRouter's Unified Harness Protocol takes this route. Its task surface is aligned with the OpenAI Responses API so existing SDKs and streaming parsers keep working, and it ships a conformance suite so the contract is testable rather than aspirational.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll fig-mat">
+                            <img src="../Post_Images/Fig_62_integration_comparison.gif"
+                                 alt="Animated comparison of two integration topologies. Without a router, a product wires itself to nine infrastructure responsibilities (Deploy, Sandbox, Task and Run, Session, Streaming, Files, Artifacts, Recovery, Traces) for each harness, giving four harnesses times nine responsibilities equals 36, and five harnesses equals 45. With a router in between, the product keeps one API into a unified interface that fans out to Codex, Claude Code, Hermes, Pi and a DeepSeek harness, so the count stays at one product integration however many harnesses are attached.">
+                        </div>
+                        <figcaption><b>Figure 2.</b> Integrated directly, the work scales with harnesses multiplied by responsibilities, so a fifth harness adds nine more. Behind a shared interface it stays at one integration and each new harness costs an adapter. Diagram by the HarnessRouter project (Apache-2.0), reproduced from its repository.</figcaption>
+                    </figure>
+
+                    <h2>What today's harness routers do not do</h2>
+
+                    <p>The current state deserves precision. HarnessRouter does not choose a harness for you. Routing is explicit, and the caller names the harness in the request body.</p>
+
+<pre><code>{
+  "model": "gpt-5.4-mini",
+  "input": "Redline this NDA against our standard terms.",
+  "metadata": { "harness_id": "hermes" }
+}</code></pre>
+
+                    <p>There is no scoring, no classifier, no cost-aware dispatch. What the project ships is a substrate: a uniform way to address many harnesses, per-session workspace isolation, secret handling that keeps credentials out of prompts, and a protocol that makes the set extensible. The policy that decides <code>harness_id</code> per request is yours to write.</p>
+
+                    <p>That is an ordering rather than a gap. A routing policy is a function from your tasks to your configurations, and nobody outside your organization can fit it, because the inputs are your traffic and the labels are your outcomes. You need the substrate before the policy is expressible, and you need your own measurements before the policy is worth anything.</p>
+
+                    <h2>Where this leaves the model choice</h2>
+
+                    <p>Model selection does not stop mattering. Harness-Bench logged 5,194 trajectories across 106 sandboxed tasks and found the effect interactive rather than additive: a harness that suits one backend can suit another poorly, so the useful unit of comparison is the pair. A configuration is a model and a harness together, and a router that can vary only one of them is searching a line through a plane.</p>
+
+                    <p>The broader shift is in how to read a vendor number. When a lab reports a benchmark score using its own scaffold, that score is a property of the pair. Anthropic's 69.2% for Opus 4.8 and the best Claude result of 51.9% on Scale's standardized board are not in conflict. They are measurements of two different systems that happen to share a model. Reading them as a model ranking is how teams end up routing on the smaller variable.</p>
+
+                    <h2>What leaders should do</h2>
+                    <ol>
+                        <li>Record the harness and its version alongside the model in every trace you keep. If your logs name only the model, you cannot attribute a regression to a scaffold change, and you cannot fit a routing policy later.</li>
+                        <li>Measure cost per solved task rather than cost per token. The 40x spread only appears in that denominator, and a harness that burns more tokens but finishes on the first attempt is often the cheaper one.</li>
+                        <li>Adopt a harness contract before you integrate a third harness. The work is linear in harnesses and multiplied by concerns, so standardizing is cheapest while you still have two.</li>
+                        <li>Score two harnesses on a task set drawn from your own traffic before you commit to either. Public leaderboards rank the pairs somebody else assembled, on the tasks somebody else picked.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">From Router to Conductor</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Model routing solves a real problem inside pipelines, but the layer end-users actually want is orchestration.</p>
+                        <a href="router-to-conductor.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Harness Advantage</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
+                        <a href="the-harness-advantage.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-bold mb-2">The Benchmark You Build</h4>
+                        <p class="text-sm mb-3" style="color: var(--text-muted);">Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.</p>
+                        <a href="the-benchmark-you-build.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">HarnessRouter, Community Edition and the Unified Harness Protocol (spec version 2026-09-12), Apache-2.0. <a href="https://github.com/HarnessRouter/harnessrouter" target="_blank" rel="noopener">github.com/HarnessRouter/harnessrouter</a></li>
+                    <li class="reference-item">Zhang, Y., Wang, J., Ge, Y., Xu, W., Hamm, J., &amp; Reddy, C. K. (2026). Stop Comparing LLM Agents Without Disclosing the Harness. arXiv:2605.23950. <a href="https://arxiv.org/abs/2605.23950" target="_blank" rel="noopener">arxiv.org/abs/2605.23950</a></li>
+                    <li class="reference-item">Vats, N., &amp; Golev, O. (2026). The Scaffold Effect in Coding Agents: Harness Choice as a Hidden Variable in Coding-Agent Evaluation. arXiv:2607.22585. <a href="https://arxiv.org/abs/2607.22585" target="_blank" rel="noopener">arxiv.org/abs/2607.22585</a></li>
+                    <li class="reference-item">Yao, Y., Tan, X., Liu, C.-H., et al. (2026). Harness-Bench: Measuring Harness Effects across Models in Realistic Agent Workflows. arXiv:2605.27922. <a href="https://arxiv.org/abs/2605.27922" target="_blank" rel="noopener">arxiv.org/abs/2605.27922</a></li>
+                    <li class="reference-item">Scale AI. SWE-Bench Pro Leaderboard (public dataset), with harness and scaffold disclosure. <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener">labs.scale.com/leaderboard/swe_bench_pro_public</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
