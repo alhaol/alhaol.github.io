@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire the Orchestrator | alhaol.github.io</title>
+    <meta name="description" content="Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/fire-the-orchestrator.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Fire the Orchestrator">
+    <meta property="og:description" content="Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/fire-the-orchestrator.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_64.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_64.png" alt="Fire the Orchestrator" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-architecture">Architecture</span>
+                        <span class="category-badge category-ai">Agent Systems</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Fire the Orchestrator</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: September 29, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Most multi-agent systems have a boss. A central orchestrator reads the task, splits it into pieces, hands each piece to a worker, gathers the results, and decides what happens next. It is the obvious design, and it carries a ceiling built in: the orchestrator can only track, assign, and merge so much before it becomes the slowest part of the system.</p>
+
+                    <p>Agensh is an experiment in what happens when you take the boss out. There is no coordinator. Workers share a common workspace, a way to message each other, and a shared record of what has been tried. Coordination is not issued from the top. It comes out of the infrastructure the workers stand on. With the bottleneck gone, the system was run with more and more workers, and the results kept improving all the way to 1,024 agents at once.</p>
+
+                    <h2>Why a coordinator becomes a ceiling</h2>
+                    <p>A central orchestrator does real work. It breaks the task down, holds the master plan, routes each subtask, and reconciles the answers that come back. Every one of those jobs grows with the number of workers. Ten agents are easy to track. A hundred means the orchestrator spends most of its context just holding state about who is doing what. The coordinator's own capacity, its context window, its reasoning budget, its one-decision-at-a-time loop, sets the practical limit on how many workers can be useful at once.</p>
+                    <p>This is an old pattern. Any system that funnels all traffic through one point inherits that point's limits. The database that every request must hit. The single build server. The one senior engineer who signs off on every design. Adding workers behind a single coordinator eventually slows the whole system down, because the coordinator has become the shared resource everyone waits on.</p>
+
+                    <blockquote>"When every worker reports to a coordinator, the coordinator's capacity is the ceiling. Take the coordinator out and the ceiling moves to how much shared infrastructure you can give the workers instead."</blockquote>
+
+                    <h2>Coordination without a coordinator</h2>
+                    <p>The alternative is old too, and it comes from watching insects. An ant colony builds elaborate structures with no ant in charge. Each ant follows simple local rules and reads signals other ants have left in the environment. Coordination lives in the shared environment, not in a manager. Researchers named the idea stigmergy and built optimization algorithms on it.</p>
+                    <p>Agensh applies the same principle to language-model agents. Three pieces of shared infrastructure stand in for the orchestrator:</p>
+                    <ul>
+                        <li>A shared workspace: the files, code, and artifacts every worker can see and change.</li>
+                        <li>A message interface: a way for any worker to signal, ask, or answer another without routing through a hub.</li>
+                        <li>A shared context: a common record of what has been attempted, what passed, and what failed, so no worker starts blind.</li>
+                    </ul>
+                    <p>Each worker runs the same loop: look at the shared state, pick something useful that nobody else is handling, do it, and write the result back where others can see it. No worker holds the master plan, because the plan is the state of the workspace itself.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Centralized coordination versus a shared-state swarm</title>
+                                <desc id="fig1-desc">On the left, workers connect to one orchestrator, which caps how many can be useful. On the right, workers connect to a shared workspace and grow in number without a central node.</desc>
+                                <text x="320" y="28" text-anchor="middle" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Two ways to coordinate many agents</text>
+                                <line x1="320" y1="48" x2="320" y2="284" stroke="#2a3f5f" stroke-width="1" stroke-dasharray="3 6"/>
+
+                                <!-- LEFT: centralized -->
+                                <text x="40" y="66" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CENTRALIZED (ORCHESTRATOR)</text>
+                                <!-- spokes -->
+                                <g stroke="#3b5680" stroke-width="1.4">
+                                    <line x1="150" y1="120" x2="70" y2="205"/>
+                                    <line x1="150" y1="120" x2="110" y2="212"/>
+                                    <line x1="150" y1="120" x2="150" y2="215"/>
+                                    <line x1="150" y1="120" x2="190" y2="212"/>
+                                    <line x1="150" y1="120" x2="230" y2="205"/>
+                                </g>
+                                <!-- orchestrator -->
+                                <circle cx="150" cy="120" r="17" fill="#1a2942" stroke="#f59e0b" stroke-width="2.5"/>
+                                <text x="150" y="124" text-anchor="middle" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700">boss</text>
+                                <!-- workers -->
+                                <g fill="#1a2942" stroke="#60a5fa" stroke-width="2">
+                                    <circle cx="70" cy="212" r="9"/>
+                                    <circle cx="110" cy="219" r="9"/>
+                                    <circle cx="150" cy="222" r="9"/>
+                                    <circle cx="190" cy="219" r="9"/>
+                                    <circle cx="230" cy="212" r="9"/>
+                                </g>
+                                <text x="40" y="256" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">More workers overload the</text>
+                                <text x="40" y="274" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">one node that tracks them all.</text>
+
+                                <!-- RIGHT: decentralized -->
+                                <text x="360" y="66" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">DECENTRALIZED (SHARED STATE)</text>
+                                <text x="360" y="92" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11">shared workspace &#183; messages &#183; context</text>
+                                <rect x="360" y="100" width="248" height="14" rx="7" fill="#1d4ed8" fill-opacity="0.35" stroke="#60a5fa" stroke-width="1.6"/>
+                                <!-- connectors up and down to the bar -->
+                                <g stroke="#3b5680" stroke-width="1.2">
+                                    <line x1="378" y1="100" x2="378" y2="80"/>
+                                    <line x1="410" y1="100" x2="410" y2="80"/>
+                                    <line x1="442" y1="100" x2="442" y2="80"/>
+                                    <line x1="474" y1="100" x2="474" y2="80"/>
+                                    <line x1="506" y1="100" x2="506" y2="80"/>
+                                    <line x1="538" y1="100" x2="538" y2="80"/>
+                                    <line x1="570" y1="100" x2="570" y2="80"/>
+                                    <line x1="394" y1="114" x2="394" y2="134"/>
+                                    <line x1="426" y1="114" x2="426" y2="134"/>
+                                    <line x1="458" y1="114" x2="458" y2="134"/>
+                                    <line x1="490" y1="114" x2="490" y2="134"/>
+                                    <line x1="522" y1="114" x2="522" y2="134"/>
+                                    <line x1="554" y1="114" x2="554" y2="134"/>
+                                </g>
+                                <g fill="#1a2942" stroke="#60a5fa" stroke-width="1.8">
+                                    <circle cx="378" cy="73" r="6.5"/>
+                                    <circle cx="410" cy="73" r="6.5"/>
+                                    <circle cx="442" cy="73" r="6.5"/>
+                                    <circle cx="474" cy="73" r="6.5"/>
+                                    <circle cx="506" cy="73" r="6.5"/>
+                                    <circle cx="538" cy="73" r="6.5"/>
+                                    <circle cx="570" cy="73" r="6.5"/>
+                                    <circle cx="394" cy="141" r="6.5"/>
+                                    <circle cx="426" cy="141" r="6.5"/>
+                                    <circle cx="458" cy="141" r="6.5"/>
+                                    <circle cx="490" cy="141" r="6.5"/>
+                                    <circle cx="522" cy="141" r="6.5"/>
+                                    <circle cx="554" cy="141" r="6.5"/>
+                                </g>
+                                <text x="360" y="256" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Workers self-organize; the count</text>
+                                <text x="360" y="274" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">scales with the shared infrastructure.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> A central orchestrator makes worker count a liability, because it must track every worker. A shared workspace makes worker count an asset, because coordination is read from the environment rather than issued by a node.</figcaption>
+                    </figure>
+
+                    <h2>The number of agents is a scaling dimension</h2>
+                    <p>Scaling laws taught the field that model quality improves predictably as you add parameters, data, and training compute. Those are the dimensions everyone tunes. Agensh points at another one that has been mostly ignored: the number of agents working a problem at the same time.</p>
+                    <p>Tested on hard coding tasks, where success means the code passes a hidden test suite, adding workers raised the pass rate. Not for the first few and then flat. It kept climbing as the count grew, out to 1,024 concurrent workers. More attempts, more variety in approach, and a shared record that lets a later worker build on an earlier one's partial progress combine into a curve that keeps bending upward where a single agent, or a coordinator-bound team, would have stalled.</p>
+                    <p>This lines up with a result seen elsewhere. Ask a model the same hard question many times and the chance that at least one answer is correct climbs sharply, often well past what one careful attempt reaches. A decentralized swarm is repeated sampling with memory: the attempts are not independent, because each worker can see and extend what the others have already done.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 320" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Test pass rate against number of agents</title>
+                                <desc id="fig2-desc">A decentralized swarm keeps improving pass rate as agent count rises to 1,024. An orchestrated team rises, then plateaus once the coordinator saturates.</desc>
+                                <text x="320" y="28" text-anchor="middle" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">More agents, higher pass rate, until the coordinator caps it</text>
+
+                                <!-- axes -->
+                                <line x1="70" y1="70" x2="70" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <line x1="70" y1="250" x2="610" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+                                <!-- gridlines at each decade of agent count -->
+                                <g stroke="#1e3a5f" stroke-width="1" stroke-dasharray="2 6">
+                                    <line x1="178" y1="70" x2="178" y2="250"/>
+                                    <line x1="286" y1="70" x2="286" y2="250"/>
+                                    <line x1="394" y1="70" x2="394" y2="250"/>
+                                    <line x1="502" y1="70" x2="502" y2="250"/>
+                                    <line x1="610" y1="70" x2="610" y2="250"/>
+                                </g>
+                                <!-- y axis label -->
+                                <text x="70" y="60" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11">pass rate</text>
+                                <!-- x tick labels -->
+                                <g fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">
+                                    <text x="70" y="268">1</text>
+                                    <text x="178" y="268">4</text>
+                                    <text x="286" y="268">16</text>
+                                    <text x="394" y="268">64</text>
+                                    <text x="502" y="268">256</text>
+                                    <text x="610" y="268">1024</text>
+                                </g>
+                                <text x="340" y="292" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">number of agents (log scale)</text>
+
+                                <!-- orchestrated (amber): rises then plateaus -->
+                                <polyline points="70,178 178,153 286,137 394,128 502,128 610,129" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                                <g fill="#f59e0b">
+                                    <circle cx="70" cy="178" r="4"/>
+                                    <circle cx="178" cy="153" r="4"/>
+                                    <circle cx="286" cy="137" r="4"/>
+                                    <circle cx="394" cy="128" r="4"/>
+                                    <circle cx="502" cy="128" r="4"/>
+                                    <circle cx="610" cy="129" r="4"/>
+                                </g>
+                                <!-- decentralized (blue): keeps rising -->
+                                <polyline points="70,178 178,151 286,128 394,110 502,95 610,84" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
+                                <g fill="#60a5fa">
+                                    <circle cx="70" cy="178" r="4"/>
+                                    <circle cx="178" cy="151" r="4"/>
+                                    <circle cx="286" cy="128" r="4"/>
+                                    <circle cx="394" cy="110" r="4"/>
+                                    <circle cx="502" cy="95" r="4"/>
+                                    <circle cx="610" cy="84" r="4"/>
+                                </g>
+
+                                <!-- legend -->
+                                <line x1="360" y1="200" x2="386" y2="200" stroke="#60a5fa" stroke-width="2.5"/>
+                                <text x="392" y="204" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">decentralized (no orchestrator)</text>
+                                <line x1="360" y1="222" x2="386" y2="222" stroke="#f59e0b" stroke-width="2.5"/>
+                                <text x="392" y="226" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">central orchestrator</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The shape of the claim, not exact figures. The decentralized curve keeps rising with agent count; the orchestrated curve flattens once the coordinator saturates. Trend after Li et al. (2024) and Brown et al. (2024) on gains from more agents and repeated sampling.</figcaption>
+                    </figure>
+
+                    <h2>The choice is a use case, not a verdict</h2>
+                    <p>None of this makes the orchestrator a mistake. For most work it is the right design. When a task splits cleanly into a few known steps, a coordinator is simpler to build, cheaper to run, and far easier to debug, because one place holds the plan and you can read it. A quick edit, a three-step pipeline, a job with a fixed recipe: put a coordinator on it and move on. Firing the orchestrator there would trade a clear system for a harder one and get nothing back.</p>
+                    <p>The decentralized design earns its keep on a different kind of problem: hard, open-ended, and checkable, where you cannot write the recipe in advance and a single attempt is often wrong. There you want many workers exploring at once, and the real question becomes how many you can run before coordination overhead eats the gain.</p>
+                    <p>That is where the second half of the argument comes in. Past a certain scale, decentralization stops being a preference and becomes the only option. A coordinator that has to track a thousand workers spends its whole budget on bookkeeping and none on the task. If the problem genuinely needs that many attempts, no smarter coordinator rescues you, because the coordinator itself is the thing you have to remove. So the honest framing is two-sided. Below the scale where the coordinator saturates, pick whichever design is simpler for the job. Above it, decentralization is a necessity, not a matter of taste.</p>
+                    <p>The swarm is also not free. Running many workers in parallel spends tokens and money in proportion to the count, and the shared infrastructure has to be fast enough that workers are not all waiting on the same state. That cost is the reason to reserve the swarm for problems where a single pass is unreliable and the budget is there to spend, and to leave the coordinator in place everywhere else.</p>
+
+                    <h2>From directing workers to feeding a swarm</h2>
+                    <p>When you do reach for the decentralized design, the mental model changes. With an orchestrator, you improve results by making the coordinator smarter. Without one, you improve results by making the shared infrastructure better and by adding workers. The unit of investment moves from the manager to the environment the workers share.</p>
+                    <p>So the question to ask about any large agent system is not whether coordinators are good or bad. It is whether this particular workload has outgrown its coordinator. For a small, well-defined job the answer is no, and a coordinator is the right tool. For a hard, checkable problem you want to attack with hundreds of attempts, the coordinator is a chokepoint, and the fix is to stop routing everything through one place.</p>
+
+                    <h2>What leaders should do</h2>
+                    <ol>
+                        <li>Match the design to the task, not to a trend. If a workload splits into a few known steps, keep the coordinator; it is simpler and cheaper. Reserve the decentralized swarm for hard, open-ended problems with an automatic pass or fail signal.</li>
+                        <li>Find the scale where your coordinator saturates. On one current multi-agent workload, log how much of the orchestrator's budget goes to judgment versus tracking who does what. The point where tracking dominates is the point where adding workers stops helping.</li>
+                        <li>Invest in shared infrastructure before adding agents. A fast shared workspace, a message channel, and a common record of attempts are what let worker count scale past that point. Build those first, then turn up the number of workers and watch the pass rate.</li>
+                        <li>Treat the number of agents as a dial with a budget. Set an explicit spend ceiling per task and move agent count like any other scaling knob: up when the problem is hard, verifiable, and worth the compute; down when a single pass or a small coordinated team already does the job.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Multi-Agent Orchestration</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Ensemble methods in software architecture: parallel agents, synthesized.</p>
+                        <a href="multi-agent-orchestration.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Orchestrated Mind</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why general intelligence emerges from coordinated fleets, not one larger model.</p>
+                        <a href="the-orchestrated-mind.html">Read Article →</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Simplicity Scales</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the most reliable production agents run on the simplest architecture that works.</p>
+                        <a href="simplicity-scales.html">Read Article →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Li, J., Zhang, Q., Yu, Y., Fu, Q., &amp; Ye, D. (2024). <em>"More Agents Is All You Need."</em> arXiv:2402.05120. <a href="https://arxiv.org/abs/2402.05120" target="_blank">arxiv.org/abs/2402.05120</a></li>
+                    <li class="reference-item">Brown, B., Juravsky, J., Ehrlich, R., et al. (2024). <em>"Large Language Monkeys: Scaling Inference Compute with Repeated Sampling."</em> arXiv:2407.21787. <a href="https://arxiv.org/abs/2407.21787" target="_blank">arxiv.org/abs/2407.21787</a></li>
+                    <li class="reference-item">Hayes-Roth, B. (1985). <em>"A Blackboard Architecture for Control."</em> Artificial Intelligence, 26(3), 251-321. <a href="https://doi.org/10.1016/0004-3702(85)90063-3" target="_blank">DOI</a></li>
+                    <li class="reference-item">Dorigo, M., &amp; St&#252;tzle, T. (2004). <em>"Ant Colony Optimization."</em> MIT Press. <a href="https://mitpress.mit.edu/9780262042192/ant-colony-optimization/" target="_blank">MIT Press</a></li>
+                    <li class="reference-item">Anthropic. (2025). <em>"How we built our multi-agent research system."</em> <a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank">anthropic.com</a></li>
+                    <li class="reference-item">Kaplan, J., McCandlish, S., Henighan, T., et al. (2020). <em>"Scaling Laws for Neural Language Models."</em> arXiv:2001.08361. <a href="https://arxiv.org/abs/2001.08361" target="_blank">arxiv.org/abs/2001.08361</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
