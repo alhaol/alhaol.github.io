@@ -123,7 +123,7 @@
                     <blockquote>"When every worker reports to a coordinator, the coordinator's capacity is the ceiling. Take the coordinator out and the ceiling moves to how much shared infrastructure you can give the workers instead."</blockquote>
 
                     <h2>Coordination without a coordinator</h2>
-                    <p>The alternative is old too, and it comes from watching insects. An ant colony builds elaborate structures with no ant in charge. Each ant follows simple local rules and reads signals other ants have left in the environment. Coordination lives in the shared environment, not in a manager. Researchers named the idea stigmergy and built optimization algorithms on it.</p>
+                    <p>The alternative is old too, and it comes from watching insects. An ant colony builds elaborate structures with no ant in charge. Each ant follows simple local rules and reads signals other ants have left in the environment. Coordination lives in the shared environment, not in an orchestrator. Researchers named the idea stigmergy and built optimization algorithms on it.</p>
                     <p>Agensh applies the same principle to language-model agents. Three pieces of shared infrastructure stand in for the orchestrator:</p>
                     <ul>
                         <li>A shared workspace: the files, code, and artifacts every worker can see and change.</li>
@@ -280,7 +280,7 @@
                     <p>The swarm is also not free. Running many workers in parallel spends tokens and money in proportion to the count, and the shared infrastructure has to be fast enough that workers are not all waiting on the same state. That cost is the reason to reserve the swarm for problems where a single pass is unreliable and the budget is there to spend, and to leave the coordinator in place everywhere else.</p>
 
                     <h2>From directing workers to feeding a swarm</h2>
-                    <p>When you do reach for the decentralized design, the mental model changes. With an orchestrator, you improve results by making the coordinator smarter. Without one, you improve results by making the shared infrastructure better and by adding workers. The unit of investment moves from the manager to the environment the workers share.</p>
+                    <p>When you do reach for the decentralized design, the mental model changes. With an orchestrator, you improve results by making the coordinator smarter. Without one, you improve results by making the shared infrastructure better and by adding workers. The unit of investment moves from the orchestrator to the environment the workers share.</p>
                     <p>So the question to ask about any large agent system is not whether coordinators are good or bad. It is whether this particular workload has outgrown its coordinator. For a small, well-defined job the answer is no, and a coordinator is the right tool. For a hard, checkable problem you want to attack with hundreds of attempts, the coordinator is a chokepoint, and the fix is to stop routing everything through one place.</p>
 
                     <h2>What leaders should do</h2>
