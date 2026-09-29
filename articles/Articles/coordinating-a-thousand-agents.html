@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fire the Orchestrator | alhaol.github.io</title>
+    <title>Coordinating a Thousand Agents | alhaol.github.io</title>
     <meta name="description" content="Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.">
-    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/fire-the-orchestrator.html">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/coordinating-a-thousand-agents.html">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Fire the Orchestrator">
+    <meta property="og:title" content="Coordinating a Thousand Agents">
     <meta property="og:description" content="Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.">
-    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/fire-the-orchestrator.html">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/coordinating-a-thousand-agents.html">
     <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_64.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
@@ -87,7 +87,7 @@
     <main class="max-w-4xl mx-auto px-6 py-12">
         <article class="theme-card rounded-xl shadow-sm overflow-hidden">
             <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_64.png" alt="Fire the Orchestrator" class="hero-image">
+                <img src="../Post_Images/Image_64.png" alt="Coordinating a Thousand Agents" class="hero-image">
 
                 <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
                     <div class="mb-4 flex flex-wrap">
@@ -95,7 +95,7 @@
                         <span class="category-badge category-ai">Agent Systems</span>
                     </div>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Fire the Orchestrator</h1>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Coordinating a Thousand Agents</h1>
                     <p class="text-xl mb-6" style="color: var(--text-muted);">Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.</p>
 
                     <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
@@ -114,7 +114,7 @@
                 <div class="prose prose-lg max-w-none">
                     <p>Most multi-agent systems have a boss. A central orchestrator reads the task, splits it into pieces, hands each piece to a worker, gathers the results, and decides what happens next. It is the obvious design, and it carries a ceiling built in: the orchestrator can only track, assign, and merge so much before it becomes the slowest part of the system.</p>
 
-                    <p>Agensh is an experiment in what happens when you take the boss out. There is no coordinator. Workers share a common workspace, a way to message each other, and a shared record of what has been tried. Coordination is not issued from the top. It comes out of the infrastructure the workers stand on. With the bottleneck gone, the system was run with more and more workers, and the results kept improving all the way to 1,024 agents at once.</p>
+                    <p>Agensh, a harness from Microsoft Research, is an experiment in what happens when you take the boss out. There is no coordinator. Workers share a common workspace, a way to message each other, and a shared record of what has been tried. Coordination is not issued from the top. It comes out of the infrastructure the workers stand on. With the bottleneck gone, the system was run with more and more workers, and the results kept improving all the way to 1,024 agents at once.</p>
 
                     <h2>Why a coordinator becomes a ceiling</h2>
                     <p>A central orchestrator does real work. It breaks the task down, holds the master plan, routes each subtask, and reconciles the answers that come back. Every one of those jobs grows with the number of workers. Ten agents are easy to track. A hundred means the orchestrator spends most of its context just holding state about who is doing what. The coordinator's own capacity, its context window, its reasoning budget, its one-decision-at-a-time loop, sets the practical limit on how many workers can be useful at once.</p>
@@ -126,9 +126,9 @@
                     <p>The alternative is old too, and it comes from watching insects. An ant colony builds elaborate structures with no ant in charge. Each ant follows simple local rules and reads signals other ants have left in the environment. Coordination lives in the shared environment, not in an orchestrator. Researchers named the idea stigmergy and built optimization algorithms on it.</p>
                     <p>Agensh applies the same principle to language-model agents. Three pieces of shared infrastructure stand in for the orchestrator:</p>
                     <ul>
-                        <li>A shared workspace: the files, code, and artifacts every worker can see and change.</li>
-                        <li>A message interface: a way for any worker to signal, ask, or answer another without routing through a hub.</li>
-                        <li>A shared context: a common record of what has been attempted, what passed, and what failed, so no worker starts blind.</li>
+                        <li>A shared workspace: a Git repository every worker can read and change, so progress is visible as commits.</li>
+                        <li>A message interface: a task channel plus direct messages, so any worker can signal, ask, or answer another without routing through a hub.</li>
+                        <li>A shared context: an append-only log of typed entries (what was observed, what is a confirmed fact, what failed, which subtask a worker has claimed, what a patch did) so no worker starts blind.</li>
                     </ul>
                     <p>Each worker runs the same loop: look at the shared state, pick something useful that nobody else is handling, do it, and write the result back where others can see it. No worker holds the master plan, because the plan is the state of the workspace itself.</p>
 
@@ -208,7 +208,7 @@
 
                     <h2>The number of agents is a scaling dimension</h2>
                     <p>Scaling laws taught the field that model quality improves predictably as you add parameters, data, and training compute. Those are the dimensions everyone tunes. Agensh points at another one that has been mostly ignored: the number of agents working a problem at the same time.</p>
-                    <p>Tested on hard coding tasks, where success means the code passes a hidden test suite, adding workers raised the pass rate. Not for the first few and then flat. It kept climbing as the count grew, out to 1,024 concurrent workers. More attempts, more variety in approach, and a shared record that lets a later worker build on an earlier one's partial progress combine into a curve that keeps bending upward where a single agent, or a coordinator-bound team, would have stalled.</p>
+                    <p>Tested on the five hardest tasks in a coding benchmark called ProgramBench (real defects in projects like FFmpeg and pandoc, a six-hour budget, no internet access), adding workers raised the pass rate. Not for the first few and then flat. Averaged across the tasks, going from 1 to 128 agents lifted the mean test-pass rate from 19.31% to 28.78%, close to a 50% relative gain. On the pandoc task the climb ran much further: from 33.89% with a single agent to 55.06% with 1,024. More attempts, more variety in approach, and a shared record that lets a later worker build on an earlier one's partial progress combine into a curve that keeps bending upward where a single agent, or a coordinator-bound team, would have stalled.</p>
                     <p>This lines up with a result seen elsewhere. Ask a model the same hard question many times and the chance that at least one answer is correct climbs sharply, often well past what one careful attempt reaches. A decentralized swarm is repeated sampling with memory: the attempts are not independent, because each worker can see and extend what the others have already done.</p>
 
                     <figure class="fig">
@@ -270,7 +270,7 @@
                                 <text x="392" y="226" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">central orchestrator</text>
                             </svg>
                         </div>
-                        <figcaption><b>Figure 2.</b> The shape of the claim, not exact figures. The decentralized curve keeps rising with agent count; the orchestrated curve flattens once the coordinator saturates. Trend after Li et al. (2024) and Brown et al. (2024) on gains from more agents and repeated sampling.</figcaption>
+                        <figcaption><b>Figure 2.</b> The shape of the argument. The decentralized curve keeps rising with agent count; the orchestrated curve flattens once the coordinator saturates. Anchored on Agensh, where the pandoc task rose from 33.89% test-pass at one agent to 55.06% at 1,024 (Zhan et al., 2026). The orchestrated baseline is illustrative.</figcaption>
                     </figure>
 
                     <h2>The choice is a use case, not a verdict</h2>
@@ -317,6 +317,7 @@
             <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
                 <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
                 <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Zhan, Z., Song, T., Dong, L., Huang, S., Lian, J., Xia, Y., &amp; Wei, F. (2026). <em>"Agensh: Scaling Organizational Intelligence to 1,024 Agents."</em> Microsoft Research. arXiv:2609.26781. <a href="https://arxiv.org/abs/2609.26781" target="_blank">arxiv.org/abs/2609.26781</a></li>
                     <li class="reference-item">Li, J., Zhang, Q., Yu, Y., Fu, Q., &amp; Ye, D. (2024). <em>"More Agents Is All You Need."</em> arXiv:2402.05120. <a href="https://arxiv.org/abs/2402.05120" target="_blank">arxiv.org/abs/2402.05120</a></li>
                     <li class="reference-item">Brown, B., Juravsky, J., Ehrlich, R., et al. (2024). <em>"Large Language Monkeys: Scaling Inference Compute with Repeated Sampling."</em> arXiv:2407.21787. <a href="https://arxiv.org/abs/2407.21787" target="_blank">arxiv.org/abs/2407.21787</a></li>
                     <li class="reference-item">Hayes-Roth, B. (1985). <em>"A Blackboard Architecture for Control."</em> Artificial Intelligence, 26(3), 251-321. <a href="https://doi.org/10.1016/0004-3702(85)90063-3" target="_blank">DOI</a></li>
