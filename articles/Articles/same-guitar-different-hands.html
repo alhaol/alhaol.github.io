@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Same Guitar, Different Hands | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_66.png" alt="Same Guitar, Different Hands" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Human Judgment</span>
+                        <span class="category-badge category-ai">AI Adoption</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Same Guitar, Different Hands</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Everyone gets the same AI instrument. The difference is a trained ear, and it takes far less practice than a guitar.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 10, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Hand the same guitar to two people. One plays something that makes a room go quiet. The other makes noise. The guitar did not change. The hands did, and more than the hands, the ear behind them.</p>
+
+<p>I keep returning to this picture after a conversation with my friend and mentor, <a href="https://www.linkedin.com/in/dr-khaled-el-maleh-47142a2/" target="_blank" rel="noopener">Dr. Khaled El-Maleh</a> [1]. We were talking about why two people with the same AI tools and the same models get such different results. Khaled put it as a guitar: in the right hands it makes art, and in other hands it only makes noise. This article follows that idea to its practical end. The starting point is his.</p>
+
+<h2>The same instrument, very different music</h2>
+
+<p>The gap is measurable. In a 2023 field experiment with 758 Boston Consulting Group consultants, people using GPT-4 on tasks inside the model's competence finished 12.2% more tasks, 25.1% faster, and their work was rated more than 40% higher in quality. On a task just outside that competence, the AI users were 19 percentage points less likely to reach the correct answer than colleagues working without it [2]. Same model, same firm. What separated the two outcomes was whether the person could tell when the model had stopped being right.</p>
+
+<p>A customer support study found the other side of it. Access to an AI assistant raised issues resolved per hour by 14% on average, and by 34% for novice and low-skilled agents, with little effect on the most experienced [3]. The assistant supplied the hands to people who had not built them yet. That is good news, and it is also the trap: a tool that supplies the hands can make it feel as if the ear came with it.</p>
+
+<h2>Signal, noise and the ear in between</h2>
+
+<p>Engineers have a precise word for this. Every channel carries <strong>signal</strong> and <strong>noise</strong>, and the quality of what comes out depends on the ratio between them, the signal-to-noise ratio [4]. An AI model is a channel that produces both at high volume. The signal is output that is correct and worth keeping. The noise is the rest: the confident wrong number, the invented citation, the paragraph that sounds fine and says nothing.</p>
+
+<p>The model does not label which is which. That job falls to the person reading. So the useful measure of a human working with AI is the share of what they keep that is actually signal. I call it the <strong>collaboration signal-to-noise ratio</strong>. The model fixes how much signal is available. The person's judgment decides how much of it is kept and how much noise slips through with it.</p>
+
+<blockquote>The model sets the ceiling. The ear sets the signal-to-noise ratio. Two people on the same model get different results because they filter differently, and filtering is a skill you can train.</blockquote>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 352" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">The same model output passing through an untrained and a trained ear</title>
+            <desc id="fig1-desc">Identical output from one model, a mix of signal and noise, ships unchanged when no one checks it, and ships as mostly signal when trained judgment drops the noise first.</desc>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700" >Same model, two ears</text>
+            <defs><marker id="f1arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
+            <rect x="30" y="130" width="96" height="90" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+            <text x="78" y="171" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600" >Same model</text>
+            <text x="78" y="190" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >same prompt</text>
+            <path d="M126,165 C138,165 138,105 150,105" fill="none" stroke="#2a3f5f" stroke-width="1.5"/>
+            <path d="M126,185 C138,185 138,235 150,235" fill="none" stroke="#2a3f5f" stroke-width="1.5"/>
+            <text x="150" y="70" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">UNTRAINED EAR</text>
+            <circle cx="165" cy="105" r="6" fill="#60a5fa"/>
+            <circle cx="190" cy="105" r="6" fill="#64748b"/>
+            <circle cx="215" cy="105" r="6" fill="#60a5fa"/>
+            <circle cx="240" cy="105" r="6" fill="#64748b"/>
+            <circle cx="265" cy="105" r="6" fill="#64748b"/>
+            <circle cx="290" cy="105" r="6" fill="#60a5fa"/>
+            <line x1="315" y1="85" x2="315" y2="125" stroke="#64748b" stroke-width="2" stroke-dasharray="4 4"/>
+            <text x="315" y="146" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle" font-weight="400" >no check</text>
+            <circle cx="345" cy="105" r="6" fill="#60a5fa"/>
+            <circle cx="370" cy="105" r="6" fill="#64748b"/>
+            <circle cx="395" cy="105" r="6" fill="#60a5fa"/>
+            <circle cx="420" cy="105" r="6" fill="#64748b"/>
+            <circle cx="445" cy="105" r="6" fill="#64748b"/>
+            <circle cx="470" cy="105" r="6" fill="#60a5fa"/>
+            <line x1="482" y1="105" x2="508" y2="105" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f1arr)"/>
+            <rect x="514" y="78" width="96" height="54" rx="8" fill="#1a2942" stroke="#64748b"/>
+            <text x="562" y="101" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600" >Ships</text>
+            <text x="562" y="120" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >signal + noise</text>
+            <text x="150" y="200" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="start" font-weight="700" letter-spacing="0.06em">TRAINED EAR</text>
+            <circle cx="165" cy="235" r="6" fill="#60a5fa"/>
+            <circle cx="190" cy="235" r="6" fill="#64748b"/>
+            <circle cx="215" cy="235" r="6" fill="#60a5fa"/>
+            <circle cx="240" cy="235" r="6" fill="#64748b"/>
+            <circle cx="265" cy="235" r="6" fill="#64748b"/>
+            <circle cx="290" cy="235" r="6" fill="#60a5fa"/>
+            <rect x="309" y="212" width="12" height="46" rx="3" fill="#f59e0b"/>
+            <text x="315" y="276" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle" font-weight="600" >judgment</text>
+            <circle cx="345" cy="235" r="6" fill="#60a5fa"/>
+            <circle cx="395" cy="235" r="6" fill="#60a5fa"/>
+            <circle cx="445" cy="235" r="6" fill="#60a5fa"/>
+            <circle cx="292" cy="300" r="5" fill="#64748b" opacity="0.7"/>
+            <circle cx="308" cy="300" r="5" fill="#64748b" opacity="0.7"/>
+            <circle cx="324" cy="300" r="5" fill="#64748b" opacity="0.7"/>
+            <text x="338" y="304" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="start" font-weight="400" >noise dropped</text>
+            <line x1="482" y1="235" x2="508" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f1arr)"/>
+            <rect x="514" y="208" width="96" height="54" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+            <text x="562" y="231" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600" >Ships</text>
+            <text x="562" y="250" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >mostly signal</text>
+            <circle cx="40" cy="331" r="5" fill="#60a5fa"/><text x="52" y="335" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >signal</text>
+            <circle cx="122" cy="331" r="5" fill="#64748b"/><text x="134" y="335" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >noise</text>
+            <rect x="196" y="324" width="8" height="14" rx="2" fill="#f59e0b"/><text x="212" y="335" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >human judgment filters before anything ships</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> The model is the same in both lanes, and so is the mix it produces. The collaboration signal-to-noise ratio is set by the filter the person applies before anything ships. Concept: Khaled El-Maleh&#39;s guitar metaphor [1], framed with Shannon&#39;s signal and noise [4].</figcaption>
+</figure>
+
+<p>There are two ways to have a bad ear. The obvious one is accepting noise, such as shipping a wrong figure because it was well formatted. The quieter one is rejecting signal: distrusting everything and redoing work the model got right. Both lower the ratio. Researchers at Microsoft Research and Carnegie Mellon surveyed 319 knowledge workers and found that higher confidence in the AI was associated with less critical thinking, while higher confidence in one's own ability was associated with more [5]. The ear weakens when you stop using it.</p>
+
+<h2>Why the practice is shorter</h2>
+
+<p>A guitarist needs years. Anders Ericsson's study of expert musicians found that the best violinists had accumulated around 10,000 hours of <strong>deliberate practice</strong> by age 20, meaning effortful work aimed at specific weaknesses, with feedback [6]. Most of those hours go to the hands: chord shapes and timing. The ear grows alongside them, slowly.</p>
+
+<p>AI moves most of the hands off the human. Writing a clear request and giving the model the right context take days to learn, not years. The model plays the notes. What remains for the person is mostly the ear, so the path to proficiency is far shorter than an instrument's.</p>
+
+<p>It is shorter only if the practice goes to the right place. Ten thousand prompts that train the hands and never the ear produce someone who asks quickly and still cannot tell which answers to trust.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 322" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Technique and judgment growth for a guitarist and for an AI user</title>
+            <desc id="fig2-desc">On guitar, technique and judgment both take years. With AI, technique saturates in days because the model supplies it; judgment rises over weeks only with mindful practice and stays flat with mindless use.</desc>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700" >Where the practice goes (illustrative, not measured)</text>
+            <text x="50" y="58" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">GUITAR</text>
+            <line x1="50" y1="70" x2="50" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+            <line x1="50" y1="250" x2="300" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+            <text x="175" y="272" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >practice time: years</text>
+            <text x="58" y="84" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="start" font-weight="400" >skill</text>
+            <text x="360" y="58" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">WITH AI</text>
+            <line x1="360" y1="70" x2="360" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+            <line x1="360" y1="250" x2="610" y2="250" stroke="#2a3f5f" stroke-width="1.5"/>
+            <text x="485" y="272" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >practice time: weeks</text>
+            <text x="368" y="84" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="start" font-weight="400" >skill</text>
+            <path d="M50,245 C120,240 160,150 300,100" fill="none" stroke="#60a5fa" stroke-width="3"/>
+            <path d="M50,248 C140,245 190,175 300,125" fill="none" stroke="#f59e0b" stroke-width="3"/>
+            <path d="M360,245 C368,120 380,100 610,92" fill="none" stroke="#60a5fa" stroke-width="3"/>
+            <path d="M360,248 C430,232 480,150 610,110" fill="none" stroke="#f59e0b" stroke-width="3"/>
+            <path d="M360,248 C430,242 500,236 610,230" fill="none" stroke="#64748b" stroke-width="2.5" stroke-dasharray="6 5"/>
+            <line x1="50" y1="300" x2="74" y2="300" stroke="#60a5fa" stroke-width="3"/><text x="82" y="304" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >technique (the hands)</text>
+            <line x1="232" y1="300" x2="256" y2="300" stroke="#f59e0b" stroke-width="3"/><text x="264" y="304" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >judgment (the ear)</text>
+            <line x1="400" y1="300" x2="424" y2="300" stroke="#64748b" stroke-width="2.5" stroke-dasharray="6 5"/><text x="432" y="304" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="start" font-weight="400" >ear after mindless use</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> An illustrative sketch, not measured data, and the two time axes use different units. On an instrument the hands and the ear grow together over years [6]. With AI the model supplies most of the hands within days, so nearly all the remaining skill is the ear, and it only grows when practice produces feedback [7].</figcaption>
+</figure>
+
+<h2>Mindful practice, not more practice</h2>
+
+<p>Daniel Kahneman and Gary Klein argued for years about when expert intuition can be trusted, and agreed on a narrow answer. Intuition is reliable when the environment is regular enough to learn from and the person gets timely feedback on whether they were right [7]. Everyday AI use fails the second test. You ask, you get a fluent answer, you move on, and you rarely find out which answers were wrong. Without feedback, the ear does not learn.</p>
+
+<p>The strategy, then, is to build the feedback in. The loop below takes minutes per round, and most of its steps happen in your head rather than in the model.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 256" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">A five-step loop for training judgment when working with AI</title>
+            <desc id="fig3-desc">Predict, generate, compare, name the noise, and score. Four of the five steps are human judgment; only one uses the model. The loop repeats on known problems and then on harder ones.</desc>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700" >The mindful practice loop</text>
+            <defs><marker id="f3arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
+            <rect x="20" y="64" width="112" height="86" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="76" y="94" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" >1. Predict</text>
+            <text x="76" y="116" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >write your answer</text>
+            <text x="76" y="133" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >before asking</text>
+            <line x1="133" y1="107" x2="148" y2="107" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f3arr)"/>
+            <rect x="142" y="64" width="112" height="86" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="198" y="94" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" >2. Generate</text>
+            <text x="198" y="116" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >ask the model</text>
+            <text x="198" y="133" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >the same question</text>
+            <line x1="255" y1="107" x2="270" y2="107" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f3arr)"/>
+            <rect x="264" y="64" width="112" height="86" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="320" y="94" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" >3. Compare</text>
+            <text x="320" y="116" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >where do you</text>
+            <text x="320" y="133" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >disagree?</text>
+            <line x1="377" y1="107" x2="392" y2="107" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f3arr)"/>
+            <rect x="386" y="64" width="112" height="86" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="442" y="94" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" >4. Name noise</text>
+            <text x="442" y="116" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >label the error</text>
+            <text x="442" y="133" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >type and log it</text>
+            <line x1="499" y1="107" x2="514" y2="107" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f3arr)"/>
+            <rect x="508" y="64" width="112" height="86" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="564" y="94" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" >5. Score</text>
+            <text x="564" y="116" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >what you caught,</text>
+            <text x="564" y="133" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="400" >what you missed</text>
+            <path d="M564,150 L564,180 L76,180 L76,156" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#f3arr)"/>
+            <text x="320" y="206" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle" font-weight="400" >Repeat on problems you already solved, then on harder ones</text>
+            <text x="320" y="236" font-family="Inter, sans-serif" font-size="13" fill="#f59e0b" text-anchor="middle" font-weight="600" >Amber steps train the ear. Only one step uses the model.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> The loop adds the feedback that everyday AI use lacks. Intuition only becomes reliable when the person learns whether they were right [7], and this loop makes that happen on every round.</figcaption>
+</figure>
+
+<ol class="list-decimal space-y-3">
+<li>Predict first. Before asking, write down your own answer or outline, even a rough one. You now have something to compare against, and you notice when the model says something you would not have.</li>
+<li>Practice on songs you already know. Use the model on problems you have already solved, where you know the right answer. Wrong notes are easy to hear in a familiar song, and this is how you learn what the model's noise sounds like in your own domain.</li>
+<li>Name the noise. When the model is wrong, label the kind of wrong: a fabricated source, a stale fact, a confident estimate, a correct answer to a different question. A short log turns a vague unease into specific things to listen for.</li>
+<li>Keep score. Track how often your review caught an error that a later check confirmed, and how often you rejected something that turned out to be right. When the score is steady, move to problems you know less well.</li>
+</ol>
+
+<p>None of this asks for more hours with the tool. It asks that the hours you already spend produce feedback. In my own work, a few weeks of this loop changed what I notice in a model's answer before I could fully explain why. That is what a trained ear feels like from the inside.</p>
+
+<h2>What changes for teams</h2>
+
+<p>Most AI rollouts measure adoption: seats, prompts sent, hours saved. Those numbers count how often the guitar is played and say nothing about the music. Two teams with identical usage can have opposite outcomes, one shipping more signal and the other shipping more noise, faster.</p>
+
+<p>The better question for a leader is what share of AI-assisted work survives independent review, and whether that share is rising. It is harder to measure, and it is the number that tracks the ear. Training budgets follow the same logic. A course on prompt syntax trains the hands, which the model already supplies. Structured review against known answers trains the ear, which nothing supplies.</p>
+
+<h2>A better guitar still needs an ear</h2>
+
+<p>Models will keep improving, and the share of signal in their raw output will rise. That does not retire the ear. A better guitar in untrained hands still makes noise, only louder and more convincing. As the noise gets more polished, the ear has to get sharper to hear it.</p>
+
+<p>Khaled's guitar is a useful picture because it puts the difference where it belongs, in the person. The part a guitar never offered is the timeline. Getting good at this takes weeks of mindful practice rather than years of scales, as long as the weeks go to the ear.</p>
+
+<h2>What leaders should do</h2>
+
+<ol class="list-decimal space-y-3">
+<li>Measure the collaboration signal-to-noise ratio instead of adoption. Each month, sample AI-assisted work, check it independently, and track the share that holds up and the share of errors your reviewers caught first.</li>
+<li>Build a known-answer practice set for each team: 20 to 30 solved problems from your own domain with verified answers. Use it to train new users and to recheck experienced ones whenever the model changes.</li>
+<li>Require a prediction before high-stakes prompts. For decisions that matter, the person writes their own estimate or outline first, so review becomes a comparison instead of a read-through.</li>
+<li>Keep a shared noise log. Collect the specific ways models have been wrong in your domain, and walk new staff through it during onboarding and again after every model upgrade.</li>
+</ol>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Taste Gap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why discernment becomes the human moat once AI makes generation free.</p>
+                        <a href="the-taste-gap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Fluency Trap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">AI makes you feel like you are learning faster than ever. Mostly, it is the model doing the understanding.</p>
+                        <a href="the-fluency-trap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Rep You Skipped</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Your memory is a library with a librarian. Only the librarian can get out of practice.</p>
+                        <a href="the-rep-you-skipped.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">El-Maleh, K. Personal conversation with the author on why people differ so widely in how they use AI, and the guitar metaphor for it, 2026. LinkedIn profile: <a href="https://www.linkedin.com/in/dr-khaled-el-maleh-47142a2/" target="_blank" rel="noopener">https://www.linkedin.com/in/dr-khaled-el-maleh-47142a2/</a></li>
+                    <li class="reference-item">Dell&#39;Acqua, F., McFowland, E., Mollick, E., et al. (2023). "Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality." Harvard Business School Working Paper 24-013. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4573321" target="_blank" rel="noopener">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4573321</a></li>
+                    <li class="reference-item">Brynjolfsson, E., Li, D., &amp; Raymond, L. R. (2023). "Generative AI at Work." NBER Working Paper 31161. <a href="https://www.nber.org/papers/w31161" target="_blank" rel="noopener">https://www.nber.org/papers/w31161</a></li>
+                    <li class="reference-item">Shannon, C. E. (1948). "A Mathematical Theory of Communication." Bell System Technical Journal, 27(3), 379-423. <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x" target="_blank" rel="noopener">https://doi.org/10.1002/j.1538-7305.1948.tb01338.x</a></li>
+                    <li class="reference-item">Lee, H.-P., Sarkar, A., Tankelevitch, L., et al. (2025). "The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers." Proceedings of CHI 2025, ACM. <a href="https://doi.org/10.1145/3706598.3713778" target="_blank" rel="noopener">https://doi.org/10.1145/3706598.3713778</a></li>
+                    <li class="reference-item">Ericsson, K. A., Krampe, R. T., &amp; Tesch-R&ouml;mer, C. (1993). "The Role of Deliberate Practice in the Acquisition of Expert Performance." Psychological Review, 100(3), 363-406. <a href="https://doi.org/10.1037/0033-295X.100.3.363" target="_blank" rel="noopener">https://doi.org/10.1037/0033-295X.100.3.363</a></li>
+                    <li class="reference-item">Kahneman, D., &amp; Klein, G. (2009). "Conditions for Intuitive Expertise: A Failure to Disagree." American Psychologist, 64(6), 515-526. <a href="https://doi.org/10.1037/a0016755" target="_blank" rel="noopener">https://doi.org/10.1037/a0016755</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
