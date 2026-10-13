@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Space for Everything | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_67.png" alt="One Space for Everything" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">Multimodal AI</span>
+                        <span class="category-badge category-cognitive">Memory</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">One Space for Everything</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 13, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~7 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>I forget a lot of things, and I think that is fine. What is not fine is the amount of information we have to consume.</p>
+
+<p>Last week, on October 6, Google released EmbeddingGemma 2 [1]. It is a model that can help you find a video clip from a spoken description, search hours of audio recordings with a typed question, or find a picture by showing it another picture. It has 740 million parameters, runs on your own device, and is available under the Apache 2.0 license. That is a useful set of abilities for something this small.</p>
+
+<p>Here is why it got me excited. Imagine a pile of badly named videos on your computer. You record a voice memo asking for one specific moment, and a search app built on this model brings back the clip. Google uses almost exactly this example [1]. I don't know about you, but to me that sounds a little magical. And I can feel how well it fits my own memory, and my agents' memory too.</p>
+
+<h2>My memory was never in the filenames</h2>
+
+<p>Look at how a personal archive is actually labeled. <code>VID_20250612_1833.mp4</code>. <code>Recording 47.m4a</code>. <code>IMG_8812.jpg</code>. The camera picked those names, not me. I record more than ever: meetings, whiteboards, talks, voice notes on a walk. I go back to almost none of it, because the only handle a search box has is the filename, and the filename says nothing about what happened.</p>
+
+<p>So most of what I record is write-only memory. It is stored, and it is never retrieved. The usual fix is discipline: rename files, tag photos, write a summary after each meeting. I have tried. It lasts about two weeks. The labeling step is exactly the step a person with too much to consume will skip.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 334" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig1-title">The same spoken question run against filename search and meaning search</title>
+            <desc id="fig1-desc">A voice memo asking for the whiteboard part of a design review finds nothing by filename, because no name mentions a whiteboard. Searching by meaning ranks the meeting recording first and points to the moment at 14:20.</desc>
+            <defs><marker id="f1arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Same question, two kinds of search (illustrative)</text>
+            <rect x="140" y="48" width="360" height="52" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="320" y="68" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle" font-weight="700" letter-spacing="0.06em">YOUR VOICE MEMO</text>
+            <text x="320" y="89" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle">&quot;the whiteboard part of the design review&quot;</text>
+            <line x1="240" y1="100" x2="170" y2="126" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f1arr)"/>
+            <line x1="400" y1="100" x2="470" y2="126" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f1arr)"/>
+            <rect x="20" y="132" width="290" height="190" rx="8" fill="none" stroke="#2a3f5f"/>
+            <rect x="330" y="132" width="290" height="190" rx="8" fill="none" stroke="#2a3f5f"/>
+            <text x="36" y="154" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">SEARCH BY NAME</text>
+            <text x="346" y="154" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="start" font-weight="700" letter-spacing="0.06em">SEARCH BY MEANING</text>
+            <rect x="36" y="166" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="46" y="182" font-family="Consolas, monospace" font-size="12" fill="#64748b">VID_20250612_1833.mp4</text>
+            <rect x="36" y="198" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="46" y="214" font-family="Consolas, monospace" font-size="12" fill="#64748b">Recording 47.m4a</text>
+            <rect x="36" y="230" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="46" y="246" font-family="Consolas, monospace" font-size="12" fill="#64748b">IMG_8812.jpg</text>
+            <rect x="36" y="262" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="46" y="278" font-family="Consolas, monospace" font-size="12" fill="#64748b">meeting (3).mp4</text>
+            <text x="36" y="308" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">0 matches. No name says whiteboard.</text>
+            <rect x="346" y="166" width="258" height="24" rx="4" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+            <text x="356" y="182" font-family="Consolas, monospace" font-size="12" fill="#f1f5f9">meeting (3).mp4 at 14:20</text>
+            <text x="594" y="182" font-family="Consolas, monospace" font-size="12" fill="#f59e0b" text-anchor="end">0.71</text>
+            <rect x="346" y="198" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="356" y="214" font-family="Consolas, monospace" font-size="12" fill="#94a3b8">IMG_8812.jpg</text>
+            <text x="594" y="214" font-family="Consolas, monospace" font-size="12" fill="#60a5fa" text-anchor="end">0.52</text>
+            <rect x="346" y="230" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="356" y="246" font-family="Consolas, monospace" font-size="12" fill="#94a3b8">Recording 47.m4a</text>
+            <text x="594" y="246" font-family="Consolas, monospace" font-size="12" fill="#60a5fa" text-anchor="end">0.24</text>
+            <rect x="346" y="262" width="258" height="24" rx="4" fill="#1a2942"/>
+            <text x="356" y="278" font-family="Consolas, monospace" font-size="12" fill="#94a3b8">VID_20250612_1833.mp4</text>
+            <text x="594" y="278" font-family="Consolas, monospace" font-size="12" fill="#60a5fa" text-anchor="end">0.09</text>
+            <text x="346" y="308" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" font-weight="600">Top hit: the clip, at the right moment.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Filename search can only match what someone typed. Meaning search compares the question with the content itself, so the recording ranks first, and a photo of the same whiteboard ranks second. File names and scores are illustrative.</figcaption>
+</figure>
+
+<h2>One space for everything</h2>
+
+<p>The technology underneath is called an <strong>embedding</strong>. An embedding model reads a piece of content and turns it into a list of numbers, which you can think of as coordinates on a very large map. The model is trained so that things with similar meaning land close together. Search then becomes simple geometry: turn the question into a point, and return whatever sits nearest to it.</p>
+
+<p>Text embeddings have been around for years. In 2021, OpenAI's CLIP showed that pictures and captions could share one map [4], and in 2023 Meta's ImageBind pushed the idea to six kinds of data [5]. EmbeddingGemma 2 puts text, code, images, video and audio on one map of 768 numbers per item [3], in a model small enough for a phone. Its text-only predecessor, released in 2025, was built for exactly that kind of device [7].</p>
+
+<blockquote>Search used to match what I typed against what I named. A shared space matches what I mean against what I recorded. The naming step, the one I always skip, is no longer needed.</blockquote>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 346" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Four kinds of content mapped into one shared embedding space</title>
+            <desc id="fig2-desc">A voice memo, a video clip, a photo or sketch, and a text note all pass through one model and become points on the same map. The voice memo lands next to the video clip it describes, so finding the clip is a nearest-neighbour lookup.</desc>
+            <defs><marker id="f2arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">One model, one map, every format</text>
+            <rect x="20" y="56" width="150" height="44" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="95" y="83" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600">Voice memo</text>
+            <rect x="20" y="112" width="150" height="44" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="95" y="139" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600">Video clip</text>
+            <rect x="20" y="168" width="150" height="44" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="95" y="195" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600">Photo or sketch</text>
+            <rect x="20" y="224" width="150" height="44" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="95" y="251" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="600">Text note or code</text>
+            <line x1="171" y1="78" x2="177" y2="78" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+            <line x1="171" y1="134" x2="177" y2="134" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+            <line x1="171" y1="190" x2="177" y2="190" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+            <line x1="171" y1="246" x2="177" y2="246" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+            <rect x="182" y="56" width="150" height="212" rx="8" fill="#1a2942" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="257" y="146" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700">EmbeddingGemma 2</text>
+            <text x="257" y="170" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">740M parameters</text>
+            <text x="257" y="194" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">768 numbers</text>
+            <text x="257" y="212" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">per item</text>
+            <line x1="334" y1="162" x2="350" y2="162" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+            <rect x="356" y="56" width="264" height="212" rx="10" fill="none" stroke="#2a3f5f" stroke-width="1.5" stroke-dasharray="6 5"/>
+            <text x="370" y="76" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">SHARED SPACE</text>
+            <g fill="#60a5fa" fill-opacity="0.55">
+                <circle cx="390" cy="110" r="4"/><circle cx="412" cy="98" r="4"/><circle cx="402" cy="132" r="4"/><circle cx="432" cy="120" r="4"/>
+                <circle cx="556" cy="94" r="4"/><circle cx="582" cy="108" r="4"/><circle cx="598" cy="86" r="4"/><circle cx="502" cy="100" r="4"/>
+                <circle cx="392" cy="218" r="4"/><circle cx="414" cy="238" r="4"/><circle cx="438" cy="224" r="4"/><circle cx="452" cy="250" r="4"/>
+                <circle cx="560" cy="232" r="4"/><circle cx="590" cy="246" r="4"/><circle cx="600" cy="212" r="4"/><circle cx="530" cy="250" r="4"/>
+                <circle cx="428" cy="182" r="4"/><circle cx="378" cy="168" r="4"/>
+            </g>
+            <circle cx="482" cy="161" r="30" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <circle cx="470" cy="156" r="6" fill="#f59e0b"/>
+            <circle cx="494" cy="166" r="6" fill="#60a5fa"/>
+            <circle cx="494" cy="166" r="10" fill="none" stroke="#f59e0b" stroke-width="2"/>
+            <text x="518" y="150" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="start" font-weight="600">voice memo</text>
+            <text x="518" y="182" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="start" font-weight="600">video clip</text>
+            <text x="95" y="290" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">any format in</text>
+            <text x="257" y="290" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">one checkpoint</text>
+            <text x="488" y="290" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">near means similar, in any format</text>
+            <text x="320" y="326" font-family="Inter, sans-serif" font-size="13" fill="#f59e0b" text-anchor="middle" font-weight="600">Search is distance: the memo&#39;s nearest neighbour is the clip.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> Every format lands on the same 768-number map, so a question in one format can find an answer in another. The model has 740M parameters in total, and the map is shared across all of its parts [2][3].</figcaption>
+</figure>
+
+<p>What about a rough sketch? A photo of a sketch is just another image, so it can query the library the same way a photo does, and Google demonstrates image-to-image search in its gallery app [1]. Google has not published results for hand-drawn sketches, though. Treat sketch search as something to test on your own collection, not a promise.</p>
+
+<h2>Small enough to stay home</h2>
+
+<p>For personal memory, where the model runs matters as much as what it does. My voice memos and family videos are not things I want to upload so that a cloud service can index them. EmbeddingGemma 2 is built to run on the device that already holds the files.</p>
+
+<p>The model is modular. The text part is 270 million parameters, a vision encoder adds 170 million, and an audio encoder adds 300 million [2]. You load only what you need, and all four configurations write to the same map, so a phone running the small text-only version can query an index the full model built on a laptop overnight. Google measured about 191 MB of memory for the quantized text-only model and about 567 MB for the full multimodal one on a Pixel 11 Pro [1]. The Apache 2.0 license means no per-query fee and no permission to ask.</p>
+
+<p>One practical detail shapes how you build with it. Each embedding has a budget of 8,192 tokens, roughly 29 images, 58 video frames, or about five and a half minutes of audio [3]. Video is sampled at one frame per second by default, so a long recording gets cut into windows of about a minute, and each window becomes its own point on the map. That is the reason search can return a moment and not just a file.</p>
+
+<h2>Shrinking the map has a price</h2>
+
+<p>Storage is the other half of running locally. Each item is 768 numbers by default, and the model is trained with <strong>Matryoshka representation learning</strong> [6], which packs the most important information into the first numbers. You can keep only the first 512, 256 or 128 of them. A million vectors take about 1.5 GB at full size and about 250 MB at 128 [2].</p>
+
+<p>The model card shows that the saving is not free, and that the cost depends on the format [3].</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 312" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig3-title">Share of full-size retrieval quality kept as embeddings shrink from 768 to 128 numbers</title>
+            <desc id="fig3-desc">At 256 numbers every task keeps at least 95 percent of its full score. At 128 numbers text keeps 94 percent and code 91 percent, while speech search falls to 82 percent and image, video and document retrieval to 77 percent.</desc>
+            <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Shrinking vectors: nearly free for text, costly for media</text>
+            <text x="80" y="52" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start">score kept, % of full size</text>
+            <rect x="290" y="56" width="40" height="208" fill="#60a5fa" fill-opacity="0.07"/>
+            <line x1="80" y1="60" x2="420" y2="60" stroke="#2a3f5f"/>
+            <line x1="80" y1="126.7" x2="420" y2="126.7" stroke="#2a3f5f"/>
+            <line x1="80" y1="193.3" x2="420" y2="193.3" stroke="#2a3f5f"/>
+            <line x1="80" y1="260" x2="420" y2="260" stroke="#2a3f5f"/>
+            <text x="72" y="64" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="end">100%</text>
+            <text x="72" y="131" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="end">90%</text>
+            <text x="72" y="197" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="end">80%</text>
+            <text x="72" y="264" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="end">70%</text>
+            <polyline points="110,60 210,62 310,70 410,98" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
+            <polyline points="110,60 210,72 310,81.3 410,121.3" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <polyline points="110,60 210,63.3 310,86.7 410,182.7" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <polyline points="110,60 210,67.3 310,91.3 410,210.7" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+            <g fill="#60a5fa"><circle cx="210" cy="62" r="3.5"/><circle cx="310" cy="70" r="3.5"/><circle cx="410" cy="98" r="3.5"/><circle cx="210" cy="72" r="3.5"/><circle cx="310" cy="81.3" r="3.5"/><circle cx="410" cy="121.3" r="3.5"/></g>
+            <g fill="#f59e0b"><circle cx="210" cy="63.3" r="3.5"/><circle cx="310" cy="86.7" r="3.5"/><circle cx="410" cy="182.7" r="3.5"/><circle cx="210" cy="67.3" r="3.5"/><circle cx="310" cy="91.3" r="3.5"/><circle cx="410" cy="210.7" r="3.5"/></g>
+            <circle cx="110" cy="60" r="3.5" fill="#f1f5f9"/>
+            <text x="420" y="102" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="start" font-weight="600">text 94%</text>
+            <text x="420" y="125" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="start" font-weight="600">code 91%</text>
+            <text x="420" y="187" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="start" font-weight="600">speech search 82%</text>
+            <text x="420" y="215" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="start" font-weight="600">images, video, docs 77%</text>
+            <text x="310" y="250" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">95%+ on all</text>
+            <text x="110" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">768</text>
+            <text x="210" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">512</text>
+            <text x="310" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">256</text>
+            <text x="410" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">128</text>
+            <text x="110" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">full size</text>
+            <text x="210" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">1.5x smaller</text>
+            <text x="310" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">3x smaller</text>
+            <text x="410" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">6x smaller</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 3.</b> Each line is a benchmark score divided by its own full-size score, so the lines compare how much quality survives, not which task is easier. Text is MTEB multilingual, code is MTEB code, speech search is MSEB retrieval, and images, video and documents are the MMEB overall score. Source: the EmbeddingGemma 2 model card [3].</figcaption>
+</figure>
+
+<p>Text barely notices the cut. Pictures and sound do. For a personal archive that is mostly video and voice, 256 numbers is the sensible default: it keeps at least 95% of the quality on every task at a third of the storage. Use 128 only for text, and only after checking it on your own data.</p>
+
+<h2>The same index serves my agents</h2>
+
+<p>I wrote before about <a href="the-rediscovery-tax.html">the cost of an agent relearning</a> what another agent already solved. Most agent memory today is text: notes, logs, transcripts. That leaves out a lot of what actually happened, such as the screenshot of the error, the diagram on the whiteboard, or the five minutes of a call where the decision was made.</p>
+
+<p>A shared space lets an agent store those as they are and find them with the same question it would use for a note. EmbeddingGemma 2 also shares its text tokenizer and audio encoder with Gemma 4, so a small local assistant can run both models together for less memory than two separate ones [1]. The embedding model finds. The language model reads what was found and reasons about it.</p>
+
+<h2>Where it falls short</h2>
+
+<p>The benchmark numbers come from Google, and they are good rather than perfect. The video retrieval score is 50.67 on MMEB v2 [3], which means plenty of misses on hard queries. The model card also warns that subtle nuance, sarcasm and figurative language remain hard, and that quality varies across its 100+ languages [3]. Its training data stops in January 2025. For a personal archive the bar is lower than that: finding the thing at all.</p>
+
+<p>I will keep forgetting. What I need is a cheaper way back to what I already recorded. A free model that fits on a phone and understands the formats I actually record in makes that way back very cheap.</p>
+
+<p>What excites me most is that one index can serve both of us. The map that lets me find a moment with a voice memo is the same map that lets my agent find it with a sentence. Personal memory and agent memory stop being two projects.</p>
+
+<h2>What leaders should do</h2>
+
+<ol class="list-decimal space-y-3">
+<li>Pick one archive your people already struggle to search, such as recorded meetings, field photos or support calls, and pilot a local multimodal index on it. Measure the time to find a known item before and after.</li>
+<li>Keep sensitive media on the device. Prefer embedding models you can run locally under a permissive license, so recordings never leave the machine to become searchable.</li>
+<li>Test on your own content before trusting the benchmarks. Write 30 questions with known answers, including spoken questions and sketch queries, and check how often the right item lands in the top three at 768 and at 256 numbers.</li>
+<li>Store mixed media at 256 numbers by default, and cut long video and audio into one-minute windows, so results point to the moment and not just the file.</li>
+</ol>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is how you work the brief window before new information decays.</p>
+                        <a href="the-memory-workbench.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Rediscovery Tax</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A problem solved by one agent should not have to be learned from scratch by the next one. Closing that gap takes more than storage.</p>
+                        <a href="the-rediscovery-tax.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Efficiency Trilemma</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Accuracy, speed and energy in small language models: why the most accurate SLM is rarely the right choice for production.</p>
+                        <a href="small-model-efficiency.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Google. (2026, October 6). <em>"EmbeddingGemma 2 is a best-in-class open model for natively multimodal embeddings."</em> The Keyword, Google Blog.
+                        <a href="https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/" target="_blank">https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/</a>
+                    </li>
+                    <li class="reference-item">
+                        Google for Developers. (2026). <em>"EmbeddingGemma 2: The Developer Guide."</em> Google Developers Blog.
+                        <a href="https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/" target="_blank">https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/</a>
+                    </li>
+                    <li class="reference-item">
+                        Google DeepMind. (2026). <em>"google/embeddinggemma-2" model card</em> (architecture, input limits, benchmark and truncation tables, limitations). Hugging Face.
+                        <a href="https://huggingface.co/google/embeddinggemma-2" target="_blank">https://huggingface.co/google/embeddinggemma-2</a>
+                    </li>
+                    <li class="reference-item">
+                        Radford, A., Kim, J. W., Hallacy, C., et al. (2021). <em>"Learning Transferable Visual Models From Natural Language Supervision"</em> (CLIP). ICML 2021.
+                        <a href="https://arxiv.org/abs/2103.00020" target="_blank">https://arxiv.org/abs/2103.00020</a>
+                    </li>
+                    <li class="reference-item">
+                        Girdhar, R., El-Nouby, A., Liu, Z., et al. (2023). <em>"ImageBind: One Embedding Space To Bind Them All."</em> CVPR 2023.
+                        <a href="https://arxiv.org/abs/2305.05665" target="_blank">https://arxiv.org/abs/2305.05665</a>
+                    </li>
+                    <li class="reference-item">
+                        Kusupati, A., Bhatt, G., Rege, A., et al. (2022). <em>"Matryoshka Representation Learning."</em> NeurIPS 2022.
+                        <a href="https://arxiv.org/abs/2205.13147" target="_blank">https://arxiv.org/abs/2205.13147</a>
+                    </li>
+                    <li class="reference-item">
+                        Schechter Vera, H., et al. (2025). <em>"EmbeddingGemma: Powerful and Lightweight Text Representations."</em> arXiv:2509.20354.
+                        <a href="https://arxiv.org/abs/2509.20354" target="_blank">https://arxiv.org/abs/2509.20354</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
