@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Weights, Closed Numbers | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_69.png" alt="Open Weights, Closed Numbers" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-workflow">Workflow</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Open Weights, Closed Numbers</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Three open models shipped in one week. Only one of them shipped the evidence.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>"Open-weight" used to describe a file. Last week it started describing a plan.</p>
+
+                    <p>Three open models were announced within two days. On October 5, Reflection AI introduced Beam as "Reflection's 501B open-weight model", with the weights, technical report and model card promised "later this month" under Apache 2.0, and access until then through a waitlist [1]. On October 6, Mistral opened a public API preview of Mistral Large 4 and promised open weights "by the end of the month", under a license it has not yet named [2][3]. The same day, Google published EmbeddingGemma 2 with its weights on Hugging Face, an Apache 2.0 license and a model card that carries the benchmark tables [4]. Three announcements, three uses of the word open, and one file you can download today.</p>
+
+                    <p>This is not an accusation. Both large models may ship on time and score as advertised. The question is what you can act on in the meantime, and the answer is less than the headlines suggest. The word open has moved from the weights to the roadmap, and the numbers that travel with a roadmap are the vendor's own.</p>
+
+                    <blockquote>An open-weight label at announcement time is a promise. The evidence you can act on is whatever someone outside the company has measured, and this week that existed for one model out of three.</blockquote>
+
+                    <h2>Three releases, three kinds of evidence</h2>
+
+                    <p>Beam arrived with benchmark tables for coding, reasoning, tool use and long context, every one of them run by Reflection. The page now carries a note dated October 8: "We've updated Beam's results, and the tables above reflects the latest numbers" [1]. Three days after launch, the vendor's own chart was still moving. There is no public independent score, because outside the waitlist nobody can run the model.</p>
+
+                    <p>Mistral Large 4 is different in one important way: the weights are not out, but the API is, so outsiders can measure. Artificial Analysis, the independent evaluator most teams check first, lists "Mistral Large 4 Preview" at 38 on its Intelligence Index, rank 65 of 216 models [5]. Read the label it assigns: "Proprietary model. The model weights are not publicly available." To an evaluator, a promised open model is a proprietary model until the file lands. Mistral's own post also quotes third-party results from vals.ai and a blind human coding evaluation by Surge AI [2], which is more than most previews offer.</p>
+
+                    <p>EmbeddingGemma 2 is the counterexample. It is small, 740 million parameters, and that is part of why Google could afford to be complete. The card ships the weights in 16-bit, names Apache 2.0, and lists its scores on MTEB, the public embedding benchmark whose harness and leaderboard anyone can run [4][7]. By the time I checked, the card reported 135,175 downloads for the month. Every one of those is a potential independent measurement, and the first ones were already on the leaderboard.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 292" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">What each of the three October releases had actually delivered by October 14, 2026</title>
+                                <desc id="fig1-desc">A matrix of three models against five things an open release can provide. Beam has vendor numbers only; its weights, license and independent numbers are promised, and it cannot be rerun. Mistral Large 4 has vendor numbers and an independent score through its API, with weights promised and no license named. EmbeddingGemma 2 has all five: downloadable weights, Apache 2.0, vendor numbers, independent numbers on a public leaderboard, and anyone can rerun it.</desc>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">What was delivered, as of October 14, 2026</text>
+
+                                <text x="207" y="63" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">WEIGHTS</text>
+                                <text x="301" y="63" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">LICENSE</text>
+                                <text x="395" y="56" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">VENDOR</text>
+                                <text x="395" y="70" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">NUMBERS</text>
+                                <text x="489" y="56" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">OUTSIDE</text>
+                                <text x="489" y="70" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">NUMBERS</text>
+                                <text x="583" y="56" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">YOU CAN</text>
+                                <text x="583" y="70" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">RERUN IT</text>
+
+                                <text x="20" y="108" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" font-weight="700">Beam</text>
+                                <text x="20" y="124" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">Reflection, Oct 5</text>
+                                <rect x="165" y="92" width="84" height="44" rx="6" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="207" y="110" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="middle" font-weight="600">Promised</text>
+                                <text x="207" y="126" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">later in Oct</text>
+                                <rect x="259" y="92" width="84" height="44" rx="6" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="301" y="110" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="middle" font-weight="600">Promised</text>
+                                <text x="301" y="126" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Apache 2.0</text>
+                                <rect x="353" y="92" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="395" y="110" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="395" y="126" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">revised Oct 8</text>
+                                <rect x="447" y="92" width="84" height="44" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="489" y="110" font-family="Inter, sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="600">Not yet</text>
+                                <text x="489" y="126" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">waitlist only</text>
+                                <rect x="541" y="92" width="84" height="44" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="583" y="110" font-family="Inter, sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="600">No</text>
+                                <text x="583" y="126" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">no access</text>
+
+                                <text x="20" y="168" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" font-weight="700">Mistral Large 4</text>
+                                <text x="20" y="184" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">Mistral, Oct 6</text>
+                                <rect x="165" y="152" width="84" height="44" rx="6" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="207" y="170" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" text-anchor="middle" font-weight="600">Promised</text>
+                                <text x="207" y="186" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">end of Oct</text>
+                                <rect x="259" y="152" width="84" height="44" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="301" y="170" font-family="Inter, sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="600">Not named</text>
+                                <text x="301" y="186" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">"open-weight"</text>
+                                <rect x="353" y="152" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="395" y="170" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="395" y="186" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">plus 3rd party</text>
+                                <rect x="447" y="152" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="489" y="170" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes, via API</text>
+                                <text x="489" y="186" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">AA index 38</text>
+                                <rect x="541" y="152" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="583" y="170" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Via API</text>
+                                <text x="583" y="186" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">API only</text>
+
+                                <text x="20" y="228" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" font-weight="700">EmbeddingGemma 2</text>
+                                <text x="20" y="244" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">Google, Oct 6</text>
+                                <rect x="165" y="212" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="207" y="230" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="207" y="246" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Hugging Face</text>
+                                <rect x="259" y="212" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="301" y="230" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="301" y="246" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Apache 2.0</text>
+                                <rect x="353" y="212" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="395" y="230" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="395" y="246" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">on the card</text>
+                                <rect x="447" y="212" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="489" y="230" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="489" y="246" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">MTEB, public</text>
+                                <rect x="541" y="212" width="84" height="44" rx="6" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="583" y="230" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle" font-weight="600">Yes</text>
+                                <text x="583" y="246" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">on your device</text>
+
+                                <text x="20" y="280" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Blue: delivered. Amber dashed: promised with a date. Grey: not available.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Three releases carrying the same word, with very different amounts delivered behind it. The matrix is a snapshot and will change when the large models ship. Sources: Reflection AI [1], Mistral AI [2][3], Hugging Face model card [4], Artificial Analysis [5].</figcaption>
+                    </figure>
+
+                    <h2>The ladder of evidence</h2>
+
+                    <p>Put the three side by side and a ladder appears. Each rung is something you can do with a model, and each rung costs the vendor a little more control.</p>
+
+                    <p>On the first rung you read the vendor's numbers. Their harness, their choice of competitors, their right to revise. On the second you read an outside run: someone with no stake measured the model, through an API if that is all there is. On the third you run it on your own task, which is the first number that means anything for your decision. On the fourth you run it where you control it, on weights you downloaded, on hardware you own, with a license that says you may. The fourth rung is the one an open-weight claim is about, and it is the only rung the vendor cannot take back. A revised chart is a revised chart. A downloaded checkpoint is a fact.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 296" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">Four rungs of evidence about a model, and which rung each October release has reached</title>
+                                <desc id="fig2-desc">The rungs, left to right: read the vendor's numbers, read an outside run, run it on your own task, run it where you control it. Beam has reached only the first. Mistral Large 4 has reached the first three through its API. EmbeddingGemma 2 has reached all four.</desc>
+                                <defs><marker id="f2arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Four rungs of evidence, and who has reached each one</text>
+
+                                <rect x="14" y="56" width="146" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="87" y="80" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="700">Vendor&#39;s numbers</text>
+                                <text x="87" y="100" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">their harness, their pick</text>
+                                <rect x="172" y="56" width="146" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="245" y="80" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="700">An outside run</text>
+                                <text x="245" y="100" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">no stake, any access</text>
+                                <rect x="330" y="56" width="146" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="403" y="80" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="700">Your own task</text>
+                                <text x="403" y="100" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">your data, any access</text>
+                                <rect x="488" y="56" width="146" height="60" rx="8" fill="rgba(96,165,250,0.10)" stroke="#60a5fa"/>
+                                <text x="561" y="80" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="700">Where you control it</text>
+                                <text x="561" y="100" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">your GPU, your license</text>
+
+                                <line x1="14" y1="132" x2="626" y2="132" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#f2arr)"/>
+                                <text x="320" y="152" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">evidence you can act on, and the vendor&#39;s control over it, move in opposite directions</text>
+
+                                <rect x="22" y="172" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="87" y="188" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">Beam</text>
+                                <rect x="22" y="202" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="87" y="218" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">Mistral Large 4</text>
+                                <rect x="22" y="232" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="87" y="248" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">EmbeddingGemma 2</text>
+
+                                <rect x="180" y="172" width="130" height="24" rx="4" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="245" y="188" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle">Beam: not yet</text>
+                                <rect x="180" y="202" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="245" y="218" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">Mistral Large 4</text>
+                                <rect x="180" y="232" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="245" y="248" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">EmbeddingGemma 2</text>
+
+                                <rect x="338" y="172" width="130" height="24" rx="4" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="403" y="188" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle">Beam: waitlist</text>
+                                <rect x="338" y="202" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="403" y="218" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">Mistral Large 4, API</text>
+                                <rect x="338" y="232" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="403" y="248" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">EmbeddingGemma 2</text>
+
+                                <rect x="496" y="172" width="130" height="24" rx="4" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="561" y="188" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle">Beam: later in Oct</text>
+                                <rect x="496" y="202" width="130" height="24" rx="4" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="561" y="218" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle">Large 4: end of Oct</text>
+                                <rect x="496" y="232" width="130" height="24" rx="4" fill="rgba(96,165,250,0.14)" stroke="#60a5fa"/>
+                                <text x="561" y="248" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">EmbeddingGemma 2</text>
+
+                                <text x="20" y="282" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Status as of October 14, 2026. Blue: reached. Amber dashed: promised or gated.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The rung that an open-weight claim is about is the last one, and only the smallest of the three releases has reached it. The ranking says nothing about capability; it ranks how much you can know today. Sources: [1] to [5].</figcaption>
+                    </figure>
+
+                    <h2>Why this will happen again</h2>
+
+                    <p>There is a precedent, and the name is an unlucky coincidence. In September 2024 a model called Reflection 70B, from OthersideAI and unrelated to Reflection AI, was announced as the most capable open model available. Artificial Analysis could not reproduce the claim; the public weights underperformed the Llama 3.1 70B they were built on, and by October 5 the founder acknowledged the model "didn't achieve the benchmarks originally reported" [6]. The lesson was not that anyone lied. It was that the gap between the announcement and the download is exactly where benchmark numbers go to drift.</p>
+
+                    <p>The incentives have not changed since. Announcement timing is competitive, which is how two labs ended up one day apart. Numbers are cheapest to publish before the weights ship, because nobody can contradict them yet. And a "preview" label grants the right to revise, which Reflection used within three days. None of that is dishonest. All of it means the number you read on launch day has a shorter half-life than the number you read after the file lands.</p>
+
+                    <h2>What to wait for</h2>
+
+                    <p>The practical response is a short checklist, applied in order, before a model gets anywhere near a procurement decision.</p>
+
+                    <ol>
+                        <li>The file, not the post. A public repository with weights you can download without a waitlist, in a format you can load.</li>
+                        <li>The license text, not the license name. "Open-weight" is a description, and Mistral has not yet said which license applies. Apache 2.0, which Reflection promises, is a specific document with specific permissions.</li>
+                        <li>An outside run on that file, on a benchmark whose harness is public. The Artificial Analysis index, the MTEB leaderboard and the published SWE-bench harness all qualify, because you could repeat them.</li>
+                        <li>Your own run on your own task. Everything above this line tells you how the model does on someone else's problem.</li>
+                    </ol>
+
+                    <p>EmbeddingGemma 2 cleared all four on the day it shipped. Mistral Large 4 has cleared two and lets you attempt the fourth through its API today. Beam has cleared one. That ordering has nothing to do with which model is best. It is an ordering of how much you can know right now, and that is the only ordering a buyer can use.</p>
+
+                    <h2>Conclusion</h2>
+
+                    <p>Open used to be binary: the weights were on the internet or they were not. It is now a timeline, with the label attached at the start and the file attached at the end, and the vendor's numbers filling the space between. Reading those numbers as an opening bid rather than a result is not cynicism. The vendors publish the dates themselves.</p>
+
+                    <p>The habit to build is a small one: separate what was announced from what was delivered, every time, in writing. The companion piece to this article explains why the number on the card is not the price. This one is simpler. The number on the card is not yet the number.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Keep "announced open" and "downloadable" as separate columns in every model status report. A model is open on the day the file is public, not on the day the post is.</li>
+                        <li>Refuse production approval on vendor-run benchmarks alone. Require at least one named outside run, with a link to the harness, before a model enters a pilot.</li>
+                        <li>Keep a short evaluation of your own tasks ready to run, so that the day the weights land you can produce your own number within hours rather than weeks.</li>
+                        <li>Record the license, not the label. If the license is unnamed, the model is approved for nothing, however open the announcement sounded.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Active Parameter</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A sparse model has two sizes. One sets what you pay per token, the other sets what you must buy before the first token.</p>
+                        <a href="the-active-parameter.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Sparse Everywhere</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Capability is now cheaper to route than to grow, and the same bet shows up at every model size.</p>
+                        <a href="sparse-everywhere.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Benchmark You Build</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.</p>
+                        <a href="the-benchmark-you-build.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Reflection AI. (2026, October 5, updated October 8). <em>"Introducing Beam: Reflection's 501B open-weight model."</em> Reflection AI Blog.
+                        <a href="https://reflection.ai/blog/introducing-beam" target="_blank">https://reflection.ai/blog/introducing-beam</a>
+                    </li>
+                    <li class="reference-item">
+                        Mistral AI. (2026, October 6). <em>"Mistral Large 4."</em> Mistral AI News.
+                        <a href="https://mistral.ai/news/mistral-large-4" target="_blank">https://mistral.ai/news/mistral-large-4</a>
+                    </li>
+                    <li class="reference-item">
+                        Mistral AI. (2026). <em>"Mistral Large 4" model page</em> (public preview v26.10, "open-weight", no license named). Mistral Docs.
+                        <a href="https://docs.mistral.ai/models/mistral-large-4-0" target="_blank">https://docs.mistral.ai/models/mistral-large-4-0</a>
+                    </li>
+                    <li class="reference-item">
+                        Google DeepMind. (2026). <em>"google/embeddinggemma-2" model card</em> (weights, Apache 2.0, MTEB and MMEB benchmark tables, download count). Hugging Face.
+                        <a href="https://huggingface.co/google/embeddinggemma-2" target="_blank">https://huggingface.co/google/embeddinggemma-2</a>
+                    </li>
+                    <li class="reference-item">
+                        Artificial Analysis. (2026). <em>"Mistral Large 4 Preview"</em> (Intelligence Index v4.3.2 score 38, rank 65 of 216, labelled proprietary while weights are unavailable).
+                        <a href="https://artificialanalysis.ai/models/mistral-large-4" target="_blank">https://artificialanalysis.ai/models/mistral-large-4</a>
+                    </li>
+                    <li class="reference-item">
+                        The Decoder. (2024, September 6, updated October 5). <em>"'World's best open source model' falls short of promised performance"</em> (Reflection 70B and the Artificial Analysis retest).
+                        <a href="https://the-decoder.com/worlds-best-open-source-model-falls-short-of-promised-performance/" target="_blank">https://the-decoder.com/worlds-best-open-source-model-falls-short-of-promised-performance/</a>
+                    </li>
+                    <li class="reference-item">
+                        Muennighoff, N., Tazi, N., Magne, L., Reimers, N. (2022). <em>"MTEB: Massive Text Embedding Benchmark."</em> EACL 2023.
+                        <a href="https://arxiv.org/abs/2210.07316" target="_blank">https://arxiv.org/abs/2210.07316</a>
+                    </li>
+                    <li class="reference-item">
+                        Open Source Initiative. (2024). <em>"The Open Source AI Definition, version 1.0"</em> (what must be available for an AI system to be called open).
+                        <a href="https://opensource.org/ai/open-source-ai-definition" target="_blank">https://opensource.org/ai/open-source-ai-definition</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>

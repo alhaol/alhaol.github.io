@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparse Everywhere | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_70.png" alt="Sparse Everywhere" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-architecture">Architecture</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Sparse Everywhere</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">Capability is now cheaper to route than to grow, and the same bet shows up at every model size.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>The cheapest way to make a model more capable is no longer to make all of it bigger. It is to make more of it, and run less of it.</p>
+
+                    <p>Three releases in one week in October showed the same bet at three very different sizes. Reflection's Beam holds 501 billion parameters and runs 23 billion for each token [10]. Mistral Large 4 holds about 1.05 trillion and runs 52 billion [11]. And Google's EmbeddingGemma 2, at 740 million parameters, is built as a 270 million parameter text core with separate vision and audio encoders that its card calls "selectively loadable", so a developer can "load only the modalities required for their use case" [12]. One model is a thousand times larger than another, and they are built on the same idea: hold more than you run, and let the input decide what runs.</p>
+
+                    <p>That idea has a name inside the model, <strong>mixture-of-experts</strong>, where a router picks a few specialist blocks for each token and leaves the rest idle. It has no single name at the other scales, but it is the same shape, and this article is about the shape rather than the week. The companion pieces cover what the two sizes cost you and how much of the October evidence you can trust. This one asks why every serious lab now makes the same choice.</p>
+
+                    <blockquote>Capability is now cheaper to route than to grow. Hold more than you run, and let the input decide what runs. That is one principle, and it is showing up at every altitude of the stack.</blockquote>
+
+                    <h2>Where the bet came from</h2>
+
+                    <p>The idea is older than the transformer. In 1991 Jacobs, Jordan, Nowlan and Hinton trained a set of small networks with a gating network that decided which one should handle each input, and called it a mixture of local experts [1]. It stayed a curiosity until 2017, when Shazeer and colleagues put a sparsely gated expert layer inside a language model, reached 137 billion parameters, and reported capacity gains of up to a thousand times "with only minor losses in computational efficiency" [2]. GShard scaled the recipe to 600 billion in 2020 [3], and the Switch Transformer showed in 2021 that at the same compute budget the sparse model pretrains up to seven times faster [4].</p>
+
+                    <p>The open-weight turn came in January 2024, when Mixtral 8x7B matched or beat Llama 2 70B while running 13 billion of its 47 billion parameters per token [5]. DeepSeek-V3 then made the modern proportions familiar: 671 billion total, 37 billion active, trained in 2.79 million H800 GPU hours [6]. Through 2025 the total count kept climbing while the active count stayed put: Llama 4 Maverick at 400 billion with 17 active [9], Kimi K2 at a trillion with 32 active [8], and OpenAI's gpt-oss-120b at 117 billion with 5 active [7]. Beam and Mistral Large 4 sit on the same line.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 304" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Total and active parameters of seven open mixture-of-experts models from 2024 to 2026 on a log scale</title>
+                                <desc id="fig1-desc">Each row shows one model as a line from its active parameter count to its total. From Mixtral at 47 billion total to Mistral Large 4 at 1,050 billion, the total end moves right by more than a factor of twenty while the active end stays between 5 and 52 billion.</desc>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">The total ran away; the active stayed in one band</text>
+
+                                <line x1="170" y1="56" x2="170" y2="252" stroke="#2a3f5f" stroke-dasharray="3 4"/>
+                                <line x1="303" y1="56" x2="303" y2="252" stroke="#2a3f5f" stroke-dasharray="3 4"/>
+                                <line x1="437" y1="56" x2="437" y2="252" stroke="#2a3f5f" stroke-dasharray="3 4"/>
+                                <line x1="570" y1="56" x2="570" y2="252" stroke="#2a3f5f" stroke-dasharray="3 4"/>
+
+                                <text x="160" y="70" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Mixtral 8x7B, 2024</text>
+                                <line x1="318" y1="66" x2="393" y2="66" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="318" cy="66" r="5" fill="#60a5fa"/>
+                                <circle cx="393" cy="66" r="5" fill="#f59e0b"/>
+                                <text x="309" y="70" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">13B</text>
+                                <text x="402" y="70" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">47B</text>
+
+                                <text x="160" y="98" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">DeepSeek-V3, 2024</text>
+                                <line x1="379" y1="94" x2="547" y2="94" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="379" cy="94" r="5" fill="#60a5fa"/>
+                                <circle cx="547" cy="94" r="5" fill="#f59e0b"/>
+                                <text x="370" y="98" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">37B</text>
+                                <text x="556" y="98" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">671B</text>
+
+                                <text x="160" y="126" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Llama 4 Maverick, 2025</text>
+                                <line x1="334" y1="122" x2="517" y2="122" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="334" cy="122" r="5" fill="#60a5fa"/>
+                                <circle cx="517" cy="122" r="5" fill="#f59e0b"/>
+                                <text x="325" y="126" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">17B</text>
+                                <text x="526" y="126" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">400B</text>
+
+                                <text x="160" y="154" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Kimi K2, 2025</text>
+                                <line x1="371" y1="150" x2="570" y2="150" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="371" cy="150" r="5" fill="#60a5fa"/>
+                                <circle cx="570" cy="150" r="5" fill="#f59e0b"/>
+                                <text x="362" y="154" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">32B</text>
+                                <text x="579" y="154" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">1,000B</text>
+
+                                <text x="160" y="182" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">gpt-oss-120b, 2025</text>
+                                <line x1="264" y1="178" x2="446" y2="178" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="264" cy="178" r="5" fill="#60a5fa"/>
+                                <circle cx="446" cy="178" r="5" fill="#f59e0b"/>
+                                <text x="255" y="182" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">5B</text>
+                                <text x="455" y="182" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">117B</text>
+
+                                <text x="160" y="210" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Beam, 2026</text>
+                                <line x1="352" y1="206" x2="530" y2="206" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="352" cy="206" r="5" fill="#60a5fa"/>
+                                <circle cx="530" cy="206" r="5" fill="#f59e0b"/>
+                                <text x="343" y="210" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">23B</text>
+                                <text x="539" y="210" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">501B</text>
+
+                                <text x="160" y="238" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Mistral Large 4, 2026</text>
+                                <line x1="399" y1="234" x2="573" y2="234" stroke="#2a3f5f" stroke-width="2"/>
+                                <circle cx="399" cy="234" r="5" fill="#60a5fa"/>
+                                <circle cx="573" cy="234" r="5" fill="#f59e0b"/>
+                                <text x="390" y="238" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="end">52B</text>
+                                <text x="582" y="238" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">1,050B</text>
+
+                                <line x1="170" y1="256" x2="610" y2="256" stroke="#2a3f5f"/>
+                                <text x="170" y="272" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">1B</text>
+                                <text x="303" y="272" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">10B</text>
+                                <text x="437" y="272" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">100B</text>
+                                <text x="570" y="272" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">1T</text>
+
+                                <circle cx="176" cy="291" r="5" fill="#60a5fa"/>
+                                <text x="187" y="295" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Active per token</text>
+                                <circle cx="336" cy="291" r="5" fill="#f59e0b"/>
+                                <text x="347" y="295" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Total held in memory</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> Seven open mixture-of-experts models, 2024 to 2026, parameters on a log axis. The amber end moves right by more than twenty times. The blue end stays between 5 and 52 billion. Sources: [5], [6], [9], [8], [7], [10], [11].</figcaption>
+                    </figure>
+
+                    <h2>Why routing wins</h2>
+
+                    <p>Two numbers explain the chart. Compute per token scales with the active count, and so does most of the training cost, which is the result the Switch Transformer established [4]. A lab that adds experts adds capacity at a price that tracks the small number, not the big one. The big number costs memory, and memory is paid for once and shared across every request on the machine. At the scale a frontier lab serves, that trade is lopsided in favour of holding more.</p>
+
+                    <p>There is a second reason that is easier to miss. A dense model spends the same parameters on every token, whether the token is a comma or a line of Rust. A sparse model can send the comma through cheap experts and the Rust through specialist ones. The model is bigger for the same per-token cost, and it spends that cost where the input is hard. Routing is a form of attention paid in parameters instead of tokens, and once you see it that way the pattern stops being a trick of large language models and starts being a general design rule.</p>
+
+                    <h2>Sparse at three altitudes</h2>
+
+                    <p>Look at the three October releases through that rule and they line up as one principle at three heights in the stack.</p>
+
+                    <p>Inside the model, the experts are held and the router runs a few of them for each token. That is Beam and Mistral Large 4, and every model in Figure 1. At the edge of the model, EmbeddingGemma 2 holds a text core plus vision and audio encoders, and the developer loads only the encoders the workload needs; its card also supports truncating each embedding from 768 to 128 dimensions when the search does not need the precision [12]. The decision is made per modality and per deployment rather than per token, but the shape is the same: more is held than is run. Above the model, a routing layer holds a fleet of models and sends each request to the one that fits, a pattern this series has looked at from two sides: "From Router to Conductor" on what the chooser should be, and "Routing Above the Model" on why the harness around the chooser moves cost further than the choice of model does. There the decision is made per request. At every altitude the same two questions decide the design: what is held, and who chooses what runs.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">The same hold-more-than-you-run principle at three altitudes: inside the model, at its edge, and above it</title>
+                                <desc id="fig2-desc">Three bands. Inside the model, all experts are held, a few run per token, and a router decides. At the edge of the model, a text core plus vision and audio encoders are held, only the encoders the input needs run, and the developer decides per modality. Above the model, a fleet of models is held, the one the request needs runs, and a router decides per request.</desc>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Sparse at three altitudes</text>
+
+                                <text x="230" y="52" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b" text-anchor="middle" font-weight="700" letter-spacing="0.06em">WHAT IS HELD</text>
+                                <text x="400" y="52" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle" font-weight="700" letter-spacing="0.06em">WHAT RUNS</text>
+                                <text x="555" y="52" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="700" letter-spacing="0.06em">WHO DECIDES</text>
+
+                                <text x="20" y="92" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">INSIDE</text>
+                                <text x="20" y="108" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">THE MODEL</text>
+                                <rect x="150" y="66" width="160" height="60" rx="8" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="230" y="92" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">All the experts</text>
+                                <text x="230" y="110" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Beam: 501B</text>
+                                <rect x="320" y="66" width="160" height="60" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa"/>
+                                <text x="400" y="92" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">A few per token</text>
+                                <text x="400" y="110" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Beam: 23B</text>
+                                <rect x="490" y="66" width="130" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="555" y="92" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">The router</text>
+                                <text x="555" y="110" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">per token</text>
+
+                                <text x="20" y="170" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">AT THE EDGE</text>
+                                <text x="20" y="186" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">OF THE MODEL</text>
+                                <rect x="150" y="144" width="160" height="60" rx="8" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="230" y="170" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">Core + encoders</text>
+                                <text x="230" y="188" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">EmbeddingGemma 2: 740M</text>
+                                <rect x="320" y="144" width="160" height="60" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa"/>
+                                <text x="400" y="170" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">What the input needs</text>
+                                <text x="400" y="188" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">text only: 270M</text>
+                                <rect x="490" y="144" width="130" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="555" y="170" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">The developer</text>
+                                <text x="555" y="188" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">per modality</text>
+
+                                <text x="20" y="248" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">ABOVE</text>
+                                <text x="20" y="264" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">THE MODEL</text>
+                                <rect x="150" y="222" width="160" height="60" rx="8" fill="none" stroke="#f59e0b" stroke-dasharray="5 4"/>
+                                <text x="230" y="248" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">A fleet of models</text>
+                                <text x="230" y="266" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">small, large, specialist</text>
+                                <rect x="320" y="222" width="160" height="60" rx="8" fill="rgba(96,165,250,0.12)" stroke="#60a5fa"/>
+                                <text x="400" y="248" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">The one that fits</text>
+                                <text x="400" y="266" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">one model per request</text>
+                                <rect x="490" y="222" width="130" height="60" rx="8" fill="#1a2942" stroke="#2a3f5f"/>
+                                <text x="555" y="248" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="600">A router</text>
+                                <text x="555" y="266" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">per request</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> One principle, three altitudes. What is held (amber) is always more than what runs (blue), and a chooser sits between them. Only the chooser and the granularity of its decision change. Sources: [10], [12], and articles 46 and 62 in this series.</figcaption>
+                    </figure>
+
+                    <h2>What it changes for you</h2>
+
+                    <p>If routing is the cheapest way to add capability, then the constraint moves. For a decade the question was how much compute you could afford. The question now is how much you can hold, and how busy you can keep it. Memory is the price of a sparse model, and utilization is the discount; the companion article on the active parameter works through that arithmetic. A team that buys a sparse model and runs it at a third of capacity has bought the big number and received the small one.</p>
+
+                    <p>The second change is to your own designs. The rule that made these models cheap applies to any system you build on them. Hold the tools, the documents, the specialist models and the prompts you might need. Run only what the request needs. And be explicit about who chooses, because the chooser is where the quality lives: a router that sends everything to the biggest model has recreated a dense system at sparse prices, and a router that sends too much to the smallest has recreated a cheap system with expensive failures. Google made the chooser a configuration flag. Reflection and Mistral made it a learned layer. Your agents will need one too, and it deserves the same care as the models it chooses between.</p>
+
+                    <h2>Conclusion</h2>
+
+                    <p>The 1991 paper's title was "Adaptive Mixtures of Local Experts", and thirty-five years later that is still the most accurate description of where the field has arrived: not one giant mind, but a large collection of local competence and a mechanism for picking from it. The trillion-parameter model and the 740 million parameter one are the same idea with a different chooser.</p>
+
+                    <p>Expect the total counts to keep climbing and the active counts to stay roughly where they are, because that is the shape the economics reward. Expect the same shape to appear in your inference stack, your retrieval layer and your agent fleet. The labs have already decided that capability is cheaper to route than to grow. The remaining question is whether the systems built on top of their models will make the same decision deliberately, or by accident.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Change the sizing question in every model review from "how much compute" to "how much memory, at what utilization". Sparse models move the bottleneck, and a budget built for dense models will buy the wrong hardware.</li>
+                        <li>Audit your own stack for dense spending: any step that sends every request through the largest model, loads every encoder, or retrieves every document. Each one is a place where a chooser would cut cost without cutting quality.</li>
+                        <li>Treat the chooser as a product. Give the routing layer an owner, a measured error rate, and an evaluation set, because its mistakes are invisible in the model's benchmark scores and visible in your bill.</li>
+                        <li>Prefer components that ship modular, the way EmbeddingGemma 2 ships its encoders. A model you can load in parts is a model whose cost you can shape to the workload instead of the other way around.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Active Parameter</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A sparse model has two sizes. One sets what you pay per token, the other sets what you must buy before the first token.</p>
+                        <a href="the-active-parameter.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Open Weights, Closed Numbers</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Three open models shipped in one week. Only one of them shipped the evidence.</p>
+                        <a href="open-weights-closed-numbers.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Routing Above the Model</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Model routing optimizes the smaller variable. The harness around the model moves cost, and often capability, much further.</p>
+                        <a href="routing-above-the-model.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Jacobs, R. A., Jordan, M. I., Nowlan, S. J., Hinton, G. E. (1991). <em>"Adaptive Mixtures of Local Experts."</em> Neural Computation 3(1), 79-87.
+                        <a href="https://doi.org/10.1162/neco.1991.3.1.79" target="_blank">https://doi.org/10.1162/neco.1991.3.1.79</a>
+                    </li>
+                    <li class="reference-item">
+                        Shazeer, N., Mirhoseini, A., Maziarz, K., et al. (2017). <em>"Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer."</em> ICLR 2017.
+                        <a href="https://arxiv.org/abs/1701.06538" target="_blank">https://arxiv.org/abs/1701.06538</a>
+                    </li>
+                    <li class="reference-item">
+                        Lepikhin, D., Lee, H., Xu, Y., et al. (2020). <em>"GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding."</em> ICLR 2021.
+                        <a href="https://arxiv.org/abs/2006.16668" target="_blank">https://arxiv.org/abs/2006.16668</a>
+                    </li>
+                    <li class="reference-item">
+                        Fedus, W., Zoph, B., Shazeer, N. (2021). <em>"Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity."</em> JMLR 23 (2022).
+                        <a href="https://arxiv.org/abs/2101.03961" target="_blank">https://arxiv.org/abs/2101.03961</a>
+                    </li>
+                    <li class="reference-item">
+                        Jiang, A. Q., Sablayrolles, A., Roux, A., et al. (2024). <em>"Mixtral of Experts."</em> arXiv:2401.04088.
+                        <a href="https://arxiv.org/abs/2401.04088" target="_blank">https://arxiv.org/abs/2401.04088</a>
+                    </li>
+                    <li class="reference-item">
+                        DeepSeek-AI. (2024). <em>"DeepSeek-V3 Technical Report"</em> (671B total, 37B active, 2.788M H800 GPU hours). arXiv:2412.19437.
+                        <a href="https://arxiv.org/abs/2412.19437" target="_blank">https://arxiv.org/abs/2412.19437</a>
+                    </li>
+                    <li class="reference-item">
+                        OpenAI. (2025). <em>"gpt-oss-120b &amp; gpt-oss-20b Model Card"</em> (116.8B total, 5.1B active). arXiv:2508.10925.
+                        <a href="https://arxiv.org/abs/2508.10925" target="_blank">https://arxiv.org/abs/2508.10925</a>
+                    </li>
+                    <li class="reference-item">
+                        Moonshot AI. (2025). <em>"Kimi-K2-Instruct" model card</em> (1T total, 32B activated, 384 experts, 8 selected per token). Hugging Face.
+                        <a href="https://huggingface.co/moonshotai/Kimi-K2-Instruct" target="_blank">https://huggingface.co/moonshotai/Kimi-K2-Instruct</a>
+                    </li>
+                    <li class="reference-item">
+                        Meta. (2025, April 5). <em>"The Llama 4 herd: The beginning of a new era of natively multimodal AI innovation"</em> (Maverick: 17B active, 128 experts, 400B total). Meta AI Blog.
+                        <a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/" target="_blank">https://ai.meta.com/blog/llama-4-multimodal-intelligence/</a>
+                    </li>
+                    <li class="reference-item">
+                        Reflection AI. (2026, October 5). <em>"Introducing Beam: Reflection's 501B open-weight model."</em> Reflection AI Blog.
+                        <a href="https://reflection.ai/blog/introducing-beam" target="_blank">https://reflection.ai/blog/introducing-beam</a>
+                    </li>
+                    <li class="reference-item">
+                        Mistral AI. (2026, October 6). <em>"Mistral Large 4" model page</em> (52B active, 1.05T total, 1.6B vision encoder). Mistral Docs.
+                        <a href="https://docs.mistral.ai/models/mistral-large-4-0" target="_blank">https://docs.mistral.ai/models/mistral-large-4-0</a>
+                    </li>
+                    <li class="reference-item">
+                        Google DeepMind. (2026). <em>"google/embeddinggemma-2" model card</em> (270M text backbone, selectively loadable 170M vision and 300M audio encoders, truncation to 128d). Hugging Face.
+                        <a href="https://huggingface.co/google/embeddinggemma-2" target="_blank">https://huggingface.co/google/embeddinggemma-2</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>

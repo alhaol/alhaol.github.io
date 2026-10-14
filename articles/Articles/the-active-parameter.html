@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Active Parameter | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_68.png" alt="The Active Parameter" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-ai">AI Systems</span>
+                        <span class="category-badge category-architecture">Architecture</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Active Parameter</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">A sparse model has two sizes. One sets what you pay per token, the other sets what you must buy before the first token.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 14, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~6 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>The biggest number on a model card is not the one that sets your bill per token. It is the one that sets your bill before the first token arrives.</p>
+
+                    <p>Two releases last week made that split hard to miss. On October 5, Reflection AI announced Beam, a 501 billion parameter model that runs 23 billion of them for any given token [1]. On October 6, Mistral opened a public preview of Mistral Large 4, a model of about one trillion parameters (1.05 trillion on its model card) that runs 52 billion, plus a 1.6 billion parameter vision encoder [2][3]. Both are sparse mixture-of-experts models. In plain terms, a <strong>mixture-of-experts</strong> model is built from many specialist blocks, called experts, and a small router that picks a handful of them for each token. The other experts sit idle for that token. They are still there. They are just not working. The design goes back to Shazeer and colleagues in 2017 [6], was scaled up by the Switch Transformer in 2021 [7], and became the familiar shape of a frontier open model when DeepSeek-V3 shipped 671 billion total with 37 billion active in late 2024 [8].</p>
+
+                    <p>That design gives one model two honest sizes, and the two sizes answer different questions. The active count answers "what does one token cost me to compute". The total count answers "what do I have to keep in memory to compute anything at all". Most headlines report the total, most price lists reflect the active, and most buyers read only one of them.</p>
+
+                    <blockquote>A sparse model has two sizes. The active size is what you pay per token. The total size is what you must hold before the first token. Only one of them is in the headline.</blockquote>
+
+                    <h2>What the active count buys you</h2>
+
+                    <p>Compute per token scales with the parameters that run, not the parameters that exist. Reflection says so in its own announcement: its efficiency chart estimates the cost of an answer as roughly two times the active parameters times the number of generated tokens [1]. That formula is what sits behind the company's headline claim that Beam matches GLM-5.2 on reasoning benchmarks with three to four times less inference compute. The claim has not been checked outside the company. The arithmetic behind it is standard, and it is the arithmetic you should use.</p>
+
+                    <p>Run it for the two models. A token through Beam costs about 46 billion floating point operations. A token through Mistral Large 4 costs about 104 billion. A dense model with Mistral's full parameter count would cost about 2.1 trillion per token, twenty times more. Per token, the sparse model behaves like a mid-sized model, and the API price reflects that. Mistral lists the preview at $1.36 per million input tokens and $4.18 per million output tokens [2], a price that no dense model of that size could carry.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 284" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig1-title">Total and active parameters for Beam, Mistral Large 4 and a dense model of the same active size</title>
+                                <desc id="fig1-desc">Beam holds 501 billion parameters and runs 23 billion per token, under five percent. Mistral Large 4 holds 1,050 billion and runs 52 billion, five percent. A dense 52 billion model holds and runs the same 52 billion. The sparse models store twenty times more than they compute.</desc>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">One model, two sizes (billions of parameters, linear scale)</text>
+
+                                <text x="20" y="66" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">BEAM (REFLECTION AI, OCT 5)</text>
+                                <rect x="150" y="74" width="181" height="14" rx="3" fill="#f59e0b"/>
+                                <text x="337" y="85" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">501B total</text>
+                                <rect x="150" y="92" width="9" height="14" rx="2" fill="#60a5fa"/>
+                                <text x="165" y="103" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">23B active (4.6%)</text>
+
+                                <text x="20" y="130" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">MISTRAL LARGE 4 (OCT 6)</text>
+                                <rect x="150" y="138" width="380" height="14" rx="3" fill="#f59e0b"/>
+                                <text x="536" y="149" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">1,050B total</text>
+                                <rect x="150" y="156" width="19" height="14" rx="2" fill="#60a5fa"/>
+                                <text x="175" y="167" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">52B active (5.0%)</text>
+
+                                <text x="20" y="194" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" font-weight="700" letter-spacing="0.06em">A DENSE 52B MODEL, FOR COMPARISON</text>
+                                <rect x="150" y="202" width="19" height="14" rx="3" fill="#f59e0b"/>
+                                <text x="175" y="213" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">52B total</text>
+                                <rect x="150" y="220" width="19" height="14" rx="2" fill="#60a5fa"/>
+                                <text x="175" y="231" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">52B active (100%)</text>
+
+                                <rect x="20" y="254" width="12" height="12" rx="2" fill="#f59e0b"/>
+                                <text x="38" y="264" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Total: must be held in memory</text>
+                                <rect x="300" y="254" width="12" height="12" rx="2" fill="#60a5fa"/>
+                                <text x="318" y="264" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Active: runs for each token</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 1.</b> The two sparse models store about twenty times more parameters than they run for a token. A dense model stores and runs the same count, so one number describes it. Sources: Reflection AI [1], Mistral AI model page [3].</figcaption>
+                    </figure>
+
+                    <h2>What the total count costs you</h2>
+
+                    <p>The router chooses experts one token at a time, and you cannot know in advance which experts the next token will need. So every expert has to be resident in GPU memory before inference starts. Sparsity cuts the work per token. It does not cut the weights you have to store. The memory floor for a sparse model is set by the total count, exactly as it would be for a dense model of the same size.</p>
+
+                    <p>The arithmetic is short enough to do by hand. Memory for the weights is the total parameter count times the bytes per parameter, and the bytes depend on the precision of the checkpoint you run.</p>
+
+<pre><code>memory for weights  =  total parameters  x  bytes per parameter
+
+Beam              501B  x 2 bytes (16-bit)  =  1.0 TB
+                  501B  x 1 byte  (8-bit)   =  0.5 TB
+Mistral Large 4   1,050B x 2 bytes (16-bit) =  2.1 TB
+                  1,050B x 1 byte  (8-bit)  =  1.05 TB
+
+compute per generated token  ~  2  x  active parameters
+
+Beam              2 x 23B   =   46 GFLOP per token
+Mistral Large 4   2 x 52B   =  104 GFLOP per token
+dense 1,050B      2 x 1,050B = 2,100 GFLOP per token</code></pre>
+
+                    <p>Those figures are the weights alone. The working memory for context (the KV cache), activations and the serving runtime typically adds another 20 to 40 percent, and the context windows these models advertise (one million tokens for both) make that overhead grow with every concurrent user. Neither vendor had published its checkpoint precision at the time of writing, so treat every row as a floor. For scale, an NVIDIA H100 holds 80 GB and an H200 holds 141 GB [4][5]. Beam at 8-bit fits one eight-GPU H100 node with little room to spare. Mistral Large 4 at the same precision needs two.</p>
+
+                    <figure class="fig">
+                        <div class="fig-scroll">
+                            <svg viewBox="0 0 640 330" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="fig2-title">GPU memory needed to hold the weights of Beam and Mistral Large 4 at three checkpoint precisions, against the memory of one H100 and of eight-GPU H100 and H200 nodes</title>
+                                <desc id="fig2-desc">Beam needs about one terabyte at 16-bit, half a terabyte at 8-bit and a quarter at 4-bit. Mistral Large 4 needs about two terabytes, one terabyte and half a terabyte. A single H100 holds 80 gigabytes, an eight-GPU H100 node holds 640 and an eight-GPU H200 node holds 1,128. Only the 8-bit and 4-bit checkpoints fit a single node, and Mistral Large 4 at 16-bit exceeds two.</desc>
+                                <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Memory to hold every expert, by checkpoint precision</text>
+                                <text x="320" y="48" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Weights only, in gigabytes. Context memory and runtime add 20 to 40 percent.</text>
+
+                                <line x1="185" y1="58" x2="185" y2="236" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="1" stroke-dasharray="4 4"/>
+                                <line x1="292" y1="58" x2="292" y2="236" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="1" stroke-dasharray="4 4"/>
+                                <line x1="385" y1="58" x2="385" y2="236" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="1" stroke-dasharray="4 4"/>
+
+                                <text x="160" y="76" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Beam, 16-bit</text>
+                                <rect x="170" y="64" width="191" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="355" y="76" font-family="Inter, sans-serif" font-size="12" fill="#0a1628" text-anchor="end" font-weight="600">1.0 TB</text>
+
+                                <text x="160" y="106" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Beam, 8-bit</text>
+                                <rect x="170" y="94" width="95" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="259" y="106" font-family="Inter, sans-serif" font-size="12" fill="#0a1628" text-anchor="end" font-weight="600">0.5 TB</text>
+
+                                <text x="160" y="136" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Beam, 4-bit</text>
+                                <rect x="170" y="124" width="48" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="224" y="136" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">0.25 TB</text>
+
+                                <text x="160" y="166" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Large 4, 16-bit</text>
+                                <rect x="170" y="154" width="400" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="564" y="166" font-family="Inter, sans-serif" font-size="12" fill="#0a1628" text-anchor="end" font-weight="600">2.1 TB</text>
+
+                                <text x="160" y="196" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Large 4, 8-bit</text>
+                                <rect x="170" y="184" width="200" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="364" y="196" font-family="Inter, sans-serif" font-size="12" fill="#0a1628" text-anchor="end" font-weight="600">1.05 TB</text>
+
+                                <text x="160" y="226" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="end">Large 4, 4-bit</text>
+                                <rect x="170" y="214" width="100" height="16" rx="3" fill="#f59e0b"/>
+                                <text x="264" y="226" font-family="Inter, sans-serif" font-size="12" fill="#0a1628" text-anchor="end" font-weight="600">0.53 TB</text>
+
+                                <text x="185" y="258" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">one H100, 80 GB</text>
+                                <text x="385" y="258" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">8 x H200, 1,128 GB</text>
+                                <text x="292" y="276" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="middle">8 x H100, 640 GB</text>
+
+                                <text x="20" y="302" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Bytes per parameter: 2 at 16-bit, 1 at 8-bit, 0.5 at 4-bit.</text>
+                                <text x="20" y="318" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Neither vendor had published its checkpoint precision at the time of writing.</text>
+                            </svg>
+                        </div>
+                        <figcaption><b>Figure 2.</b> The memory floor follows the total count, not the active one. Beam at 8-bit fits one eight-GPU node before overhead; Mistral Large 4 at 16-bit does not fit two H100 nodes. Dashed lines mark hardware. Sources: parameter counts from [1] and [3], GPU memory from NVIDIA [4][5]; precision rows are arithmetic, not vendor figures.</figcaption>
+                    </figure>
+
+                    <h2>Two buyers, two prices</h2>
+
+                    <p>Here is why the confusion survives. The two prices land on two different buyers.</p>
+
+                    <p>If you call the model through an API, you only ever see the active price. The provider holds the full set of experts in memory and spreads that standing cost across every customer in the queue. A sparse model is a good deal for you, and the total count is trivia.</p>
+
+                    <p>If you host the model yourself, which is the whole point of an open-weight release, you pay the total price first, in GPUs you have to buy or rent before the first request, and you earn the active discount only as the machine fills up. A sparse model on a half-idle node is a large model with a large bill and a small amount of work done. The discount is real, but it is a discount on utilization, and it belongs to whoever keeps the hardware busy.</p>
+
+                    <p>This is also why a 23 billion active model and a 23 billion dense model are not interchangeable on your own hardware, even though they cost about the same per token. The dense model fits one GPU. Beam needs a node. Same running cost, very different standing cost.</p>
+
+                    <h2>Reading a model card in the right order</h2>
+
+                    <p>The fix is a reading order, not a new metric. When a sparse model lands on your desk, read the card in this sequence and write each number down before moving to the next.</p>
+
+                    <ol>
+                        <li>Total parameters, then the precision of the released checkpoint. Multiply them. That is your memory floor, and it decides whether the model fits a GPU, a node or a rack.</li>
+                        <li>Active parameters. Double them. That is your compute per generated token, and it decides your cost per answer once the hardware is busy.</li>
+                        <li>Context length, and how much of it your workload will use. Memory for context grows with every concurrent request, and the one million token figure on both cards is a ceiling, not a free allowance.</li>
+                        <li>Which of the numbers above came from a measurement you can repeat, and which came from the vendor's chart. For both of this week's models the weights are promised for later in the month, so every benchmark is still a claim. That problem deserves its own article, and it gets one next.</li>
+                    </ol>
+
+                    <p>Do this once and the headline number stops misleading you. "One trillion parameters" is a statement about memory. "Fifty-two billion active" is a statement about compute. Both are true, and neither one is the price.</p>
+
+                    <h2>Conclusion</h2>
+
+                    <p>Dense models trained us to read one number, because in a dense model the count of parameters that exist and the count that work are the same. Sparse models broke that habit without telling anyone. The vendors are not hiding anything; both figures sit in the first paragraph of both announcements. The failure is on the reading side. The big number gets quoted for capability, the small number gets quoted for cost, and nobody adds up what it takes to run the thing in a room you control.</p>
+
+                    <p>Expect every frontier open model to arrive with two sizes from now on. The gap between them will keep widening, because routing is now the cheapest way to add capability, and the gap is exactly where the hosting bill hides.</p>
+
+                    <h2>What leaders should do</h2>
+
+                    <ol>
+                        <li>Require two numbers on every model proposal that crosses your desk: memory to hold the weights at the planned precision, and compute per token from the active count. Send back a proposal that reports only the total.</li>
+                        <li>Decide which buyer you are before you pick the model. API consumption buys the active price with no standing cost. Self-hosting buys the total price up front and recovers the sparse discount only at high utilization, so put a utilization target in the business case.</li>
+                        <li>Budget context memory as its own line item. The advertised window is a ceiling. Size for the context length your workload uses, times concurrent requests, on top of the weights.</li>
+                        <li>Hold the hardware order until the checkpoint precision is published. A model that ships at 8-bit halves the memory floor against a 16-bit assumption, and for these two models the difference is a whole node.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Open Weights, Closed Numbers</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Three open models shipped in one week. Only one of them shipped the evidence.</p>
+                        <a href="open-weights-closed-numbers.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Sparse Everywhere</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Capability is now cheaper to route than to grow, and the same bet shows up at every model size.</p>
+                        <a href="sparse-everywhere.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Inference Registry</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Architecting dynamic model routers to manage the economics of extended thinking.</p>
+                        <a href="the-inference-registry.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">
+                        Reflection AI. (2026, October 5). <em>"Introducing Beam: Reflection's 501B open-weight model."</em> Reflection AI Blog.
+                        <a href="https://reflection.ai/blog/introducing-beam" target="_blank">https://reflection.ai/blog/introducing-beam</a>
+                    </li>
+                    <li class="reference-item">
+                        Mistral AI. (2026, October 6). <em>"Mistral Large 4."</em> Mistral AI News.
+                        <a href="https://mistral.ai/news/mistral-large-4" target="_blank">https://mistral.ai/news/mistral-large-4</a>
+                    </li>
+                    <li class="reference-item">
+                        Mistral AI. (2026). <em>"Mistral Large 4" model page</em> (52B active, 1.05T total, 1.6B vision encoder, 1M context, public preview v26.10). Mistral Docs.
+                        <a href="https://docs.mistral.ai/models/mistral-large-4-0" target="_blank">https://docs.mistral.ai/models/mistral-large-4-0</a>
+                    </li>
+                    <li class="reference-item">
+                        NVIDIA. <em>"NVIDIA H100 Tensor Core GPU"</em> (80 GB HBM3). Product page.
+                        <a href="https://www.nvidia.com/en-us/data-center/h100/" target="_blank">https://www.nvidia.com/en-us/data-center/h100/</a>
+                    </li>
+                    <li class="reference-item">
+                        NVIDIA. <em>"NVIDIA H200 Tensor Core GPU"</em> (141 GB HBM3e). Product page.
+                        <a href="https://www.nvidia.com/en-us/data-center/h200/" target="_blank">https://www.nvidia.com/en-us/data-center/h200/</a>
+                    </li>
+                    <li class="reference-item">
+                        Shazeer, N., Mirhoseini, A., Maziarz, K., et al. (2017). <em>"Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer."</em> ICLR 2017.
+                        <a href="https://arxiv.org/abs/1701.06538" target="_blank">https://arxiv.org/abs/1701.06538</a>
+                    </li>
+                    <li class="reference-item">
+                        Fedus, W., Zoph, B., Shazeer, N. (2021). <em>"Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity."</em> JMLR 23 (2022).
+                        <a href="https://arxiv.org/abs/2101.03961" target="_blank">https://arxiv.org/abs/2101.03961</a>
+                    </li>
+                    <li class="reference-item">
+                        DeepSeek-AI. (2024). <em>"DeepSeek-V3 Technical Report"</em> (671B total, 37B active). arXiv:2412.19437.
+                        <a href="https://arxiv.org/abs/2412.19437" target="_blank">https://arxiv.org/abs/2412.19437</a>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
