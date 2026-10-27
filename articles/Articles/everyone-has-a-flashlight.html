@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyone Has a Flashlight | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_71.png" alt="Everyone Has a Flashlight" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-engineering">Security</span>
+                        <span class="category-badge category-cognitive">Leadership</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Everyone Has a Flashlight</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">AI gave everyone, attackers included, the same flashlight. Knowing where to point it is now the advantage.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: October 27, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~3 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>Imagine everyone suddenly gets a powerful flashlight: you, your neighbours, and the burglar. It lights up whatever you point it at. It does not tell you where to point it. The person who knows the house still knows which room to check first.</p>
+
+<p>That picture came out of a discussion with <a href="https://www.linkedin.com/in/salah-abualhoul/" target="_blank" rel="noopener">Salah Abualhoul</a> [7] about PHP2Shell, the flaw that led governments to take their own websites offline this month. This is where we landed.</p>
+
+<h2>AI was the flashlight</h2>
+
+<p>PHP runs 69% of the websites whose server-side language is known [2], and Germany, France and four other countries took sites offline over this flaw [1]. The headlines said AI found it. The researcher who reported it first did use a public model, but what aimed it was his twenty years of knowing where PHP's bugs hide. He writes that no model finds "all bugs" with simple prompts [3].</p>
+
+<p>Once he had pointed the way, others arrived fast. Another team found the same flaws within weeks [4], and someone tried the attack four days before it was announced [5]. A flashlight is not an advantage when everyone has one, and the burglar has the same one you do. The advantage is knowing the house.</p>
+
+<h2>The noise nobody checked</h2>
+
+<p>The uncomfortable part is that this noise was heard before. The problem came up in a 2024 audit and was left because nobody could prove it was exploitable [3]. The PHP Foundation now calls that a structural failure [6].</p>
+
+<p>The rule was not foolish. "No proof, no fix" made sense when proving it took an expert team months; nobody wakes the whole house for every creak. But this year the proof took one person about two weeks. When checking is that cheap for you, it is that cheap for the burglar. The rule has to flip: if you hear a noise near an open door, act as if someone is already inside.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 336" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">The same finding in 2024 and 2026</title>
+            <desc id="fig2-desc">In both years the PHP team followed the same rule: act once there is proof of an exploit. In 2024 proof would have taken an expert team months, no concrete attack path was found, and the issue waited two more years. In 2026 one researcher with an AI model produced proof in about two weeks, the fix became the top priority, and it shipped on October 21, four days after the first known attack attempt.</desc>
+            <g font-family="Inter, sans-serif">
+                <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">Same finding, same rule, different cost of proof</text>
+
+                <text x="196" y="62" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">2024 AUDIT</text>
+                <text x="416" y="62" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">2026 PATCH THE PLANET</text>
+                <line x1="30" y1="72" x2="610" y2="72" stroke="#2a3f5f" stroke-width="1"/>
+
+                <text x="30" y="98" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">THE FINDING</text>
+                <text x="196" y="98" fill="#f1f5f9" font-size="13">out-of-memory issue</text>
+                <text x="196" y="116" fill="#94a3b8" font-size="12">seen during an audit</text>
+                <text x="416" y="98" fill="#f1f5f9" font-size="13">same root cause</text>
+                <text x="416" y="116" fill="#94a3b8" font-size="12">reported Aug 11</text>
+                <line x1="30" y1="130" x2="610" y2="130" stroke="#2a3f5f" stroke-width="1"/>
+
+                <text x="30" y="156" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">COST OF PROOF</text>
+                <text x="196" y="156" fill="#f1f5f9" font-size="13">a world-class team,</text>
+                <text x="196" y="174" fill="#94a3b8" font-size="12">months of work</text>
+                <text x="416" y="156" fill="#60a5fa" font-size="13" font-weight="600">about two weeks</text>
+                <text x="416" y="174" fill="#60a5fa" font-size="12">one researcher with AI</text>
+                <line x1="30" y1="188" x2="610" y2="188" stroke="#2a3f5f" stroke-width="1"/>
+
+                <text x="30" y="214" fill="#f59e0b" font-size="11" font-weight="700" letter-spacing="0.06em">THE HUMAN CALL</text>
+                <text x="196" y="214" fill="#f59e0b" font-size="13" font-weight="600">no concrete vectors,</text>
+                <text x="196" y="232" fill="#f59e0b" font-size="12">so it can wait</text>
+                <text x="416" y="214" fill="#f59e0b" font-size="13" font-weight="600">proven exploitable,</text>
+                <text x="416" y="232" fill="#f59e0b" font-size="12">top priority</text>
+                <line x1="30" y1="246" x2="610" y2="246" stroke="#2a3f5f" stroke-width="1"/>
+
+                <text x="30" y="272" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.06em">WHAT FOLLOWED</text>
+                <text x="196" y="272" fill="#64748b" font-size="13">parked for two</text>
+                <text x="196" y="290" fill="#64748b" font-size="12">more years</text>
+                <text x="416" y="272" fill="#f1f5f9" font-size="13">patched Oct 21</text>
+                <text x="416" y="290" fill="#94a3b8" font-size="12">first attack attempt Oct 17</text>
+                <line x1="30" y1="304" x2="610" y2="304" stroke="#2a3f5f" stroke-width="1"/>
+
+                <text x="30" y="324" fill="#64748b" font-size="11">Amber: the human call, made by the same rule both times. Blue: what AI changed.</text>
+            </g>
+        </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> The finding did not change between 2024 and 2026, and neither did the rule: act once there is proof. What changed was the cost of proof, from months for an expert team to about two weeks for one researcher with AI. When proof is that cheap, waiting for it hands the first move to whoever proves it next. Sources: [3], [4], [5], [6].</figcaption>
+</figure>
+
+<h2>Who walks, and who decides</h2>
+
+<p>Let AI agents do the walking: check every room, every server, every copy of the same mistake. Keep people on two decisions: which room matters, and what to do about it now. And write down what your experts know about the house, so the agents walk where they would.</p>
+
+<p>Most teams are buying brighter flashlights. Fewer are investing in the people who know where to point them, or giving those people the authority to act before the proof arrives.</p>
+
+<blockquote>AI sets the pace. People set the direction.</blockquote>
+
+<h2>What leaders should do</h2>
+
+<ol class="list-decimal space-y-3">
+<li>Retire "wait for proof." If a weakness is plausible and exposed to the internet, fix it in days.</li>
+<li>Get your experts' knowledge of the house onto paper, so agents can search the way they would.</li>
+<li>Name who can approve an emergency fix before you need one, and measure decisions in hours.</li>
+</ol>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Taste Gap</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why discernment becomes the human moat once AI makes generation free.</p>
+                        <a href="the-taste-gap.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">Agents Are the Attack Surface</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.</p>
+                        <a href="agent-attack-surface.html">Read Article &rarr;</a>
+                    </div>
+                    <div class="related-article-card">
+                        <h4 class="font-semibold mb-2">The Harness Advantage</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
+                        <a href="the-harness-advantage.html">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                    <li class="reference-item">Umar Farooq and Reuters. "World leaders warn of security flaws found in PHP programming language." Al Jazeera, October 22, 2026. <a href="https://www.aljazeera.com/news/2026/10/22/world-leaders-warn-against-security-flaw-found-in-php-computer-programming" target="_blank" rel="noopener">https://www.aljazeera.com/news/2026/10/22/world-leaders-warn-against-security-flaw-found-in-php-computer-programming</a></li>
+                    <li class="reference-item">W3Techs. "Usage Statistics and Market Share of PHP for Websites." Accessed October 26, 2026. <a href="https://w3techs.com/technologies/details/pl-php" target="_blank" rel="noopener">https://w3techs.com/technologies/details/pl-php</a></li>
+                    <li class="reference-item">Ryan Austin. "PHP2Shell." Calif, October 21, 2026. <a href="https://calif.io/php2shell/" target="_blank" rel="noopener">https://calif.io/php2shell/</a></li>
+                    <li class="reference-item">Sagi Tzadik, Shir Tamari, Nir Ohfeld and Tomer Schwartz. "PHP2Shell: AI uncovers critical RCE vulnerabilities affecting 70% of the Internet." Wiz Research, October 21, 2026. <a href="https://www.wiz.io/blog/php2shell-php-rce" target="_blank" rel="noopener">https://www.wiz.io/blog/php2shell-php-rce</a></li>
+                    <li class="reference-item">CJ Moses. "Amazon Threat Intelligence identifies PHP2Shell exploitation prior to public disclosure in MadPot." AWS Security Blog, October 21, 2026. <a href="https://aws.amazon.com/blogs/security/amazon-threat-intelligence-identifies-php2shell-exploitation-prior-to-public-disclosure-in-madpot/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/amazon-threat-intelligence-identifies-php2shell-exploitation-prior-to-public-disclosure-in-madpot/</a></li>
+                    <li class="reference-item">The PHP Foundation. "Today's PHP Security Release, and How We're Strengthening PHP Security." October 21, 2026. <a href="https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/" target="_blank" rel="noopener">https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/</a></li>
+                    <li class="reference-item">Abualhoul, S. Personal conversation with the author, October 2026. LinkedIn profile: <a href="https://www.linkedin.com/in/salah-abualhoul/" target="_blank" rel="noopener">https://www.linkedin.com/in/salah-abualhoul/</a></li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
