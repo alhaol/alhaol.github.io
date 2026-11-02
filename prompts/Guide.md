@@ -5,7 +5,7 @@ own file under [`mds/`](mds/). This guide explains the shared idea behind them, 
 for, how to fill them in, and how to chain them into a full learning loop.
 
 <!-- PROMPTS:COUNT:START -->
-**9 prompts** across 3 categories: Learning, Workflow, Writing.
+**10 prompts** across 3 categories: Learning, Workflow, Writing.
 <!-- PROMPTS:COUNT:END -->
 
 > **Use the hub instead of copying by hand.** [`index.html`](index.html) renders every prompt from
@@ -39,6 +39,7 @@ wait.** Don't paste them and then skim ahead; play your part in the back-and-for
 | "Every session starts with me re-explaining the project because nothing carries over." | [07 — The Claude Code Scaffold](mds/07-claude-code-scaffold.md) |
 | "I keep re-paying for the same reasoning every time I run this." | [08 — The Local-First Harness](mds/08-local-first-harness.md) |
 | "I write clearly and correctly, and a week later nobody remembers a word of it." | [09 — The Memory-First Editor](mds/09-memory-first-editor.md) |
+| "My agent writes confident code from one-line prompts. I want it to gather context, ask me questions and write a test first." | [10 — The COMPOSE Protocol Skill](mds/10-compose-protocol-skill.md) |
 <!-- PROMPTS:TABLE:END -->
 
 On the hub these same situations appear on the cards, so you can search by symptom
