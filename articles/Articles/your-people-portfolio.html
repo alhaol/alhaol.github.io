@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your People Are the Portfolio | alhaol.github.io</title>
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body.theme-cybersecurity {
+            --bg-color: #0a1628;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --card-bg: #1a2942;
+            --border-color: #2a3f5f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .prose { color: var(--text-muted); }
+        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.75rem; }
+        .prose a { color: var(--primary-color); text-decoration: underline; }
+        header { background: transparent; color: var(--text-main); }
+        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .nav-link { color: var(--text-main); text-decoration: none; }
+        .nav-link:hover { color: var(--primary-color); }
+        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
+        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        .reference-item a { color: var(--primary-color); }
+        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
+        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
+        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+
+        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
+           and the palette matches the page theme exactly. See references/svg-figures.md before
+           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
+           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
+           its own box and the page body never scrolls sideways. Verified with
+           document.scrollWidth === document.clientWidth at a 492px viewport. */
+        .fig { margin: 2.25rem 0; }
+        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
+        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
+        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body class="theme-cybersecurity">
+    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
+        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
+            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
+            <div class="p-8 md:p-12">
+                <img src="../Post_Images/Image_72.png" alt="Your People Are the Portfolio" class="hero-image">
+
+                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
+                    <div class="mb-4 flex flex-wrap">
+                        <span class="category-badge category-cognitive">Wellbeing</span>
+                        <span class="category-badge category-workflow">Leadership</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Your People Are the Portfolio</h1>
+                    <p class="text-xl mb-6" style="color: var(--text-muted);">A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.</p>
+
+                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
+                        <div>
+                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
+                            <p>AI Technical Lead</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
+                        <span>Published: November 02, 2026</span>
+                        <span class="mx-2">|</span>
+                        <span>Reading Time: ~8 min</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-lg max-w-none">
+                    <p>The most reliable predictor of a long, healthy life is not your salary, your title, or your cholesterol. It is the quality of your relationships. That is the headline finding of the longest study of adult life ever run, and most of us organize our weeks as if we had never heard it.</p>
+
+<p>I found the clearest summary of this idea on a napkin. It is a hand-drawn sketch titled "Life's best investment: your people!" with four panels: the trap, what erodes bonds, your core circle, and a daily practice. Each panel is simple enough to fit on a napkin, and each one is backed by more research than it looks. This article walks through the sketch one panel at a time.</p>
+
+<figure class="fig">
+    <div class="fig-scroll" style="background-color:#ffffff;">
+        <img src="../Post_Images/Fig_72_napkin.jpg" alt="Napkin sketch titled Life's best investment: your people, with four panels: 1. The trap (too busy, missed moments, success with no one to share it is empty); 2. What erodes bonds (a closeness-over-years line sliding into neglect, screens over faces, grudges kept, fair-weather friends; relationships are gardens, not trophies); 3. Your core circle (parents: honor, call, visit; spouse: partner first, always; kids: presence over presents; real friends: loyal in hard times); 4. Invest and nurture daily (show up, listen, forgive, serve, repeat every single day)." style="display:block;width:100%;height:auto;">
+    </div>
+    <figcaption><b>Figure 1.</b> The whole argument on one napkin. Read it clockwise: the trap that pulls us away, the forces that wear bonds down, the people who matter most, and the five habits that keep them close.</figcaption>
+</figure>
+
+<h2>The evidence behind the napkin</h2>
+
+<p>The Harvard Study of Adult Development began in 1938 with 724 young men, some of them Harvard sophomores and some of them boys from Boston's poorest neighbourhoods. Researchers have followed them, and later their children, for more than 85 years. Robert Waldinger, the study's current director, puts the result plainly: the people who were most satisfied in their relationships at age 50 were the healthiest at age 80. Relationship satisfaction in midlife predicted physical health in old age better than cholesterol did.</p>
+
+<p>The Harvard result is not an outlier. A 2010 meta-analysis by Julianne Holt-Lunstad and colleagues pooled 148 studies covering more than 300,000 people and found that people with stronger social relationships had a 50% higher likelihood of survival over the study periods. In 2023 the U.S. Surgeon General issued an advisory on loneliness that compared the mortality effect of social disconnection to smoking up to 15 cigarettes a day.</p>
+
+<blockquote>Relationships behave like an investment account that charges a fee every month. Leave it alone and the balance falls. Small, regular deposits are the only thing that keeps it growing.</blockquote>
+
+<h2>Panel one: the trap</h2>
+
+<p>The first panel shows a figure hunched over a laptop next to a stack of coins, labelled "too busy." Beside it stands a family holding hands next to an empty chair, labelled "missed moments," with a winged clock flying away under the words "time slipping." The caption underneath is the sharpest line on the napkin: success with no one to share it is empty.</p>
+
+<p>The trap works because the costs arrive on different schedules. Work sends its bills today, with deadlines, emails, and a manager who notices. Relationships send theirs years later, quietly, as an empty chair at dinner or a friend who stopped calling. Bronnie Ware, a palliative care nurse, recorded the most common regrets of her dying patients. "I wish I hadn't worked so hard" came from every male patient she nursed. "I wish I had stayed in touch with my friends" was close behind.</p>
+
+<p>Nobody in her account wished for one more quarterly target. The coins in the sketch are not the enemy. The problem starts when they become the only thing you count.</p>
+
+<h2>Panel two: what erodes bonds</h2>
+
+<p>The second panel is a small chart. Closeness sits on the vertical axis and years on the horizontal one, and the line slides steadily down until a red arrow points at the word "neglect." Next to it are three named forces: screens over faces, grudges kept, and fair-weather friends.</p>
+
+<p>The chart makes the most important point in the whole sketch. Decline is the default. Nobody has to do anything wrong for a relationship to fade; they only have to do nothing. Figure 2 redraws the napkin's line next to its opposite.</p>
+
+<figure class="fig">
+    <div class="fig-scroll">
+        <svg viewBox="0 0 640 330" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig2-title">Closeness over the years: a neglected relationship versus a tended one</title>
+            <desc id="fig2-desc">Without deposits, closeness slides steadily toward neglect. With small, regular deposits, each small slip is restored and closeness stays high for years. Illustrative, not measured data.</desc>
+            <text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Decline is the default; deposits keep the line flat</text>
+            <line x1="70" y1="60" x2="70" y2="270" stroke="#2a3f5f" stroke-width="1.5"/>
+            <line x1="70" y1="270" x2="610" y2="270" stroke="#2a3f5f" stroke-width="1.5"/>
+            <text x="34" y="165" text-anchor="middle" transform="rotate(-90 34 165)" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Closeness</text>
+            <text x="340" y="296" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Years</text>
+            <path d="M70,82 C200,96 300,150 400,182 S560,232 600,242" fill="none" stroke="#60a5fa" stroke-width="3"/>
+            <path d="M70,84 L123,96 L123,84 L176,96 L176,84 L229,96 L229,84 L282,96 L282,84 L335,96 L335,84 L388,96 L388,84 L441,96 L441,84 L494,96 L494,84 L547,96 L547,84 L600,96" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="123" cy="84" r="3.5" fill="#f59e0b"/><circle cx="176" cy="84" r="3.5" fill="#f59e0b"/><circle cx="229" cy="84" r="3.5" fill="#f59e0b"/><circle cx="282" cy="84" r="3.5" fill="#f59e0b"/><circle cx="335" cy="84" r="3.5" fill="#f59e0b"/><circle cx="388" cy="84" r="3.5" fill="#f59e0b"/><circle cx="441" cy="84" r="3.5" fill="#f59e0b"/><circle cx="494" cy="84" r="3.5" fill="#f59e0b"/><circle cx="547" cy="84" r="3.5" fill="#f59e0b"/>
+            <text x="600" y="68" text-anchor="end" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Tended: small deposits, often</text>
+            <text x="90" y="252" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Neglected: no deposits, slow drift</text>
+            <text x="320" y="318" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Illustrative shape, not measured data. Dots mark a call, a visit, a meal, a kind act.</text>
+        </svg>
+    </div>
+    <figcaption><b>Figure 2.</b> The napkin's chart, with its missing half drawn in. A relationship left alone drifts down without anyone doing anything wrong. A tended one slips too, but each small deposit restores it, so the line stays high. The shape is illustrative; the evidence for it is the Harvard and Gottman research discussed in this article.</figcaption>
+</figure>
+
+<p>Each of the three forces has evidence behind it. Screens are the easiest to see. In a 2013 study, Andrew Przybylski and Netta Weinstein found that the mere presence of a mobile phone on the table, not even in use, lowered how close and connected strangers felt after a meaningful conversation. Grudges are slower. Each one is a withdrawal you keep making long after the original event. Fair-weather friends are the hardest to spot because they look like real friends until the weather changes.</p>
+
+<p>The green line under the panel sums it up: relationships are gardens, not trophies. A trophy, once won, sits on a shelf and stays won. A garden you stop tending becomes weeds.</p>
+
+<h2>Panel three: your core circle</h2>
+
+<p>The third panel narrows the focus to four groups, each paired with a short instruction:</p>
+
+<ul class="list-disc space-y-3">
+    <li>Parents: honor, call, visit. The window is finite, and it is shorter than it feels.</li>
+    <li>Spouse: partner first, always. Of all the bonds on the list, this one is the easiest to put on autopilot.</li>
+    <li>Kids: presence over presents. Children remember who showed up, not what was in the box.</li>
+    <li>Real friends: loyal in hard times. This is the test that separates them from the fair-weather kind in panel two.</li>
+</ul>
+
+<p>The list is short on purpose. Friendship takes time to build, and time is the scarce input. Jeffrey Hall at the University of Kansas estimated that moving from acquaintance to casual friend takes roughly 50 hours together, to friend about 90 hours, and to close friend more than 200. Nobody has 200 hours for everyone. A core circle is a decision about where those hours go.</p>
+
+<h2>Panel four: invest and nurture daily</h2>
+
+<p>The last panel is a loop of green arrows around a heart, with five steps: show up and be fully present; listen with your phone down; forgive and let go fast; serve through small kind acts; and repeat every single day.</p>
+
+<p>The loop shape is the point. None of these steps is dramatic. Relationships are built in small moments far more than in grand gestures. John Gottman's research on couples calls these moments "bids": a comment, a question, a hand on the shoulder. Each one is a small request for attention. In his study of newlyweds, couples who were still married six years later had turned toward each other's bids about 86% of the time. Couples who later divorced had done so about 33% of the time.</p>
+
+<p>That gap is made of tiny choices: looking up from the screen, answering the question, laughing at the joke. Each one is cheap. Repeated daily for years, they decide which line in Figure 2 you end up on.</p>
+
+<h2>Putting it into practice</h2>
+
+<p>The napkin is useful because you can run it as a weekly review, the same way you would review a project:</p>
+
+<ol class="list-decimal space-y-3">
+    <li>Write down the names in your core circle. Keep it to the people you would call at 3 a.m., and the people who would call you.</li>
+    <li>Next to each name, write the date of your last real conversation, meaning one where neither of you was looking at a screen.</li>
+    <li>Pick one name with the oldest date and make one small deposit this week: a call, a visit, a meal, or a message that asks a real question.</li>
+    <li>If a grudge is sitting on the list, decide whether it is still earning its place. Most are not.</li>
+</ol>
+
+<p>This takes ten minutes. The point is not the list itself. It turns an invisible decline into something you can see, and what you can see you can act on.</p>
+
+<h2>What leaders should do</h2>
+
+<p>Leaders shape how much room their teams have for the people in panel three. A culture that rewards the figure at the laptop will get more of panel one. A few concrete moves change that:</p>
+
+<ol class="list-decimal space-y-3">
+    <li>Protect evenings and weekends by default. Do not send messages after hours that imply a reply is expected, and schedule them for the morning instead.</li>
+    <li>Run phone-down meetings for one-on-ones and team discussions, so the habit of being present is practiced at work as well as at home.</li>
+    <li>Take your own leave visibly, including for family events, so people see that showing up for their families does not cost them their careers.</li>
+    <li>Ask about the people behind the person. Remember the name of a colleague's child or an ailing parent, and follow up. It costs a minute and tells people their lives outside work count.</li>
+</ol>
+
+<p>Careers end, titles get reassigned, and the coins in the first panel are spent. The people in the third panel are the part of the portfolio that is still there at the end, and the only part that compounds through small daily deposits. The napkin is right: invest there first.</p>
+
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
+                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
+                <div class="related-articles">
+                                        <div class="related-article-card">
+                        <a href="the-understanding-advantage.html">The Understanding Advantage</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Outsource the thinking if you must; understanding stays with you.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="the-taste-gap.html">The Taste Gap</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Why discernment becomes the human moat once AI makes generation free.</p>
+                    </div>
+                    <div class="related-article-card">
+                        <a href="everyone-has-a-flashlight.html">Everyone Has a Flashlight</a>
+                        <p class="text-sm mt-2" style="color: var(--text-muted);">Invest in the people who know where to point the light.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
+                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
+                <ol class="list-decimal space-y-4">
+                                        <li class="reference-item">Waldinger, R. &amp; Schulz, M. (2023). <em>The Good Life: Lessons from the World&#39;s Longest Scientific Study of Happiness</em>. Simon &amp; Schuster.</li>
+                    <li class="reference-item">Waldinger, R. (2015). "What makes a good life? Lessons from the longest study on happiness." TEDxBeaconStreet. <a href="https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness" target="_blank" rel="noopener">ted.com</a></li>
+                    <li class="reference-item">Holt-Lunstad, J., Smith, T. B., &amp; Layton, J. B. (2010). "Social Relationships and Mortality Risk: A Meta-analytic Review." <em>PLoS Medicine</em>, 7(7), e1000316. <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">doi:10.1371/journal.pmed.1000316</a></li>
+                    <li class="reference-item">Office of the U.S. Surgeon General (2023). <em>Our Epidemic of Loneliness and Isolation: The U.S. Surgeon General&#39;s Advisory on the Healing Effects of Social Connection and Community</em>. <a href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" target="_blank" rel="noopener">hhs.gov</a></li>
+                    <li class="reference-item">Hall, J. A. (2019). "How many hours does it take to make a friend?" <em>Journal of Social and Personal Relationships</em>, 36(4), 1278-1296. <a href="https://doi.org/10.1177/0265407518761225" target="_blank" rel="noopener">doi:10.1177/0265407518761225</a></li>
+                    <li class="reference-item">Przybylski, A. K. &amp; Weinstein, N. (2013). "Can you connect with me now? How the presence of mobile communication technology influences face-to-face conversation quality." <em>Journal of Social and Personal Relationships</em>, 30(3), 237-246. <a href="https://doi.org/10.1177/0265407512453827" target="_blank" rel="noopener">doi:10.1177/0265407512453827</a></li>
+                    <li class="reference-item">Gottman, J. M. &amp; DeClaire, J. (2001). <em>The Relationship Cure: A 5-Step Guide to Strengthening Your Marriage, Family, and Friendships</em>. Crown.</li>
+                    <li class="reference-item">Ware, B. (2012). <em>The Top Five Regrets of the Dying: A Life Transformed by the Dearly Departing</em>. Hay House.</li>
+                </ol>
+            </div>
+        </article>
+    </main>
+
+    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
+        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
+            <p>&copy; 2026 alhaol.github.io</p>
+        </div>
+    </footer>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
+        document.body.className = currentTheme;
+    </script>
+</body>
+</html>
