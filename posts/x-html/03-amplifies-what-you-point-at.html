@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>It amplifies whatever you point it at | alhaol.github.io</title>
+<meta name="description" content="AI does not cut the noise. It amplifies whatever you point it at.">
+<link rel="canonical" href="https://alhaol.github.io/posts/x-html/03-amplifies-what-you-point-at.html">
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+<!--
+  Landing page for a post on x.com/ialhaol. Rendered by scripts/render_page.py.
+
+  This is the ONLY part of posts/ that ships. The post on X carries one image, one
+  line and a link to this page, so this page is the post; the 280 characters are the
+  teaser.
+
+  Deliberately NOT login-gated. Every app and presentation on the site sits behind the
+  shared overlay, but a login wall on the page an X reader just clicked through to
+  throws away the click. This follows articles/, blooms/ and memory/, which are open.
+
+  Deliberately a single fixed dark theme with no toggle. The site stores two
+  incompatible value formats under localStorage['theme'] (articles write "theme-*",
+  blooms and memory classes write "dark"/"light"), and a page that reads that key
+  inherits the collision. A two-minute read does not need a toggle enough to be worth
+  it, and fixed dark matches the dark card above it.
+-->
+
+<!-- Link preview, for anywhere this gets shared without the card attached. -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="It amplifies whatever you point it at">
+<meta property="og:description" content="AI does not cut the noise. It amplifies whatever you point it at.">
+<meta property="og:image" content="https://alhaol.github.io/posts/x-images/03-amplifies-what-you-point-at-dark.png">
+<meta property="og:url" content="https://alhaol.github.io/posts/x-html/03-amplifies-what-you-point-at.html">
+<meta property="og:site_name" content="alhaol.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ialhaol">
+<meta name="twitter:creator" content="@ialhaol">
+<meta name="twitter:title" content="It amplifies whatever you point it at">
+<meta name="twitter:description" content="AI does not cut the noise. It amplifies whatever you point it at.">
+<meta name="twitter:image" content="https://alhaol.github.io/posts/x-images/03-amplifies-what-you-point-at-dark.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #0a1628;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    /* Rose, the card accent. Page and image have to read as one object. */
+    --primary-color: #f43f5e;
+    --card-bg: #1a2942;
+    --border-color: #2a3f5f;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .prose { color: var(--text-muted); }
+  .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.5rem; margin-top: 2.25rem; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
+  .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.7rem; }
+  .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+  .prose strong { color: var(--text-main); font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose a { color: var(--primary-color); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { text-decoration-thickness: 2px; }
+  .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
+  .prose li { margin-bottom: 0.6rem; line-height: 1.75; }
+  .prose blockquote { border-left: 3px solid var(--primary-color); padding: 1rem 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+  .prose code { background-color: var(--card-bg); padding: 0.2rem 0.45rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88em; color: var(--primary-color); }
+
+  .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+  .nav-link { color: var(--text-main); text-decoration: none; }
+  .nav-link:hover { color: var(--primary-color); }
+
+  .pillar-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(244, 63, 94, 0.14);
+    color: var(--primary-color);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  /* The card, at the top, exactly as it appears on X. The reader arriving from the
+     timeline should recognise the page as the thing they clicked. */
+  .hero-card {
+    width: 100%;
+    display: block;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  /* The post's own line, set larger than the body: it is the claim everything below
+     is spent defending. */
+  .lede {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .onward { border-left: 3px solid var(--primary-color); }
+  .x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+  .x-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  @media (max-width: 768px) {
+    .lede { font-size: 1.12rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="border-b py-4" style="border-color: var(--border-color); background-color: var(--card-bg);">
+  <div class="max-w-3xl mx-auto px-6 flex justify-between items-center gap-4">
+    <a href="../../" class="font-bold text-lg tracking-tight nav-link">&#8592; alhaol.github.io</a>
+    <a href="https://x.com/ialhaol" class="nav-link text-sm" rel="me">@ialhaol</a>
+  </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 py-10 md:py-14">
+
+  <img src="../x-images/03-amplifies-what-you-point-at-dark.png" alt="Aim is the advantage" class="hero-card mb-8">
+
+  <header class="mb-8">
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <span class="pillar-badge">Ethics &amp; Mentorship</span>
+      <span class="text-sm" style="color: var(--text-muted);">2026-11-04</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5" style="color: var(--text-main); letter-spacing: -0.025em;">Aim is the advantage</h1>
+    <p class="lede">AI does not cut the noise. It amplifies whatever you point it at.</p>
+  </header>
+
+  <hr class="mb-8" style="border-color: var(--border-color);">
+
+  <article class="prose">
+    <p>Everyone got a flashlight this year. The same one went to you, to your neighbours, and to the burglar. It lights up whatever it is pointed at, and it has no opinion about where that should be.</p>
+    <p>PHP2Shell is the clearest case I have seen. PHP runs about 69% of the websites whose server-side language is known, and in October six governments took their own sites offline over a flaw in it. The headlines said AI found the bug. Read the researcher's own write-up and the picture changes. He did use a public model. What aimed it was twenty years of knowing where PHP's bugs hide, and he is blunt that no model finds all the bugs from a simple prompt. Once he had pointed the way, a second team found the same flaws within weeks, and someone tried the attack four days before the public announcement. Same flashlight, three different hands.</p>
+    <h2>Noise is not the absence of signal</h2>
+    <p>The uncomfortable part is that this noise was heard in 2024. An audit raised it and it was left alone, because nobody could prove it was exploitable. The PHP Foundation now calls that a structural failure. The rule was reasonable in its day. "No proof, no fix" made sense when proof took an expert team months. Nobody wakes the whole house for every creak.</p>
+    <p>What AI changed was not the creak. It changed the price of checking. This year the proof took one person about two weeks. When checking is that cheap for you, it is that cheap for the burglar, and a rule built for expensive proof starts handing the first move to whoever proves it next.</p>
+    <p>This is what "cut the noise" means in practice. The noise did not get quieter. The cost of telling noise from signal collapsed, for everyone at once. The only asymmetry left is knowing which creak to check first.</p>
+    <h2>Amplification is neutral</h2>
+    <p>A flashlight pointed at the wrong wall produces a very bright wrong wall. That is the trap in the current round of AI adoption. A team with no idea where its risks live gets more findings, more alerts, and more confident summaries of things that do not matter. The volume goes up. The ratio does not.</p>
+    <p>The teams that get a better ratio are doing something unglamorous. They write down what their experts know about the house, so the agents walk the rooms in the order a veteran would. They keep people on two decisions only: which room matters, and what to do about it now. And they have named, in advance, who can approve a fix before the proof arrives, because proof is now the slow part.</p>
+    <p>That is a people investment, not a model investment, and it is where I see the most leverage. The model sets the pace. A person who knows the house sets the direction, and the direction is the whole result.</p>
+    <h2>Three moves</h2>
+    <p>Retire "wait for proof" for anything plausible and exposed to the internet. Fix it in days.</p>
+    <p>Get the experts' map onto paper. If it lives in one head only, the agents cannot use it, and neither can the next hire.</p>
+    <p>Decide who can act in an emergency before there is one, and measure that decision in hours.</p>
+    <p>Everyone has the flashlight now. Aim is the advantage, and aim is a skill you can grow in people.</p>
+  </article>
+
+    <aside class="onward theme-card rounded-lg p-6 mt-10">
+    <div class="text-xs uppercase tracking-widest mb-2" style="color: var(--text-muted);">Going deeper</div>
+    <a href="../../articles/Articles/everyone-has-a-flashlight.html" style="color: var(--primary-color);" class="font-semibold">Read the long version on alhaol.github.io</a>
+  </aside>
+
+  <div class="mt-10 pt-8 border-t" style="border-color: var(--border-color);">
+    <!-- render_page.py points this at the profile; publish.py swaps it for the
+         post's own permalink once you hand one over. -->
+    <a id="discuss" class="x-link" href="https://x.com/ialhaol">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Discuss this on X
+    </a>
+  </div>
+
+</main>
+
+<footer class="border-t py-8 mt-8" style="border-color: var(--border-color);">
+  <div class="max-w-3xl mx-auto px-6 text-sm" style="color: var(--text-muted);">
+    Ibrahim AbuAlhaol &middot;
+    <a href="../../" style="color: var(--primary-color);">alhaol.github.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
