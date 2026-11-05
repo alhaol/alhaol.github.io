@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The data stays on the robot | alhaol.github.io</title>
+<meta name="description" content="A robot makes more data in one shift than it will ever upload.">
+<link rel="canonical" href="https://alhaol.github.io/posts/x-html/04-data-stays-on-the-robot.html">
+<link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+<!--
+  Landing page for a post on x.com/ialhaol. Rendered by scripts/render_page.py.
+
+  This is the ONLY part of posts/ that ships. The post on X carries one image, one
+  line and a link to this page, so this page is the post; the 280 characters are the
+  teaser.
+
+  Deliberately NOT login-gated. Every app and presentation on the site sits behind the
+  shared overlay, but a login wall on the page an X reader just clicked through to
+  throws away the click. This follows articles/, blooms/ and memory/, which are open.
+
+  Deliberately a single fixed dark theme with no toggle. The site stores two
+  incompatible value formats under localStorage['theme'] (articles write "theme-*",
+  blooms and memory classes write "dark"/"light"), and a page that reads that key
+  inherits the collision. A two-minute read does not need a toggle enough to be worth
+  it, and fixed dark matches the dark card above it.
+-->
+
+<!-- Link preview, for anywhere this gets shared without the card attached. -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="The data stays on the robot">
+<meta property="og:description" content="A robot makes more data in one shift than it will ever upload.">
+<meta property="og:image" content="https://alhaol.github.io/posts/x-images/04-data-stays-on-the-robot-dark.png">
+<meta property="og:url" content="https://alhaol.github.io/posts/x-html/04-data-stays-on-the-robot.html">
+<meta property="og:site_name" content="alhaol.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ialhaol">
+<meta name="twitter:creator" content="@ialhaol">
+<meta name="twitter:title" content="The data stays on the robot">
+<meta name="twitter:description" content="A robot makes more data in one shift than it will ever upload.">
+<meta name="twitter:image" content="https://alhaol.github.io/posts/x-images/04-data-stays-on-the-robot-dark.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #0a1628;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    /* Rose, the card accent. Page and image have to read as one object. */
+    --primary-color: #f43f5e;
+    --card-bg: #1a2942;
+    --border-color: #2a3f5f;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .prose { color: var(--text-muted); }
+  .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.5rem; margin-top: 2.25rem; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
+  .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.7rem; }
+  .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
+  .prose strong { color: var(--text-main); font-weight: 600; }
+  .prose em { font-style: italic; }
+  .prose a { color: var(--primary-color); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { text-decoration-thickness: 2px; }
+  .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
+  .prose li { margin-bottom: 0.6rem; line-height: 1.75; }
+  .prose blockquote { border-left: 3px solid var(--primary-color); padding: 1rem 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
+  .prose code { background-color: var(--card-bg); padding: 0.2rem 0.45rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88em; color: var(--primary-color); }
+
+  .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+  .nav-link { color: var(--text-main); text-decoration: none; }
+  .nav-link:hover { color: var(--primary-color); }
+
+  .pillar-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(244, 63, 94, 0.14);
+    color: var(--primary-color);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  /* The card, at the top, exactly as it appears on X. The reader arriving from the
+     timeline should recognise the page as the thing they clicked. */
+  .hero-card {
+    width: 100%;
+    display: block;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  /* The post's own line, set larger than the body: it is the claim everything below
+     is spent defending. */
+  .lede {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .onward { border-left: 3px solid var(--primary-color); }
+  .x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+  .x-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  @media (max-width: 768px) {
+    .lede { font-size: 1.12rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="border-b py-4" style="border-color: var(--border-color); background-color: var(--card-bg);">
+  <div class="max-w-3xl mx-auto px-6 flex justify-between items-center gap-4">
+    <a href="../../" class="font-bold text-lg tracking-tight nav-link">&#8592; alhaol.github.io</a>
+    <a href="https://x.com/ialhaol" class="nav-link text-sm" rel="me">@ialhaol</a>
+  </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 py-10 md:py-14">
+
+  <img src="../x-images/04-data-stays-on-the-robot-dark.png" alt="The data stays on the robot" class="hero-card mb-8">
+
+  <header class="mb-8">
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <span class="pillar-badge">Architecture</span>
+      <span class="text-sm" style="color: var(--text-muted);">2026-11-04</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5" style="color: var(--text-main); letter-spacing: -0.025em;">The data stays on the robot</h1>
+    <p class="lede">A robot makes more data in one shift than it will ever upload.</p>
+  </header>
+
+  <hr class="mb-8" style="border-color: var(--border-color);">
+
+  <article class="prose">
+    <p>The compute forecast for physical AI usually runs one way: more robots, more GPUs, more data centres. Half of that is right. The other half has the geography backwards.</p>
+    <h2>Compute goes to the body</h2>
+    <p>Start with what a robot actually runs. NVIDIA's Jetson Thor, the module that Agility, Boston Dynamics, Figure and Amazon Robotics are building on, carries 2,070 FP4 teraflops and 128 GB of memory inside a 130 watt envelope. That is a small data centre's worth of inference bolted to a machine that has to react in milliseconds and cannot wait for a round trip. The planning model may live in the cloud. The reflexes never will.</p>
+    <p>Deloitte's 2026 prediction puts inference at about two thirds of all AI compute, up from a third in 2023, and says most of it still runs in data centres this year. But every robot shipped moves a slice of that inference permanently out of the building, onto hardware the buyer owns, powered from a battery, with no cloud bill attached. The demand does not vanish. It changes address.</p>
+    <h2>Storage goes to the decision</h2>
+    <p>The storage story is stranger. A humanoid's sensor suite produces anywhere from 800 bytes per second for motion alone to 246 megabytes per second with cameras and depth, according to a June 2026 standards paper on humanoid robot datasets. At the top of that range an eight hour shift is about 7 terabytes. One robot. One day.</p>
+    <p>Nobody uploads that. A fleet of a thousand would push petabytes a day through links that were sized for telemetry. So the robot has to decide, on the body, what is worth keeping: the grasp that slipped, the corner it had never seen, the ten seconds before a stop. The rest is overwritten before anyone looks at it.</p>
+    <p>That inverts the storage question. The industry has spent a decade on capacity: how much can we keep. Physical AI makes the question selection: which one percent of today was surprising enough to be worth a training run. Storage demand does not grow with the sensor rate. It grows with the surprise rate, and the compute that scores surprise lives next to the sensor, not in the cloud.</p>
+    <h2>What the cloud is for</h2>
+    <p>The cloud keeps two jobs, and both differ from the one it has now. Training, on the curated slice: the largest open humanoid dataset today, AgiBot World, is about 3,000 hours, tiny next to what text models consume, and it is tiny because real interaction data costs around 180 dollars an hour against about two dollars an hour for simulation. And simulation itself: thousands of GPUs generating the failures a fleet has not met yet. Both are bursty, both are batch, and neither needs to be within a millisecond of anything.</p>
+    <p>So the shape of demand is a split. Reflexes and triage on the body, in watts. Simulation and training in the cloud, in bursts. The thing in the middle, the always-on inference farm the chatbot era built, is the part physical AI needs least.</p>
+    <h2>What to build for</h2>
+    <p>If you run infrastructure, plan for three things. Fleet storage measured in curated hours, not raw terabytes, with the scoring done at the edge. Simulation capacity that scales with the number of failure modes you want to rehearse, not with the number of robots. And a data path from body to cloud that moves kilobytes of labelled surprise, not gigabytes of video.</p>
+    <p>A robot makes more data in a shift than it will ever upload. The architecture that wins is the one that decides well, on the body, what the cloud gets to see.</p>
+  </article>
+
+    <aside class="onward theme-card rounded-lg p-6 mt-10">
+    <div class="text-xs uppercase tracking-widest mb-2" style="color: var(--text-muted);">Going deeper</div>
+    <a href="../../articles/Articles/sparse-everywhere.html" style="color: var(--primary-color);" class="font-semibold">Read the long version on alhaol.github.io</a>
+  </aside>
+
+  <div class="mt-10 pt-8 border-t" style="border-color: var(--border-color);">
+    <!-- render_page.py points this at the profile; publish.py swaps it for the
+         post's own permalink once you hand one over. -->
+    <a id="discuss" class="x-link" href="https://x.com/ialhaol">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Discuss this on X
+    </a>
+  </div>
+
+</main>
+
+<footer class="border-t py-8 mt-8" style="border-color: var(--border-color);">
+  <div class="max-w-3xl mx-auto px-6 text-sm" style="color: var(--text-muted);">
+    Ibrahim AbuAlhaol &middot;
+    <a href="../../" style="color: var(--primary-color);">alhaol.github.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
