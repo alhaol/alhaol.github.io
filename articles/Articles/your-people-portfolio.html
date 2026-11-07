@@ -1,149 +1,438 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>Your People Are the Portfolio | alhaol.github.io</title>
+    <meta name="description" content="A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/your-people-portfolio.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Your People Are the Portfolio">
+    <meta property="og:description" content="A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/your-people-portfolio.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_72.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Two lines of closeness over the years: one drifts down through neglect, the other stays high through small, regular deposits.">
+    <meta property="article:published_time" content="2026-11-02">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Your People Are the Portfolio">
+    <meta name="twitter:description" content="A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_72.png">
+    <meta name="twitter:image:alt" content="Two lines of closeness over the years: one drifts down through neglect, the other stays high through small, regular deposits.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/your-people-portfolio.html",
+      "headline": "Your People Are the Portfolio",
+      "alternativeHeadline": "A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.",
+      "description": "A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_72.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-11-02",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
 <body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_72.png" alt="Your People Are the Portfolio" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-cognitive">Wellbeing</span>
-                        <span class="category-badge category-workflow">Leadership</span>
-                    </div>
+    <!-- HEADER. KICKER markup: primary label in blue, optional secondary muted, e.g.
+         <span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span>
+         Labels come only from the controlled vocabulary listed at the top of this file. -->
+    <header class="article-head col">
+        <p class="kicker"><span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span></p>
+        <h1 id="article-title">Your People Are the Portfolio</h1>
+        <p class="dek subtitle">A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-11-02">November 2, 2026</time><span aria-hidden="true"> &middot; </span>7 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Your People Are the Portfolio</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">A napkin sketch, an 85-year Harvard study, and why relationships are the one investment that compounds through small daily deposits.</p>
+    <!-- HERO. Never cropped, never lazy (it is the LCP image). -->
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_72.png" alt="Two lines of closeness over the years: one drifts down through neglect, the other stays high through small, regular deposits." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: November 02, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~8 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
-                    <p>The most reliable predictor of a long, healthy life is not your salary, your title, or your cholesterol. It is the quality of your relationships. That is the headline finding of the longest study of adult life ever run, and most of us organize our weeks as if we had never heard it.</p>
+        <!-- KEY TAKEAWAYS. Exactly three findings, 12 to 28 words each, declarative, in the body's order,
+             no citations, no imperatives. Markup: <li>One sentence finding.</li> x3 -->
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Relationship satisfaction at age 50 predicted health at 80 better than cholesterol did, in a Harvard study that has run for more than 85 years.</li>
+<li>Closeness fades by default: nobody has to do anything wrong for a relationship to decline, they only have to do nothing.</li>
+<li>Couples still married six years later had turned toward each other's small bids for attention about 86% of the time; couples who divorced, about 33%.</li>
+            </ol>
+        </aside>
+
+        <!-- TOC. Authored by the skill, never built by JS. One <li><a href="#slug">Exact h2 text</a></li> per
+             body h2 (same order), then <li><a href="#references">References</a></li>. Ids are deterministic
+             slugs of the h2 text. Sticky rail at >= 1200px, collapsed disclosure below that. -->
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#relationships-predict-health-in-old-age">Relationships predict health in old age</a></li>
+<li><a href="#work-bills-today-relationships-bill-later">Work bills today, relationships bill later</a></li>
+<li><a href="#decline-is-the-default">Decline is the default</a></li>
+<li><a href="#the-core-circle-decides-where-hours-go">The core circle decides where hours go</a></li>
+<li><a href="#small-daily-bids-decide-the-line">Small daily bids decide the line</a></li>
+<li><a href="#run-the-napkin-as-a-weekly-review">Run the napkin as a weekly review</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <!-- BODY. Expected markup:
+             Section heading:  <h2 id="decline-is-the-default">Decline is the default</h2>   (no h3 in the body)
+             Inline citation:  ...a 50% higher likelihood of survival.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>
+                               (numbered in order of first use; later uses of the same source get id cite-3b, ...)
+             Pull quote:       <aside class="pull-quote" aria-hidden="true"><p>Verbatim line from the body.</p></aside>
+                               (1 or 2; not in the lede or the leaders section; not next to a figure)
+             Source quote:     <figure class="quote"><blockquote><p>Words.</p></blockquote><figcaption>Name, role</figcaption></figure>
+             SVG figure:       <figure class="fig" id="fig-2"><div class="fig-scroll">[the inline svg element: viewBox "0 0 640 H", role="img",
+                                 aria-labelledby="fig2-title fig2-desc" ...><title id="fig2-title">..</title><desc id="fig2-desc">..</desc>
+                                 title and desc first]</div><figcaption><b>Figure 2.</b> Claim sentence. Caveat. Sources: <a href="#ref-1">[1]</a>.</figcaption></figure>
+             Raster figure:    same, with <div class="fig-scroll fig-plate--paper"><img src="../Post_Images/Fig_NN_x.png" alt=".."
+                                 width=".." height=".." loading="lazy" decoding="async"></div> (paper plate for scans/photos)
+             Code:             <pre data-lang="python"><code>...</code></pre>
+             Leaders list:     last element of the body:
+                               <h2 id="what-leaders-should-do">What leaders should do</h2>
+                               <p>Optional lead-in, max 25 words.</p>
+                               <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
+        <div id="article-body" class="prose">
+            <p>The most reliable predictor of a long, healthy life is not your salary, your title, or your cholesterol. It is the quality of your relationships. That is the headline finding of the longest study of adult life ever run, and most of us organize our weeks as if we had never heard it.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup></p>
 
 <p>I found the clearest summary of this idea on a napkin. It is a hand-drawn sketch titled "Life's best investment: your people!" with four panels: the trap, what erodes bonds, your core circle, and a daily practice. Each panel is simple enough to fit on a napkin, and each one is backed by more research than it looks. This article walks through the sketch one panel at a time.</p>
 
-<figure class="fig">
-    <div class="fig-scroll" style="background-color:#ffffff;">
-        <img src="../Post_Images/Fig_72_napkin.jpg" alt="Napkin sketch titled Life's best investment: your people, with four panels: 1. The trap (too busy, missed moments, success with no one to share it is empty); 2. What erodes bonds (a closeness-over-years line sliding into neglect, screens over faces, grudges kept, fair-weather friends; relationships are gardens, not trophies); 3. Your core circle (parents: honor, call, visit; spouse: partner first, always; kids: presence over presents; real friends: loyal in hard times); 4. Invest and nurture daily (show up, listen, forgive, serve, repeat every single day)." style="display:block;width:100%;height:auto;">
+<figure class="fig" id="fig-1">
+    <div class="fig-scroll fig-plate--paper">
+        <img src="../Post_Images/Fig_72_napkin.jpg" alt="Napkin sketch titled Life's best investment: your people, with four panels: 1. The trap (too busy, missed moments, success with no one to share it is empty); 2. What erodes bonds (a closeness-over-years line sliding into neglect, screens over faces, grudges kept, fair-weather friends; relationships are gardens, not trophies); 3. Your core circle (parents: honor, call, visit; spouse: partner first, always; kids: presence over presents; real friends: loyal in hard times); 4. Invest and nurture daily (show up, listen, forgive, serve, repeat every single day)." width="1376" height="768" loading="lazy" decoding="async">
     </div>
     <figcaption><b>Figure 1.</b> The whole argument on one napkin. Read it clockwise: the trap that pulls us away, the forces that wear bonds down, the people who matter most, and the five habits that keep them close.</figcaption>
 </figure>
 
-<h2>The evidence behind the napkin</h2>
+<h2 id="relationships-predict-health-in-old-age">Relationships predict health in old age</h2>
 
-<p>The Harvard Study of Adult Development began in 1938 with 724 young men, some of them Harvard sophomores and some of them boys from Boston's poorest neighbourhoods. Researchers have followed them, and later their children, for more than 85 years. Robert Waldinger, the study's current director, puts the result plainly: the people who were most satisfied in their relationships at age 50 were the healthiest at age 80. Relationship satisfaction in midlife predicted physical health in old age better than cholesterol did.</p>
+<p>The Harvard Study of Adult Development began in 1938 with 724 young men, some of them Harvard sophomores and some of them boys from Boston's poorest neighbourhoods. Researchers have followed them, and later their children, for more than 85 years.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup> Robert Waldinger, the study's current director, puts the result plainly: the people who were most satisfied in their relationships at age 50 were the healthiest at age 80. Relationship satisfaction in midlife predicted physical health in old age better than cholesterol did.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup></p>
 
-<p>The Harvard result is not an outlier. A 2010 meta-analysis by Julianne Holt-Lunstad and colleagues pooled 148 studies covering more than 300,000 people and found that people with stronger social relationships had a 50% higher likelihood of survival over the study periods. In 2023 the U.S. Surgeon General issued an advisory on loneliness that compared the mortality effect of social disconnection to smoking up to 15 cigarettes a day.</p>
+<p>The Harvard result is not an outlier. A 2010 meta-analysis by Julianne Holt-Lunstad and colleagues pooled 148 studies covering more than 300,000 people and found that people with stronger social relationships had a 50% higher likelihood of survival over the study periods.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> In 2023 the U.S. Surgeon General issued an advisory on loneliness that compared the mortality effect of social disconnection to smoking up to 15 cigarettes a day.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup></p>
 
-<blockquote>Relationships behave like an investment account that charges a fee every month. Leave it alone and the balance falls. Small, regular deposits are the only thing that keeps it growing.</blockquote>
+<p>Relationships behave like an investment account that charges a fee every month. Leave it alone and the balance falls. Small, regular deposits are the only thing that keeps it growing.</p>
 
-<h2>Panel one: the trap</h2>
+<h2 id="work-bills-today-relationships-bill-later">Work bills today, relationships bill later</h2>
 
 <p>The first panel shows a figure hunched over a laptop next to a stack of coins, labelled "too busy." Beside it stands a family holding hands next to an empty chair, labelled "missed moments," with a winged clock flying away under the words "time slipping." The caption underneath is the sharpest line on the napkin: success with no one to share it is empty.</p>
 
-<p>The trap works because the costs arrive on different schedules. Work sends its bills today, with deadlines, emails, and a manager who notices. Relationships send theirs years later, quietly, as an empty chair at dinner or a friend who stopped calling. Bronnie Ware, a palliative care nurse, recorded the most common regrets of her dying patients. "I wish I hadn't worked so hard" came from every male patient she nursed. "I wish I had stayed in touch with my friends" was close behind.</p>
+<p>The trap works because the costs arrive on different schedules. Work sends its bills today, with deadlines, emails, and a manager who notices. Relationships send theirs years later, quietly, as an empty chair at dinner or a friend who stopped calling. Bronnie Ware, a palliative care nurse, recorded the most common regrets of her dying patients. "I wish I hadn't worked so hard" came from every male patient she nursed. "I wish I had stayed in touch with my friends" was close behind.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup></p>
+
+<aside class="pull-quote" aria-hidden="true"><p>Relationships behave like an investment account that charges a fee every month. Leave it alone and the balance falls.</p></aside>
 
 <p>Nobody in her account wished for one more quarterly target. The coins in the sketch are not the enemy. The problem starts when they become the only thing you count.</p>
 
-<h2>Panel two: what erodes bonds</h2>
+<h2 id="decline-is-the-default">Decline is the default</h2>
 
 <p>The second panel is a small chart. Closeness sits on the vertical axis and years on the horizontal one, and the line slides steadily down until a red arrow points at the word "neglect." Next to it are three named forces: screens over faces, grudges kept, and fair-weather friends.</p>
 
 <p>The chart makes the most important point in the whole sketch. Decline is the default. Nobody has to do anything wrong for a relationship to fade; they only have to do nothing. Figure 2 redraws the napkin's line next to its opposite.</p>
 
-<figure class="fig">
+<figure class="fig" id="fig-2">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 330" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig2-title">Closeness over the years: a neglected relationship versus a tended one</title>
@@ -158,42 +447,42 @@
             <circle cx="123" cy="84" r="3.5" fill="#f59e0b"/><circle cx="176" cy="84" r="3.5" fill="#f59e0b"/><circle cx="229" cy="84" r="3.5" fill="#f59e0b"/><circle cx="282" cy="84" r="3.5" fill="#f59e0b"/><circle cx="335" cy="84" r="3.5" fill="#f59e0b"/><circle cx="388" cy="84" r="3.5" fill="#f59e0b"/><circle cx="441" cy="84" r="3.5" fill="#f59e0b"/><circle cx="494" cy="84" r="3.5" fill="#f59e0b"/><circle cx="547" cy="84" r="3.5" fill="#f59e0b"/>
             <text x="600" y="68" text-anchor="end" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Tended: small deposits, often</text>
             <text x="90" y="252" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Neglected: no deposits, slow drift</text>
-            <text x="320" y="318" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Illustrative shape, not measured data. Dots mark a call, a visit, a meal, a kind act.</text>
+            <text x="320" y="318" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Illustrative shape, not measured data. Dots mark a call, a visit, a meal, a kind act.</text>
         </svg>
     </div>
-    <figcaption><b>Figure 2.</b> The napkin's chart, with its missing half drawn in. A relationship left alone drifts down without anyone doing anything wrong. A tended one slips too, but each small deposit restores it, so the line stays high. The shape is illustrative; the evidence for it is the Harvard and Gottman research discussed in this article.</figcaption>
+    <figcaption><b>Figure 2.</b> A relationship left alone drifts down without anyone doing anything wrong. A tended one slips too, but each small deposit restores it, so the line stays high. Illustrative shape, not measured data; evidence in <a href="#ref-1">[1]</a>, <a href="#ref-8">[8]</a>.</figcaption>
 </figure>
 
-<p>Each of the three forces has evidence behind it. Screens are the easiest to see. In a 2013 study, Andrew Przybylski and Netta Weinstein found that the mere presence of a mobile phone on the table, not even in use, lowered how close and connected strangers felt after a meaningful conversation. Grudges are slower. Each one is a withdrawal you keep making long after the original event. Fair-weather friends are the hardest to spot because they look like real friends until the weather changes.</p>
+<p>Each of the three forces has evidence behind it. Screens are the easiest to see. In a 2013 study, Andrew Przybylski and Netta Weinstein found that the mere presence of a mobile phone on the table, not even in use, lowered how close and connected strangers felt after a meaningful conversation.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> Grudges are slower. Each one is a withdrawal you keep making long after the original event. Fair-weather friends are the hardest to spot because they look like real friends until the weather changes.</p>
 
 <p>The green line under the panel sums it up: relationships are gardens, not trophies. A trophy, once won, sits on a shelf and stays won. A garden you stop tending becomes weeds.</p>
 
-<h2>Panel three: your core circle</h2>
+<h2 id="the-core-circle-decides-where-hours-go">The core circle decides where hours go</h2>
 
 <p>The third panel narrows the focus to four groups, each paired with a short instruction:</p>
 
-<ul class="list-disc space-y-3">
+<ul>
     <li>Parents: honor, call, visit. The window is finite, and it is shorter than it feels.</li>
     <li>Spouse: partner first, always. Of all the bonds on the list, this one is the easiest to put on autopilot.</li>
     <li>Kids: presence over presents. Children remember who showed up, not what was in the box.</li>
     <li>Real friends: loyal in hard times. This is the test that separates them from the fair-weather kind in panel two.</li>
 </ul>
 
-<p>The list is short on purpose. Friendship takes time to build, and time is the scarce input. Jeffrey Hall at the University of Kansas estimated that moving from acquaintance to casual friend takes roughly 50 hours together, to friend about 90 hours, and to close friend more than 200. Nobody has 200 hours for everyone. A core circle is a decision about where those hours go.</p>
+<p>The list is short on purpose. Friendship takes time to build, and time is the scarce input. Jeffrey Hall at the University of Kansas estimated that moving from acquaintance to casual friend takes roughly 50 hours together, to friend about 90 hours, and to close friend more than 200.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> Nobody has 200 hours for everyone. A core circle is a decision about where those hours go.</p>
 
-<h2>Panel four: invest and nurture daily</h2>
+<h2 id="small-daily-bids-decide-the-line">Small daily bids decide the line</h2>
 
 <p>The last panel is a loop of green arrows around a heart, with five steps: show up and be fully present; listen with your phone down; forgive and let go fast; serve through small kind acts; and repeat every single day.</p>
 
-<p>The loop shape is the point. None of these steps is dramatic. Relationships are built in small moments far more than in grand gestures. John Gottman's research on couples calls these moments "bids": a comment, a question, a hand on the shoulder. Each one is a small request for attention. In his study of newlyweds, couples who were still married six years later had turned toward each other's bids about 86% of the time. Couples who later divorced had done so about 33% of the time.</p>
+<p>The loop shape is the point. None of these steps is dramatic. Relationships are built in small moments far more than in grand gestures. John Gottman's research on couples calls these moments "bids": a comment, a question, a hand on the shoulder. Each one is a small request for attention. In his study of newlyweds, couples who were still married six years later had turned toward each other's bids about 86% of the time. Couples who later divorced had done so about 33% of the time.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup></p>
 
 <p>That gap is made of tiny choices: looking up from the screen, answering the question, laughing at the joke. Each one is cheap. Repeated daily for years, they decide which line in Figure 2 you end up on.</p>
 
-<h2>Putting it into practice</h2>
+<h2 id="run-the-napkin-as-a-weekly-review">Run the napkin as a weekly review</h2>
 
 <p>The napkin is useful because you can run it as a weekly review, the same way you would review a project:</p>
 
-<ol class="list-decimal space-y-3">
+<ol>
     <li>Write down the names in your core circle. Keep it to the people you would call at 3 a.m., and the people who would call you.</li>
     <li>Next to each name, write the date of your last real conversation, meaning one where neither of you was looking at a screen.</li>
     <li>Pick one name with the oldest date and make one small deposit this week: a call, a visit, a meal, or a message that asks a real question.</li>
@@ -202,65 +491,176 @@
 
 <p>This takes ten minutes. The point is not the list itself. It turns an invisible decline into something you can see, and what you can see you can act on.</p>
 
-<h2>What leaders should do</h2>
+<p>Careers end, titles get reassigned, and the coins in the first panel are spent. The people in the third panel are the part of the portfolio that is still there at the end, and the only part that compounds through small daily deposits. The napkin is right: invest there first.</p>
 
-<p>Leaders shape how much room their teams have for the people in panel three. A culture that rewards the figure at the laptop will get more of panel one. A few concrete moves change that:</p>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
 
-<ol class="list-decimal space-y-3">
+<p>Leaders shape how much room their teams have for the people in panel three. A culture that rewards the figure at the laptop will get more of panel one.</p>
+
+<ol>
     <li>Protect evenings and weekends by default. Do not send messages after hours that imply a reply is expected, and schedule them for the morning instead.</li>
     <li>Run phone-down meetings for one-on-ones and team discussions, so the habit of being present is practiced at work as well as at home.</li>
     <li>Take your own leave visibly, including for family events, so people see that showing up for their families does not cost them their careers.</li>
     <li>Ask about the people behind the person. Remember the name of a colleague's child or an ailing parent, and follow up. It costs a minute and tells people their lives outside work count.</li>
 </ol>
-
-<p>Careers end, titles get reassigned, and the coins in the first panel are spent. The people in the third panel are the part of the portfolio that is still there at the end, and the only part that compounds through small daily deposits. The napkin is right: invest there first.</p>
-
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                                        <div class="related-article-card">
-                        <a href="the-understanding-advantage.html">The Understanding Advantage</a>
-                        <p class="text-sm mt-2" style="color: var(--text-muted);">Outsource the thinking if you must; understanding stays with you.</p>
-                    </div>
-                    <div class="related-article-card">
-                        <a href="the-taste-gap.html">The Taste Gap</a>
-                        <p class="text-sm mt-2" style="color: var(--text-muted);">Why discernment becomes the human moat once AI makes generation free.</p>
-                    </div>
-                    <div class="related-article-card">
-                        <a href="everyone-has-a-flashlight.html">Everyone Has a Flashlight</a>
-                        <p class="text-sm mt-2" style="color: var(--text-muted);">Invest in the people who know where to point the light.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                                        <li class="reference-item">Waldinger, R. &amp; Schulz, M. (2023). <em>The Good Life: Lessons from the World&#39;s Longest Scientific Study of Happiness</em>. Simon &amp; Schuster.</li>
-                    <li class="reference-item">Waldinger, R. (2015). "What makes a good life? Lessons from the longest study on happiness." TEDxBeaconStreet. <a href="https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness" target="_blank" rel="noopener">ted.com</a></li>
-                    <li class="reference-item">Holt-Lunstad, J., Smith, T. B., &amp; Layton, J. B. (2010). "Social Relationships and Mortality Risk: A Meta-analytic Review." <em>PLoS Medicine</em>, 7(7), e1000316. <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">doi:10.1371/journal.pmed.1000316</a></li>
-                    <li class="reference-item">Office of the U.S. Surgeon General (2023). <em>Our Epidemic of Loneliness and Isolation: The U.S. Surgeon General&#39;s Advisory on the Healing Effects of Social Connection and Community</em>. <a href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" target="_blank" rel="noopener">hhs.gov</a></li>
-                    <li class="reference-item">Hall, J. A. (2019). "How many hours does it take to make a friend?" <em>Journal of Social and Personal Relationships</em>, 36(4), 1278-1296. <a href="https://doi.org/10.1177/0265407518761225" target="_blank" rel="noopener">doi:10.1177/0265407518761225</a></li>
-                    <li class="reference-item">Przybylski, A. K. &amp; Weinstein, N. (2013). "Can you connect with me now? How the presence of mobile communication technology influences face-to-face conversation quality." <em>Journal of Social and Personal Relationships</em>, 30(3), 237-246. <a href="https://doi.org/10.1177/0265407512453827" target="_blank" rel="noopener">doi:10.1177/0265407512453827</a></li>
-                    <li class="reference-item">Gottman, J. M. &amp; DeClaire, J. (2001). <em>The Relationship Cure: A 5-Step Guide to Strengthening Your Marriage, Family, and Friendships</em>. Crown.</li>
-                    <li class="reference-item">Ware, B. (2012). <em>The Top Five Regrets of the Dying: A Life Transformed by the Dearly Departing</em>. Hay House.</li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <!-- AUTHOR CARD. Fixed text: never edit per article. -->
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- REFERENCES. One entry per source, in first-citation order; every entry cited at least once.
+             Markup: <li id="ref-1">Author, A. A., &amp; Author, B. B. (Year). "Article title." <em>Journal</em>, 7(7), e1. <a href="https://doi.org/..." target="_blank" rel="noopener">https://doi.org/...</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+             Books and reports: title in <em>. Link text is the full URL. -->
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Waldinger, R., &amp; Schulz, M. (2023). <em>The good life: Lessons from the world's longest scientific study of happiness</em>. Simon &amp; Schuster. <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Waldinger, R. (2015, November). "What makes a good life? Lessons from the longest study on happiness." TEDxBeaconStreet. <a href="https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness" target="_blank" rel="noopener">https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Holt-Lunstad, J., Smith, T. B., &amp; Layton, J. B. (2010). "Social relationships and mortality risk: A meta-analytic review." <em>PLoS Medicine</em>, 7(7), e1000316. <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">https://doi.org/10.1371/journal.pmed.1000316</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Office of the U.S. Surgeon General. (2023). <em>Our epidemic of loneliness and isolation: The U.S. Surgeon General's advisory on the healing effects of social connection and community</em>. <a href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" target="_blank" rel="noopener">https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Ware, B. (2012). <em>The top five regrets of the dying: A life transformed by the dearly departing</em>. Hay House. <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Przybylski, A. K., &amp; Weinstein, N. (2013). "Can you connect with me now? How the presence of mobile communication technology influences face-to-face conversation quality." <em>Journal of Social and Personal Relationships</em>, 30(3), 237-246. <a href="https://doi.org/10.1177/0265407512453827" target="_blank" rel="noopener">https://doi.org/10.1177/0265407512453827</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Hall, J. A. (2019). "How many hours does it take to make a friend?" <em>Journal of Social and Personal Relationships</em>, 36(4), 1278-1296. <a href="https://doi.org/10.1177/0265407518761225" target="_blank" rel="noopener">https://doi.org/10.1177/0265407518761225</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">Gottman, J. M., &amp; DeClaire, J. (2001). <em>The relationship cure: A 5 step guide to strengthening your marriage, family, and friendships</em>. Crown. <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- RELATED. Exactly three cards. Dek is the target article's own dek, verbatim. Markup:
+         <li class="rcard"><img src="../Post_Images/Image_NN.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+           <p class="rcard-kicker">Leadership</p><h3><a href="slug.html">Title</a></h3><p class="rcard-dek">Target dek.</p></li>
+         (Image_32 is .jpg.) -->
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_71.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Leadership</p>
+    <h3><a href="everyone-has-a-flashlight.html">Everyone Has a Flashlight</a></h3>
+    <p class="rcard-dek">AI gave everyone, attackers included, the same flashlight. Knowing where to point it is now the advantage.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_26.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-understanding-advantage.html">The Understanding Advantage</a></h3>
+    <p class="rcard-dek">You can outsource thinking to AI, but understanding stays with you. The real opportunity is using AI to build understanding faster than you could alone.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_31.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-taste-gap.html">The Taste Gap</a></h3>
+    <p class="rcard-dek">Why discernment becomes the human moat once AI makes generation free.</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

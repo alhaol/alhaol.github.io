@@ -1,14 +1,644 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Structured RPI Workflows | alhaol.github.io</title>
-    <meta name="description" content="Research → Plan → Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
+    <title>Structured RPI Workflows | alhaol.github.io</title>
+    <meta name="description" content="Research, Plan, Implement: a three-phase state machine for eliminating AI-driven development errors.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
     <link rel="canonical" href="https://alhaol.github.io/articles/Articles/structured-rpi-workflows.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
     <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Structured RPI Workflows">
-    <meta property="og:description" content="Research → Plan → Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors">
+    <meta property="og:description" content="Research, Plan, Implement: a three-phase state machine for eliminating AI-driven development errors.">
     <meta property="og:url" content="https://alhaol.github.io/articles/Articles/structured-rpi-workflows.html">
     <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_06.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+    <meta property="og:image:alt" content="Three glowing shapes on a curved track labelled research, plan and implement, phases that hand off in a fixed order.">
+    <meta property="article:published_time" content="2026-04-13">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png"><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>:root{--bg-color:#0a1628;--text-main:#f1f5f9;--text-muted:#94a3b8;--primary-color:#60a5fa;--card-bg:#1a2942;--border-color:#2a3f5f;}body.theme-cybersecurity{--bg-color:#0a1628;--text-main:#f1f5f9;--text-muted:#94a3b8;--primary-color:#60a5fa;--card-bg:#1a2942;--border-color:#2a3f5f;}body{background-color:var(--bg-color);color:var(--text-main);font-family:'Inter',sans-serif;}.prose{color:var(--text-muted);}.prose h2{color:var(--text-main);font-weight:700;font-size:1.75rem;margin-top:2rem;margin-bottom:1rem;}.prose h3{color:var(--text-main);font-weight:600;font-size:1.25rem;margin-top:1.5rem;margin-bottom:0.75rem;}.prose p{margin-bottom:1.25rem;line-height:1.8;}.prose blockquote{border-left:4px solid var(--primary-color);padding:1.25rem;font-style:italic;margin:1.5rem 0;background-color:var(--card-bg);}.prose ul,.prose ol{padding-left:1.5rem;margin-bottom:1.25rem;}.prose li{margin-bottom:0.75rem;}.prose a{color:var(--primary-color);text-decoration:underline;}.hero-image{width:100%;max-height:400px;object-fit:cover;margin-bottom:2rem;border-radius:0.5rem;}.theme-card{background-color:var(--card-bg);border:1px solid var(--border-color);}.nav-link{color:var(--text-main);text-decoration:none;}.nav-link:hover{color:var(--primary-color);}.category-badge{display:inline-block;padding:0.5rem 0.875rem;border-radius:0.25rem;font-size:0.75rem;font-weight:600;text-transform:uppercase;margin-right:0.75rem;margin-bottom:0.5rem;}.category-workflow{background-color:rgba(249,115,22,0.15);color:#f97316;border:1px solid rgba(249,115,22,0.3);}.category-engineering{background-color:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);}.related-articles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-top:2rem;}.related-article-card{background-color:var(--card-bg);border:1px solid var(--border-color);padding:1.5rem;border-radius:0.5rem;}.related-article-card a{color:var(--primary-color);text-decoration:none;font-weight:600;}.reference-item{margin-bottom:1.5rem;padding-left:1.5rem;color:var(--text-muted);line-height:1.6;}.reference-item a{color:var(--primary-color);}code{background-color:var(--card-bg);padding:0.25rem 0.5rem;border-radius:0.25rem;font-family:'JetBrains Mono',monospace;color:var(--primary-color);}</style></head><body class="theme-cybersecurity"><nav class="border-b py-4" style="border-color:var(--border-color);background-color:var(--card-bg);"><div class="max-w-4xl mx-auto px-6 flex justify-between items-center"><a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a></div></nav><main class="max-w-4xl mx-auto px-6 py-12"><article class="theme-card rounded-xl shadow-sm"><div class="p-8 md:p-12"><img src="../Post_Images/Image_06.png" alt="Structured RPI Workflows" class="hero-image"><header class="mb-10 border-b pb-8" style="border-color:var(--border-color);"><div class="mb-4"><span class="category-badge category-workflow">Methodology</span><span class="category-badge category-engineering">Process</span></div><h1 class="text-4xl md:text-5xl font-extrabold mb-4">Structured RPI Workflows</h1><p class="text-xl mb-6" style="color:var(--text-muted);">Research → Plan → Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors</p><div class="text-sm" style="color:var(--text-muted);"><p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p><p>AI Technical Lead</p></div><div class="mt-4 text-sm" style="color:var(--text-muted);"><span>Published: April 13, 2026</span> | <span>Reading Time: ~11 min</span></div></header><div class="prose prose-lg max-w-none"><h2>The Premature Convergence Problem</h2><p>A common failure mode in AI-augmented development: jump straight from problem statement to code. "Build a login system" → AI generates 500 lines of code → you discover the architecture is wrong → start over.</p><p>This happens because code generation is seductive. The AI can produce working code very quickly. You feel momentum. But momentum in the wrong direction is worse than no momentum.</p><p>The RPI framework (Research-Plan-Implement) prevents premature convergence by imposing a three-phase state machine. Each phase has a specific goal and outputs. Phases don't overlap.</p><blockquote>"The cost of getting the architecture wrong is 10x the cost of spending 30 minutes planning it correctly upfront."</blockquote><h2>Phase 1: Research (No Code Generation)</h2><p>Goal: Understand the problem deeply. Output: A markdown document describing the problem, constraints, and existing patterns in the codebase.</p><p><strong>What happens in Research:</strong></p><ul><li>Read relevant files (tests, existing similar features, domain models)</li><li>Understand constraints (performance requirements, regulatory, team conventions)</li><li>Identify existing patterns (how authentication is currently done, how state is managed)</li><li>Document findings in a markdown file</li></ul><p><strong>What does NOT happen:</strong></p><ul><li>No code generation</li><li>No architectural proposals</li><li>No tool configuration</li></ul><p>The engineer reads the research doc and makes a go/no-go decision. "Do we understand the problem well enough to design a solution?" If not, more research.</p><h2>Phase 2: Plan (Design, No Implementation)</h2><p>Goal: Design a solution. Output: An architectural markdown document with implementation strategy, file structure, key decision rationale.</p><p><strong>What happens in Plan:</strong></p><ul><li>Propose an architecture (given the research findings)</li><li>Document trade-offs and key decisions</li><li>Outline the implementation steps</li><li>Identify risky areas</li></ul><p><strong>What does NOT happen:</strong></p><ul><li>No code is written</li><li>No tests are written</li><li>No files are modified</li></ul><p>The engineer reviews the plan. They ask questions. They propose changes. Only when the plan is approved do you move to implementation.</p><p>This is the critical gate. A wrong plan caught here costs 30 minutes to revise. The same wrong plan discovered 4 hours into implementation costs days to unwind.</p><h2>Phase 3: Implement (Code, With Verification)</h2><p>Goal: Execute the plan. Output: Working code with passing tests.</p><p><strong>What happens in Implement:</strong></p><ul><li>Follow the plan exactly (no ad-hoc deviations)</li><li>Write code and tests in parallel</li><li>Run tests constantly to catch regressions</li><li>Commit regularly with clear messages</li></ul><p><strong>What does NOT happen:</strong></p><ul><li>No architecture changes (those are plan-phase decisions)</li><li>No new features beyond the plan scope</li><li>No exploratory code (all code is plan-driven)</li></ul><p>If during implementation you discover the plan needs revision, you escalate to the human. You don't silently deviate. This preserves the contract: plan was approved, implement must follow the plan.</p><h2>The State Machine</h2><pre><code>RESEARCH --[plan approved]--> PLAN --[design approved]--> IMPLEMENT --[done]--> end
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Structured RPI Workflows">
+    <meta name="twitter:description" content="Research, Plan, Implement: a three-phase state machine for eliminating AI-driven development errors.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_06.png">
+    <meta name="twitter:image:alt" content="Three glowing shapes on a curved track labelled research, plan and implement, phases that hand off in a fixed order.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/structured-rpi-workflows.html",
+      "headline": "Structured RPI Workflows",
+      "alternativeHeadline": "Research &rarr; Plan &rarr; Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors",
+      "description": "Research, Plan, Implement: a three-phase state machine for eliminating AI-driven development errors.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_06.png", "width": 1024, "height": 1024 },
+      "datePublished": "2026-04-13",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
+    <style>
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
+
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
+
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
+
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
+    </nav>
+</header>
+
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
+
+    <!-- HEADER. KICKER markup: primary label in blue, optional secondary muted, e.g.
+         <span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span>
+         Labels come only from the controlled vocabulary listed at the top of this file. -->
+    <header class="article-head col">
+        <p class="kicker"><span>Workflow</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Engineering</span></p>
+        <h1 id="article-title">Structured RPI Workflows</h1>
+        <p class="dek subtitle">Research &rarr; Plan &rarr; Implement: A Three-Phase State Machine for Eliminating AI-Driven Development Errors</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-04-13">April 13, 2026</time><span aria-hidden="true"> &middot; </span>4 min read</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO. Never cropped, never lazy (it is the LCP image). -->
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_06.png" alt="Three glowing shapes on a curved track labelled research, plan and implement, phases that hand off in a fixed order." width="1024" height="1024" style="object-fit: cover" fetchpriority="high" decoding="async">
+    </figure>
+
+    <div class="article-grid">
+
+        <!-- KEY TAKEAWAYS. Exactly three findings, 12 to 28 words each, declarative, in the body's order,
+             no citations, no imperatives. Markup: <li>One sentence finding.</li> x3 -->
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>The RPI framework imposes a three-phase state machine of Research, Plan and Implement, where each phase has its own goal and outputs and phases never overlap.</li>
+<li>A wrong plan caught at the plan gate costs 30 minutes to revise; discovered 4 hours into implementation, the same plan costs days to unwind.</li>
+<li>A simple feature takes about 1 hour across all three phases and a complex system about 2.5 days, and research and planning compress with experience.</li>
+            </ol>
+        </aside>
+
+        <!-- TOC. Authored by the skill, never built by JS. One <li><a href="#slug">Exact h2 text</a></li> per
+             body h2 (same order), then <li><a href="#references">References</a></li>. Ids are deterministic
+             slugs of the h2 text. Sticky rail at >= 1200px, collapsed disclosure below that. -->
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#the-premature-convergence-problem">The premature convergence problem</a></li>
+<li><a href="#phase-1-research-no-code-generation">Phase 1: Research (no code generation)</a></li>
+<li><a href="#phase-2-plan-design-no-implementation">Phase 2: Plan (design, no implementation)</a></li>
+<li><a href="#phase-3-implement-code-with-verification">Phase 3: Implement (code, with verification)</a></li>
+<li><a href="#the-state-machine">The state machine</a></li>
+<li><a href="#why-this-works">Why this works</a></li>
+<li><a href="#duration-expectations">Duration expectations</a></li>
+<li><a href="#integrating-with-claude-code">Integrating with Claude Code</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <!-- BODY. Expected markup:
+             Section heading:  <h2 id="decline-is-the-default">Decline is the default</h2>   (no h3 in the body)
+             Inline citation:  ...a 50% higher likelihood of survival.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>
+                               (numbered in order of first use; later uses of the same source get id cite-3b, ...)
+             Pull quote:       <aside class="pull-quote" aria-hidden="true"><p>Verbatim line from the body.</p></aside>
+                               (1 or 2; not in the lede or the leaders section; not next to a figure)
+             Source quote:     <figure class="quote"><blockquote><p>Words.</p></blockquote><figcaption>Name, role</figcaption></figure>
+             SVG figure:       <figure class="fig" id="fig-2"><div class="fig-scroll">[the inline svg element: viewBox "0 0 640 H", role="img",
+                                 aria-labelledby="fig2-title fig2-desc" ...><title id="fig2-title">..</title><desc id="fig2-desc">..</desc>
+                                 title and desc first]</div><figcaption><b>Figure 2.</b> Claim sentence. Caveat. Sources: <a href="#ref-1">[1]</a>.</figcaption></figure>
+             Raster figure:    same, with <div class="fig-scroll fig-plate--paper"><img src="../Post_Images/Fig_NN_x.png" alt=".."
+                                 width=".." height=".." loading="lazy" decoding="async"></div> (paper plate for scans/photos)
+             Code:             <pre data-lang="python"><code>...</code></pre>
+             Leaders list:     last element of the body:
+                               <h2 id="what-leaders-should-do">What leaders should do</h2>
+                               <p>Optional lead-in, max 25 words.</p>
+                               <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
+        <div id="article-body" class="prose">
+            <h2 id="the-premature-convergence-problem">The premature convergence problem</h2>
+<p>A common failure mode in AI-augmented development: jump straight from problem statement to code. "Build a login system" &rarr; AI generates 500 lines of code &rarr; you discover the architecture is wrong &rarr; start over.</p>
+<p>This happens because code generation is seductive. The AI can produce working code very quickly. You feel momentum. But momentum in the wrong direction is worse than no momentum.</p>
+<p>The RPI framework (Research-Plan-Implement) prevents premature convergence by imposing a three-phase state machine. Each phase has a specific goal and outputs. Phases don't overlap.</p>
+<figure class="quote"><blockquote><p>"The cost of getting the architecture wrong is 10x the cost of spending 30 minutes planning it correctly upfront."</p></blockquote></figure>
+
+<h2 id="phase-1-research-no-code-generation">Phase 1: Research (no code generation)</h2>
+<p>Goal: Understand the problem deeply. Output: A markdown document describing the problem, constraints, and existing patterns in the codebase.</p>
+<p><strong>What happens in Research:</strong></p>
+<ul>
+<li>Read relevant files (tests, existing similar features, domain models)</li>
+<li>Understand constraints (performance requirements, regulatory, team conventions)</li>
+<li>Identify existing patterns (how authentication is currently done, how state is managed)</li>
+<li>Document findings in a markdown file</li>
+</ul>
+<p><strong>What does NOT happen:</strong></p>
+<ul>
+<li>No code generation</li>
+<li>No architectural proposals</li>
+<li>No tool configuration</li>
+</ul>
+<p>The engineer reads the research doc and makes a go/no-go decision. "Do we understand the problem well enough to design a solution?" If not, more research.</p>
+
+<h2 id="phase-2-plan-design-no-implementation">Phase 2: Plan (design, no implementation)</h2>
+<p>Goal: Design a solution. Output: An architectural markdown document with implementation strategy, file structure, key decision rationale.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup></p>
+<p><strong>What happens in Plan:</strong></p>
+<ul>
+<li>Propose an architecture (given the research findings)</li>
+<li>Document trade-offs and key decisions</li>
+<li>Outline the implementation steps</li>
+<li>Identify risky areas</li>
+</ul>
+<p><strong>What does NOT happen:</strong></p>
+<ul>
+<li>No code is written</li>
+<li>No tests are written</li>
+<li>No files are modified</li>
+</ul>
+<p>The engineer reviews the plan. They ask questions. They propose changes. Only when the plan is approved do you move to implementation.</p>
+<p>This is the critical gate. A wrong plan caught here costs 30 minutes to revise. The same wrong plan discovered 4 hours into implementation costs days to unwind.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup></p>
+
+<h2 id="phase-3-implement-code-with-verification">Phase 3: Implement (code, with verification)</h2>
+<p>Goal: Execute the plan. Output: Working code with passing tests.</p>
+<p><strong>What happens in Implement:</strong></p>
+<ul>
+<li>Follow the plan exactly (no ad-hoc deviations)</li>
+<li>Write code and tests in parallel</li>
+<li>Run tests constantly to catch regressions</li>
+<li>Commit regularly with clear messages</li>
+</ul>
+<p><strong>What does NOT happen:</strong></p>
+<ul>
+<li>No architecture changes (those are plan-phase decisions)</li>
+<li>No new features beyond the plan scope</li>
+<li>No exploratory code (all code is plan-driven)</li>
+</ul>
+<p>If during implementation you discover the plan needs revision, you escalate to the human. You don't silently deviate. This preserves the contract: plan was approved, implement must follow the plan.</p>
+<aside class="pull-quote" aria-hidden="true"><p>A wrong plan caught here costs 30 minutes to revise. The same wrong plan discovered 4 hours into implementation costs days to unwind.</p></aside>
+
+<h2 id="the-state-machine">The state machine</h2>
+<pre data-lang="text"><code>RESEARCH --[plan approved]--&gt; PLAN --[design approved]--&gt; IMPLEMENT --[done]--&gt; end
    |                            |                           |
-   |--[needs more research]-----|                           |--[plan violation detected]--> PLAN
-   |                            |--[revise]--> PLAN         |--[failed tests]--> IMPLEMENT
-   |                            |--[reject]--> RESEARCH     |--[success]--> end</code></pre><p>Key point: you can move backwards. If implementation reveals a plan flaw, you don't patch the code—you go back to the plan phase and revise.</p><h2>Why This Works</h2><p>The RPI structure prevents four common problems:</p><ul><li><strong>Premature implementation:</strong> Forcing a plan phase ensures you think before coding.</li><li><strong>Architecture disagreement:</strong> The plan is reviewed and approved before code exists. No "I didn't realize you were thinking that way" surprises.</li><li><strong>Scope creep:</strong> The implementation phase follows the plan. Requests for additional features go to a new RPI cycle, not into the current one.</li><li><strong>Rework:</strong> By catching design mistakes in the plan phase (cheap), you avoid implementation rework (expensive).</li></ul><h2>Duration Expectations</h2><ul><li><strong>Simple features:</strong> Research 15 min, Plan 15 min, Implement 30 min. Total: 1 hour.</li><li><strong>Medium features:</strong> Research 45 min, Plan 45 min, Implement 3 hours. Total: 4.5 hours.</li><li><strong>Complex systems:</strong> Research 4 hours, Plan 2 hours, Implement 2 days. Total: 2.5 days.</li></ul><p>The research and plan phases compress with experience. You learn patterns and can research/plan faster. Implementation stays expensive—rightfully so, since that's where the work happens.</p><h2>Integrating with Claude Code</h2><p>Claude Code supports RPI natively via plan mode:</p><ol><li><strong>Research phase:</strong> Use standard Claude Code, read files, explore patterns.</li><li><strong>Plan phase:</strong> Enter plan mode (<code>/plan</code>). AI designs a solution, you review and approve.</li><li><strong>Implement phase:</strong> Exit plan mode, execute the approved plan.</li></ol><p>This surfaces the three-phase structure explicitly in the tool.</p></div></div><div class="px-8 md:px-12 py-8 border-t" style="border-color:var(--border-color);background-color:var(--card-bg);"><h3 class="text-lg font-bold mb-6">Related Articles</h3><div class="related-articles"><div class="related-article-card"><h4 class="font-semibold mb-2">The Paradigm Shift</h4><p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem;">How Terminal-Native Agentic AI Transforms the Engineer's Workspace</p><a href="the-paradigm-shift.html">Read →</a></div></div></div><div class="px-8 md:px-12 py-8 border-t" style="border-color:var(--border-color);"><h3 class="text-lg font-bold mb-6">References</h3><ol class="list-decimal space-y-2"><li class="reference-item">McConnell, S. (2004). <em>"Code Complete."</em> Microsoft Press.</li><li class="reference-item">Knuth, D. (1984). <em>"Literate Programming."</em> The Computer Journal. <a href="https://doi.org/10.1093/comjnl/27.2.97" target="_blank">DOI:10.1093/comjnl/27.2.97</a></li></ol></div></article></main><footer class="border-t py-8 mt-16" style="border-color:var(--border-color);color:var(--text-muted);"><div class="max-w-4xl mx-auto px-6 text-center text-sm"><p>&copy; 2026 alhaol.github.io</p></div></footer><script>const t=localStorage.getItem('theme')||'theme-cybersecurity';document.body.className=t;</script></body></html>
+   |--[needs more research]-----|                           |--[plan violation detected]--&gt; PLAN
+   |                            |--[revise]--&gt; PLAN         |--[failed tests]--&gt; IMPLEMENT
+   |                            |--[reject]--&gt; RESEARCH     |--[success]--&gt; end</code></pre>
+<p>Key point: you can move backwards. If implementation reveals a plan flaw, you don't patch the code; you go back to the plan phase and revise.</p>
+
+<h2 id="why-this-works">Why this works</h2>
+<p>The RPI structure prevents four common problems:</p>
+<ul>
+<li><strong>Premature implementation:</strong> Forcing a plan phase ensures you think before coding.</li>
+<li><strong>Architecture disagreement:</strong> The plan is reviewed and approved before code exists. No "I didn't realize you were thinking that way" surprises.</li>
+<li><strong>Scope creep:</strong> The implementation phase follows the plan. Requests for additional features go to a new RPI cycle, not into the current one.</li>
+<li><strong>Rework:</strong> By catching design mistakes in the plan phase (cheap), you avoid implementation rework (expensive).</li>
+</ul>
+
+<h2 id="duration-expectations">Duration expectations</h2>
+<ul>
+<li><strong>Simple features:</strong> Research 15 min, Plan 15 min, Implement 30 min. Total: 1 hour.</li>
+<li><strong>Medium features:</strong> Research 45 min, Plan 45 min, Implement 3 hours. Total: 4.5 hours.</li>
+<li><strong>Complex systems:</strong> Research 4 hours, Plan 2 hours, Implement 2 days. Total: 2.5 days.</li>
+</ul>
+<p>The research and plan phases compress with experience. You learn patterns and can research/plan faster. Implementation stays expensive, rightfully so, since that's where the work happens.</p>
+
+<h2 id="integrating-with-claude-code">Integrating with Claude Code</h2>
+<p>Claude Code supports RPI natively via plan mode:</p>
+<ol>
+<li><strong>Research phase:</strong> Use standard Claude Code, read files, explore patterns.</li>
+<li><strong>Plan phase:</strong> Enter plan mode (<code>/plan</code>). AI designs a solution, you review and approve.</li>
+<li><strong>Implement phase:</strong> Exit plan mode, execute the approved plan.</li>
+</ol>
+<p>This surfaces the three-phase structure explicitly in the tool.</p>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>Require a written research document and an explicit go/no-go decision before any code is generated, so the team confirms it understands the problem first.</li>
+<li>Make plan approval the hard gate: review the proposed architecture, trade-offs and risky areas before implementation starts, while a wrong plan still costs 30 minutes instead of days.</li>
+<li>Hold implementation to the approved plan. Send plan violations back to the plan phase and route requests for additional features to a new RPI cycle, not the current one.</li>
+<li>Budget time by feature size, from about 1 hour for a simple feature to 2.5 days for a complex system, and expect the research and plan phases to compress with experience.</li>
+</ol>
+        </div>
+
+        <!-- AUTHOR CARD. Fixed text: never edit per article. -->
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- REFERENCES. One entry per source, in first-citation order; every entry cited at least once.
+             Markup: <li id="ref-1">Author, A. A., &amp; Author, B. B. (Year). "Article title." <em>Journal</em>, 7(7), e1. <a href="https://doi.org/..." target="_blank" rel="noopener">https://doi.org/...</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+             Books and reports: title in <em>. Link text is the full URL. -->
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Knuth, D. (1984). "Literate programming." <em>The Computer Journal</em>, 27(2), 97-111. <a href="https://doi.org/10.1093/comjnl/27.2.97" target="_blank" rel="noopener">https://doi.org/10.1093/comjnl/27.2.97</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">McConnell, S. (2004). <em>Code complete</em>. Microsoft Press. <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- RELATED. Exactly three cards. Dek is the target article's own dek, verbatim. Markup:
+         <li class="rcard"><img src="../Post_Images/Image_NN.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+           <p class="rcard-kicker">Leadership</p><h3><a href="slug.html">Title</a></h3><p class="rcard-dek">Target dek.</p></li>
+         (Image_32 is .jpg.) -->
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard" style="max-width: 24rem">
+    <img src="../Post_Images/Image_01.png" alt="" width="1024" height="1024" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="the-paradigm-shift.html">The Paradigm Shift</a></h3>
+    <p class="rcard-dek">Beyond Autocomplete: How Terminal-Native Agentic AI Fundamentally Transforms the Senior Engineer's Workspace</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
+</body>
+</html>
