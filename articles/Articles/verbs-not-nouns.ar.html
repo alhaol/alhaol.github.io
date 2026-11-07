@@ -1,147 +1,398 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>أفعال لا أسماء | alhaol.github.io</title>
+    <meta name="description" content="سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.ar.html">
+    <link rel="alternate" hreflang="ar" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.ar.html">
+    <link rel="alternate" hreflang="en" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.html">
+    <link rel="alternate" hreflang="x-default" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Kufi+Arabic:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="ar_AR">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:title" content="أفعال لا أسماء">
+    <meta property="og:description" content="سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/verbs-not-nouns.ar.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_55.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="كأس ثابتة بين قوسين على اليسار، وعلى اليمين سلسلة من الكؤوس تميل على قوس متقطّع حتى تنسكب محتوياتها على الأرض.">
+    <meta property="article:published_time" content="2026-08-30">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="أفعال لا أسماء">
+    <meta name="twitter:description" content="سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_55.png">
+    <meta name="twitter:image:alt" content="كأس ثابتة بين قوسين على اليسار، وعلى اليمين سلسلة من الكؤوس تميل على قوس متقطّع حتى تنسكب محتوياتها على الأرض.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/verbs-not-nouns.ar.html",
+      "headline": "أفعال لا أسماء",
+      "alternativeHeadline": "سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.",
+      "description": "سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_55.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-08-30",
+      "dateModified": "2026-11-07",
+      "inLanguage": "ar",
+      "translationOfWork": { "@type": "Article", "@id": "https://alhaol.github.io/articles/Articles/verbs-not-nouns.html", "url": "https://alhaol.github.io/articles/Articles/verbs-not-nouns.html", "inLanguage": "en" },
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:Inter,"Noto Naskh Arabic","Amiri",serif;
+        --font-body:Inter,"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.9 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; inset-inline-start: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.85; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Noto Naskh Arabic', 'Amiri', serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 100% 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    [dir="rtl"] .icon-back { transform: scaleX(-1); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        h1, h2, h3, h4, .kufi { font-family: 'Noto Kufi Arabic', 'Inter', sans-serif; }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.7rem; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.6; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.75rem; line-height: 1.6; }
-        .prose p { margin-bottom: 1.25rem; line-height: 2.1; color: var(--text-muted); font-size: 1.05rem; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .9375rem/1.5 var(--font-body); color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.45 var(--font-display); color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.8; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.5; }
+    .byline-meta { font: 500 .875rem/1.7 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
 
-        /* RTL mirroring: every directional rule from the English template is flipped here. */
-        .prose blockquote {
-            border-right: 4px solid var(--primary-color);
-            border-left: none;
-            padding: 1.25rem;
-            font-style: normal;
-            color: var(--text-muted);
-            background-color: var(--card-bg);
-            margin: 1.5rem 0;
-            border-radius: 0.25rem;
-            line-height: 2;
-        }
-        .prose ul, .prose ol { padding-right: 1.5rem; padding-left: 0; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; line-height: 2; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; margin-left: 0.75rem; margin-right: 0; margin-bottom: 0.5rem; font-family: 'Noto Kufi Arabic', sans-serif; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-right: 1.5rem; padding-left: 0; color: var(--text-muted); line-height: 1.9; }
-        .reference-item a { color: var(--primary-color); }
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
 
-        /* Code stays left-to-right. Arabic prose direction must not leak into source. */
-        code, pre { direction: ltr; text-align: left; unicode-bidi: isolate; font-family: 'JetBrains Mono', monospace; }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.9em; color: var(--primary-color); display: inline-block; }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        pre code { background: none; padding: 0; display: block; }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
 
-        /* Figures are authored in mirrored RTL geometry for this edition, not reused from
-           the English page. Model names and numerals stay Latin because that is how they
-           appear in the sources; every label word is Arabic. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.9rem; line-height: 1.9; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 700; }
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .9375rem/1.5 var(--font-body); color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-inline-start: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.9; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; inset-inline-start: 0; font: 600 1.25rem/1.6 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
 
-        .lang-switch { font-family: 'Inter', sans-serif; font-size: 0.8rem; border: 1px solid var(--border-color); padding: 0.35rem 0.7rem; border-radius: 0.3rem; color: var(--text-muted); text-decoration: none; }
-        .lang-switch:hover { color: var(--primary-color); border-color: var(--primary-color); }
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .9375rem/1.5 var(--font-body); color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin-block: 0 .2rem; margin-inline: .25rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-inline-start: 1px solid var(--border); }
+    .toc a { display: block; padding-block: .35rem; padding-inline: 1rem 0; margin-inline-start: -1px; border-inline-start: 2px solid transparent; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-inline-start-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.9; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-inline-start: 1.5em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 700 2rem/1.5 var(--font-display); color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.6 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; inset-inline-start: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-inline-start: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-inline-start: 1.25rem; border-inline-start: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-inline-end: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: 600 1.625rem/1.75 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .9375rem; line-height: 1.9; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { direction: ltr; unicode-bidi: isolate; font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { direction: ltr; text-align: left; font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 700 1.375rem/1.6 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.6 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.9; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .9375rem/1.5 var(--font-body); color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding-block: .15rem; padding-inline: 2.75rem .25rem; margin-inline-start: -.25rem; font-size: .9375rem; line-height: 1.9; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; inset-inline-start: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-inline-start: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .9375rem/1.5 var(--font-body); color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .8125rem/1.4 var(--font-body); color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.5 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.8; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link kufi">📚 مقالات أخرى</a>
-            <a href="verbs-not-nouns.html" class="lang-switch">Read in English</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">تخطَّ إلى المقال</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">إبراهيم أبو الهول</a>
+    <nav class="sitebar-nav" aria-label="الموقع">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>كل المقالات</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="السمة الداكنة" aria-pressed="true" title="التبديل بين السمة الفاتحة والداكنة" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_55.png" alt="أفعال لا أسماء" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-ai">الذكاء الاصطناعي والروبوتات</span>
-                        <span class="category-badge category-architecture">البُنى والمعمارية</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>أنظمة الذكاء الاصطناعي</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">المعمارية</span></p>
+        <h1 id="article-title">أفعال لا أسماء</h1>
+        <p class="dek subtitle">سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">إبراهيم أبو الهول</p>
+                <p class="byline-meta"><time datetime="2026-08-30">30 أغسطس 2026</time><span aria-hidden="true"> &middot; </span>8 دقائق قراءة</p>
+            </div>
+        </div>
+        <p class="byline-meta" style="margin-top: 0.75rem"><a href="verbs-not-nouns.html" lang="en" hreflang="en" dir="ltr">Read in English</a></p>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4" style="line-height: 1.5;">أفعال لا أسماء</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted); line-height: 1.9;">سياسات الروبوت ترث كفاءتها من نموذجها الأساس، والنماذج اللغوية لم يُطلب منها يومًا أن تتعلّم الفيزياء.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_55.png" alt="كأس ثابتة بين قوسين على اليسار، وعلى اليمين سلسلة من الكؤوس تميل على قوس متقطّع حتى تنسكب محتوياتها على الأرض." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">إبراهيم أبو الهول، دكتوراه، مهندس محترف، عضو أول في IEEE</p>
-                            <p>قائد تقني في الذكاء الاصطناعي</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>تاريخ النشر: 30 أغسطس 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>زمن القراءة: 8 دقائق تقريبًا</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">أهم النقاط</h2>
+            <ol>
+                <li>وأوزان النظام كلّها تقريبًا اكتُسبت أثناء تعلُّم العلاقة بين الصور والكلمات. لذلك يرث النموذج فهمًا متينًا للأسماء والفئات، ولا يكاد يرث شيئًا عن كيفية حركة الأشياء.</li>
+                <li>عبر عشر مهام لم يرها النموذج من قبل، أنجز DreamZero نسبة 39.5 بالمئة من تقدّم المهمة المحدَّد. أمّا أقوى مقارنة، وهي GR00T N1.6 بتدريبه المسبق الخاص، فبلغت 16.3 بالمئة.</li>
+                <li>والخلاصة الأمينة عن DreamZero أن النموذج الأساس المرئي ينتقل أفضل من النموذج اللغوي بفارق واسع، وأن سبب تفوّقه لا يزال استنتاجًا لا برهانًا.</li>
+            </ol>
+        </aside>
 
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">في هذه الصفحة</summary>
+                <ol>
+                    <li><a href="#what-a-backbone-hands-down">ما الذي يورِّثه النموذج الأساس</a></li>
+                    <li><a href="#predict-the-world-then-act">تنبّأ بالعالم أولًا، ثم تصرَّف</a></li>
+                    <li><a href="#what-the-numbers-show">ماذا تُظهر الأرقام فعلًا</a></li>
+                    <li><a href="#the-part-that-is-still-a-hypothesis">الجزء الذي لا يزال فرضية</a></li>
+                    <li><a href="#the-ablation-that-settles-it-for-your-own-stack">تجربة الحذف التي تحسم الأمر في منظومتك أنت</a></li>
+                    <li><a href="#what-leaders-should-do">ما الذي ينبغي أن يفعله القادة</a></li>
+                    <li><a href="#references">المراجع</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <div id="article-body" class="prose">
 <p>يستطيع نموذج الرؤية واللغة والفعل أن ينظر إلى طاولة ويحدّد أيُّ الأجسام هو الكأس. لكن ادفع الكأس نحو الحافة واسأله عمّا سيحدث بعد ذلك، فستجده على أرض هشّة، لأن شيئًا في تدريبه لم يُلزِمه يومًا بأن يعرف.</p>
 
-<p>هذه ليست فجوة في الحجم، بل فجوة في النَّسَب. فنموذج الرؤية واللغة والفعل (<code>VLA</code>) يُبنى بأخذ نموذج رؤية ولغة دُرِّب مسبقًا على صور مقترنة بنصوص، ثم يُركَّب عليه رأس فعل (action head). وأوزان النظام كلّها تقريبًا اكتُسبت أثناء تعلُّم العلاقة بين الصور والكلمات. لذلك يرث النموذج فهمًا متينًا للأسماء والفئات، ولا يكاد يرث شيئًا عن كيفية حركة الأشياء.</p>
+<p>هذه ليست فجوة في الحجم، بل فجوة في النَّسَب. فنموذج الرؤية واللغة والفعل (<code>VLA</code>) يُبنى بأخذ نموذج رؤية ولغة دُرِّب مسبقًا على صور مقترنة بنصوص، ثم يُركَّب عليه رأس فعل (action head).<sup class="cite"><a href="#ref-1" id="cite-1a">1</a>,<a href="#ref-2" id="cite-2a">2</a></sup> وأوزان النظام كلّها تقريبًا اكتُسبت أثناء تعلُّم العلاقة بين الصور والكلمات. لذلك يرث النموذج فهمًا متينًا للأسماء والفئات، ولا يكاد يرث شيئًا عن كيفية حركة الأشياء.</p>
 
-<blockquote>النموذج بارع في ما أجبره هدف تدريبه المسبق على البراعة فيه. التنبّؤ بالوصف النصّي يجعله فصيحًا في الأسماء. أمّا التنبّؤ بالإطار التالي فهو وحده ما يجعله فصيحًا في الأفعال.</blockquote>
+<p>النموذج بارع في ما أجبره هدف تدريبه المسبق على البراعة فيه. التنبّؤ بالوصف النصّي يجعله فصيحًا في الأسماء. أمّا التنبّؤ بالإطار التالي فهو وحده ما يجعله فصيحًا في الأفعال.</p>
 
-<h2>ما الذي يورِّثه النموذج الأساس</h2>
+<h2 id="what-a-backbone-hands-down">ما الذي يورِّثه النموذج الأساس</h2>
 
 <p>الطريقة المفيدة لقراءة أي سياسة روبوت هي أن تسأل: ماذا كان هذا النموذج قبل أن يصبح سياسة روبوت؟ المخطّطات المعمارية ترسم رأس الفعل في نهاية المسار، فيبدو وكأنه الجزء المهم. وهو في الحقيقة أصغر الأجزاء. النموذج الأساس (backbone) هو ما يحدّد ما يعرفه النظام، أمّا الرأس فيحدّد كيفية التعبير عن تلك المعرفة فحسب.</p>
 
-<p>وتضع NVIDIA الفارق على هذا الخط تحديدًا. فنموذج العالم والفعل (<code>WAM</code>) يُعرَّف بأنه سياسة «تبدأ من نموذج عالَم أو نموذج فيديو مُدرَّب مسبقًا، ثم تُكيَّف لتمثيل أو توقّع كيفية تغيّر المشهد عبر الزمن وإصدار الأفعال المقابلة». أمّا نموذج الرؤية واللغة والفعل فيبدأ من نموذج أساس للصور والنصوص. الرأس نفسه، والسَّلف مختلف، وهذا الاختلاف في السَّلف هو الحُجّة كلّها.</p>
+<p>وتضع NVIDIA الفارق على هذا الخط تحديدًا. فنموذج العالم والفعل (<code>WAM</code>) يُعرَّف بأنه سياسة «تبدأ من نموذج عالَم أو نموذج فيديو مُدرَّب مسبقًا، ثم تُكيَّف لتمثيل أو توقّع كيفية تغيّر المشهد عبر الزمن وإصدار الأفعال المقابلة».<sup class="cite"><a href="#ref-3" id="cite-3a">3</a>,<a href="#ref-4" id="cite-4a">4</a></sup> أمّا نموذج الرؤية واللغة والفعل فيبدأ من نموذج أساس للصور والنصوص. الرأس نفسه، والسَّلف مختلف، وهذا الاختلاف في السَّلف هو الحُجّة كلّها.</p>
 
 <p>مدوَّنة الصور والنصوص فهرسٌ لأشياء موجودة. أمّا مدوَّنة الفيديو فسِجلٌّ لأحداث تقع. وواحدة فقط من هاتين تحتوي على المعلومة القائلة إن السائل المسكوب يسقط، وإن الكُمّ المطويّ يبقى مطويًّا، وإن الورقة تنزلق على أختها قبل أن تنفصل عنها. ولا يمكنك استخراج ذلك من الأوصاف النصّية مهما كبر حجمها، لأن تلك الأوصاف لم يُطلب منها يومًا أن ترمِّز هذه المعلومة.</p>
 
-<figure class="fig">
-    <div class="fig-scroll">
+<figure class="fig" id="fig-1">
+    <div class="fig-scroll" dir="rtl">
         <svg direction="rtl" viewBox="0 0 640 272" role="img" aria-labelledby="arfig1-title arfig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="arfig1-title">ما يورّثه النموذج الأساس اللغوي مقابل النموذج الأساس المرئي لسياسة الروبوت</title>
             <desc id="arfig1-desc">نموذج الرؤية واللغة والفعل يُدرَّب مسبقًا على صور مقترنة بنصوص، فيرث الأسماء والفئات ودلالات الأجسام، ويضعف في الديناميكا والتلامس. أمّا نموذج العالم والفعل فيُدرَّب مسبقًا على فيديو واسع النطاق، فيرث ديناميكا المشهد وكيفية تغيّر الأشياء، ويضعف في الربط اللغوي الدقيق. رأس الفعل واحد في الحالتين، والمختلف هو السَّلف.</desc>
@@ -155,7 +406,7 @@
             <rect x="432" y="68" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="598" y="88" text-anchor="start" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700">VLA</text>
             <text x="598" y="108" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">صور مقترنة بنصوص</text>
-            <text x="598" y="126" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">فهرس لأشياء موجودة</text>
+            <text x="598" y="126" text-anchor="start" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="12">فهرس لأشياء موجودة</text>
 
             <rect x="224" y="68" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="404" y="68" width="4" height="64" fill="#60a5fa"/>
@@ -170,7 +421,7 @@
             <rect x="432" y="152" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="598" y="172" text-anchor="start" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700">WAM</text>
             <text x="598" y="192" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">فيديو واسع النطاق</text>
-            <text x="598" y="210" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">سجل لأحداث تقع</text>
+            <text x="598" y="210" text-anchor="start" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="12">سجل لأحداث تقع</text>
 
             <rect x="224" y="152" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="404" y="152" width="4" height="64" fill="#60a5fa"/>
@@ -188,24 +439,26 @@
     <figcaption><b>الشكل 1.</b> الكفاءة موروثة من مدوَّنة التدريب المسبق، لا مضافة عبر رأس الفعل. المصدر: NVIDIA، <span dir="ltr">«Pretrained to Imagine, Fine-Tuned to Act»</span>، 2026.</figcaption>
 </figure>
 
-<h2>تنبّأ بالعالم أولًا، ثم تصرَّف</h2>
+<h2 id="predict-the-world-then-act">تنبّأ بالعالم أولًا، ثم تصرَّف</h2>
 
-<p>يمثّل DreamZero أوضح تجسيد لهذا التصحيح. فهو محوّل انتشار انحداري ذاتي (autoregressive diffusion transformer) بحجم 14 مليار معامل، مبني على <code>Wan2.1-I2V-14B</code>، وهو نموذج أساس لتوليد الفيديو. يتلقّى ثلاثة مدخلات: السياق البصري عبر مُرمِّز تبايني، والتعليمة اللغوية عبر مُرمِّز نصّي، وحالة مفاصل الروبوت نفسه عبر مُرمِّز حالة. ثم يزيل الضوضاء عن الفيديو المستقبلي والأفعال المستقبلية معًا عبر كتل محوّل مشتركة، مع مُفكِّك ترميز منفصل لكلٍّ منهما، ويعمل في حلقة مغلقة بتردّد 7 هرتز.</p>
+<p>يمثّل DreamZero أوضح تجسيد لهذا التصحيح. فهو محوّل انتشار انحداري ذاتي (autoregressive diffusion transformer) بحجم 14 مليار معامل، مبني على <code>Wan2.1-I2V-14B</code>، وهو نموذج أساس لتوليد الفيديو.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> يتلقّى ثلاثة مدخلات: السياق البصري عبر مُرمِّز تبايني، والتعليمة اللغوية عبر مُرمِّز نصّي، وحالة مفاصل الروبوت نفسه عبر مُرمِّز حالة. ثم يزيل الضوضاء عن الفيديو المستقبلي والأفعال المستقبلية معًا عبر كتل محوّل مشتركة، مع مُفكِّك ترميز منفصل لكلٍّ منهما، ويعمل في حلقة مغلقة بتردّد 7 هرتز.</p>
 
-<p>ونتيجة هذا التصميم تغيُّرٌ في ما يُطلب من النموذج أن يتعلّمه. فالسياسة التقليدية تتعلّم تخطيطًا كثيفًا من الحالات إلى الأفعال عبر محاكاة العروض التوضيحية. أمّا نموذج العالم والفعل فيتنبّأ بما سيبدو عليه المشهد بعد قليل، ثم يستنتج أوامر المحرّكات المتّسقة مع ذلك المستقبل. وتصف NVIDIA هذا الانتقال بأنه تحويل لتعلُّم الفعل باتجاه الديناميكا العكسية (inverse dynamics)، وهي مسألة أفضل صياغةً بكثير: سؤال «أيّ حركة تُنتج هذه النتيجة» أيسر من سؤال «أيّ حركة ينبغي أن أقوم بها».</p>
+<aside class="pull-quote" aria-hidden="true"><p>مدوَّنة الصور والنصوص فهرسٌ لأشياء موجودة. أمّا مدوَّنة الفيديو فسِجلٌّ لأحداث تقع.</p></aside>
 
-<p>ويحمل البحث اسم Jim Fan بين مؤلّفيه، وهذا مهم عند قراءته. فالحجّة نفسها تظهر في محاضرته لدى Sequoia بصيغة أوسع، والصيغتان لا تقولان الشيء ذاته. المحاضرة هي تسويق الفكرة. أمّا البحث فهو الدليل عليها، والدليل أضيق.</p>
+<p>ونتيجة هذا التصميم تغيُّرٌ في ما يُطلب من النموذج أن يتعلّمه. فالسياسة التقليدية تتعلّم تخطيطًا كثيفًا من الحالات إلى الأفعال عبر محاكاة العروض التوضيحية. أمّا نموذج العالم والفعل فيتنبّأ بما سيبدو عليه المشهد بعد قليل، ثم يستنتج أوامر المحرّكات المتّسقة مع ذلك المستقبل. وتصف NVIDIA هذا الانتقال بأنه تحويل لتعلُّم الفعل باتجاه الديناميكا العكسية (inverse dynamics)، وهي مسألة أفضل صياغةً بكثير: سؤال «أيّ حركة تُنتج هذه النتيجة» أيسر من سؤال «أيّ حركة ينبغي أن أقوم بها».<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup></p>
 
-<h2>ماذا تُظهر الأرقام فعلًا</h2>
+<p>ويحمل البحث اسم Jim Fan بين مؤلّفيه، وهذا مهم عند قراءته. فالحجّة نفسها تظهر في محاضرته لدى Sequoia بصيغة أوسع، والصيغتان لا تقولان الشيء ذاته.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> المحاضرة هي تسويق الفكرة. أمّا البحث فهو الدليل عليها، والدليل أضيق.</p>
 
-<figure class="fig">
-    <div class="fig-scroll">
+<h2 id="what-the-numbers-show">ماذا تُظهر الأرقام فعلًا</h2>
+
+<figure class="fig" id="fig-2">
+    <div class="fig-scroll" dir="rtl">
         <svg direction="rtl" viewBox="0 0 640 300" role="img" aria-labelledby="arfig2-title arfig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="arfig2-title">متوسط تقدّم المهمة في مهام لم يرها النموذج، لـ DreamZero مقابل خطوط الأساس</title>
             <desc id="arfig2-desc">يبلغ DreamZero نسبة 39.5 بالمئة من متوسط تقدّم المهمة في عشر مهام جديدة. ويبلغ GR00T N1.6 المُدرَّب مسبقًا 16.3 بالمئة. أمّا GR00T N1.6 وpi-0.5 حين يُدرَّبان من الصفر فيسجّلان أقل من واحد بالمئة. انهيار الحالتين المُدرَّبتين من الصفر هو الدليل على أن التدريب المسبق، لا رأس الفعل، هو ما يقوم بالعمل كلّه تقريبًا.</desc>
 
             <text x="610" y="30" text-anchor="start" fill="#f1f5f9" font-family="Noto Kufi Arabic, sans-serif" font-size="15" font-weight="700">مهام لم يرها النموذج: ما الذي يصمد دون بيانات خاصة بالمهمة</text>
-            <text x="610" y="50" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">متوسط تقدّم المهمة على 10 مهام جديدة، 80 تشغيلة. الأعلى أفضل.</text>
+            <text x="610" y="50" text-anchor="start" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="12">متوسط تقدّم المهمة على 10 مهام جديدة، 80 تشغيلة. الأعلى أفضل.</text>
 
             <line x1="390" y1="66" x2="390" y2="236" stroke="#2a3f5f" stroke-width="1"/>
             <line x1="314" y1="66" x2="314" y2="236" stroke="#2a3f5f" stroke-width="1"/>
@@ -235,22 +488,22 @@
             <text x="239" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">20%</text>
             <text x="163" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">30%</text>
             <text x="88" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">40%</text>
-            <text x="610" y="282" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">تقدّم المهمة: مراحل الطيّ من 5، وثمار مُعبَّأة من 10، وأغراض تُزال.</text>
+            <text x="610" y="282" text-anchor="start" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="12">تقدّم المهمة: مراحل الطيّ من 5، وثمار مُعبَّأة من 10، وأغراض تُزال.</text>
         </svg>
     </div>
     <figcaption><b>الشكل 2.</b> الحالتان المُدرَّبتان من الصفر تنهاران إلى ما يقارب الصفر، وهذا هو الاكتشاف: النموذج الأساس هو المنتج. المصدر: Ye وآخرون، <span dir="ltr">«World Action Models are Zero-shot Policies»</span>، <span dir="ltr">arXiv:2602.15922</span>، الشكل 9.</figcaption>
 </figure>
 
-<p>عبر عشر مهام لم يرها النموذج من قبل، أنجز DreamZero نسبة 39.5 بالمئة من تقدّم المهمة المحدَّد. أمّا أقوى مقارنة، وهي GR00T N1.6 بتدريبه المسبق الخاص، فبلغت 16.3 بالمئة. وفي تقييم منفصل على DROID-Franka سجّل 49 بالمئة تقدّمًا في المهمة ونسبة نجاح 22.5 بالمئة، مقابل 31 بالمئة و12.5 بالمئة لـ GR00T N1.6. وعلى لوحة صدارة RoboArena يقف عند 1750 نقطة إيلو، متقدّمًا على Pi-0.5 عند 1622.</p>
+<p>عبر عشر مهام لم يرها النموذج من قبل، أنجز DreamZero نسبة 39.5 بالمئة من تقدّم المهمة المحدَّد. أمّا أقوى مقارنة، وهي GR00T N1.6 بتدريبه المسبق الخاص، فبلغت 16.3 بالمئة.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a></sup> وفي تقييم منفصل على DROID-Franka سجّل 49 بالمئة تقدّمًا في المهمة ونسبة نجاح 22.5 بالمئة، مقابل 31 بالمئة و12.5 بالمئة لـ GR00T N1.6. وعلى لوحة صدارة RoboArena يقف عند 1750 نقطة إيلو، متقدّمًا على Pi-0.5 عند 1622.</p>
 
 <p>والصفّان الأهم هما الصفّان في أسفل الرسم. فـ GR00T N1.6 وPi-0.5 حين يُدرَّبان من الصفر، دون أي تدريب مسبق، يسجّلان معًا أقل من واحد بالمئة. ومهما كان ما تفعله هاتان المعماريتان، فهما لا تتعلّمانه من عروض الروبوت التوضيحية. تلك العروض طبقة تكييف رقيقة فوق شيء كان موجودًا سلفًا، والخلاف بين نماذج الرؤية واللغة والفعل ونماذج العالم والفعل هو خلاف حول ماهية ذلك الشيء.</p>
 
-<p>وكفاءة البيانات تشير إلى الاتجاه نفسه. فقد حقّق DreamZero تحسّنًا نسبيًا يزيد على 42 بالمئة في المهام الجديدة انطلاقًا من 10 إلى 20 دقيقة من عروض الفيديو وحدها، وتكيّف مع جسم روبوتي مختلف تمامًا من 30 دقيقة من بيانات اللعب. وهذه أرقام لا تراها إلّا حين تكون معظم الكفاءة سابقة للمهمة نفسها.</p>
+<p>وكفاءة البيانات تشير إلى الاتجاه نفسه. فقد حقّق DreamZero تحسّنًا نسبيًا يزيد على 42 بالمئة في المهام الجديدة انطلاقًا من 10 إلى 20 دقيقة من عروض الفيديو وحدها، وتكيّف مع جسم روبوتي مختلف تمامًا من 30 دقيقة من بيانات اللعب.<sup class="cite"><a href="#ref-5" id="cite-5c">5</a></sup> وهذه أرقام لا تراها إلّا حين تكون معظم الكفاءة سابقة للمهمة نفسها.</p>
 
-<h2>الجزء الذي لا يزال فرضية</h2>
+<h2 id="the-part-that-is-still-a-hypothesis">الجزء الذي لا يزال فرضية</h2>
 
-<figure class="fig">
-    <div class="fig-scroll">
+<figure class="fig" id="fig-3">
+    <div class="fig-scroll" dir="rtl">
         <svg direction="rtl" viewBox="0 0 640 296" role="img" aria-labelledby="arfig3-title arfig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="arfig3-title">ثلاث دعاوى تُساق لنماذج العالم والفعل، مرتّبة بحسب قوة الدليل عليها</title>
             <desc id="arfig3-desc">الدعوى بأن النموذج الأساس المرئي يتفوق على النموذج الأساس اللغوي في المهام الجديدة مقيسة في البحث. والدعوى بأن التنبّؤ بالعالم أولًا يجعل توليد الفعل مسألة أفضل صياغة تطرحها NVIDIA بوصفها فرضية. أمّا الدعوى بأن نماذج الفيديو تتعلّم الجاذبية والاحتكاك والطفو من التنبّؤ بالإطارات فتظهر في المحاضرات ولا يثبتها البحث.</desc>
@@ -265,7 +518,7 @@
             <text x="594" y="114" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">في مهام لم يرها النموذج قط</text>
             <rect x="30" y="68" width="140" height="58" rx="4" fill="#1a2942" stroke="#60a5fa"/>
             <text x="100" y="94" fill="#60a5fa" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">مَقيسة</text>
-            <text x="100" y="112" direction="ltr" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
+            <text x="100" y="112" direction="ltr" fill="#8090a8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
 
             <rect x="190" y="136" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="606" y="136" width="4" height="58" fill="#f59e0b"/>
@@ -273,7 +526,7 @@
             <text x="594" y="182" text-anchor="start" fill="#f1f5f9" font-family="Noto Naskh Arabic, serif" font-size="13">مسألة أيسر وأفضل صياغة</text>
             <rect x="30" y="136" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
             <text x="100" y="162" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">فرضية</text>
-            <text x="100" y="180" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="11" text-anchor="middle">بصياغة NVIDIA</text>
+            <text x="100" y="180" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="11" text-anchor="middle">بصياغة NVIDIA</text>
 
             <rect x="190" y="204" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="606" y="204" width="4" height="58" fill="#f59e0b"/>
@@ -283,7 +536,7 @@
             <text x="100" y="230" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">ليست في</text>
             <text x="100" y="248" fill="#f59e0b" font-family="Noto Kufi Arabic, sans-serif" font-size="11" font-weight="700" text-anchor="middle">البحث</text>
 
-            <text x="610" y="286" text-anchor="start" fill="#64748b" font-family="Noto Naskh Arabic, serif" font-size="12">أقوى صيغ الحُجّة هي الأسرع انتشارًا والأقل سندًا.</text>
+            <text x="610" y="286" text-anchor="start" fill="#8090a8" font-family="Noto Naskh Arabic, serif" font-size="12">أقوى صيغ الحُجّة هي الأسرع انتشارًا والأقل سندًا.</text>
         </svg>
     </div>
     <figcaption><b>الشكل 3.</b> الصيغة الشائعة تسبق الدليل بخطوتين. المصادر: <span dir="ltr">arXiv:2602.15922</span>، ومدوّنة مطوّري NVIDIA 2026، ومحاضرة <span dir="ltr">Sequoia AI Ascent 2026</span>.</figcaption>
@@ -291,13 +544,13 @@
 
 <p>الصيغة التي تنتشر على وسائل التواصل تقول إن نماذج الفيديو تكتشف تلقائيًا الجاذبية والاحتكاك والطفو بمجرّد تعلّمها التنبّؤ بالإطارات. وهي عبارة جميلة. لكن البحث لا يقولها.</p>
 
-<p>ما يقوله البحث هو أن النموذج يُهيَّأ من أوزان انتشار فيديو دُرِّبت على فيديو واسع النطاق، وأن ذلك يمنحه أولويّات مكانية زمانية نافعة. وكتابة NVIDIA نفسها حذرة على نحو لا تلتزم به المحاضرة. فهي تطرح ثلاث فرضيات، كلٌّ منها مشروطة: أن التنبّؤ بالديناميكا العكسية «أيسر غالبًا» من توليد الفعل مباشرة، وأن الفجوة بين الفيديو والفعل «قد تكون أصغر» من الفجوة بين اللغة والفعل، وأن بيانات الفيديو تُنظِّم سياسات الروبوت. هذه تخمينات معقولة تتّسق معها نتيجة مقيسة. لكنها ليست برهانًا على أن قانونًا فيزيائيًا بعينه قد جرى تعلُّمه.</p>
+<p>ما يقوله البحث هو أن النموذج يُهيَّأ من أوزان انتشار فيديو دُرِّبت على فيديو واسع النطاق، وأن ذلك يمنحه أولويّات مكانية زمانية نافعة.<sup class="cite"><a href="#ref-5" id="cite-5d">5</a></sup> وكتابة NVIDIA نفسها حذرة على نحو لا تلتزم به المحاضرة. فهي تطرح ثلاث فرضيات، كلٌّ منها مشروطة: أن التنبّؤ بالديناميكا العكسية «أيسر غالبًا» من توليد الفعل مباشرة، وأن الفجوة بين الفيديو والفعل «قد تكون أصغر» من الفجوة بين اللغة والفعل، وأن بيانات الفيديو تُنظِّم سياسات الروبوت.<sup class="cite"><a href="#ref-3" id="cite-3c">3</a></sup> هذه تخمينات معقولة تتّسق معها نتيجة مقيسة. لكنها ليست برهانًا على أن قانونًا فيزيائيًا بعينه قد جرى تعلُّمه.</p>
 
 <p>ويستحق هذا التمييز أن نتمسّك به، لأن هذا الموقع ناقش الحالة العامة بإسهاب في <a href="intelligence-is-applied-causality.html">Intelligence Is Applied Causality</a>. فالنظام الذي يتنبّأ بالحالة التالية بدقّة ليس بالضرورة نظامًا يحمل نموذجًا للآلية السببية، والاثنان ينفصلان بأوضح ما يكون خارج توزيع التدريب، وهو بالضبط الموضع الذي يثبت فيه الروبوت جدواه. والخلاصة الأمينة عن DreamZero أن النموذج الأساس المرئي ينتقل أفضل من النموذج اللغوي بفارق واسع، وأن سبب تفوّقه لا يزال استنتاجًا لا برهانًا.</p>
 
-<h3>تجربة الحذف التي تحسم الأمر في منظومتك أنت</h3>
+<h2 id="the-ablation-that-settles-it-for-your-own-stack">تجربة الحذف التي تحسم الأمر في منظومتك أنت</h2>
 
-<pre><code># Hold the action head, the robot data and the tasks fixed.
+<pre data-lang="python" dir="ltr"><code># Hold the action head, the robot data and the tasks fixed.
 # Vary only what the policy was before it was a policy.
 
 for backbone in ["none", "vision_language", "video_world_model"]:
@@ -312,62 +565,162 @@ for backbone in ["none", "vision_language", "video_world_model"]:
 
 <p>والقراءة العملية لمن يموّل هذا العمل هي أن سياسة الروبوت في جوهرها رهان على مدوَّنة تدريب مسبق. والاختيار بين نموذج أساس لغوي ونموذج أساس مرئي هو اختيار بين أن يكون النظام أفضل في التعرّف على العالم أو أفضل في استباقه. وبالنسبة لآلة عليها أن تتصرّف، فالاستباق هو المهارة الأنفع، والأدلّة اليوم ترجّحه بوضوح يكفي للتخطيط على أساسه، شرط ألّا يبالغ أحد في تفسير سبب نجاحه.</p>
 
-<h2>ما الذي ينبغي على القادة فعله</h2>
+<h2 id="what-leaders-should-do">ما الذي ينبغي أن يفعله القادة</h2>
 
-<ol class="list-decimal">
+<ol>
     <li>اسأل أي مورّد روبوتات عمّا دُرِّبت عليه سياسته مسبقًا قبل أن ترى روبوتًا قط، واعتبر الإجابة المبهمة إجابةً بحد ذاتها. فالنموذج الأساس يتنبّأ بالسلوك في المهام خارج العرض التوضيحي أفضل بكثير من أي رقم في لوحة النتائج.</li>
     <li>نفّذ تجربة الحذف الثلاثية أعلاه على مهامك أنت قبل الالتزام بأي معمارية: بلا تدريب مسبق، ثم بتدريب لغوي، ثم بتدريب مرئي، مع تثبيت كل شيء آخر. تكلفتها دورة تدريب واحدة، وهي النسخة الوحيدة من هذه المقارنة التي تعكس بياناتك.</li>
     <li>قيِّم على مهام غائبة فعلًا عن مجموعة تدريبك، وأبلغ عن تقدّم المهمة لا عن نسبة النجاح وحدها. فالمقياس الثنائي يخفي الكفاءة الجزئية التي تفصل السياسة القابلة للانتقال عن السياسة التي حفظت عن ظهر قلب.</li>
     <li>حين يقول مورّد إن نموذجه تعلّم الفيزياء، اسأل: أيّ كمية فيزيائية، ومقيسة كيف؟ فالأدلّة المنشورة تدعم انتقالًا أفضل من التدريب المسبق على الفيديو، لا اكتشاف قانون فيزيائي، والعقود ينبغي أن تُكتب على أساس الدعوى الأولى.</li>
 </ol>
-
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6 kufi">مقالات ذات صلة</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Buying the Format</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">صفقة NVIDIA وHugging Face، والأصل الأهم فيها بالنسبة للروبوتات هو صيغة ملف.</p>
-                        <a href="buying-the-format.html">اقرأ &larr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Intelligence Is Applied Causality</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">تعريف عملي يضع السببية والقرار والفعل في قلب الذكاء.</p>
-                        <a href="intelligence-is-applied-causality.html">اقرأ &larr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Experience Bottleneck</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">النماذج اللغوية ورثت مدوَّنة جاهزة، أمّا الروبوتات فتكسب كل ساعة من ساعاتها بعرق.</p>
-                        <a href="the-experience-bottleneck.html">اقرأ &larr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6 kufi">المراجع والقراءات الموسّعة</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Ye, S., Ge, Y., Zheng, K., Gao, S., Yu, S., ومعهم Fan, L. وJang, J. (2026). <em>World Action Models are Zero-shot Policies</em>. <span dir="ltr">arXiv:2602.15922</span>. مصدر نموذج DreamZero وخطوط الأساس وكل أرقام تقدّم المهمة الواردة هنا. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener">arxiv.org/abs/2602.15922</a></li>
-                    <li class="reference-item">NVIDIA (2026). <em>Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models</em>. مصدر تعريف نموذج العالم والفعل والفرضيات الثلاث المشروطة. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener">developer.nvidia.com</a></li>
-                    <li class="reference-item">NVIDIA. <em>What Is a World Action Model (WAM)?</em> <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener">nvidia.com/en-us/glossary/world-action-model</a></li>
-                    <li class="reference-item">Fan, L. (2026). <em>Robotics: Endgame</em>. Sequoia Capital AI Ascent. المحاضرة التي تُعرض فيها الصيغة الأقوى عن تعلّم الفيزياء من الفيديو. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener">youtube.com/watch?v=3Y8aq_ofEVs</a></li>
-                    <li class="reference-item">Shukor, M., Aubakirova, D., Capuano, F., وآخرون (2025). <em>SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</em>. arXiv:2506.01844. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">arxiv.org/abs/2506.01844</a></li>
-                    <li class="reference-item">Cadene, R., Aliberts, S., Capuano, F., وآخرون (2026). <em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em>. ICLR 2026. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arxiv.org/abs/2602.22818</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">بقلم</p>
+                <p class="author-name" id="author-name">إبراهيم أبو الهول، <span class="author-cred">دكتوراه، مهندس محترف، عضو أول في IEEE</span></p>
+                <p class="author-bio">قائد تقني في الذكاء الاصطناعي لدى Dell Technologies، يعمل على الذكاء الاصطناعي الوكيلي وأنظمة الحافة الذكية وأمن الذكاء الاصطناعي.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author" dir="ltr">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">المراجع</h2>
+            <ol>
+                <li id="ref-1"><span dir="ltr">Shukor, M., Aubakirova, D., Capuano, F.,</span> وآخرون (2025). «<span dir="ltr">SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</span>». <span dir="ltr">arXiv:2506.01844</span>. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener" dir="ltr">https://arxiv.org/abs/2506.01844</a> <a class="backref" href="#cite-1a" aria-label="العودة إلى النص">&#8618;</a></li>
+                <li id="ref-2"><span dir="ltr">Cadene, R., Aliberts, S., Capuano, F.,</span> وآخرون (2026). «<span dir="ltr">LeRobot: An Open-Source Library for End-to-End Robot Learning</span>». <em><span dir="ltr">ICLR 2026</span></em>. <span dir="ltr">arXiv:2602.22818</span>. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener" dir="ltr">https://arxiv.org/abs/2602.22818</a> <a class="backref" href="#cite-2a" aria-label="العودة إلى النص">&#8618;</a></li>
+                <li id="ref-3">NVIDIA (2026). «<span dir="ltr">Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models</span>». <em><span dir="ltr">NVIDIA Technical Blog</span></em>. مصدر تعريف نموذج العالم والفعل والفرضيات الثلاث المشروطة. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener" dir="ltr">https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/</a> <a class="backref" href="#cite-3a" aria-label="العودة إلى النص">&#8618;</a></li>
+                <li id="ref-4">NVIDIA (بلا تاريخ). «<span dir="ltr">What Is a World Action Model (WAM)?</span>». <em><span dir="ltr">NVIDIA Glossary</span></em>. <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener" dir="ltr">https://www.nvidia.com/en-us/glossary/world-action-model/</a> <a class="backref" href="#cite-4a" aria-label="العودة إلى النص">&#8618;</a></li>
+                <li id="ref-5"><span dir="ltr">Ye, S., Ge, Y., Zheng, K., Gao, S., Yu, S.,</span> ومعهم <span dir="ltr">Fan, L.</span> و<span dir="ltr">Jang, J.</span> (2026). «<span dir="ltr">World Action Models are Zero-shot Policies</span>». <span dir="ltr">arXiv:2602.15922</span>. مصدر نموذج DreamZero وخطوط الأساس وكل أرقام تقدّم المهمة الواردة هنا. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener" dir="ltr">https://arxiv.org/abs/2602.15922</a> <a class="backref" href="#cite-5a" aria-label="العودة إلى النص">&#8618;</a></li>
+                <li id="ref-6"><span dir="ltr">Fan, L.</span> (2026). «<span dir="ltr">Robotics: Endgame</span>». <span dir="ltr">Sequoia Capital AI Ascent</span>. المحاضرة التي تُعرض فيها الصيغة الأقوى عن تعلّم الفيزياء من الفيديو. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener" dir="ltr">https://www.youtube.com/watch?v=3Y8aq_ofEVs</a> <a class="backref" href="#cite-6a" aria-label="العودة إلى النص">&#8618;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">مقالات ذات صلة</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+                <img src="../Post_Images/Image_54.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+                <p class="rcard-kicker">أنظمة الذكاء الاصطناعي</p>
+                <h3><a href="buying-the-format.html" lang="en" dir="ltr">Buying the Format</a></h3>
+                <p class="rcard-dek">صفقة NVIDIA وHugging Face، والأصل الأهم فيها بالنسبة للروبوتات هو صيغة ملف.</p>
+            </li>
+            <li class="rcard">
+                <img src="../Post_Images/Image_37.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+                <p class="rcard-kicker">أنظمة الذكاء الاصطناعي</p>
+                <h3><a href="intelligence-is-applied-causality.html" lang="en" dir="ltr">Intelligence Is Applied Causality</a></h3>
+                <p class="rcard-dek">تعريف عملي يضع السببية والقرار والفعل في قلب الذكاء.</p>
+            </li>
+            <li class="rcard">
+                <img src="../Post_Images/Image_43.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+                <p class="rcard-kicker">أنظمة الذكاء الاصطناعي</p>
+                <h3><a href="the-experience-bottleneck.html" lang="en" dir="ltr">The Experience Bottleneck</a></h3>
+                <p class="rcard-dek">النماذج اللغوية ورثت مدوَّنة جاهزة، أمّا الروبوتات فتكسب كل ساعة من ساعاتها بعرق.</p>
+            </li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 إبراهيم أبو الهول</p>
+    <p><a href="../">كل المقالات</a><span aria-hidden="true"> &middot; </span><a href="../../">الصفحة الشخصية</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'نسخ رابط القسم: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('تم نسخ الرابط'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>
