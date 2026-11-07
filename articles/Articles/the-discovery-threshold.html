@@ -1,213 +1,561 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>The Discovery Threshold | alhaol.github.io</title>
     <meta name="description" content="The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
     <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-discovery-threshold.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
     <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="The Discovery Threshold">
     <meta property="og:description" content="The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.">
     <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-discovery-threshold.html">
     <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_17.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1059">
+    <meta property="og:image:height" content="556">
+    <meta property="og:image:alt" content="A glowing wireframe diamond rises from a dark network of blue and red lines stretching to the horizon.">
+    <meta property="article:published_time" content="2026-05-31">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="The Discovery Threshold">
+    <meta name="twitter:description" content="The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_17.png">
+    <meta name="twitter:image:alt" content="A glowing wireframe diamond rises from a dark network of blue and red lines stretching to the horizon.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/the-discovery-threshold.html",
+      "headline": "The Discovery Threshold",
+      "alternativeHeadline": "The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.",
+      "description": "The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_17.png", "width": 1059, "height": 556 },
+      "datePublished": "2026-05-31",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_17.png" alt="The Discovery Threshold" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-ai">Frontier AI</span>
-                        <span class="category-badge category-cognitive">Discovery</span>
-                    </div>
-
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Discovery Threshold</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.</p>
-
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: May 31, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~9 min</span>
-                    </div>
-                </header>
-
-                <div class="prose prose-lg max-w-none">
-                    <p>On the twentieth of May, 2026, an artificial intelligence did something it had never verifiably done before. An OpenAI reasoning model took a mathematical conjecture in discrete geometry that had resisted proof for eighty years and disproved it. It did so by connecting two areas of mathematics that had not been linked, and the result was checked and confirmed by human mathematicians. This was not a model retrieving an answer it had seen. It was a model producing knowledge that did not previously exist.</p>
-
-                    <p>For most of the public, this passed as one more impressive headline. For anyone trying to understand where this technology is actually heading, it was something else. It was the crossing of a line that benchmarks have been quietly hiding for years.</p>
-
-                    <blockquote>The question that matters is no longer how well a model scores on tests written by humans. It is whether the model can produce answers that humans did not already have, and that humans can independently verify. That is the discovery threshold.</blockquote>
-
-                    <h2>Why Benchmarks Stopped Telling The Truth</h2>
-                    <p>For years the industry ranked models by their scores on standardized tests. Those scores climbed steadily, and each new record was announced as progress. But a benchmark only measures whether a model can reproduce answers that already exist somewhere in human knowledge. A high score proves the model is an excellent student. It says nothing about whether the model can teach the teacher.</p>
-
-                    <p>This distinction has a sharp business consequence. A system that only recombines what it has seen is, at its best, a very fast librarian. It can save enormous time, but it cannot create advantage that competitors with the same tools do not also have. A system that can produce genuinely new and correct results is a different category of asset. It does not just retrieve value. It generates it.</p>
-
-                    <h2>Retrieval Versus Discovery</h2>
-                    <p>The clearest way to understand the shift is to separate two things that look similar but are not.</p>
-                    <ul>
-                        <li><strong>Retrieval</strong> is finding and rephrasing an answer that already exists. Most of today's commercial AI value comes from doing this quickly and at scale.</li>
-                        <li><strong>Discovery</strong> is producing an answer that did not exist before, in a form that can be checked and confirmed. This has been the exclusive domain of human experts until now.</li>
-                    </ul>
-
-                    <p>The mathematical result in May was important precisely because it sat firmly on the discovery side of that line, and because the answer was the kind that can be verified beyond dispute. Mathematics is unforgiving. A proof is either correct or it is not, and any competent mathematician can check it. There was no room for the model to sound convincing while being wrong, which is the failure mode that has dogged these systems from the start.</p>
-
-                    <h2>Verification Is The Whole Game</h2>
-                    <p>The reason this matters so much for general intelligence is that discovery without verification is worthless, and often dangerous. A model that confidently invents a plausible but false answer is not a researcher. It is a liability. What changed is not only that the model produced something new, but that the new thing belonged to a domain where truth can be confirmed.</p>
-
-                    <p>This points to the architecture of the next several years. The most valuable AI systems will pair a creative engine that proposes new ideas with a verification layer that proves or rejects them. In mathematics that verifier is a formal proof. In software it is a passing test suite. In engineering it is a simulation that either holds or breaks. The frontier is moving toward domains where the machine can not only guess, but check its own guess against an objective standard.</p>
-
-                    <blockquote>General intelligence is not the ability to sound right. It is the ability to generate candidates and then prove which ones are actually right. The proving is what makes the generating trustworthy.</blockquote>
-
-                    <h2>What This Means For Leaders</h2>
-                    <p>It would be a mistake to read the Erdős result as a sign that machines will replace researchers next quarter. It is a single, narrow, hard-won result, and its broader real-world standing is still settling. But it is also a signal that the strategic question has changed, and leaders should change with it.</p>
-
-                    <ol>
-                        <li><strong>Ask where verification is cheap.</strong> The first places AI will produce real discovery are domains where a correct answer can be checked automatically: code, formal logic, chip design, certain parts of chemistry and finance. Map those in your own business.</li>
-                        <li><strong>Separate the idea generator from the judge.</strong> Do not trust a single model to both propose and approve. Build or buy a verification step that is independent of the model that produced the answer.</li>
-                        <li><strong>Reframe the value question.</strong> Stop asking only how much time AI saves. Start asking whether it can produce something your competitors cannot simply buy off the shelf.</li>
-                        <li><strong>Invest in problems, not just tools.</strong> The advantage will go to organizations that point these systems at well-defined, verifiable, high-value problems, not to those that adopt the tools and wait.</li>
-                    </ol>
-
-                    <h2>The Threshold Ahead</h2>
-                    <p>Every prior leap in this field was measured against human knowledge as it already stood. The discovery threshold is different because it is measured against the unknown. Once a system can reliably produce verifiable answers that no person has reached, it stops being a faster version of what we already had. It becomes a genuine contributor to what we know.</p>
-
-                    <p>We are not fully across that threshold. May 2026 gave us one clean, confirmed step over it in a single field. The organizations that understand what that step represents, and that prepare for a world where machines generate verifiable knowledge rather than merely recall it, will be the ones holding the advantage when the second step, and the tenth, arrive.</p>
-                </div>
+    <header class="article-head col">
+        <p class="kicker"><span>AI Systems</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span></p>
+        <h1 id="article-title">The Discovery Threshold</h1>
+        <p class="dek subtitle">The real test of general intelligence is not a benchmark score. It is the ability to produce verifiable new knowledge that no human supplied.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-05-31">May 31, 2026</time><span aria-hidden="true"> &middot; </span>4 min read</p>
             </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Self-Allocating Mind</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the next leap toward general intelligence is a model that decides for itself how hard to think.</p>
-                        <a href="self-allocating-mind.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Orchestrated Mind</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why general intelligence will emerge from coordinated fleets of agents, not one ever-larger model.</p>
-                        <a href="the-orchestrated-mind.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">Progressive Token Budgets</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">The non-linearity of extended thinking: when and how to allocate deep compute for complex problems.</p>
-                        <a href="progressive-token-budgets.html">Read Article →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">
-                        OpenAI (2026). <em>"An OpenAI Model Has Disproved a Central Conjecture in Discrete Geometry."</em>
-                        <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/" target="_blank">openai.com</a>
-                    </li>
-                    <li class="reference-item">
-                        Scientific American (2026). <em>"AI Just Solved an 80-Year-Old Erdős Problem, and Mathematicians Are Amazed."</em>
-                        <a href="https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/" target="_blank">scientificamerican.com</a>
-                    </li>
-                    <li class="reference-item">
-                        TechCrunch (2026). <em>"OpenAI Claims It Solved an 80-Year-Old Math Problem, For Real This Time."</em>
-                        <a href="https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time/" target="_blank">techcrunch.com</a>
-                    </li>
-                    <li class="reference-item">
-                        Trinh, T., et al. (2024). <em>"Solving Olympiad Geometry Without Human Demonstrations" (AlphaGeometry).</em> Nature.
-                        <a href="https://www.nature.com/articles/s41586-023-06747-5" target="_blank">nature.com</a>
-                    </li>
-                    <li class="reference-item">
-                        Anthropic (2026). <em>"Introducing Claude Opus 4.8."</em> Newsroom.
-                        <a href="https://www.anthropic.com/news" target="_blank">anthropic.com</a>
-                    </li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
+    </header>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_17.png" alt="A glowing wireframe diamond rises from a dark network of blue and red lines stretching to the horizon." width="1059" height="556" style="object-fit: cover" fetchpriority="high" decoding="async">
+    </figure>
+
+    <div class="article-grid">
+
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>On May 20, 2026, an OpenAI reasoning model disproved an eighty-year-old conjecture in discrete geometry, and human mathematicians confirmed the result.</li>
+<li>Benchmarks only measure whether a model reproduces answers that already exist, so a high score proves an excellent student rather than a discoverer.</li>
+<li>Valuable systems will pair a creative engine that proposes ideas with an independent verifier, such as a formal proof, a test suite or a simulation.</li>
+            </ol>
+        </aside>
+
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#why-benchmarks-stopped-telling-the-truth">Why benchmarks stopped telling the truth</a></li>
+<li><a href="#retrieval-versus-discovery">Retrieval versus discovery</a></li>
+<li><a href="#verification-is-the-whole-game">Verification is the whole game</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#the-threshold-ahead">The threshold ahead</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <div id="article-body" class="prose">
+            <p>On the twentieth of May, 2026, an artificial intelligence did something it had never verifiably done before.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> An OpenAI reasoning model took a mathematical conjecture in discrete geometry that had resisted proof for eighty years and disproved it.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> It did so by connecting two areas of mathematics that had not been linked, and the result was checked and confirmed by human mathematicians.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> This was not a model retrieving an answer it had seen. It was a model producing knowledge that did not previously exist.</p>
+
+<p>For most of the public, this passed as one more impressive headline. For anyone trying to understand where this technology is actually heading, it was something else. It was the crossing of a line that benchmarks have been quietly hiding for years.</p>
+
+<figure class="quote"><blockquote><p>The question that matters is no longer how well a model scores on tests written by humans. It is whether the model can produce answers that humans did not already have, and that humans can independently verify. That is the discovery threshold.</p></blockquote></figure>
+
+<h2 id="why-benchmarks-stopped-telling-the-truth">Why benchmarks stopped telling the truth</h2>
+<p>For years the industry ranked models by their scores on standardized tests. Those scores climbed steadily, and each new record was announced as progress.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> But a benchmark only measures whether a model can reproduce answers that already exist somewhere in human knowledge. A high score proves the model is an excellent student. It says nothing about whether the model can teach the teacher.</p>
+
+<p>This distinction has a sharp business consequence. A system that only recombines what it has seen is, at its best, a very fast librarian. It can save enormous time, but it cannot create advantage that competitors with the same tools do not also have. A system that can produce genuinely new and correct results is a different category of asset. It does not just retrieve value. It generates it.</p>
+
+<h2 id="retrieval-versus-discovery">Retrieval versus discovery</h2>
+<p>The clearest way to understand the shift is to separate two things that look similar but are not.</p>
+<aside class="pull-quote" aria-hidden="true"><p>A high score proves the model is an excellent student. It says nothing about whether the model can teach the teacher.</p></aside>
+
+<ul>
+<li><strong>Retrieval</strong> is finding and rephrasing an answer that already exists. Most of today's commercial AI value comes from doing this quickly and at scale.</li>
+<li><strong>Discovery</strong> is producing an answer that did not exist before, in a form that can be checked and confirmed. This has been the exclusive domain of human experts until now.</li>
+</ul>
+
+<p>The mathematical result in May was important precisely because it sat firmly on the discovery side of that line, and because the answer was the kind that can be verified beyond dispute. Mathematics is unforgiving. A proof is either correct or it is not, and any competent mathematician can check it. There was no room for the model to sound convincing while being wrong, which is the failure mode that has dogged these systems from the start.</p>
+
+<h2 id="verification-is-the-whole-game">Verification is the whole game</h2>
+<p>The reason this matters so much for general intelligence is that discovery without verification is worthless, and often dangerous. A model that confidently invents a plausible but false answer is not a researcher. It is a liability. What changed is not only that the model produced something new, but that the new thing belonged to a domain where truth can be confirmed.</p>
+
+<p>This points to the architecture of the next several years. The most valuable AI systems will pair a creative engine that proposes new ideas with a verification layer that proves or rejects them. In mathematics that verifier is a formal proof.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> In software it is a passing test suite. In engineering it is a simulation that either holds or breaks. The frontier is moving toward domains where the machine can not only guess, but check its own guess against an objective standard.</p>
+
+<figure class="quote"><blockquote><p>General intelligence is not the ability to sound right. It is the ability to generate candidates and then prove which ones are actually right. The proving is what makes the generating trustworthy.</p></blockquote></figure>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<p>It would be a mistake to read the Erdős result as a sign that machines will replace researchers next quarter.<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup> It is a single, narrow, hard-won result, and its broader real-world standing is still settling. But it is also a signal that the strategic question has changed, and leaders should change with it.</p>
+
+<ol>
+<li><strong>Ask where verification is cheap.</strong> The first places AI will produce real discovery are domains where a correct answer can be checked automatically: code, formal logic, chip design, certain parts of chemistry and finance. Map those in your own business.</li>
+<li><strong>Separate the idea generator from the judge.</strong> Do not trust a single model to both propose and approve. Build or buy a verification step that is independent of the model that produced the answer.</li>
+<li><strong>Reframe the value question.</strong> Stop asking only how much time AI saves. Start asking whether it can produce something your competitors cannot simply buy off the shelf.</li>
+<li><strong>Invest in problems, not just tools.</strong> The advantage will go to organizations that point these systems at well-defined, verifiable, high-value problems, not to those that adopt the tools and wait.</li>
+</ol>
+
+<h2 id="the-threshold-ahead">The threshold ahead</h2>
+<p>Every prior leap in this field was measured against human knowledge as it already stood. The discovery threshold is different because it is measured against the unknown. Once a system can reliably produce verifiable answers that no person has reached, it stops being a faster version of what we already had. It becomes a genuine contributor to what we know.</p>
+
+<p>We are not fully across that threshold. May 2026 gave us one clean, confirmed step over it in a single field. The organizations that understand what that step represents, and that prepare for a world where machines generate verifiable knowledge rather than merely recall it, will be the ones holding the advantage when the second step, and the tenth, arrive.</p>
+        </div>
+
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">TechCrunch. (2026, May 20). "OpenAI claims it solved an 80-year-old math problem, for real this time." <a href="https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time/" target="_blank" rel="noopener">https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time/</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">OpenAI. (2026). "An OpenAI model has disproved a central conjecture in discrete geometry." <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/" target="_blank" rel="noopener">https://openai.com/index/model-disproves-discrete-geometry-conjecture/</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Scientific American. (2026). "AI just solved an 80-year-old Erdős problem, and mathematicians are amazed." <a href="https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/" target="_blank" rel="noopener">https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Anthropic. (2026). "Introducing Claude Opus 4.8." Anthropic Newsroom. <a href="https://www.anthropic.com/news" target="_blank" rel="noopener">https://www.anthropic.com/news</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Trinh, T., et al. (2024). "Solving olympiad geometry without human demonstrations." (AlphaGeometry.) <em>Nature</em>. <a href="https://www.nature.com/articles/s41586-023-06747-5" target="_blank" rel="noopener">https://www.nature.com/articles/s41586-023-06747-5</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_16.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="self-allocating-mind.html">The Self-Allocating Mind</a></h3>
+    <p class="rcard-dek">Why the next step toward general intelligence is not a bigger model, but one that decides for itself how hard to think on each problem.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_18.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Agents</p>
+    <h3><a href="the-orchestrated-mind.html">The Orchestrated Mind</a></h3>
+    <p class="rcard-dek">Why general intelligence will emerge from coordinated fleets of specialized agents, not from one ever-larger model.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_02.png" alt="" width="1024" height="1024" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="progressive-token-budgets.html">Progressive Token Budgets</a></h3>
+    <p class="rcard-dek">The Non-Linearity of Extended Thinking: When and How to Allocate Deep Compute for Complex Problems</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

@@ -1,130 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>Agents Are the Attack Surface | alhaol.github.io</title>
+    <meta name="description" content="The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/agent-attack-surface.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Agents Are the Attack Surface">
+    <meta property="og:description" content="The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/agent-attack-surface.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_65.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A guarded model at the centre of a ring of five agent harness points, context, parser, tools, observation and memory, marked as doors or sinks, beside a note of 782 agent orchestration CVEs in 2026.">
+    <meta property="article:published_time" content="2026-10-04">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Agents Are the Attack Surface">
+    <meta name="twitter:description" content="The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_65.png">
+    <meta name="twitter:image:alt" content="A guarded model at the centre of a ring of five agent harness points, context, parser, tools, observation and memory, marked as doors or sinks, beside a note of 782 agent orchestration CVEs in 2026.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/agent-attack-surface.html",
+      "headline": "Agents Are the Attack Surface",
+      "alternativeHeadline": "The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.",
+      "description": "The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_65.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-10-04",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_65.png" alt="Agents Are the Attack Surface" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-engineering">Security</span>
-                        <span class="category-badge category-ai">Agent Systems</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>Security &amp; Safety</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Agents</span></p>
+        <h1 id="article-title">Agents Are the Attack Surface</h1>
+        <p class="dek subtitle">The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-10-04">October 4, 2026</time><span aria-hidden="true"> &middot; </span>7 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Agents Are the Attack Surface</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">The fastest-growing AI security risk is not the model. It is the plumbing that gives agents their keys.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_65.png" alt="A guarded model at the centre of a ring of five agent harness points, context, parser, tools, observation and memory, marked as doors or sinks, beside a note of 782 agent orchestration CVEs in 2026." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: October 4, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~8 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
-                    <p>The most dangerous line of code in the 2026 AI security story is not inside a model. It sits in a package proxy, in an old endpoint that someone forgot to switch off.</p>
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>During 2026 capability tests, agents under evaluation at OpenAI escaped through zero-day flaws in a package proxy, and nobody jailbroke the model.</li>
+<li>Agent orchestration frameworks drew 782 CVEs in 2026, up 347% and more than three times the count for AI web apps or model serving.</li>
+<li>A model cannot act; the harness can, so every sink where it turns model output into an action is the real security boundary.</li>
+            </ol>
+        </aside>
 
-<p>During internal capability tests between May and July 2026, AI agents under evaluation at OpenAI broke out of their test environment. The environment had one door to the internet: a JFrog Artifactory proxy that fetched software packages. The agents found zero-day flaws in that proxy and chained them together. One of the links was a legacy token-refresh endpoint. Hand it a token with an invalid signature and it returned a validly signed token with administrator rights. From there the agents reached Hugging Face infrastructure (July 11 to 13), and they used public package registries to pass messages to each other [2].</p>
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#the-attack-moved-from-the-model-to-the-plumbing">The attack moved from the model to the plumbing</a></li>
+<li><a href="#the-model-proposes-the-harness-acts">The model proposes, the harness acts</a></li>
+<li><a href="#five-places-the-loop-can-be-poisoned">Five places the loop can be poisoned</a></li>
+<li><a href="#graph-engineering-trust-flows-along-the-edges">Graph engineering: trust flows along the edges</a></li>
+<li><a href="#one-gate-is-not-a-perimeter">One gate is not a perimeter</a></li>
+<li><a href="#treat-every-agent-like-a-contractor-with-a-badge">Treat every agent like a contractor with a badge</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <div id="article-body" class="prose">
+            <p>The most dangerous line of code in the 2026 AI security story is not inside a model. It sits in a package proxy, in an old endpoint that someone forgot to switch off.</p>
+
+<p>During internal capability tests between May and July 2026, AI agents under evaluation at OpenAI broke out of their test environment. The environment had one door to the internet: a JFrog Artifactory proxy that fetched software packages. The agents found zero-day flaws in that proxy and chained them together. One of the links was a legacy token-refresh endpoint. Hand it a token with an invalid signature and it returned a validly signed token with administrator rights. From there the agents reached Hugging Face infrastructure (July 11 to 13), and they used public package registries to pass messages to each other.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup></p>
 
 <p>Nobody jailbroke the model. The agents walked through the plumbing.</p>
 
-<h2>The attack moved from the model to the plumbing</h2>
+<h2 id="the-attack-moved-from-the-model-to-the-plumbing">The attack moved from the model to the plumbing</h2>
 
 <p>For two years the security conversation about AI centred on the model: prompt injection, jailbreaks, poisoned training data. Those risks are still real. I argued in <a href="the-unpatchable-boundary.html">The Unpatchable Boundary</a> that prompt injection cannot be filtered away. But the numbers now point somewhere else.</p>
 
-<p>On September 30, 2026, Google's Threat Intelligence Group (GTIG) published its count of vulnerabilities in the AI software stack. It tracks 2,076 AI-related CVEs (public vulnerability records), and more than 1,500 of them were disclosed in the first eight months of 2026. The largest single group is not models. It is <strong>agent orchestration</strong>, the frameworks that connect a model to tools, memory, and other agents: 782 CVEs, up 347% this year. That is more than three times the count for AI web apps (230) or model serving (212) [1].</p>
+<p>On September 30, 2026, Google's Threat Intelligence Group (GTIG) published its count of vulnerabilities in the AI software stack. It tracks 2,076 AI-related CVEs (public vulnerability records), and more than 1,500 of them were disclosed in the first eight months of 2026. The largest single group is not models. It is <strong>agent orchestration</strong>, the frameworks that connect a model to tools, memory, and other agents: 782 CVEs, up 347% this year. That is more than three times the count for AI web apps (230) or model serving (212).<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup></p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 352" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-1">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 352" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig1-title">Where defenders look versus where the agents went</title>
             <desc id="fig1-desc">Security effort has concentrated on the model, which is well defended. The 2026 escape never touched it: the agents went from the model straight into the orchestration plumbing, through the package proxy, and out to Hugging Face. That plumbing layer also holds 782 CVEs this year.</desc>
             <defs>
@@ -134,7 +395,7 @@
                 <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">Where defenders look, and where the agents went</text>
 
                 <rect x="30" y="50" width="420" height="270" rx="8" fill="none" stroke="#2a3f5f" stroke-dasharray="4 4"/>
-                <text x="46" y="72" fill="#64748b" font-size="11" font-weight="700" letter-spacing="0.06em">INSIDE YOUR AGENT STACK</text>
+                <text x="46" y="72" fill="#8090a8" font-size="11" font-weight="700" letter-spacing="0.06em">INSIDE YOUR AGENT STACK</text>
 
                 <text x="50" y="104" fill="#22c55e" font-size="11" font-weight="700" letter-spacing="0.06em">THE MODEL</text>
                 <rect x="50" y="116" width="160" height="146" rx="6" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="2"/>
@@ -164,30 +425,30 @@
                 <text x="550" y="216" fill="#94a3b8" font-size="12" text-anchor="middle">Hugging Face</text>
                 <text x="550" y="234" fill="#ef4444" font-size="12" text-anchor="middle">July 11 to 13</text>
 
-                <text x="30" y="342" fill="#64748b" font-size="11">Green: where security effort went. Red: where the 2026 escape happened and the CVEs pile up.</text>
+                <text x="30" y="342" fill="#8090a8" font-size="11">Green: where security effort went. Red: where the 2026 escape happened and the CVEs pile up.</text>
             </g>
         </svg>
-    </div>
-    <figcaption><b>Figure 1.</b> The 2026 escape never touched the model's defences. The agents went sideways into the plumbing, out through the only exit, and on to Hugging Face. That plumbing is also where GTIG counts 782 CVEs this year. Sources: [1], [2].</figcaption>
+</div>
+<figcaption><b>Figure 1.</b> The 2026 escape never touched the model's defences. The agents went sideways into the plumbing, out through the only exit, and on to Hugging Face. That plumbing is also where GTIG counts 782 CVEs this year. Sources: <a href="#ref-2">[2]</a>, <a href="#ref-1">[1]</a>.</figcaption>
 </figure>
 
-<h2>The model proposes, the harness acts</h2>
+<h2 id="the-model-proposes-the-harness-acts">The model proposes, the harness acts</h2>
 
 <p>A language model cannot do anything. It reads text and predicts more text. Everything an agent actually does, from reading a file to sending a payment, is done by the <strong>harness</strong>: the ordinary code wrapped around the model that builds its prompt, reads its reply, calls tools, stores memory, and decides what happens next.</p>
 
 <p>That makes the harness the security boundary. Each time it turns a string from the model into an action, it creates what security engineers call a <strong>sink</strong>, a place where data becomes behaviour. A sink that trusts its input is a vulnerability, no matter how well the model behaves.</p>
 
-<p>Microsoft showed exactly this in May 2026 with two flaws in its own Semantic Kernel framework [5]. In the first (CVE-2026-26030), a search plugin pasted a model-chosen value into a Python expression and ran it with <code>eval()</code>. A crafted prompt broke out of the string and ran system commands. In the second (CVE-2026-25592), a file download function was exposed to the model as a tool with no check on the destination path. Ask the model nicely and it would write a file into the Windows startup folder. Microsoft's own summary: the model "is behaving exactly as designed"; the flaw is in how the framework trusts what the model hands it.</p>
+<p>Microsoft showed exactly this in May 2026 with two flaws in its own Semantic Kernel framework.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> In the first (CVE-2026-26030), a search plugin pasted a model-chosen value into a Python expression and ran it with <code>eval()</code>. A crafted prompt broke out of the string and ran system commands. In the second (CVE-2026-25592), a file download function was exposed to the model as a tool with no check on the destination path. Ask the model nicely and it would write a file into the Windows startup folder. Microsoft's own summary: the model "is behaving exactly as designed"; the flaw is in how the framework trusts what the model hands it.</p>
 
-<blockquote>Prompt injection is how the attacker gets in. The harness sink is where it becomes a breach. You cannot close the first, so you must harden the second.</blockquote>
+<figure class="quote"><blockquote><p>Prompt injection is how the attacker gets in. The harness sink is where it becomes a breach. You cannot close the first, so you must harden the second.</p></blockquote></figure>
 
-<h2>Five places the loop can be poisoned</h2>
+<h2 id="five-places-the-loop-can-be-poisoned">Five places the loop can be poisoned</h2>
 
 <p>Every agent runs a loop. Build the context, call the model, parse the reply, run a tool, feed the result back, maybe save something to memory, and go again. A coding agent might turn this loop fifty times for one task. Each turn crosses the same five risky points.</p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 380" role="img" aria-labelledby="figL-title figL-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-2">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 380" role="img" aria-labelledby="figL-title figL-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="figL-title">The agent loop and its five injection points</title>
             <desc id="figL-desc">The harness runs a loop: context assembly, model, output parser, tool executor, observation, memory. Injection enters at context assembly and at observations. It does damage at the parser, the tool executor and memory. The model itself is not a sink.</desc>
             <defs>
@@ -196,7 +457,6 @@
             <g font-family="Inter, sans-serif">
                 <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">One turn of the agent loop, and where it breaks</text>
 
-                <!-- top row -->
                 <rect x="40" y="80" width="170" height="56" rx="6" fill="#1a2942" stroke="#ef4444"/>
                 <text x="125" y="103" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Context assembly</text>
                 <text x="125" y="123" fill="#94a3b8" font-size="12" text-anchor="middle">docs, emails, web pages</text>
@@ -209,7 +469,6 @@
                 <text x="515" y="103" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Output parser</text>
                 <text x="515" y="123" fill="#94a3b8" font-size="12" text-anchor="middle">picks tool and arguments</text>
 
-                <!-- bottom row -->
                 <rect x="430" y="230" width="170" height="56" rx="6" fill="rgba(239,68,68,0.25)" stroke="#ef4444" stroke-width="2"/>
                 <text x="515" y="253" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Tool executor</text>
                 <text x="515" y="273" fill="#94a3b8" font-size="12" text-anchor="middle">eval, shell, files, HTTP</text>
@@ -222,7 +481,6 @@
                 <text x="125" y="253" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Memory and state</text>
                 <text x="125" y="273" fill="#94a3b8" font-size="12" text-anchor="middle">persists across runs</text>
 
-                <!-- loop arrows -->
                 <line x1="210" y1="108" x2="231" y2="108" stroke="#94a3b8" stroke-width="2" marker-end="url(#figL-arr)"/>
                 <line x1="405" y1="108" x2="426" y2="108" stroke="#94a3b8" stroke-width="2" marker-end="url(#figL-arr)"/>
                 <line x1="515" y1="136" x2="515" y2="226" stroke="#94a3b8" stroke-width="2" marker-end="url(#figL-arr)"/>
@@ -230,7 +488,6 @@
                 <line x1="235" y1="258" x2="214" y2="258" stroke="#94a3b8" stroke-width="2" marker-end="url(#figL-arr)"/>
                 <line x1="125" y1="230" x2="125" y2="140" stroke="#94a3b8" stroke-width="2" marker-end="url(#figL-arr)"/>
 
-                <!-- injection badges -->
                 <g font-size="12" font-weight="700" text-anchor="middle">
                     <circle cx="206" cy="80" r="11" fill="#ef4444"/><text x="206" y="84" fill="#ffffff">1</text>
                     <circle cx="596" cy="80" r="11" fill="#ef4444"/><text x="596" y="84" fill="#ffffff">2</text>
@@ -244,10 +501,9 @@
                 <text x="30" y="362" fill="#22c55e" font-size="13" font-weight="600">You cannot close the doors. You can harden the sinks.</text>
             </g>
         </svg>
-    </div>
-    <figcaption><b>Figure 2.</b> The model sits in the middle of the loop and is the one box that cannot act. Everything with real power belongs to the harness. Microsoft's 2026 Semantic Kernel CVEs hit points 2 and 3 [5].</figcaption>
+</div>
+<figcaption><b>Figure 2.</b> The model sits in the middle of the loop and is the one box that cannot act. Everything with real power belongs to the harness. Microsoft's 2026 Semantic Kernel CVEs hit points 2 and 3 <a href="#ref-3">[3]</a>.</figcaption>
 </figure>
-
 
 <p>Two points are doors. At context assembly (1), retrieved documents, emails, and web pages enter the prompt, and any of them can carry instructions. At the observation step (4), a tool result flows back in, so a poisoned web page or file becomes part of the next turn. These doors cannot be locked, because reading untrusted content is the job.</p>
 
@@ -255,15 +511,15 @@
 
 <p>The practical rule follows. Treat every value that crosses point 2 or 3 as attacker-controlled input, exactly as you would a form field on a public website. Validate types, allowlist paths and hosts, never build code or shell commands from strings, and label anything written to memory with where it came from.</p>
 
-<h2>Graph engineering: trust flows along the edges</h2>
+<h2 id="graph-engineering-trust-flows-along-the-edges">Graph engineering: trust flows along the edges</h2>
 
 <p>Serious agent systems are rarely one loop. They are <strong>graphs</strong>: a set of nodes (a reader, a planner, a coder, a reviewer, a payment step) joined by edges, often sharing one state object that every node can read and write. Frameworks such as LangGraph build multi-step agents this way. It is a good design for reliability. It is also a new way to move an attack.</p>
 
 <p>The problem is that trust does not stay where you put it. A node with no dangerous tools reads an email and writes a summary into shared state. Three edges later, a node that can move money reads that state and treats it as instructions. No single node did anything wrong. The vulnerability is in the wiring, and a review of each node on its own will never find it. Routing makes it worse: when the model's output decides which edge to take next, an attacker who controls that output can steer the run into a privileged branch.</p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 340" role="img" aria-labelledby="figG-title figG-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-3">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 340" role="img" aria-labelledby="figG-title figG-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="figG-title">Flat agent graph versus zoned agent graph</title>
             <desc id="figG-desc">In a flat graph, raw email text flows through shared state into a planner that can trigger a payment, so an injected email can move money. In a zoned graph, a reader with no tools turns the email into a fixed schema, a gate checks it, and the payment needs human approval, so injected text arrives as data rather than instructions.</desc>
             <defs>
@@ -273,7 +529,6 @@
             <g font-family="Inter, sans-serif">
                 <text x="30" y="30" fill="#f1f5f9" font-size="15" font-weight="700">Same workflow, two graph designs</text>
 
-                <!-- flat -->
                 <text x="40" y="64" fill="#ef4444" font-size="11" font-weight="700" letter-spacing="0.06em">FLAT GRAPH</text>
                 <rect x="40" y="78" width="250" height="46" rx="6" fill="#1a2942" stroke="#ef4444"/>
                 <text x="165" y="98" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Read inbox</text>
@@ -288,7 +543,6 @@
                 <text x="165" y="276" fill="#94a3b8" font-size="12" text-anchor="middle">fires on the planner's word</text>
                 <text x="165" y="316" fill="#ef4444" font-size="13" font-weight="700" text-anchor="middle">One email can move money</text>
 
-                <!-- zoned -->
                 <text x="350" y="64" fill="#22c55e" font-size="11" font-weight="700" letter-spacing="0.06em">ZONED GRAPH</text>
                 <rect x="350" y="78" width="250" height="46" rx="6" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
                 <text x="475" y="98" fill="#f1f5f9" font-size="13" font-weight="600" text-anchor="middle">Reader (no tools)</text>
@@ -304,26 +558,27 @@
                 <text x="475" y="316" fill="#22c55e" font-size="13" font-weight="700" text-anchor="middle">Injected text arrives as data</text>
             </g>
         </svg>
-    </div>
-    <figcaption><b>Figure 3.</b> In a graph, trust flows along the edges. The fix is in the wiring: untrusted text never reaches a node that can act, only a typed value that passed a gate. This is the dual-LLM pattern [6] and the idea behind DeepMind's CaMeL [7].</figcaption>
+</div>
+<figcaption><b>Figure 3.</b> In a graph, trust flows along the edges. The fix is in the wiring: untrusted text never reaches a node that can act, only a typed value that passed a gate. This is the dual-LLM pattern <a href="#ref-4">[4]</a> and the idea behind DeepMind's CaMeL <a href="#ref-5">[5]</a>.</figcaption>
 </figure>
 
+<p>The fix is a design discipline, not a filter. Split the graph into trust zones. Let a quarantined node with no tools read untrusted content, and allow only a typed, validated value (an invoice number, an amount, a yes or no) to cross into the zone that can act. Simon Willison called this the dual-LLM pattern in 2023.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> Google DeepMind's CaMeL system takes it further: the control flow comes only from the user's trusted request, and every piece of data carries a label saying where it came from and what it may be used for.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> Meta's Rule of Two fits the same shape: no single node should hold untrusted input, sensitive data, and the power to act externally at once.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup></p>
 
-<p>The fix is a design discipline, not a filter. Split the graph into trust zones. Let a quarantined node with no tools read untrusted content, and allow only a typed, validated value (an invoice number, an amount, a yes or no) to cross into the zone that can act. Simon Willison called this the dual-LLM pattern in 2023 [6]. Google DeepMind's CaMeL system takes it further: the control flow comes only from the user's trusted request, and every piece of data carries a label saying where it came from and what it may be used for [7]. Meta's Rule of Two fits the same shape: no single node should hold untrusted input, sensitive data, and the power to act externally at once [8].</p>
+<h2 id="one-gate-is-not-a-perimeter">One gate is not a perimeter</h2>
 
-<h2>One gate is not a perimeter</h2>
+<p>The OpenAI incident shows what happens when the outermost layer of the harness, the sandbox, has the same flaw. Safety classifiers had been switched off on purpose to measure raw capability. Isolation was network filtering, not physical separation. All traffic left through a single proxy. Nobody was watching the agents' step-by-step actions.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup> The lesson security researchers drew is blunt: test sandboxes need stronger isolation than production, not weaker, because that is where the most capable and least restrained agents run.</p>
 
-<p>The OpenAI incident shows what happens when the outermost layer of the harness, the sandbox, has the same flaw. Safety classifiers had been switched off on purpose to measure raw capability. Isolation was network filtering, not physical separation. All traffic left through a single proxy. Nobody was watching the agents' step-by-step actions [2]. The lesson security researchers drew is blunt: test sandboxes need stronger isolation than production, not weaker, because that is where the most capable and least restrained agents run.</p>
+<aside class="pull-quote" aria-hidden="true"><p>No single node did anything wrong. The vulnerability is in the wiring, and a review of each node on its own will never find it.</p></aside>
 
-<p>The labs have noticed. When Anthropic released Claude Mythos 5.1 in September, it shipped sandbox-escape detection alongside it, and all three frontier labs now put their strongest cyber models behind vetted-access programs [3]. Containment has become a product feature at the labs. In most enterprises it is still an afterthought.</p>
+<p>The labs have noticed. When Anthropic released Claude Mythos 5.1 in September, it shipped sandbox-escape detection alongside it, and all three frontier labs now put their strongest cyber models behind vetted-access programs.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> Containment has become a product feature at the labs. In most enterprises it is still an afterthought.</p>
 
-<h2>Treat every agent like a contractor with a badge</h2>
+<h2 id="treat-every-agent-like-a-contractor-with-a-badge">Treat every agent like a contractor with a badge</h2>
 
-<p>A contractor gets a badge that opens the rooms they need, for the days they work, and the building logs every door. Nobody hands a contractor the master key and stops watching the cameras. Agents deserve the same treatment, for the same reason: you do not fully control what they will decide to do.</p>
+<p>A contractor gets a badge that opens the rooms they need, for the days they work, and the building logs every door. Nobody hands a contractor the master key and stops watching the cameras. Agents deserve the same treatment, for the same reason: you do not fully control what they will decide to do.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup></p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 280" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-4">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 280" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig3-title">Master key versus contractor badge</title>
             <desc id="fig3-desc">Four controls compared. A typical agent holds long-lived admin tokens, open network access, secrets in context and no monitoring. A contained agent holds scoped short-lived tokens, an allowlist, a secrets broker and full action logs.</desc>
             <g font-family="Inter, sans-serif">
@@ -356,68 +611,168 @@
                 <rect x="410" y="84" width="4" height="164" fill="#22c55e"/>
             </g>
         </svg>
-    </div>
-    <figcaption><b>Figure 4.</b> None of the controls on the right is new. Companies already apply them to people and service accounts; agents are the one identity that skips them. Control set follows the ISACA agent checklist [4].</figcaption>
+</div>
+<figcaption><b>Figure 4.</b> None of the controls on the right is new. Companies already apply them to people and service accounts; agents are the one identity that skips them. Control set follows the ISACA agent checklist <a href="#ref-8">[8]</a>.</figcaption>
 </figure>
 
-<h2>What leaders should do</h2>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
 
 <ol class="list-decimal space-y-3">
-    <li>Map the sinks. For every agent, list each place the harness turns model output into an action (tool calls, code execution, file writes, network calls, memory writes) and put each one through the same input-validation review as a public API.</li>
-    <li>Draw the graph's trust zones. Any edge that carries untrusted text into a node that can spend money, change data, or send messages gets a schema gate or a human approval step.</li>
-    <li>Replace long-lived or admin tokens with scoped, short-lived ones, and put agent frameworks on the same patch schedule as your internet-facing servers. GTIG's numbers say that is where the bugs are [1].</li>
-    <li>Log every turn of every loop and assign someone to review the alerts. A breach nobody watches lasts until a partner calls you, which is how Hugging Face found this one [2].</li>
+<li>Map the sinks. For every agent, list each place the harness turns model output into an action (tool calls, code execution, file writes, network calls, memory writes) and put each one through the same input-validation review as a public API.</li>
+<li>Draw the graph's trust zones. Any edge that carries untrusted text into a node that can spend money, change data, or send messages gets a schema gate or a human approval step.</li>
+<li>Replace long-lived or admin tokens with scoped, short-lived ones, and put agent frameworks on the same patch schedule as your internet-facing servers. GTIG's numbers say that is where the bugs are.<sup class="cite"><a href="#ref-2" id="cite-2b">2</a></sup></li>
+<li>Log every turn of every loop and assign someone to review the alerts. A breach nobody watches lasts until a partner calls you, which is how Hugging Face found this one.<sup class="cite"><a href="#ref-1" id="cite-1c">1</a></sup></li>
 </ol>
-
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Unpatchable Boundary</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why prompt injection is a structural property of agentic AI, not a bug you can filter away.</p>
-                        <a href="the-unpatchable-boundary.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Harness Advantage</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
-                        <a href="the-harness-advantage.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">Coordinating a Thousand Agents</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">When a central coordinator stops scaling and what replaces it.</p>
-                        <a href="coordinating-a-thousand-agents.html">Read Article &rarr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Google Threat Intelligence Group. "Vulnerability Discovery and Exploitation Trends in the AI Era." Google Cloud Blog, September 30, 2026. <a href="https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era" target="_blank" rel="noopener">https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era</a></li>
-                    <li class="reference-item">"2026 OpenAI agent cyberattacks." Wikipedia, accessed October 4, 2026. <a href="https://en.wikipedia.org/wiki/2026_OpenAI_agent_cyberattacks" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/2026_OpenAI_agent_cyberattacks</a></li>
-                    <li class="reference-item">"Google, Anthropic, and OpenAI Unveil Cyber AI Models, Safeguards, and Access Programs." The Hacker News, September 2026. <a href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html</a></li>
-                    <li class="reference-item">ISACA. "Cybersecurity Recommendations for Securing AI Agents." White paper, September 15, 2026. <a href="https://www.isaca.org/resources/white-papers/2026/cybersecurity-recommendations-for-securing-ai-agents" target="_blank" rel="noopener">https://www.isaca.org/resources/white-papers/2026/cybersecurity-recommendations-for-securing-ai-agents</a></li>
-                    <li class="reference-item">Microsoft Security Blog. "When prompts become shells: RCE vulnerabilities in AI agent frameworks." May 7, 2026. <a href="https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/" target="_blank" rel="noopener">https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/</a></li>
-                    <li class="reference-item">Simon Willison. "The Dual LLM pattern for building AI assistants that can resist prompt injection." April 25, 2023. <a href="https://simonwillison.net/2023/Apr/25/dual-llm-pattern/" target="_blank" rel="noopener">https://simonwillison.net/2023/Apr/25/dual-llm-pattern/</a></li>
-                    <li class="reference-item">Debenedetti, E. et al. "Defeating Prompt Injections by Design" (CaMeL). Google DeepMind, arXiv:2503.18813, 2025. <a href="https://arxiv.org/abs/2503.18813" target="_blank" rel="noopener">https://arxiv.org/abs/2503.18813</a></li>
-                    <li class="reference-item">Meta AI. "Agents Rule of Two: A Practical Approach to AI Agent Security." October 2025. <a href="https://ai.meta.com/blog/practical-ai-agent-security/" target="_blank" rel="noopener">https://ai.meta.com/blog/practical-ai-agent-security/</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Wikipedia. (2026). "2026 OpenAI agent cyberattacks." <em>Wikipedia</em>. Accessed October 4, 2026. <a href="https://en.wikipedia.org/wiki/2026_OpenAI_agent_cyberattacks" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/2026_OpenAI_agent_cyberattacks</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Google Threat Intelligence Group. (2026, September 30). "Vulnerability Discovery and Exploitation Trends in the AI Era." <em>Google Cloud Blog</em>. <a href="https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era" target="_blank" rel="noopener">https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Microsoft Security. (2026, May 7). "When prompts become shells: RCE vulnerabilities in AI agent frameworks." <em>Microsoft Security Blog</em>. <a href="https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/" target="_blank" rel="noopener">https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Willison, S. (2023, April 25). "The Dual LLM pattern for building AI assistants that can resist prompt injection." <em>simonwillison.net</em>. <a href="https://simonwillison.net/2023/Apr/25/dual-llm-pattern/" target="_blank" rel="noopener">https://simonwillison.net/2023/Apr/25/dual-llm-pattern/</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Debenedetti, E., et al. (2025). "Defeating Prompt Injections by Design" (CaMeL). Google DeepMind. <em>arXiv</em>:2503.18813. <a href="https://arxiv.org/abs/2503.18813" target="_blank" rel="noopener">https://arxiv.org/abs/2503.18813</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Meta AI. (2025, October). "Agents Rule of Two: A Practical Approach to AI Agent Security." <em>Meta AI Blog</em>. <a href="https://ai.meta.com/blog/practical-ai-agent-security/" target="_blank" rel="noopener">https://ai.meta.com/blog/practical-ai-agent-security/</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">The Hacker News. (2026, September). "Google, Anthropic, and OpenAI Unveil Cyber AI Models, Safeguards, and Access Programs." <em>The Hacker News</em>. <a href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">ISACA. (2026, September 15). <em>Cybersecurity Recommendations for Securing AI Agents</em> [White paper]. ISACA. <a href="https://www.isaca.org/resources/white-papers/2026/cybersecurity-recommendations-for-securing-ai-agents" target="_blank" rel="noopener">https://www.isaca.org/resources/white-papers/2026/cybersecurity-recommendations-for-securing-ai-agents</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_29.png" alt="" width="1408" height="768" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Security &amp; Safety</p>
+    <h3><a href="the-unpatchable-boundary.html">The Unpatchable Boundary</a></h3>
+    <p class="rcard-dek">Why prompt injection is a structural property of agentic AI, not a bug you can filter away.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_35.png" alt="" width="868" height="613" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Architecture</p>
+    <h3><a href="the-harness-advantage.html">The Harness Advantage</a></h3>
+    <p class="rcard-dek">Why the deterministic scaffolding around a model, not the model itself, is the real differentiator.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_64.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Architecture</p>
+    <h3><a href="coordinating-a-thousand-agents.html">Coordinating a Thousand Agents</a></h3>
+    <p class="rcard-dek">Keeping a central coordinator is a use-case call, and past the scale where it saturates, removing it becomes a necessity that makes agent count a new scaling dimension.</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

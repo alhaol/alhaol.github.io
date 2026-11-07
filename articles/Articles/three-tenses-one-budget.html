@@ -1,134 +1,393 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>Three Tenses, One Budget | alhaol.github.io</title>
+    <meta name="description" content="Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/three-tenses-one-budget.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Three Tenses, One Budget">
+    <meta property="og:description" content="Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/three-tenses-one-budget.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_52.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A tall blue bar sends two amber lines into closed loops that go nowhere and one blue line straight through to a blue block on the right.">
+    <meta property="article:published_time" content="2026-08-23">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Three Tenses, One Budget">
+    <meta name="twitter:description" content="Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_52.png">
+    <meta name="twitter:image:alt" content="A tall blue bar sends two amber lines into closed loops that go nowhere and one blue line straight through to a blue block on the right.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/three-tenses-one-budget.html",
+      "headline": "Three Tenses, One Budget",
+      "alternativeHeadline": "Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.",
+      "description": "Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_52.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-08-23",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_52.png" alt="Three Tenses, One Budget" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-cognitive">Cognitive</span>
-                        <span class="category-badge category-ai">AI / ML</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>Learning &amp; Cognition</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">AI Systems</span></p>
+        <h1 id="article-title">Three Tenses, One Budget</h1>
+        <p class="dek subtitle">Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-08-23">August 23, 2026</time><span aria-hidden="true"> &middot; </span>6 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Three Tenses, One Budget</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">Memory, presence and ambition draw on the same account. AI changes what every withdrawal costs.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_52.png" alt="A tall blue bar sends two amber lines into closed loops that go nowhere and one blue line straight through to a blue block on the right." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: August 23, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~7 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
-                    <p>You are not where you think you are. Matthew Killingsworth and Daniel Gilbert sampled people at random moments through the day and found that minds were somewhere other than the task at hand 46.9 percent of the time. The part that should get your attention is what predicted how people felt. Whether the mind was wandering explained about 10.8 percent of the variation in happiness. What the person was actually doing explained about 4.6 percent.</p>
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Minds wandered from the task at hand 46.9 percent of the time, and where attention sat explained more of happiness than the activity itself.</li>
+<li>Rumination and worry feel like reflection and planning from the inside, yet neither ends in a changed action available right now.</li>
+<li>Cheaper thinking lowers the cost of productive and parasitic attention by the same amount, so AI amplifies whatever allocation you already had.</li>
+            </ol>
+        </aside>
+
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#three-tenses-one-account">Three tenses, one account</a></li>
+<li><a href="#each-tense-has-productive-and-parasitic-forms">Each tense has productive and parasitic forms</a></li>
+<li><a href="#one-question-sorts-them">One question sorts them</a></li>
+<li><a href="#what-ai-moves-in-both-directions">What AI moves, in both directions</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <div id="article-body" class="prose">
+            <p>You are not where you think you are. Matthew Killingsworth and Daniel Gilbert sampled people at random moments through the day and found that minds were somewhere other than the task at hand 46.9 percent of the time.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> The part that should get your attention is what predicted how people felt. Whether the mind was wandering explained about 10.8 percent of the variation in happiness. What the person was actually doing explained about 4.6 percent.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup></p>
 
 <p>Where your attention sits matters more than what you are doing with your hands. Most advice drawn from that finding collapses into a slogan about being present, which is not a model and is wrong in a specific way. Learning from a mistake is attention on the past. Planning next quarter is attention on the future. Neither is waste, and telling people to stop doing them is telling them to stop thinking.</p>
 
-<h2>Three tenses, one account</h2>
+<h2 id="three-tenses-one-account">Three tenses, one account</h2>
 
 <p>Treat attention as a budget with three places to spend it. <strong>Memory-driven</strong> attention runs on the past. <strong>Reality-driven</strong> attention runs on what is in front of you. <strong>Dream-driven</strong> attention runs on the future. The account is finite, so a withdrawal for one is not available to the others.</p>
 
 <p>One asymmetry makes the model worth having. The present is the only tense in which you can act. The past is closed and the future has not arrived, so any value from either has to arrive through a change you make now. That constraint is what the old saying gets right, in whichever of its dozen versions you first heard it.</p>
 
-<blockquote>You cannot change the past, but you can ruin the present by worrying too much about the future.</blockquote>
+<figure class="quote"><blockquote><p>You cannot change the past, but you can ruin the present by worrying too much about the future.</p></blockquote></figure>
 
 <p>Read literally, that line is an accounting statement. Both of the other tenses draw on the same account the present needs, and only one of the three can convert the withdrawal into anything.</p>
 
-<h2>Each tense has a productive form and a parasitic one</h2>
+<h2 id="each-tense-has-productive-and-parasitic-forms">Each tense has productive and parasitic forms</h2>
 
 <p>The mistake in the slogan version is treating past and future attention as one category. Each tense has two forms that feel identical from the inside and behave nothing alike.</p>
 
-<figure class="fig">
+<figure class="fig" id="fig-1">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 366" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig1-title">Each of the three tenses has a productive form and a parasitic form</title>
@@ -138,7 +397,7 @@
             <text x="388" y="64" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">PARASITIC FORM</text>
 
             <text x="16" y="108" font-size="13" font-weight="700" fill="#f1f5f9">PAST</text>
-            <text x="16" y="128" font-size="11" fill="#64748b">memory-driven</text>
+            <text x="16" y="128" font-size="11" fill="#8090a8">memory-driven</text>
             <rect x="136" y="76" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="152" y="108" font-size="13" font-weight="700" fill="#60a5fa">Extraction</text>
             <text x="152" y="132" font-size="11.5" fill="#94a3b8">Take the lesson, close the file.</text>
@@ -147,7 +406,7 @@
             <text x="404" y="132" font-size="11.5" fill="#94a3b8">Run it again. Nothing changes.</text>
 
             <text x="16" y="200" font-size="13" font-weight="700" fill="#f1f5f9">PRESENT</text>
-            <text x="16" y="220" font-size="11" fill="#64748b">reality-driven</text>
+            <text x="16" y="220" font-size="11" fill="#8090a8">reality-driven</text>
             <rect x="136" y="168" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="152" y="200" font-size="13" font-weight="700" fill="#60a5fa">Engagement</text>
             <text x="152" y="224" font-size="11.5" fill="#94a3b8">Attention on what is actually here.</text>
@@ -156,7 +415,7 @@
             <text x="404" y="224" font-size="11.5" fill="#94a3b8">Present, but steered by nothing.</text>
 
             <text x="16" y="292" font-size="13" font-weight="700" fill="#f1f5f9">FUTURE</text>
-            <text x="16" y="312" font-size="11" fill="#64748b">dream-driven</text>
+            <text x="16" y="312" font-size="11" fill="#8090a8">dream-driven</text>
             <rect x="136" y="260" width="244" height="82" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="152" y="292" font-size="13" font-weight="700" fill="#60a5fa">Planning</text>
             <text x="152" y="316" font-size="11.5" fill="#94a3b8">If X happens, I will do Y.</text>
@@ -168,15 +427,15 @@
     <figcaption><b>Figure 1.</b> The two forms feel the same from the inside, which is why the parasitic column survives. Rumination presents itself as problem solving and worry presents itself as preparation. Terms after Nolen-Hoeksema on rumination and Seligman and colleagues on prospection.</figcaption>
 </figure>
 
-<p>Susan Nolen-Hoeksema spent a career separating the two forms on the past side. Rumination in her definition is repetitive passive attention to distress and its causes, and it predicts longer and more severe depressive episodes rather than relieving them. It is not reflection that got out of hand. It is a different process that borrows reflection's clothes.</p>
+<p>Susan Nolen-Hoeksema spent a career separating the two forms on the past side. Rumination in her definition is repetitive passive attention to distress and its causes, and it predicts longer and more severe depressive episodes rather than relieving them.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> It is not reflection that got out of hand. It is a different process that borrows reflection's clothes.</p>
 
-<p>The future side has the same split. Martin Seligman, Peter Railton, Roy Baumeister and Chandra Sripada argue that the mind is organized around prospection, the generation and evaluation of possible futures, and that these are best understood as "if X, then Y" conditionals. Worry produces an unbounded supply of X and never attaches a Y. It runs the same machinery with the output disconnected.</p>
+<p>The future side has the same split. Martin Seligman, Peter Railton, Roy Baumeister and Chandra Sripada argue that the mind is organized around prospection, the generation and evaluation of possible futures, and that these are best understood as "if X, then Y" conditionals.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> Worry produces an unbounded supply of X and never attaches a Y. It runs the same machinery with the output disconnected.</p>
 
-<h2>One question sorts them</h2>
+<h2 id="one-question-sorts-them">One question sorts them</h2>
 
 <p>You do not need to diagnose which mode you are in. You need one test, and it applies to any thought about any tense.</p>
 
-<figure class="fig">
+<figure class="fig" id="fig-2">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 210" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig2-title">The single test that separates investment from leakage</title>
@@ -222,24 +481,26 @@
 
 <p>Two examples make the edge visible. "I handled that meeting badly" becomes extraction the moment it ends in "I will send the agenda twenty four hours ahead next time." Held any longer, it is replay. "The audit is in March" becomes planning the moment it ends in "on Friday I will pull the three documents they always ask for." Held any longer, it is worry.</p>
 
-<p>Peter Gollwitzer gave the productive form its exact grammar. An implementation intention has the shape "whenever situation X arises, I will do Y," and across a large literature that simple move produces reliable gains in follow through compared with holding the same goal without it. The practical value here is as a filter rather than a technique. A thought about the future that cannot be written in that sentence has not become a plan yet.</p>
+<p>Peter Gollwitzer gave the productive form its exact grammar. An implementation intention has the shape "whenever situation X arises, I will do Y," and across a large literature that simple move produces reliable gains in follow through compared with holding the same goal without it.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> The practical value here is as a filter rather than a technique. A thought about the future that cannot be written in that sentence has not become a plan yet.</p>
 
-<h2>What AI moves, in both directions</h2>
+<aside class="pull-quote" aria-hidden="true"><p>Worry conducted with a research assistant is still worry, and it now produces documents, which makes it look like work.</p></aside>
+
+<h2 id="what-ai-moves-in-both-directions">What AI moves, in both directions</h2>
 
 <p>The honest account of AI here has two halves, and skipping the second one is how this topic usually gets written.</p>
 
-<p>The first half is real. Evan Risko and Sam Gilbert's review of cognitive offloading describes what happens when you use the world to carry what your head was carrying: the demand on memory drops. A good deal of replay is fear of losing a lesson, and a lesson written into a system you can query is a lesson you can stop holding. A worry can be handed to a model with instructions to split it into decisions available this week and things outside your control, and to write the first list in if-then form. That is a transformation you can specify, not a mood you have to summon. And the analysis that used to eat present-tense attention is exactly the work these systems do well.</p>
+<p>The first half is real. Evan Risko and Sam Gilbert's review of cognitive offloading describes what happens when you use the world to carry what your head was carrying: the demand on memory drops.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> A good deal of replay is fear of losing a lesson, and a lesson written into a system you can query is a lesson you can stop holding. A worry can be handed to a model with instructions to split it into decisions available this week and things outside your control, and to write the first list in if-then form. That is a transformation you can specify, not a mood you have to summon. And the analysis that used to eat present-tense attention is exactly the work these systems do well.</p>
 
 <p>The second half is the part to sit with. The same tool lowers the cost of the parasitic column by the same amount. A model will generate the hundredth retrospective of a conversation you already had, and the thousandth branch of a future you do not control, faster and more fluently than you could alone. Worry conducted with a research assistant is still worry, and it now produces documents, which makes it look like work.</p>
 
-<figure class="fig">
+<figure class="fig" id="fig-3">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 285" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig3-title">AI reduces the effort of every lane, productive and parasitic alike</title>
             <desc id="fig3-desc">Six lanes, one for each combination of tense and form. The effort each lane required before is shown as a dashed full-width track, and the effort with AI as a shorter filled bar. Every lane shrinks by the same proportion, including the three parasitic ones, so the tool does not choose the allocation for you.</desc>
             <text x="16" y="30" font-size="15" font-weight="700" fill="#f1f5f9">The discount applies to all six lanes</text>
-            <text x="392" y="62" font-size="11" fill="#64748b" text-anchor="middle">with AI</text>
-            <text x="600" y="62" font-size="11" fill="#64748b" text-anchor="end">before</text>
+            <text x="392" y="62" font-size="11" fill="#8090a8" text-anchor="middle">with AI</text>
+            <text x="600" y="62" font-size="11" fill="#8090a8" text-anchor="end">before</text>
             <line x1="392" y1="70" x2="392" y2="270" stroke="#2a3f5f" stroke-width="1" stroke-dasharray="4 5"/>
 
             <text x="16" y="88" font-size="11.5" fill="#60a5fa">Past: extraction</text>
@@ -272,14 +533,18 @@
 
 <p>The prompt below is the transformation in its smallest form. The last line is the one that matters, because without it a model will keep generating branches for as long as you keep reading them.</p>
 
-<pre><code>Here is something I keep circling: [situation].
+<pre data-lang="text"><code>Here is something I keep circling: [situation].
 Do not reassure me and do not add possibilities.
 Split it into two lists: what I can decide or do within seven days,
 and what is outside my control.
 Rewrite the first list as "when X happens, I will do Y" sentences.
 Return the second list once, as a closed list, and do not expand it.</code></pre>
 
-<h2>What leaders should do</h2>
+<p>The model earns its keep by being an allocation model rather than a piece of advice about serenity. Past and future are legitimate places to spend attention. They just have to return something to the only tense where you can act, and the return has to be a change, not a feeling of having thought hard.</p>
+
+<p>What is new is the price. Thinking about anything at all has become much cheaper in the last three years, and cheaper thinking does not sort itself into useful and useless. It arrives as more of both. The saying survives the upgrade without amendment: the past is still closed, the future still has not arrived, and the only thing genuinely at stake in either direction is the hour you are in right now.</p>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
 
 <ol>
     <li>Require every postmortem to end in an owned if-then sentence with a name and a date on it. A review that produces understanding and no changed action is replay running at organizational scale, and it costs a room full of people rather than one person.</li>
@@ -287,56 +552,153 @@ Return the second list once, as a closed list, and do not expand it.</code></pre
     <li>Move lessons out of individual heads into a system the team can query. People keep re-holding what they are afraid of losing, and the offloading literature is clear that externalizing reduces the load. This is the cheapest of the four and the one most often skipped.</li>
     <li>Protect blocks of present-tense attention as a scheduling matter, not an aspiration. The Killingsworth and Gilbert data is about wellbeing rather than output, so treat this as a claim about how people feel at work, which is a sufficient reason on its own.</li>
 </ol>
-
-<p>The model earns its keep by being an allocation model rather than a piece of advice about serenity. Past and future are legitimate places to spend attention. They just have to return something to the only tense where you can act, and the return has to be a change, not a feeling of having thought hard.</p>
-
-<p>What is new is the price. Thinking about anything at all has become much cheaper in the last three years, and cheaper thinking does not sort itself into useful and useless. It arrives as more of both. The saying survives the upgrade without amendment: the past is still closed, the future still has not arrived, and the only thing genuinely at stake in either direction is the hour you are in right now.</p>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Hard Choice Quadrant</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">Sorting a decision by its consequences and by how close the options stay, and knowing which quadrant a tool cannot help you in.</p>
-                        <a href="the-hard-choice-quadrant.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Happiness Loop</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">What actually moves wellbeing at work, and why the measured drivers are rarely the ones that get budget.</p>
-                        <a href="the-happiness-loop.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Focus Loop</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">Attention as a system with feedback rather than a resource you simply spend down over a day.</p>
-                        <a href="the-focus-loop.html">Read Article &rarr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Killingsworth, M. A., &amp; Gilbert, D. T. (2010). "A Wandering Mind Is an Unhappy Mind." <em>Science</em>, 330(6006), 932. The experience-sampling study behind the 46.9 percent figure, and the finding that whether the mind wandered explained more variance in happiness than the activity being performed. <a href="https://doi.org/10.1126/science.1192439" target="_blank" rel="noopener">doi:10.1126/science.1192439</a></li>
-                    <li class="reference-item">Nolen-Hoeksema, S., Wisco, B. E., &amp; Lyubomirsky, S. (2008). "Rethinking Rumination." <em>Perspectives on Psychological Science</em>, 3(5), 400-424. Defines rumination as repetitive passive attention to distress and its causes, and reviews the evidence that it prolongs rather than resolves. <a href="https://doi.org/10.1111/j.1745-6924.2008.00088.x" target="_blank" rel="noopener">doi:10.1111/j.1745-6924.2008.00088.x</a></li>
-                    <li class="reference-item">Seligman, M. E. P., Railton, P., Baumeister, R. F., &amp; Sripada, C. (2013). "Navigating Into the Future or Driven by the Past." <em>Perspectives on Psychological Science</em>, 8(2), 119-141. Argues that prospection organizes much of mental life, and that it operates through the generation and evaluation of "if X, then Y" conditionals. <a href="https://doi.org/10.1177/1745691612474317" target="_blank" rel="noopener">doi:10.1177/1745691612474317</a></li>
-                    <li class="reference-item">Gollwitzer, P. M. (1999). "Implementation intentions: Strong effects of simple plans." <em>American Psychologist</em>, 54(7), 493-503. The source of the "whenever situation X arises, I will do Y" form and the evidence for its effect on follow through. <a href="https://doi.org/10.1037/0003-066X.54.7.493" target="_blank" rel="noopener">doi:10.1037/0003-066X.54.7.493</a></li>
-                    <li class="reference-item">Risko, E. F., &amp; Gilbert, S. J. (2016). "Cognitive Offloading." <em>Trends in Cognitive Sciences</em>, 20(9), 676-688. Reviews what changes when people use the world rather than memory to carry information, which is the mechanism behind moving a lesson out of your head. <a href="https://doi.org/10.1016/j.tics.2016.07.002" target="_blank" rel="noopener">doi:10.1016/j.tics.2016.07.002</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Killingsworth, M. A., &amp; Gilbert, D. T. (2010). "A Wandering Mind Is an Unhappy Mind." <em>Science</em>, 330(6006), 932. <a href="https://doi.org/10.1126/science.1192439" target="_blank" rel="noopener">https://doi.org/10.1126/science.1192439</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Nolen-Hoeksema, S., Wisco, B. E., &amp; Lyubomirsky, S. (2008). "Rethinking Rumination." <em>Perspectives on Psychological Science</em>, 3(5), 400-424. <a href="https://doi.org/10.1111/j.1745-6924.2008.00088.x" target="_blank" rel="noopener">https://doi.org/10.1111/j.1745-6924.2008.00088.x</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Seligman, M. E. P., Railton, P., Baumeister, R. F., et al. (2013). "Navigating Into the Future or Driven by the Past." <em>Perspectives on Psychological Science</em>, 8(2), 119-141. <a href="https://doi.org/10.1177/1745691612474317" target="_blank" rel="noopener">https://doi.org/10.1177/1745691612474317</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Gollwitzer, P. M. (1999). "Implementation intentions: Strong effects of simple plans." <em>American Psychologist</em>, 54(7), 493-503. <a href="https://doi.org/10.1037/0003-066X.54.7.493" target="_blank" rel="noopener">https://doi.org/10.1037/0003-066X.54.7.493</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Risko, E. F., &amp; Gilbert, S. J. (2016). "Cognitive Offloading." <em>Trends in Cognitive Sciences</em>, 20(9), 676-688. <a href="https://doi.org/10.1016/j.tics.2016.07.002" target="_blank" rel="noopener">https://doi.org/10.1016/j.tics.2016.07.002</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_51.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-hard-choice-quadrant.html">The Hard Choice Quadrant</a></h3>
+    <p class="rcard-dek">AI can settle three of the four kinds of decision you face. The fourth one is still yours.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_45.png" alt="" width="134217728" height="134221569" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-happiness-loop.html">The Happiness Loop</a></h3>
+    <p class="rcard-dek">The best hours of your life run on four conditions you can build, and AI is the first tool that can supply all four or destroy all four.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_48.png" alt="" width="134217728" height="134221569" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-focus-loop.html">The Focus Loop</a></h3>
+    <p class="rcard-dek">A methodology that treats focus as an engineering problem, not a willpower problem, using AI to hold task state so restarting costs almost nothing.</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

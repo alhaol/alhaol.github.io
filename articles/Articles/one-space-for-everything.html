@@ -1,130 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>One Space for Everything | alhaol.github.io</title>
+    <meta name="description" content="EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/one-space-for-everything.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="One Space for Everything">
+    <meta property="og:description" content="EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/one-space-for-everything.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_67.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="An audio waveform, a film strip, a photo and lines of text each send threads into one cloud of points, where the audio and video threads land side by side.">
+    <meta property="article:published_time" content="2026-10-13">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="One Space for Everything">
+    <meta name="twitter:description" content="EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_67.png">
+    <meta name="twitter:image:alt" content="An audio waveform, a film strip, a photo and lines of text each send threads into one cloud of points, where the audio and video threads land side by side.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/one-space-for-everything.html",
+      "headline": "One Space for Everything",
+      "alternativeHeadline": "EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.",
+      "description": "EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_67.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-10-13",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_67.png" alt="One Space for Everything" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-ai">Multimodal AI</span>
-                        <span class="category-badge category-cognitive">Memory</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>AI Systems</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span></p>
+        <h1 id="article-title">One Space for Everything</h1>
+        <p class="dek subtitle">EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-10-13">October 13, 2026</time><span aria-hidden="true"> &middot; </span>6 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">One Space for Everything</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">EmbeddingGemma 2 puts voice, video, images and text on one map small enough for a phone, so you can find a moment by asking for it.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_67.png" alt="An audio waveform, a film strip, a photo and lines of text each send threads into one cloud of points, where the audio and video threads land side by side." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: October 13, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~7 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
-                    <p>I forget a lot of things, and I think that is fine. What is not fine is the amount of information we have to consume.</p>
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>EmbeddingGemma 2 puts text, code, images, video and audio on one map of 768 numbers per item, in a model small enough for a phone.</li>
+<li>A shared space matches what you mean against what you recorded, so the naming step people always skip is no longer needed.</li>
+<li>For a mostly video and voice archive, 256 numbers keeps at least 95% of the quality on every task at a third of the storage.</li>
+            </ol>
+        </aside>
 
-<p>Last week, on October 6, Google released EmbeddingGemma 2 [1]. It is a model that can help you find a video clip from a spoken description, search hours of audio recordings with a typed question, or find a picture by showing it another picture. It has 740 million parameters, runs on your own device, and is available under the Apache 2.0 license. That is a useful set of abilities for something this small.</p>
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#my-memory-was-never-in-the-filenames">My memory was never in the filenames</a></li>
+<li><a href="#one-space-for-everything">One space for everything</a></li>
+<li><a href="#small-enough-to-stay-home">Small enough to stay home</a></li>
+<li><a href="#shrinking-the-map-has-a-price">Shrinking the map has a price</a></li>
+<li><a href="#the-same-index-serves-my-agents">The same index serves my agents</a></li>
+<li><a href="#where-it-falls-short">Where it falls short</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
 
-<p>Here is why it got me excited. Imagine a pile of badly named videos on your computer. You record a voice memo asking for one specific moment, and a search app built on this model brings back the clip. Google uses almost exactly this example [1]. I don't know about you, but to me that sounds a little magical. And I can feel how well it fits my own memory, and my agents' memory too.</p>
+        <div id="article-body" class="prose">
+            <p>I forget a lot of things, and I think that is fine. What is not fine is the amount of information we have to consume.</p>
 
-<h2>My memory was never in the filenames</h2>
+<p>Last week, on October 6, Google released EmbeddingGemma 2.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> It is a model that can help you find a video clip from a spoken description, search hours of audio recordings with a typed question, or find a picture by showing it another picture. It has 740 million parameters, runs on your own device, and is available under the Apache 2.0 license. That is a useful set of abilities for something this small.</p>
+
+<p>Here is why it got me excited. Imagine a pile of badly named videos on your computer. You record a voice memo asking for one specific moment, and a search app built on this model brings back the clip. Google uses almost exactly this example.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup> I don't know about you, but to me that sounds a little magical. And I can feel how well it fits my own memory, and my agents' memory too.</p>
+
+<h2 id="my-memory-was-never-in-the-filenames">My memory was never in the filenames</h2>
 
 <p>Look at how a personal archive is actually labeled. <code>VID_20250612_1833.mp4</code>. <code>Recording 47.m4a</code>. <code>IMG_8812.jpg</code>. The camera picked those names, not me. I record more than ever: meetings, whiteboards, talks, voice notes on a walk. I go back to almost none of it, because the only handle a search box has is the filename, and the filename says nothing about what happened.</p>
 
 <p>So most of what I record is write-only memory. It is stored, and it is never retrieved. The usual fix is discipline: rename files, tag photos, write a summary after each meeting. I have tried. It lasts about two weeks. The labeling step is exactly the step a person with too much to consume will skip.</p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 334" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-1">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 334" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig1-title">The same spoken question run against filename search and meaning search</title>
             <desc id="fig1-desc">A voice memo asking for the whiteboard part of a design review finds nothing by filename, because no name mentions a whiteboard. Searching by meaning ranks the meeting recording first and points to the moment at 14:20.</desc>
             <defs><marker id="f1arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
@@ -139,13 +400,13 @@
             <text x="36" y="154" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8" text-anchor="start" font-weight="700" letter-spacing="0.06em">SEARCH BY NAME</text>
             <text x="346" y="154" font-family="Inter, sans-serif" font-size="11" fill="#60a5fa" text-anchor="start" font-weight="700" letter-spacing="0.06em">SEARCH BY MEANING</text>
             <rect x="36" y="166" width="258" height="24" rx="4" fill="#1a2942"/>
-            <text x="46" y="182" font-family="Consolas, monospace" font-size="12" fill="#64748b">VID_20250612_1833.mp4</text>
+            <text x="46" y="182" font-family="Consolas, monospace" font-size="12" fill="#8090a8">VID_20250612_1833.mp4</text>
             <rect x="36" y="198" width="258" height="24" rx="4" fill="#1a2942"/>
-            <text x="46" y="214" font-family="Consolas, monospace" font-size="12" fill="#64748b">Recording 47.m4a</text>
+            <text x="46" y="214" font-family="Consolas, monospace" font-size="12" fill="#8090a8">Recording 47.m4a</text>
             <rect x="36" y="230" width="258" height="24" rx="4" fill="#1a2942"/>
-            <text x="46" y="246" font-family="Consolas, monospace" font-size="12" fill="#64748b">IMG_8812.jpg</text>
+            <text x="46" y="246" font-family="Consolas, monospace" font-size="12" fill="#8090a8">IMG_8812.jpg</text>
             <rect x="36" y="262" width="258" height="24" rx="4" fill="#1a2942"/>
-            <text x="46" y="278" font-family="Consolas, monospace" font-size="12" fill="#64748b">meeting (3).mp4</text>
+            <text x="46" y="278" font-family="Consolas, monospace" font-size="12" fill="#8090a8">meeting (3).mp4</text>
             <text x="36" y="308" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">0 matches. No name says whiteboard.</text>
             <rect x="346" y="166" width="258" height="24" rx="4" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
             <text x="356" y="182" font-family="Consolas, monospace" font-size="12" fill="#f1f5f9">meeting (3).mp4 at 14:20</text>
@@ -161,21 +422,21 @@
             <text x="594" y="278" font-family="Consolas, monospace" font-size="12" fill="#60a5fa" text-anchor="end">0.09</text>
             <text x="346" y="308" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b" font-weight="600">Top hit: the clip, at the right moment.</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 1.</b> Filename search can only match what someone typed. Meaning search compares the question with the content itself, so the recording ranks first, and a photo of the same whiteboard ranks second. File names and scores are illustrative.</figcaption>
+</div>
+<figcaption><b>Figure 1.</b> Filename search can only match what someone typed. Meaning search compares the question with the content itself, so the recording ranks first, and a photo of the same whiteboard ranks second. File names and scores are illustrative.</figcaption>
 </figure>
 
-<h2>One space for everything</h2>
+<h2 id="one-space-for-everything">One space for everything</h2>
 
 <p>The technology underneath is called an <strong>embedding</strong>. An embedding model reads a piece of content and turns it into a list of numbers, which you can think of as coordinates on a very large map. The model is trained so that things with similar meaning land close together. Search then becomes simple geometry: turn the question into a point, and return whatever sits nearest to it.</p>
 
-<p>Text embeddings have been around for years. In 2021, OpenAI's CLIP showed that pictures and captions could share one map [4], and in 2023 Meta's ImageBind pushed the idea to six kinds of data [5]. EmbeddingGemma 2 puts text, code, images, video and audio on one map of 768 numbers per item [3], in a model small enough for a phone. Its text-only predecessor, released in 2025, was built for exactly that kind of device [7].</p>
+<p>Text embeddings have been around for years. In 2021, OpenAI's CLIP showed that pictures and captions could share one map,<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> and in 2023 Meta's ImageBind pushed the idea to six kinds of data.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> EmbeddingGemma 2 puts text, code, images, video and audio on one map of 768 numbers per item,<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> in a model small enough for a phone. Its text-only predecessor, released in 2025, was built for exactly that kind of device.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup></p>
 
-<blockquote>Search used to match what I typed against what I named. A shared space matches what I mean against what I recorded. The naming step, the one I always skip, is no longer needed.</blockquote>
+<figure class="quote"><blockquote><p>Search used to match what I typed against what I named. A shared space matches what I mean against what I recorded. The naming step, the one I always skip, is no longer needed.</p></blockquote></figure>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 346" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-2">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 346" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig2-title">Four kinds of content mapped into one shared embedding space</title>
             <desc id="fig2-desc">A voice memo, a video clip, a photo or sketch, and a text note all pass through one model and become points on the same map. The voice memo lands next to the video clip it describes, so finding the clip is a nearest-neighbour lookup.</desc>
             <defs><marker id="f2arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker></defs>
@@ -218,29 +479,31 @@
             <text x="488" y="290" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">near means similar, in any format</text>
             <text x="320" y="326" font-family="Inter, sans-serif" font-size="13" fill="#f59e0b" text-anchor="middle" font-weight="600">Search is distance: the memo&#39;s nearest neighbour is the clip.</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 2.</b> Every format lands on the same 768-number map, so a question in one format can find an answer in another. The model has 740M parameters in total, and the map is shared across all of its parts [2][3].</figcaption>
+</div>
+<figcaption><b>Figure 2.</b> Every format lands on the same 768-number map, so a question in one format can find an answer in another. The model has 740M parameters in total, and the map is shared across all of its parts <a href="#ref-6">[6]</a><a href="#ref-4">[4]</a>.</figcaption>
 </figure>
 
-<p>What about a rough sketch? A photo of a sketch is just another image, so it can query the library the same way a photo does, and Google demonstrates image-to-image search in its gallery app [1]. Google has not published results for hand-drawn sketches, though. Treat sketch search as something to test on your own collection, not a promise.</p>
+<p>What about a rough sketch? A photo of a sketch is just another image, so it can query the library the same way a photo does, and Google demonstrates image-to-image search in its gallery app.<sup class="cite"><a href="#ref-1" id="cite-1c">1</a></sup> Google has not published results for hand-drawn sketches, though. Treat sketch search as something to test on your own collection, not a promise.</p>
 
-<h2>Small enough to stay home</h2>
+<h2 id="small-enough-to-stay-home">Small enough to stay home</h2>
 
 <p>For personal memory, where the model runs matters as much as what it does. My voice memos and family videos are not things I want to upload so that a cloud service can index them. EmbeddingGemma 2 is built to run on the device that already holds the files.</p>
 
-<p>The model is modular. The text part is 270 million parameters, a vision encoder adds 170 million, and an audio encoder adds 300 million [2]. You load only what you need, and all four configurations write to the same map, so a phone running the small text-only version can query an index the full model built on a laptop overnight. Google measured about 191 MB of memory for the quantized text-only model and about 567 MB for the full multimodal one on a Pixel 11 Pro [1]. The Apache 2.0 license means no per-query fee and no permission to ask.</p>
+<aside class="pull-quote" aria-hidden="true"><p>So most of what I record is write-only memory. It is stored, and it is never retrieved.</p></aside>
 
-<p>One practical detail shapes how you build with it. Each embedding has a budget of 8,192 tokens, roughly 29 images, 58 video frames, or about five and a half minutes of audio [3]. Video is sampled at one frame per second by default, so a long recording gets cut into windows of about a minute, and each window becomes its own point on the map. That is the reason search can return a moment and not just a file.</p>
+<p>The model is modular. The text part is 270 million parameters, a vision encoder adds 170 million, and an audio encoder adds 300 million.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> You load only what you need, and all four configurations write to the same map, so a phone running the small text-only version can query an index the full model built on a laptop overnight. Google measured about 191 MB of memory for the quantized text-only model and about 567 MB for the full multimodal one on a Pixel 11 Pro.<sup class="cite"><a href="#ref-1" id="cite-1d">1</a></sup> The Apache 2.0 license means no per-query fee and no permission to ask.</p>
 
-<h2>Shrinking the map has a price</h2>
+<p>One practical detail shapes how you build with it. Each embedding has a budget of 8,192 tokens, roughly 29 images, 58 video frames, or about five and a half minutes of audio.<sup class="cite"><a href="#ref-4" id="cite-4b">4</a></sup> Video is sampled at one frame per second by default, so a long recording gets cut into windows of about a minute, and each window becomes its own point on the map. That is the reason search can return a moment and not just a file.</p>
 
-<p>Storage is the other half of running locally. Each item is 768 numbers by default, and the model is trained with <strong>Matryoshka representation learning</strong> [6], which packs the most important information into the first numbers. You can keep only the first 512, 256 or 128 of them. A million vectors take about 1.5 GB at full size and about 250 MB at 128 [2].</p>
+<h2 id="shrinking-the-map-has-a-price">Shrinking the map has a price</h2>
 
-<p>The model card shows that the saving is not free, and that the cost depends on the format [3].</p>
+<p>Storage is the other half of running locally. Each item is 768 numbers by default, and the model is trained with <strong>Matryoshka representation learning</strong>,<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> which packs the most important information into the first numbers. You can keep only the first 512, 256 or 128 of them. A million vectors take about 1.5 GB at full size and about 250 MB at 128.<sup class="cite"><a href="#ref-6" id="cite-6b">6</a></sup></p>
 
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 312" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+<p>The model card shows that the saving is not free, and that the cost depends on the format.<sup class="cite"><a href="#ref-4" id="cite-4c">4</a></sup></p>
+
+<figure class="fig" id="fig-3">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 312" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig3-title">Share of full-size retrieval quality kept as embeddings shrink from 768 to 128 numbers</title>
             <desc id="fig3-desc">At 256 numbers every task keeps at least 95 percent of its full score. At 128 numbers text keeps 94 percent and code 91 percent, while speech search falls to 82 percent and image, video and document retrieval to 77 percent.</desc>
             <text x="320" y="30" font-family="Inter, sans-serif" font-size="15" fill="#f1f5f9" text-anchor="middle" font-weight="700">Shrinking vectors: nearly free for text, costly for media</text>
@@ -270,32 +533,32 @@
             <text x="210" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">512</text>
             <text x="310" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">256</text>
             <text x="410" y="282" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">128</text>
-            <text x="110" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">full size</text>
-            <text x="210" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">1.5x smaller</text>
-            <text x="310" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">3x smaller</text>
-            <text x="410" y="300" font-family="Inter, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">6x smaller</text>
+            <text x="110" y="300" font-family="Inter, sans-serif" font-size="11" fill="#8090a8" text-anchor="middle">full size</text>
+            <text x="210" y="300" font-family="Inter, sans-serif" font-size="11" fill="#8090a8" text-anchor="middle">1.5x smaller</text>
+            <text x="310" y="300" font-family="Inter, sans-serif" font-size="11" fill="#8090a8" text-anchor="middle">3x smaller</text>
+            <text x="410" y="300" font-family="Inter, sans-serif" font-size="11" fill="#8090a8" text-anchor="middle">6x smaller</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 3.</b> Each line is a benchmark score divided by its own full-size score, so the lines compare how much quality survives, not which task is easier. Text is MTEB multilingual, code is MTEB code, speech search is MSEB retrieval, and images, video and documents are the MMEB overall score. Source: the EmbeddingGemma 2 model card [3].</figcaption>
+</div>
+<figcaption><b>Figure 3.</b> Each line is a benchmark score divided by its own full-size score, so the lines compare how much quality survives, not which task is easier. Text is MTEB multilingual, code is MTEB code, speech search is MSEB retrieval, and images, video and documents are the MMEB overall score. Source: the EmbeddingGemma 2 model card <a href="#ref-4">[4]</a>.</figcaption>
 </figure>
 
 <p>Text barely notices the cut. Pictures and sound do. For a personal archive that is mostly video and voice, 256 numbers is the sensible default: it keeps at least 95% of the quality on every task at a third of the storage. Use 128 only for text, and only after checking it on your own data.</p>
 
-<h2>The same index serves my agents</h2>
+<h2 id="the-same-index-serves-my-agents">The same index serves my agents</h2>
 
 <p>I wrote before about <a href="the-rediscovery-tax.html">the cost of an agent relearning</a> what another agent already solved. Most agent memory today is text: notes, logs, transcripts. That leaves out a lot of what actually happened, such as the screenshot of the error, the diagram on the whiteboard, or the five minutes of a call where the decision was made.</p>
 
-<p>A shared space lets an agent store those as they are and find them with the same question it would use for a note. EmbeddingGemma 2 also shares its text tokenizer and audio encoder with Gemma 4, so a small local assistant can run both models together for less memory than two separate ones [1]. The embedding model finds. The language model reads what was found and reasons about it.</p>
+<p>A shared space lets an agent store those as they are and find them with the same question it would use for a note. EmbeddingGemma 2 also shares its text tokenizer and audio encoder with Gemma 4, so a small local assistant can run both models together for less memory than two separate ones.<sup class="cite"><a href="#ref-1" id="cite-1e">1</a></sup> The embedding model finds. The language model reads what was found and reasons about it.</p>
 
-<h2>Where it falls short</h2>
+<h2 id="where-it-falls-short">Where it falls short</h2>
 
-<p>The benchmark numbers come from Google, and they are good rather than perfect. The video retrieval score is 50.67 on MMEB v2 [3], which means plenty of misses on hard queries. The model card also warns that subtle nuance, sarcasm and figurative language remain hard, and that quality varies across its 100+ languages [3]. Its training data stops in January 2025. For a personal archive the bar is lower than that: finding the thing at all.</p>
+<p>The benchmark numbers come from Google, and they are good rather than perfect. The video retrieval score is 50.67 on MMEB v2,<sup class="cite"><a href="#ref-4" id="cite-4d">4</a></sup> which means plenty of misses on hard queries. The model card also warns that subtle nuance, sarcasm and figurative language remain hard, and that quality varies across its 100+ languages.<sup class="cite"><a href="#ref-4" id="cite-4e">4</a></sup> Its training data stops in January 2025. For a personal archive the bar is lower than that: finding the thing at all.</p>
 
 <p>I will keep forgetting. What I need is a cheaper way back to what I already recorded. A free model that fits on a phone and understands the formats I actually record in makes that way back very cheap.</p>
 
 <p>What excites me most is that one index can serve both of us. The map that lets me find a moment with a voice memo is the same map that lets my agent find it with a sentence. Personal memory and agent memory stop being two projects.</p>
 
-<h2>What leaders should do</h2>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
 
 <ol class="list-decimal space-y-3">
 <li>Pick one archive your people already struggle to search, such as recorded meetings, field photos or support calls, and pilot a local multimodal index on it. Measure the time to find a known item before and after.</li>
@@ -303,76 +566,155 @@
 <li>Test on your own content before trusting the benchmarks. Write 30 questions with known answers, including spoken questions and sketch queries, and check how often the right item lands in the top three at 768 and at 256 numbers.</li>
 <li>Store mixed media at 256 numbers by default, and cut long video and audio into one-minute windows, so results point to the moment and not just the file.</li>
 </ol>
-
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is how you work the brief window before new information decays.</p>
-                        <a href="the-memory-workbench.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Rediscovery Tax</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A problem solved by one agent should not have to be learned from scratch by the next one. Closing that gap takes more than storage.</p>
-                        <a href="the-rediscovery-tax.html">Read Article &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Efficiency Trilemma</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Accuracy, speed and energy in small language models: why the most accurate SLM is rarely the right choice for production.</p>
-                        <a href="small-model-efficiency.html">Read Article &rarr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">
-                        Google. (2026, October 6). <em>"EmbeddingGemma 2 is a best-in-class open model for natively multimodal embeddings."</em> The Keyword, Google Blog.
-                        <a href="https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/" target="_blank">https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/</a>
-                    </li>
-                    <li class="reference-item">
-                        Google for Developers. (2026). <em>"EmbeddingGemma 2: The Developer Guide."</em> Google Developers Blog.
-                        <a href="https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/" target="_blank">https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/</a>
-                    </li>
-                    <li class="reference-item">
-                        Google DeepMind. (2026). <em>"google/embeddinggemma-2" model card</em> (architecture, input limits, benchmark and truncation tables, limitations). Hugging Face.
-                        <a href="https://huggingface.co/google/embeddinggemma-2" target="_blank">https://huggingface.co/google/embeddinggemma-2</a>
-                    </li>
-                    <li class="reference-item">
-                        Radford, A., Kim, J. W., Hallacy, C., et al. (2021). <em>"Learning Transferable Visual Models From Natural Language Supervision"</em> (CLIP). ICML 2021.
-                        <a href="https://arxiv.org/abs/2103.00020" target="_blank">https://arxiv.org/abs/2103.00020</a>
-                    </li>
-                    <li class="reference-item">
-                        Girdhar, R., El-Nouby, A., Liu, Z., et al. (2023). <em>"ImageBind: One Embedding Space To Bind Them All."</em> CVPR 2023.
-                        <a href="https://arxiv.org/abs/2305.05665" target="_blank">https://arxiv.org/abs/2305.05665</a>
-                    </li>
-                    <li class="reference-item">
-                        Kusupati, A., Bhatt, G., Rege, A., et al. (2022). <em>"Matryoshka Representation Learning."</em> NeurIPS 2022.
-                        <a href="https://arxiv.org/abs/2205.13147" target="_blank">https://arxiv.org/abs/2205.13147</a>
-                    </li>
-                    <li class="reference-item">
-                        Schechter Vera, H., et al. (2025). <em>"EmbeddingGemma: Powerful and Lightweight Text Representations."</em> arXiv:2509.20354.
-                        <a href="https://arxiv.org/abs/2509.20354" target="_blank">https://arxiv.org/abs/2509.20354</a>
-                    </li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Google. (2026, October 6). "EmbeddingGemma 2 is a best-in-class open model for natively multimodal embeddings." <em>The Keyword, Google Blog</em>. <a href="https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/" target="_blank" rel="noopener">https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Radford, A., Kim, J. W., Hallacy, C., et al. (2021). "Learning Transferable Visual Models From Natural Language Supervision" (CLIP). <em>ICML 2021</em>. <a href="https://arxiv.org/abs/2103.00020" target="_blank" rel="noopener">https://arxiv.org/abs/2103.00020</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Girdhar, R., El-Nouby, A., Liu, Z., et al. (2023). "ImageBind: One Embedding Space To Bind Them All." <em>CVPR 2023</em>. <a href="https://arxiv.org/abs/2305.05665" target="_blank" rel="noopener">https://arxiv.org/abs/2305.05665</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Google DeepMind. (2026). "google/embeddinggemma-2" model card. <em>Hugging Face</em>. (architecture, input limits, benchmark and truncation tables, limitations) <a href="https://huggingface.co/google/embeddinggemma-2" target="_blank" rel="noopener">https://huggingface.co/google/embeddinggemma-2</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Schechter Vera, H., et al. (2025). "EmbeddingGemma: Powerful and Lightweight Text Representations." <em>arXiv</em>:2509.20354. <a href="https://arxiv.org/abs/2509.20354" target="_blank" rel="noopener">https://arxiv.org/abs/2509.20354</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Google for Developers. (2026). "EmbeddingGemma 2: The Developer Guide." <em>Google Developers Blog</em>. <a href="https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/" target="_blank" rel="noopener">https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Kusupati, A., Bhatt, G., Rege, A., et al. (2022). "Matryoshka Representation Learning." <em>NeurIPS 2022</em>. <a href="https://arxiv.org/abs/2205.13147" target="_blank" rel="noopener">https://arxiv.org/abs/2205.13147</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_41.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-memory-workbench.html">The Memory Workbench</a></h3>
+    <p class="rcard-dek">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is how you work the brief window before new information decays.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_63.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="the-rediscovery-tax.html">The Rediscovery Tax</a></h3>
+    <p class="rcard-dek">A problem solved by one agent should not have to be learned from scratch by the next one. Closing that gap takes more than storage.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_11.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="small-model-efficiency.html">The Efficiency Trilemma</a></h3>
+    <p class="rcard-dek">Accuracy, Speed, and Energy in Small Language Models: Why the Most Accurate SLM Is Rarely the Right Choice for Production</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

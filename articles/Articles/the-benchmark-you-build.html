@@ -1,133 +1,379 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>The Benchmark You Build | alhaol.github.io</title>
-    <meta name="description" content="Public leaderboards are perishable and measure someone else's population. A method for building the 500-item evaluation set that decides your purchases.">
+    <meta name="description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
     <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
     <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="The Benchmark You Build">
-    <meta property="og:description" content="Public leaderboards are perishable and measure someone else's population. A method for building the 500-item evaluation set that decides your purchases.">
+    <meta property="og:description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
     <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html">
     <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_50.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Eight blue bars on the left link by thin curves to eight amber bars in a dashed box on the right, and one highlighted short bar jumps by a bold amber curve to the top.">
+    <meta property="article:published_time" content="2026-08-21">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="The Benchmark You Build">
+    <meta name="twitter:description" content="Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_50.png">
+    <meta name="twitter:image:alt" content="Eight blue bars on the left link by thin curves to eight amber bars in a dashed box on the right, and one highlighted short bar jumps by a bold amber curve to the top.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/the-benchmark-you-build.html",
+      "headline": "The Benchmark You Build",
+      "alternativeHeadline": "Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.",
+      "description": "Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_50.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-08-21",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_50.png" alt="The Benchmark You Build" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-ai">AI / ML</span>
-                        <span class="category-badge category-engineering">Engineering</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>AI Systems</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Engineering</span></p>
+        <h1 id="article-title">The Benchmark You Build</h1>
+        <p class="dek subtitle">Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-08-21">August 21, 2026</time><span aria-hidden="true"> &middot; </span>14 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Benchmark You Build</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">Public leaderboards measure what a model knows. Only an evaluation set you built measures whether it can do your job.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_50.png" alt="Eight blue bars on the left link by thin curves to eight amber bars in a dashed box on the right, and one highlighted short bar jumps by a bold amber curve to the top." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: August 21, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: 16 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Rebuilt ImageNet test sets cut published accuracy by 11 to 14 percent, yet rankings held up far better, so a leaderboard orders models more honestly than it forecasts.</li>
+<li>Fixing a silent AlGhafa scoring bug moved Open Arabic LLM Leaderboard scores by as much as 20 points, though no model had changed.</li>
+<li>On 500 items near 80 percent accuracy the 95 percent interval spans about plus or minus 3.5 points, so two models three points apart are tied.</li>
+            </ol>
+        </aside>
 
-<p>Every team that picks a model off a leaderboard is running an experiment somebody else designed, on a population that is not theirs, and treating the result as a decision.</p>
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#three-ways-a-public-number-drifts">Three ways a public number drifts</a></li>
+<li><a href="#the-leaderboards-keep-telling-you-this">The leaderboards keep telling you this</a></li>
+<li><a href="#what-arabic-makes-impossible-to-ignore">What Arabic makes impossible to ignore</a></li>
+<li><a href="#what-each-kind-of-evaluation-is-good-for">What each kind of evaluation is good for</a></li>
+<li><a href="#how-to-build-one-that-survives-contact">How to build one that survives contact</a></li>
+<li><a href="#scoring-without-fooling-yourself">Scoring without fooling yourself</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
 
+        <div id="article-body" class="prose">
+            <p>Every team that picks a model off a leaderboard is running an experiment somebody else designed, on a population that is not theirs, and treating the result as a decision.</p>
 <p>That is rarely laziness. A public score is often the only number available, it arrives free, and it carries the authority of a paper and a chart. The trouble is that several forces pull that number away from your reality, and none of them announce themselves. The score does not become false. It becomes irrelevant, which is much harder to notice.</p>
-
-<blockquote>A leaderboard measures a model against a population of questions. You are buying a model to serve a population of users. Nobody has ever shown you that those two populations resemble each other.</blockquote>
-
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="quote"><blockquote><p>A leaderboard measures a model against a population of questions. You are buying a model to serve a population of users. Nobody has ever shown you that those two populations resemble each other.</p></blockquote></figure>
+<figure class="fig" id="fig-1">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig1-title">Overlap between what a public benchmark samples and what production traffic looks like</title>
             <desc id="fig1-desc">Two overlapping regions. The public benchmark region contains Modern Standard Arabic, general knowledge, multiple choice and curated text. The production traffic region contains dialect, code-switching, your own domain and messy open-ended requests. The overlap between them is narrow, and the published score is computed almost entirely outside it.</desc>
 
@@ -152,31 +398,24 @@
             <text x="320" y="162" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">that carries</text>
             <text x="320" y="178" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">over</text>
 
-            <text x="40" y="278" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The published number is computed across the whole blue region, including the part you will never serve.</text>
+            <text x="40" y="272" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">The published number is computed across the whole blue region,</text>
+            <text x="40" y="288" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">including the part you will never serve.</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 1.</b> A benchmark score is an average over a question population. Buying on that number assumes the two populations overlap, which is the one thing the number cannot tell you.</figcaption>
+</div>
+<figcaption><b>Figure 1.</b> A benchmark score is an average over a question population. Buying on that number assumes the two populations overlap, which is the one thing the number cannot tell you.</figcaption>
 </figure>
-
-<h2>Three ways a public number drifts</h2>
-
-<p>The first is contamination. Shuo Yang and colleagues showed that the standard defence, removing test items from training data by matching overlapping n-grams, does not survive paraphrase or translation. A rephrased item passes straight through the filter while remaining, to a model, the same item. They found 8 to 18 percent of the HumanEval benchmark present in widely used pretraining corpora, and demonstrated that a 13-billion-parameter model deliberately overfit to a rephrased test set can post numbers on par with GPT-4. The score is real. The competence behind it is not. Their proposed remedy, a decontaminator that compares embeddings rather than surface strings, works better and is still not a solution you can buy: it only runs on corpora you are allowed to see, which rules out every closed model on the board.</p>
-
-<p>The second is ordinary reuse. Benjamin Recht and colleagues rebuilt the test sets for CIFAR-10 and ImageNet, following the original collection protocol as closely as they could, then re-scored a wide range of published models. Accuracy fell 11 to 14 percent on ImageNet and 3 to 15 percent on CIFAR-10. Nobody cheated. A decade of one research community tuning against one fixed sample was enough on its own to inflate every number in the literature. The useful detail is what survived: the ranking held up far better than the absolute scores. A leaderboard is a more honest ordering than it is a forecast, and teams get into trouble by reading it as the second.</p>
-
-<p>The third is the incentive structure around the leaderboard itself. A 2025 audit of Chatbot Arena covering roughly two million battles, 42 providers and 243 models found undisclosed private testing, where a provider evaluates many variants and publishes only the winner, including 27 unreleased variants tested by one provider ahead of a single launch. The same work found that modest amounts of arena-specific data can produce relative gains up to 112 percent on the arena distribution, and that proprietary models are sampled in more battles than open-weight ones. The arena operators disputed parts of the analysis, which is worth knowing and does not change the structural point: a leaderboard that matters becomes a target, and a target measures fit to itself.</p>
-
-<h2>The leaderboards themselves keep telling you this</h2>
-
+<h2 id="three-ways-a-public-number-drifts">Three ways a public number drifts</h2>
+<p>The first is contamination. Shuo Yang and colleagues showed that the standard defence, removing test items from training data by matching overlapping n-grams, does not survive paraphrase or translation. A rephrased item passes straight through the filter while remaining, to a model, the same item. They found 8 to 18 percent of the HumanEval benchmark present in widely used pretraining corpora, and demonstrated that a 13-billion-parameter model deliberately overfit to a rephrased test set can post numbers on par with GPT-4.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> The score is real. The competence behind it is not. Their proposed remedy, a decontaminator that compares embeddings rather than surface strings, works better and is still not a solution you can buy: it only runs on corpora you are allowed to see, which rules out every closed model on the board.</p>
+<p>The second is ordinary reuse. Benjamin Recht and colleagues rebuilt the test sets for CIFAR-10 and ImageNet, following the original collection protocol as closely as they could, then re-scored a wide range of published models. Accuracy fell 11 to 14 percent on ImageNet and 3 to 15 percent on CIFAR-10.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> Nobody cheated. A decade of one research community tuning against one fixed sample was enough on its own to inflate every number in the literature. The useful detail is what survived: the ranking held up far better than the absolute scores. A leaderboard is a more honest ordering than it is a forecast, and teams get into trouble by reading it as the second.</p>
+<aside class="pull-quote" aria-hidden="true"><p>The score does not become false. It becomes irrelevant, which is much harder to notice.</p></aside>
+<p>The third is the incentive structure around the leaderboard itself. A 2025 audit of Chatbot Arena covering roughly two million battles, 42 providers and 243 models found undisclosed private testing, where a provider evaluates many variants and publishes only the winner, including 27 unreleased variants tested by one provider ahead of a single launch.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> The same work found that modest amounts of arena-specific data can produce relative gains up to 112 percent on the arena distribution, and that proprietary models are sampled in more battles than open-weight ones.<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup> The arena operators disputed parts of the analysis, which is worth knowing and does not change the structural point: a leaderboard that matters becomes a target, and a target measures fit to itself.</p>
+<h2 id="the-leaderboards-keep-telling-you-this">The leaderboards keep telling you this</h2>
 <p>The strongest evidence here is not a critique paper. It is the behaviour of the people who run the leaderboards, and Hugging Face's Open LLM Leaderboard is the cleanest case.</p>
-
-<p>Version 1 launched in mid-2023 and ran six benchmarks, ARC, HellaSwag, MMLU, TruthfulQA, WinoGrande and GSM8K, through a single standardized harness so numbers were comparable across submissions. It was archived in June 2024 because the models had saturated it: scores had bunched near the ceiling and the ruler no longer separated good from great. Version 2 replaced the set with harder tasks chosen to resist saturation, MMLU-Pro, GPQA, MuSR, IFEval, BBH and MATH Level 5. In March 2025, after evaluating more than 13,000 models, that was retired too. The stated reason reads better as an engineering warning than as an announcement: as capabilities moved toward reasoning and assistant behaviour, the benchmark suite was drifting toward measuring something the field had stopped caring about, and continuing to publish it would encourage teams to hill-climb an irrelevant direction.</p>
-
+<p>Version 1 launched in mid-2023 and ran six benchmarks, ARC, HellaSwag, MMLU, TruthfulQA, WinoGrande and GSM8K, through a single standardized harness so numbers were comparable across submissions. It was archived in June 2024 because the models had saturated it: scores had bunched near the ceiling and the ruler no longer separated good from great.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> Version 2 replaced the set with harder tasks chosen to resist saturation, MMLU-Pro, GPQA, MuSR, IFEval, BBH and MATH Level 5. In March 2025, after evaluating more than 13,000 models, that was retired too.<sup class="cite"><a href="#ref-4" id="cite-4b">4</a></sup> The stated reason reads better as an engineering warning than as an announcement: as capabilities moved toward reasoning and assistant behaviour, the benchmark suite was drifting toward measuring something the field had stopped caring about, and continuing to publish it would encourage teams to hill-climb an irrelevant direction.</p>
 <p>Read that back. The best-resourced, most carefully maintained public evaluation in open-weights AI lasted about 21 months across two versions, and its maintainers shut it down rather than let people optimize against a stale target. Whatever leaderboard you are reading today sits somewhere on that same curve, and nothing on the page tells you where.</p>
-
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 356" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-2">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 356" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig2-title">The useful life of public benchmark leaderboards compared with a private evaluation set</title>
             <desc id="fig2-desc">A timeline from mid-2023 to now. The Open LLM Leaderboard version 1 ran about a year and was archived once models saturated its benchmarks. Version 2 ran about nine months and was retired in March 2025 after scoring more than thirteen thousand models. The Open Arabic LLM Leaderboard was rebuilt from version 1 to version 2 in February 2025, dropping translated benchmarks. AraGen avoids expiry by replacing its private test set every three months. A private evaluation set owned by the team runs the whole period without expiring, because it is re-sampled rather than retired.</desc>
 
@@ -188,21 +427,21 @@
 
             <text x="20" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">The useful life of a public ruler</text>
 
-            <text x="20" y="54" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">PUBLIC BENCHMARKS</text>
+            <text x="20" y="54" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#8090a8">PUBLIC BENCHMARKS</text>
 
             <text x="168" y="71" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open LLM</text>
             <text x="168" y="87" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard v1</text>
             <rect x="178" y="66" width="138" height="18" rx="2" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-opacity="0.8"/>
             <line x1="316" y1="62" x2="316" y2="88" stroke="#94a3b8" stroke-width="1.5"/>
             <text x="324" y="71" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">archived Jun 2024</text>
-            <text x="324" y="87" font-family="Inter, sans-serif" font-size="11" fill="#64748b">benchmarks saturated</text>
+            <text x="324" y="87" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">benchmarks saturated</text>
 
             <text x="168" y="115" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open LLM</text>
             <text x="168" y="131" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard v2</text>
             <rect x="316" y="110" width="104" height="18" rx="2" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-opacity="0.8"/>
             <line x1="420" y1="106" x2="420" y2="132" stroke="#94a3b8" stroke-width="1.5"/>
             <text x="428" y="115" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">retired Mar 2025</text>
-            <text x="428" y="131" font-family="Inter, sans-serif" font-size="11" fill="#64748b">after 13,000+ models</text>
+            <text x="428" y="131" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">after 13,000+ models</text>
 
             <text x="168" y="159" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Open Arabic LLM</text>
             <text x="168" y="175" text-anchor="end" font-family="Inter, sans-serif" font-size="11.5" fill="#f1f5f9">Leaderboard</text>
@@ -221,7 +460,7 @@
             <rect x="525" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
             <rect x="560" y="198" width="31" height="18" rx="2" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa" stroke-opacity="0.45"/>
             <rect x="595" y="198" width="20" height="18" rx="2" fill="#60a5fa" fill-opacity="0.30" stroke="#60a5fa" stroke-opacity="0.7"/>
-            <text x="385" y="236" font-family="Inter, sans-serif" font-size="11" fill="#64748b">the set is replaced, not the leaderboard</text>
+            <text x="385" y="236" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">the set is replaced, not the leaderboard</text>
 
             <text x="20" y="262" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#f59e0b">YOUR SET</text>
 
@@ -240,48 +479,37 @@
             <line x1="258" y1="332" x2="258" y2="338" stroke="#2a3f5f"/>
             <line x1="397" y1="332" x2="397" y2="338" stroke="#2a3f5f"/>
             <line x1="535" y1="332" x2="535" y2="338" stroke="#2a3f5f"/>
-            <text x="178" y="352" font-family="Inter, sans-serif" font-size="11" fill="#64748b">mid-2023</text>
-            <text x="258" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2024</text>
-            <text x="397" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2025</text>
-            <text x="535" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">2026</text>
-            <text x="620" y="352" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#64748b">now</text>
+            <text x="178" y="352" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">mid-2023</text>
+            <text x="258" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">2024</text>
+            <text x="397" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">2025</text>
+            <text x="535" y="352" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">2026</text>
+            <text x="620" y="352" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">now</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 2.</b> Every public ruler on this chart was archived, retired or rebuilt inside two years. The one design that does not expire is AraGen&#39;s, which rotates a private set every quarter &mdash; the same discipline a team applies to its own evaluation set. Sources: Hugging Face Open LLM Leaderboard archive; Open Arabic LLM Leaderboard v2 (Feb 2025); AraGen 3C3H (Dec 2024).</figcaption>
+</div>
+<figcaption><b>Figure 2.</b> Every public ruler on this chart was archived, retired or rebuilt inside two years. The one design that does not expire is AraGen&#39;s, which rotates a private set every quarter, the same discipline a team applies to its own evaluation set. Sources: Hugging Face Open LLM Leaderboard archive; Open Arabic LLM Leaderboard v2 (Feb 2025); AraGen 3C3H (Dec 2024).</figcaption>
 </figure>
-
-<h2>What Arabic makes impossible to ignore</h2>
-
+<h2 id="what-arabic-makes-impossible-to-ignore">What Arabic makes impossible to ignore</h2>
 <p>Every team has this problem. Arabic teams find out sooner, because the gap between the benchmark and the user is visible in the language itself.</p>
-
 <p>Arabic is diglossic. Modern Standard Arabic is the written and formal register, and it is what nearly every Arabic benchmark is composed in. Your users write dialect, and they switch into English mid-sentence for technical terms. A model can score well on formal Arabic comprehension and still fail a Gulf or Levantine support request, and no MSA benchmark will warn you.</p>
-
-<p>The Arabic leaderboards have been unusually candid about this, and their revision history is worth studying. The Open Arabic LLM Leaderboard launched in May 2024 from 2A2I, TII and Hugging Face with fourteen benchmarks, several of them machine translations of English sets such as MMLU and EXAMS. Version 2, released in February 2025, dropped the translations outright. The reasoning was that a translated item carries the framing and cultural assumptions of the original and produces mismatches that have nothing to do with the model's Arabic. In their place came native sets: ArabicMMLU with roughly 15,000 items built from real school exams, AraTrust with 522 human-written questions on trustworthiness, MadinahQA, and ALRAGE, a retrieval-augmented generation set drawn from 40 Arabic books.</p>
-
-<p>Buried in the same release is the detail that should stay with you. The maintainers found a silent bug in AlGhafa, one of the main tasks carried over from version 1, in how answer choices were handled. Correcting it moved scores by as much as 20 points, and it hit smaller models hardest. No model changed. The scoring code did. Anyone who had shortlisted candidates from that leaderboard the week before was partly ranking an artifact of the harness, and had no way to see it, because the harness is not the thing on the page.</p>
-
-<p>AraGen, from Inception and MBZUAI, attacked the problem from the other end. Instead of multiple choice it scores free generation, using a metric called 3C3H: Correctness, Completeness, Conciseness, Helpfulness, Honesty and Harmlessness. Correctness is binary and gates the rest, so a wrong answer zeroes every other dimension and a fluent falsehood cannot out-score a blunt fact. The more interesting design choice is operational. AraGen Bench is only 279 human-verified questions, and it stays private for three months at a time before being published and replaced by a fresh set of comparable structure and difficulty. That is a public leaderboard voluntarily adopting the two disciplines this article argues for: keep the set small enough to curate properly, and keep it private long enough for the number to mean something.</p>
-
-<p>Dialect is the remaining hole, and AraDiCE is the serious attempt at it. Built by QCRI and published at COLING 2025, it covers Gulf, Egyptian and Levantine Arabic across roughly 45,000 post-edited samples, plus a benchmark for cultural awareness in those regions. Its headline finding is one to keep: Arabic-specific models such as Jais and AceGPT beat larger multilingual models on dialect work, and dialect identification and generation remain hard for everything tested.</p>
-
-<p>Some of that square I have had to build. In work on Jordanian dialect speech recognition with Ali Safieh and Rawan Ghnemat, there was no labelled corpus to evaluate against, so we assembled one: 97,000 records and 113 hours of speech, of which only 52 hours could be labelled at all. The comparison point for Modern Standard Arabic was the 1,000-hour Massive Arabic Speech Corpus. That ratio is the argument in a single line.</p>
-
-<p>The resolution turned out to matter more than the label suggests. Jordanian Arabic carries phonemes the MSA set does not, and it splits into urban, rural and Bedouin varieties inside one country, which means even "Levantine" is too coarse a bucket to make a purchase on. Our best system reached 51 percent word error rate after five generations of self-supervised training. That number is not a failure. It is what an honest measurement looks like the first time it is taken on the right population, and no public leaderboard would have produced it.</p>
-
+<p>The Arabic leaderboards have been unusually candid about this, and their revision history is worth studying. The Open Arabic LLM Leaderboard launched in May 2024 from 2A2I, TII and Hugging Face with fourteen benchmarks, several of them machine translations of English sets such as MMLU and EXAMS. Version 2, released in February 2025, dropped the translations outright.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> The reasoning was that a translated item carries the framing and cultural assumptions of the original and produces mismatches that have nothing to do with the model's Arabic. In their place came native sets: ArabicMMLU with roughly 15,000 items built from real school exams, AraTrust with 522 human-written questions on trustworthiness, MadinahQA, and ALRAGE, a retrieval-augmented generation set drawn from 40 Arabic books.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a>,<a href="#ref-6" id="cite-6a">6</a></sup></p>
+<p>Buried in the same release is the detail that should stay with you. The maintainers found a silent bug in AlGhafa, one of the main tasks carried over from version 1, in how answer choices were handled. Correcting it moved scores by as much as 20 points, and it hit smaller models hardest.<sup class="cite"><a href="#ref-5" id="cite-5c">5</a></sup> No model changed. The scoring code did. Anyone who had shortlisted candidates from that leaderboard the week before was partly ranking an artifact of the harness, and had no way to see it, because the harness is not the thing on the page.</p>
+<p>AraGen, from Inception and MBZUAI, attacked the problem from the other end. Instead of multiple choice it scores free generation, using a metric called 3C3H: Correctness, Completeness, Conciseness, Helpfulness, Honesty and Harmlessness.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> Correctness is binary and gates the rest, so a wrong answer zeroes every other dimension and a fluent falsehood cannot out-score a blunt fact. The more interesting design choice is operational. AraGen Bench is only 279 human-verified questions, and it stays private for three months at a time before being published and replaced by a fresh set of comparable structure and difficulty.<sup class="cite"><a href="#ref-7" id="cite-7b">7</a></sup> That is a public leaderboard voluntarily adopting the two disciplines this article argues for: keep the set small enough to curate properly, and keep it private long enough for the number to mean something.</p>
+<p>Dialect is the remaining hole, and AraDiCE is the serious attempt at it. Built by QCRI and published at COLING 2025, it covers Gulf, Egyptian and Levantine Arabic across roughly 45,000 post-edited samples, plus a benchmark for cultural awareness in those regions.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> Its headline finding is one to keep: Arabic-specific models such as Jais and AceGPT beat larger multilingual models on dialect work, and dialect identification and generation remain hard for everything tested.</p>
+<p>Some of that square I have had to build. In work on Jordanian dialect speech recognition with Ali Safieh and Rawan Ghnemat, there was no labelled corpus to evaluate against, so we assembled one: 97,000 records and 113 hours of speech, of which only 52 hours could be labelled at all.<sup class="cite"><a href="#ref-9" id="cite-9a">9</a></sup> The comparison point for Modern Standard Arabic was the 1,000-hour Massive Arabic Speech Corpus. That ratio is the argument in a single line.</p>
+<p>The resolution turned out to matter more than the label suggests. Jordanian Arabic carries phonemes the MSA set does not, and it splits into urban, rural and Bedouin varieties inside one country, which means even "Levantine" is too coarse a bucket to make a purchase on. Our best system reached 51 percent word error rate after five generations of self-supervised training.<sup class="cite"><a href="#ref-9" id="cite-9b">9</a></sup> That number is not a failure. It is what an honest measurement looks like the first time it is taken on the right population, and no public leaderboard would have produced it.</p>
 <p>All of these are good, and you should run them. They still stop one square short of where your product lives.</p>
-
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 348" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-3">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 348" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig3-title">Coverage grid of Arabic benchmarks by language register and task specificity</title>
             <desc id="fig3-desc">A two by two grid. Modern Standard Arabic with general knowledge is well covered by benchmarks such as ArabicMMLU. Dialect with general knowledge is partly covered by AraDiCE. Modern Standard Arabic on a specific domain is thin. Dialect on your own domain, which is where most production traffic sits, has no public benchmark at all.</desc>
 
             <text x="40" y="30" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Where Arabic benchmarks sit, and where your traffic sits</text>
 
-            <text x="245" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">GENERAL KNOWLEDGE</text>
-            <text x="435" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">YOUR DOMAIN</text>
-            <text x="140" y="120" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">DIALECT</text>
-            <text x="140" y="230" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#64748b">MSA</text>
+            <text x="245" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#8090a8">GENERAL KNOWLEDGE</text>
+            <text x="435" y="54" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#8090a8">YOUR DOMAIN</text>
+            <text x="140" y="120" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#8090a8">DIALECT</text>
+            <text x="140" y="230" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#8090a8">MSA</text>
 
             <rect x="150" y="62" width="190" height="110" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="340" y="62" width="190" height="110" fill="#1a2942" stroke="#f59e0b" stroke-width="2"/>
@@ -304,69 +532,53 @@
             <text x="435" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Thin and scattered</text>
             <text x="435" y="257" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Rarely your domain</text>
 
-            <text x="40" y="312" font-family="Inter, sans-serif" font-size="11" fill="#64748b">The amber square is the one you are paid to be correct in, and the only one nobody else will measure.</text>
-            <text x="40" y="330" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Sources: ArabicMMLU (ACL 2024), AraDiCE (COLING 2025), OALL v2, AraGen.</text>
+            <text x="40" y="300" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">The amber square is the one you are paid to be correct in,</text>
+            <text x="40" y="315" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">and the only one nobody else will measure.</text>
+            <text x="40" y="333" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Sources: ArabicMMLU (ACL 2024), AraDiCE (COLING 2025), OALL v2, AraGen.</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 3.</b> Public Arabic benchmarks have made real progress on register and culture. None of them cover your dialect on your task, which is the square your users occupy.</figcaption>
+</div>
+<figcaption><b>Figure 3.</b> Public Arabic benchmarks have made real progress on register and culture. None of them cover your dialect on your task, which is the square your users occupy.</figcaption>
 </figure>
-
-<h2>What each kind of evaluation is actually good for</h2>
-
+<h2 id="what-each-kind-of-evaluation-is-good-for">What each kind of evaluation is good for</h2>
 <p>None of this makes public benchmarks worthless, and a team that responds by ignoring them has traded one error for another. The useful move is to be explicit about the division of labour, including where your own set is the weaker instrument.</p>
-
-<h3>What a public leaderboard does well</h3>
-
-<ul class="list-disc space-y-2">
-    <li><b>Screening.</b> It cuts a field of forty candidates down to five for free, in an afternoon, before you have spent anything.</li>
-    <li><b>Comparability at a scale you cannot reach.</b> One harness, one prompt format, one parser, run across thousands of models. You will never reproduce that internally, and without it you cannot say whether a 4-point gap is the model or the plumbing.</li>
-    <li><b>Ordering, more than absolute accuracy.</b> This is the practical lesson from the ImageNet rebuild: rankings held up much better than the scores did. Trust a leaderboard to tell you which models are in the conversation, not what accuracy you will see.</li>
-    <li><b>Regression detection.</b> A new checkpoint that drops several points on IFEval has broken something general, and you want to know that before you evaluate it on anything of your own.</li>
-    <li><b>Adversarial scrutiny.</b> The AlGhafa scoring bug was found and disclosed because many independent people ran the same harness. Your internal set has one pair of eyes on it, and its bugs stay yours.</li>
-    <li><b>Coverage you cannot afford to build.</b> Expert-level science questions, multi-domain safety, long-context retrieval. You are not going to construct a GPQA.</li>
+<h3 id="what-a-public-leaderboard-does-well">What a public leaderboard does well</h3>
+<ul>
+<li><b>Screening.</b> It cuts a field of forty candidates down to five for free, in an afternoon, before you have spent anything.</li>
+<li><b>Comparability at a scale you cannot reach.</b> One harness, one prompt format, one parser, run across thousands of models. You will never reproduce that internally, and without it you cannot say whether a 4-point gap is the model or the plumbing.</li>
+<li><b>Ordering, more than absolute accuracy.</b> This is the practical lesson from the ImageNet rebuild: rankings held up much better than the scores did. Trust a leaderboard to tell you which models are in the conversation, not what accuracy you will see.</li>
+<li><b>Regression detection.</b> A new checkpoint that drops several points on IFEval has broken something general, and you want to know that before you evaluate it on anything of your own.</li>
+<li><b>Adversarial scrutiny.</b> The AlGhafa scoring bug was found and disclosed because many independent people ran the same harness. Your internal set has one pair of eyes on it, and its bugs stay yours.</li>
+<li><b>Coverage you cannot afford to build.</b> Expert-level science questions, multi-domain safety, long-context retrieval. You are not going to construct a GPQA.</li>
 </ul>
-
-<h3>What it structurally cannot do</h3>
-
-<ul class="list-disc space-y-2">
-    <li>It carries no prior about your distribution, so it cannot tell you whether the gap between two models will appear at all on your traffic.</li>
-    <li>It cannot be decontaminated for a closed model, because you cannot inspect the training corpus.</li>
-    <li>It is perishable, on a horizon of one to two years, and the page never says how far along it is.</li>
-    <li>It reports a point estimate with no interval, which invites teams to read a 1-point gap as a ranking.</li>
-    <li>It measures a model, not your system. Your prompt, retrieval layer, tools, latency budget and cost ceiling are all excluded from the number and are usually where your quality actually comes from.</li>
-    <li>Once it matters commercially, it becomes a target, and it starts measuring who most wants to be at the top of it.</li>
+<h3 id="what-it-structurally-cannot-do">What it structurally cannot do</h3>
+<ul>
+<li>It carries no prior about your distribution, so it cannot tell you whether the gap between two models will appear at all on your traffic.</li>
+<li>It cannot be decontaminated for a closed model, because you cannot inspect the training corpus.</li>
+<li>It is perishable, on a horizon of one to two years, and the page never says how far along it is.</li>
+<li>It reports a point estimate with no interval, which invites teams to read a 1-point gap as a ranking.</li>
+<li>It measures a model, not your system. Your prompt, retrieval layer, tools, latency budget and cost ceiling are all excluded from the number and are usually where your quality actually comes from.</li>
+<li>Once it matters commercially, it becomes a target, and it starts measuring who most wants to be at the top of it.</li>
 </ul>
-
-<h3>What your own set costs you</h3>
-
+<h3 id="what-your-own-set-costs-you">What your own set costs you</h3>
 <p>Being honest about this is what keeps the practice alive after the first quarter.</p>
-
-<ul class="list-disc space-y-2">
-    <li>It costs real time. Two people for two weeks is the floor for the first version, and it recurs every quarter, forever.</li>
-    <li>Small samples mean wide intervals. Five hundred items cannot resolve small differences, and pretending otherwise is the same mistake in a smaller font.</li>
-    <li>It encodes your annotators' assumptions, including the ones they are not aware of. Your blind spots become your ceiling.</li>
-    <li>It goes stale. Traffic drifts, the product changes, and a set built two years ago is a fossil of an older user.</li>
-    <li>It says nothing about general capability. A model can be excellent on your 500 items and poor at everything adjacent, which matters the day someone expands the scope of the product.</li>
-    <li>You can overfit to it exactly the way the field overfit ImageNet, and you will not notice, for the same reasons they did not.</li>
+<ul>
+<li>It costs real time. Two people for two weeks is the floor for the first version, and it recurs every quarter, forever.</li>
+<li>Small samples mean wide intervals. Five hundred items cannot resolve small differences, and pretending otherwise is the same mistake in a smaller font.</li>
+<li>It encodes your annotators' assumptions, including the ones they are not aware of. Your blind spots become your ceiling.</li>
+<li>It goes stale. Traffic drifts, the product changes, and a set built two years ago is a fossil of an older user.</li>
+<li>It says nothing about general capability. A model can be excellent on your 500 items and poor at everything adjacent, which matters the day someone expands the scope of the product.</li>
+<li>You can overfit to it exactly the way the field overfit ImageNet, and you will not notice, for the same reasons they did not.</li>
 </ul>
-
 <p>That last risk is the one that dictates the build. It is the reason half the set stays sealed.</p>
-
-<h2>How to build one that survives contact</h2>
-
+<h2 id="how-to-build-one-that-survives-contact">How to build one that survives contact</h2>
 <p>A useful evaluation set is smaller and duller than people expect. Three hundred to five hundred items will separate serious candidates, and that is arithmetic rather than a hedge. On 500 items with accuracy near 80 percent, the standard error of a single score is about 1.8 points, so the 95 percent interval spans roughly plus or minus 3.5 points. Two models three points apart on that set are tied, and reporting them as ranked repeats the error you are trying to escape.</p>
-
 <p>You can recover most of that precision without buying more items by testing paired: run every candidate over the identical items and compare outcomes item by item rather than in aggregate. A paired test, McNemar's being the standard one, only looks at the items where two models disagree, so it detects far smaller true differences than two independent scores with overlapping intervals ever could. Ten thousand items, by contrast, mostly buys a slower feedback loop and a false sense of rigor.</p>
-
 <p>Sample the items from real traffic rather than writing them from imagination. Imagination produces the questions you expect to receive, which your system already handles, because you built it while imagining the same things. Logs produce the ones you actually get, including the half-typed ones and the ones in the wrong language. Stratify the sample so dialects and task types appear in something close to their real proportions, then oversample the rare cases you cannot afford to fail.</p>
-
 <p>Every item needs either a verifiable answer or an explicit rubric written before anyone scores a model. Label each item twice, independently, and keep a log of the disagreements, because that rate is the measurement's ceiling: if two of your own experts agree only 82 percent of the time, a model reporting 94 percent is telling you about your rubric, not about the model. Record it as Cohen's kappa rather than raw agreement. Raw agreement flatters you on skewed data, since two annotators who both answer "no violation" on a set that is 90 percent compliant will agree 90 percent of the time while having measured nothing at all. Kappa subtracts that chance floor. Below about 0.6, fix the rubric before you score a single model.</p>
-
 <p>Then split the set. Keep a private half that never leaves machines you control, never goes into a prompt to a hosted API, and never gets pasted into a vendor console during a bake-off. Contamination stops being hypothetical the moment a set has been travelling to third parties for a year.</p>
-
-<figure class="fig">
-    <div class="fig-scroll">
-        <svg viewBox="0 0 640 286" role="img" aria-labelledby="fig4-title fig4-desc" xmlns="http://www.w3.org/2000/svg">
+<figure class="fig" id="fig-4">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 286" role="img" aria-labelledby="fig4-title fig4-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig4-title">The five step loop for building and maintaining a custom evaluation set</title>
             <desc id="fig4-desc">Five steps run left to right: sample real traffic, write items with answers, label twice and log disputes, hold out a private split, and score every candidate. The third and fourth steps are the ones most teams skip. A return arrow closes the loop, since the set is re-sampled each quarter and leaked items are retired.</desc>
 
@@ -421,88 +633,179 @@
             <text x="380" y="200" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f59e0b">the two steps most teams skip</text>
 
             <path d="M560,160 L560,226 L80,226 L80,166" fill="none" stroke="#60a5fa" stroke-opacity="0.55" stroke-dasharray="4 4" marker-end="url(#arw50)"/>
-            <text x="120" y="248" font-family="Inter, sans-serif" font-size="11" fill="#64748b">Re-sample each quarter and retire items that turn up in vendor material.</text>
-            <text x="120" y="268" font-family="Inter, sans-serif" font-size="11" fill="#64748b">At 500 items and 80 percent accuracy the 95 percent band is about 3.5 points.</text>
+            <text x="120" y="248" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Re-sample each quarter and retire items that turn up in vendor material.</text>
+            <text x="120" y="268" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">At 500 items and 80 percent accuracy the 95 percent band is about 3.5 points.</text>
         </svg>
-    </div>
-    <figcaption><b>Figure 4.</b> Steps 3 and 4 are what separate an evaluation set from a demo script. They are also the two that get cut when the deadline moves.</figcaption>
+</div>
+<figcaption><b>Figure 4.</b> Steps 3 and 4 are what separate an evaluation set from a demo script. They are also the two that get cut when the deadline moves.</figcaption>
 </figure>
-
-<h2>Scoring without fooling yourself</h2>
-
+<h2 id="scoring-without-fooling-yourself">Scoring without fooling yourself</h2>
 <p>Use exact match wherever the task allows it, because it costs nothing and cannot flatter anyone. For open-ended work you will end up using a model as the judge, which is reasonable and needs care.</p>
-
-<p>Lianmin Zheng and colleagues found that a strong judge model agrees with human preferences more than 80 percent of the time, which is about the rate at which humans agree with each other. The same paper documents the failure modes: position bias, where the answer shown first wins more often; verbosity bias, where longer answers score higher regardless of quality; and self-enhancement bias, where a judge prefers output from its own model family. Randomize the presentation order, control for length, and never let a vendor's model judge that vendor's model in a procurement decision.</p>
-
-<p>The AraGen team measured all of this on their own leaderboard and published the numbers, which puts a useful floor under how much to trust a judge. Their judge was highly reliable at the narrow task of detecting hallucination, above 96 percent, and still landed at a Cohen's kappa near 0.44 against human raters on the full rubric, which is moderate agreement, not strong. They also quantified self-preference directly: GPT-4o scored itself 0.8025 against 0.7928 when scored by other judges. That gap is small, consistent, and almost exactly the size of margin that procurement decisions turn on. Notably, a jury of several judges did not change the rankings, so the answer is not more judges. It is publishing the agreement number next to the score.</p>
-
+<p>Lianmin Zheng and colleagues found that a strong judge model agrees with human preferences more than 80 percent of the time, which is about the rate at which humans agree with each other.<sup class="cite"><a href="#ref-10" id="cite-10a">10</a></sup> The same paper documents the failure modes: position bias, where the answer shown first wins more often; verbosity bias, where longer answers score higher regardless of quality; and self-enhancement bias, where a judge prefers output from its own model family. Randomize the presentation order, control for length, and never let a vendor's model judge that vendor's model in a procurement decision.</p>
+<p>The AraGen team measured all of this on their own leaderboard and published the numbers, which puts a useful floor under how much to trust a judge. Their judge was highly reliable at the narrow task of detecting hallucination, above 96 percent, and still landed at a Cohen's kappa near 0.44 against human raters on the full rubric, which is moderate agreement, not strong.<sup class="cite"><a href="#ref-7" id="cite-7c">7</a></sup> They also quantified self-preference directly: GPT-4o scored itself 0.8025 against 0.7928 when scored by other judges.<sup class="cite"><a href="#ref-7" id="cite-7d">7</a></sup> That gap is small, consistent, and almost exactly the size of margin that procurement decisions turn on. Notably, a jury of several judges did not change the rankings, so the answer is not more judges. It is publishing the agreement number next to the score.</p>
 <p>So calibrate, and say so. A score without an agreement number attached is a rumour with a decimal point.</p>
-
-<h2>What leaders should do</h2>
-
-<ol>
-    <li>Pull 500 real requests from last quarter's logs, stratified by task type and by dialect, and make that the seed of the evaluation set. Budget two people for two weeks, not a research program.</li>
-    <li>Split it in half. The public half is for iterating and for sharing with vendors. The private half never touches a hosted API, and it is the one that decides purchases.</li>
-    <li>Require every model claim, internal or from a vendor, to be restated as a score on your set, with a confidence interval and the judge's human agreement rate beside it. Two models whose intervals overlap are tied; break that tie on cost, latency, licence or data residency, not on the decimal.</li>
-    <li>Measure agreement between your own annotators as kappa and treat it as the ceiling. When a model reaches it, stop tuning and go work on something else, because past that point you are fitting noise in your own rubric.</li>
-    <li>Put the quarterly re-sample in the calendar and retire any item that turns up in vendor material or public documentation. This is the step that gets cut, and cutting it is how the set quietly becomes a fossil.</li>
-</ol>
-
 <p>Model weights are a commodity now, and they change every few months. The evaluation set is the part of the stack that appreciates. It encodes what your organization means by correct, in your language and your domain, and it holds that meaning stable while everything underneath it is replaced. Teams that own one can switch providers in an afternoon. Teams that do not are choosing between vendors on the strength of report cards those vendors printed, from an exam that will be retired before the contract is up.</p>
-
 <p>Arabic makes the argument concrete, because a benchmark written in formal Arabic plainly does not describe a user typing Gulf dialect with English technical terms mixed in. But nothing here is specific to Arabic. Any team whose traffic differs from the average of the internet is in exactly the same position, and most of them have not noticed, because the leaderboard number keeps going up.</p>
-
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Sovereignty Starts at the Tokenizer</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.</p>
-                        <a href="sovereignty-at-the-tokenizer.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Scoreboard Effect</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">Why the benchmarks you choose quietly decide what kind of AI system you end up building.</p>
-                        <a href="the-scoreboard-effect.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Sovereign Dialect Adaptation</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">An architecting blueprint for in-house small-language-model specialization under data-sovereignty constraints.</p>
-                        <a href="sovereign-dialect-adaptation.html">Read Article →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Yang, S., Chiang, W. L., Zheng, L., Gonzalez, J. E., &amp; Stoica, I. (2023). <em>Rethinking Benchmark and Contamination for Language Models with Rephrased Samples.</em> <a href="https://arxiv.org/abs/2311.04850" target="_blank" rel="noopener">arxiv.org/abs/2311.04850</a></li>
-                    <li class="reference-item">Recht, B., Roelofs, R., Schmidt, L., &amp; Shankar, V. (2019). <em>Do ImageNet Classifiers Generalize to ImageNet?</em> ICML 2019. <a href="https://arxiv.org/abs/1902.10811" target="_blank" rel="noopener">arxiv.org/abs/1902.10811</a></li>
-                    <li class="reference-item">Singh, S., et al. (2025). <em>The Leaderboard Illusion.</em> <a href="https://arxiv.org/abs/2504.20879" target="_blank" rel="noopener">arxiv.org/abs/2504.20879</a></li>
-                    <li class="reference-item">Zheng, L., et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> NeurIPS 2023 Datasets and Benchmarks. <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">arxiv.org/abs/2306.05685</a></li>
-                    <li class="reference-item">Koto, F., Li, H., Shatnawi, S., et al. (2024). <em>ArabicMMLU: Assessing Massive Multitask Language Understanding in Arabic.</em> Findings of ACL 2024. <a href="https://arxiv.org/abs/2402.12840" target="_blank" rel="noopener">arxiv.org/abs/2402.12840</a></li>
-                    <li class="reference-item">Mousi, B., Durrani, N., Ahmad, F., et al. (2024). <em>AraDiCE: Benchmarks for Dialectal and Cultural Capabilities in LLMs.</em> COLING 2025. <a href="https://arxiv.org/abs/2409.11404" target="_blank" rel="noopener">arxiv.org/abs/2409.11404</a></li>
-                    <li class="reference-item">Safieh, A. A., Abu Alhaol, I., &amp; Ghnemat, R. (2022). <em>End-to-end Jordanian dialect speech-to-text self-supervised learning framework.</em> Frontiers in Robotics and AI, 9. <a href="https://doi.org/10.3389/frobt.2022.1090012" target="_blank" rel="noopener">doi.org/10.3389/frobt.2022.1090012</a></li>
-                    <li class="reference-item">Hugging Face (2024&ndash;2025). <em>Open LLM Leaderboard: v1 archive and v2 retirement notes.</em> <a href="https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/archive" target="_blank" rel="noopener">huggingface.co/docs/leaderboards/open_llm_leaderboard/archive</a></li>
-                    <li class="reference-item">Ali, A., Ghouti, L., Fourrier, C., et al. (2025). <em>The Open Arabic LLM Leaderboard 2.</em> Hugging Face Blog, February 2025. <a href="https://huggingface.co/blog/leaderboard-arabic-v2" target="_blank" rel="noopener">huggingface.co/blog/leaderboard-arabic-v2</a></li>
-                    <li class="reference-item">Inception &amp; MBZUAI (2024). <em>Rethinking LLM Evaluation with 3C3H: AraGen Benchmark and Leaderboard.</em> Hugging Face Blog, December 2024. <a href="https://huggingface.co/blog/leaderboard-3c3h-aragen" target="_blank" rel="noopener">huggingface.co/blog/leaderboard-3c3h-aragen</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>Pull 500 real requests from last quarter's logs, stratified by task type and by dialect, and make that the seed of the evaluation set. Budget two people for two weeks, not a research program.</li>
+<li>Split it in half. The public half is for iterating and for sharing with vendors. The private half never touches a hosted API, and it is the one that decides purchases.</li>
+<li>Require every model claim, internal or from a vendor, to be restated as a score on your set, with a confidence interval and the judge's human agreement rate beside it. Two models whose intervals overlap are tied; break that tie on cost, latency, licence or data residency, not on the decimal.</li>
+<li>Measure agreement between your own annotators as kappa and treat it as the ceiling. When a model reaches it, stop tuning and go work on something else, because past that point you are fitting noise in your own rubric.</li>
+<li>Put the quarterly re-sample in the calendar and retire any item that turns up in vendor material or public documentation. This is the step that gets cut, and cutting it is how the set quietly becomes a fossil.</li>
+</ol>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Yang, S., Chiang, W. L., Zheng, L., et al. (2023). "Rethinking Benchmark and Contamination for Language Models with Rephrased Samples." <em>arXiv</em>. <a href="https://arxiv.org/abs/2311.04850" target="_blank" rel="noopener">https://arxiv.org/abs/2311.04850</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Recht, B., Roelofs, R., Schmidt, L., et al. (2019). "Do ImageNet Classifiers Generalize to ImageNet?" <em>ICML 2019</em>. <a href="https://arxiv.org/abs/1902.10811" target="_blank" rel="noopener">https://arxiv.org/abs/1902.10811</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Singh, S., et al. (2025). "The Leaderboard Illusion." <em>arXiv</em>. <a href="https://arxiv.org/abs/2504.20879" target="_blank" rel="noopener">https://arxiv.org/abs/2504.20879</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Hugging Face. (2024 to 2025). "Open LLM Leaderboard: v1 archive and v2 retirement notes." <em>Hugging Face Docs</em>. <a href="https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/archive" target="_blank" rel="noopener">https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/archive</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Ali, A., Ghouti, L., Fourrier, C., et al. (2025, February). "The Open Arabic LLM Leaderboard 2." <em>Hugging Face Blog</em>. <a href="https://huggingface.co/blog/leaderboard-arabic-v2" target="_blank" rel="noopener">https://huggingface.co/blog/leaderboard-arabic-v2</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Koto, F., Li, H., Shatnawi, S., et al. (2024). "ArabicMMLU: Assessing Massive Multitask Language Understanding in Arabic." <em>Findings of ACL 2024</em>. <a href="https://arxiv.org/abs/2402.12840" target="_blank" rel="noopener">https://arxiv.org/abs/2402.12840</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Inception &amp; MBZUAI. (2024, December). "Rethinking LLM Evaluation with 3C3H: AraGen Benchmark and Leaderboard." <em>Hugging Face Blog</em>. <a href="https://huggingface.co/blog/leaderboard-3c3h-aragen" target="_blank" rel="noopener">https://huggingface.co/blog/leaderboard-3c3h-aragen</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">Mousi, B., Durrani, N., Ahmad, F., et al. (2024). "AraDiCE: Benchmarks for Dialectal and Cultural Capabilities in LLMs." <em>COLING 2025</em>. <a href="https://arxiv.org/abs/2409.11404" target="_blank" rel="noopener">https://arxiv.org/abs/2409.11404</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-9">Safieh, A. A., Abu Alhaol, I., &amp; Ghnemat, R. (2022). "End-to-end Jordanian dialect speech-to-text self-supervised learning framework." <em>Frontiers in Robotics and AI</em>, 9. <a href="https://doi.org/10.3389/frobt.2022.1090012" target="_blank" rel="noopener">https://doi.org/10.3389/frobt.2022.1090012</a> <a class="backref" href="#cite-9a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-10">Zheng, L., et al. (2023). "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena." <em>NeurIPS 2023 Datasets and Benchmarks</em>. <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">https://arxiv.org/abs/2306.05685</a> <a class="backref" href="#cite-10a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_49.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="sovereignty-at-the-tokenizer.html">Sovereignty Starts at the Tokenizer</a></h3>
+    <p class="rcard-dek">Data residency is the easy half of sovereign AI. The vocabulary your model reads with decides what your language costs.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_33.png" alt="" width="1408" height="768" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="the-scoreboard-effect.html">The Scoreboard Effect</a></h3>
+    <p class="rcard-dek">Why the benchmarks you choose quietly decide what kind of AI system you end up building.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_15.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Architecture</p>
+    <h3><a href="sovereign-dialect-adaptation.html">Sovereign Dialect Adaptation</a></h3>
+    <p class="rcard-dek">An Architecting Blueprint for In-House Small-Language-Model Specialization Under Data-Sovereignty Constraints</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

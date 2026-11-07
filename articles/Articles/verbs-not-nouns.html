@@ -1,132 +1,393 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>Verbs, Not Nouns | alhaol.github.io</title>
+    <meta name="description" content="Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.html">
+    <link rel="alternate" hreflang="en" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.html">
+    <link rel="alternate" hreflang="ar" href="https://alhaol.github.io/articles/Articles/verbs-not-nouns.ar.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Verbs, Not Nouns">
+    <meta property="og:description" content="Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/verbs-not-nouns.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_55.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A glass stands still inside brackets on the left, while on the right a sequence of glasses tips over along a dashed arc and pours its contents onto the floor.">
+    <meta property="article:published_time" content="2026-08-30">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Verbs, Not Nouns">
+    <meta name="twitter:description" content="Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_55.png">
+    <meta name="twitter:image:alt" content="A glass stands still inside brackets on the left, while on the right a sequence of glasses tips over along a dashed arc and pours its contents onto the floor.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/verbs-not-nouns.html",
+      "headline": "Verbs, Not Nouns",
+      "alternativeHeadline": "Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.",
+      "description": "Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_55.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-08-30",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-            <a href="verbs-not-nouns.ar.html" style="font-size:0.8rem;border:1px solid var(--border-color);padding:0.35rem 0.7rem;border-radius:0.3rem;color:var(--text-muted);text-decoration:none;">اقرأ بالعربية</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_55.png" alt="Verbs, Not Nouns" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-ai">AI &amp; Robotics</span>
-                        <span class="category-badge category-architecture">Architecture</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>AI Systems</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Architecture</span></p>
+        <h1 id="article-title">Verbs, Not Nouns</h1>
+        <p class="dek subtitle">Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-08-30">August 30, 2026</time><span aria-hidden="true"> &middot; </span>6 min read</p>
+            </div>
+        </div>
+        <p class="byline-meta" style="margin-top: 0.75rem"><a href="verbs-not-nouns.ar.html" lang="ar" hreflang="ar" dir="rtl">اقرأ بالعربية</a></p>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Verbs, Not Nouns</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">Robot policies inherit their competence from their backbone, and language backbones never had to learn physics.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_55.png" alt="A glass stands still inside brackets on the left, while on the right a sequence of glasses tips over along a dashed arc and pours its contents onto the floor." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: August 30, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: ~8 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Nearly every parameter in a vision-language-action model learned how images relate to words, so it inherits nouns and categories but almost nothing about motion.</li>
+<li>DreamZero completed 39.5 percent of task progress on ten unseen tasks against 16.3 percent for GR00T N1.6, while baselines trained from scratch scored under one percent.</li>
+<li>Video pretraining transfers better than language pretraining by a wide margin, but the paper does not show that any named physical law was learned.</li>
+            </ol>
+        </aside>
 
-<p>A vision-language-action model can look at a table and tell you which object is the glass. Nudge the glass toward the edge and ask what happens next, and the model is on much thinner ice, because nothing in its training ever required it to know.</p>
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#what-a-backbone-hands-down">What a backbone hands down</a></li>
+<li><a href="#predict-the-world-then-act">Predict the world, then act</a></li>
+<li><a href="#what-the-numbers-show">What the numbers show</a></li>
+<li><a href="#the-part-that-is-still-a-hypothesis">The part that is still a hypothesis</a></li>
+<li><a href="#the-ablation-that-settles-it-for-your-own-stack">The ablation that settles it for your own stack</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
 
-<p>That is not a gap in scale. It is a gap in ancestry. A vision-language-action model, or <code>VLA</code>, is built by taking a vision-language model that was pretrained on pictures paired with text and attaching an action head to it. Nearly every parameter in the finished system earned its weights learning how images relate to words. The model inherits a strong grasp of nouns and categories, and almost nothing about how things move.</p>
+        <div id="article-body" class="prose">
+            <p>A vision-language-action model can look at a table and tell you which object is the glass. Nudge the glass toward the edge and ask what happens next, and the model is on much thinner ice, because nothing in its training ever required it to know.</p>
 
-<blockquote>A model is good at whatever its pretraining objective forced it to be good at. Predicting captions makes a system fluent in nouns. Predicting the next frame is what makes it fluent in verbs.</blockquote>
+<p>That is not a gap in scale. It is a gap in ancestry. A vision-language-action model, or <code>VLA</code>, is built by taking a vision-language model that was pretrained on pictures paired with text and attaching an action head to it.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a>,<a href="#ref-2" id="cite-2a">2</a></sup> Nearly every parameter in the finished system earned its weights learning how images relate to words. The model inherits a strong grasp of nouns and categories, and almost nothing about how things move.</p>
 
-<h2>What a backbone hands down</h2>
+<p>A model is good at whatever its pretraining objective forced it to be good at. Predicting captions makes a system fluent in nouns. Predicting the next frame is what makes it fluent in verbs.</p>
+
+<h2 id="what-a-backbone-hands-down">What a backbone hands down</h2>
 
 <p>The useful way to read any robot policy is to ask what it was before it was a robot policy. Architecture diagrams draw the action head at the end, which makes it look like the important part. It is the smallest part. The backbone decides what the system knows, and the head decides only how that knowledge is expressed.</p>
 
-<p>NVIDIA draws the distinction along exactly this line. A world action model, or <code>WAM</code>, is defined as a policy that "starts from a pretrained world-model or video backbone and adapts it to represent or predict how the scene changes over time and emit corresponding actions." A VLA starts from an image-and-text backbone instead. Same action head, different ancestor, and the difference in ancestor is the whole argument.</p>
+<p>NVIDIA draws the distinction along exactly this line. A world action model, or <code>WAM</code>, is defined as a policy that "starts from a pretrained world-model or video backbone and adapts it to represent or predict how the scene changes over time and emit corresponding actions."<sup class="cite"><a href="#ref-3" id="cite-3a">3</a>,<a href="#ref-4" id="cite-4a">4</a></sup> A VLA starts from an image-and-text backbone instead. Same action head, different ancestor, and the difference in ancestor is the whole argument.</p>
 
 <p>An image-text corpus is a catalogue of things that exist. A video corpus is a record of things happening. Only one of those contains the information that a poured liquid falls, that a folded sleeve stays folded, that a card slides against another card before it separates. You cannot recover that from captions at any scale, because the captions were never asked to encode it.</p>
 
-<figure class="fig">
+<figure class="fig" id="fig-1">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 272" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig1-title">What a vision-language backbone and a video backbone each hand down to a robot policy</title>
@@ -141,7 +402,7 @@
             <rect x="30" y="68" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="42" y="88" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">VLA</text>
             <text x="42" y="107" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Images paired with text</text>
-            <text x="42" y="124" fill="#64748b" font-family="Inter, sans-serif" font-size="11">a catalogue of things</text>
+            <text x="42" y="124" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">a catalogue of things</text>
             <rect x="232" y="68" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="232" y="68" width="4" height="64" fill="#60a5fa"/>
             <text x="248" y="94" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Nouns and categories</text>
@@ -154,7 +415,7 @@
             <rect x="30" y="152" width="178" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <text x="42" y="172" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">WAM</text>
             <text x="42" y="191" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Web-scale video</text>
-            <text x="42" y="208" fill="#64748b" font-family="Inter, sans-serif" font-size="11">a record of events</text>
+            <text x="42" y="208" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">a record of events</text>
             <rect x="232" y="152" width="184" height="64" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="232" y="152" width="4" height="64" fill="#60a5fa"/>
             <text x="248" y="178" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">Scene dynamics</text>
@@ -170,24 +431,26 @@
     <figcaption><b>Figure 1.</b> Competence is inherited from the pretraining corpus, not added by the action head. Source: NVIDIA, "Pretrained to Imagine, Fine-Tuned to Act", 2026.</figcaption>
 </figure>
 
-<h2>Predict the world, then act</h2>
+<h2 id="predict-the-world-then-act">Predict the world, then act</h2>
 
-<p>DreamZero is the clearest instance of the correction. It is a 14-billion-parameter autoregressive diffusion transformer built on <code>Wan2.1-I2V-14B</code>, a video generation backbone. It takes three inputs: visual context through a variational encoder, a language instruction through a text encoder, and the robot's own joint state through a state encoder. It then denoises future video and future actions together through shared transformer blocks, with a separate decoder for each, and runs closed-loop at 7 Hz.</p>
+<p>DreamZero is the clearest instance of the correction. It is a 14-billion-parameter autoregressive diffusion transformer built on <code>Wan2.1-I2V-14B</code>, a video generation backbone.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> It takes three inputs: visual context through a variational encoder, a language instruction through a text encoder, and the robot's own joint state through a state encoder. It then denoises future video and future actions together through shared transformer blocks, with a separate decoder for each, and runs closed-loop at 7 Hz.</p>
 
-<p>The consequence of that design is a change in what the model is asked to learn. A conventional policy learns a dense mapping from states to actions by copying demonstrations. A world action model predicts what the scene is about to look like, then works out which motor commands are consistent with that future. NVIDIA describes the shift as moving action learning toward inverse dynamics, and inverse dynamics is a much better-posed problem: it is easier to ask "what movement would produce this outcome" than to ask "what movement should I make."</p>
+<aside class="pull-quote" aria-hidden="true"><p>An image-text corpus is a catalogue of things that exist. A video corpus is a record of things happening.</p></aside>
 
-<p>The paper carries Jim Fan's name among its authors, which matters for reading it. The same argument appears in his Sequoia talk in a more sweeping form, and the two versions do not make identical claims. The talk is the marketing of the idea. The paper is the evidence for it, and the evidence is narrower.</p>
+<p>The consequence of that design is a change in what the model is asked to learn. A conventional policy learns a dense mapping from states to actions by copying demonstrations. A world action model predicts what the scene is about to look like, then works out which motor commands are consistent with that future. NVIDIA describes the shift as moving action learning toward inverse dynamics, and inverse dynamics is a much better-posed problem: it is easier to ask "what movement would produce this outcome" than to ask "what movement should I make."<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup></p>
 
-<h2>What the numbers show</h2>
+<p>The paper carries Jim Fan's name among its authors, which matters for reading it. The same argument appears in his Sequoia talk in a more sweeping form, and the two versions do not make identical claims.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> The talk is the marketing of the idea. The paper is the evidence for it, and the evidence is narrower.</p>
 
-<figure class="fig">
+<h2 id="what-the-numbers-show">What the numbers show</h2>
+
+<figure class="fig" id="fig-2">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig2-title">Average task progress on unseen tasks for DreamZero against GR00T N1.6 and pi-0.5 baselines</title>
             <desc id="fig2-desc">DreamZero reaches 39.5 percent average task progress on ten unseen tasks. GR00T N1.6 with pretraining reaches 16.3 percent. Both GR00T N1.6 and pi-0.5 trained from scratch score under 1 percent. The collapse of the from-scratch arms shows that pretraining, not the action head, is doing nearly all of the work.</desc>
 
             <text x="30" y="30" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="15" font-weight="700">Unseen tasks: what survives without task-specific data</text>
-            <text x="30" y="50" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Average task progress over 10 unseen tasks, 80 rollouts. Higher is better.</text>
+            <text x="30" y="50" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">Average task progress over 10 unseen tasks, 80 rollouts. Higher is better.</text>
 
             <line x1="250" y1="66" x2="250" y2="236" stroke="#2a3f5f" stroke-width="1"/>
             <line x1="326" y1="66" x2="326" y2="236" stroke="#2a3f5f" stroke-width="1"/>
@@ -217,21 +480,21 @@
             <text x="401" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">20%</text>
             <text x="477" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">30%</text>
             <text x="552" y="254" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">40%</text>
-            <text x="30" y="282" fill="#64748b" font-family="Inter, sans-serif" font-size="11">Task progress: folding stages out of 5, fruits packed out of 10, items cleared.</text>
+            <text x="30" y="282" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">Task progress: folding stages out of 5, fruits packed out of 10, items cleared.</text>
         </svg>
     </div>
     <figcaption><b>Figure 2.</b> The from-scratch arms collapse to near zero, which is the finding: the backbone is the product. Source: Ye et al., "World Action Models are Zero-shot Policies", arXiv:2602.15922, Figure 9.</figcaption>
 </figure>
 
-<p>Across ten tasks the model had never seen, DreamZero completed 39.5 percent of the defined task progress. The strongest comparison, GR00T N1.6 with its own pretraining, reached 16.3 percent. On a separate DROID-Franka evaluation it recorded 49 percent task progress and a 22.5 percent success rate, against 31 percent and 12.5 percent for GR00T N1.6. On the RoboArena leaderboard it sits at 1750 Elo, ahead of Pi-0.5 at 1622.</p>
+<p>Across ten tasks the model had never seen, DreamZero completed 39.5 percent of the defined task progress. The strongest comparison, GR00T N1.6 with its own pretraining, reached 16.3 percent.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a></sup> On a separate DROID-Franka evaluation it recorded 49 percent task progress and a 22.5 percent success rate, against 31 percent and 12.5 percent for GR00T N1.6. On the RoboArena leaderboard it sits at 1750 Elo, ahead of Pi-0.5 at 1622.</p>
 
 <p>The two rows that matter most are the ones at the bottom of the chart. GR00T N1.6 and Pi-0.5 trained from scratch, with no pretraining at all, both score under one percent. Whatever these architectures are doing, they are not learning it from the robot demonstrations. The demonstrations are a thin adaptation layer on top of something that was already there, and the argument between VLAs and WAMs is an argument about what that something should be.</p>
 
-<p>Data efficiency points the same way. DreamZero picked up more than 42 percent relative improvement on unseen tasks from 10 to 20 minutes of video-only demonstrations, and adapted to an entirely new robot body from 30 minutes of play data. Those are numbers you only see when most of the competence predates the task.</p>
+<p>Data efficiency points the same way. DreamZero picked up more than 42 percent relative improvement on unseen tasks from 10 to 20 minutes of video-only demonstrations, and adapted to an entirely new robot body from 30 minutes of play data.<sup class="cite"><a href="#ref-5" id="cite-5c">5</a></sup> Those are numbers you only see when most of the competence predates the task.</p>
 
-<h2>The part that is still a hypothesis</h2>
+<h2 id="the-part-that-is-still-a-hypothesis">The part that is still a hypothesis</h2>
 
-<figure class="fig">
+<figure class="fig" id="fig-3">
     <div class="fig-scroll">
         <svg viewBox="0 0 640 296" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="fig3-title">Three claims made for world action models, sorted by how well each is evidenced</title>
@@ -247,7 +510,7 @@
             <text x="46" y="112" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">on tasks the model has never seen</text>
             <rect x="470" y="68" width="140" height="58" rx="4" fill="#1a2942" stroke="#60a5fa"/>
             <text x="540" y="94" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">MEASURED</text>
-            <text x="540" y="110" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
+            <text x="540" y="110" fill="#8090a8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">39.5 vs 16.3</text>
 
             <rect x="30" y="136" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="30" y="136" width="4" height="58" fill="#f59e0b"/>
@@ -255,7 +518,7 @@
             <text x="46" y="180" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="12">an easier, better-posed problem</text>
             <rect x="470" y="136" width="140" height="58" rx="4" fill="#1a2942" stroke="#f59e0b"/>
             <text x="540" y="162" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">HYPOTHESIS</text>
-            <text x="540" y="178" fill="#64748b" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">NVIDIA wording</text>
+            <text x="540" y="178" fill="#8090a8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">NVIDIA wording</text>
 
             <rect x="30" y="204" width="420" height="58" rx="4" fill="#1a2942" stroke="#2a3f5f"/>
             <rect x="30" y="204" width="4" height="58" fill="#f59e0b"/>
@@ -265,7 +528,7 @@
             <text x="540" y="230" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">NOT IN THE</text>
             <text x="540" y="246" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">PAPER</text>
 
-            <text x="30" y="286" fill="#64748b" font-family="Inter, sans-serif" font-size="11">The strongest version of the argument travels fastest and is supported least.</text>
+            <text x="30" y="286" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">The strongest version of the argument travels fastest and is supported least.</text>
         </svg>
     </div>
     <figcaption><b>Figure 3.</b> The popular framing outruns the evidence by two steps. Sources: arXiv:2602.15922; NVIDIA developer blog, 2026; Sequoia AI Ascent talk, 2026.</figcaption>
@@ -273,13 +536,13 @@
 
 <p>The version of this argument that circulates on social media says video models spontaneously discover gravity, friction and buoyancy simply by learning to predict frames. It is a wonderful line. The paper does not make it.</p>
 
-<p>What the paper says is that the model is initialized from video diffusion weights trained on web-scale video, and that this supplies useful spatiotemporal priors. NVIDIA's own write-up is careful in a way the talk is not. It offers three hypotheses, each hedged: that inverse dynamics prediction is "often easier" than pure action generation, that the video-to-action gap "may be smaller" than the language-to-action gap, and that video data regularizes robot policies. Those are reasonable conjectures with a measured outcome consistent with them. They are not a demonstration that any named physical law has been learned.</p>
+<p>What the paper says is that the model is initialized from video diffusion weights trained on web-scale video, and that this supplies useful spatiotemporal priors.<sup class="cite"><a href="#ref-5" id="cite-5d">5</a></sup> NVIDIA's own write-up is careful in a way the talk is not. It offers three hypotheses, each hedged: that inverse dynamics prediction is "often easier" than pure action generation, that the video-to-action gap "may be smaller" than the language-to-action gap, and that video data regularizes robot policies.<sup class="cite"><a href="#ref-3" id="cite-3c">3</a></sup> Those are reasonable conjectures with a measured outcome consistent with them. They are not a demonstration that any named physical law has been learned.</p>
 
 <p>The distinction is worth holding onto, because this site has argued the general case at length in <a href="intelligence-is-applied-causality.html">Intelligence Is Applied Causality</a>. A system that predicts the next state accurately is not thereby a system that holds a model of mechanism, and the two come apart most visibly off the training distribution, which is exactly where a robot earns its keep. The honest summary of DreamZero is that a video backbone transfers better than a language backbone by a wide margin, and that why it transfers better is still inference.</p>
 
-<h3>The ablation that settles it for your own stack</h3>
+<h2 id="the-ablation-that-settles-it-for-your-own-stack">The ablation that settles it for your own stack</h2>
 
-<pre><code># Hold the action head, the robot data and the tasks fixed.
+<pre data-lang="python"><code># Hold the action head, the robot data and the tasks fixed.
 # Vary only what the policy was before it was a policy.
 
 for backbone in ["none", "vision_language", "video_world_model"]:
@@ -294,61 +557,162 @@ for backbone in ["none", "vision_language", "video_world_model"]:
 
 <p>The practical reading for anyone funding this work is that a robot policy is mostly a bet on a pretraining corpus. Choosing between a language backbone and a video backbone is choosing whether the system will be better at recognizing the world or at anticipating it. For a machine that has to act, anticipation is the more useful skill, and the evidence now favours it clearly enough to plan around, provided nobody oversells why it works.</p>
 
-<h2>What leaders should do</h2>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
 
-<ol class="list-decimal">
+<ol>
     <li>Ask any robotics vendor what their policy was pretrained on before it ever saw a robot, and treat a vague answer as the answer. The backbone predicts behaviour on tasks outside the demo far better than the headline benchmark does.</li>
     <li>Run the three-arm ablation above on your own tasks before committing to an architecture: no pretraining, language pretraining, video pretraining, everything else held constant. It costs one training cycle and it is the only version of this comparison that reflects your data.</li>
     <li>Evaluate on tasks genuinely absent from your training set, and report task progress rather than success rate alone. A binary metric hides the partial competence that separates a transferable policy from a memorized one.</li>
     <li>When a supplier says their model has learned physics, ask which physical quantity, measured how. The published evidence supports better transfer from video pretraining, not the discovery of physical law, and contracts should be written against the first claim.</li>
 </ol>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Buying the Format</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">NVIDIA is reportedly paying $12.9 billion for Hugging Face, and the asset that matters most for robotics is a file format.</p>
-                        <a href="buying-the-format.html">Read &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">Intelligence Is Applied Causality</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">A working definition that puts cause and effect, decisions, and action at the center of intelligence.</p>
-                        <a href="intelligence-is-applied-causality.html">Read &rarr;</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-bold mb-2">The Experience Bottleneck</h4>
-                        <p class="text-sm mb-3" style="color: var(--text-muted);">Language models inherited a corpus. Robots have to earn every hour of theirs, and that changes the arithmetic behind every AGI forecast.</p>
-                        <a href="the-experience-bottleneck.html">Read &rarr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Ye, S., Ge, Y., Zheng, K., Gao, S., Yu, S., et al., including Fan, L. and Jang, J. (2026). <em>World Action Models are Zero-shot Policies</em>. arXiv:2602.15922. The DreamZero model, its baselines and all task-progress figures cited here. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener">arxiv.org/abs/2602.15922</a></li>
-                    <li class="reference-item">NVIDIA (2026). <em>Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models</em>. NVIDIA Technical Blog. Source of the WAM definition and the three hedged hypotheses. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener">developer.nvidia.com</a></li>
-                    <li class="reference-item">NVIDIA. <em>What Is a World Action Model (WAM)?</em> NVIDIA Glossary. <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener">nvidia.com/en-us/glossary/world-action-model</a></li>
-                    <li class="reference-item">Fan, L. (2026). <em>Robotics: Endgame</em>. Sequoia Capital AI Ascent. The talk in which the stronger "video models learn physics" framing is presented. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener">youtube.com/watch?v=3Y8aq_ofEVs</a></li>
-                    <li class="reference-item">Shukor, M., Aubakirova, D., Capuano, F., Kooijmans, P., Palma, S., et al. (2025). <em>SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics</em>. arXiv:2506.01844. Representative of the VLA lineage discussed here. <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">arxiv.org/abs/2506.01844</a></li>
-                    <li class="reference-item">Cadene, R., Aliberts, S., Capuano, F., et al. (2026). <em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em>. ICLR 2026. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arxiv.org/abs/2602.22818</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Shukor, M., Aubakirova, D., Capuano, F., et al. (2025). "SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics." arXiv:2506.01844. (Representative of the VLA lineage.) <a href="https://arxiv.org/abs/2506.01844" target="_blank" rel="noopener">https://arxiv.org/abs/2506.01844</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Cadene, R., Aliberts, S., Capuano, F., et al. (2026). "LeRobot: An Open-Source Library for End-to-End Robot Learning." <em>ICLR 2026</em>. arXiv:2602.22818. <a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">https://arxiv.org/abs/2602.22818</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">NVIDIA. (2026). "Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models." <em>NVIDIA Technical Blog</em>. <a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/" target="_blank" rel="noopener">https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">NVIDIA. (n.d.). "What Is a World Action Model (WAM)?" <em>NVIDIA Glossary</em>. <a href="https://www.nvidia.com/en-us/glossary/world-action-model/" target="_blank" rel="noopener">https://www.nvidia.com/en-us/glossary/world-action-model/</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Ye, S., Ge, Y., Zheng, K., et al. (2026). "World Action Models are Zero-shot Policies." arXiv:2602.15922. <a href="https://arxiv.org/abs/2602.15922" target="_blank" rel="noopener">https://arxiv.org/abs/2602.15922</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Fan, L. (2026). "Robotics: Endgame." Sequoia Capital AI Ascent. <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs" target="_blank" rel="noopener">https://www.youtube.com/watch?v=3Y8aq_ofEVs</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_54.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="buying-the-format.html">Buying the Format</a></h3>
+    <p class="rcard-dek">NVIDIA is reportedly paying $12.9 billion for Hugging Face, and the asset that matters most for robotics is a file format.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_37.png" alt="" width="134217728" height="134221569" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="intelligence-is-applied-causality.html">Intelligence Is Applied Causality</a></h3>
+    <p class="rcard-dek">A working definition that puts cause and effect, decisions, and action at the center of intelligence.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_43.png" alt="" width="134217728" height="134221569" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="the-experience-bottleneck.html">The Experience Bottleneck</a></h3>
+    <p class="rcard-dek">Language models inherited a corpus. Robots have to earn every hour of theirs, and that changes the arithmetic behind every AGI forecast.</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>

@@ -1,127 +1,379 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <title>The Graph You're Missing | alhaol.github.io</title>
     <meta name="description" content="Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-graph-youre-missing.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
     <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="The Graph You're Missing">
+    <meta property="og:description" content="Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-graph-youre-missing.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_47.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1059">
+    <meta property="og:image:height" content="556">
+    <meta property="og:image:alt" content="A glowing cyan star of light rays radiating from a bright centre point against a dark navy background.">
+    <meta property="article:published_time" content="2026-08-13">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="The Graph You're Missing">
+    <meta name="twitter:description" content="Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_47.png">
+    <meta name="twitter:image:alt" content="A glowing cyan star of light rays radiating from a bright centre point against a dark navy background.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/the-graph-youre-missing.html",
+      "headline": "The Graph You're Missing",
+      "alternativeHeadline": "Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.",
+      "description": "Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_47.png", "width": 1059, "height": 556 },
+      "datePublished": "2026-08-13",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
     <style>
-        :root {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
 
-        body.theme-cybersecurity {
-            --bg-color: #0a1628;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary-color: #60a5fa;
-            --card-bg: #1a2942;
-            --border-color: #2a3f5f;
-        }
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
 
-        .prose { color: var(--text-muted); }
-        .prose h2 { color: var(--text-main); font-weight: 700; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; }
-        .prose h3 { color: var(--text-main); font-weight: 600; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: var(--text-muted); }
-        .prose blockquote { border-left: 4px solid var(--primary-color); padding: 1.25rem; font-style: italic; color: var(--text-muted); background-color: var(--card-bg); margin: 1.5rem 0; border-radius: 0.25rem; }
-        .prose ul, .prose ol { padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .prose li { margin-bottom: 0.75rem; }
-        .prose a { color: var(--primary-color); text-decoration: underline; }
-        header { background: transparent; color: var(--text-main); }
-        .theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
-        .nav-link { color: var(--text-main); text-decoration: none; }
-        .nav-link:hover { color: var(--primary-color); }
-        .category-badge { display: inline-block; padding: 0.5rem 0.875rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.75rem; margin-bottom: 0.5rem; }
-        .category-ai { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.3); }
-        .category-architecture { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .category-engineering { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .category-cognitive { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .category-workflow { background-color: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .hero-image { width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 2rem; border-radius: 0.5rem; }
-        .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .related-article-card { background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.5rem; transition: all 0.3s; }
-        .related-article-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .related-article-card a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-        .reference-item { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); line-height: 1.6; }
-        .reference-item a { color: var(--primary-color); }
-        code { background-color: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: var(--primary-color); }
-        pre { background-color: var(--card-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
-        @media (max-width: 768px) { .hero-image { max-height: 250px; } }
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
 
-        /* Authored inline SVG figures. Vector rather than raster so labels stay sharp at any width
-           and the palette matches the page theme exactly. See references/svg-figures.md before
-           drawing one. The scroll wrapper is load-bearing: figures are authored at a 640-unit
-           viewBox with a 580px floor, which is wider than a phone, so each figure scrolls inside
-           its own box and the page body never scrolls sideways. Verified with
-           document.scrollWidth === document.clientWidth at a 492px viewport. */
-        .fig { margin: 2.25rem 0; }
-        .fig-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: #0d1c33; }
-        .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
-        .fig figcaption { color: var(--text-muted); font-size: 0.875rem; line-height: 1.65; margin-top: 0.85rem; }
-        .fig figcaption b { color: var(--text-main); font-weight: 600; }
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
     </style>
 </head>
-<body class="theme-cybersecurity">
-    <nav class="border-b py-4 shadow-sm" style="border-color: var(--border-color); background-color: var(--card-bg);">
-        <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-            <a href="../" class="font-bold text-lg tracking-tight nav-link">📚 Other Posts</a>
-        </div>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
     </nav>
+</header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <article class="theme-card rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 md:p-12">
-                <img src="../Post_Images/Image_47.png" alt="The Graph You're Missing" class="hero-image">
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
 
-                <header class="mb-10 border-b pb-8" style="border-color: var(--border-color);">
-                    <div class="mb-4 flex flex-wrap">
-                        <span class="category-badge category-architecture">Architecture</span>
-                        <span class="category-badge category-ai">AI Systems</span>
-                    </div>
+    <header class="article-head col">
+        <p class="kicker"><span>Architecture</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">AI Systems</span></p>
+        <h1 id="article-title">The Graph You're Missing</h1>
+        <p class="dek subtitle">Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-08-13">August 13, 2026</time><span aria-hidden="true"> &middot; </span>9 min read</p>
+            </div>
+        </div>
+    </header>
 
-                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">The Graph You're Missing</h1>
-                    <p class="text-xl mb-6" style="color: var(--text-muted);">Knowledge, cognitive, and causal graphs answer three different questions. Which one your agent lacks is written in how it fails.</p>
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_47.png" alt="A glowing cyan star of light rays radiating from a bright centre point against a dark navy background." width="1059" height="556" style="object-fit: cover" fetchpriority="high" decoding="async">
+    </figure>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-                        <div>
-                            <p class="font-semibold">Ibrahim AbuAlhaol, PhD, P.Eng., SMIEEE</p>
-                            <p>AI Technical Lead</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm" style="color: var(--text-muted);">
-                        <span>Published: August 13, 2026</span>
-                        <span class="mx-2">|</span>
-                        <span>Reading Time: 9 min</span>
-                    </div>
-                </header>
+    <div class="article-grid">
 
-                <div class="prose prose-lg max-w-none">
-                    <p>Three different things are sold under the word graph, and teams keep buying the wrong one. An agent hits a wall, someone proposes a graph, six months of ontology work follows, and the wall is still there. The purchase was not wrong in general. It was wrong for that wall.</p>
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Document retrieval can make a confidently wrong agent more confident, because a stale wiki page still describes a decommissioned print server as a domain controller.</li>
+<li>Article 12 of the EU AI Act, enforceable since 2 August 2026, asks for traceability that application logs alone cannot give an agent's reasoning.</li>
+<li>The cognitive graph has the fastest efficiency payoff and the worst security cost, so it belongs last in the build order, after knowledge and causal structure.</li>
+            </ol>
+        </aside>
 
-                    <p>The three separate cleanly once you ask what question each one answers. A <strong>knowledge graph</strong> answers what is true, and who said so: entities as nodes, relationships as edges, ideally with a source and a timestamp on every edge. A <strong>cognitive graph</strong> answers how did I get here, recording the agent's own reasoning as it happens. A <strong>causal graph</strong> answers what would happen if I acted differently, encoding which variables actually move which other variables.</p>
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#symptom-confidently-wrong">Symptom: confidently wrong</a></li>
+<li><a href="#symptom-it-learns-nothing-overnight">Symptom: it learns nothing overnight</a></li>
+<li><a href="#the-cognitive-graph-is-a-liability-first">The cognitive graph is a liability first</a></li>
+<li><a href="#symptom-it-broke-when-nothing-broke">Symptom: it broke when nothing broke</a></li>
+<li><a href="#the-honest-scorecard">The honest scorecard</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
 
-                    <p>One caution about vocabulary before going further. Two of those three terms are settled. Knowledge graph has been standard usage since Google adopted it in 2012. Causal graph has a formal definition and a calculus behind it. Cognitive graph has neither, and gets attached to at least four unrelated structures depending on who is selling. In this article it means one specific thing: a persistent, queryable record of the agent's own reasoning.</p>
-
-                    <p>To keep this concrete, one system runs through the whole article. A security operations agent doing alert triage. It is 04:12, and alert 40,113 of the week has just arrived.</p>
-
-                    <figure class="fig">
-                        <div class="fig-scroll">
-                            <svg viewBox="0 0 640 336" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+        <div id="article-body" class="prose">
+            <p>Three different things are sold under the word graph, and teams keep buying the wrong one. An agent hits a wall, someone proposes a graph, six months of ontology work follows, and the wall is still there. The purchase was not wrong in general. It was wrong for that wall.</p>
+<p>The three separate cleanly once you ask what question each one answers. A <strong>knowledge graph</strong> answers what is true, and who said so: entities as nodes, relationships as edges, ideally with a source and a timestamp on every edge. A <strong>cognitive graph</strong> answers how did I get here, recording the agent's own reasoning as it happens. A <strong>causal graph</strong> answers what would happen if I acted differently, encoding which variables actually move which other variables.</p>
+<p>One caution about vocabulary before going further. Two of those three terms are settled. Knowledge graph has been standard usage since Google adopted it in 2012. Causal graph has a formal definition and a calculus behind it.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> Cognitive graph has neither, and gets attached to at least four unrelated structures depending on who is selling. In this article it means one specific thing: a persistent, queryable record of the agent's own reasoning.</p>
+<p>To keep this concrete, one system runs through the whole article. A security operations agent doing alert triage. It is 04:12, and alert 40,113 of the week has just arrived.</p>
+<figure class="fig" id="fig-1">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 336" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
                                 <title id="fig1-title">One security alert answered three different ways by three types of graph</title>
                                 <desc id="fig1-desc">Given the same alert about suspected lateral movement on host SRV-4471, a knowledge graph reports what the host actually is, a cognitive graph reports that the agent has judged this alert family before and was often wrong, and a causal graph reports that escalating would not have changed the outcome.</desc>
 
@@ -137,31 +389,28 @@
                                 <line x1="30" y1="250" x2="610" y2="250" stroke="#2a3f5f" stroke-width="1"/>
 
                                 <text x="30" y="142" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">KNOWLEDGE</text>
-                                <text x="30" y="160" fill="#64748b" font-family="Inter, sans-serif" font-size="11">what is true?</text>
+                                <text x="30" y="160" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">what is true?</text>
                                 <text x="190" y="142" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">SRV-4471 is a decommissioned print server,</text>
                                 <text x="190" y="162" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">not the domain controller its name implies.</text>
 
                                 <text x="30" y="210" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">COGNITIVE</text>
-                                <text x="30" y="228" fill="#64748b" font-family="Inter, sans-serif" font-size="11">how did I get here?</text>
+                                <text x="30" y="228" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">how did I get here?</text>
                                 <text x="190" y="210" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">I judged four alerts in this family last week</text>
                                 <text x="190" y="230" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">on the same evidence. Three were wrong.</text>
 
                                 <text x="30" y="278" fill="#60a5fa" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">CAUSAL</text>
-                                <text x="30" y="296" fill="#64748b" font-family="Inter, sans-serif" font-size="11">what if I act?</text>
+                                <text x="30" y="296" fill="#8090a8" font-family="Inter, sans-serif" font-size="11">what if I act?</text>
                                 <text x="190" y="278" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">Escalating would not change the outcome.</text>
                                 <text x="190" y="298" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="13">The change window is the driver, not the host.</text>
                             </svg>
-                        </div>
-                        <figcaption><b>Figure 1.</b> The three graphs are not competing implementations of the same idea. Each one is the only structure that can produce its row. An agent holding all three answers can act; an agent holding one of them is guessing about the other two.</figcaption>
-                    </figure>
-
-                    <blockquote>The graphs do not compete. They answer different questions, and an agent has a different hole in it depending on which question it cannot answer.</blockquote>
-
-                    <p>That reframing turns an architecture debate into a diagnosis. You do not pick a graph from a catalog. You read the way your agent fails and the failure names the layer.</p>
-
-                    <figure class="fig">
-                        <div class="fig-scroll">
-                            <svg viewBox="0 0 640 340" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+</div>
+<figcaption><b>Figure 1.</b> The three graphs are not competing implementations of the same idea. Each one is the only structure that can produce its row. An agent holding all three answers can act; an agent holding one of them is guessing about the other two.</figcaption>
+</figure>
+<figure class="quote"><blockquote><p>The graphs do not compete. They answer different questions, and an agent has a different hole in it depending on which question it cannot answer.</p></blockquote></figure>
+<p>That reframing turns an architecture debate into a diagnosis. You do not pick a graph from a catalog. You read the way your agent fails and the failure names the layer.</p>
+<figure class="fig" id="fig-2">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 340" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
                                 <title id="fig2-title">A diagnostic mapping five agent failure symptoms to the graph layer each one implies is missing</title>
                                 <desc id="fig2-desc">Confidently wrong facts indicate a missing knowledge graph. Re-solving solved problems indicates a missing cognitive graph. Breaking when nothing broke indicates a missing causal graph. Being unable to explain a decision indicates all three exist but are not joined. A correct answer that cannot be proven indicates the knowledge graph lacks lineage.</desc>
 
@@ -195,7 +444,7 @@
                                     <text x="54" y="308">Right answer, no way to prove it</text>
                                 </g>
 
-                                <g stroke="#64748b" stroke-width="1.5" fill="none">
+                                <g stroke="#8090a8" stroke-width="1.5" fill="none">
                                     <path d="M362 119 L386 119 M380 114 L386 119 L380 124"/>
                                     <path d="M362 165 L386 165 M380 160 L386 165 L380 170"/>
                                     <path d="M362 211 L386 211 M380 206 L386 211 L380 216"/>
@@ -211,61 +460,37 @@
                                     <text x="404" y="308">Lineage, not more facts</text>
                                 </g>
                             </svg>
-                        </div>
-                        <figcaption><b>Figure 2.</b> The diagnostic that should precede any graph purchase. Sort your last twenty agent failures into these rows before choosing a technology, because the two most expensive mistakes in this space are building an ontology to fix a memory problem and buying a memory product to fix a grounding problem.</figcaption>
-                    </figure>
-
-                    <h2>Symptom: confidently wrong</h2>
-
-                    <p>The alert says lateral movement on SRV-4471. The model reads the hostname, recognizes the naming convention, infers a domain controller, and escalates to P1. A human analyst is woken up. SRV-4471 is a decommissioned print server that nobody removed from the scanner's scope.</p>
-
-                    <p>Nothing failed in the reasoning. Given what the model believed, escalation was correct. The belief was wrong, and no part of the pipeline could contradict it, because there was no representation of the estate for the model to consult. Document retrieval makes this worse rather than better: a wiki page from 2023 does describe SRV-4471 as a domain controller, retrieval will surface it, and the model becomes more confident while staying wrong.</p>
-
-                    <p>A knowledge graph fixes the class of failure by making the entity the unit of storage instead of the document. SRV-4471 becomes a node with an owner, a subnet, a lifecycle state, and a last-seen timestamp. Microsoft Research demonstrated the general form of this advantage with GraphRAG: building an entity graph before any query arrives beats flat retrieval on questions that need more than one hop, which describes almost every real triage question.</p>
-
-                    <p>The other two dimensions come along with it. On efficiency, one traversal replaces the five tool calls the agent would otherwise make to learn who owns a host. On governance, provenance becomes a property of the edge rather than an afterthought in a log file, so the question of where a fact came from has an answer built into the data structure.</p>
-
-                    <p>The cost is staleness. A knowledge graph is a photograph of infrastructure that changes hourly, and a stale node is worse than a missing one because a wrong fact arrives dressed in the authority of a retrieved one. Bi-temporal designs address part of this. Graphiti, the engine behind Zep, stamps every edge with both when the fact was true and when the system learned it, so a later contradiction updates the record instead of corrupting it. The second cost is schedule. Ontology work pays back late, and teams that spend a year modeling before the first query often never ship at all.</p>
-
-                    <h2>Symptom: it learns nothing overnight</h2>
-
-                    <p>Three weeks later the same agent has a correct estate model. A similar alert family now arrives every night around the same hour. Every night the agent runs the same investigation, makes the same eleven tool calls, and reaches the same conclusion. No individual run is wrong. The waste is that run twenty-one has no access to runs one through twenty.</p>
-
-                    <p>Deduplication at the signature level does not help, because the alerts are not identical. What repeats is the conclusion, not the input. Two alerts with different hashes, different source addresses, and different timestamps can still be the same judgment call, and only something that stored the judgment can see that.</p>
-
-                    <p>A cognitive graph stores the reasoning itself. Nodes are observations, hypotheses, and conclusions. Edges are the inferences that connect them. The agent can then ask a question it currently has no way to ask: have I concluded something about this before, and on what evidence? Accuracy improves because the agent stops re-deriving conclusions it already found to be wrong. Efficiency improves most of all, since deduplicating at the conclusion is the difference between eleven tool calls and one lookup.</p>
-
-                    <p>Governance is where this stopped being optional. Article 12 of the EU AI Act requires high-risk systems to automatically record events across their lifetime, with traceability appropriate to the system's purpose, and it became enforceable on 2 August 2026. An agent whose reasoning existed only inside a context window that has since been discarded cannot satisfy that on application logs alone. Application logs record what the agent called. They do not record what it believed.</p>
-
-                    <h2>The cognitive graph is a liability before it is an asset</h2>
-
-                    <p>Here is the part the vendors skip. A cognitive graph is a durable, queryable store of an agent's private reasoning, and every property that makes it useful also makes it dangerous.</p>
-
-                    <p>It is poisonable. Write one false conclusion into the trace and every later run inherits it. A knowledge graph has an external referent, so a wrong node can be checked against the asset database. A wrong conclusion has no referent, because the source is the agent itself. OWASP ranked this as ASI06, memory and context poisoning, in its December 2025 Top 10 for Agentic Applications, and described the effect precisely: poisoned memory reshapes behavior long after the interaction that planted it.</p>
-
-                    <p>It leaks. Reasoning traces capture whatever the agent was looking at, which in a security operations center means raw alert payloads, credentials that happened to appear in a log line, internal hostnames, and the names of the analysts who touched the case. That store now needs a data classification, a retention period, and an access model. Very few teams write a retention policy for an agent's thoughts before they write the agent.</p>
-
-                    <p>It reinforces itself. An agent that remembers concluding "benign" is more likely to conclude "benign" again. When the first conclusion was right, that is exactly the behavior we wanted. When it was wrong, it is confirmation bias with a database behind it, and the wrong case is the one that matters, because it is the case an attacker will arrange deliberately.</p>
-
-                    <p>None of this argues for skipping the layer. It argues for sequencing it correctly, which is the point the scorecard below is built around.</p>
-
-                    <h2>Symptom: it broke when nothing broke</h2>
-
-                    <p>The third failure survives both previous fixes. The agent now has a correct estate model and a full memory of its own reasoning, and its false positive rate jumps by an order of magnitude in a single week. No system changed. IT enabled remote desktop access for a hybrid work program, and traffic on port 3389 went from rare to ordinary.</p>
-
-                    <p>The agent had learned that activity on 3389 predicts compromise. The correlation was real in the training data and it was never the mechanism. When the world moved, the correlation inverted, and the model had no way to notice, because a correlation carries no information about why it holds. This is Judea Pearl's distinction between seeing and doing: observing that escalated tickets correlate with resolved incidents tells you nothing about whether escalating causes resolution.</p>
-
-                    <p>A causal graph encodes the mechanism rather than the pattern. On accuracy, it survives the shift that breaks the correlation. On efficiency, it prunes the hypothesis space, so the agent tests the few nodes that could actually produce the observation instead of enumerating every explanation consistent with it. On governance, it supports the counterfactual that every post-incident review eventually asks: if the agent had escalated at 04:12, would the outcome have been different? A correlational model cannot answer that question. It can only report what happened next to what else happened.</p>
-
-                    <p>The cost is that causal graphs are the most expensive of the three to build and the worst of the three to get wrong. A wrong knowledge graph is wrong about a fact, which is embarrassing and fixable. A wrong causal graph is wrong about the shape of the world, and it defends its errors fluently, because everything downstream of a bad structural assumption stays internally consistent. I have written about the upside of causal modeling in <a href="the-causal-advantage.html">The Causal Advantage</a>. The discipline it demands is the reason most teams should not start here.</p>
-
-                    <h2>The honest scorecard</h2>
-
-                    <p>A grid in which every cell is a win is a sales deck. Each of these three layers makes at least one thing worse, and the cost row is the row to read first, because it is the one that determines build order.</p>
-
-                    <figure class="fig">
-                        <div class="fig-scroll">
-                            <svg viewBox="0 0 640 424" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+</div>
+<figcaption><b>Figure 2.</b> The diagnostic that should precede any graph purchase. Sort your last twenty agent failures into these rows before choosing a technology, because the two most expensive mistakes in this space are building an ontology to fix a memory problem and buying a memory product to fix a grounding problem.</figcaption>
+</figure>
+<h2 id="symptom-confidently-wrong">Symptom: confidently wrong</h2>
+<p>The alert says lateral movement on SRV-4471. The model reads the hostname, recognizes the naming convention, infers a domain controller, and escalates to P1. A human analyst is woken up. SRV-4471 is a decommissioned print server that nobody removed from the scanner's scope.</p>
+<p>Nothing failed in the reasoning. Given what the model believed, escalation was correct. The belief was wrong, and no part of the pipeline could contradict it, because there was no representation of the estate for the model to consult. Document retrieval makes this worse rather than better: a wiki page from 2023 does describe SRV-4471 as a domain controller, retrieval will surface it, and the model becomes more confident while staying wrong.</p>
+<p>A knowledge graph fixes the class of failure by making the entity the unit of storage instead of the document.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> SRV-4471 becomes a node with an owner, a subnet, a lifecycle state, and a last-seen timestamp. Microsoft Research demonstrated the general form of this advantage with GraphRAG: building an entity graph before any query arrives beats flat retrieval on questions that need more than one hop, which describes almost every real triage question.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup></p>
+<p>The other two dimensions come along with it. On efficiency, one traversal replaces the five tool calls the agent would otherwise make to learn who owns a host. On governance, provenance becomes a property of the edge rather than an afterthought in a log file, so the question of where a fact came from has an answer built into the data structure.</p>
+<p>The cost is staleness. A knowledge graph is a photograph of infrastructure that changes hourly, and a stale node is worse than a missing one because a wrong fact arrives dressed in the authority of a retrieved one. Bi-temporal designs address part of this. Graphiti, the engine behind Zep, stamps every edge with both when the fact was true and when the system learned it, so a later contradiction updates the record instead of corrupting it.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> The second cost is schedule. Ontology work pays back late, and teams that spend a year modeling before the first query often never ship at all.</p>
+<h2 id="symptom-it-learns-nothing-overnight">Symptom: it learns nothing overnight</h2>
+<p>Three weeks later the same agent has a correct estate model. A similar alert family now arrives every night around the same hour. Every night the agent runs the same investigation, makes the same eleven tool calls, and reaches the same conclusion. No individual run is wrong. The waste is that run twenty-one has no access to runs one through twenty.</p>
+<p>Deduplication at the signature level does not help, because the alerts are not identical. What repeats is the conclusion, not the input. Two alerts with different hashes, different source addresses, and different timestamps can still be the same judgment call, and only something that stored the judgment can see that.</p>
+<p>A cognitive graph stores the reasoning itself. Nodes are observations, hypotheses, and conclusions. Edges are the inferences that connect them. The agent can then ask a question it currently has no way to ask: have I concluded something about this before, and on what evidence? Accuracy improves because the agent stops re-deriving conclusions it already found to be wrong. Efficiency improves most of all, since deduplicating at the conclusion is the difference between eleven tool calls and one lookup.</p>
+<p>Governance is where this stopped being optional. Article 12 of the EU AI Act requires high-risk systems to automatically record events across their lifetime, with traceability appropriate to the system's purpose, and it became enforceable on 2 August 2026.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> An agent whose reasoning existed only inside a context window that has since been discarded cannot satisfy that on application logs alone. Application logs record what the agent called. They do not record what it believed.</p>
+<h2 id="the-cognitive-graph-is-a-liability-first">The cognitive graph is a liability first</h2>
+<p>Here is the part the vendors skip. A cognitive graph is a durable, queryable store of an agent's private reasoning, and every property that makes it useful also makes it dangerous.</p>
+<p>It is poisonable. Write one false conclusion into the trace and every later run inherits it. A knowledge graph has an external referent, so a wrong node can be checked against the asset database. A wrong conclusion has no referent, because the source is the agent itself. OWASP ranked this as ASI06, memory and context poisoning, in its December 2025 Top 10 for Agentic Applications, and described the effect precisely: poisoned memory reshapes behavior long after the interaction that planted it.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup></p>
+<aside class="pull-quote" aria-hidden="true"><p>Application logs record what the agent called. They do not record what it believed.</p></aside>
+<p>It leaks. Reasoning traces capture whatever the agent was looking at, which in a security operations center means raw alert payloads, credentials that happened to appear in a log line, internal hostnames, and the names of the analysts who touched the case. That store now needs a data classification, a retention period, and an access model. Very few teams write a retention policy for an agent's thoughts before they write the agent.</p>
+<p>It reinforces itself. An agent that remembers concluding "benign" is more likely to conclude "benign" again. When the first conclusion was right, that is exactly the behavior we wanted. When it was wrong, it is confirmation bias with a database behind it, and the wrong case is the one that matters, because it is the case an attacker will arrange deliberately.</p>
+<p>None of this argues for skipping the layer. It argues for sequencing it correctly, which is the point the scorecard below is built around.</p>
+<h2 id="symptom-it-broke-when-nothing-broke">Symptom: it broke when nothing broke</h2>
+<p>The third failure survives both previous fixes. The agent now has a correct estate model and a full memory of its own reasoning, and its false positive rate jumps by an order of magnitude in a single week. No system changed. IT enabled remote desktop access for a hybrid work program, and traffic on port 3389 went from rare to ordinary.</p>
+<p>The agent had learned that activity on 3389 predicts compromise. The correlation was real in the training data and it was never the mechanism. When the world moved, the correlation inverted, and the model had no way to notice, because a correlation carries no information about why it holds. This is Judea Pearl's distinction between seeing and doing: observing that escalated tickets correlate with resolved incidents tells you nothing about whether escalating causes resolution.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup></p>
+<p>A causal graph encodes the mechanism rather than the pattern. On accuracy, it survives the shift that breaks the correlation. On efficiency, it prunes the hypothesis space, so the agent tests the few nodes that could actually produce the observation instead of enumerating every explanation consistent with it. On governance, it supports the counterfactual that every post-incident review eventually asks: if the agent had escalated at 04:12, would the outcome have been different? A correlational model cannot answer that question. It can only report what happened next to what else happened.</p>
+<p>The cost is that causal graphs are the most expensive of the three to build and the worst of the three to get wrong. A wrong knowledge graph is wrong about a fact, which is embarrassing and fixable. A wrong causal graph is wrong about the shape of the world, and it defends its errors fluently, because everything downstream of a bad structural assumption stays internally consistent. I have written about the upside of causal modeling in <a href="the-causal-advantage.html">The Causal Advantage</a>. The discipline it demands is the reason most teams should not start here.</p>
+<h2 id="the-honest-scorecard">The honest scorecard</h2>
+<p>A grid in which every cell is a win is a sales deck. Each of these three layers makes at least one thing worse, and the cost row is the row to read first, because it is the one that determines build order.</p>
+<figure class="fig" id="fig-3">
+<div class="fig-scroll">
+<svg viewBox="0 0 640 424" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
                                 <title id="fig3-title">Three graph types scored across accuracy, efficiency, and governance, each with its cost</title>
                                 <desc id="fig3-desc">The knowledge graph grounds entities, collapses lookups, and carries provenance, but goes stale and pays back late. The cognitive graph stops repeated errors, deduplicates at the conclusion, and makes decisions replayable, but is a poisonable and leaky store of the agent's own reasoning. The causal graph survives distribution shift, prunes hypotheses, and answers counterfactuals, but is costly to build and defends its errors fluently when misspecified.</desc>
 
@@ -305,7 +530,7 @@
                                 </g>
                                 <rect x="30" y="164" width="580" height="28" rx="4" fill="#1a2942"/>
                                 <line x1="31" y1="164" x2="31" y2="192" stroke="#f59e0b" stroke-width="3"/>
-                                <text x="44" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="44" y="182" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">COST</text>
                                 <text x="88" y="182" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Goes stale, and a stale fact arrives dressed as a verified one.</text>
 
                                 <text x="30" y="226" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">Cognitive</text>
@@ -320,7 +545,7 @@
                                 </g>
                                 <rect x="30" y="270" width="580" height="28" rx="4" fill="#1a2942"/>
                                 <line x1="31" y1="270" x2="31" y2="298" stroke="#f59e0b" stroke-width="3"/>
-                                <text x="44" y="288" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="44" y="288" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">COST</text>
                                 <text x="88" y="288" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">A poisonable, leaky store of the agent's own reasoning.</text>
 
                                 <text x="30" y="332" fill="#60a5fa" font-family="Inter, sans-serif" font-size="13" font-weight="700">Causal</text>
@@ -335,74 +560,170 @@
                                 </g>
                                 <rect x="30" y="376" width="580" height="28" rx="4" fill="#1a2942"/>
                                 <line x1="31" y1="376" x2="31" y2="404" stroke="#f59e0b" stroke-width="3"/>
-                                <text x="44" y="394" fill="#f59e0b" font-family="Inter, sans-serif" font-size="10" font-weight="700" letter-spacing="0.06em">COST</text>
+                                <text x="44" y="394" fill="#f59e0b" font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">COST</text>
                                 <text x="88" y="394" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12">Costly to build, and when misspecified it defends its errors.</text>
                             </svg>
-                        </div>
-                        <figcaption><b>Figure 3.</b> Nine claims and three admissions. The cognitive graph has the strongest efficiency case of the three and the worst security cost, which is why it should be built last rather than first. Sources: GraphRAG (arXiv 2404.16130); Zep and Graphiti (arXiv 2501.13956); OWASP Top 10 for Agentic Applications, ASI06.</figcaption>
-                    </figure>
-
-                    <p>Reading the cost column gives an order that surprises most teams. Build the knowledge graph first, because it is the only layer with an external referent and everything above it needs something to be checked against. Add causal structure second, but only around the decisions that have to be defended. Build the cognitive graph last.</p>
-
-                    <p>That last instruction is the counterintuitive one, since the cognitive graph has the largest and fastest efficiency payoff. Build it first and you get exactly the store OWASP describes: an unaudited, poisonable record of the agent's private conclusions, with nothing to validate those conclusions against. The same layer built third sits on top of a grounded estate model and a causal model that can flag when a remembered conclusion no longer follows. The layer does not change. What changes is whether anything can catch it when it goes wrong.</p>
-
-                    <h2>What leaders should do</h2>
-
-                    <ol>
-                        <li>Sort your last twenty agent failures using Figure 2 before approving any graph spend. The two most expensive mistakes in this area are commissioning an ontology to fix a memory problem and buying a memory product to fix a grounding problem, and both are avoidable with an afternoon of triage.</li>
-                        <li>Require two timestamps and a source on every edge of the knowledge graph from the first commit: when the fact was true, and when the system learned it. Retrofitting provenance onto a graph already in production costs more than building it correctly, and Article 12 of the EU AI Act has been enforceable since 2 August 2026.</li>
-                        <li>Treat the cognitive graph as a production data store rather than a log. Before it ships it needs a data classification, a retention period, an access model, and a defined procedure for invalidating a conclusion that turns out to be poisoned. If nobody owns that procedure, the layer is not ready.</li>
-                        <li>Add causal structure only where a counterfactual has to be defended to a regulator, a customer, or an incident review. Everywhere else, correlation with a drift monitor is cheaper and honest about what it is.</li>
-                    </ol>
-
-                    <p>The word graph will keep being used to mean all three of these things at once. Teams that separate them by the question each answers will spend their next architecture budget on the layer they are actually missing.</p>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t" style="border-color: var(--border-color); background-color: var(--card-bg);">
-                <h3 class="text-lg font-bold mb-6">Related Articles</h3>
-                <div class="related-articles">
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Causal Advantage</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Why causal data quality, not dataset size, decides how far a system can go.</p>
-                        <a href="the-causal-advantage.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">Loops, Graphs, and Anchors</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">A different three graphs: control flow, stored knowledge, and system improvement.</p>
-                        <a href="loops-graphs-anchors.html">Read Article →</a>
-                    </div>
-                    <div class="related-article-card">
-                        <h4 class="font-semibold mb-2">The Memory Workbench</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">Working memory as a surface you handle, not a container you fill.</p>
-                        <a href="the-memory-workbench.html">Read Article →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-8 md:px-12 py-8 border-t reference-list" style="border-color: var(--border-color);">
-                <h3 class="text-lg font-bold mb-6">References &amp; Extended Literature</h3>
-                <ol class="list-decimal space-y-4">
-                    <li class="reference-item">Pearl, J. and Mackenzie, D. <em>The Book of Why: The New Science of Cause and Effect</em>. Basic Books, 2018. The ladder of causation and the distinction between seeing and doing.</li>
-                    <li class="reference-item">Edge, D. et al. "From Local to Global: A Graph RAG Approach to Query-Focused Summarization." Microsoft Research, arXiv:2404.16130. <a href="https://arxiv.org/abs/2404.16130" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2404.16130</a></li>
-                    <li class="reference-item">"Zep: A Temporal Knowledge Graph Architecture for Agent Memory." arXiv:2501.13956. Describes Graphiti and its bi-temporal edge model. <a href="https://arxiv.org/abs/2501.13956" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2501.13956</a></li>
-                    <li class="reference-item">OWASP Gen AI Security Project. "OWASP Top 10 for Agentic Applications," December 9, 2025. Threat ASI06, Memory and Context Poisoning. <a href="https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/" target="_blank" rel="noopener noreferrer">genai.owasp.org</a></li>
-                    <li class="reference-item">European Union. Artificial Intelligence Act, Article 12: Record-keeping. Automatic logging and traceability duties for high-risk AI systems, enforceable from August 2, 2026. <a href="https://artificialintelligenceact.eu/article/12/" target="_blank" rel="noopener noreferrer">artificialintelligenceact.eu/article/12</a></li>
-                    <li class="reference-item">MITRE. <em>ATT&amp;CK</em>. The adversary tactic and technique model most often used as the shared ontology for a security operations knowledge graph. <a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">attack.mitre.org</a></li>
-                </ol>
-            </div>
-        </article>
-    </main>
-
-    <footer class="border-t py-8 mt-16" style="border-color: var(--border-color); color: var(--text-muted);">
-        <div class="max-w-4xl mx-auto px-6 text-center text-sm">
-            <p>&copy; 2026 alhaol.github.io</p>
+</div>
+<figcaption><b>Figure 3.</b> Nine claims and three admissions. The cognitive graph has the strongest efficiency case of the three and the worst security cost, which is why it should be built last rather than first. Sources: GraphRAG (arXiv 2404.16130); Zep and Graphiti (arXiv 2501.13956); OWASP Top 10 for Agentic Applications, ASI06.</figcaption>
+</figure>
+<p>Reading the cost column gives an order that surprises most teams. Build the knowledge graph first, because it is the only layer with an external referent and everything above it needs something to be checked against. Add causal structure second, but only around the decisions that have to be defended. Build the cognitive graph last.</p>
+<p>That last instruction is the counterintuitive one, since the cognitive graph has the largest and fastest efficiency payoff. Build it first and you get exactly the store OWASP describes: an unaudited, poisonable record of the agent's private conclusions, with nothing to validate those conclusions against. The same layer built third sits on top of a grounded estate model and a causal model that can flag when a remembered conclusion no longer follows. The layer does not change. What changes is whether anything can catch it when it goes wrong.</p>
+<p>The word graph will keep being used to mean all three of these things at once. Teams that separate them by the question each answers will spend their next architecture budget on the layer they are actually missing.</p>
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>Sort your last twenty agent failures using Figure 2 before approving any graph spend. The two most expensive mistakes in this area are commissioning an ontology to fix a memory problem and buying a memory product to fix a grounding problem, and both are avoidable with an afternoon of triage.</li>
+<li>Require two timestamps and a source on every edge of the knowledge graph from the first commit: when the fact was true, and when the system learned it. Retrofitting provenance onto a graph already in production costs more than building it correctly, and Article 12 of the EU AI Act has been enforceable since 2 August 2026.</li>
+<li>Treat the cognitive graph as a production data store rather than a log. Before it ships it needs a data classification, a retention period, an access model, and a defined procedure for invalidating a conclusion that turns out to be poisoned. If nobody owns that procedure, the layer is not ready.</li>
+<li>Add causal structure only where a counterfactual has to be defended to a regulator, a customer, or an incident review. Everywhere else, correlation with a drift monitor is cheaper and honest about what it is.</li>
+</ol>
         </div>
-    </footer>
 
-    <script>
-        const currentTheme = localStorage.getItem('theme') || 'theme-cybersecurity';
-        document.body.className = currentTheme;
-    </script>
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Pearl, J., &amp; Mackenzie, D. (2018). <em>The Book of Why: The New Science of Cause and Effect</em>. Basic Books. (The ladder of causation; seeing versus doing.) <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">MITRE. (n.d.). <em>ATT&amp;CK</em>. (The tactic and technique model often used as a security operations ontology.) <a href="https://attack.mitre.org/" target="_blank" rel="noopener">https://attack.mitre.org/</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Edge, D., et al. (2024). "From Local to Global: A Graph RAG Approach to Query-Focused Summarization." <em>arXiv</em> (Microsoft Research). <a href="https://arxiv.org/abs/2404.16130" target="_blank" rel="noopener">https://arxiv.org/abs/2404.16130</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">"Zep: A Temporal Knowledge Graph Architecture for Agent Memory." (2025). <em>arXiv</em>. (Describes Graphiti and its bi-temporal edge model.) <a href="https://arxiv.org/abs/2501.13956" target="_blank" rel="noopener">https://arxiv.org/abs/2501.13956</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">European Union. (2024). <em>Artificial Intelligence Act</em>, Article 12: Record-keeping. (Logging duties for high-risk systems, enforceable from August 2, 2026.) <a href="https://artificialintelligenceact.eu/article/12/" target="_blank" rel="noopener">https://artificialintelligenceact.eu/article/12/</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">OWASP Gen AI Security Project. (2025, December 9). "OWASP Top 10 for Agentic Applications." (Threat ASI06, Memory and Context Poisoning.) <a href="https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/" target="_blank" rel="noopener">https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard">
+    <img src="../Post_Images/Image_23.png" alt="" width="1408" height="768" loading="lazy" decoding="async">
+    <p class="rcard-kicker">AI Systems</p>
+    <h3><a href="the-causal-advantage.html">The Causal Advantage</a></h3>
+    <p class="rcard-dek">Why high-quality causal data, not bigger datasets, is what lets a system reach its full potential.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_39.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Architecture</p>
+    <h3><a href="loops-graphs-anchors.html">Loops, Graphs, and Anchors</a></h3>
+    <p class="rcard-dek">The word graph is doing three different jobs in AI right now. Telling them apart explains the whole shift.</p>
+</li>
+<li class="rcard">
+    <img src="../Post_Images/Image_41.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+    <p class="rcard-kicker">Learning &amp; Cognition</p>
+    <h3><a href="the-memory-workbench.html">The Memory Workbench</a></h3>
+    <p class="rcard-dek">A bad memory is rarely a capacity problem. It is a handling problem, and the fix is how you work the brief window before new information decays.</p>
+</li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
 </body>
 </html>
