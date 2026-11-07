@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
+    <title>Abstraction Is the Review Layer | alhaol.github.io</title>
+    <meta name="description" content="AI produces more than anyone can read, so people auto-accept it. Review one level up instead: ask for the visual, the method and the reasons.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/abstraction-review-layer.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Abstraction Is the Review Layer">
+    <meta property="og:description" content="AI produces more than anyone can read, so people auto-accept it. Review one level up instead: ask for the visual, the method and the reasons.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/abstraction-review-layer.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_73.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A tall, dense stack of faint lines on the left and a small set of three clear cards on the right, one marked in amber: detail reduced to something a person can judge.">
+    <meta property="article:published_time" content="2026-11-07">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="Abstraction Is the Review Layer">
+    <meta name="twitter:description" content="AI produces more than anyone can read, so people auto-accept it. Review one level up instead: ask for the visual, the method and the reasons.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_73.png">
+    <meta name="twitter:image:alt" content="A tall, dense stack of faint lines on the left and a small set of three clear cards on the right, one marked in amber: detail reduced to something a person can judge.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/abstraction-review-layer.html",
+      "headline": "Abstraction Is the Review Layer",
+      "alternativeHeadline": "AI now produces more than anyone can read, so people auto-accept it. The fix is to review one level up, where experience works: the visual, the method and the reasons.",
+      "description": "AI produces more than anyone can read, so people auto-accept it. Review one level up instead: ask for the visual, the method and the reasons.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_73.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-11-07",
+      "dateModified": "2026-11-07",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
+    <style>
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
+
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
+
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
+
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
+    </nav>
+</header>
+
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
+
+    <!-- HEADER. KICKER markup: primary label in blue, optional secondary muted, e.g.
+         <span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span>
+         Labels come only from the controlled vocabulary listed at the top of this file. -->
+    <header class="article-head col">
+        <p class="kicker"><span>Workflow</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span></p>
+        <h1 id="article-title">Abstraction Is the Review Layer</h1>
+        <p class="dek subtitle">AI now produces more than anyone can read, so people auto-accept it. The fix is to review one level up, where experience works: the visual, the method and the reasons.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-11-07">November 7, 2026</time><span aria-hidden="true"> &middot; </span>5 min read</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO. Never cropped, never lazy (it is the LCP image). -->
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_73.png" alt="A tall, dense stack of faint lines on the left and a small set of three clear cards on the right, one marked in amber: detail reduced to something a person can judge." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
+
+    <div class="article-grid">
+
+        <!-- KEY TAKEAWAYS. Exactly three findings, 12 to 28 words each, declarative, in the body's order,
+             no citations, no imperatives. Markup: <li>One sentence finding.</li> x3 -->
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>In a 2025 survey of 1,150 employees, 40% had received AI workslop in the past month, and each piece took almost two hours to handle.</li>
+<li>People check AI output when checking is cheap and skip it when it is expensive, so the lever is the cost of judgment rather than discipline.</li>
+<li>Highlighting the parts most likely to need edits sped up review, while each extra clinical reminder per visit cut acceptance by 30%.</li>
+            </ol>
+        </aside>
+
+        <!-- TOC. Authored by the skill, never built by JS. One <li><a href="#slug">Exact h2 text</a></li> per
+             body h2 (same order), then <li><a href="#references">References</a></li>. Ids are deterministic
+             slugs of the h2 text. Sticky rail at >= 1200px, collapsed disclosure below that. -->
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#auto-accept-is-a-rational-response-to-cost">Auto-accept is a rational response to cost</a></li>
+<li><a href="#abstraction-makes-judgment-cheap">Abstraction makes judgment cheap</a></li>
+<li><a href="#three-abstractions-that-carry-judgment">Three abstractions that carry judgment</a></li>
+<li><a href="#let-the-agent-flag-its-doubts">Let the agent flag its doubts</a></li>
+<li><a href="#prompts-that-ask-for-the-abstraction">Prompts that ask for the abstraction</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <!-- BODY. Expected markup:
+             Section heading:  <h2 id="decline-is-the-default">Decline is the default</h2>   (no h3 in the body)
+             Inline citation:  ...a 50% higher likelihood of survival.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>
+                               (numbered in order of first use; later uses of the same source get id cite-3b, ...)
+             Pull quote:       <aside class="pull-quote" aria-hidden="true"><p>Verbatim line from the body.</p></aside>
+                               (1 or 2; not in the lede or the leaders section; not next to a figure)
+             Source quote:     <figure class="quote"><blockquote><p>Words.</p></blockquote><figcaption>Name, role</figcaption></figure>
+             SVG figure:       <figure class="fig" id="fig-2"><div class="fig-scroll">[the inline svg element: viewBox "0 0 640 H", role="img",
+                                 aria-labelledby="fig2-title fig2-desc" ...><title id="fig2-title">..</title><desc id="fig2-desc">..</desc>
+                                 title and desc first]</div><figcaption><b>Figure 2.</b> Claim sentence. Caveat. Sources: <a href="#ref-1">[1]</a>.</figcaption></figure>
+             Raster figure:    same, with <div class="fig-scroll fig-plate--paper"><img src="../Post_Images/Fig_NN_x.png" alt=".."
+                                 width=".." height=".." loading="lazy" decoding="async"></div> (paper plate for scans/photos)
+             Code:             <pre data-lang="python"><code>...</code></pre>
+             Leaders list:     last element of the body:
+                               <h2 id="what-leaders-should-do">What leaders should do</h2>
+                               <p>Optional lead-in, max 25 words.</p>
+                               <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
+        <div id="article-body" class="prose">
+            
+<p>The average knowledge worker is now interrupted every two minutes during core hours, 275 times a day once the evenings are counted.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> On top of that stream sits a new one. In a 2025 survey of 1,150 full-time U.S. employees, 40% had received AI-generated "workslop" in the past month, and it made up 15.4% of everything they received.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> Each piece took almost two hours to deal with.<sup class="cite"><a href="#ref-2" id="cite-2b">2</a></sup></p>
+<p>So people stop dealing with it. They skim the summary, accept the draft, forward the report. It is quieter than burnout and more dangerous, because work goes out under their name that nobody judged. My own rule is simple. When something is heavy and detailed, I do not read it. I ask the AI to abstract it into a visual, a method and a set of reasons, so my experience can judge it quickly and change direction while change is still cheap.</p>
+
+<h2 id="auto-accept-is-a-rational-response-to-cost">Auto-accept is a rational response to cost</h2>
+<p>Rubber-stamping looks like laziness. The research says it is closer to arithmetic. Parasuraman and Manzey found that automation complacency appears when other tasks compete for attention, and that automation bias affects experts as much as novices and cannot be prevented by training or instructions.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> A review of 74 studies named workload, task complexity and time pressure as the conditions that drive it.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> That is a fair description of most inboxes.</p>
+<p>The generative era adds a twist. In a Microsoft Research survey of 319 knowledge workers, higher confidence in the AI went with less critical thinking, and the thinking that remained shifted toward verifying and stitching together what the AI produced.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> Verification has quietly become the job, and it is the part nobody budgeted for. I have called this <a href="the-verification-tax.html">the verification tax</a>.</p>
+<p>The most useful finding comes from five studies with 731 participants. People decide strategically whether to engage with an AI's explanation, and when the explanation did not lower the cost of checking the answer, they did not check.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> Reliance is a cost decision. If checking costs two hours, people accept. The lever is not willpower. It is the price of judgment.</p>
+
+<h2 id="abstraction-makes-judgment-cheap">Abstraction makes judgment cheap</h2>
+<p>Experience does not work at the level of detail. A senior engineer cannot verify 400 changed lines in a minute, but she can look at a diagram of which services now call which and see at once that one arrow is wrong. A finance lead cannot audit a 40-page model overnight, but she can read the five assumptions it rests on and spot the one that will not survive next quarter. Expertise is pattern recognition over structure, and structure is exactly what detail hides.</p>
+<p>So the review should happen one level up. Instead of asking the AI for the finished artifact and then trying to read it, ask it to describe the artifact at the level where your judgment operates: what it looks like, how it was made, and why each major choice went the way it did. That abstraction takes minutes to read. If it is wrong, you change direction before anyone polishes the wrong thing. If it is right, the detail underneath inherits much of your confidence, and you know which parts still deserve a closer look.</p>
+<figure class="fig" id="fig-1"><div class="fig-scroll">
+<svg viewBox="0 0 640 300" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig1-title">The same AI output reviewed at the level of detail and at the level of abstraction</title>
+<desc id="fig1-desc">Detail costs hours to check, so it is accepted unread. An abstraction made of a visual, a method and the reasons costs minutes, so it is judged and redirected early.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Same output, two levels of review</text>
+<text x="40" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="600" letter-spacing="1.2" fill="#94a3b8">DETAIL</text>
+<rect x="40" y="72" width="250" height="150" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<g stroke="#f59e0b" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round">
+<line x1="56" y1="88" x2="270" y2="88"/><line x1="56" y1="99" x2="252" y2="99"/><line x1="56" y1="110" x2="266" y2="110"/>
+<line x1="56" y1="121" x2="240" y2="121"/><line x1="56" y1="132" x2="270" y2="132"/><line x1="56" y1="143" x2="258" y2="143"/>
+<line x1="56" y1="154" x2="268" y2="154"/><line x1="56" y1="165" x2="236" y2="165"/><line x1="56" y1="176" x2="262" y2="176"/>
+<line x1="56" y1="187" x2="270" y2="187"/><line x1="56" y1="198" x2="248" y2="198"/><line x1="56" y1="209" x2="214" y2="209"/>
+</g>
+<text x="165" y="248" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Hours to check</text>
+<text x="165" y="268" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">so it gets accepted unread</text>
+<path d="M304 147 L332 147" stroke="#94a3b8" stroke-width="2"/><path d="M332 141 L340 147 L332 153 Z" fill="#94a3b8"/>
+<text x="350" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="600" letter-spacing="1.2" fill="#94a3b8">ABSTRACTION</text>
+<rect x="350" y="72" width="250" height="42" rx="6" fill="#1a2942" stroke="#60a5fa"/>
+<text x="366" y="98" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Visual: the shape</text>
+<rect x="350" y="126" width="250" height="42" rx="6" fill="#1a2942" stroke="#60a5fa"/>
+<text x="366" y="152" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Method: how it was made</text>
+<rect x="350" y="180" width="250" height="42" rx="6" fill="#1a2942" stroke="#60a5fa"/>
+<text x="366" y="206" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Reasons: why each choice</text>
+<text x="475" y="248" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Minutes to judge</text>
+<text x="475" y="268" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">so it gets judged, and redirected early</text>
+<text x="320" y="292" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Illustrative</text>
+</svg></div>
+<figcaption><b>Figure 1.</b> Detail costs more attention than people have, so it is accepted unread; an abstraction costs minutes, so it gets judged. Illustrative; evidence in <a href="#ref-2">[2]</a>, <a href="#ref-6">[6]</a>.</figcaption></figure>
+
+<h2 id="three-abstractions-that-carry-judgment">Three abstractions that carry judgment</h2>
+<p>Three forms do most of the work, and each answers a different question that experience can test.</p>
+<ul>
+<li>A <strong>visualization</strong> answers "what is the shape of this?" A diagram of the flow, a table of options against criteria, a timeline, a map of who depends on whom. Shape errors, such as a missing step, a loop that should not exist or an owner who appears twice, are visible at a glance and invisible in prose.</li>
+<li>A <strong>methodology</strong> answers "how was this produced?" Which sources the AI used, what it left out, what it assumed and which steps it followed. A flawed method still produces confident output, so this is where you catch the report built on last year's numbers.</li>
+<li>A <strong>rationale</strong> answers "why this and not the alternative?" The three or four decisions that shaped the result, each with the option rejected. Experience is strongest here, because you have seen how similar decisions played out.</li>
+</ul>
+<p>There is a trap in the third form. In a CHI 2021 study, AI explanations made people more likely to accept the AI's recommendation regardless of whether it was correct.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> A rationale written to persuade makes rubber-stamping easier, not harder. The fix is to ask for rationales that can be checked: name the rejected option, state the assumption, give the number. An explanation you cannot test is decoration.</p>
+
+<h2 id="let-the-agent-flag-its-doubts">Let the agent flag its doubts</h2>
+<p>Abstraction tells you what to judge. The agent can also tell you where to drill down, if it flags the right things. A study of 30 programmers found that highlighting the code most likely to need editing led to faster work and more targeted edits, while highlighting what the model itself found improbable gave no benefit over no highlighting at all.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> In a pre-registered study of 404 people, an AI that said "I'm not sure" in the first person reduced over-reliance and raised accuracy.<sup class="cite"><a href="#ref-9" id="cite-9a">9</a></sup></p>
+<aside class="pull-quote" aria-hidden="true"><p>Instead of asking the AI for the finished artifact and then trying to read it, ask it to describe the artifact at the level where your judgment operates</p></aside>
+<p>The risk is flagging everything. Among 112 primary care clinicians, the likelihood of accepting a reminder dropped by 30% for each additional reminder received per visit.<sup class="cite"><a href="#ref-10" id="cite-10a">10</a></sup> Security analysts describe the same arc as alarm burnout followed by desensitization.<sup class="cite"><a href="#ref-11" id="cite-11a">11</a></sup> So ask for few flags, two or three per output, each tied to a reason: the number it could not source, the assumption it made on your behalf, the place where it chose between two reasonable readings.</p>
+<figure class="fig" id="fig-2"><div class="fig-scroll">
+<svg viewBox="0 0 640 280" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig2-title">An abstraction of a proposal with two of five parts flagged for a closer look</title>
+<desc id="fig2-desc">Three parts are accepted at the abstraction level. Two carry a flag and a reason, an unsourced number and an assumed scope, so the reviewer drills down only there.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Flag a few places, each with a reason</text>
+<rect x="40" y="56" width="380" height="34" rx="5" fill="#1a2942" stroke="#2a3f5f"/><text x="56" y="78" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Structure of the proposal</text><path d="M444 73 L449 78 L457 68" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="466" y="77" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">accept</text><rect x="40" y="96" width="380" height="34" rx="5" fill="#1a2942" stroke="#2a3f5f"/><text x="56" y="118" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Sources and method</text><path d="M444 113 L449 118 L457 108" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="466" y="117" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">accept</text><rect x="40" y="136" width="380" height="34" rx="5" fill="#1a2942" stroke="#f59e0b"/><text x="56" y="158" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Budget figure for next quarter</text><circle cx="450" cy="153" r="7" fill="none" stroke="#f59e0b" stroke-width="2"/><text x="450" y="157" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f59e0b">!</text><text x="466" y="157" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b">unsourced number</text><rect x="40" y="176" width="380" height="34" rx="5" fill="#1a2942" stroke="#f59e0b"/><text x="56" y="198" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Scope of the rollout</text><circle cx="450" cy="193" r="7" fill="none" stroke="#f59e0b" stroke-width="2"/><text x="450" y="197" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f59e0b">!</text><text x="466" y="197" font-family="Inter, sans-serif" font-size="12" fill="#f59e0b">assumed scope</text><rect x="40" y="216" width="380" height="34" rx="5" fill="#1a2942" stroke="#2a3f5f"/><text x="56" y="238" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Recommendation</text><path d="M444 233 L449 238 L457 228" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="466" y="237" font-family="Inter, sans-serif" font-size="12" fill="#60a5fa">accept</text>
+<text x="320" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Illustrative. Two or three flags per output, no more.</text>
+</svg></div>
+<figcaption><b>Figure 2.</b> A useful abstraction marks two or three places for a closer look, each with a reason. Flag everything and acceptance collapses. Illustrative; evidence in <a href="#ref-8">[8]</a>, <a href="#ref-10">[10]</a>.</figcaption></figure>
+
+<h2 id="prompts-that-ask-for-the-abstraction">Prompts that ask for the abstraction</h2>
+<p>This works today with any capable assistant, with no new tooling. The prompts below are the ones I use when an output is too long to judge directly. They follow the shape that agent builders now recommend, where agents pause for human feedback at checkpoints rather than only at the end.<sup class="cite"><a href="#ref-12" id="cite-12a">12</a></sup></p>
+<pre data-lang="text"><code>1. Before you write the full document, show me its structure as a diagram
+   or a table: the main parts, how they connect, what each depends on.
+
+2. State your method in five lines: the sources you used, what you left
+   out, the assumptions you made, and the steps you followed.
+
+3. List the three decisions that most shaped this result. For each, give
+   the option you rejected, the reason, and any number you relied on.
+
+4. Mark at most three places where you are least sure, and say why.</code></pre>
+<p>Read the answers before anything else. If the shape, the method or the reasons are wrong, redirect there; only then ask for the detail, or read it. Ten minutes at the level of abstraction replaces the two hours nobody had, and the work that goes out has actually been judged by the person whose name is on it.</p>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>Make "show me the abstraction first" the team norm for any AI output longer than a page: a visual, the method and the key decisions before the full draft.</li>
+<li>Review AI work at checkpoints, not only at the end, so changes of direction cost minutes of conversation instead of days of rework.</li>
+<li>Require rationales that name the rejected option and the number behind each choice, and treat an explanation that cannot be checked as no explanation.</li>
+<li>Cap flags at two or three per output, each with a reason, and watch whether people still read them; if acceptance drifts toward automatic, cut the flags further.</li>
+</ol>
+
+        </div>
+
+        <!-- AUTHOR CARD. Fixed text: never edit per article. -->
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- REFERENCES. One entry per source, in first-citation order; every entry cited at least once.
+             Markup: <li id="ref-1">Author, A. A., &amp; Author, B. B. (Year). "Article title." <em>Journal</em>, 7(7), e1. <a href="https://doi.org/..." target="_blank" rel="noopener">https://doi.org/...</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+             Books and reports: title in <em>. Link text is the full URL. -->
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Microsoft. (2025). <em>2025: The year the Frontier Firm is born</em>. Work Trend Index Annual Report. <a href="https://www.microsoft.com/en-us/worklab/work-trend-index/2025-the-year-the-frontier-firm-is-born" target="_blank" rel="noopener">https://www.microsoft.com/en-us/worklab/work-trend-index/2025-the-year-the-frontier-firm-is-born</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Niederhoffer, K., Rosen Kellerman, G., Lee, A., et al. (2025, September 22). "AI-generated workslop is destroying productivity." <em>Harvard Business Review</em>. <a href="https://hbr.org/2025/09/ai-generated-workslop-is-destroying-productivity" target="_blank" rel="noopener">https://hbr.org/2025/09/ai-generated-workslop-is-destroying-productivity</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Parasuraman, R., &amp; Manzey, D. H. (2010). "Complacency and bias in human use of automation: An attentional integration." <em>Human Factors</em>, 52(3), 381 to 410. <a href="https://doi.org/10.1177/0018720810376055" target="_blank" rel="noopener">https://doi.org/10.1177/0018720810376055</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Goddard, K., Roudsari, A., &amp; Wyatt, J. C. (2012). "Automation bias: A systematic review of frequency, effect mediators, and mitigators." <em>Journal of the American Medical Informatics Association</em>, 19(1), 121 to 127. <a href="https://doi.org/10.1136/amiajnl-2011-000089" target="_blank" rel="noopener">https://doi.org/10.1136/amiajnl-2011-000089</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Lee, H., Sarkar, A., Tankelevitch, L., et al. (2025). "The impact of generative AI on critical thinking: Self-reported reductions in cognitive effort and confidence effects from a survey of knowledge workers." <em>CHI 2025</em>. <a href="https://doi.org/10.1145/3706598.3713778" target="_blank" rel="noopener">https://doi.org/10.1145/3706598.3713778</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Vasconcelos, H., Jorke, M., Grunde-McLaughlin, M., et al. (2023). "Explanations can reduce overreliance on AI systems during decision-making." <em>Proceedings of the ACM on Human-Computer Interaction</em>, 7(CSCW1). <a href="https://doi.org/10.1145/3579605" target="_blank" rel="noopener">https://doi.org/10.1145/3579605</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Bansal, G., Wu, T., Zhou, J., et al. (2021). "Does the whole exceed its parts? The effect of AI explanations on complementary team performance." <em>CHI 2021</em>. <a href="https://doi.org/10.1145/3411764.3445717" target="_blank" rel="noopener">https://doi.org/10.1145/3411764.3445717</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">Vasconcelos, H., Bansal, G., Fourney, A., et al. (2024). "Generation probabilities are not enough: Uncertainty highlighting in AI code completions." <em>ACM Transactions on Computer-Human Interaction</em>. <a href="https://doi.org/10.1145/3702320" target="_blank" rel="noopener">https://doi.org/10.1145/3702320</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-9">Kim, S. S. Y., Liao, Q. V., Vorvoreanu, M., et al. (2024). "I'm not sure, but...: Examining the impact of large language models' uncertainty expression on user reliance and trust." <em>FAccT 2024</em>. <a href="https://doi.org/10.1145/3630106.3658941" target="_blank" rel="noopener">https://doi.org/10.1145/3630106.3658941</a> <a class="backref" href="#cite-9a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-10">Ancker, J. S., Edwards, A., Nosal, S., et al. (2017). "Effects of workload, work complexity, and repeated alerts on alert fatigue in a clinical decision support system." <em>BMC Medical Informatics and Decision Making</em>, 17, 36. <a href="https://doi.org/10.1186/s12911-017-0430-8" target="_blank" rel="noopener">https://doi.org/10.1186/s12911-017-0430-8</a> <a class="backref" href="#cite-10a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-11">Alahmadi, B. A., Axon, L., &amp; Martinovic, I. (2022). "99% false positives: A qualitative study of SOC analysts' perspectives on security alarms." <em>31st USENIX Security Symposium</em>. <a href="https://www.usenix.org/conference/usenixsecurity22/presentation/alahmadi" target="_blank" rel="noopener">https://www.usenix.org/conference/usenixsecurity22/presentation/alahmadi</a> <a class="backref" href="#cite-11a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-12">Anthropic. (2024, December 19). "Building effective agents." <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/building-effective-agents</a> <a class="backref" href="#cite-12a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- RELATED. Exactly three cards. Dek is the target article's own dek, verbatim. Markup:
+         <li class="rcard"><img src="../Post_Images/Image_NN.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+           <p class="rcard-kicker">Leadership</p><h3><a href="slug.html">Title</a></h3><p class="rcard-dek">Target dek.</p></li>
+         (Image_32 is .jpg.) -->
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard"><img src="../Post_Images/Image_44.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+<p class="rcard-kicker">AI Systems</p><h3><a href="the-verification-tax.html">The Verification Tax</a></h3><p class="rcard-dek">AI broke the fast, cheap, good tradeoff for generation and left it completely intact for anything you cannot check.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_26.png" alt="" width="1059" height="556" loading="lazy" decoding="async">
+<p class="rcard-kicker">AI Systems</p><h3><a href="the-understanding-advantage.html">The Understanding Advantage</a></h3><p class="rcard-dek">You can outsource thinking to AI, but understanding stays with you. The real opportunity is using AI to build understanding faster than you could alone.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_08.png" alt="" width="1024" height="1024" loading="lazy" decoding="async">
+<p class="rcard-kicker">Security &amp; Safety</p><h3><a href="the-trust-gradient.html">The Trust Gradient</a></h3><p class="rcard-dek">Supervision Theory in Multi-Agent Systems: Calibrating Autonomy to Risk and Stakeholder Confidence</p></li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
+</body>
+</html>
