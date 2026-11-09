@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
+    <title>The Lucky Guess Problem | alhaol.github.io</title>
+    <meta name="description" content="Assessment works only when right answers are rarely lucky; AI makes them lucky on demand, so shipped code no longer shows what a team knows.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-lucky-guess-problem.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="The Lucky Guess Problem">
+    <meta property="og:description" content="Assessment works only when right answers are rarely lucky; AI makes them lucky on demand, so shipped code no longer shows what a team knows.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-lucky-guess-problem.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_76.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Two identical cards labelled same output; one rests on solid blocks labelled knowledge, the other on hollow amber outlines labelled lucky guess.">
+    <meta property="article:published_time" content="2026-11-09">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="The Lucky Guess Problem">
+    <meta name="twitter:description" content="Assessment works only when right answers are rarely lucky; AI makes them lucky on demand, so shipped code no longer shows what a team knows.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_76.png">
+    <meta name="twitter:image:alt" content="Two identical cards labelled same output; one rests on solid blocks labelled knowledge, the other on hollow amber outlines labelled lucky guess.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/the-lucky-guess-problem.html",
+      "headline": "The Lucky Guess Problem",
+      "alternativeHeadline": "Assessment works only when right answers are rarely lucky. AI makes them lucky on demand, so shipped code no longer shows what a team knows.",
+      "description": "Assessment works only when right answers are rarely lucky; AI makes them lucky on demand, so shipped code no longer shows what a team knows.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_76.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-09",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
+    <style>
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
+
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
+
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
+
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
+    </nav>
+</header>
+
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
+
+    <!-- HEADER. KICKER markup: primary label in blue, optional secondary muted, e.g.
+         <span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span>
+         Labels come only from the controlled vocabulary listed at the top of this file. -->
+    <header class="article-head col">
+        <p class="kicker"><span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">AI Systems</span></p>
+        <h1 id="article-title">The Lucky Guess Problem</h1>
+        <p class="dek subtitle">Assessment works only when right answers are rarely lucky. AI makes them lucky on demand, so shipped code no longer shows what a team knows.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-11-09">November 9, 2026</time><span aria-hidden="true"> &middot; </span>5 min read</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO. Never cropped, never lazy (it is the LCP image). -->
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_76.png" alt="Two identical cards labelled same output; one rests on solid blocks labelled knowledge, the other on hollow amber outlines labelled lucky guess." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
+
+    <div class="article-grid">
+
+        <!-- KEY TAKEAWAYS. Exactly three findings, 12 to 28 words each, declarative, in the body's order,
+             no citations, no imperatives. Markup: <li>One sentence finding.</li> x3 -->
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Knowledge Space Theory's assessment models give every item a lucky-guess rate, and reading a state from answers works only while that rate stays low.</li>
+<li>Engineers who learned a new async Python library with AI help averaged 50% on a follow-up quiz, against 67% for those who coded by hand.</li>
+<li>Across nine experiments, searching the internet led people to mistake access to information for their own understanding, and an assistant is that access, always on.</li>
+            </ol>
+        </aside>
+
+        <!-- TOC. Authored by the skill, never built by JS. One <li><a href="#slug">Exact h2 text</a></li> per
+             body h2 (same order), then <li><a href="#references">References</a></li>. Ids are deterministic
+             slugs of the h2 text. Sticky rail at >= 1200px, collapsed disclosure below that. -->
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#assessment-assumes-lucky-guesses-are-rare">Assessment assumes lucky guesses are rare</a></li>
+<li><a href="#ai-makes-every-answer-a-possible-guess">AI makes every answer a possible guess</a></li>
+<li><a href="#turn-the-assistant-into-the-assessor">Turn the assistant into the assessor</a></li>
+<li><a href="#some-prerequisites-deserve-to-go">Some prerequisites deserve to go</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <!-- BODY. Expected markup:
+             Section heading:  <h2 id="decline-is-the-default">Decline is the default</h2>   (no h3 in the body)
+             Inline citation:  ...a 50% higher likelihood of survival.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>
+                               (numbered in order of first use; later uses of the same source get id cite-3b, ...)
+             Pull quote:       <aside class="pull-quote" aria-hidden="true"><p>Verbatim line from the body.</p></aside>
+                               (1 or 2; not in the lede or the leaders section; not next to a figure)
+             Source quote:     <figure class="quote"><blockquote><p>Words.</p></blockquote><figcaption>Name, role</figcaption></figure>
+             SVG figure:       <figure class="fig" id="fig-2"><div class="fig-scroll">[the inline svg element: viewBox "0 0 640 H", role="img",
+                                 aria-labelledby="fig2-title fig2-desc" ...><title id="fig2-title">..</title><desc id="fig2-desc">..</desc>
+                                 title and desc first]</div><figcaption><b>Figure 2.</b> Claim sentence. Caveat. Sources: <a href="#ref-1">[1]</a>.</figcaption></figure>
+             Raster figure:    same, with <div class="fig-scroll fig-plate--paper"><img src="../Post_Images/Fig_NN_x.png" alt=".."
+                                 width=".." height=".." loading="lazy" decoding="async"></div> (paper plate for scans/photos)
+             Code:             <pre data-lang="python"><code>...</code></pre>
+             Leaders list:     last element of the body:
+                               <h2 id="what-leaders-should-do">What leaders should do</h2>
+                               <p>Optional lead-in, max 25 words.</p>
+                               <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
+        <div id="article-body" class="prose">
+            
+<p>A platform team moves a service to async Python with heavy help from a coding assistant. The pull requests are clean and the migration ships a sprint early. Three months later a request hangs in production, and nobody on the team can explain how cancellation travels through the task tree. Every review, skill matrix and promotion packet had treated the merged code as evidence that the team understood it. It was evidence that the code worked.</p>
+<p>Knowledge Space Theory explains the gap between the two. Its assessments infer what a person knows from their answers, and they can do it with few questions only because a right answer is rarely a lucky guess.<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> AI assistance makes lucky guesses cheap and constant. A team's output now says little about its knowledge state, so leaders who need that state have to measure it, and the assistant can do the measuring.</p>
+
+<h2 id="assessment-assumes-lucky-guesses-are-rare">Assessment assumes lucky guesses are rare</h2>
+<p>In the theory's most studied probabilistic model, every item carries two error rates: the chance that someone who knows it answers wrong anyway, a careless error, and the chance that someone who does not know it answers right, a lucky guess.<sup class="cite"><a href="#ref-1" id="cite-1b">1</a></sup> When both are small, each answer is strong evidence, and an adaptive assessment can locate a person quickly. ALEKS, built on the theory, pinned down one student's state among 57,147 candidates with 24 questions.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup></p>
+<p>Engineering organizations run the same inference informally. A merged pull request, a resolved incident, a design that survived review: each is read as an answer that reveals a knowledge state. Promotion packets are assembled from them and skill matrices updated from them. The inference was always noisy. It held up because writing correct code you did not understand used to be hard.</p>
+
+<h2 id="ai-makes-every-answer-a-possible-guess">AI makes every answer a possible guess</h2>
+<p>A coding assistant raises the lucky-guess rate on every task it can do. Suppose half a team understands cancellation, careless errors run at 10% and lucky guesses at 10%. Then 90% of right answers come from someone who knows the concept. Now let an assistant push the lucky-guess rate to 90%. Right answers nearly double, and only 50% of them come from knowing, no better than picking an engineer at random (Figure 1).</p>
+<figure class="fig" id="fig-1"><div class="fig-scroll">
+<svg viewBox="0 0 640 262" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig1-title">How often a right answer comes from knowing, with and without an assistant</title>
+<desc id="fig1-desc">With lucky guesses at 10 percent, 90 percent of right answers come from people who know the concept. With an assistant pushing lucky guesses to 90 percent, right answers nearly double but only half come from knowing, the same share as the base rate.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">More right answers, the same knowledge</text>
+<text x="20" y="78" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">No assistant</text>
+<text x="20" y="95" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">lucky guesses: 10%</text>
+<rect x="190" y="66" width="135" height="28" fill="#60a5fa" fill-opacity="0.85"/>
+<rect x="325" y="66" width="15" height="28" fill="#f59e0b" fill-opacity="0.85"/>
+<text x="352" y="85" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8"><tspan font-weight="700" fill="#60a5fa">90%</tspan> of right answers come from knowing</text>
+<text x="20" y="148" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">With an assistant</text>
+<text x="20" y="165" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">lucky guesses: 90%</text>
+<rect x="190" y="136" width="135" height="28" fill="#60a5fa" fill-opacity="0.85"/>
+<rect x="325" y="136" width="135" height="28" fill="#f59e0b" fill-opacity="0.85"/>
+<text x="472" y="155" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8"><tspan font-weight="700" fill="#f59e0b">50%</tspan> from knowing</text>
+<path d="M190 184 L490 184" stroke="#2a3f5f" stroke-width="1.2"/>
+<g stroke="#2a3f5f" stroke-width="1.2"><path d="M190 184 L190 190"/><path d="M340 184 L340 190"/><path d="M490 184 L490 190"/></g>
+<g font-family="Inter, sans-serif" font-size="11" fill="#8090a8" text-anchor="middle">
+<text x="190" y="203">0%</text><text x="340" y="203">50%</text><text x="490" y="203">100%</text>
+<text x="340" y="219">share of attempts that come out right</text>
+</g>
+<rect x="190" y="235" width="14" height="12" fill="#60a5fa" fill-opacity="0.85"/>
+<text x="210" y="245" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">knows the concept</text>
+<rect x="350" y="235" width="14" height="12" fill="#f59e0b" fill-opacity="0.85"/>
+<text x="370" y="245" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">lucky guess</text>
+</svg>
+</div>
+<figcaption><b>Figure 1.</b> An assistant adds right answers without adding knowledge, so a right answer stops identifying who knows. Illustrative numbers: half the team knows the concept and careless errors run at 10%. Model in <a href="#ref-1">[1]</a>.</figcaption></figure>
+<p>Experiments show the effect on exactly this kind of work. Researchers at Anthropic randomly assigned developers to learn a new asynchronous programming library with or without AI assistance.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> The 52 mostly junior engineers were all unfamiliar with Trio, the library in question.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> The AI group finished about two minutes faster, a difference that was not statistically significant, and then averaged 50% on a quiz about the library, against 67% for those who had coded by hand.<sup class="cite"><a href="#ref-4" id="cite-4b">4</a></sup> Same task, a different state at the end.</p>
+<p>School mathematics shows the same split. In a trial with nearly 1,000 students, unrestricted GPT-4 raised practice grades by 48%, then left those students 17% behind peers who never had it once access was removed.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> People rarely notice the gap from inside. Across nine experiments, searching the internet for explanations led people to mistake access to information for their own understanding.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> An assistant is that access, always on (Figure 2).</p>
+<figure class="fig" id="fig-2"><div class="fig-scroll">
+<svg viewBox="0 0 640 300" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig2-title">Two experiments comparing performance with an AI assistant and knowledge measured afterwards</title>
+<desc id="fig2-desc">Engineers learning the Trio library scored 67 percent on a later quiz when they coded by hand and 50 percent with AI help. High school students gained 48 percent in practice grades with GPT-4 and scored 17 percent lower on the exam once access was removed.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Output goes up, measured knowledge goes down</text>
+<g font-family="Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#94a3b8">
+<text x="40" y="62">LEARNING TRIO, 52 ENGINEERS</text>
+<text x="350" y="62">SCHOOL MATH, NEARLY 1,000 STUDENTS</text>
+</g>
+<path d="M330 50 L330 270" stroke="#2a3f5f" stroke-width="1"/>
+<path d="M50 240 L270 240" stroke="#2a3f5f" stroke-width="1.2"/>
+<rect x="75" y="133" width="70" height="107" fill="#60a5fa" fill-opacity="0.85"/>
+<rect x="175" y="160" width="70" height="80" fill="#f59e0b" fill-opacity="0.85"/>
+<g font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<text x="110" y="125" fill="#60a5fa">67%</text>
+<text x="210" y="152" fill="#f59e0b">50%</text>
+</g>
+<g font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">
+<text x="110" y="258">by hand</text>
+<text x="210" y="258">with AI</text>
+</g>
+<text x="160" y="282" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">quiz score after the task</text>
+<path d="M360 170 L600 170" stroke="#2a3f5f" stroke-width="1.2"/>
+<rect x="385" y="93" width="70" height="77" fill="#60a5fa" fill-opacity="0.85"/>
+<rect x="505" y="170" width="70" height="27" fill="#f59e0b" fill-opacity="0.85"/>
+<g font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<text x="420" y="85" fill="#60a5fa">+48%</text>
+<text x="540" y="215" fill="#f59e0b">17% lower</text>
+</g>
+<g font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9" text-anchor="middle">
+<text x="420" y="258">practice, with AI</text>
+<text x="540" y="258">exam, AI removed</text>
+</g>
+<text x="480" y="282" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">change in grades against students without access</text>
+</svg>
+</div>
+<figcaption><b>Figure 2.</b> With an assistant, output rises while the knowledge measured afterwards falls. Left: quiz scores in percent; right: change in grades against students who never had access. Sources: <a href="#ref-4">[4]</a>, <a href="#ref-5">[5]</a>.</figcaption></figure>
+
+<h2 id="turn-the-assistant-into-the-assessor">Turn the assistant into the assessor</h2>
+<p>The tool that masks the state can also measure it. After a change merges, an assistant can read the diff, list the concepts the code depends on, and write three to five short probes on them: predict what this coroutine does when its parent is cancelled, explain why this lock exists, find the bug in a ten-line variant. The engineer answers without help.</p>
+<p>The probes adapt as an ALEKS assessment does, and the result is a state with an outer fringe rather than a score: the concepts this engineer is ready to learn next. <a href="the-missing-edge.html">The Missing Edge</a> describes how a few such questions find the prerequisite a person lacks.</p>
+<p>For the async migration, the probes would have asked what happens to a child task when its parent's scope is cancelled, and where a timeout belongs. The engineers who wrote that code would have learned they could not answer while the code was still fresh, months before a hung request taught them in production.</p>
+<p>How the assistant is used matters as much as the probes. In the Trio study, the participants who showed stronger mastery used the assistant to build comprehension, asking follow-up questions, requesting explanations or posing conceptual questions while they coded.<sup class="cite"><a href="#ref-4" id="cite-4c">4</a></sup> Vendors now ship modes that push in the same direction. Anthropic's learning mode guides a student's reasoning instead of providing answers,<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> and OpenAI introduced a study mode for ChatGPT in July 2025.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> The probes are drafts too: a reviewer should drop any that test trivia instead of an edge the code depends on.</p>
+<p>Keep the result with the engineer. The point is to show people their own missing edges before an incident does. Ranking them defeats the purpose. A team-level view, aggregated and anonymous, is enough to show leaders where the shared gaps sit, which is the map <a href="the-map-nobody-drew.html">The Map Nobody Drew</a> asks teams to build.</p>
+
+<h2 id="some-prerequisites-deserve-to-go">Some prerequisites deserve to go</h2>
+<p>The strongest objection is the calculator argument. Few engineers are tested on memory layout or assembly anymore, because abstraction retired those prerequisites, and AI may retire many more. Probing for knowledge the job no longer needs is nostalgia, and probing people at all can feel like surveillance.</p>
+<p>Both points are fair, and both sharpen the practice instead of ending it. Some edges can be delegated for good, the way most engineers delegate memory management to a runtime. The ones that cannot are the edges oversight runs on: reading a diff critically, debugging a failure, deciding during an incident. In the Trio study, the largest gap between the two groups was on debugging questions.<sup class="cite"><a href="#ref-4" id="cite-4d">4</a></sup></p>
+<p>Decide edge by edge which knowledge must stay in people's heads, probe only that set, and let the rest go. Reviewing AI work at a higher level, as <a href="abstraction-review-layer.html">Abstraction Is the Review Layer</a> argues, still needs someone who knows what the level hides.</p>
+<aside class="pull-quote" aria-hidden="true"><p>Every review, skill matrix and promotion packet had treated the merged code as evidence that the team understood it. It was evidence that the code worked.</p></aside>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>List the concepts each critical service's on-call rotation depends on, and mark the oversight edges that must stay in engineers' own knowledge states.</li>
+<li>Add three to five unaided probes, generated by the assistant from the diff, to merges that touch an oversight edge, with results visible only to the author.</li>
+<li>Stop citing merged pull requests alone as evidence of mastery in promotion packets; pair them with a debugging session or design review the candidate leads without assistance.</li>
+<li>Track the share of incidents whose responders could explain the failing mechanism without an assistant, and treat a falling share as a training signal.</li>
+</ol>
+
+        </div>
+
+        <!-- AUTHOR CARD. Fixed text: never edit per article. -->
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- REFERENCES. One entry per source, in first-citation order; every entry cited at least once.
+             Markup: <li id="ref-1">Author, A. A., &amp; Author, B. B. (Year). "Article title." <em>Journal</em>, 7(7), e1. <a href="https://doi.org/..." target="_blank" rel="noopener">https://doi.org/...</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+             Books and reports: title in <em>. Link text is the full URL. -->
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Heller, J., Stefanutti, L., Anselmi, P., et al. (2015). "On the link between cognitive diagnostic models and knowledge space theory." <em>Psychometrika</em>, 80(4), 995 to 1019. <a href="https://doi.org/10.1007/s11336-015-9457-x" target="_blank" rel="noopener">https://doi.org/10.1007/s11336-015-9457-x</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Falmagne, J.-C., Cosyn, E., Doignon, J.-P., et al. (n.d.). <em>The assessment of knowledge, in theory and in practice</em> [White paper]. ALEKS Corporation. Retrieved November 9, 2026, from <a href="https://www.aleks.com/about_aleks/Science_Behind_ALEKS.pdf" target="_blank" rel="noopener">https://www.aleks.com/about_aleks/Science_Behind_ALEKS.pdf</a> (revised version in LNCS 3874, 2006) <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Shen, J. H., &amp; Tamkin, A. (2026). "How AI impacts skill formation." arXiv:2601.20245. <a href="https://doi.org/10.48550/arXiv.2601.20245" target="_blank" rel="noopener">https://doi.org/10.48550/arXiv.2601.20245</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Anthropic. (2026, January 29). "How AI assistance impacts the formation of coding skills." <a href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank" rel="noopener">https://www.anthropic.com/research/AI-assistance-coding-skills</a> <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Bastani, H., Bastani, O., Sungu, A., et al. (2025). "Generative AI without guardrails can harm learning: Evidence from high school mathematics." <em>Proceedings of the National Academy of Sciences</em>, 122(26), e2422633122. <a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">https://doi.org/10.1073/pnas.2422633122</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Fisher, M., Goddu, M. K., &amp; Keil, F. C. (2015). "Searching for explanations: How the Internet inflates estimates of internal knowledge." <em>Journal of Experimental Psychology: General</em>, 144(3), 674 to 687. <a href="https://doi.org/10.1037/xge0000070" target="_blank" rel="noopener">https://doi.org/10.1037/xge0000070</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Anthropic. (2025, April 2). "Introducing Claude for Education." <a href="https://www.anthropic.com/news/introducing-claude-for-education" target="_blank" rel="noopener">https://www.anthropic.com/news/introducing-claude-for-education</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">OpenAI. (2025, July 29). "Introducing study mode in ChatGPT." <a href="https://openai.com/index/chatgpt-study-mode" target="_blank" rel="noopener">https://openai.com/index/chatgpt-study-mode</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- RELATED. Exactly three cards. Dek is the target article's own dek, verbatim. Markup:
+         <li class="rcard"><img src="../Post_Images/Image_NN.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+           <p class="rcard-kicker">Leadership</p><h3><a href="slug.html">Title</a></h3><p class="rcard-dek">Target dek.</p></li>
+         (Image_32 is .jpg.) -->
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard"><img src="../Post_Images/Image_74.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Learning &amp; Cognition</p><h3><a href="the-missing-edge.html">The Missing Edge</a></h3><p class="rcard-dek">Engineers rarely stall because a concept is hard. They stall because it sits one missing prerequisite away, and AI can find that edge by asking before it explains.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_75.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Leadership</p><h3><a href="the-map-nobody-drew.html">The Map Nobody Drew</a></h3><p class="rcard-dek">Every team runs on a prerequisite map its experts can no longer see. AI can now draft it, and newcomers' answers show which edges are real.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_73.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Workflow</p><h3><a href="abstraction-review-layer.html">Abstraction Is the Review Layer</a></h3><p class="rcard-dek">AI now produces more than anyone can read, so people auto-accept it. The fix is to review one level up, where experience works: the visual, the method and the reasons.</p></li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
+</body>
+</html>

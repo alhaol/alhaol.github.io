@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme bootstrap. Runs before any stylesheet so the first paint is already the right theme. */
+    (function () {
+        var t = 'dark';
+        try { var s = localStorage.getItem('article-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
+    <title>The Missing Edge | alhaol.github.io</title>
+    <meta name="description" content="Engineers rarely stall because a concept is hard; they stall one missing prerequisite away, and AI can find that edge by asking first.">
+    <meta name="author" content="Ibrahim AbuAlhaol">
+    <link rel="canonical" href="https://alhaol.github.io/articles/Articles/the-missing-edge.html">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0a1628">
+    <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Open Graph (LinkedIn, Slack, iMessage; X falls back to these) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="alhaol.github.io">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="The Missing Edge">
+    <meta property="og:description" content="Engineers rarely stall because a concept is hard; they stall one missing prerequisite away, and AI can find that edge by asking first.">
+    <meta property="og:url" content="https://alhaol.github.io/articles/Articles/the-missing-edge.html">
+    <meta property="og:image" content="https://alhaol.github.io/articles/Post_Images/Image_74.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A cluster labelled what you know, an amber node on its fringe labelled missing edge, and a distant ring labelled target that is reachable only through that node.">
+    <meta property="article:published_time" content="2026-11-09">
+    <meta property="article:author" content="https://alhaol.github.io/">
+
+    <!-- X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ialhaol">
+    <meta name="twitter:creator" content="@ialhaol">
+    <meta name="twitter:title" content="The Missing Edge">
+    <meta name="twitter:description" content="Engineers rarely stall because a concept is hard; they stall one missing prerequisite away, and AI can find that edge by asking first.">
+    <meta name="twitter:image" content="https://alhaol.github.io/articles/Post_Images/Image_74.png">
+    <meta name="twitter:image:alt" content="A cluster labelled what you know, an amber node on its fringe labelled missing edge, and a distant ring labelled target that is reachable only through that node.">
+
+    <!-- JSON-LD. Values are JSON strings: escape any backslash or double quote; never write "</". -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "mainEntityOfPage": "https://alhaol.github.io/articles/Articles/the-missing-edge.html",
+      "headline": "The Missing Edge",
+      "alternativeHeadline": "Engineers rarely stall because a concept is hard. They stall because it sits one missing prerequisite away, and AI can find that edge by asking before it explains.",
+      "description": "Engineers rarely stall because a concept is hard; they stall one missing prerequisite away, and AI can find that edge by asking first.",
+      "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_74.png", "width": 1200, "height": 630 },
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-09",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://alhaol.github.io/#person",
+        "name": "Ibrahim AbuAlhaol",
+        "honorificSuffix": "PhD, P.Eng., SMIEEE",
+        "jobTitle": "AI Technical Lead",
+        "url": "https://alhaol.github.io/",
+        "image": "https://alhaol.github.io/assets/ibrahim-author-128.webp",
+        "sameAs": ["https://www.linkedin.com/in/abualhaol/", "https://x.com/ialhaol"]
+      },
+      "publisher": { "@id": "https://alhaol.github.io/#person" }
+    }
+    </script>
+
+    <style>
+    /* ---------- tokens ---------- */
+    :root, [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:#0a1628; --surface:#0d1c33; --surface-2:#1a2942; --border:#2a3f5f;
+        --text-strong:#f1f5f9; --text:#cbd5e1; --text-muted:#94a3b8;
+        --accent:#60a5fa; --link:#93c5fd; --amber:#f59e0b;
+        --code-bg:#0d1c33; --code-text:#cbd5e1; --control-border:#94a3b8;
+        --font-display:"Source Serif 4","Iowan Old Style",Georgia,serif;
+        --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+        --measure:65ch;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+        --bg:#f7f9fc; --surface:#ffffff; --surface-2:#eaf0f7; --border:#c9d4e3;
+        --text-strong:#0a1628; --text:#1e293b; --text-muted:#475569;
+        --accent:#1d4ed8; --link:#1d4ed8; --amber:#b45309;
+        --code-bg:#eef2f8; --code-text:#1e293b; --control-border:#64748b;
+    }
+
+    /* ---------- reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.125rem/1.75 var(--font-body); -webkit-font-smoothing: antialiased; transition: background-color .2s, color .2s; }
+    h1, h2, h3, p, ol, ul, figure, blockquote { margin: 0; }
+    img, svg { max-width: 100%; }
+    img { height: auto; }
+    a { color: var(--link); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; padding: .5rem 1rem; background: var(--surface-2); color: var(--text-strong); border-radius: 6px; }
+    .skip-link:focus { top: .75rem; }
+    @media (max-width: 767px) { body { font-size: 1.0625rem; line-height: 1.7; } }
+
+    /* ---------- progress + site bar ---------- */
+    .read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 60; pointer-events: none; }
+    .sitebar { position: sticky; top: 0; z-index: 50; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 max(16px, calc((100% - 70rem) / 2)); border-bottom: 1px solid transparent; transition: background-color .2s, border-color .2s; }
+    .sitebar.is-scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom-color: var(--border); }
+    .sitebar-brand { display: inline-flex; align-items: center; gap: .55rem; font: 600 .9375rem/1 var(--font-body); color: var(--text-strong); text-decoration: none; white-space: nowrap; }
+    .sitebar-brand img { border-radius: 50%; display: block; }
+    .sitebar-nav { display: flex; align-items: center; gap: 1rem; }
+    .sitebar-nav a { display: inline-flex; align-items: center; gap: .35rem; font: 500 .875rem/1 var(--font-body); color: var(--text-muted); text-decoration: none; white-space: nowrap; }
+    .sitebar-nav a:hover { color: var(--text-strong); }
+    .theme-toggle { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; padding: 0; }
+    .theme-toggle:hover { background: var(--surface-2); color: var(--text-strong); border-color: var(--control-border); }
+    .theme-toggle[hidden] { display: none; }
+    [data-theme="dark"] .i-moon, [data-theme="light"] .i-sun { display: none; }
+    /* UI icons are CSS masks, not inline svg: validate_svg.py lints every inline svg on the page as a
+       figure, so the page chrome must carry none (nor may a comment contain an opening svg tag). */
+    .icon { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+    .icon-back { width: 14px; height: 14px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10 3 5 8l5 5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .icon-sun { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+    .icon-moon { width: 18px; height: 18px; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z'/%3E%3C/svg%3E"); }
+
+    /* ---------- column helpers ---------- */
+    .col { width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .wide { width: min(70rem, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- header ---------- */
+    .article-head { padding: clamp(2.25rem, 6vw, 4.5rem) 0 2rem; }
+    .kicker { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .kicker-sep { margin: 0 .5em; color: var(--text-muted); }
+    .kicker-2 { color: var(--text-muted); }
+    .article-head h1 { font: 700 clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem)/1.08 var(--font-display); letter-spacing: -.015em; color: var(--text-strong); max-width: 22ch; text-wrap: balance; margin: 0 0 1rem; font-optical-sizing: auto; }
+    .dek { font-size: 1.3125rem; line-height: 1.5; color: var(--text-muted); text-wrap: balance; margin: 0 0 1.75rem; }
+    .byline { display: flex; align-items: center; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .byline img { border-radius: 50%; flex: none; display: block; }
+    .byline p { margin: 0; }
+    .byline-name { font-weight: 600; color: var(--text-strong); font-size: .9375rem; line-height: 1.3; }
+    .byline-meta { font: 500 .875rem/1.4 var(--font-body); color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 767px) { .dek { font-size: 1.125rem; } }
+
+    /* ---------- hero: uncropped 1200x630 plate ---------- */
+    .hero { margin-bottom: 2.5rem; }
+    .hero-image { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--border); background: #0d1c33; }
+    @media (max-width: 767px) { .hero.wide { width: 100%; } .hero-image { border-radius: 0; border-left: 0; border-right: 0; } }
+
+    /* ---------- article grid: TOC rail | 65ch body | spacer ---------- */
+    .article-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: min(var(--measure), 100% - 32px); margin-inline: auto; }
+    .article-grid > * { min-width: 0; }
+    @media (min-width: 1200px) {
+        .article-grid { width: min(78rem, 100% - 32px); grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: 2.5rem; }
+        .article-grid > * { grid-column: 2; }
+        .article-grid > .toc { grid-column: 1; grid-row: 1 / span 6; align-self: start; justify-self: end; width: 100%; max-width: 14rem; position: sticky; top: 5rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    }
+
+    /* ---------- key takeaways ---------- */
+    .takeaways { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 0 0 2.5rem; }
+    .takeaways-label { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
+    .takeaways-label::before { content: ""; width: 1.25rem; height: 2px; background: var(--amber); }
+    .takeaways ol { list-style: none; counter-reset: k; margin: 0; padding: 0; }
+    .takeaways li { counter-increment: k; position: relative; padding-left: 2rem; color: var(--text); font-size: 1.0625rem; line-height: 1.6; }
+    .takeaways li + li { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+    /* hanging numeral is absolutely positioned (not a grid column) so inline children like <strong> stay in the text flow */
+    .takeaways li::before { content: counter(k); position: absolute; left: 0; font: 600 1.25rem/1.3 var(--font-display); color: var(--accent); }
+    @media (max-width: 767px) { .takeaways { padding: 1.25rem; border-radius: 10px; } }
+
+    /* ---------- TOC: one element, rail >= 1200px, disclosure below ---------- */
+    .toc summary { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: ""; width: .5rem; height: .5rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); margin: 0 .25rem .2rem 0; transition: transform .2s; }
+    .toc details[open] summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+    .toc ol { list-style: none; margin: 1rem 0 0; padding: 0; border-left: 1px solid var(--border); }
+    .toc a { display: block; padding: .35rem 0 .35rem 1rem; margin-left: -1px; border-left: 2px solid transparent; font-size: .875rem; line-height: 1.4; color: var(--text-muted); text-decoration: none; }
+    .toc a:hover { color: var(--text-strong); }
+    .toc a[aria-current] { color: var(--text-strong); border-left-color: var(--accent); font-weight: 600; }
+    @media (max-width: 1199px) { .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0 0 2.5rem; } }
+    @media (min-width: 1200px) { .toc summary { pointer-events: none; } .toc summary::after { display: none; } }
+
+    /* ---------- prose ---------- */
+    .prose { color: var(--text); }
+    .prose p { margin: 0 0 1.4em; text-wrap: pretty; }
+    .prose > p:first-of-type { font-size: 1.25rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin: 0 0 1.4em; padding-left: 1.25em; }
+    .prose li + li { margin-top: .5em; }
+    .prose li::marker { color: var(--text-muted); }
+    .prose strong { color: var(--text-strong); font-weight: 600; }
+    .prose a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+    .prose a:hover { text-decoration-color: currentColor; }
+    .prose hr { border: 0; height: 1px; background: var(--border); margin: 3rem auto; width: 6rem; }
+    .prose h2 { position: relative; font: 600 2rem/1.2 var(--font-display); letter-spacing: -.01em; color: var(--text-strong); margin: 3.5rem 0 1rem; text-wrap: balance; scroll-margin-top: 5rem; }
+    .prose h3 { position: relative; font: 600 1.25rem/1.35 var(--font-body); color: var(--text-strong); margin: 2.25rem 0 .75rem; scroll-margin-top: 5rem; }
+    .h-anchor { position: absolute; left: -1.1em; top: 0; width: 1em; color: var(--accent); text-decoration: none !important; opacity: 0; font: 500 .8em/1.5 var(--font-body); transition: opacity .15s; }
+    .prose h2:hover .h-anchor, .prose h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+    @media (hover: none), (max-width: 767px) { .h-anchor { position: static; opacity: .45; margin-left: .35em; } .prose h2 { font-size: 1.625rem; } .prose > p:first-of-type { font-size: 1.125rem; } }
+    #references { scroll-margin-top: 5rem; }
+
+    /* Inline citation: <sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>, after the punctuation. */
+    .cite { font-size: .7em; line-height: 0; vertical-align: super; }
+    .cite a, .prose .cite a { color: var(--accent); text-decoration: none; padding: 0 .1em; font-weight: 600; }
+    .cite a:hover { text-decoration: underline; }
+
+    /* Blockquote = someone else's words, attributed. Pull quote = the article's own line, verbatim. */
+    .quote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+    .quote blockquote { margin: 0; color: var(--text); }
+    .quote blockquote p { margin: 0; }
+    .quote figcaption { margin-top: .6rem; font-size: .875rem; color: var(--text-muted); }
+    .quote figcaption::before { content: ""; display: inline-block; width: 1rem; height: 1px; background: currentColor; vertical-align: middle; margin-right: .5rem; }
+    .pull-quote { margin: 3rem 0; padding-top: 1.25rem; border-top: 2px solid var(--amber); max-width: 32ch; }
+    .pull-quote p { font: italic 400 1.625rem/1.35 var(--font-display); color: var(--text-strong); margin: 0 !important; text-wrap: balance; }
+    @media (max-width: 767px) { .pull-quote p { font-size: 1.375rem; } }
+
+    /* ---------- figures (plate is dark navy in BOTH themes; literal hex on purpose) ---------- */
+    /* The scroll wrapper is load-bearing: SVGs are authored on a 640-unit viewBox with a 580px floor,
+       wider than a phone, so each figure scrolls inside its own box and the page never scrolls sideways. */
+    .fig { margin: 2.75rem 0; }
+    .fig-scroll { overflow-x: auto; border-radius: 12px; background: #0d1c33; border: 1px solid #2a3f5f; }
+    .fig-scroll svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .fig-scroll img { display: block; width: 100%; height: auto; }
+    .fig-scroll.fig-plate--paper { background: #fff; }
+    .fig figcaption { font-size: .875rem; line-height: 1.6; color: var(--text-muted); margin-top: .85rem; }
+    .fig figcaption b { color: var(--text-strong); font-weight: 600; }
+    .fig figcaption a { color: var(--link); }
+    [data-theme="light"] .fig-scroll { border-color: transparent; box-shadow: 0 1px 2px rgb(10 22 40 / .08), 0 8px 24px rgb(10 22 40 / .10); }
+    @media (max-width: 767px) { .fig-scroll { border-radius: 8px; } }
+
+    /* ---------- code ---------- */
+    :not(pre) > code { font: .875em/1 var(--font-mono); background: var(--surface-2); color: var(--text-strong); padding: .15em .4em; border-radius: 4px; border: 1px solid var(--border); }
+    pre { font: .875rem/1.65 var(--font-mono); background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 2rem 0; tab-size: 2; }
+    pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    pre[data-lang]::before { content: attr(data-lang); display: block; font: 500 .6875rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .75rem; }
+
+    /* ---------- author card ---------- */
+    .author-card { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: start; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin: 4rem 0 3rem; }
+    .author-card img { display: block; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface-2), 0 0 0 4px var(--accent); }
+    .author-card p { margin: 0; }
+    .author-eyebrow { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem !important; }
+    .author-name { font: 600 1.375rem/1.25 var(--font-display); color: var(--text-strong); }
+    .author-cred { font: 400 1rem/1.25 var(--font-body); color: var(--text-muted); }
+    .author-bio { font-size: 1rem; line-height: 1.6; color: var(--text); margin: .6rem 0 .9rem !important; }
+    .author-links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: .875rem; font-weight: 500; }
+    .author-links a { color: var(--link); text-decoration: none; }
+    .author-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 767px) { .author-card { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; } .author-card img { width: 64px; height: 64px; } }
+
+    /* ---------- references ---------- */
+    .refs { border-top: 1px solid var(--border); padding-top: 2rem; }
+    .refs h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.25rem; }
+    .refs ol { list-style: none; counter-reset: r; padding: 0; margin: 0; }
+    .refs li { counter-increment: r; position: relative; padding: .15rem .25rem .15rem 2.75rem; margin-left: -.25rem; font-size: .9375rem; line-height: 1.6; color: var(--text-muted); overflow-wrap: anywhere; }
+    .refs li + li { margin-top: .6rem; }
+    .refs li::before { content: "[" counter(r) "]"; position: absolute; left: .25rem; top: .15rem; font: 400 .8125rem/1.85 var(--font-mono); }
+    .refs li:target { background: var(--surface-2); border-radius: 6px; }
+    .refs cite, .refs em { color: var(--text); font-style: italic; }
+    .refs a { color: var(--link); }
+    .refs .backref { margin-left: .4em; text-decoration: none; color: var(--accent); }
+
+    /* ---------- related ("Keep reading") ---------- */
+    .related { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .related > h2 { font: 600 .8125rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 1.5rem; }
+    .related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.75rem; }
+    .rcard { position: relative; }
+    .rcard p { margin: 0; }
+    .rcard img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); margin-bottom: .9rem; transition: transform .25s ease, border-color .25s; background: #0d1c33; }
+    .rcard-kicker { font: 600 .75rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem !important; }
+    .rcard h3 { font: 600 1.1875rem/1.3 var(--font-display); margin: 0 0 .4rem; }
+    .rcard h3 a { color: var(--text-strong); text-decoration: none; }
+    .rcard h3 a::after { content: ""; position: absolute; inset: 0; }
+    .rcard-dek { font-size: .9375rem; line-height: 1.5; color: var(--text-muted); }
+    .rcard:hover img { border-color: var(--accent); transform: translateY(-2px); }
+    .rcard:hover h3 a, .rcard h3 a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- footer ---------- */
+    .site-footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; margin-top: 4rem; font-size: .8125rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .site-footer p { margin: 0; }
+    .site-footer a { color: var(--text-muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--text-strong); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        .read-progress { display: none; }
+    }
+
+    @media print {
+        @page { margin: 18mm 16mm; }
+        :root, [data-theme] { --bg:#fff; --surface:#fff; --surface-2:#fff; --text-strong:#000; --text:#111; --text-muted:#333; --accent:#000; --link:#000; --border:#999; }
+        body { font-size: 11pt; background: #fff; }
+        .skip-link, .read-progress, .sitebar, .toc, .theme-toggle, .h-anchor, .related, .site-footer, #a11y-status { display: none !important; }
+        .article-grid, .col, .wide { width: auto; display: block; }
+        .hero-image { max-height: 70mm; width: auto; margin: 0 auto; }
+        .refs a[href^="http"]::after { content: " <" attr(href) ">"; font-size: .85em; word-break: break-all; }
+        h2, h3 { break-after: avoid; }
+        figure, blockquote, pre, .takeaways, .author-card, .pull-quote { break-inside: avoid; }
+        .fig-scroll { overflow: visible; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .fig-scroll svg { min-width: 0; }
+        pre { white-space: pre-wrap; }
+    }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to article</a>
+<div id="read-progress" class="read-progress" aria-hidden="true"></div>
+
+<header class="sitebar">
+    <a class="sitebar-brand" href="../../"><img src="../../assets/ibrahim-author-128.webp" alt="" width="26" height="26">Ibrahim AbuAlhaol</a>
+    <nav class="sitebar-nav" aria-label="Site">
+        <a href="../"><span class="icon icon-back" aria-hidden="true"></span>All articles</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Dark theme" aria-pressed="true" title="Toggle light and dark theme" hidden>
+            <span class="icon icon-sun i-sun" aria-hidden="true"></span>
+            <span class="icon icon-moon i-moon" aria-hidden="true"></span>
+        </button>
+    </nav>
+</header>
+
+<main id="content" tabindex="-1">
+<article aria-labelledby="article-title">
+
+    <!-- HEADER. KICKER markup: primary label in blue, optional secondary muted, e.g.
+         <span>Leadership</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">Learning &amp; Cognition</span>
+         Labels come only from the controlled vocabulary listed at the top of this file. -->
+    <header class="article-head col">
+        <p class="kicker"><span>Learning &amp; Cognition</span><span class="kicker-sep" aria-hidden="true">&middot;</span><span class="kicker-2">AI Systems</span></p>
+        <h1 id="article-title">The Missing Edge</h1>
+        <p class="dek subtitle">Engineers rarely stall because a concept is hard. They stall because it sits one missing prerequisite away, and AI can find that edge by asking before it explains.</p>
+        <div class="byline">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="40" height="40">
+            <div>
+                <p class="byline-name">Ibrahim AbuAlhaol</p>
+                <p class="byline-meta"><time datetime="2026-11-09">November 9, 2026</time><span aria-hidden="true"> &middot; </span>7 min read</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO. Never cropped, never lazy (it is the LCP image). -->
+    <figure class="hero wide">
+        <img class="hero-image" src="../Post_Images/Image_74.png" alt="A cluster labelled what you know, an amber node on its fringe labelled missing edge, and a distant ring labelled target that is reachable only through that node." width="1200" height="630" fetchpriority="high" decoding="async">
+    </figure>
+
+    <div class="article-grid">
+
+        <!-- KEY TAKEAWAYS. Exactly three findings, 12 to 28 words each, declarative, in the body's order,
+             no citations, no imperatives. Markup: <li>One sentence finding.</li> x3 -->
+        <aside class="takeaways" aria-labelledby="takeaways-title">
+            <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
+            <ol>
+                <li>Topics offered from a learner's outer fringe were learned with a median success probability of .93 across nearly two million ALEKS learning occasions, by its developers' estimate.</li>
+<li>Stalls hide their own cause, because people overrate how well they understand a mechanism until asked to explain it, so rereading the target rarely helps.</li>
+<li>In one ALEKS assessment, 24 questions pinpointed a student's state among 57,147 possible ones, because prerequisites let each answer settle several concepts at once.</li>
+            </ol>
+        </aside>
+
+        <!-- TOC. Authored by the skill, never built by JS. One <li><a href="#slug">Exact h2 text</a></li> per
+             body h2 (same order), then <li><a href="#references">References</a></li>. Ids are deterministic
+             slugs of the h2 text. Sticky rail at >= 1200px, collapsed disclosure below that. -->
+        <nav class="toc" aria-labelledby="toc-title">
+            <details>
+                <summary id="toc-title">On this page</summary>
+                <ol>
+                    <li><a href="#knowledge-is-a-state-not-a-level">Knowledge is a state, not a level</a></li>
+<li><a href="#you-can-only-learn-from-the-fringe">You can only learn from the fringe</a></li>
+<li><a href="#stalls-hide-their-own-cause">Stalls hide their own cause</a></li>
+<li><a href="#ask-before-you-explain">Ask before you explain</a></li>
+<li><a href="#ai-can-also-delete-the-stall">AI can also delete the stall</a></li>
+<li><a href="#what-leaders-should-do">What leaders should do</a></li>
+<li><a href="#references">References</a></li>
+                </ol>
+            </details>
+        </nav>
+        <script>try { if (matchMedia('(min-width: 1200px)').matches) document.querySelector('.toc details').open = true; } catch (e) {}</script>
+
+        <!-- BODY. Expected markup:
+             Section heading:  <h2 id="decline-is-the-default">Decline is the default</h2>   (no h3 in the body)
+             Inline citation:  ...a 50% higher likelihood of survival.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup>
+                               (numbered in order of first use; later uses of the same source get id cite-3b, ...)
+             Pull quote:       <aside class="pull-quote" aria-hidden="true"><p>Verbatim line from the body.</p></aside>
+                               (1 or 2; not in the lede or the leaders section; not next to a figure)
+             Source quote:     <figure class="quote"><blockquote><p>Words.</p></blockquote><figcaption>Name, role</figcaption></figure>
+             SVG figure:       <figure class="fig" id="fig-2"><div class="fig-scroll">[the inline svg element: viewBox "0 0 640 H", role="img",
+                                 aria-labelledby="fig2-title fig2-desc" ...><title id="fig2-title">..</title><desc id="fig2-desc">..</desc>
+                                 title and desc first]</div><figcaption><b>Figure 2.</b> Claim sentence. Caveat. Sources: <a href="#ref-1">[1]</a>.</figcaption></figure>
+             Raster figure:    same, with <div class="fig-scroll fig-plate--paper"><img src="../Post_Images/Fig_NN_x.png" alt=".."
+                                 width=".." height=".." loading="lazy" decoding="async"></div> (paper plate for scans/photos)
+             Code:             <pre data-lang="python"><code>...</code></pre>
+             Leaders list:     last element of the body:
+                               <h2 id="what-leaders-should-do">What leaders should do</h2>
+                               <p>Optional lead-in, max 25 words.</p>
+                               <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
+        <div id="article-body" class="prose">
+            
+<p>A senior Java engineer opens the Rust Book's chapter on lifetimes for the third time. The prose is clear and the examples are short, yet the chapter still does not land. Its opening says every reference in Rust has a lifetime, "the scope for which that reference is valid."<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> That sentence only makes sense to a reader who already expects a value to be destroyed the moment its owner goes out of scope. Years of garbage collection taught this engineer to expect the opposite, and nothing on the page says so.</p>
+<p>Each of us holds a different knowledge state, and every new concept assumes part of one. We stall when we cannot see the gap between where we are and what the concept assumes. Knowledge Space Theory, the mathematics behind the ALEKS tutoring system, has described that gap precisely since 1985.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> What changed is that an AI assistant can now find it for each engineer in minutes, provided it asks questions before it answers them.</p>
+
+<h2 id="knowledge-is-a-state-not-a-level">Knowledge is a state, not a level</h2>
+<p>Jean-Paul Doignon and Jean-Claude Falmagne proposed describing what a person knows as the exact set of problems they can solve in a domain, rather than as a score.<sup class="cite"><a href="#ref-2" id="cite-2b">2</a></sup> A <strong>knowledge state</strong> is that set. Two engineers with the same title and the same years of experience can hold very different ones.</p>
+<p>Not every set is possible, because some concepts depend on others. The theory records each dependency as a prerequisite, formally a surmise relation: if someone has mastered B, we can surmise they have mastered A.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> Prerequisites rule out many combinations, yet the number that remain is still large. ALEKS's Beginning Algebra domain can hold as many as 650 items, and its learning space many millions of states.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup></p>
+<p>Our usual instruments flatten all of that. A skill matrix says "Rust: 2 of 5." A title says senior. Both are levels, and a level cannot say which concept is missing. The Java engineer's state is rich, with generics, traits and years of concurrent code, and it lacks one idea that the lifetimes chapter takes for granted.</p>
+
+<h2 id="you-can-only-learn-from-the-fringe">You can only learn from the fringe</h2>
+<p>The theory's most practical idea is the <strong>outer fringe</strong>: the concepts you are ready to learn now, because every prerequisite is already in your state.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> ALEKS builds its interface on it: after each assessment, a student picks the next topic from the outer fringe of their state.<sup class="cite"><a href="#ref-4" id="cite-4b">4</a></sup> A learning path, in the same vocabulary, is a route from knowing nothing in a domain to knowing all of it, one concept at a time. Even an 88-problem version of Beginning Algebra admits billions of feasible learning paths.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a></sup></p>
+<p>Figure 1 places the Java engineer on a small Rust map. Lifetimes is not on the outer fringe; it sits two steps beyond it. Rust's own rules explain the chain.</p>
+<p>Each value has a single owner, and "when the owner goes out of scope, the value will be dropped."<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> Borrowing exists to keep references from outliving their owners, and lifetimes are how the compiler checks it. Ownership sits on the fringe and on the way to the target. It is the missing edge.</p>
+<figure class="fig" id="fig-1"><div class="fig-scroll">
+<svg viewBox="0 0 640 330" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig1-title">A Rust prerequisite map with one engineer's knowledge state, outer fringe and target</title>
+<desc id="fig1-desc">Four concepts are known. Ownership and drop, and Result and errors, sit on the outer fringe and can be learned now. Lifetimes, the target, needs references and borrowing, which needs ownership, so ownership is the missing edge.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">One engineer's state on a Rust prerequisite map</text>
+<rect x="20" y="64" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="86" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Variables</text>
+<text x="86" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">and scope</text>
+<rect x="176" y="64" width="132" height="48" rx="6" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="242" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Ownership</text>
+<text x="242" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">and drop</text>
+<text x="242" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#f59e0b">the missing edge</text>
+<rect x="332" y="64" width="132" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="398" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">References</text>
+<text x="398" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">and borrowing</text>
+<rect x="488" y="64" width="132" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="554" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Lifetimes</text>
+<text x="554" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#f59e0b">your target</text>
+<rect x="20" y="140" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="86" y="161" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Generics</text>
+<text x="86" y="177" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">and traits</text>
+<rect x="20" y="216" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="86" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Structs</text>
+<text x="86" y="253" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">and enums</text>
+<rect x="176" y="216" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="242" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Pattern</text>
+<text x="242" y="253" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">matching</text>
+<rect x="332" y="216" width="132" height="48" rx="6" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="398" y="237" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Result</text>
+<text x="398" y="253" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">and errors</text>
+<g stroke-width="1.6" fill="none">
+<path d="M153 88 L169 88" stroke="#60a5fa"/>
+<path d="M309 88 L325 88" stroke="#f59e0b"/>
+<path d="M465 88 L481 88" stroke="#f59e0b"/>
+<path d="M153 164 L554 164 L554 120" stroke="#60a5fa" stroke-opacity="0.7"/>
+<path d="M153 240 L169 240" stroke="#60a5fa"/>
+<path d="M309 240 L325 240" stroke="#60a5fa"/>
+</g>
+<path d="M169 84 L175 88 L169 92 Z" fill="#60a5fa"/>
+<path d="M325 84 L331 88 L325 92 Z" fill="#f59e0b"/>
+<path d="M481 84 L487 88 L481 92 Z" fill="#f59e0b"/>
+<path d="M550 120 L554 113 L558 120 Z" fill="#60a5fa" fill-opacity="0.7"/>
+<path d="M169 236 L175 240 L169 244 Z" fill="#60a5fa"/>
+<path d="M325 236 L331 240 L325 244 Z" fill="#60a5fa"/>
+<rect x="20" y="299" width="18" height="12" rx="2" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.2"/>
+<text x="44" y="309" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">in your state</text>
+<rect x="160" y="299" width="18" height="12" rx="2" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="184" y="309" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">outer fringe</text>
+<rect x="290" y="299" width="18" height="12" rx="2" fill="#1a2942" stroke="#2a3f5f" stroke-width="1.2"/>
+<text x="314" y="309" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">not yet reachable</text>
+<path d="M450 305 L468 305" stroke="#f59e0b" stroke-width="2"/>
+<text x="474" y="309" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">path to the target</text>
+</svg>
+</div>
+<figcaption><b>Figure 1.</b> Lifetimes sits two steps outside this engineer's outer fringe, and ownership is the edge on the way. Illustrative map; the order of concepts follows the Rust Book. Sources: <a href="#ref-1">[1]</a>, <a href="#ref-6">[6]</a>.</figcaption></figure>
+<p>The fringe is also a compact description. For the well-behaved structures ALEKS uses, a state is fully specified by two short lists, what the student can do at the top of their state and what they are ready to learn, and in school mathematics the two lists together hold about 11 problems on average.<sup class="cite"><a href="#ref-5" id="cite-5c">5</a></sup></p>
+<p>The outer fringe predicts well, too. Across 1,940,473 learning occasions in elementary school mathematics, the system's developers estimated a median probability of .93 that a student succeeds in learning a topic picked from it.<sup class="cite"><a href="#ref-4" id="cite-4c">4</a></sup> A stall described as a fringe is a short list with a high hit rate. A stall described as a level is a shrug.</p>
+
+<h2 id="stalls-hide-their-own-cause">Stalls hide their own cause</h2>
+<p>From inside a knowledge state, the missing prerequisite does not look missing. The Java engineer reads "reference" and maps it onto a Java reference, a perfectly good concept that happens to be the wrong one here. Rozenblit and Keil called the general pattern the illusion of explanatory depth: people believe they understand how things work in far more detail than they do, until someone asks them to explain.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup></p>
+<p>So the stall gets the wrong diagnosis. "Lifetimes are hard" is the folk explanation, and it prescribes more explanation of lifetimes: another tutorial, another video, another rereading. Each one is written for a reader who already holds ownership.</p>
+<p>Explaining the target again cannot repair a gap that sits underneath it.</p>
+<p>The evidence fits that reading. In a study of a code-understanding tool built on a large language model, professionals completed more sub-tasks with it than with web search, while students saw no significant gain.<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> An explanation lands only on the prerequisites a reader already holds.</p>
+
+<h2 id="ask-before-you-explain">Ask before you explain</h2>
+<p>An assessment that knows the map can find the gap fast, because prerequisites make every answer count twice. Fail ownership and you will fail everything built on it, so nobody needs to ask about those. Pass borrowing and you hold everything beneath it. In one Arithmetic assessment its designers describe, ALEKS needed only 24 questions to pinpoint a student's state among 57,147 possible ones.<sup class="cite"><a href="#ref-5" id="cite-5d">5</a></sup></p>
+<p>An AI assistant can run the same procedure in a conversation. Ask it to hold the explanation and probe the prerequisites first: start in the middle of the chain, use short predict-the-output questions, and stop at the first concept you get wrong whose own prerequisites you get right.</p>
+<p>For the Java engineer, three questions settle it (Figure 2). The engineer misjudges a borrowing rule, expects a string to stay usable after it moves to a new variable, and correctly says a variable is gone once its block ends. The missing edge is ownership and drop. An afternoon on that, and lifetimes moves onto the fringe.</p>
+<figure class="fig" id="fig-2"><div class="fig-scroll">
+<svg viewBox="0 0 640 326" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="fig2-title">Three diagnostic questions walking down the prerequisite chain under Rust lifetimes</title>
+<desc id="fig2-desc">The first question probes borrowing and fails, which also rules out lifetimes. The second probes ownership and fails. The third probes scope and passes. Ownership and drop is the first concept that fails while its own prerequisite passes, so it is the missing edge.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Ask first: three questions find the missing edge</text>
+<rect x="287" y="50" width="108" height="214" rx="8" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="176" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="226" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Variables</text>
+<text x="226" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">and scope</text>
+<rect x="291" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="341" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Ownership</text>
+<text x="341" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">and drop</text>
+<rect x="406" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="456" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">References</text>
+<text x="456" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">and borrowing</text>
+<rect x="521" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="571" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#f1f5f9">Lifetimes</text>
+<text x="571" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">the target</text>
+<g fill="#8090a8">
+<path d="M277 76 L285 76 L285 73 L290 77 L285 81 L285 78 L277 78 Z"/>
+<path d="M392 76 L400 76 L400 73 L405 77 L400 81 L400 78 L392 78 Z"/>
+<path d="M507 76 L515 76 L515 73 L520 77 L515 81 L515 78 L507 78 Z"/>
+</g>
+<text x="20" y="130" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q1  Borrowing probe</text>
+<text x="20" y="148" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">&amp;mut while &amp; is live?</text>
+<text x="20" y="184" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q2  Ownership probe</text>
+<text x="20" y="202" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">use s1 after a move?</text>
+<text x="20" y="238" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q3  Scope probe</text>
+<text x="20" y="256" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">x visible after its block?</text>
+<g font-family="Inter, sans-serif" font-size="13" fill="#8090a8" text-anchor="middle">
+<text x="226" y="139">?</text>
+<text x="341" y="139">?</text>
+<text x="226" y="193">?</text>
+</g>
+<g fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round">
+<circle cx="456" cy="134" r="10"/><path d="M452 130 L460 138 M460 130 L452 138"/>
+<circle cx="341" cy="188" r="10"/><path d="M337 184 L345 192 M345 184 L337 192"/>
+</g>
+<g fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-opacity="0.4">
+<circle cx="571" cy="134" r="10"/><path d="M567 130 L575 138 M575 130 L567 138"/>
+<circle cx="456" cy="188" r="10"/><path d="M452 184 L460 192 M460 184 L452 192"/>
+<circle cx="571" cy="188" r="10"/><path d="M567 184 L575 192 M575 184 L567 192"/>
+<circle cx="341" cy="242" r="10"/><path d="M337 238 L345 246 M345 238 L337 246"/>
+<circle cx="456" cy="242" r="10"/><path d="M452 238 L460 246 M460 238 L452 246"/>
+<circle cx="571" cy="242" r="10"/><path d="M567 238 L575 246 M575 238 L567 246"/>
+</g>
+<g fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="226" cy="242" r="10"/><path d="M221 242 L225 246 L231 238"/>
+</g>
+<text x="341" y="288" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Missing edge: ownership and drop</text>
+<text x="320" y="314" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Solid marks are asked. Faded ones follow from earlier answers.</text>
+</svg>
+</div>
+<figcaption><b>Figure 2.</b> Three questions locate the missing edge, because each answer also settles the concepts above or below it. Illustrative; method in <a href="#ref-3">[3]</a>, <a href="#ref-5">[5]</a>.</figcaption></figure>
+<p>Machines have estimated knowledge states from answer histories since the 1990s: Corbett and Anderson's tutors kept a running probability that each student had learned each rule, a process they named knowledge tracing.<sup class="cite"><a href="#ref-9" id="cite-9a">9</a></sup> Language models add what those tutors lacked, a fresh diagnostic question for any concept on demand, and they diagnose far better when a map narrows the candidates. GPT-4 identified a student's misconception correctly 91.9% of the time when choosing among four candidates, and 39.8% of the time among 100.<sup class="cite"><a href="#ref-10" id="cite-10a">10</a></sup></p>
+<p>The map supplies the short list. The model proposes the edge; the engineer's answers confirm it.</p>
+<aside class="pull-quote" aria-hidden="true"><p>Explaining the target again cannot repair a gap that sits underneath it.</p></aside>
+
+<h2 id="ai-can-also-delete-the-stall">AI can also delete the stall</h2>
+<p>The strongest objection is that none of this happens by default. Ask an assistant about a borrow-checker error and it will usually fix the code. The code compiles, the engineer ships, and the stall disappears without the gap ever being filled. The fluency is real. It belongs to the code.</p>
+<p>The evidence is uncomfortable. In a randomized trial with nearly 1,000 high school students in Turkey, unrestricted GPT-4 access raised grades on practice problems by 48%, and once access was taken away those students scored 17% lower than peers who never had it.<sup class="cite"><a href="#ref-11" id="cite-11a">11</a></sup></p>
+<p>The same trial points to the design that works. A tutor version, prompted with hints and the correct solution, essentially eliminated the harm, though it did not raise exam scores either.<sup class="cite"><a href="#ref-11" id="cite-11b">11</a></sup> In a Harvard physics course, an AI tutor built on the same pedagogical practices as the in-class lessons produced median learning gains more than double those of active learning in class.<sup class="cite"><a href="#ref-12" id="cite-12a">12</a></sup></p>
+<p>The stall is information about where the edge is, and deleting it deletes the signal. What that does to a team's evidence of what it knows is the subject of <a href="the-lucky-guess-problem.html">The Lucky Guess Problem</a>; the individual feeling is covered in <a href="the-fluency-trap.html">The Fluency Trap</a>.</p>
+
+<h2 id="what-leaders-should-do">What leaders should do</h2>
+<ol>
+<li>Rewrite onboarding guides for new stacks so that "explain X" prompts become "diagnose my prerequisites for X" prompts, and ask engineers to note the missing edge each diagnosis finds.</li>
+<li>Treat "this is hard" in a one-on-one as a location question: ask which prerequisite failed, then fund an hour on that edge before another day on the target.</li>
+<li>Turn on the assistant's tutoring or learning mode for each engineer's first month on a new stack, so it asks and hints instead of writing the solution.</li>
+<li>Review the noted edges monthly; any edge three or more engineers missed is a gap in your team's docs and belongs on the map described in <a href="the-map-nobody-drew.html">The Map Nobody Drew</a>.</li>
+</ol>
+
+        </div>
+
+        <!-- AUTHOR CARD. Fixed text: never edit per article. -->
+        <section class="author-card" id="author" aria-labelledby="author-name">
+            <img src="../../assets/ibrahim-author-128.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
+            <div>
+                <p class="author-eyebrow">Written by</p>
+                <p class="author-name" id="author-name">Ibrahim AbuAlhaol, <span class="author-cred">PhD, P.Eng., SMIEEE</span></p>
+                <p class="author-bio">AI Technical Lead at Dell Technologies, working on agentic AI, intelligent edge systems and AI security.</p>
+                <p class="author-links">
+                    <a href="https://alhaol.github.io/" rel="author">alhaol.github.io</a>
+                    <a href="https://www.linkedin.com/in/abualhaol/" rel="me noopener" target="_blank">LinkedIn</a>
+                    <a href="https://x.com/ialhaol" rel="me noopener" target="_blank">X</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- REFERENCES. One entry per source, in first-citation order; every entry cited at least once.
+             Markup: <li id="ref-1">Author, A. A., &amp; Author, B. B. (Year). "Article title." <em>Journal</em>, 7(7), e1. <a href="https://doi.org/..." target="_blank" rel="noopener">https://doi.org/...</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+             Books and reports: title in <em>. Link text is the full URL. -->
+        <section class="refs" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol>
+                <li id="ref-1">Klabnik, S., Nichols, C., &amp; Krycho, C. (n.d.). "Validating references with lifetimes." In <em>The Rust Programming Language</em> (Rust 1.97, 2024 edition). Retrieved November 9, 2026, from <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html</a> <a class="backref" href="#cite-1a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-2">Doignon, J.-P., &amp; Falmagne, J.-C. (1985). "Spaces for the assessment of knowledge." <em>International Journal of Man-Machine Studies</em>, 23(2), 175 to 196. <a href="https://doi.org/10.1016/S0020-7373(85)80031-6" target="_blank" rel="noopener">https://doi.org/10.1016/S0020-7373(85)80031-6</a> <a class="backref" href="#cite-2a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-3">Falmagne, J.-C., Koppen, M., Villano, M., et al. (1990). "Introduction to knowledge spaces: How to build, test, and search them." <em>Psychological Review</em>, 97(2), 201 to 224. <a href="https://doi.org/10.1037/0033-295X.97.2.201" target="_blank" rel="noopener">https://doi.org/10.1037/0033-295X.97.2.201</a> <a class="backref" href="#cite-3a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-4">Doignon, J.-P., &amp; Falmagne, J.-C. (2015). "Knowledge spaces and learning spaces." arXiv:1511.06757. <a href="https://doi.org/10.48550/arXiv.1511.06757" target="_blank" rel="noopener">https://doi.org/10.48550/arXiv.1511.06757</a> (preprint of a chapter in the <em>New Handbook of Mathematical Psychology</em>, 2016) <a class="backref" href="#cite-4a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-5">Falmagne, J.-C., Cosyn, E., Doignon, J.-P., et al. (n.d.). <em>The assessment of knowledge, in theory and in practice</em> [White paper]. ALEKS Corporation. Retrieved November 9, 2026, from <a href="https://www.aleks.com/about_aleks/Science_Behind_ALEKS.pdf" target="_blank" rel="noopener">https://www.aleks.com/about_aleks/Science_Behind_ALEKS.pdf</a> (revised version in LNCS 3874, 2006) <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-6">Klabnik, S., Nichols, C., &amp; Krycho, C. (n.d.). "What is ownership?" In <em>The Rust Programming Language</em> (Rust 1.97, 2024 edition). Retrieved November 9, 2026, from <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html" target="_blank" rel="noopener">https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-7">Rozenblit, L., &amp; Keil, F. (2002). "The misunderstood limits of folk science: An illusion of explanatory depth." <em>Cognitive Science</em>, 26(5), 521 to 562. <a href="https://doi.org/10.1207/s15516709cog2605_1" target="_blank" rel="noopener">https://doi.org/10.1207/s15516709cog2605_1</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">Nam, D., Macvean, A., Hellendoorn, V., et al. (2024). "Using an LLM to help with code understanding." <em>Proceedings of the IEEE/ACM 46th International Conference on Software Engineering</em>, 1 to 13. <a href="https://doi.org/10.1145/3597503.3639187" target="_blank" rel="noopener">https://doi.org/10.1145/3597503.3639187</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-9">Corbett, A. T., &amp; Anderson, J. R. (1994). "Knowledge tracing: Modeling the acquisition of procedural knowledge." <em>User Modeling and User-Adapted Interaction</em>, 4(4), 253 to 278. <a href="https://doi.org/10.1007/BF01099821" target="_blank" rel="noopener">https://doi.org/10.1007/BF01099821</a> <a class="backref" href="#cite-9a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-10">Liu, N., Sonkar, S., Wang, Z., et al. (2023). "Novice learner and expert tutor: Evaluating math reasoning abilities of large language models with misconceptions." arXiv:2310.02439. <a href="https://doi.org/10.48550/arXiv.2310.02439" target="_blank" rel="noopener">https://doi.org/10.48550/arXiv.2310.02439</a> <a class="backref" href="#cite-10a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-11">Bastani, H., Bastani, O., Sungu, A., et al. (2025). "Generative AI without guardrails can harm learning: Evidence from high school mathematics." <em>Proceedings of the National Academy of Sciences</em>, 122(26), e2422633122. <a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">https://doi.org/10.1073/pnas.2422633122</a> <a class="backref" href="#cite-11a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-12">Kestin, G., Miller, K., Klales, A., et al. (2025). "AI tutoring outperforms in-class active learning: An RCT introducing a novel research-based design in an authentic educational setting." <em>Scientific Reports</em>, 15, 17458. <a href="https://doi.org/10.1038/s41598-025-97652-6" target="_blank" rel="noopener">https://doi.org/10.1038/s41598-025-97652-6</a> <a class="backref" href="#cite-12a" aria-label="Back to text">&#8617;</a></li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- RELATED. Exactly three cards. Dek is the target article's own dek, verbatim. Markup:
+         <li class="rcard"><img src="../Post_Images/Image_NN.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+           <p class="rcard-kicker">Leadership</p><h3><a href="slug.html">Title</a></h3><p class="rcard-dek">Target dek.</p></li>
+         (Image_32 is .jpg.) -->
+    <section class="related wide" aria-labelledby="related-title">
+        <h2 id="related-title">Keep reading</h2>
+        <ul class="related-grid">
+            <li class="rcard"><img src="../Post_Images/Image_75.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Leadership</p><h3><a href="the-map-nobody-drew.html">The Map Nobody Drew</a></h3><p class="rcard-dek">Every team runs on a prerequisite map its experts can no longer see. AI can now draft it, and newcomers' answers show which edges are real.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_76.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Leadership</p><h3><a href="the-lucky-guess-problem.html">The Lucky Guess Problem</a></h3><p class="rcard-dek">Assessment works only when right answers are rarely lucky. AI makes them lucky on demand, so shipped code no longer shows what a team knows.</p></li>
+<li class="rcard"><img src="../Post_Images/Image_36.png" alt="" width="1200" height="630" loading="lazy" decoding="async">
+<p class="rcard-kicker">Learning &amp; Cognition</p><h3><a href="the-fluency-trap.html">The Fluency Trap</a></h3><p class="rcard-dek">AI makes you feel like you're learning faster than ever. Mostly, it's the model doing the understanding.</p></li>
+        </ul>
+    </section>
+
+</article>
+</main>
+
+<footer class="site-footer wide">
+    <p>&copy; 2026 Ibrahim AbuAlhaol</p>
+    <p><a href="../">All articles</a><span aria-hidden="true"> &middot; </span><a href="../../">Portfolio</a></p>
+</footer>
+<div id="a11y-status" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+    'use strict';
+    var d = document.documentElement;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var status = document.getElementById('a11y-status');
+    function announce(msg) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+
+    /* theme toggle: writes only localStorage['article-theme'] */
+    var btn = document.getElementById('theme-toggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function apply(t) {
+        d.setAttribute('data-theme', t);
+        if (btn) btn.setAttribute('aria-pressed', String(t === 'dark'));
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0a1628' : '#f7f9fc');
+    }
+    if (btn) {
+        btn.hidden = false;
+        apply(d.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+        btn.addEventListener('click', function () {
+            var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            apply(next);
+            try { localStorage.setItem('article-theme', next); } catch (e) {}
+        });
+    }
+
+    /* site bar background once scrolled */
+    var bar = document.querySelector('.sitebar');
+
+    /* heading anchors with copy link */
+    var body = document.getElementById('article-body');
+    var heads = body ? Array.prototype.slice.call(body.querySelectorAll('h2[id], h3[id]')) : [];
+    heads.forEach(function (h) {
+        var a = document.createElement('a');
+        a.className = 'h-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Copy link to section: ' + h.textContent.trim());
+        a.textContent = '#';
+        a.addEventListener('click', function (ev) {
+            if (!(navigator.clipboard && window.isSecureContext)) return;
+            ev.preventDefault();
+            history.replaceState(null, '', '#' + h.id);
+            h.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+            navigator.clipboard.writeText(location.href.split('#')[0] + '#' + h.id).then(function () { announce('Link copied'); }, function () {});
+        });
+        h.appendChild(a);
+    });
+
+    /* TOC active section */
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    var tracked = heads.filter(function (h) { return h.tagName === 'H2' && links[h.id]; });
+    var refs = document.getElementById('references');
+    if (refs && links.references) tracked.push(refs);
+    var current = null;
+    function setCurrent(id) {
+        if (id === current) return;
+        if (current && links[current]) links[current].removeAttribute('aria-current');
+        current = id;
+        if (id && links[id]) links[id].setAttribute('aria-current', 'location');
+    }
+    function pickActive() {
+        var line = window.innerHeight * 0.3, id = null;
+        for (var i = 0; i < tracked.length; i++) { if (tracked[i].getBoundingClientRect().top <= line) id = tracked[i].id; else break; }
+        setCurrent(id);
+    }
+
+    /* reading progress over the essay body only; rAF + passive scroll, transform only */
+    var prog = document.getElementById('read-progress');
+    var ticking = false;
+    function paint() {
+        ticking = false;
+        if (bar) bar.classList.toggle('is-scrolled', window.scrollY > 8);
+        if (prog && body) {
+            var r = body.getBoundingClientRect(), total = r.height - window.innerHeight;
+            var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+            prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        }
+        if (tracked.length) pickActive();
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    paint();
+})();
+</script>
+</body>
+</html>
