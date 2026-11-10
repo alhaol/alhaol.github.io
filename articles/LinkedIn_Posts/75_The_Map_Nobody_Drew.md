@@ -4,7 +4,7 @@ That is not carelessness. Expertise hides its own steps, and every team's onboar
 
 Three new hires join an AI team in the same month: a backend engineer, a statistician and a new data science graduate. By the end of week two the engineer is stuck on page 4 of the guide and the other two on page 5, for different reasons: one has never had to think about data leakage, the other has never weighed base rates. The guide teaches neither, because the staff engineer who wrote it handles both without thinking.
 
-Knowledge Space Theory gives the missing structure a name, a prerequisite map, and a method for drawing it out of an expert. AI makes that questioning cheap, but it is not reliable alone: in a 2026 study the best model matched expert labels on about 70% of 307 pairs. So the expert reviews every drafted link, and new hires' placement answers keep or drop each one.
+Knowledge Space Theory gives the missing structure a name, a prerequisite map, and a method for drawing it out of an expert. AI makes that questioning cheap, but it is not reliable alone: in a 2026 study the best models matched experts on about 70% of 307 pairs, yet linked a quarter or more of the unrelated pairs. So an expert rules on every drafted link, and placement answers keep or drop each one.
 
 The payoff is placement instead of page one.
 

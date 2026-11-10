@@ -59,7 +59,7 @@
       "description": "A new hire who stalls is often missing one earlier step they cannot see, so explaining again fails; an AI tutor can find it by asking first.",
       "image": { "@type": "ImageObject", "url": "https://alhaol.github.io/articles/Post_Images/Image_74.png", "width": 1200, "height": 630 },
       "datePublished": "2026-11-09",
-      "dateModified": "2026-11-09",
+      "dateModified": "2026-11-10",
       "inLanguage": "en",
       "author": {
         "@type": "Person",
@@ -354,7 +354,7 @@
             <h2 id="takeaways-title" class="takeaways-label">Key takeaways</h2>
             <ol>
                 <li>In ALEKS's arithmetic map, 1,668 different knowledge states each contain exactly 75 topics, so the same score can hide very different gaps.</li>
-<li>Students who chose their next topic from what they were ready to learn mastered a typical one about 93% of the time, by ALEKS's own standard.</li>
+<li>Psychology researchers endorsed about as many false statements about confidence intervals as students did, so a guide that says to report one assumes a missing step.</li>
 <li>A GPT-4 tutor told to give hints instead of answers largely avoided the harm unrestricted access did to high school students' exam scores.</li>
             </ol>
         </aside>
@@ -397,49 +397,55 @@
                                <ol><li>Imperative verb first, specific object, a measure.</li> (3 or 4 items)</ol> -->
         <div id="article-body" class="prose">
             
-<p>Three weeks after moving from backend engineering onto the AI team, a software engineer opens a pull request claiming a better ranking model. It scores 91.2% accuracy against the old model's 90.8% on the team's 1,000-example test set. Asked whether the gain is real, they rerun the evaluation on a fresh random split, and the order flips. They reread the evaluation page of the team's onboarding guide, which says to report a confidence interval, and still cannot say whether 0.4 points means anything.</p>
+<p>Three weeks after moving from backend engineering onto the AI team, a software engineer opens a pull request claiming a better intent classifier. It scores 91.2% accuracy against the old model's 90.8% on the team's 1,000-example test set. Asked whether the gain is real, they score both models on a second held-out set of 1,000, and the order flips. They reread the evaluation page of the team's onboarding guide, which says to report a confidence interval, and still cannot say whether 0.4 points means anything.</p>
 <p>The guide is clear. It is written for someone who already knows how far a score moves from one test set to the next, and nothing in it says so.</p>
-<p>In the epigraph to his 1968 textbook, David Ausubel put it plainly: "The most important single factor influencing learning is what the learner already knows. Ascertain this and teach him accordingly."<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> Ascertaining it, one learner at a time, is the expensive part. Knowledge Space Theory (KST), proposed in 1985, is a mathematical account of how knowledge in a subject fits together; it describes what a person knows as the exact set of problems they can solve, not as a score.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> An AI tutor can now do the ascertaining in minutes, if it asks before it explains.</p>
+<p>In the epigraph to his 1968 textbook, David Ausubel put it plainly: "The most important single factor influencing learning is what the learner already knows. Ascertain this and teach him accordingly."<sup class="cite"><a href="#ref-1" id="cite-1a">1</a></sup> Ascertaining it, one learner at a time, is the expensive part. Knowledge Space Theory (KST), proposed in 1985, is a mathematical account of how knowledge in a subject fits together; it describes what a person knows as the exact set of problems they can solve, not as a score.<sup class="cite"><a href="#ref-2" id="cite-2a">2</a></sup> An AI tutor can now attempt the ascertaining in minutes, if it asks before it explains.</p>
 
 <h2 id="knowledge-has-a-shape">Knowledge has a shape</h2>
 <p>What a new hire knows is a set of topics, and some topics depend on others. A topic is one kind of problem a learner can or cannot yet solve, such as judging whether one model really beats another. A new hire's <strong>knowledge state</strong> is the full set of topics they can do in a subject right now. Topic A is a prerequisite of topic B when nobody can do B without being able to do A: nobody can read a confidence interval without knowing what a standard error is.</p>
-<p>Draw each prerequisite as a link, an arrow from one topic to another meaning the second needs the first, and you have a prerequisite map. It shows every topic in a program and the links between them, and so which knowledge states are possible.</p>
-<p>The team's skills matrix holds a level instead: a single score or rating, such as "statistics: 3 of 5", which cannot say which topic is missing. ALEKS (Assessment and Learning in Knowledge Spaces) is an online tutoring and assessment system built on KST. In its arithmetic map, 1,668 different knowledge states each contain exactly 75 topics.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> Count topics and they look alike, yet each leaves a different set of gaps.</p>
+<p>Draw each prerequisite as a link, an arrow from one topic to another meaning the second needs the first, and you have a prerequisite map. It allows only knowledge states that include every topic's prerequisites.</p>
+<p>The team's skills matrix holds a level instead: a single score or rating, such as "statistics: 3 of 5", which cannot say which topic is missing. ALEKS (Assessment and Learning in Knowledge Spaces) is an online tutoring and assessment system built on KST. In its arithmetic map, 1,668 different knowledge states each contain exactly 75 topics.<sup class="cite"><a href="#ref-3" id="cite-3a">3</a></sup> Same count, different gaps.</p>
 
 <h2 id="ready-to-learn-is-a-short-list">Ready to learn is a short list</h2>
-<p>What a learner can learn next is a short list, and for this engineer it holds one topic. A learner is <strong>ready to learn</strong> the topics they could learn next without first learning anything else, because their prerequisites are already in place; KST calls this list the outer fringe. Educators will hear an echo of Vygotsky's zone of proximal development, the distance between what a learner can do alone and what they can do with guidance.<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> The two are close kin, but the ready-to-learn list names specific topics, so it can be written down and checked.</p>
-<p>Figure 1 places the engineer on five topics: their goal, comparing two models, and four beneath it. They hold train-test splits and sampling variability, the fact that a score changes from one test set to the next. The only topic they are ready to learn is the standard error, how far a score typically moves between test sets, and the goal sits two steps beyond it, behind confidence intervals. That makes the standard error their <strong>missing step</strong>: the prerequisite a learner lacks on the way to a goal while holding everything it needs, so it is always a topic they are ready to learn.</p>
+<p>What a learner can learn next is a short list, and for this engineer it holds one topic. A learner is <strong>ready to learn</strong> the topics they could learn next without first learning anything else, because their prerequisites are already in place; KST calls this list the outer fringe. Educators will hear an echo of Vygotsky's zone of proximal development, what a learner can do with guidance but not yet alone;<sup class="cite"><a href="#ref-4" id="cite-4a">4</a></sup> the ready-to-learn list names specific topics, so it can be written down and checked.</p>
+<p>Figure 1 places the engineer on six topics: their goal, comparing two models, and five beneath it. They hold train-test splits and sampling variability, the fact that a score changes from one test set to the next. The only topic they are ready to learn is the standard error, how far a score typically sits from the model's true accuracy, and the goal sits three steps beyond it, behind confidence intervals and paired differences. That makes the standard error their <strong>missing step</strong>: a topic beneath the goal that the learner lacks while holding everything it needs. A goal can have one per branch, and each is a topic they are ready to learn.</p>
 <figure class="fig" id="fig-1"><div class="fig-scroll">
 <svg viewBox="0 0 640 268" role="img" aria-labelledby="f74-1-title f74-1-desc" xmlns="http://www.w3.org/2000/svg">
-<title id="f74-1-title">One new hire's knowledge state on five model-evaluation topics</title>
-<desc id="f74-1-desc">The engineer holds sampling variability and train-test splits. The standard error is the only topic they are ready to learn and the missing step. Confidence intervals are not yet reachable, and the goal, comparing two models, needs both confidence intervals and train-test splits.</desc>
-<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">One new hire's map: the goal sits two steps away</text>
-<rect x="20" y="64" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
-<text x="86" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Sampling</text>
-<text x="86" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">variability</text>
-<rect x="176" y="64" width="132" height="48" rx="6" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
-<text x="242" y="93" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Standard error</text>
-<text x="242" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#f59e0b">the missing step</text>
-<rect x="332" y="64" width="132" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="398" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">Confidence</text>
-<text x="398" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">intervals</text>
-<rect x="488" y="64" width="132" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="554" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Comparing</text>
-<text x="554" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">two models</text>
-<text x="554" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#f59e0b">the goal</text>
-<rect x="20" y="160" width="132" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
-<text x="86" y="181" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Train-test</text>
-<text x="86" y="197" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">split</text>
+<title id="f74-1-title">One new hire's knowledge state on six model-evaluation topics</title>
+<desc id="f74-1-desc">The engineer holds sampling variability and train-test splits. The standard error is the only topic they are ready to learn and the missing step. Confidence intervals and paired differences are not yet reachable, and the goal, comparing two models, needs both paired differences and train-test splits.</desc>
+<text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">One new hire's map: one step blocks the goal</text>
+<rect x="20" y="64" width="104" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="72" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Sampling</text>
+<text x="72" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">variability</text>
+<rect x="144" y="64" width="104" height="48" rx="6" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="196" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Standard</text>
+<text x="196" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">error</text>
+<text x="196" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#f59e0b">the missing step</text>
+<rect x="268" y="64" width="104" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="320" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">Confidence</text>
+<text x="320" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">intervals</text>
+<rect x="392" y="64" width="104" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="444" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">Paired</text>
+<text x="444" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#8090a8">differences</text>
+<rect x="516" y="64" width="104" height="48" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="568" y="85" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Comparing</text>
+<text x="568" y="101" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">two models</text>
+<text x="568" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#f59e0b">the goal</text>
+<rect x="20" y="160" width="104" height="48" rx="6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/>
+<text x="72" y="181" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">Train-test</text>
+<text x="72" y="197" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#f1f5f9">split</text>
 <g stroke-width="1.6" fill="none">
-<path d="M153 88 L169 88" stroke="#60a5fa"/>
-<path d="M309 88 L325 88" stroke="#f59e0b"/>
-<path d="M465 88 L481 88" stroke="#f59e0b"/>
-<path d="M153 184 L554 184 L554 145" stroke="#60a5fa" stroke-opacity="0.7"/>
+<path d="M125 88 L137 88" stroke="#60a5fa"/>
+<path d="M249 88 L261 88" stroke="#f59e0b"/>
+<path d="M373 88 L385 88" stroke="#f59e0b"/>
+<path d="M497 88 L509 88" stroke="#f59e0b"/>
+<path d="M125 184 L568 184 L568 145" stroke="#60a5fa" stroke-opacity="0.7"/>
 </g>
-<path d="M169 84 L175 88 L169 92 Z" fill="#60a5fa"/>
-<path d="M325 84 L331 88 L325 92 Z" fill="#f59e0b"/>
-<path d="M481 84 L487 88 L481 92 Z" fill="#f59e0b"/>
-<path d="M550 145 L554 138 L558 145 Z" fill="#60a5fa" fill-opacity="0.7"/>
+<path d="M137 84 L143 88 L137 92 Z" fill="#60a5fa"/>
+<path d="M261 84 L267 88 L261 92 Z" fill="#f59e0b"/>
+<path d="M385 84 L391 88 L385 92 Z" fill="#f59e0b"/>
+<path d="M509 84 L515 88 L509 92 Z" fill="#f59e0b"/>
+<path d="M564 145 L568 138 L572 145 Z" fill="#60a5fa" fill-opacity="0.7"/>
 <rect x="20" y="236" width="18" height="12" rx="2" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.2"/>
 <text x="44" y="246" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">known</text>
 <rect x="104" y="236" width="18" height="12" rx="2" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3 2"/>
@@ -450,76 +456,84 @@
 <text x="490" y="246" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">path to the goal</text>
 </svg>
 </div>
-<figcaption><b>Figure 1.</b> The standard error is the one topic this engineer is ready to learn, and the goal sits two steps beyond it. Illustrative composite case: five topics from the team's evaluation practice. Sources: <a href="#ref-2">[2]</a>, <a href="#ref-3">[3]</a>.</figcaption></figure>
-<p>ALEKS builds on the same list: students pick their next topic from it.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> Its developers estimate that, in elementary school mathematics, a typical topic picked this way was learned about 93% of the time, judged by ALEKS's own practice standard and with no comparison group.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a></sup> So teach from that list, not from the page where the learner stalled.</p>
+<figcaption><b>Figure 1.</b> The standard error is the one topic this engineer is ready to learn, and the goal sits three steps beyond it. Illustrative composite case: six topics from the team's evaluation practice. Sources: <a href="#ref-2">[2]</a>, <a href="#ref-3">[3]</a>.</figcaption></figure>
+<p>ALEKS builds on the same list: students pick their next topic from it.<sup class="cite"><a href="#ref-5" id="cite-5a">5</a></sup> In elementary school mathematics, the median topic picked this way reached ALEKS's practice standard on 93% of attempts, with no comparison group.<sup class="cite"><a href="#ref-5" id="cite-5b">5</a></sup> So teach from that list, not from the page where the learner stalled.</p>
 
 <h2 id="stalls-hide-their-own-cause">Stalls hide their own cause</h2>
-<p>A missing step does not feel missing from the inside, and the person explaining cannot see it either. The engineer can run the evaluation script and get a confidence interval from a library call, and that feels like understanding. Rozenblit and Keil called this the illusion of explanatory depth: the belief that you understand something in more detail than you can explain. People rated their understanding lower after trying to explain how something works,<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup> and the illusion was far stronger for explanations than for facts or procedures.</p>
-<p>Statistics is full of such steps, even among experts. When 120 researchers and 442 students judged six false statements about what a confidence interval means, both groups endorsed more than three on average, and the researchers hardly outperformed the students.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> The engineer's code is fine. The interpretation is what failed, and no page of the guide teaches it, because the staff engineer who wrote the guide reads standard errors without thinking.</p>
-<p>So "this is hard" prescribes more explanation of the same topic, each written for a reader who already reads standard errors. A major review of study techniques rated rereading a low-utility technique and practice testing a high-utility one,<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> and rereading the guide is rereading.</p>
+<p>A missing step does not feel missing from the inside, and the person explaining cannot see it either. The engineer can run the evaluation script and get a confidence interval from a library call, and that feels like understanding. Rozenblit and Keil called this the illusion of explanatory depth: the belief that you understand something in more detail than you can explain. People rated their understanding lower after trying to explain how something works.<sup class="cite"><a href="#ref-6" id="cite-6a">6</a></sup></p>
+<p>Statistics is full of such steps, even among researchers. When 120 researchers and 442 students, all in psychology, judged six false statements about what a confidence interval means, both groups endorsed more than three on average, and the researchers hardly outperformed the students.<sup class="cite"><a href="#ref-7" id="cite-7a">7</a></sup> The engineer's code runs; the interpretation failed, and no page of the guide teaches it, because its author reads standard errors without thinking.</p>
+<p>So "this is hard" prescribes more explanation of the same topic, each written for a reader who already reads standard errors. I have been that expert, as a teaching assistant for graduate statistical analysis at the University of Mississippi.</p>
 <p>Explaining the same topic again cannot fix a gap that sits underneath it. Do not ask a stalled learner whether they understand. Ask a question with one right answer.</p>
 
 <h2 id="ask-before-you-explain">Ask before you explain</h2>
-<p>A few questions in the right order find the missing step. A diagnostic question tests one topic; because of prerequisites, its answer also says something about the topics above and below it. Answer a confidence-interval question right and you very likely hold everything beneath it; miss it and nothing built on it is within reach yet.</p>
-<p>The method is a short walk along the chain beneath the goal. Start in the middle, move down after a miss and up after a right answer, and stop at the first topic missed whose own prerequisites are answered right. The engineer's working evaluation script already speaks for train-test splits, so the walk runs down the other branch: confidence intervals, the standard error, sampling variability (Figure 2).</p>
-<p>Confidence intervals: "Your model scores 91% on 1,000 test examples. What range would you expect on a fresh 1,000?" Missed. Standard error: "About how far does that 91% move between random test sets of 1,000?" Missed. Sampling variability: "Would the same model score exactly 91% on a new random test set?" Right: no.</p>
+<p>A few questions in the right order find the missing step. A diagnostic question tests one topic; because of prerequisites, its answer also says something about the topics above and below it. Answer a confidence-interval question right and you very likely hold everything beneath it; miss it and nothing above it is within reach yet.</p>
+<p>The method is a short search along the chain beneath the goal. Ask about the middle topic first, then the middle of whatever part the answer leaves open, and stop at the first topic missed whose own prerequisites are answered right. An earlier unaided question on train-test splits came back right, so the search runs down the other branch: confidence intervals, the standard error, sampling variability (Figure 2).</p>
+<p>Confidence intervals: "Your model scores 91% on 1,000 test examples. What is a 95% confidence interval for its true accuracy?" Missed. Standard error: "About how far is that 91% typically from the model's true accuracy?" Missed. Sampling variability: "Why would the same model score differently on a new random test set?" Right: a new random sample gives a new score.</p>
 <figure class="fig" id="fig-2"><div class="fig-scroll">
 <svg viewBox="0 0 640 326" role="img" aria-labelledby="f74-2-title f74-2-desc" xmlns="http://www.w3.org/2000/svg">
-<title id="f74-2-title">Three diagnostic questions walking down the chain beneath comparing two models</title>
-<desc id="f74-2-desc">The first question tests confidence intervals and is missed, which also puts the goal out of reach. The second tests the standard error and is missed. The third tests sampling variability and is answered right. The standard error is the first topic missed whose own prerequisite is answered right, so it is the missing step.</desc>
+<title id="f74-2-title">Three diagnostic questions searching the chain beneath comparing two models</title>
+<desc id="f74-2-desc">The first question tests confidence intervals and is missed, which also puts paired differences and the goal out of reach. The second tests the standard error and is missed. The third tests sampling variability and is answered right. The standard error is the first topic missed whose own prerequisite is answered right, so it is the missing step.</desc>
 <text x="320" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Ask first: three questions find the missing step</text>
-<rect x="287" y="50" width="108" height="214" rx="8" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 4"/>
-<rect x="176" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="226" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Sampling</text>
-<text x="226" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">variability</text>
-<rect x="291" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="341" y="81" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Standard error</text>
-<rect x="406" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="456" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Confidence</text>
-<text x="456" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">intervals</text>
-<rect x="521" y="56" width="100" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
-<text x="571" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#f1f5f9">Comparing</text>
-<text x="571" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">models: goal</text>
+<rect x="259" y="50" width="86" height="214" rx="8" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="177" y="56" width="74" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="214" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Sampling</text>
+<text x="214" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">variability</text>
+<rect x="265" y="56" width="74" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="302" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Standard</text>
+<text x="302" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">error</text>
+<rect x="353" y="56" width="74" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="390" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Confidence</text>
+<text x="390" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">intervals</text>
+<rect x="441" y="56" width="74" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="478" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">Paired</text>
+<text x="478" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#f1f5f9">differences</text>
+<rect x="529" y="56" width="74" height="42" rx="6" fill="#1a2942" stroke="#2a3f5f"/>
+<text x="566" y="73" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#f1f5f9">Comparing</text>
+<text x="566" y="89" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">models: goal</text>
 <g fill="#8090a8">
-<path d="M277 76 L285 76 L285 73 L290 77 L285 81 L285 78 L277 78 Z"/>
-<path d="M392 76 L400 76 L400 73 L405 77 L400 81 L400 78 L392 78 Z"/>
-<path d="M507 76 L515 76 L515 73 L520 77 L515 81 L515 78 L507 78 Z"/>
+<path d="M252 76 L259 76 L259 73 L264 77 L259 81 L259 78 L252 78 Z"/>
+<path d="M340 76 L347 76 L347 73 L352 77 L347 81 L347 78 L340 78 Z"/>
+<path d="M428 76 L435 76 L435 73 L440 77 L435 81 L435 78 L428 78 Z"/>
+<path d="M516 76 L523 76 L523 73 L528 77 L523 81 L523 78 L516 78 Z"/>
 </g>
 <text x="20" y="130" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q1  Confidence interval</text>
-<text x="20" y="148" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">91% on 1,000: what range?</text>
+<text x="20" y="148" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">95% interval for true accuracy?</text>
 <text x="20" y="184" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q2  Standard error</text>
-<text x="20" y="202" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">How far does 91% move?</text>
+<text x="20" y="202" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">How far from true accuracy?</text>
 <text x="20" y="238" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Q3  Sampling variability</text>
-<text x="20" y="256" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Same 91% on a new set?</text>
+<text x="20" y="256" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Why a new score on a new set?</text>
 <g font-family="Inter, sans-serif" font-size="13" fill="#8090a8" text-anchor="middle">
-<text x="226" y="139">?</text>
-<text x="341" y="139">?</text>
-<text x="226" y="193">?</text>
+<text x="214" y="139">?</text>
+<text x="302" y="139">?</text>
+<text x="214" y="193">?</text>
 </g>
 <g fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round">
-<circle cx="456" cy="134" r="10"/><path d="M452 130 L460 138 M460 130 L452 138"/>
-<circle cx="341" cy="188" r="10"/><path d="M337 184 L345 192 M345 184 L337 192"/>
+<circle cx="390" cy="134" r="10"/><path d="M386 130 L394 138 M394 130 L386 138"/>
+<circle cx="302" cy="188" r="10"/><path d="M298 184 L306 192 M306 184 L298 192"/>
 </g>
 <g fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-opacity="0.4">
-<circle cx="571" cy="134" r="10"/><path d="M567 130 L575 138 M575 130 L567 138"/>
-<circle cx="456" cy="188" r="10"/><path d="M452 184 L460 192 M460 184 L452 192"/>
-<circle cx="571" cy="188" r="10"/><path d="M567 184 L575 192 M575 184 L567 192"/>
-<circle cx="341" cy="242" r="10"/><path d="M337 238 L345 246 M345 238 L337 246"/>
-<circle cx="456" cy="242" r="10"/><path d="M452 238 L460 246 M460 238 L452 246"/>
-<circle cx="571" cy="242" r="10"/><path d="M567 238 L575 246 M575 238 L567 246"/>
+<circle cx="478" cy="134" r="10"/><path d="M474 130 L482 138 M482 130 L474 138"/>
+<circle cx="566" cy="134" r="10"/><path d="M562 130 L570 138 M570 130 L562 138"/>
+<circle cx="390" cy="188" r="10"/><path d="M386 184 L394 192 M394 184 L386 192"/>
+<circle cx="478" cy="188" r="10"/><path d="M474 184 L482 192 M482 184 L474 192"/>
+<circle cx="566" cy="188" r="10"/><path d="M562 184 L570 192 M570 184 L562 192"/>
+<circle cx="302" cy="242" r="10"/><path d="M298 238 L306 246 M306 238 L298 246"/>
+<circle cx="390" cy="242" r="10"/><path d="M386 238 L394 246 M394 238 L386 246"/>
+<circle cx="478" cy="242" r="10"/><path d="M474 238 L482 246 M482 238 L474 246"/>
+<circle cx="566" cy="242" r="10"/><path d="M562 238 L570 246 M570 238 L562 246"/>
 </g>
 <g fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-<circle cx="226" cy="242" r="10"/><path d="M221 242 L225 246 L231 238"/>
+<circle cx="214" cy="242" r="10"/><path d="M209 242 L213 246 L219 238"/>
 </g>
-<text x="341" y="288" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Missing step: standard error</text>
+<text x="302" y="288" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">Missing step: standard error</text>
 <text x="320" y="314" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#8090a8">Solid marks are asked. Faded ones follow from earlier answers.</text>
 </svg>
 </div>
-<figcaption><b>Figure 2.</b> Three questions find the missing step, because each answer also settles topics above or below it. Illustrative composite case; it treats every answer as accurate, and in practice a surprising answer is asked again. Sources: <a href="#ref-3">[3]</a>.</figcaption></figure>
-<p>The standard error is the first topic missed whose prerequisite is answered right, so it is very likely the missing step. Answers are evidence, not proof: any one can be a careless slip (a wrong answer from someone who knows the topic) or a lucky guess (a right answer from someone who does not), so a fourth question on the standard error is cheap insurance. The answer it should reach: at 91% on 1,000 examples, the standard error is about 0.9 points, so a 0.4-point gain sits well inside the noise.</p>
-<p>The logic scales. In one ALEKS assessment its developers describe, 24 questions were enough to settle on a sixth-grader's most likely knowledge state among 57,147 possible ones.<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup> None of this is specific to statistics; the same holds for a new hire learning the team's deployment pipeline or a student learning to read a regression table.</p>
+<figcaption><b>Figure 2.</b> Three questions find the missing step, because each answer also settles topics above or below it. Illustrative: if slips and lucky guesses each happen one time in 10, these answers are right four times in five, and a fourth question makes it nine in 10. Sources: <a href="#ref-3">[3]</a>.</figcaption></figure>
+<p>The standard error is the first topic missed whose prerequisite is answered right, so it is very likely the missing step. Answers are evidence, not proof: any one can be a careless slip (a wrong answer from someone who knows the topic) or a lucky guess (a right answer from someone who does not), so a fourth question on the standard error is cheap insurance. The answer the engineer should reach follows a habit I learned measuring wireless error rates: count the events, not the percentages. B leads by four examples, and only examples where the two models disagree carry evidence; even a clean sweep, four disagreements all won by B, gives an exact paired test (McNemar's) p of about 0.13.</p>
+<p>ALEKS runs a sturdier version of the same search: it weighs every possible knowledge state at once and asks the question a learner has about an even chance of getting right.<sup class="cite"><a href="#ref-3" id="cite-3b">3</a></sup> In one assessment its developers describe, 24 questions were enough to settle on a sixth-grader's most likely state among 57,147 possible ones.<sup class="cite"><a href="#ref-3" id="cite-3c">3</a></sup></p>
 <aside class="pull-quote" aria-hidden="true"><p>Explaining the same topic again cannot fix a gap that sits underneath it.</p></aside>
-<p>An AI tutor, an AI assistant set up to ask questions and give hints instead of handing over answers, can run this walk in conversation and write a fresh question for any topic, though each needs checking. It cannot know the team's chain, so the lead writes it in: each topic with one short question and its answer key. Copy the version below and swap in your own chain.</p>
+<p>An AI tutor, an AI assistant set up to ask questions and give hints instead of handing over answers, can run this search in conversation and write a fresh question for any topic, though each needs checking. It cannot know the team's chain, so the lead writes it in: each topic with one short question and its answer key. Copy the version below and swap in your own chain.</p>
 <pre data-lang="prompt"><code>You tutor one page of our team's onboarding guide, on practice
 questions only. Before you explain anything, find the step I am
 missing.
@@ -528,48 +542,58 @@ Chain for this page, goal first:
 1. Comparing two models
    Ask: Model A scores 90.8% and model B 91.2% on the same
         1,000 test examples. Is B better?
-   Key: Not shown; the gap is well inside the noise.
-2. Confidence intervals
-   Ask: 91% accuracy on 1,000 test examples. What range would
-        you expect on a fresh 1,000?
-   Key: About 89% to 93%
-3. Standard error
-   Ask: About how far does that 91% move between random test
-        sets of 1,000?
-   Key: About 0.9 percentage points
-4. Sampling variability
-   Ask: Would the same model score exactly 91% on a new random
-        test set?
-   Key: No
+   Key: Not shown. B leads by four examples, and only the
+        examples the models disagree on count. Even if B won
+        all four, an exact paired test gives p of about 0.13.
+2. Paired differences
+   Ask: Two models score the same 1,000 examples. Which
+        examples decide whether one beats the other?
+   Key: Only those they disagree on: how many, and how they
+        split.
+3. Confidence intervals
+   Ask: 91% accuracy on 1,000 test examples. What is a 95%
+        confidence interval for the model's true accuracy?
+   Key: About 89% to 93%: plus or minus two standard errors.
+4. Standard error
+   Ask: About how far is that 91% typically from the model's
+        true accuracy?
+   Key: About 0.9 percentage points: the square root of
+        0.91 x 0.09 / 1,000.
+5. Sampling variability
+   Ask: Why would the same model score differently on a new
+        random test set?
+   Key: A new random sample of examples gives a new score.
 
 Rules:
-* Ask one question at a time, starting in the middle of the
-  chain. Give no hints or answers yet.
+* Ask one question at a time, starting with the middle topic
+  of the chain. Give no hints or answers yet.
 * Skip any topic my earlier answers already show I can do.
-* After a wrong answer, move down the chain; after a right
-  one, move up.
+* After each answer, ask about the middle of the part of the
+  chain that the answer leaves open.
 * Stop at the first topic I miss whose topics below I get
   right. Confirm it with one more question.
 * Then teach only that topic, with hints and the worked
   examples supplied.
 * Mark answers only against the keys supplied.
-* End with one line for the log: "Missing step: [topic]".</code></pre>
-<p>The answer keys come from the lead's own worked examples, never from the model. The last line of each conversation names a missing step the team can count.</p>
+* End with one line for the log, with no names:
+  "Missing step: [topic]".</code></pre>
+<p>The answer keys come from the lead's worked examples, never from the model. Each conversation's last line names a missing step the team counts by topic, never by person.</p>
 
 <h2 id="answering-first-erases-the-clue">Answering first erases the clue</h2>
 <p>A default AI assistant does the opposite. Paste in the two scores and it will often declare a winner, or write a significance test the engineer runs without reading. The stall vanishes and the gap stays. A stall tells you where the missing step is, and an answer handed over erases the clue.</p>
-<p>The trials point to a safer setup. In a randomized trial with nearly 1,000 high school mathematics students in Turkey, a GPT-4 tutor that held the solutions and was told to give hints instead of answers largely avoided the harm that unrestricted access did to exam scores, though it produced no measurable gain.<sup class="cite"><a href="#ref-9" id="cite-9a">9</a></sup> In a Harvard physics course, an AI tutor built from expert-written instructions and solutions produced median learning gains more than double those of an active-learning class, on a test taken right after the lesson.<sup class="cite"><a href="#ref-10" id="cite-10a">10</a></sup></p>
+<p>One-to-one tutoring has always found missing steps, at a price. In 1984 Benjamin Bloom reported tutored students scoring about two standard deviations above a conventional class, a gain "too costly for most societies to bear on a large scale."<sup class="cite"><a href="#ref-8" id="cite-8a">8</a></sup> A later review put human tutors at 0.79 standard deviations and intelligent tutoring systems at 0.76.<sup class="cite"><a href="#ref-9" id="cite-9a">9</a></sup> AI makes the conversation cheap; it still has to diagnose.</p>
+<p>The trials point to a safer setup. In a randomized trial with nearly 1,000 high school mathematics students in Turkey, a GPT-4 tutor that held the solutions and was told to give hints instead of answers largely avoided the harm that unrestricted access did to exam scores, though it produced no measurable gain.<sup class="cite"><a href="#ref-10" id="cite-10a">10</a></sup> In a Harvard physics course, an AI tutor built from expert-written instructions and solutions produced median learning gains more than double those of an active-learning class, on a test taken right after the lesson.<sup class="cite"><a href="#ref-11" id="cite-11a">11</a></sup></p>
 <aside class="pull-quote" aria-hidden="true"><p>Do not ask a stalled learner whether they understand. Ask a question with one right answer.</p></aside>
-<p>Neither tutor was a chatbot left on its defaults: each was handed worked solutions and told how to teach, which is the lead's job. Unrestricted help can reduce what people learn,<sup class="cite"><a href="#ref-9" id="cite-9b">9</a></sup> and it can also hide what they learned, a separate harm taken up in <a href="the-lucky-guess-problem.html">The Lucky Guess Problem</a>.</p>
-<p>Diagnosis along a map needs few questions; whether it makes people learn more is less clear. An independent meta-analysis found ALEKS about as effective as classroom teaching overall and especially useful as a supplement,<sup class="cite"><a href="#ref-11" id="cite-11a">11</a></sup> and both AI tutor trials were short, each at one institution. Treat any tutor setup as a pilot and compare it with how the team onboards today.</p>
-<p>Asking the right three questions takes a map of what depends on what, and most teams have never drawn one. <a href="the-map-nobody-drew.html">The Map Nobody Drew</a> shows how to draft it.</p>
+<p>Neither tutor was a chatbot left on its defaults: each was handed worked solutions and told how to teach: the lead's job. Unrestricted help can also hide what people learned, the subject of <a href="the-lucky-guess-problem.html">The Lucky Guess Problem</a>.</p>
+<p>Diagnosis along a map needs few questions; whether it makes people learn more is less clear. An independent meta-analysis found ALEKS about as effective as classroom teaching overall and especially useful as a supplement,<sup class="cite"><a href="#ref-12" id="cite-12a">12</a></sup> and both AI tutor trials were short, each at one institution.</p>
+<p>Asking the right three questions takes a map, and most teams have never drawn one; <a href="the-map-nobody-drew.html">The Map Nobody Drew</a> shows how.</p>
 
 <h2 id="what-leaders-should-do">What leaders should do</h2>
 <ol>
-<li>Rewrite the instructions for your team's AI assistant so it finds the missing step before it explains, using the chain format above. The team lead owns this; it is done when two recent hires have tried it on a real question.</li>
-<li>Treat "this is hard" in a one-on-one as a question about location: ask one question per earlier step, then spend an hour on the first step missed. Managers own this; it is done when the script is in the onboarding playbook.</li>
-<li>Pilot the tutor, with worked examples and a rule to hint instead of answering, with your next new hires, and compare their unaided evaluation reviews with the last cohort's. The engineering manager owns the pilot and its report.</li>
-<li>Review the tutor's logged missing steps monthly, and add any step that three or more new hires missed to the onboarding guide and the team's prerequisite map. The staff engineer and team lead share this; it is done when a review changes a page.</li>
+<li>Set up a tutor for one onboarding page, separate from the coding assistant, using the chain format above; it takes about three hours. The team lead owns it until two hires have each named a missing step with it.</li>
+<li>Treat "this is hard" in a one-on-one as a question about location: ask one question per earlier step, then spend an hour on the first step missed. Each hire's mentor owns this, and the test is a script in the onboarding playbook.</li>
+<li>Pilot the hint-only tutor in one section of a first-year statistics course, keep its diagnostic questions ungraded inside the course platform, and compare an unaided quiz with another section's. The course coordinator owns the pilot and its report.</li>
+<li>Review the tutor's logged missing steps each quarter, and add any step three or more hires missed to the guide and the team's prerequisite map. The team lead owns the review; it is done when one changes a page.</li>
 </ol>
 
         </div>
@@ -602,10 +626,11 @@ Rules:
 <li id="ref-5">Cosyn, E., Doble, C., Falmagne, J.-C., et al. (2013). "Assessing mathematical knowledge in a learning space." In J.-C. Falmagne, D. Albert, C. Doble, et al. (Eds.), <em>Knowledge spaces: Applications in education</em> (pp. 27 to 50). Springer. <a href="https://doi.org/10.1007/978-3-642-35329-1_2" target="_blank" rel="noopener">https://doi.org/10.1007/978-3-642-35329-1_2</a> <a class="backref" href="#cite-5a" aria-label="Back to text">&#8617;</a></li>
 <li id="ref-6">Rozenblit, L., &amp; Keil, F. (2002). "The misunderstood limits of folk science: An illusion of explanatory depth." <em>Cognitive Science</em>, 26(5), 521 to 562. <a href="https://doi.org/10.1207/s15516709cog2605_1" target="_blank" rel="noopener">https://doi.org/10.1207/s15516709cog2605_1</a> <a class="backref" href="#cite-6a" aria-label="Back to text">&#8617;</a></li>
 <li id="ref-7">Hoekstra, R., Morey, R. D., Rouder, J. N., et al. (2014). "Robust misinterpretation of confidence intervals." <em>Psychonomic Bulletin &amp; Review</em>, 21(5), 1157 to 1164. <a href="https://doi.org/10.3758/s13423-013-0572-3" target="_blank" rel="noopener">https://doi.org/10.3758/s13423-013-0572-3</a> <a class="backref" href="#cite-7a" aria-label="Back to text">&#8617;</a></li>
-<li id="ref-8">Dunlosky, J., Rawson, K. A., Marsh, E. J., et al. (2013). "Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology." <em>Psychological Science in the Public Interest</em>, 14(1), 4 to 58. <a href="https://doi.org/10.1177/1529100612453266" target="_blank" rel="noopener">https://doi.org/10.1177/1529100612453266</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
-<li id="ref-9">Bastani, H., Bastani, O., Sungu, A., et al. (2025). "Generative AI without guardrails can harm learning: Evidence from high school mathematics." <em>Proceedings of the National Academy of Sciences</em>, 122(26), e2422633122. <a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">https://doi.org/10.1073/pnas.2422633122</a> <a class="backref" href="#cite-9a" aria-label="Back to text">&#8617;</a></li>
-<li id="ref-10">Kestin, G., Miller, K., Klales, A., et al. (2025). "AI tutoring outperforms in-class active learning: An RCT introducing a novel research-based design in an authentic educational setting." <em>Scientific Reports</em>, 15, 17458. <a href="https://doi.org/10.1038/s41598-025-97652-6" target="_blank" rel="noopener">https://doi.org/10.1038/s41598-025-97652-6</a> <a class="backref" href="#cite-10a" aria-label="Back to text">&#8617;</a></li>
-<li id="ref-11">Sun, S., Else-Quest, N. M., Hodges, L. C., et al. (2021). "The effects of ALEKS on mathematics learning in K-12 and higher education: A meta-analysis." <em>Investigations in Mathematics Learning</em>, 13(3), 182 to 196. <a href="https://doi.org/10.1080/19477503.2021.1926194" target="_blank" rel="noopener">https://doi.org/10.1080/19477503.2021.1926194</a> <a class="backref" href="#cite-11a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-8">Bloom, B. S. (1984). "The 2 sigma problem: The search for methods of group instruction as effective as one-to-one tutoring." <em>Educational Researcher</em>, 13(6), 4 to 16. <a href="https://doi.org/10.3102/0013189X013006004" target="_blank" rel="noopener">https://doi.org/10.3102/0013189X013006004</a> <a class="backref" href="#cite-8a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-9">VanLehn, K. (2011). "The relative effectiveness of human tutoring, intelligent tutoring systems, and other tutoring systems." <em>Educational Psychologist</em>, 46(4), 197 to 221. <a href="https://doi.org/10.1080/00461520.2011.611369" target="_blank" rel="noopener">https://doi.org/10.1080/00461520.2011.611369</a> <a class="backref" href="#cite-9a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-10">Bastani, H., Bastani, O., Sungu, A., et al. (2025). "Generative AI without guardrails can harm learning: Evidence from high school mathematics." <em>Proceedings of the National Academy of Sciences</em>, 122(26), e2422633122. <a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">https://doi.org/10.1073/pnas.2422633122</a> <a class="backref" href="#cite-10a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-11">Kestin, G., Miller, K., Klales, A., et al. (2025). "AI tutoring outperforms in-class active learning: An RCT introducing a novel research-based design in an authentic educational setting." <em>Scientific Reports</em>, 15, 17458. <a href="https://doi.org/10.1038/s41598-025-97652-6" target="_blank" rel="noopener">https://doi.org/10.1038/s41598-025-97652-6</a> <a class="backref" href="#cite-11a" aria-label="Back to text">&#8617;</a></li>
+<li id="ref-12">Sun, S., Else-Quest, N. M., Hodges, L. C., et al. (2021). "The effects of ALEKS on mathematics learning in K-12 and higher education: A meta-analysis." <em>Investigations in Mathematics Learning</em>, 13(3), 182 to 196. <a href="https://doi.org/10.1080/19477503.2021.1926194" target="_blank" rel="noopener">https://doi.org/10.1080/19477503.2021.1926194</a> <a class="backref" href="#cite-12a" aria-label="Back to text">&#8617;</a></li>
             </ol>
         </section>
 
