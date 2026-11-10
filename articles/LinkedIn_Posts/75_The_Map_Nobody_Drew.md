@@ -1,15 +1,15 @@
-In a 2026 study, the best language model matched experts on prerequisite links with 0.697 accuracy.
+Three expert surgeons teaching an emergency airway procedure left out 71% of the clinical knowledge steps.
 
-That is too low to trust alone and high enough to change how a team onboards people.
+That is not carelessness. Expertise hides its own steps, and every team's onboarding guide inherits the gaps.
 
-Every team runs on a prerequisite map nobody wrote down: what you need to know before the eval gate, the router policy or a prompt rollback make sense. The people who built the system can no longer see it. In two experiments, those with more expertise were worse at predicting how long novices would take, and debiasing did not help.
+Three new hires join an AI team in the same month: a backend engineer, a statistician and a new data science graduate. By the end of week two the engineer is stuck on page 4 of the guide and the other two on page 5, for different reasons: one has never had to think about data leakage, the other has never weighed base rates. The guide teaches neither, because the staff engineer who wrote it handles both without thinking.
 
-Experts also draw false edges. Teachers with more advanced mathematics were more likely to treat equations as a prerequisite for word problems, a view at odds with how students actually performed.
+Knowledge Space Theory gives the missing structure a name, a prerequisite map, and a method for drawing it out of an expert. AI makes that questioning cheap, but it is not reliable alone: in a 2026 study the best model matched expert labels on about 70% of 307 pairs. So the expert reviews every drafted link, and new hires' placement answers keep or drop each one.
 
-So split the work. Let AI draft the map from the onboarding doc and the repo. Let newcomers' answers decide which edges are real, because every edge predicts that nobody holds B without A. Then start each hire at their own outer fringe instead of page one.
+The payoff is placement instead of page one.
 
-Draft a prerequisite map of your team's 20 to 40 core concepts this quarter, and review every edge like code.
+Draft a map of your team's core topics with an AI assistant, and have your staff engineer accept or reject every link.
 
-#AI #Onboarding #KnowledgeSpaceTheory #EngineeringLeadership #iwork4dell
+#AILeadership #DataScience #Onboarding #KnowledgeSpaceTheory #iwork4dell
 
 Extended Reading: https://alhaol.github.io/articles/Articles/the-map-nobody-drew.html
