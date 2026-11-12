@@ -1,13 +1,15 @@
-24 questions were enough for ALEKS to place one student among 57,147 possible knowledge states.
+Your new hire says "this part is hard" for the third time. Explaining it a fourth time will not help.
 
-That efficiency comes from prerequisites, and it explains why so many new hires stall. An engineer who is stuck is often missing one earlier step they cannot see, so explaining the same topic again fails.
+They are not stuck on the page in front of them. They are missing one earlier step, and they cannot see which one. Neither can you, because you stopped noticing that step years ago.
 
-Picture a backend engineer three weeks into an AI team. Their pull request says the new model wins, 91.2% accuracy against 90.8% on 1,000 test examples. On a second held-out set the order flips. The team's guide says to report a confidence interval, and it assumes they already know how far a score typically sits from the model's true accuracy, and that only the examples two models disagree on count. Nothing on the page says so.
+On an AI team it looks like this: an engineer cannot tell whether their model's small gain is real. The guide says "report a confidence interval." What they lack is the step underneath it: how much a score wobbles from one test set to the next.
 
-Three questions, asked in order along a map of what depends on what, find the missing step: the standard error. An AI tutor can run that search in conversation, if it is set up to ask before it explains. In a randomized trial with nearly 1,000 high school students, a tutor told to hint instead of answer largely avoided the harm that unrestricted access caused.
+So stop explaining. Ask one question per earlier step, each with one right answer, and teach the first step they miss. Three questions usually find it.
 
-Set up a tutor for one onboarding page, separate from your coding assistant, so it finds the missing step before it explains anything.
+An AI tutor can run that search too, if you tell it to ask before it explains. In a trial with nearly 1,000 high school students, a tutor told to give hints instead of answers largely avoided the harm unrestricted AI did to exam scores.
 
-#DataScience #AILeadership #LearningDesign #KnowledgeSpaceTheory #iwork4dell
+Pick the one onboarding page where your new hires stall most, and write one question for each step beneath it.
+
+#AILeadership #Onboarding #LearningDesign #DataScience #iwork4dell
 
 Extended Reading: https://alhaol.github.io/articles/Articles/the-missing-step.html
