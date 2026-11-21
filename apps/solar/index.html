@@ -93,6 +93,66 @@
     body > div > header a:hover { color: #0284c7 !important; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { scrollbar-width: none; }
+
+    /* ===== Dark mode (toggled by .solar-dark on <html>, saved in localStorage['solar:theme']) ===== */
+    html.solar-dark, html.solar-dark body { background: #020617 !important; color: #e2e8f0; }
+    html.solar-dark body > div > header h1 { color: #f1f5f9 !important; }
+    html.solar-dark body > div > header p, html.solar-dark body > div > header a { color: #94a3b8 !important; }
+    html.solar-dark .card-clean { background-color: #0f172a; border-color: #1e293b; box-shadow: none; }
+    html.solar-dark .bg-white { background-color: #1e293b !important; }
+    html.solar-dark .bg-slate-50 { background-color: #111c31 !important; }
+    html.solar-dark .bg-slate-100 { background-color: #1e293b !important; }
+    html.solar-dark .bg-slate-200 { background-color: #334155 !important; }
+    html.solar-dark .hover\:bg-white:hover, html.solar-dark .hover\:bg-slate-100:hover, html.solar-dark .hover\:bg-slate-200:hover { background-color: #334155 !important; }
+    html.solar-dark .bg-gradient-to-br.from-white { background-image: none !important; background-color: #0f172a !important; }
+    html.solar-dark .bg-slate-900.text-white { background-color: #e2e8f0 !important; color: #0f172a !important; }
+    html.solar-dark .text-slate-900 { color: #f1f5f9 !important; }
+    html.solar-dark .text-slate-800 { color: #e2e8f0 !important; }
+    html.solar-dark .text-slate-700 { color: #cbd5e1 !important; }
+    html.solar-dark .text-slate-600, html.solar-dark .text-slate-500 { color: #94a3b8 !important; }
+    html.solar-dark .text-slate-400 { color: #64748b !important; }
+    html.solar-dark .border-slate-200, html.solar-dark .border-slate-300, html.solar-dark .hover\:border-slate-300:hover { border-color: #334155 !important; }
+    html.solar-dark .bg-white.border-2.border-slate-200 { border-color: #334155 !important; }
+    html.solar-dark select, html.solar-dark input { color-scheme: dark; }
+    /* Diagrams are drawn for a light page: give every inline SVG in a card a light backing */
+    html.solar-dark .card-clean svg { background: #f1f5f9; border-radius: 12px; }
+    html.solar-dark code { color: #e2e8f0; }
+    html.solar-dark .bg-sky-50, html.solar-dark .bg-sky-50\/70, html.solar-dark .bg-sky-50\/60 { background-color: rgba(14,165,233,0.10) !important; }
+    html.solar-dark .bg-sky-100 { background-color: rgba(14,165,233,0.18) !important; }
+    html.solar-dark .bg-sky-200 { background-color: rgba(14,165,233,0.28) !important; }
+    html.solar-dark .border-sky-200, html.solar-dark .border-sky-300, html.solar-dark .border-sky-400, html.solar-dark .border-sky-500 { border-color: rgba(14,165,233,0.45) !important; }
+    html.solar-dark .text-sky-700, html.solar-dark .text-sky-800, html.solar-dark .text-sky-900, html.solar-dark .text-sky-950, html.solar-dark .text-sky-900\/70 { color: #7dd3fc !important; }
+    html.solar-dark .text-sky-600 { color: #38bdf8 !important; }
+    html.solar-dark .bg-emerald-50, html.solar-dark .bg-emerald-50\/70, html.solar-dark .bg-emerald-50\/60 { background-color: rgba(16,185,129,0.10) !important; }
+    html.solar-dark .bg-emerald-100 { background-color: rgba(16,185,129,0.18) !important; }
+    html.solar-dark .bg-emerald-200 { background-color: rgba(16,185,129,0.28) !important; }
+    html.solar-dark .border-emerald-200, html.solar-dark .border-emerald-300, html.solar-dark .border-emerald-400, html.solar-dark .border-emerald-500 { border-color: rgba(16,185,129,0.45) !important; }
+    html.solar-dark .text-emerald-700, html.solar-dark .text-emerald-800, html.solar-dark .text-emerald-900, html.solar-dark .text-emerald-950, html.solar-dark .text-emerald-900\/70 { color: #6ee7b7 !important; }
+    html.solar-dark .text-emerald-600 { color: #34d399 !important; }
+    html.solar-dark .bg-amber-50, html.solar-dark .bg-amber-50\/70, html.solar-dark .bg-amber-50\/60 { background-color: rgba(245,158,11,0.10) !important; }
+    html.solar-dark .bg-amber-100 { background-color: rgba(245,158,11,0.18) !important; }
+    html.solar-dark .bg-amber-200 { background-color: rgba(245,158,11,0.28) !important; }
+    html.solar-dark .border-amber-200, html.solar-dark .border-amber-300, html.solar-dark .border-amber-400, html.solar-dark .border-amber-500 { border-color: rgba(245,158,11,0.45) !important; }
+    html.solar-dark .text-amber-700, html.solar-dark .text-amber-800, html.solar-dark .text-amber-900, html.solar-dark .text-amber-950, html.solar-dark .text-amber-900\/70 { color: #fcd34d !important; }
+    html.solar-dark .text-amber-600 { color: #fbbf24 !important; }
+    html.solar-dark .bg-red-50, html.solar-dark .bg-red-50\/70, html.solar-dark .bg-red-50\/60 { background-color: rgba(239,68,68,0.10) !important; }
+    html.solar-dark .bg-red-100 { background-color: rgba(239,68,68,0.18) !important; }
+    html.solar-dark .bg-red-200 { background-color: rgba(239,68,68,0.28) !important; }
+    html.solar-dark .border-red-200, html.solar-dark .border-red-300, html.solar-dark .border-red-400, html.solar-dark .border-red-500 { border-color: rgba(239,68,68,0.45) !important; }
+    html.solar-dark .text-red-700, html.solar-dark .text-red-800, html.solar-dark .text-red-900, html.solar-dark .text-red-950, html.solar-dark .text-red-900\/70 { color: #fca5a5 !important; }
+    html.solar-dark .text-red-600 { color: #f87171 !important; }
+    html.solar-dark .bg-purple-50, html.solar-dark .bg-purple-50\/70, html.solar-dark .bg-purple-50\/60 { background-color: rgba(168,85,247,0.10) !important; }
+    html.solar-dark .bg-purple-100 { background-color: rgba(168,85,247,0.18) !important; }
+    html.solar-dark .bg-purple-200 { background-color: rgba(168,85,247,0.28) !important; }
+    html.solar-dark .border-purple-200, html.solar-dark .border-purple-300, html.solar-dark .border-purple-400, html.solar-dark .border-purple-500 { border-color: rgba(168,85,247,0.45) !important; }
+    html.solar-dark .text-purple-700, html.solar-dark .text-purple-800, html.solar-dark .text-purple-900, html.solar-dark .text-purple-950, html.solar-dark .text-purple-900\/70 { color: #d8b4fe !important; }
+    html.solar-dark .text-purple-600 { color: #c084fc !important; }
+    html.solar-dark .bg-orange-50, html.solar-dark .bg-orange-50\/70, html.solar-dark .bg-orange-50\/60 { background-color: rgba(249,115,22,0.10) !important; }
+    html.solar-dark .bg-orange-100 { background-color: rgba(249,115,22,0.18) !important; }
+    html.solar-dark .bg-orange-200 { background-color: rgba(249,115,22,0.28) !important; }
+    html.solar-dark .border-orange-200, html.solar-dark .border-orange-300, html.solar-dark .border-orange-400, html.solar-dark .border-orange-500 { border-color: rgba(249,115,22,0.45) !important; }
+    html.solar-dark .text-orange-700, html.solar-dark .text-orange-800, html.solar-dark .text-orange-900, html.solar-dark .text-orange-950, html.solar-dark .text-orange-900\/70 { color: #fdba74 !important; }
+    html.solar-dark .text-orange-600 { color: #fb923c !important; }
   </style>
 </head>
 <body>
@@ -135,7 +195,7 @@
   <header class="flex items-center justify-between mb-8">
     <div>
       <h1 class="text-3xl font-bold text-white">Solar</h1>
-      <p class="text-slate-400 text-sm mt-1">Home solar, connectors, Canadian deals and a family STEM lab</p>
+      <p class="text-slate-400 text-sm mt-1">Home solar, connectors, Canadian deals, meters and a family STEM lab</p>
     </div>
     <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
   </header>
@@ -161,24 +221,28 @@
                         <p class="text-xs text-slate-500 hidden sm:block">Zero-to-Hero Home Solar, Connectors, Canadian Deals & Family STEM Lab</p>
                     </div>
                 </div>
+                <button id="theme-toggle" onclick="toggleSolarTheme()" aria-label="Switch to dark mode" class="ml-3 shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200">🌙 Dark</button>
             </div>
 
             <!-- 5 Focused Navigation Tabs -->
-            <nav class="flex overflow-x-auto pb-1 md:pb-0 gap-1.5 no-scrollbar" aria-label="Main Navigation">
-                <button onclick="switchTab('puzzle')" id="nav-puzzle" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+            <nav class="flex overflow-x-auto pb-1 md:pb-0 gap-1.5 no-scrollbar" aria-label="Main Navigation" role="tablist">
+                <button onclick="switchTab('puzzle')" id="nav-puzzle" role="tab" aria-controls="tab-puzzle" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
                     1. 3 Puzzle Pieces
                 </button>
-                <button onclick="switchTab('panels')" id="nav-panels" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+                <button onclick="switchTab('panels')" id="nav-panels" role="tab" aria-controls="tab-panels" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
                     2. Solar Panels
                 </button>
-                <button onclick="switchTab('connectors')" id="nav-connectors" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+                <button onclick="switchTab('connectors')" id="nav-connectors" role="tab" aria-controls="tab-connectors" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
                     3. Connectors & Wiring
                 </button>
-                <button onclick="switchTab('canada')" id="nav-canada" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+                <button onclick="switchTab('canada')" id="nav-canada" role="tab" aria-controls="tab-canada" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
                     4. 🇨🇦 Buyer's Guide
                 </button>
-                <button onclick="switchTab('stem')" id="nav-stem" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+                <button onclick="switchTab('stem')" id="nav-stem" role="tab" aria-controls="tab-stem" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
                     5. Power Saving & Kids Lab
+                </button>
+                <button onclick="switchTab('measure')" id="nav-measure" role="tab" aria-controls="tab-measure" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100">
+                    6. Measure It
                 </button>
             </nav>
         </div>
@@ -268,7 +332,7 @@
                         <text x="325" y="170" font-size="12" fill="#1e293b">• Analogy: <tspan font-weight="700">Hose Diameter</tspan> (how wide the flow is).</text>
                         <text x="325" y="189" font-size="12" fill="#1e293b">• <tspan font-weight="700">300W:</tspan> Phones, Wi-Fi router, LED camp lights.</text>
                         <text x="325" y="208" font-size="12" fill="#1e293b">• <tspan font-weight="700">1,800W (Magic Number):</tspan> Standard 15A wall outlet max!</text>
-                        <text x="325" y="226" font-size="11" fill="#475569">  Runs fridges, microwaves & coffee makers (not 240V dryers).</text>
+                        <text x="325" y="226" font-size="11" fill="#475569">  That is the peak: keep loads that run for hours under ~1,440W (80%).</text>
 
                         <!-- Piece 1 Right Callout Box -->
                         <rect x="735" y="102" width="195" height="114" rx="14" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
@@ -375,7 +439,7 @@
                             <!-- Upward Refill Pipe -->
                             <path d="M 183 54 V 10" stroke="#0284c7" stroke-width="8" stroke-linecap="round"/>
                             <polygon points="183,0 173,16 193,16" fill="#0284c7"/>
-                            <text x="212" y="25" font-size="10.5" font-weight="800" fill="#0369a1">REFILS</text>
+                            <text x="212" y="25" font-size="10.5" font-weight="800" fill="#0369a1">REFILLS</text>
                             <text x="212" y="38" font-size="10.5" font-weight="800" fill="#0369a1">TANK!</text>
                         </g>
 
@@ -426,78 +490,272 @@
                     </div>
                 </div>
 
-                <div class="grid lg:grid-cols-12 gap-6 items-center">
-                    <!-- Appliance Toggle Buttons (Left 7 cols) -->
-                    <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <button onclick="toggleSandboxApp('lamp', 15, this)" class="sb-app-btn active-app p-4 rounded-2xl border-2 border-sky-500 bg-sky-50 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">💡</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-sky-600 text-white">ON</span>
+                <div class="grid lg:grid-cols-12 gap-6 items-start">
+                    <!-- Appliance Toggle Buttons (Left 7 cols), grouped by room -->
+                    <div class="lg:col-span-7 space-y-5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <p class="text-[11px] text-slate-500">Typical running watts. Your appliance may differ: check its label or measure it (see the Measure It tab).</p>
+                            <button onclick="sandboxAllOff()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200">All Off</button>
+                        </div>
+                        <div>
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Essentials & Electronics</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <button onclick="toggleSandboxApp('lamp', 15, this)" aria-pressed="true" class="sb-app-btn active-app p-3 rounded-2xl border-2 border-sky-500 bg-sky-50 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">💡</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-sky-600 text-white">ON</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">LED Desk Lamp</div>
+                                    <div class="text-xs font-semibold text-sky-700">15 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('wifi', 20, this)" aria-pressed="true" class="sb-app-btn active-app p-3 rounded-2xl border-2 border-sky-500 bg-sky-50 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">📶</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-sky-600 text-white">ON</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Wi-Fi & Fiber Box</div>
+                                    <div class="text-xs font-semibold text-sky-700">20 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('phone', 10, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">📱</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Phone Charger</div>
+                                    <div class="text-xs font-semibold text-slate-500">10 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('laptop', 60, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">💻</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Laptop</div>
+                                    <div class="text-xs font-semibold text-slate-500">60 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('desktop', 250, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🖥️</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Desktop PC + Monitor</div>
+                                    <div class="text-xs font-semibold text-slate-500">250 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('gaming', 150, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🎮</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">TV + Game Console</div>
+                                    <div class="text-xs font-semibold text-slate-500">150 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('cpap', 40, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">😴</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">CPAP Machine</div>
+                                    <div class="text-xs font-semibold text-slate-500">40 W (no heated humidifier)</div>
+                                </div>
+                            </button>
                             </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">LED Desk Lamp</div>
-                                <div class="text-xs font-semibold text-sky-700">15 Watts</div>
+                        </div>
+                        <div>
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Kitchen</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <button onclick="toggleSandboxApp('fridge', 150, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🧊</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Kitchen Fridge</div>
+                                    <div class="text-xs font-semibold text-slate-500">150 W (avg) · ~450 W start</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('freezer', 80, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">❄️</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Chest Freezer</div>
+                                    <div class="text-xs font-semibold text-slate-500">80 W (avg) · ~240 W start</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('microwave', 1200, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🍿</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Microwave Oven</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,200 W (draw from the wall)</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('kettle', 1500, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🫖</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Electric Kettle</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,500 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('coffee', 900, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">☕</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Coffee Maker</div>
+                                    <div class="text-xs font-semibold text-slate-500">900 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('toaster', 900, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🍞</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Toaster</div>
+                                    <div class="text-xs font-semibold text-slate-500">900 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('airfryer', 1500, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🍟</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Air Fryer</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,500 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('instantpot', 1000, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🍲</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Instant Pot</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,000 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('slowcooker', 200, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🥘</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Slow Cooker</div>
+                                    <div class="text-xs font-semibold text-slate-500">200 W</div>
+                                </div>
+                            </button>
                             </div>
-                        </button>
-
-                        <button onclick="toggleSandboxApp('wifi', 20, this)" class="sb-app-btn active-app p-4 rounded-2xl border-2 border-sky-500 bg-sky-50 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">📶</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-sky-600 text-white">ON</span>
+                        </div>
+                        <div>
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Comfort & Home</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <button onclick="toggleSandboxApp('hairdryer', 1600, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">💨</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Hair Dryer</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,600 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('heater', 1500, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🔥</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Space Heater</div>
+                                    <div class="text-xs font-semibold text-slate-500">1,500 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('blanket', 100, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🛏️</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Electric Blanket</div>
+                                    <div class="text-xs font-semibold text-slate-500">100 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('fan', 50, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🌀</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Box Fan</div>
+                                    <div class="text-xs font-semibold text-slate-500">50 W</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('windowac', 500, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🌬️</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Window Air Conditioner</div>
+                                    <div class="text-xs font-semibold text-slate-500">500 W · ~1,500 W start</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('dehumid', 300, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">💧</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Dehumidifier</div>
+                                    <div class="text-xs font-semibold text-slate-500">300 W · ~600 W start</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('washer', 500, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🧺</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Washing Machine</div>
+                                    <div class="text-xs font-semibold text-slate-500">500 W (cold wash) · ~1,000 W start</div>
+                                </div>
+                            </button>
+                            <button onclick="toggleSandboxApp('sumppump', 800, this)" aria-pressed="false" class="sb-app-btn p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl">🌊</span>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="font-bold text-slate-900 text-sm leading-tight">Sump Pump (1/3 HP)</div>
+                                    <div class="text-xs font-semibold text-slate-500">800 W · ~2,400 W start</div>
+                                </div>
+                            </button>
                             </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">Wi-Fi & Fiber Box</div>
-                                <div class="text-xs font-semibold text-sky-700">20 Watts</div>
-                            </div>
-                        </button>
-
-                        <button onclick="toggleSandboxApp('gaming', 150, this)" class="sb-app-btn p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">🎮</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
-                            </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">TV + Game Console</div>
-                                <div class="text-xs font-semibold text-slate-500">150 Watts</div>
-                            </div>
-                        </button>
-
-                        <button onclick="toggleSandboxApp('fridge', 150, this)" class="sb-app-btn p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">🧊</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
-                            </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">Kitchen Fridge</div>
-                                <div class="text-xs font-semibold text-slate-500">150 Watts (avg)</div>
-                            </div>
-                        </button>
-
-                        <button onclick="toggleSandboxApp('microwave', 1200, this)" class="sb-app-btn p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">🍿</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
-                            </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">Microwave Oven</div>
-                                <div class="text-xs font-semibold text-slate-500">1,200 Watts</div>
-                            </div>
-                        </button>
-
-                        <button onclick="toggleSandboxApp('hairdryer', 1600, this)" class="sb-app-btn p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl">💨</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">OFF</span>
-                            </div>
-                            <div class="mt-3">
-                                <div class="font-bold text-slate-900 text-sm">Hair Dryer</div>
-                                <div class="text-xs font-semibold text-slate-500">1,600 Watts</div>
-                            </div>
-                        </button>
+                        </div>
                     </div>
 
                     <!-- Live Animated Water Tank & Readout (Right 5 cols) -->
-                    <div class="lg:col-span-5 bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col sm:flex-row items-center gap-5">
+                    <div class="lg:col-span-5 lg:sticky lg:top-28 bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col sm:flex-row items-center gap-5">
                         <!-- Animated SVG Water Tank -->
                         <div class="w-32 flex-shrink-0">
                             <svg viewBox="0 0 120 170" class="w-full h-auto">
@@ -646,6 +904,9 @@
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                             <span class="font-extrabold text-emerald-700">3. Vmp & Imp (Operating Voltage & Amps):</span> The voltage and current while actively charging. Power = <code>Vmp × Imp</code> (e.g., 20V × 10A = 200W).
                         </div>
+                        <div class="p-3 rounded-xl bg-sky-50 border border-sky-200">
+                            <span class="font-extrabold text-sky-800">4. Battery Charge Temperature (on the power station, not the panel):</span> Most LFP batteries <strong>cannot charge below 0°C</strong> unless the station has self-heating. In a Canadian winter, keep the station indoors or in a heated space and run the solar cable outside to it.
+                        </div>
                     </div>
                 </div>
 
@@ -654,7 +915,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-full">Interactive Physics Lab</span>
-                            <span class="text-xs font-bold text-slate-500">200W Panel (24V Voc @ 25°C)</span>
+                            <span class="text-xs font-bold text-slate-500">200W Panel (24V Voc @ 25°C, real-world losses included)</span>
                         </div>
                         <h3 class="text-lg font-extrabold text-slate-900 mb-4">Sun Angle, Cloud & Ottawa Winter Simulator</h3>
 
@@ -684,7 +945,7 @@
                         <div class="grid grid-cols-3 gap-3 text-center">
                             <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl">
                                 <div class="text-[11px] font-bold text-amber-800">Real Power Output</div>
-                                <div id="phys-watts" class="text-xl font-extrabold text-amber-600 mt-0.5">185 W</div>
+                                <div id="phys-watts" class="text-xl font-extrabold text-amber-600 mt-0.5">168 W</div>
                             </div>
                             <div class="bg-red-50 border border-red-200 p-3 rounded-2xl">
                                 <div class="text-[11px] font-bold text-red-800">Cold Voc Voltage</div>
@@ -692,12 +953,33 @@
                             </div>
                             <div class="bg-sky-50 border border-sky-200 p-3 rounded-2xl">
                                 <div class="text-[11px] font-bold text-sky-800">Current (Amps)</div>
-                                <div id="phys-amps" class="text-xl font-extrabold text-sky-700 mt-0.5">8.8 A</div>
+                                <div id="phys-amps" class="text-xl font-extrabold text-sky-700 mt-0.5">7.6 A</div>
                             </div>
                         </div>
                         <p id="phys-kid-note" class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200 mt-3 leading-relaxed">
-                            ❄️ <strong>Fun Fact for Kids:</strong> Solar panels love cold air! In freezing -15°C winter sun, electrons move with less resistance, boosting voltage from 24.0V up to <strong>26.9V</strong>. Always leave a 15% winter safety margin!
+                            ❄️ <strong>Fun Fact for Kids:</strong> Solar panels love cold air! In freezing -15°C winter sun, cold silicon cells push out a higher voltage, boosting Voc from 24.0V up to <strong>26.9V</strong>. Always leave a 15% winter safety margin!
                         </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Ottawa winter reality + safety & code -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card-clean rounded-3xl p-6">
+                    <span class="inline-block text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full mb-2">Ottawa Winter Reality</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 mb-3">Cold Panels Are Strong, Short Days Are Not</h3>
+                    <div class="space-y-3 text-sm text-slate-700">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><strong>Sun hours:</strong> expect roughly 1.5 to 2 "peak sun hours" a day in December versus about 5 to 5.5 in June. A 400W setup that makes ~2kWh on a June day may make only ~0.6kWh in December.</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><strong>Tilt steeper in winter:</strong> at Ottawa's ~45° latitude, tilt panels to about 60° from flat in winter (about 30° in summer). Steep panels also shed snow faster.</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><strong>Snow:</strong> even a thin layer can drop output to near zero. Brush it off with a soft broom, never scrape the glass.</div>
+                    </div>
+                </div>
+                <div class="card-clean rounded-3xl p-6">
+                    <span class="inline-block text-xs font-bold uppercase tracking-wider text-red-700 bg-red-50 border border-red-200 px-3 py-1 rounded-full mb-2">Safety & Code in Ontario</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 mb-3">Three Rules Before You Plug In</h3>
+                    <div class="space-y-3 text-sm text-slate-700">
+                        <div class="p-3 rounded-xl bg-red-50 border border-red-200"><strong>Never backfeed your house:</strong> do not connect a power station to home wiring with a "suicide cord" or a dryer outlet. It can electrocute utility line workers. Whole-home or circuit backup needs a power inlet and transfer switch installed by a licensed electrician with an ESA permit.</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><strong>Buy certified:</strong> look for CSA, cUL or cETL marks on power stations, chargers and smart plugs sold in Canada.</div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><strong>Fuse parallel strings:</strong> with 3 or more panels in parallel, put an inline MC4 fuse (about 15A) on each panel so one faulty panel can't be back-fed by the others.</div>
                     </div>
                 </div>
             </div>
@@ -885,6 +1167,7 @@
                     </div>
                 </div>
 
+                <p class="text-[11px] text-slate-500 -mt-3 mb-4">Prices are approximate CAD ranges checked November 2026 and change often; confirm on the retailer's site before buying.</p>
                 <!-- Canadian Product Cards Grid -->
                 <div id="canada-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                     <!-- Item 1: Costco EcoFlow DELTA 3 Classic -->
@@ -902,7 +1185,7 @@
                         <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
                             <div>
                                 <div class="text-lg font-extrabold text-slate-900">~$599–$659 <span class="text-xs font-normal text-slate-500">CAD</span></div>
-                                <div class="text-[11px] text-slate-500">Also check DELTA 3 (#8880003)</div>
+                                <div class="text-[11px] text-slate-500">Verified on Costco.ca, Nov 2026</div>
                             </div>
                             <span class="text-xs font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200">The "Printer"</span>
                         </div>
@@ -912,12 +1195,12 @@
                     <div data-store="costco" class="ca-card bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-red-100 text-red-800">Costco Canada • #7410002</span>
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-red-100 text-red-800">Costco Canada</span>
                                 <span class="text-xs font-bold text-slate-600">Camping / Small Backup</span>
                             </div>
                             <h3 class="text-lg font-extrabold text-slate-900">EcoFlow RIVER 2 Pro (768Wh)</h3>
                             <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                                Lightweight 7.8 kg unit with <strong>800W AC output</strong> and 220W solar input. Great starter unit for kids' camping trips, routers, and CPAP machines. (Need huge whole-home power? Look for <strong>DELTA 3 Ultra #2012441</strong>).
+                                Lightweight 7.8 kg unit with <strong>800W AC output</strong> and 220W solar input. Great starter unit for kids' camping trips, routers, and CPAP machines. (Need far more power? Look at the larger DELTA 3 models.)
                             </p>
                         </div>
                         <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
@@ -1050,9 +1333,9 @@
 
                     <div class="bg-emerald-50 p-5 rounded-2xl border-2 border-emerald-400">
                         <div class="text-xs font-bold text-emerald-800 uppercase">✅ Smart Canadian DIY Mix</div>
-                        <div id="bundle-diy-price" class="text-3xl font-extrabold text-emerald-700 mt-1">$1,175 CAD</div>
+                        <div id="bundle-diy-price" class="text-3xl font-extrabold text-emerald-700 mt-1">$1,205 CAD</div>
                         <div id="bundle-save-badge" class="inline-block mt-2 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-extrabold">
-                            🎉 You Save $524 CAD!
+                            🎉 You Save $494 CAD!
                         </div>
                     </div>
                 </div>
@@ -1077,8 +1360,8 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Ontario Utility Rate Plan:</label>
                             <select id="ontario-plan" onchange="calcOntarioSavings()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm font-semibold text-slate-900">
-                                <option value="ulo" selected>Ultra-Low Overnight (3.7¢ Night vs. 37.7¢ Peak 4–9 PM)</option>
-                                <option value="tou">Standard Time-of-Use (9.1¢ Off-Peak vs. 18.9¢ On-Peak)</option>
+                                <option value="ulo" selected>Ultra-Low Overnight (3.7¢ Night vs. 37.7¢ Peak 4–9 PM, OEB Nov 1, 2026)</option>
+                                <option value="tou">Standard Time-of-Use (9.1¢ Off-Peak vs. 18.9¢ On-Peak, OEB Nov 1, 2026)</option>
                             </select>
                         </div>
 
@@ -1093,7 +1376,7 @@
                         <div>
                             <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
                                 <span>Daily Energy Shifted Away From Peak (kWh):</span>
-                                <span id="ontario-kwh-label" class="text-emerald-700">2.0 kWh / day (2 cycles of 1kWh)</span>
+                                <span id="ontario-kwh-label" class="text-emerald-700">2.0 kWh / day (2 cycles of a 1kWh battery)</span>
                             </div>
                             <input type="range" id="ontario-kwh" min="0.5" max="4.0" step="0.5" value="2.0" oninput="calcOntarioSavings()" class="w-full accent-emerald-600 cursor-pointer">
                         </div>
@@ -1102,13 +1385,13 @@
                     <div class="lg:col-span-6 grid sm:grid-cols-2 gap-4">
                         <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl text-center">
                             <div class="text-xs font-bold uppercase text-emerald-800">Annual Bill Savings</div>
-                            <div id="ontario-annual-save" class="text-3xl font-extrabold text-emerald-700 mt-1">$275 CAD</div>
-                            <div class="text-xs text-emerald-900/70 mt-1">Plus ~13% HST saved on top!</div>
+                            <div id="ontario-annual-save" class="text-3xl font-extrabold text-emerald-700 mt-1">$190 CAD</div>
+                            <div class="text-xs text-emerald-900/70 mt-1">Weekday peaks only (~252 days a year), energy price only, before HST and the 15.7% Ontario Electricity Rebate</div>
                         </div>
                         <div class="bg-sky-50 border border-sky-200 p-5 rounded-2xl text-center">
-                            <div class="text-xs font-bold uppercase text-sky-800">10-Year LFP Lifespan Value</div>
-                            <div id="ontario-10yr-save" class="text-3xl font-extrabold text-sky-700 mt-1">$2,750 CAD</div>
-                            <div class="text-xs text-sky-900/70 mt-1">Pays for your entire setup 2× over!</div>
+                            <div class="text-xs font-bold uppercase text-sky-800">Battery Lifetime Value</div>
+                            <div id="ontario-10yr-save" class="text-3xl font-extrabold text-sky-700 mt-1">$1,131 CAD</div>
+                            <div id="ontario-life-note" class="text-xs text-sky-900/70 mt-1">504 cycles a year wears out a 3,000-cycle LFP battery in ~6 years</div>
                         </div>
                         <div class="sm:col-span-2 bg-amber-50 border border-amber-200 p-4 rounded-2xl text-xs text-amber-950 leading-relaxed">
                             <strong>⚡ Bonus Superpower (&lt;10ms UPS Mode):</strong> Keep your desktop PC, router, and sump pump/fridge plugged into the power station 24/7. When a winter ice storm knocks out Hydro Ottawa / Hydro One, the battery takes over in under <strong>0.01 seconds</strong>—your Zoom call or Wi-Fi never even drops!
@@ -1139,7 +1422,7 @@
                         </p>
                         <div class="space-y-2">
                             <button onclick="answerQuiz(1, false, this)" class="q1-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">A) 10 Hours</button>
-                            <button onclick="answerQuiz(1, true, this)" class="q1-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">B) About 4 to 5 Hours (1,000 ÷ 200 = 5h)</button>
+                            <button onclick="answerQuiz(1, true, this)" class="q1-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">B) About 4 to 5 Hours</button>
                             <button onclick="answerQuiz(1, false, this)" class="q1-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">C) 30 Minutes</button>
                         </div>
                         <div id="q1-feedback" class="hidden mt-3 text-xs font-semibold p-2.5 rounded-xl"></div>
@@ -1152,7 +1435,7 @@
                             On a bright, sunny <strong>-20°C winter day in Canada</strong>, what happens to a solar panel's voltage (Voc)?
                         </p>
                         <div class="space-y-2">
-                            <button onclick="answerQuiz(2, true, this)" class="q2-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">A) Voltage goes UP! Cold wires have less resistance.</button>
+                            <button onclick="answerQuiz(2, true, this)" class="q2-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">A) Voltage goes UP! Cold solar cells make more voltage.</button>
                             <button onclick="answerQuiz(2, false, this)" class="q2-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">B) Voltage freezes to zero.</button>
                             <button onclick="answerQuiz(2, false, this)" class="q2-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">C) Panels only work in July.</button>
                         </div>
@@ -1166,8 +1449,8 @@
                             You have two 24V solar panels and a power station with a <strong>60V maximum limit</strong>. How should you wire them?
                         </p>
                         <div class="space-y-2">
-                            <button onclick="answerQuiz(3, true, this)" class="q3-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">A) Series (+ to −): 24V + 24V = 48V (Safely under 60V!)</button>
-                            <button onclick="answerQuiz(3, false, this)" class="q3-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">B) Plug them into the microwave.</button>
+                            <button onclick="answerQuiz(3, true, this)" class="q3-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">A) Series (+ to −)</button>
+                            <button onclick="answerQuiz(3, false, this)" class="q3-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">B) Series, then add a third panel for extra speed</button>
                             <button onclick="answerQuiz(3, false, this)" class="q3-opt w-full text-left px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold hover:bg-slate-100">C) Series makes 240V.</button>
                         </div>
                         <div id="q3-feedback" class="hidden mt-3 text-xs font-semibold p-2.5 rounded-xl"></div>
@@ -1190,6 +1473,107 @@
             </div>
         </section>
 
+        <!-- TAB 6: MEASURE IT (POWER, VOLTAGE AND CURRENT METERS) -->
+        <section id="tab-measure" class="hidden space-y-8" role="tabpanel" aria-labelledby="nav-measure">
+            <div class="card-clean rounded-3xl p-6 sm:p-8">
+                <span class="inline-block text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full mb-2">Lesson 6 • Measure, Don't Guess</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Devices to Measure Power, Voltage & Current</h2>
+                <p class="text-slate-600 text-sm sm:text-base mt-1 mb-6 max-w-3xl">
+                    Every number on this page is an estimate until you measure it. Two meters cover the house side (AC), and four cover the solar side (DC). Start with #1 and #3: together they answer "what does it use?" and "is my wiring safe?"
+                </p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800">AC • Plug-in</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">1. Plug-in Power Meter (e.g., P3 Kill A Watt EZ, P4460)</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> Watts, volts, amps and kWh of any 120V appliance plugged through it.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> learn what your fridge, TV or router really draws, so the sandbox and runtime math use your numbers instead of guesses.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> 15A / 1,800W rating, cumulative kWh, and a cost-per-kWh setting.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=Kill+A+Watt+EZ+P4460" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800">AC • Over time</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">2. Smart Plug with Energy Monitoring (e.g., TP-Link Kasa KP125M)</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> Live watts plus daily and monthly kWh, logged in a phone app.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> check which loads run during the 4 PM to 9 PM peak and how much your peak-shaving actually shifts.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> "energy monitoring" in the listing (many smart plugs do not measure), 15A rating, and cETL or CSA marks.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=Kasa+KP125M+smart+plug+energy+monitoring" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900">DC + AC • Essential</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">3. Digital Multimeter (CAT III, 600V)</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> DC and AC voltage, resistance and continuity; small DC currents on its 10A range.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> read a panel&#39;s open-circuit voltage (Voc) before you plug it in, and check series strings stay under your station&#39;s 60V limit.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> auto-ranging, CAT III 600V or better, and fused probes. Do not use its 10A range on panels that can push more current.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=auto+ranging+digital+multimeter+CAT+III+600V" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800">DC + AC • No wire cutting</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">4. AC/DC Clamp Meter</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> Current flowing through a wire, read by clamping around it, plus voltage.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> see the real amps from your panels on a cloudy versus sunny day without unplugging anything.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> "AC/DC current" in the specs. Many cheaper clamp meters measure AC current only and will read zero on solar cables.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=AC+DC+clamp+meter+DC+current" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-orange-100 text-orange-900">DC • Inline</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">5. Inline DC Watt Meter (XT60 or Anderson)</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> Volts, amps, watts and total Wh flowing from the panel cable into the station.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> log a whole day of solar harvest and compare it with the station&#39;s own display.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> connectors that match your cable (XT60 for EcoFlow), a rating above your Voc and current (at least 60V and 20A), and thick 12AWG or 10AWG leads.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=XT60+DC+watt+meter+solar" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-red-100 text-red-800">DC • Panel check</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900">6. Solar Panel Tester (MPPT Tester)</h3>
+                            <p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><strong>Measures:</strong> A panel&#39;s Voc, short-circuit current (Isc) and maximum power point in full sun.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Use it to:</strong> confirm a new or used panel delivers close to its sticker watts before you build a system around it.</p>
+                            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>What to look for:</strong> a voltage and wattage range above your panel, MC4 leads, and an MPPT (max power) test mode.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <a href="https://www.amazon.ca/s?k=solar+panel+tester+MPPT+MC4" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Search on Amazon.ca <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-900 leading-relaxed">
+                    <strong>Safety first:</strong> AC plug-in meters (#1, #2) are for 120V outlets only and cannot read solar DC. On the DC side, every meter must be rated above your panel's cold Voc. Measure Voc with nothing connected, cover panels before unplugging MC4s, and never measure inside your home's electrical panel. That is a job for a licensed electrician.
+                </div>
+                <p class="text-[11px] text-slate-500 mt-3">Links open an Amazon.ca search, not a specific listing, so they keep working as stock changes. Check ratings and reviews before buying.</p>
+            </div>
+        </section>
+
     </div>
 
     <!-- Clean Educational Footer -->
@@ -1205,23 +1589,52 @@
 <script>
 // === App logic ===
         // =========================================================================
+        // 0. LIGHT / DARK THEME (own key; the site's shared 'theme' key holds other formats)
+        // =========================================================================
+        const THEME_KEY = 'solar:theme';
+        function applySolarTheme(mode) {
+            const dark = mode === 'dark';
+            document.documentElement.classList.toggle('solar-dark', dark);
+            const btn = document.getElementById('theme-toggle');
+            if (btn) {
+                btn.textContent = dark ? '☀️ Light' : '🌙 Dark';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            }
+        }
+        function toggleSolarTheme() {
+            const next = document.documentElement.classList.contains('solar-dark') ? 'light' : 'dark';
+            try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+            applySolarTheme(next);
+        }
+        (function initSolarTheme() {
+            let saved = null;
+            try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applySolarTheme(saved || (prefersDark ? 'dark' : 'light'));
+        })();
+
+        // =========================================================================
         // 1. NAVIGATION TAB SWITCHING
         // =========================================================================
         function switchTab(tabName) {
-            const sections = ['puzzle', 'panels', 'connectors', 'canada', 'stem'];
+            const sections = ['puzzle', 'panels', 'connectors', 'canada', 'stem', 'measure'];
+            if (!sections.includes(tabName)) tabName = 'puzzle';
             sections.forEach(sec => {
                 const el = document.getElementById('tab-' + sec);
                 const btn = document.getElementById('nav-' + sec);
                 if (sec === tabName) {
                     el.classList.remove('hidden');
                     btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
                     btn.classList.remove('text-slate-600', 'hover:bg-slate-100');
                 } else {
                     el.classList.add('hidden');
                     btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
                     btn.classList.add('text-slate-600', 'hover:bg-slate-100');
                 }
             });
+            if (location.hash !== '#' + tabName) history.replaceState(null, '', '#' + tabName);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1231,6 +1644,11 @@
         let sbTankWh = 1024;
         let sbMaxWatts = 1800;
         let sbApps = { lamp: 15, wifi: 20 };
+        const SB_SURGE = {"fridge": 3, "freezer": 3, "windowac": 3, "dehumid": 2, "washer": 2, "sumppump": 3};
+
+        function sandboxAllOff() {
+            document.querySelectorAll('.sb-app-btn[aria-pressed="true"]').forEach(b => b.click());
+        }
 
         function setSandboxTank(wh, maxW) {
             sbTankWh = wh;
@@ -1255,12 +1673,14 @@
             const sub = btn.querySelector('div:last-child div:last-child');
             if (sbApps[id]) {
                 delete sbApps[id];
+                btn.setAttribute('aria-pressed', 'false');
                 btn.className = 'sb-app-btn p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition flex flex-col justify-between';
                 badge.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600';
                 badge.textContent = 'OFF';
                 sub.className = 'text-xs font-semibold text-slate-500';
             } else {
                 sbApps[id] = watts;
+                btn.setAttribute('aria-pressed', 'true');
                 btn.className = 'sb-app-btn active-app p-4 rounded-2xl border-2 border-sky-500 bg-sky-50 text-left transition flex flex-col justify-between';
                 badge.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-sky-600 text-white';
                 badge.textContent = 'ON';
@@ -1306,7 +1726,18 @@
             waterRect.setAttribute('height', 160 - topY);
             waterWave.setAttribute('d', `M 18 ${topY} Q 39 ${topY - 6} 60 ${topY} T 102 ${topY} L 102 ${topY + 16} L 18 ${topY + 16} Z`);
 
-            if (totalW > sbMaxWatts) {
+            // Motors (compressors, pumps) draw 2-3x their running watts for a moment at start-up.
+            // Worst case: the biggest one kicks on while everything else is running.
+            let surgeExtra = 0;
+            for (let k in sbApps) if (SB_SURGE[k]) surgeExtra = Math.max(surgeExtra, sbApps[k] * (SB_SURGE[k] - 1));
+            const peakW = totalW + surgeExtra;
+            if (totalW <= sbMaxWatts && (peakW > sbMaxWatts || totalW > sbMaxWatts * 0.8)) {
+                wattsEl.className = 'text-2xl font-extrabold text-amber-600';
+                statusEl.className = 'p-2.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold text-center';
+                statusEl.textContent = peakW > sbMaxWatts
+                    ? `⚠️ Motor start-up surge pushes the peak to ~${peakW.toLocaleString()}W, over the ${sbMaxWatts.toLocaleString()}W limit. Check the station's surge rating.`
+                    : `⚠️ Over 80% of the ${sbMaxWatts.toLocaleString()}W limit: fine for a few minutes, but don't run this load for hours.`;
+            } else if (totalW > sbMaxWatts) {
                 wattsEl.className = 'text-2xl font-extrabold text-red-600';
                 statusEl.className = 'p-2.5 rounded-xl bg-red-100 border border-red-300 text-red-900 text-xs font-bold text-center';
                 statusEl.textContent = `🚨 HOSE OVERLOAD! ${totalW}W exceeds ${sbMaxWatts}W AC limit!`;
@@ -1342,7 +1773,7 @@
             const deltaT = 25 - tempC;
             const voc = 24.0 * (1 + deltaT * 0.003);
             const vmp = 20.0 * (1 + deltaT * 0.0025);
-            const imp = 10.0 * (sunPct / 100);
+            const imp = 10.0 * (sunPct / 100) * 0.85; // real-world losses: ~85% of the sticker rating
             const watts = Math.round(vmp * imp);
 
             document.getElementById('phys-watts').textContent = watts + ' W';
@@ -1351,7 +1782,7 @@
 
             const noteEl = document.getElementById('phys-kid-note');
             if (tempC < 0) {
-                noteEl.innerHTML = `❄️ <strong>Cold Weather Superpower:</strong> At ${tempC}°C, electrons flow with less resistance! Notice how Voc jumped from 24.0V to <strong>${voc.toFixed(1)}V</strong>. That's why we always leave a 15% winter voltage safety margin!`;
+                noteEl.innerHTML = `❄️ <strong>Cold Weather Superpower:</strong> At ${tempC}°C, cold silicon cells push out a higher voltage! Notice how Voc jumped from 24.0V to <strong>${voc.toFixed(1)}V</strong>. That's why we always leave a 15% winter voltage safety margin. One catch: most LFP power stations won't <em>charge</em> below 0°C unless they self-heat, so keep the station indoors and run the cable outside.`;
             } else if (tempC > 26) {
                 noteEl.innerHTML = `🌡️ <strong>Hot Panel Effect:</strong> Just like a laptop slows down when hot, solar voltage dips slightly to <strong>${voc.toFixed(1)}V</strong> at +${tempC}°C, though long summer days still produce tons of total energy!`;
             } else {
@@ -1596,21 +2027,54 @@
             const src = document.getElementById('ontario-charge-src').value;
             const kwh = parseFloat(document.getElementById('ontario-kwh').value);
 
-            document.getElementById('ontario-kwh-label').textContent = `${kwh.toFixed(1)} kWh / day`;
+            document.getElementById('ontario-kwh-label').textContent = `${kwh.toFixed(1)} kWh / day (${kwh.toFixed(1)} cycles of a 1kWh battery)`;
 
             const peakRate = plan === 'ulo' ? 0.377 : 0.189;
             const offPeakRate = plan === 'ulo' ? 0.037 : 0.091;
             const chargeCost = src === 'solar' ? 0 : (offPeakRate / 0.85); // 85% round-trip efficiency
 
             const dailySave = Math.max(0, kwh * (peakRate - chargeCost));
-            const annualSave = Math.round(dailySave * 365);
-            const tenYrSave = annualSave * 10;
+            // Peak pricing applies on weekdays only: ~261 weekdays minus ~9 statutory holidays.
+            const PEAK_DAYS = 252;
+            const annualSave = Math.round(dailySave * PEAK_DAYS);
+            // A 1kWh LFP battery rated for 3,000 cycles; each kWh shifted is one cycle. Cap at 10 years.
+            const cyclesPerYear = Math.round(kwh * PEAK_DAYS);
+            const lifeYears = Math.min(10, 3000 / cyclesPerYear);
+            const tenYrSave = Math.round(annualSave * lifeYears);
+            document.getElementById('ontario-life-note').textContent = lifeYears >= 10
+                ? `${cyclesPerYear} cycles a year stays within a 3,000-cycle LFP battery for 10 years`
+                : `${cyclesPerYear} cycles a year wears out a 3,000-cycle LFP battery in ~${lifeYears.toFixed(lifeYears < 3 ? 1 : 0)} years`;
 
             document.getElementById('ontario-annual-save').textContent = '$' + annualSave.toLocaleString() + ' CAD';
             document.getElementById('ontario-10yr-save').textContent = '$' + tenYrSave.toLocaleString() + ' CAD';
         }
 
+        const QUIZ_KEY = 'solar:quiz';
         const quizSolved = { 1: false, 2: false, 3: false, 4: false };
+        function saveQuiz() {
+            try { localStorage.setItem(QUIZ_KEY, JSON.stringify(quizSolved)); } catch (e) {}
+        }
+        function updateQuizScore() {
+            const total = Object.values(quizSolved).filter(Boolean).length;
+            document.getElementById('kid-score-val').textContent = total;
+            if (total === 4) {
+                document.getElementById('kid-score-badge').innerHTML = '🏆 4 / 4 — Certified Junior Solar Engineer!';
+                document.getElementById('kid-score-badge').className = 'bg-emerald-600 text-white px-4 py-2 rounded-2xl font-extrabold text-sm text-center shadow-md';
+            }
+        }
+        function lockQuiz(qNum) {
+            document.querySelectorAll(`.q${qNum}-opt`).forEach(b => { b.disabled = true; b.classList.add('cursor-default'); });
+        }
+        function restoreQuiz() {
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem(QUIZ_KEY)); } catch (e) {}
+            if (!saved) return;
+            [1, 2, 3, 4].forEach(q => {
+                if (!saved[q]) return;
+                const correct = [...document.querySelectorAll(`.q${q}-opt`)].find(b => (b.getAttribute('onclick') || '').includes('true'));
+                if (correct) answerQuiz(q, true, correct, true);
+            });
+        }
         const quizExplanations = {
             1: '🎉 Spot on! 1,000Wh ÷ 200W = 5 hours theoretical (around 4.2 hours in real life after inverter efficiency).',
             2: '❄️ Awesome! Solar panels produce higher voltage in cold Canadian winter air—so always leave a 15% voltage buffer!',
@@ -1618,7 +2082,8 @@
             4: '🔌 Bingo! That tiny center sense pin tells EcoFlow it is connected to solar panels rather than a 12V car cigarette lighter!'
         };
 
-        function answerQuiz(qNum, isCorrect, btnEl) {
+        function answerQuiz(qNum, isCorrect, btnEl, restoring) {
+            if (quizSolved[qNum] && !restoring) return;
             const fb = document.getElementById(`q${qNum}-feedback`);
             fb.classList.remove('hidden');
 
@@ -1626,15 +2091,10 @@
                 btnEl.className = `q${qNum}-opt w-full text-left px-3.5 py-2 rounded-xl bg-emerald-100 border-2 border-emerald-500 text-emerald-950 text-xs font-bold`;
                 fb.className = 'mt-3 text-xs font-semibold p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900';
                 fb.textContent = quizExplanations[qNum];
-                if (!quizSolved[qNum]) {
-                    quizSolved[qNum] = true;
-                    const total = Object.values(quizSolved).filter(Boolean).length;
-                    document.getElementById('kid-score-val').textContent = total;
-                    if (total === 4) {
-                        document.getElementById('kid-score-badge').innerHTML = '🏆 4 / 4 — Certified Junior Solar Engineer!';
-                        document.getElementById('kid-score-badge').className = 'bg-emerald-600 text-white px-4 py-2 rounded-2xl font-extrabold text-sm text-center shadow-md';
-                    }
-                }
+                quizSolved[qNum] = true;
+                lockQuiz(qNum);
+                updateQuizScore();
+                if (!restoring) saveQuiz();
             } else {
                 btnEl.className = `q${qNum}-opt w-full text-left px-3.5 py-2 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs font-semibold`;
                 fb.className = 'mt-3 text-xs font-semibold p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900';
@@ -1649,6 +2109,8 @@
             renderWiringLab();
             calcBundleSavings();
             calcOntarioSavings();
+            restoreQuiz();
+            switchTab((location.hash || '#puzzle').slice(1));
         };
 </script>
 
