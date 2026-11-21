@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hair</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: #10b981; }
+    .btn-accent {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #10b981; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    /* ============================================================
+       DARK-NAVY TECHNICAL THEME BASE STYLES
+       ============================================================ */
+    html {
+      scroll-behavior: smooth;
+      background-color: #0a0f1e;
+      color: #f8fafc;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0a0f1e;
+      background-image:
+        radial-gradient(circle at 10% 0%, rgba(16, 185, 129, 0.09), transparent 36%),
+        radial-gradient(circle at 90% 6%, rgba(6, 182, 212, 0.08), transparent 34%);
+      color: #f8fafc;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Custom Scrollbars */
+    .dark-scroll::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .dark-scroll::-webkit-scrollbar-track {
+      background: #0a0f1e;
+      border-radius: 9999px;
+    }
+    .dark-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .dark-scroll::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Dark-mode native date picker icon contrast */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.85) sepia(0.25) saturate(2.2) hue-rotate(140deg);
+      cursor: pointer;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-up {
+      animation: fadeSlideUp 0.2s ease-out forwards;
+    }
+
+    /* ============================================================
+       CLEAN LIGHT-MODE PRINT STYLESHEET
+       ============================================================ */
+    @media print {
+      html,
+      body {
+        background: #ffffff !important;
+        background-image: none !important;
+        color: #0f172a !important;
+        font-size: 11px !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block !important;
+      }
+
+      .print-surface {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+
+      .print-subsurface {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+
+      .print-text-dark {
+        color: #0f172a !important;
+      }
+
+      .print-text-muted {
+        color: #475569 !important;
+      }
+
+      section {
+        margin-bottom: 14px !important;
+      }
+    }
+    .font-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,monospace;}
+    #hairApp{padding:0;background:transparent;border:none;box-shadow:none;backdrop-filter:none;}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-6xl mx-auto relative z-10">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Hair</h1>
+      <p class="text-slate-400 text-sm mt-1">Scalp and hair product reminders: wash days, daily stack, reorders, scalp log</p>
+    </div>
+    <a href="../../links/" class="text-slate-400 hover:text-white text-sm">← Apps Hub</a>
+  </header>
+
+  <main id="hairApp" class="glass-panel p-6">
+      <!-- ============================================================
+       STICKY NAVIGATION BAR WITH SECTION JUMP LINKS
+       ============================================================ -->
+  <nav class="sticky top-0 z-40 bg-[#0a0f1e]/95 backdrop-blur-md border-b border-[#1f2937] no-print" aria-label="Section Navigation">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
+      <!-- Brand Logo -->
+      <a href="#top" class="flex items-center gap-2 shrink-0 group">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-slate-950 flex items-center justify-center shadow-md shadow-emerald-500/15 group-hover:scale-105 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+        <span class="hidden sm:inline text-xs font-extrabold tracking-tight text-slate-100">Scalp Protocol</span>
+      </a>
+
+      <!-- Jump Links -->
+      <div class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto dark-scroll py-1">
+        <a href="#section-orders" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition whitespace-nowrap">
+          Amazon.ca Orders
+        </a>
+        <a href="#section-today" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-[#111827] transition whitespace-nowrap">
+          Today (8)
+        </a>
+        <a href="#section-weekly" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-[#111827] transition whitespace-nowrap">
+          Weekly Grid
+        </a>
+        <a href="#section-log" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-[#111827] transition whitespace-nowrap">
+          Scalp Log
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       MAIN PAGE CONTAINER
+       ============================================================ -->
+  <div id="top" class="max-w-6xl mx-auto px-3 sm:px-6 py-5 sm:py-7 space-y-7 pb-20">
+
+    <!-- ============================================================
+         1. HEADER & COMPLIANCE BADGE + 2. 12-WEEK PROGRESS BANNER
+         ============================================================ -->
+    <header class="bg-[#111827] border border-[#1f2937] rounded-3xl p-4 sm:p-6 shadow-xl shadow-black/30 print-surface">
+      <!-- Top Title, Compliance Badges & Header Quick Actions -->
+      <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 pb-5 border-b border-[#1f2937]">
+        <div class="space-y-2">
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white print-text-dark">
+            Scalp &amp; Hair Recovery Protocol Tracker
+          </h1>
+
+          <!-- Required Compliance & Location Pills -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 print-subsurface">
+              <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              Zero Beef / Zero Pork Gelatin Verified
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 print-subsurface">
+              12-Week External + Internal Protocol
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-[#0a0f1e] text-slate-300 border border-[#374151] print-subsurface">
+              Ottawa, ON
+            </span>
+          </div>
+
+          <p id="header-live-date" class="text-xs text-slate-400 font-medium print-text-muted">
+            Loading current date...
+          </p>
+        </div>
+
+        <!-- Header Quick Action Buttons: Export JSON, Import JSON, Print Sheet -->
+        <div class="flex flex-wrap items-center gap-2 no-print shrink-0">
+          <button id="btn-export-json" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 hover:bg-emerald-500/25 transition flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export JSON
+          </button>
+
+          <label class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-[#0a0f1e] text-slate-200 border border-[#374151] hover:border-cyan-400 transition cursor-pointer flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Import JSON
+            <input id="input-import-json" type="file" accept="application/json" class="hidden" />
+          </label>
+
+          <button id="btn-print-sheet" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/35 hover:bg-cyan-500/25 transition flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print Sheet
+          </button>
+        </div>
+      </div>
+
+      <!-- 12-Week Progress & Today's Completion Ring Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-5">
+        <!-- Left Card: Circular SVG Progress Ring + Daily Streak -->
+        <div class="lg:col-span-5 bg-[#0a0f1e] border border-[#1f2937] rounded-2xl p-4 flex items-center gap-4 print-subsurface">
+          <!-- Circular SVG Ring -->
+          <div class="relative w-20 h-20 shrink-0">
+            <svg class="w-20 h-20 -rotate-90" viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="#1f2937" stroke-width="7"></circle>
+              <circle id="today-ring-progress" cx="40" cy="40" r="32" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-dasharray="201.06" stroke-dashoffset="201.06" class="transition-all duration-500 ease-out"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="today-pct-text" class="text-base font-extrabold font-mono text-white print-text-dark">0%</span>
+            </div>
+          </div>
+
+          <!-- Progress Metrics & Streak -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Today's Completion</span>
+              <span id="streak-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35" title="Consecutive days with at least 1 logged item">
+                <span aria-hidden="true">🔥</span>
+                <span id="streak-value">0d</span>
+              </span>
+            </div>
+            <div id="today-count-text" class="text-sm font-extrabold text-slate-100 mt-0.5 print-text-dark">0 / 8 completed</div>
+            <div class="w-full h-2 bg-[#1f2937] rounded-full overflow-hidden mt-2">
+              <div id="today-bar-fill" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+            <p id="today-wash-hint" class="text-[11px] text-slate-400 mt-1.5 font-medium truncate print-text-muted">
+              Checking wash schedule...
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Card: Editable Start Date + 12-Week Dynamic Phase Progress Bar -->
+        <div class="lg:col-span-7 bg-[#0a0f1e] border border-[#1f2937] rounded-2xl p-4 flex flex-col justify-between gap-3 print-subsurface">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="protocol-week-heading" class="text-lg font-extrabold text-white print-text-dark">Week 1 of 12</span>
+                <span id="protocol-day-badge" class="font-mono text-xs font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg">
+                  Day 1 of 84
+                </span>
+              </div>
+              <div class="mt-1.5">
+                <span id="protocol-phase-pill" class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/35">
+                  Phase 1: Scalp Clearing (Weeks 1–4)
+                </span>
+              </div>
+            </div>
+
+            <!-- Editable Protocol Start Date -->
+            <label class="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#111827] border border-[#374151] text-xs no-print">
+              <span class="font-semibold text-slate-400 whitespace-nowrap">Start Date:</span>
+              <input id="protocol-start-date" type="date" class="bg-transparent text-slate-100 font-mono font-bold focus:outline-none cursor-pointer" />
+            </label>
+          </div>
+
+          <!-- Visual 12-Week Dual-Phase Progress Bar -->
+          <div>
+            <div class="relative w-full h-3.5 bg-[#1f2937] rounded-full overflow-hidden flex">
+              <!-- Weeks 1-4 (33.33%) -->
+              <div class="w-1/3 h-full border-r-2 border-[#0a0f1e] bg-cyan-950/80"></div>
+              <!-- Weeks 5-12 (66.67%) -->
+              <div class="w-2/3 h-full bg-emerald-950/60"></div>
+              <!-- Live Fill -->
+              <div id="protocol-timeline-fill" class="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 2%;"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-1.5 font-medium print-text-muted">
+              <span id="phase1-label" class="font-semibold text-cyan-300 print-text-dark">Phase 1: Scalp Clearing (Wks 1–4)</span>
+              <span id="phase2-label" class="text-slate-400 print-text-muted">Phase 2: Maintenance &amp; Regrowth (Wks 5–12)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nizoral Phase Toggle & Mon-Sun Wash Day Selector Chips -->
+      <div class="mt-4 pt-4 border-t border-[#1f2937] flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Phase 1 vs Phase 2 Nizoral Toggle -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Nizoral Schedule:</span>
+          <div class="inline-flex p-1 rounded-2xl bg-[#0a0f1e] border border-[#1f2937] w-full sm:w-auto">
+            <button id="btn-phase-1" type="button" class="flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition">
+              Phase 1 (2x / week)
+            </button>
+            <button id="btn-phase-2" type="button" class="flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition">
+              Phase 2 (1x / week)
+            </button>
+          </div>
+        </div>
+
+        <!-- Clickable Mon-Sun Wash Day Selector Chips -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <span id="wash-day-label" class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">
+            Wash Days (2/2):
+          </span>
+          <div id="wash-day-chips" class="flex items-center gap-1.5 flex-wrap">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         3. PROMINENT "AMAZON CANADA ORDER & REORDER LIST" SECTION
+            (Always visible directly on the main page)
+         ============================================================ -->
+    <section id="section-orders" class="scroll-mt-16">
+      <div class="bg-[#111827] border border-[#1f2937] rounded-3xl p-4 sm:p-6 shadow-xl shadow-black/25 print-surface">
+        <!-- Section Header + Inventory Summary + Copy Order List Button -->
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-[#1f2937]">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35">
+                AMAZON.CA ORDER HUB
+              </span>
+              <h2 class="text-lg sm:text-xl font-extrabold text-white print-text-dark">
+                Amazon Canada Order &amp; Reorder List
+              </h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-1 print-text-muted">
+              Track inventory, order directly on Amazon Canada, or save exact <span class="font-mono text-cyan-400">amazon.ca/dp/...</span> links for one-click reorders.
+            </p>
+          </div>
+
+          <!-- Inventory Counts + Copy Order List Button -->
+          <div class="flex flex-wrap items-center gap-2 no-print">
+            <div id="inventory-summary-pills" class="flex flex-wrap items-center gap-1.5">
+              <!-- Populated dynamically by JS -->
+            </div>
+            <button id="btn-copy-order-list" type="button" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-sm flex items-center gap-1.5 min-w-[140px] justify-center">
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copy-order-btn-label">Copy Order List</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Top Gelatin-Free Verification Notice -->
+        <div class="mt-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/35 p-3.5 sm:p-4 flex items-start gap-3 print-subsurface">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <p class="text-xs sm:text-sm text-emerald-100 leading-relaxed print-text-dark">
+            <strong class="text-emerald-300 print-text-dark">Zero Beef / Zero Pork Gelatin Guarantee:</strong>
+            All internal supplements use 100% plant-based veggie capsules/softgels or wild fish/marine sources — ZERO beef or pork gelatin. Always double-check the 'Other Ingredients' label on Amazon.ca before checkout.
+          </p>
+        </div>
+
+        <!-- GROUP A: EXTERNAL TREATMENTS -->
+        <div class="mt-6">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+              <h3 class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-cyan-300 font-mono print-text-dark">
+                Group A: External Treatments (Topical — No Gelatin)
+              </h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400">2 Products</span>
+          </div>
+
+          <div id="orders-group-a" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Populated dynamically by JS -->
+          </div>
+
+          <!-- Highlighted 3-Step Wash-Day Order Bar directly beneath Group A -->
+          <div class="mt-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-[#0f1c31] to-emerald-950/50 border border-cyan-500/35 p-4 print-subsurface">
+            <div class="flex items-center gap-2 mb-2.5">
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-extrabold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">WASH-DAY PROTOCOL</span>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-white print-text-dark">3-Step Wash-Day Order</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              <div class="bg-[#0a0f1e]/85 border border-[#1f2937] rounded-xl px-3.5 py-2.5 text-xs print-surface">
+                <span class="font-mono font-extrabold text-cyan-400 block mb-0.5">Step 1 &rarr; Nizoral 2%</span>
+                <span class="text-slate-200 print-text-dark">Wash with Nizoral 2% (lather 3–5 min, cool/lukewarm rinse)</span>
+              </div>
+              <div class="bg-[#0a0f1e]/85 border border-[#1f2937] rounded-xl px-3.5 py-2.5 text-xs print-surface">
+                <span class="font-mono font-extrabold text-cyan-400 block mb-0.5">Step 2 &rarr; Dry Thoroughly</span>
+                <span class="text-slate-200 print-text-dark">Dry hair &amp; scalp completely (towel + air dry)</span>
+              </div>
+              <div class="bg-[#0a0f1e]/85 border border-[#1f2937] rounded-xl px-3.5 py-2.5 text-xs print-surface">
+                <span class="font-mono font-extrabold text-emerald-400 block mb-0.5">Step 3 &rarr; Roll-On Serum</span>
+                <span class="text-slate-200 print-text-dark">Roll on Rosemary/Redensyl Serum (massage 1–2 min, leave in)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GROUP B: INTERNAL SUPPLEMENTS (ZERO BEEF / ZERO PORK GELATIN) -->
+        <div class="mt-7 pt-6 border-t border-[#1f2937]">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <h3 class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-emerald-300 font-mono print-text-dark">
+                Group B: Internal Supplements (Zero Beef / Zero Pork Gelatin)
+              </h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400">3 Products</span>
+          </div>
+
+          <div id="orders-group-b" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- GROUP C: OPTIONAL SUPPORT (ZERO BEEF / ZERO PORK GELATIN) -->
+        <div class="mt-7 pt-6 border-t border-[#1f2937]">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <h3 class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-amber-300 font-mono print-text-dark">
+                Group C: Optional Support (Zero Beef / Zero Pork Gelatin)
+              </h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400">2 Optional Products</span>
+          </div>
+
+          <div id="orders-group-c" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         4. TODAY'S INTERACTIVE DAILY CHECKLIST (8 DAILY TASKS)
+         ============================================================ -->
+    <section id="section-today" class="scroll-mt-16 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">Daily Execution</span>
+          <h2 class="text-xl font-extrabold text-white print-text-dark">Today's Interactive Daily Checklist</h2>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <span id="checklist-date-pill" class="px-3 py-1.5 rounded-xl bg-[#111827] border border-[#1f2937] text-xs font-mono text-slate-300">
+            Today
+          </span>
+          <button id="btn-clear-today" type="button" class="px-3 py-1.5 rounded-xl bg-[#111827] border border-rose-500/35 text-rose-300 hover:bg-rose-500/15 text-xs font-bold transition">
+            Clear Today
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Wash-Day Highlight Banner (Shown on selected Nizoral days) -->
+      <div id="today-washday-banner" class="hidden rounded-2xl bg-gradient-to-r from-cyan-950/90 to-emerald-950/80 border border-cyan-500/45 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 flex items-center justify-center text-lg shrink-0">💧</div>
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-cyan-300">Scheduled Nizoral Wash Day</div>
+            <div class="text-sm font-bold text-white">Nizoral 2% Shampoo is DUE TODAY — lather 3–5 min, rinse cool, and dry scalp fully before serum roll-on.</div>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-extrabold bg-cyan-400 text-slate-950 self-start sm:self-center shrink-0">
+          DUE TODAY
+        </span>
+      </div>
+
+      <!-- 2-Column Responsive Grid of Daily Checklist Groups -->
+      <div id="today-checklist-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         5. 7-DAY WEEKLY ADHERENCE GRID
+         ============================================================ -->
+    <section id="section-weekly" class="scroll-mt-16 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div>
+          <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">Live Synced Mon–Sun Matrix</span>
+          <h2 class="text-xl font-extrabold text-white print-text-dark">7-Day Weekly Adherence Grid</h2>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="weekly-range-label" class="text-xs font-mono font-semibold text-slate-300 bg-[#111827] border border-[#1f2937] px-3 py-2 rounded-xl print-subsurface">
+            Mon – Sun
+          </span>
+          <button id="btn-reset-week" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 text-rose-300 border border-rose-500/35 hover:bg-rose-500/25 transition no-print">
+            Reset Week
+          </button>
+        </div>
+      </div>
+
+      <!-- Weekly Adherence Summary KPI Pills -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-[#111827] border border-[#1f2937] rounded-2xl p-4 print-surface">
+          <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Overall Weekly</div>
+          <div id="stat-weekly-overall" class="text-2xl sm:text-3xl font-extrabold font-mono text-white mt-1 print-text-dark">0%</div>
+          <div id="stat-weekly-counts" class="text-xs text-slate-400 mt-0.5 print-text-muted">0 / 56 checkoffs</div>
+        </div>
+        <div class="bg-[#111827] border border-[#1f2937] rounded-2xl p-4 print-surface">
+          <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">External %</div>
+          <div id="stat-weekly-external" class="text-2xl sm:text-3xl font-extrabold font-mono text-cyan-300 mt-1 print-text-dark">0%</div>
+          <div class="text-xs text-slate-400 mt-0.5 print-text-muted">Nizoral, Cool Rinse &amp; AM/PM Serum</div>
+        </div>
+        <div class="bg-[#111827] border border-[#1f2937] rounded-2xl p-4 print-surface">
+          <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">Internal %</div>
+          <div id="stat-weekly-internal" class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-300 mt-1 print-text-dark">0%</div>
+          <div class="text-xs text-slate-400 mt-0.5 print-text-muted">Marine Collagen, Veggie Saw Palm, Omega-3</div>
+        </div>
+        <div class="bg-[#111827] border border-[#1f2937] rounded-2xl p-4 print-surface">
+          <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400">Diet %</div>
+          <div id="stat-weekly-diet" class="text-2xl sm:text-3xl font-extrabold font-mono text-amber-300 mt-1 print-text-dark">0%</div>
+          <div class="text-xs text-slate-400 mt-0.5 print-text-muted">Anti-Itch Low Sugar &amp; Regrowth Foods</div>
+        </div>
+      </div>
+
+      <!-- Matrix Table Card -->
+      <div class="bg-[#111827] border border-[#1f2937] rounded-3xl overflow-hidden shadow-xl shadow-black/25 print-surface">
+        <div class="px-4 sm:px-5 py-3.5 border-b border-[#1f2937] flex flex-wrap items-center justify-between gap-2">
+          <p class="text-xs text-slate-400 print-text-muted">
+            Click any cell to toggle. Today's highlighted column stays synced live with <strong class="text-slate-200 print-text-dark">Today's Checklist</strong>.
+          </p>
+          <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400">
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span>Done</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-cyan-500/20 border border-cyan-400 inline-block"></span>Wash Day</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-[#0a0f1e] border border-[#374151] inline-block"></span>Pending</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto dark-scroll">
+          <table class="w-full text-left border-collapse min-w-[660px]">
+            <thead>
+              <tr id="weekly-matrix-head" class="bg-[#0a0f1e] border-b border-[#1f2937] text-xs font-mono text-slate-400">
+                <!-- Populated dynamically by JS -->
+              </tr>
+            </thead>
+            <tbody id="weekly-matrix-body" class="divide-y divide-[#1f2937] text-sm">
+              <!-- Populated dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         6. DUAL-METRIC SCALP RECOVERY LOG & 14-ENTRY TREND CHART
+         ============================================================ -->
+    <section id="section-log" class="scroll-mt-16 space-y-5">
+      <div>
+        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400">Symptom Recovery Analytics</span>
+        <h2 class="text-xl font-extrabold text-white print-text-dark">Dual-Metric Scalp Recovery Log &amp; Trend Chart</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <!-- Left: Daily Scalp Check-In Form -->
+        <div class="lg:col-span-5 bg-[#111827] border border-[#1f2937] rounded-3xl p-5 shadow-xl shadow-black/25 print-surface">
+          <h3 class="text-base font-extrabold text-white print-text-dark">Log Daily Scalp Status</h3>
+          <p class="text-xs text-slate-400 mt-0.5 mb-4 print-text-muted">Track both metrics from 1 (Calm/Clear) to 5 (Severe) to see your scalp clear across Weeks 1–12.</p>
+
+          <form id="scalp-log-form" class="space-y-4">
+            <!-- Date Input -->
+            <div>
+              <label for="log-entry-date" class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1.5">Log Date</label>
+              <input id="log-entry-date" type="date" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0f1e] border border-[#1f2937] text-sm font-mono font-semibold text-white focus:outline-none focus:border-cyan-400" />
+            </div>
+
+            <!-- Metric 1: Itch / Inflammation (1=Calm, 5=Severe) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">Itch / Inflammation</span>
+                <span id="itch-selected-label" class="text-xs font-semibold text-cyan-300">2 — Mild</span>
+              </div>
+              <div id="itch-pills" class="grid grid-cols-5 gap-1.5">
+                <!-- Populated dynamically by JS -->
+              </div>
+            </div>
+
+            <!-- Metric 2: Bumps / Flaking (1=Clear, 5=Severe) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400">Bumps / Flaking</span>
+                <span id="bumps-selected-label" class="text-xs font-semibold text-amber-300">2 — Mild</span>
+              </div>
+              <div id="bumps-pills" class="grid grid-cols-5 gap-1.5">
+                <!-- Populated dynamically by JS -->
+              </div>
+            </div>
+
+            <!-- Short Notes -->
+            <div>
+              <label for="log-entry-notes" class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1.5">Short Notes</label>
+              <textarea id="log-entry-notes" rows="3" placeholder="e.g., Scalp much calmer after Nizoral + cool rinse; zero grease from morning roll-on..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0f1e] border border-[#1f2937] text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-400 resize-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-emerald-500/15 active:scale-[0.99]">
+              Save Recovery Check-In
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: 14-Entry Dual-Bar Trend Chart & Compact History List -->
+        <div class="lg:col-span-7 space-y-5">
+          <!-- Dual-Bar Trend Chart (Up to last 14 entries) -->
+          <div class="bg-[#111827] border border-[#1f2937] rounded-3xl p-5 shadow-xl shadow-black/25 print-surface">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h3 class="text-sm font-extrabold text-white print-text-dark">Scalp Clearing Trend (Last 14 Entries)</h3>
+                <p class="text-[11px] text-slate-400 print-text-muted">Lower bars = calmer, clearer scalp (Scale 1–5)</p>
+              </div>
+              <div class="flex items-center gap-3 text-[11px] font-mono">
+                <span class="inline-flex items-center gap-1.5 text-cyan-300 print-text-dark">
+                  <span class="w-2.5 h-2.5 rounded-sm bg-cyan-400 inline-block"></span>Itch
+                </span>
+                <span class="inline-flex items-center gap-1.5 text-amber-300 print-text-dark">
+                  <span class="w-2.5 h-2.5 rounded-sm bg-amber-400 inline-block"></span>Bumps
+                </span>
+              </div>
+            </div>
+
+            <div id="scalp-trend-chart" class="w-full h-44 bg-[#0a0f1e] border border-[#1f2937] rounded-2xl p-3 overflow-x-auto dark-scroll flex items-end print-subsurface">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Compact Log History Table / List -->
+          <div class="bg-[#111827] border border-[#1f2937] rounded-3xl p-5 shadow-xl shadow-black/25 print-surface">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-extrabold text-white print-text-dark">Log History</h3>
+              <span id="log-history-count" class="text-xs font-mono text-slate-400">0 entries</span>
+            </div>
+            <div id="scalp-log-list" class="space-y-2 max-h-[340px] overflow-y-auto dark-scroll pr-1">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Print-Only Protocol Summary Footer -->
+    <footer class="hidden print-only pt-4 border-t border-slate-300 text-[10px] text-slate-700 leading-relaxed">
+      <strong>Scalp &amp; Hair Recovery Protocol (Zero Beef / Zero Pork Gelatin — Ottawa, ON):</strong>
+      Wash-Day Order: (1) Nizoral 2% Shampoo 3–5 min, cool/lukewarm rinse &rarr; (2) Dry scalp completely &rarr; (3) Rosemary/Redensyl Roll-On Serum massage 1–2 min, leave in.
+      Internal Stack: Vital Proteins Marine Collagen Peptides (Morning), NOW Saw Palmetto 320 mg Veggie Softgel (1/day Dinner), Sports Research Triple Strength Omega-3 Fish Softgel (1/day Dinner).
+    </footer>
+  </div>
+
+  <!-- ============================================================
+       MODAL: EDIT DIRECT AMAZON.CA LINK
+       ============================================================ -->
+  <div id="edit-link-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="edit-link-title">
+    <div class="bg-[#111827] border border-[#374151] rounded-3xl max-w-md w-full p-6 shadow-2xl animate-fade-up">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">Save Direct Product URL</span>
+          <h3 id="edit-link-title" class="text-base font-extrabold text-white mt-0.5">Edit Amazon.ca Link</h3>
+        </div>
+        <button id="edit-link-close" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#1f2937] transition" aria-label="Close modal">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <p id="edit-link-product-name" class="text-xs font-semibold text-slate-200 mb-3 bg-[#0a0f1e] border border-[#1f2937] rounded-xl p-3"></p>
+
+      <form id="edit-link-form" class="space-y-4">
+        <div>
+          <label for="edit-link-input" class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+            Direct Amazon.ca URL (e.g., https://www.amazon.ca/dp/...)
+          </label>
+          <input id="edit-link-input" type="url" required placeholder="https://www.amazon.ca/dp/..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0f1e] border border-[#374151] text-xs font-mono text-cyan-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400" />
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <button id="edit-link-reset" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-amber-300 hover:bg-amber-500/10 transition">
+            Reset Default Search
+          </button>
+          <div class="flex items-center gap-2">
+            <button id="edit-link-cancel" type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#1f2937] hover:bg-[#374151] text-slate-200 transition">
+              Cancel
+            </button>
+            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
+              Save Link
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: CUSTOM CONFIRMATION DIALOG (Zero native confirm())
+       ============================================================ -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="bg-[#111827] border border-[#374151] rounded-3xl max-w-sm w-full p-6 shadow-2xl animate-fade-up">
+      <div class="w-11 h-11 rounded-2xl bg-rose-500/15 border border-rose-500/35 text-rose-400 flex items-center justify-center mb-3">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3 id="confirm-modal-title" class="text-lg font-extrabold text-white">Confirm Action</h3>
+      <p id="confirm-modal-message" class="text-sm text-slate-400 mt-1.5 leading-relaxed">Are you sure?</p>
+      <div class="flex items-center justify-end gap-2 mt-6">
+        <button id="confirm-modal-cancel" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#1f2937] hover:bg-[#374151] text-slate-200 transition">
+          Cancel
+        </button>
+        <button id="confirm-modal-ok" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-400 text-slate-950 transition">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOAST NOTIFICATION CONTAINER (Zero native alert())
+       ============================================================ -->
+  <div id="toast-container" class="fixed bottom-5 right-4 sm:right-6 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+  </main>
+</div>
+
+<script>
+// === App logic ===
+// Fixed-position overlays live inside <main>; move them to <body> so they cover the viewport.
+['edit-link-modal','confirm-modal','toast-container'].forEach(function (id) {
+  var el = document.getElementById(id);
+  if (el) document.body.appendChild(el);
+});
+    (function () {
+      'use strict';
+
+      // ============================================================
+      // 1. PROTOCOL DATA & ZERO-BEEF / ZERO-PORK PRODUCT CATALOG
+      // ============================================================
+      const STORAGE_KEY = 'scalp_hair_protocol_v3_clean';
+
+      // Mon (1) -> Sun (0) order
+      const WEEK_DAYS = [
+        { dayIndex: 1, short: 'Mon', full: 'Monday' },
+        { dayIndex: 2, short: 'Tue', full: 'Tuesday' },
+        { dayIndex: 3, short: 'Wed', full: 'Wednesday' },
+        { dayIndex: 4, short: 'Thu', full: 'Thursday' },
+        { dayIndex: 5, short: 'Fri', full: 'Friday' },
+        { dayIndex: 6, short: 'Sat', full: 'Saturday' },
+        { dayIndex: 0, short: 'Sun', full: 'Sunday' },
+      ];
+
+      // Order Status Dropdown Options & Styling
+      const ORDER_STATUSES = [
+        { value: 'To Order', badgeClass: 'bg-slate-800 text-slate-200 border-slate-600' },
+        { value: 'Ordered', badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/45' },
+        { value: 'In Stock', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/45' },
+        { value: 'Reorder Soon', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/50' },
+      ];
+
+      // Severity Scale Metadata for Itch & Bumps
+      const ITCH_SCALE = [
+        { val: 1, short: 'Calm', label: '1 — Calm' },
+        { val: 2, short: 'Mild', label: '2 — Mild' },
+        { val: 3, short: 'Mod', label: '3 — Moderate' },
+        { val: 4, short: 'High', label: '4 — Inflamed' },
+        { val: 5, short: 'Severe', label: '5 — Severe' },
+      ];
+
+      const BUMPS_SCALE = [
+        { val: 1, short: 'Clear', label: '1 — Clear' },
+        { val: 2, short: 'Mild', label: '2 — Mild' },
+        { val: 3, short: 'Mod', label: '3 — Moderate' },
+        { val: 4, short: 'High', label: '4 — Flared' },
+        { val: 5, short: 'Severe', label: '5 — Severe' },
+      ];
+
+      // Verified Zero-Beef / Zero-Pork Product List across 3 Groups
+      const PRODUCTS = [
+        // --- GROUP A: EXTERNAL TREATMENTS (TOPICAL — NO GELATIN) ---
+        {
+          id: 'nizoral_shampoo',
+          group: 'A',
+          name: 'Nizoral Ketoconazole 2% Anti-Dandruff & Itchy Scalp Shampoo',
+          gelatinBadge: 'Topical • No Gelatin',
+          badgeTone: 'cyan',
+          actives: 'Ketoconazole 2% (antifungal + mild local anti-DHT)',
+          dosage: '2x/week (Weeks 1–4), then 1x every 1–2 weeks. Lather 3–5 min, rinse with cool/lukewarm water.',
+          benefit: 'Clears yeast/fungus causing bumpy, itchy scalp inflammation and supports healthier follicles.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=Nizoral+Ketoconazole+2%25+Anti-Dandruff+Shampoo',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="22" y="4" width="20" height="9" rx="2.5" fill="#06b6d4"/>
+              <path d="M23 13 L41 13 L46 21 L18 21 Z" fill="#334155"/>
+              <rect x="14" y="20" width="36" height="48" rx="7" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+              <rect x="16" y="30" width="32" height="14" fill="#0891b2"/>
+              <text x="32" y="40" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="800" font-family="Inter, sans-serif">2% KETO</text>
+              <rect x="21" y="49" width="22" height="3" rx="1.5" fill="#67e8f9" opacity="0.75"/>
+              <rect x="24" y="55" width="16" height="2.5" rx="1.25" fill="#475569"/>
+            </svg>
+          `,
+        },
+        {
+          id: 'rosemary_rollon',
+          group: 'A',
+          name: 'Hair Growth Serum Roll-On (3% Rosemary, 3% Redensyl, 2% AnaGain)',
+          gelatinBadge: 'Topical • No Gelatin',
+          badgeTone: 'cyan',
+          actives: '3% Rosemary Oil, 3% Redensyl, 2% AnaGain',
+          dosage: '1–2x daily (morning and/or night) on clean, dry scalp. Massage 1–2 min; do not rinse.',
+          benefit: 'Rollerball stimulates microcirculation while natural actives wake dormant crown follicles without harsh side effects.',
+          defaultStatus: 'Ordered',
+          defaultUrl: 'https://www.amazon.ca/s?k=Hair+Growth+Serum+Roll+On+3%25+Rosemary+3%25+Redensyl+Anagain',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <circle cx="32" cy="10" r="6" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+              <circle cx="30" cy="8" r="1.8" fill="#ffffff"/>
+              <rect x="24" y="14" width="16" height="7" rx="2" fill="#334155"/>
+              <rect x="21" y="21" width="22" height="47" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+              <rect x="23" y="31" width="18" height="26" rx="2.5" fill="#0a0f1e"/>
+              <path d="M32 35 C36 38 36 43 32 46 C28 43 28 38 32 35 Z" fill="#10b981"/>
+              <text x="32" y="53" text-anchor="middle" fill="#6ee7b7" font-size="5.5" font-weight="800" font-family="Inter, sans-serif">3% ROSE</text>
+            </svg>
+          `,
+        },
+
+        // --- GROUP B: INTERNAL SUPPLEMENTS (ZERO BEEF / ZERO PORK GELATIN) ---
+        {
+          id: 'saw_palmetto_veggie',
+          group: 'B',
+          name: 'NOW Foods Saw Palmetto Extract 320 mg Veggie Softgels (with Pumpkin Seed Oil)',
+          gelatinBadge: '100% Plant Veggie Softgel • No Gelatin',
+          badgeTone: 'emerald',
+          actives: '320 mg Saw Palmetto Extract (85–95% Fatty Acids) + 80 mg Cold-Pressed Pumpkin Seed Oil. Shell: Modified corn starch, glycerin, carrageenan, water (Halal/Kosher/Vegan shell).',
+          dosage: '1 veggie softgel daily with dinner.',
+          benefit: 'Naturally inhibits 5-alpha reductase (DHT) to slow crown thinning and supports prostate health.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=NOW+Foods+Saw+Palmetto+Extract+320+mg+Veggie+Softgels',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="19" y="6" width="26" height="9" rx="2.5" fill="#10b981"/>
+              <rect x="13" y="15" width="38" height="53" rx="7" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <rect x="15" y="24" width="34" height="12" fill="#059669"/>
+              <text x="32" y="33" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="800" font-family="Inter, sans-serif">VEGGIE</text>
+              <text x="32" y="46" text-anchor="middle" fill="#6ee7b7" font-size="5.5" font-weight="700" font-family="Inter, sans-serif">SAW PALM</text>
+              <path d="M32 51 C37 54 37 60 32 63 C27 60 27 54 32 51 Z" fill="#34d399"/>
+            </svg>
+          `,
+        },
+        {
+          id: 'omega3_fish',
+          group: 'B',
+          name: 'Sports Research Triple Strength Omega-3 Fish Oil (Fish Softgels)',
+          gelatinBadge: 'Fish Gelatin Only (Tilapia) • No Beef/Pork',
+          badgeTone: 'cyan',
+          actives: '1,250 mg Wild Alaska Pollock (690 mg EPA, 260–310 mg DHA). Tilapia fish gelatin softgel, IFOS 5-star certified.',
+          dosage: '1 softgel daily with dinner (heaviest meal).',
+          benefit: 'Lowers systemic scalp inflammation and restores skin moisture barrier during dry Ottawa winters.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=Sports+Research+Triple+Strength+Omega-3+Fish+Oil+Fish+Softgels',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="19" y="6" width="26" height="9" rx="2.5" fill="#475569"/>
+              <rect x="13" y="15" width="38" height="53" rx="7" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+              <rect x="15" y="25" width="34" height="32" rx="3" fill="#0c4a6e"/>
+              <path d="M32 30 C36 35 37 39 37 41 A5 5 0 1 1 27 41 C27 39 28 35 32 30 Z" fill="#fbbf24"/>
+              <text x="32" y="53" text-anchor="middle" fill="#e0f2fe" font-size="6.5" font-weight="800" font-family="Inter, sans-serif">OMEGA-3</text>
+            </svg>
+          `,
+        },
+        {
+          id: 'marine_collagen',
+          group: 'B',
+          name: 'Vital Proteins Marine Collagen Peptides (Unflavored Powder)',
+          gelatinBadge: 'Wild-Caught Fish Powder • No Beef/Pork',
+          badgeTone: 'cyan',
+          actives: '10–12 g Hydrolyzed Marine Collagen Peptides per serving (wild-caught white fish/cod scales; loose powder, zero capsule gelatin).',
+          dosage: '1–2 scoops daily mixed into morning coffee, tea, or water.',
+          benefit: 'Supplies bioavailable amino acids for stronger keratin hair shafts, skin elasticity, and joint recovery.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=Vital+Proteins+Marine+Collagen+Peptides+Unflavored',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="10" y="10" width="44" height="10" rx="3" fill="#06b6d4"/>
+              <rect x="12" y="20" width="40" height="48" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <rect x="14" y="30" width="36" height="28" rx="2" fill="#0e7490"/>
+              <text x="32" y="42" text-anchor="middle" fill="#ffffff" font-size="6.5" font-weight="800" font-family="Inter, sans-serif">MARINE</text>
+              <text x="32" y="51" text-anchor="middle" fill="#cffafe" font-size="5.5" font-weight="700" font-family="Inter, sans-serif">COLLAGEN</text>
+            </svg>
+          `,
+        },
+
+        // --- GROUP C: OPTIONAL SUPPORT (ZERO BEEF / ZERO PORK GELATIN) ---
+        {
+          id: 'nizoral_conditioner',
+          group: 'C',
+          name: 'Nizoral Deep Moisturizing Conditioner (Sulfate-Free)',
+          gelatinBadge: 'Topical • No Gelatin',
+          badgeTone: 'cyan',
+          actives: '7 moisturizers; free of sulfates, parabens, and dyes.',
+          dosage: 'After Nizoral wash days if hair feels dry.',
+          benefit: 'Prevents Nizoral-related dryness without washing away medicated scalp benefits.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=Nizoral+Deep+Moisturizing+Conditioner',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="22" y="5" width="20" height="9" rx="2.5" fill="#38bdf8"/>
+              <rect x="15" y="14" width="34" height="53" rx="7" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <rect x="17" y="29" width="30" height="14" fill="#0284c7"/>
+              <text x="32" y="39" text-anchor="middle" fill="#ffffff" font-size="6.5" font-weight="800" font-family="Inter, sans-serif">MOISTURE</text>
+              <rect x="23" y="49" width="18" height="2.5" rx="1.25" fill="#7dd3fc" opacity="0.7"/>
+            </svg>
+          `,
+        },
+        {
+          id: 'zinc_picolinate',
+          group: 'C',
+          name: 'NOW Foods Zinc Picolinate 50 mg Veg Capsules (Optional)',
+          gelatinBadge: 'Vegan Cellulose Capsule • No Gelatin',
+          badgeTone: 'emerald',
+          actives: '50 mg Zinc Picolinate in plant hypromellose capsule (replaces zinc omitted in the Veggie Saw Palmetto formula, or get natural zinc from daily roasted pumpkin seeds).',
+          dosage: '1 capsule every 2–3 days with a meal (or rely on pumpkin seeds in diet).',
+          benefit: 'Supports immune defense against scalp yeast overgrowth and healthy follicle repair.',
+          defaultStatus: 'To Order',
+          defaultUrl: 'https://www.amazon.ca/s?k=NOW+Foods+Zinc+Picolinate+50+mg+Veg+Capsules',
+          iconSvg: `
+            <svg viewBox="0 0 64 72" class="w-12 h-14 shrink-0" aria-hidden="true">
+              <rect x="19" y="6" width="26" height="9" rx="2.5" fill="#f59e0b"/>
+              <rect x="13" y="15" width="38" height="53" rx="7" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <rect x="15" y="25" width="34" height="13" fill="#d97706"/>
+              <text x="32" y="34.5" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="800" font-family="Inter, sans-serif">ZINC 50</text>
+              <text x="32" y="48" text-anchor="middle" fill="#fde68a" font-size="5.5" font-weight="700" font-family="Inter, sans-serif">VEG CAPS</text>
+              <rect x="22" y="54" width="20" height="5" rx="2.5" fill="#10b981"/>
+            </svg>
+          `,
+        },
+      ];
+
+      // 8 Daily Tasks — exact 1-to-1 sync between Today's Checklist and 7-Day Weekly Grid
+      const DAILY_TASKS = [
+        {
+          id: 'marine_collagen',
+          group: 'Morning',
+          category: 'INTERNAL',
+          title: 'Vital Proteins Marine Collagen',
+          desc: '1–2 scoops dissolved in morning coffee, tea, or water (wild-caught fish powder, zero beef/pork).',
+          shortLabel: 'Marine Collagen (AM)',
+          shortSub: 'Morning • 1–2 scoops',
+        },
+        {
+          id: 'serum_am',
+          group: 'Morning',
+          category: 'EXTERNAL',
+          title: 'Morning Rosemary & Redensyl Serum Roll-On',
+          desc: 'Apply onto clean, dry scalp and massage gently for 1–2 min. Leave in — do not rinse.',
+          shortLabel: 'Rosemary Roll-On (AM)',
+          shortSub: 'Morning • Dry scalp',
+        },
+        {
+          id: 'nizoral',
+          group: 'Shower / Wash',
+          category: 'EXTERNAL',
+          title: 'Nizoral 2% Shampoo',
+          descWash: 'Lather 5–10 mL (1–2 tsp) into scalp for 3–5 min, rinse cool/lukewarm, and dry scalp fully before roll-on serum.',
+          descRest: 'Non-medicated rest day — use a gentle regular shampoo to keep your scalp clean without over-drying.',
+          shortLabel: 'Nizoral 2% / Gentle Wash',
+          shortSub: 'Wash days: 3–5 min',
+          isWashTask: true,
+        },
+        {
+          id: 'cool_rinse',
+          group: 'Shower / Wash',
+          category: 'EXTERNAL',
+          title: 'Cool / Lukewarm Final Scalp Rinse',
+          desc: 'Avoid hot water; finish with a cool or lukewarm rinse to protect your Ottawa winter scalp moisture barrier.',
+          shortLabel: 'Cool / Lukewarm Rinse',
+          shortSub: 'Shower • Protects barrier',
+        },
+        {
+          id: 'saw_palmetto',
+          group: 'Dinner (With Meal)',
+          category: 'INTERNAL',
+          title: 'NOW Saw Palmetto 320 mg Veggie Softgel',
+          desc: '1 plant-based veggie softgel daily with dinner (100% gelatin-free, with pumpkin seed oil).',
+          shortLabel: 'Saw Palmetto Veggie',
+          shortSub: 'Dinner • 1 veggie softgel',
+        },
+        {
+          id: 'omega3',
+          group: 'Dinner (With Meal)',
+          category: 'INTERNAL',
+          title: 'Sports Research Triple Strength Omega-3',
+          desc: '1 tilapia fish-gelatin softgel with your heaviest meal to calm systemic scalp inflammation.',
+          shortLabel: 'Triple Strength Omega-3',
+          shortSub: 'Dinner • 1 fish softgel',
+        },
+        {
+          id: 'serum_pm',
+          group: 'Night',
+          category: 'EXTERNAL',
+          title: 'Night Rosemary & Redensyl Serum Roll-On',
+          desc: 'Apply onto clean, dry scalp before bed, massage 1–2 min, leave overnight, and wash hands after.',
+          shortLabel: 'Rosemary Roll-On (PM)',
+          shortSub: 'Night • Leave overnight',
+        },
+        {
+          id: 'diet_guard',
+          group: 'Daily Diet Guard',
+          category: 'DIET',
+          title: 'Anti-Itch Diet Guard',
+          desc: 'Keep refined sugar & simple white carbs low; include roasted pumpkin seeds, walnuts, or green tea today.',
+          shortLabel: 'Anti-Itch Diet Guard',
+          shortSub: 'Low sugar • Seeds / Tea',
+        },
+      ];
+
+      // ============================================================
+      // 2. DATE HELPERS (LOCAL TIMEZONE SAFE)
+      // ============================================================
+      function formatISO(dateObj) {
+        const y = dateObj.getFullYear();
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const d = String(dateObj.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+
+      function parseISO(isoStr) {
+        if (!isoStr || typeof isoStr !== 'string') return new Date();
+        const parts = isoStr.split('-').map(Number);
+        if (parts.length !== 3 || parts.some(isNaN)) return new Date();
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+      }
+
+      function getTodayISO() {
+        return formatISO(new Date());
+      }
+
+      function formatLongDate(isoStr) {
+        return parseISO(isoStr).toLocaleDateString('en-CA', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      }
+
+      function formatShortDate(isoStr) {
+        return parseISO(isoStr).toLocaleDateString('en-CA', {
+          month: 'short',
+          day: 'numeric',
+        });
+      }
+
+      function getCurrentWeekDates() {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const jsDay = today.getDay(); // 0=Sun..6=Sat
+        const diffToMon = jsDay === 0 ? -6 : 1 - jsDay;
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMon);
+
+        const list = [];
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(monday);
+          d.setDate(monday.getDate() + i);
+          list.push({
+            iso: formatISO(d),
+            dayIndex: d.getDay(),
+            short: WEEK_DAYS[i].short,
+            dayNum: d.getDate(),
+          });
+        }
+        return list;
+      }
+
+      // ============================================================
+      // 3. STATE & LOCALSTORAGE PERSISTENCE
+      // ============================================================
+      function buildDefaultOrderStatuses() {
+        const map = {};
+        PRODUCTS.forEach((p) => {
+          map[p.id] = p.defaultStatus;
+        });
+        return map;
+      }
+
+      function getDefaultState() {
+        return {
+          startDate: getTodayISO(),
+          phase: 'phase1', // 'phase1' (2x/wk) or 'phase2' (1x/wk)
+          washDays: [1, 4], // Defaults: Mon (1) & Thu (4) in Phase 1
+          orderStatuses: buildDefaultOrderStatuses(),
+          customLinks: {}, // { productId: 'https://www.amazon.ca/dp/...' }
+          checks: {}, // { 'YYYY-MM-DD': { taskId: boolean } }
+          logs: [], // [{ id, date, itch, bumps, notes, timestamp }]
+        };
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return getDefaultState();
+          const parsed = JSON.parse(raw);
+          const defaults = getDefaultState();
+          return {
+            ...defaults,
+            ...parsed,
+            washDays: Array.isArray(parsed.washDays) && parsed.washDays.length > 0 ? parsed.washDays : defaults.washDays,
+            orderStatuses: { ...defaults.orderStatuses, ...(parsed.orderStatuses || {}) },
+            customLinks: parsed.customLinks && typeof parsed.customLinks === 'object' ? parsed.customLinks : {},
+            checks: parsed.checks && typeof parsed.checks === 'object' ? parsed.checks : {},
+            logs: Array.isArray(parsed.logs) ? parsed.logs : [],
+          };
+        } catch (err) {
+          console.error('Failed to load localStorage state:', err);
+          return getDefaultState();
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          console.error('Failed to save localStorage state:', err);
+          showToast('Could not save changes to localStorage.', 'error');
+        }
+      }
+
+      let state = loadState();
+      let selectedItch = 2;
+      let selectedBumps = 2;
+      let editingProductId = null;
+      let pendingConfirmCallback = null;
+
+      function isWashDay(isoStr) {
+        return state.washDays.includes(parseISO(isoStr).getDay());
+      }
+
+      function getDayChecks(isoStr) {
+        return state.checks[isoStr] || {};
+      }
+
+      function setDayCheck(isoStr, taskId, checked) {
+        if (!state.checks[isoStr]) state.checks[isoStr] = {};
+        state.checks[isoStr][taskId] = Boolean(checked);
+        saveState();
+      }
+
+      function getProductUrl(prod) {
+        return state.customLinks[prod.id] || prod.defaultUrl;
+      }
+
+      // Compute Today's 8-item completion
+      function getDailyCompletion(isoStr) {
+        const checks = getDayChecks(isoStr);
+        const total = DAILY_TASKS.length;
+        const completed = DAILY_TASKS.filter((t) => Boolean(checks[t.id])).length;
+        const pct = Math.round((completed / total) * 100);
+        return { completed, total, pct };
+      }
+
+      // Streak: Consecutive days with >= 1 logged item
+      function calculateStreak() {
+        const today = new Date();
+        const cursor = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const todayISO = formatISO(cursor);
+        let streak = 0;
+
+        // If today has >= 1 item, count today and walk backward;
+        // if today has 0 so far, walk backward from yesterday so morning streak persists.
+        if (getDailyCompletion(todayISO).completed >= 1) {
+          streak += 1;
+        }
+        cursor.setDate(cursor.getDate() - 1);
+
+        for (let i = 0; i < 365; i++) {
+          const iso = formatISO(cursor);
+          if (getDailyCompletion(iso).completed >= 1) {
+            streak += 1;
+            cursor.setDate(cursor.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+        return streak;
+      }
+
+      // ============================================================
+      // 4. UI UTILITIES: TOASTS, CLIPBOARD, MODALS, SANITIZATION
+      // ============================================================
+      function escapeHTML(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const el = document.createElement('div');
+        const palette =
+          type === 'error'
+            ? 'bg-rose-950/95 border-rose-500/50 text-rose-100'
+            : type === 'info'
+            ? 'bg-[#111827]/95 border-cyan-500/50 text-cyan-100'
+            : 'bg-emerald-950/95 border-emerald-500/50 text-emerald-100';
+
+        el.className = `pointer-events-auto px-4 py-3 rounded-2xl border shadow-2xl text-xs sm:text-sm font-semibold animate-fade-up ${palette}`;
+        el.textContent = message;
+        container.appendChild(el);
+
+        setTimeout(() => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(6px)';
+          el.style.transition = 'all 0.25s ease';
+          setTimeout(() => el.remove(), 260);
+        }, 2800);
+      }
+
+      // iFrame-safe Clipboard Copy using document.execCommand('copy')
+      function copyTextSafe(text) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.top = '-9999px';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) {
+          console.error('Clipboard copy failed:', err);
+          return false;
+        }
+      }
+
+      function openConfirm(title, message, onConfirm) {
+        document.getElementById('confirm-modal-title').textContent = title;
+        document.getElementById('confirm-modal-message').textContent = message;
+        pendingConfirmCallback = onConfirm;
+        document.getElementById('confirm-modal').classList.remove('hidden');
+      }
+
+      function closeConfirm() {
+        document.getElementById('confirm-modal').classList.add('hidden');
+        pendingConfirmCallback = null;
+      }
+
+      function openEditLinkModal(productId) {
+        const prod = PRODUCTS.find((p) => p.id === productId);
+        if (!prod) return;
+        editingProductId = productId;
+        document.getElementById('edit-link-product-name').textContent = prod.name;
+        document.getElementById('edit-link-input').value = getProductUrl(prod);
+        document.getElementById('edit-link-modal').classList.remove('hidden');
+        setTimeout(() => document.getElementById('edit-link-input').focus(), 50);
+      }
+
+      function closeEditLinkModal() {
+        document.getElementById('edit-link-modal').classList.add('hidden');
+        editingProductId = null;
+      }
+
+      // ============================================================
+      // 5. RENDERING FUNCTIONS
+      // ============================================================
+
+      // 5A. Render Header, 12-Week Progress & Protocol Control Banner
+      function renderBanner() {
+        const todayISO = getTodayISO();
+        document.getElementById('header-live-date').textContent = formatLongDate(todayISO);
+
+        // Circular Progress Ring + Today's Count
+        const stats = getDailyCompletion(todayISO);
+        const circumference = 201.06; // 2 * pi * 32
+        const dashOffset = circumference - (stats.pct / 100) * circumference;
+
+        document.getElementById('today-ring-progress').style.strokeDashoffset = String(dashOffset);
+        document.getElementById('today-pct-text').textContent = `${stats.pct}%`;
+        document.getElementById('today-count-text').textContent = `${stats.completed} / ${stats.total} completed`;
+        document.getElementById('today-bar-fill').style.width = `${stats.pct}%`;
+
+        // Daily Streak
+        const streak = calculateStreak();
+        document.getElementById('streak-value').textContent = `${streak}d`;
+
+        // Wash-day status subtitle
+        const washDue = isWashDay(todayISO);
+        const washHintEl = document.getElementById('today-wash-hint');
+        if (washDue) {
+          washHintEl.innerHTML = '<span class="text-cyan-400 font-bold">💧 Nizoral 2% Wash Day Today</span>';
+        } else {
+          const washNames = WEEK_DAYS.filter((d) => state.washDays.includes(d.dayIndex))
+            .map((d) => d.short)
+            .join(' & ');
+          washHintEl.textContent = `Rest day for Nizoral (Scheduled: ${washNames || 'None'})`;
+        }
+
+        // Editable Start Date + 12-Week Dynamic Phase Math
+        const startInput = document.getElementById('protocol-start-date');
+        if (startInput.value !== state.startDate) {
+          startInput.value = state.startDate;
+        }
+
+        const startD = parseISO(state.startDate);
+        const todayD = parseISO(todayISO);
+        const rawDay = Math.floor((todayD - startD) / 86400000) + 1;
+        const clampedDay = Math.max(1, Math.min(84, rawDay));
+        const currentWeek = Math.max(1, Math.min(12, Math.ceil(clampedDay / 7)));
+        const progressPct = rawDay < 1 ? 0 : Math.max(2, Math.min(100, Math.round((clampedDay / 84) * 100)));
+
+        document.getElementById('protocol-week-heading').textContent =
+          rawDay > 84 ? '12 Weeks Complete!' : `Week ${currentWeek} of 12`;
+        document.getElementById('protocol-day-badge').textContent =
+          rawDay < 1 ? 'Upcoming' : rawDay > 84 ? `Day ${rawDay} (Maint.)` : `Day ${clampedDay} of 84`;
+        document.getElementById('protocol-timeline-fill').style.width = `${progressPct}%`;
+
+        const phasePill = document.getElementById('protocol-phase-pill');
+        const p1Label = document.getElementById('phase1-label');
+        const p2Label = document.getElementById('phase2-label');
+        if (currentWeek <= 4) {
+          phasePill.textContent = 'Phase 1: Scalp Clearing (Weeks 1–4)';
+          phasePill.className = 'inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/35';
+          p1Label.className = 'font-bold text-cyan-300 print-text-dark';
+          p2Label.className = 'text-slate-500 print-text-muted';
+        } else {
+          phasePill.textContent = 'Phase 2: Maintenance & Regrowth (Weeks 5–12)';
+          phasePill.className = 'inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35';
+          p1Label.className = 'text-slate-500 print-text-muted';
+          p2Label.className = 'font-bold text-emerald-300 print-text-dark';
+        }
+
+        // Phase 1 / Phase 2 Schedule Toggle Buttons
+        const btnP1 = document.getElementById('btn-phase-1');
+        const btnP2 = document.getElementById('btn-phase-2');
+        const activeBtn = 'bg-cyan-500 text-slate-950 shadow-sm';
+        const idleBtn = 'text-slate-400 hover:text-white';
+        btnP1.className = `flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition ${state.phase === 'phase1' ? activeBtn : idleBtn}`;
+        btnP2.className = `flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-xs font-bold transition ${state.phase === 'phase2' ? activeBtn : idleBtn}`;
+
+        // Mon-Sun Wash Day Selector Chips
+        const targetCount = state.phase === 'phase1' ? 2 : 1;
+        document.getElementById('wash-day-label').textContent = `Wash Days (${state.washDays.length}/${targetCount}):`;
+
+        const chipsWrap = document.getElementById('wash-day-chips');
+        chipsWrap.innerHTML = '';
+        WEEK_DAYS.forEach((d) => {
+          const selected = state.washDays.includes(d.dayIndex);
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.textContent = d.short;
+          chip.title = `Toggle ${d.full} as Nizoral wash day`;
+          chip.className = selected
+            ? 'px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-cyan-500 text-slate-950 shadow-sm transition active:scale-95'
+            : 'px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-[#0a0f1e] text-slate-400 border border-[#1f2937] hover:border-slate-500 hover:text-white transition active:scale-95';
+          chip.addEventListener('click', () => handleWashDayToggle(d.dayIndex));
+          chipsWrap.appendChild(chip);
+        });
+      }
+
+      // 5B. Render Amazon Canada Order & Reorder List
+      function getStatusBadgeClass(statusVal) {
+        const match = ORDER_STATUSES.find((s) => s.value === statusVal) || ORDER_STATUSES[0];
+        return match.badgeClass;
+      }
+
+      function renderOrderList() {
+        // Compute live status summary counters
+        const counts = { 'In Stock': 0, Ordered: 0, 'To Order': 0, 'Reorder Soon': 0 };
+        PRODUCTS.forEach((p) => {
+          const st = state.orderStatuses[p.id] || p.defaultStatus;
+          if (counts[st] !== undefined) counts[st] += 1;
+        });
+
+        const summaryWrap = document.getElementById('inventory-summary-pills');
+        summaryWrap.innerHTML = `
+          <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">In Stock: ${counts['In Stock']}</span>
+          <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Ordered: ${counts['Ordered']}</span>
+          <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-slate-800 text-slate-300 border border-slate-600">To Order: ${counts['To Order']}</span>
+          ${
+            counts['Reorder Soon'] > 0
+              ? `<span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/45">Reorder: ${counts['Reorder Soon']}</span>`
+              : ''
+          }
+        `;
+
+        function createProductCard(prod) {
+          const status = state.orderStatuses[prod.id] || prod.defaultStatus;
+          const url = getProductUrl(prod);
+          const isCustomUrl = Boolean(state.customLinks[prod.id]);
+
+          const gelatinBadgeClass =
+            prod.badgeTone === 'emerald'
+              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+              : 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40';
+
+          const card = document.createElement('article');
+          card.className = 'bg-[#0a0f1e] border border-[#1f2937] hover:border-[#374151] rounded-2xl p-4 flex flex-col justify-between gap-4 transition print-subsurface';
+
+          card.innerHTML = `
+            <div class="space-y-3">
+              <!-- Product Illustration + Verification Badge + Name -->
+              <div class="flex items-start gap-3">
+                <div class="p-1.5 rounded-xl bg-[#111827] border border-[#1f2937] shrink-0">
+                  ${prod.iconSvg}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold border ${gelatinBadgeClass} print-surface">
+                      <span aria-hidden="true">✓</span> ${prod.gelatinBadge}
+                    </span>
+                    ${
+                      isCustomUrl
+                        ? '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/35">Direct URL</span>'
+                        : ''
+                    }
+                  </div>
+                  <h4 class="text-sm font-extrabold text-white leading-snug print-text-dark">${prod.name}</h4>
+                </div>
+              </div>
+
+              <!-- Actives, Dosage & Why It Helps -->
+              <div class="space-y-2 text-xs border-t border-[#1f2937] pt-3">
+                <div>
+                  <span class="font-mono font-bold text-[10px] uppercase tracking-wider text-slate-500 block">Active Ingredients &amp; Shell</span>
+                  <span class="text-slate-300 leading-relaxed print-text-dark">${prod.actives}</span>
+                </div>
+                <div>
+                  <span class="font-mono font-bold text-[10px] uppercase tracking-wider text-slate-500 block">Dosage &amp; Timing</span>
+                  <span class="text-emerald-300 font-semibold leading-relaxed print-text-dark">${prod.dosage}</span>
+                </div>
+                <div>
+                  <span class="font-mono font-bold text-[10px] uppercase tracking-wider text-slate-500 block">Why It Helps</span>
+                  <span class="text-slate-400 leading-relaxed print-text-muted">${prod.benefit}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Order Status + Amazon.ca CTA + Edit Link -->
+            <div class="pt-3 border-t border-[#1f2937] space-y-2.5 no-print">
+              <div class="flex items-center justify-between gap-2">
+                <label for="order-status-${prod.id}" class="text-[11px] font-mono font-bold text-slate-400">Status:</label>
+                <select id="order-status-${prod.id}" data-status-id="${prod.id}" class="flex-1 max-w-[175px] px-2.5 py-1.5 rounded-xl border text-xs font-bold focus:outline-none cursor-pointer transition ${getStatusBadgeClass(status)}">
+                  ${ORDER_STATUSES.map(
+                    (opt) => `<option value="${opt.value}" class="bg-[#111827] text-slate-100" ${opt.value === status ? 'selected' : ''}>${opt.value}</option>`
+                  ).join('')}
+                </select>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer"
+                   class="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-1.5 transition shadow-sm">
+                  <span>Order on Amazon.ca</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <button type="button" data-edit-link="${prod.id}"
+                        class="py-2.5 px-3 rounded-xl bg-[#111827] border border-[#374151] hover:border-cyan-400 text-slate-300 hover:text-cyan-300 text-xs font-bold transition whitespace-nowrap">
+                  Edit Link
+                </button>
+              </div>
+            </div>
+          `;
+
+          card.querySelector(`[data-status-id="${prod.id}"]`).addEventListener('change', (e) => {
+            state.orderStatuses[prod.id] = e.target.value;
+            saveState();
+            renderOrderList();
+            showToast(`Status updated to "${e.target.value}"`, 'info');
+          });
+
+          card.querySelector(`[data-edit-link="${prod.id}"]`).addEventListener('click', () => {
+            openEditLinkModal(prod.id);
+          });
+
+          return card;
+        }
+
+        const groupA = document.getElementById('orders-group-a');
+        const groupB = document.getElementById('orders-group-b');
+        const groupC = document.getElementById('orders-group-c');
+        groupA.innerHTML = '';
+        groupB.innerHTML = '';
+        groupC.innerHTML = '';
+
+        PRODUCTS.forEach((p) => {
+          const card = createProductCard(p);
+          if (p.group === 'A') groupA.appendChild(card);
+          else if (p.group === 'B') groupB.appendChild(card);
+          else groupC.appendChild(card);
+        });
+      }
+
+      // 5C. Render Today's Interactive Daily Checklist (8 Tasks)
+      function getCategoryBadgeHTML(category) {
+        if (category === 'EXTERNAL') {
+          return '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/35">EXTERNAL</span>';
+        }
+        if (category === 'INTERNAL') {
+          return '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35">INTERNAL</span>';
+        }
+        return '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35">DIET</span>';
+      }
+
+      function renderTodayChecklist() {
+        const todayISO = getTodayISO();
+        const checks = getDayChecks(todayISO);
+        const washDue = isWashDay(todayISO);
+
+        document.getElementById('checklist-date-pill').textContent = formatShortDate(todayISO);
+
+        // Toggle wash-day alert banner
+        const banner = document.getElementById('today-washday-banner');
+        if (washDue) banner.classList.remove('hidden');
+        else banner.classList.add('hidden');
+
+        // Define checklist time-of-day groups
+        const groups = [
+          {
+            key: 'Morning',
+            icon: '☀️',
+            subtitle: 'Keratin building blocks & AM follicle activation',
+          },
+          {
+            key: 'Shower / Wash',
+            icon: '🚿',
+            subtitle: washDue ? 'Scheduled Nizoral scalp clearing + cool rinse' : 'Rest day gentle wash + cool barrier rinse',
+          },
+          {
+            key: 'Dinner (With Meal)',
+            icon: '🍽️',
+            subtitle: 'Zero beef/pork DHT & inflammation defense with food',
+          },
+          {
+            key: 'Night',
+            icon: '🌙',
+            subtitle: 'Overnight crown serum absorption',
+          },
+          {
+            key: 'Daily Diet Guard',
+            icon: '🥗',
+            subtitle: 'Low-glycemic scalp defense & zinc/EGCG nutrition',
+            fullWidth: true,
+          },
+        ];
+
+        const grid = document.getElementById('today-checklist-grid');
+        grid.innerHTML = '';
+
+        groups.forEach((grp) => {
+          const items = DAILY_TASKS.filter((t) => t.group === grp.key);
+          const doneCount = items.filter((t) => Boolean(checks[t.id])).length;
+
+          const card = document.createElement('div');
+          card.className = `bg-[#111827] border border-[#1f2937] rounded-3xl overflow-hidden shadow-lg shadow-black/20 print-surface ${
+            grp.fullWidth ? 'lg:col-span-2' : ''
+          }`;
+
+          card.innerHTML = `
+            <div class="px-4 sm:px-5 py-3.5 bg-[#0a0f1e]/85 border-b border-[#1f2937] flex items-center justify-between gap-2 print-subsurface">
+              <div class="flex items-center gap-2.5">
+                <span class="text-lg" aria-hidden="true">${grp.icon}</span>
+                <div>
+                  <h3 class="text-sm font-extrabold text-white print-text-dark">${grp.key}</h3>
+                  <p class="text-[11px] text-slate-400 print-text-muted">${grp.subtitle}</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-xs font-mono font-bold ${
+                doneCount === items.length
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  : 'bg-[#111827] text-slate-400 border border-[#1f2937]'
+              }">
+                ${doneCount}/${items.length}
+              </span>
+            </div>
+            <div class="divide-y divide-[#1f2937]" data-list="${grp.key}"></div>
+          `;
+
+          const listEl = card.querySelector(`[data-list="${grp.key}"]`);
+
+          items.forEach((task) => {
+            const isChecked = Boolean(checks[task.id]);
+            const isHighlightedWash = Boolean(task.isWashTask && washDue);
+
+            let dynamicStatusPill = '';
+            let taskDesc = task.desc;
+
+            if (task.isWashTask) {
+              if (washDue) {
+                dynamicStatusPill =
+                  '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-extrabold bg-cyan-400 text-slate-950">DUE TODAY — Lather 3–5 min</span>';
+                taskDesc = task.descWash;
+              } else {
+                dynamicStatusPill =
+                  '<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-600">REST DAY — Gentle shampoo</span>';
+                taskDesc = task.descRest;
+              }
+            }
+
+            const row = document.createElement('label');
+            row.className = `flex items-start gap-3.5 p-4 sm:p-5 cursor-pointer transition select-none ${
+              isChecked
+                ? 'bg-emerald-500/[0.07]'
+                : isHighlightedWash
+                ? 'bg-cyan-500/[0.08] hover:bg-cyan-500/[0.12]'
+                : 'hover:bg-[#162032]/70'
+            }`;
+
+            row.innerHTML = `
+              <div class="pt-0.5 shrink-0">
+                <input type="checkbox" class="sr-only" ${isChecked ? 'checked' : ''} />
+                <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition ${
+                  isChecked
+                    ? 'bg-emerald-500 border-emerald-500 text-slate-950'
+                    : isHighlightedWash
+                    ? 'bg-[#0a0f1e] border-cyan-400 text-transparent'
+                    : 'bg-[#0a0f1e] border-slate-600 text-transparent hover:border-emerald-400'
+                }">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                  ${getCategoryBadgeHTML(task.category)}
+                  ${dynamicStatusPill}
+                </div>
+                <div class="text-sm font-bold leading-snug transition ${
+                  isChecked ? 'line-through text-slate-500' : 'text-white print-text-dark'
+                }">
+                  ${task.title}
+                </div>
+                <p class="text-xs mt-1 leading-relaxed ${
+                  isChecked ? 'text-slate-500' : 'text-slate-400 print-text-muted'
+                }">
+                  ${taskDesc}
+                </p>
+              </div>
+            `;
+
+            row.querySelector('input').addEventListener('change', (e) => {
+              setDayCheck(todayISO, task.id, e.target.checked);
+              renderAll();
+            });
+
+            listEl.appendChild(row);
+          });
+
+          grid.appendChild(card);
+        });
+      }
+
+      // 5D. Render 7-Day Weekly Adherence Grid (Live-Synced with Today's Checklist)
+      function renderWeeklyGrid() {
+        const weekDates = getCurrentWeekDates();
+        const todayISO = getTodayISO();
+
+        document.getElementById('weekly-range-label').textContent = `${formatShortDate(weekDates[0].iso)} – ${formatShortDate(weekDates[6].iso)}`;
+
+        // Table Header Row
+        const theadRow = document.getElementById('weekly-matrix-head');
+        theadRow.innerHTML = `<th class="py-3.5 px-4 text-left sticky left-0 bg-[#0a0f1e] z-10 min-w-[205px] border-r border-[#1f2937] print-subsurface">Daily Protocol Item</th>`;
+
+        weekDates.forEach((d) => {
+          const isToday = d.iso === todayISO;
+          const wash = state.washDays.includes(d.dayIndex);
+          const th = document.createElement('th');
+          th.className = `py-3 px-2 text-center min-w-[62px] ${isToday ? 'bg-emerald-500/10' : ''}`;
+          th.innerHTML = `
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="text-[10px] uppercase tracking-wider ${isToday ? 'text-emerald-300 font-extrabold' : 'text-slate-400'}">${d.short}</span>
+              <span class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-extrabold ${
+                isToday ? 'bg-emerald-500 text-slate-950' : 'text-slate-200 print-text-dark'
+              }">${d.dayNum}</span>
+              ${wash ? '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-0.5" title="Scheduled Nizoral Wash Day"></span>' : '<span class="w-1.5 h-1.5 mt-0.5"></span>'}
+            </div>
+          `;
+          theadRow.appendChild(th);
+        });
+
+        // Table Body & Live Adherence Totals
+        const tbody = document.getElementById('weekly-matrix-body');
+        tbody.innerHTML = '';
+
+        const tally = {
+          all: { done: 0, total: 0 },
+          EXTERNAL: { done: 0, total: 0 },
+          INTERNAL: { done: 0, total: 0 },
+          DIET: { done: 0, total: 0 },
+        };
+
+        DAILY_TASKS.forEach((task) => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-[#162032]/50 transition';
+
+          const dotCls =
+            task.category === 'EXTERNAL'
+              ? 'bg-cyan-400'
+              : task.category === 'INTERNAL'
+              ? 'bg-emerald-400'
+              : 'bg-amber-400';
+
+          const labelTd = document.createElement('td');
+          labelTd.className = 'py-3 px-4 sticky left-0 bg-[#111827] z-10 border-r border-[#1f2937] print-surface';
+          labelTd.innerHTML = `
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full shrink-0 ${dotCls}"></span>
+              <div>
+                <div class="text-xs sm:text-sm font-bold text-slate-100 leading-tight print-text-dark">${task.shortLabel}</div>
+                <div class="text-[10px] font-mono text-slate-400 print-text-muted">${task.shortSub}</div>
+              </div>
+            </div>
+          `;
+          tr.appendChild(labelTd);
+
+          weekDates.forEach((d) => {
+            const checks = getDayChecks(d.iso);
+            const isToday = d.iso === todayISO;
+            const washScheduled = state.washDays.includes(d.dayIndex);
+            const isDone = Boolean(checks[task.id]);
+
+            tally.all.total += 1;
+            tally[task.category].total += 1;
+            if (isDone) {
+              tally.all.done += 1;
+              tally[task.category].done += 1;
+            }
+
+            const td = document.createElement('td');
+            td.className = `py-2.5 px-1.5 text-center ${isToday ? 'bg-emerald-500/[0.06]' : ''}`;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.title = `${task.title} — ${d.short} ${d.dayNum}`;
+
+            if (isDone) {
+              btn.className =
+                'w-9 h-9 mx-auto rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center shadow-sm transition active:scale-95';
+              btn.innerHTML = `
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              `;
+            } else if (task.isWashTask && washScheduled) {
+              btn.className =
+                'w-9 h-9 mx-auto rounded-xl bg-cyan-500/15 border border-dashed border-cyan-400 text-cyan-300 text-[10px] font-mono font-extrabold flex items-center justify-center hover:bg-cyan-500/25 transition active:scale-95';
+              btn.textContent = 'DUE';
+            } else if (task.isWashTask && !washScheduled) {
+              btn.className =
+                'w-9 h-9 mx-auto rounded-xl bg-[#0a0f1e]/65 border border-[#1f2937] text-slate-500 text-[10px] font-mono flex items-center justify-center hover:border-slate-500 hover:text-slate-300 transition active:scale-95';
+              btn.textContent = 'Rest';
+            } else {
+              btn.className =
+                'w-9 h-9 mx-auto rounded-xl bg-[#0a0f1e] border border-[#1f2937] hover:border-emerald-400/60 flex items-center justify-center transition active:scale-95';
+              btn.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>';
+            }
+
+            btn.addEventListener('click', () => {
+              setDayCheck(d.iso, task.id, !isDone);
+              renderAll();
+            });
+
+            td.appendChild(btn);
+            tr.appendChild(td);
+          });
+
+          tbody.appendChild(tr);
+        });
+
+        const pct = (bucket) => (bucket.total > 0 ? Math.round((bucket.done / bucket.total) * 100) : 0);
+        document.getElementById('stat-weekly-overall').textContent = `${pct(tally.all)}%`;
+        document.getElementById('stat-weekly-counts').textContent = `${tally.all.done} / ${tally.all.total} checkoffs`;
+        document.getElementById('stat-weekly-external').textContent = `${pct(tally.EXTERNAL)}%`;
+        document.getElementById('stat-weekly-internal').textContent = `${pct(tally.INTERNAL)}%`;
+        document.getElementById('stat-weekly-diet').textContent = `${pct(tally.DIET)}%`;
+      }
+
+      // 5E. Render Dual-Metric Scalp Recovery Log & 14-Entry Trend Chart
+      function renderScalpLog() {
+        const dateInput = document.getElementById('log-entry-date');
+        if (!dateInput.value) dateInput.value = getTodayISO();
+
+        // Render 1–5 Pill Buttons for Itch / Inflammation
+        const itchWrap = document.getElementById('itch-pills');
+        itchWrap.innerHTML = '';
+        ITCH_SCALE.forEach((m) => {
+          const active = selectedItch === m.val;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = active
+            ? 'py-2 rounded-xl border-2 border-cyan-400 bg-cyan-500/20 text-cyan-200 font-mono font-extrabold text-xs flex flex-col items-center transition'
+            : 'py-2 rounded-xl border border-[#1f2937] bg-[#0a0f1e] text-slate-400 hover:border-slate-500 font-mono font-bold text-xs flex flex-col items-center transition';
+          btn.innerHTML = `<span>${m.val}</span><span class="text-[9px] font-sans font-semibold mt-0.5">${m.short}</span>`;
+          btn.addEventListener('click', () => {
+            selectedItch = m.val;
+            renderScalpLog();
+          });
+          itchWrap.appendChild(btn);
+        });
+        document.getElementById('itch-selected-label').textContent = ITCH_SCALE[selectedItch - 1].label;
+
+        // Render 1–5 Pill Buttons for Bumps / Flaking
+        const bumpsWrap = document.getElementById('bumps-pills');
+        bumpsWrap.innerHTML = '';
+        BUMPS_SCALE.forEach((m) => {
+          const active = selectedBumps === m.val;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = active
+            ? 'py-2 rounded-xl border-2 border-amber-400 bg-amber-500/20 text-amber-200 font-mono font-extrabold text-xs flex flex-col items-center transition'
+            : 'py-2 rounded-xl border border-[#1f2937] bg-[#0a0f1e] text-slate-400 hover:border-slate-500 font-mono font-bold text-xs flex flex-col items-center transition';
+          btn.innerHTML = `<span>${m.val}</span><span class="text-[9px] font-sans font-semibold mt-0.5">${m.short}</span>`;
+          btn.addEventListener('click', () => {
+            selectedBumps = m.val;
+            renderScalpLog();
+          });
+          bumpsWrap.appendChild(btn);
+        });
+        document.getElementById('bumps-selected-label').textContent = BUMPS_SCALE[selectedBumps - 1].label;
+
+        // Sort logs newest first for history
+        const sorted = [...state.logs].sort((a, b) => {
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          return (b.timestamp || 0) - (a.timestamp || 0);
+        });
+
+        document.getElementById('log-history-count').textContent = `${sorted.length} ${sorted.length === 1 ? 'entry' : 'entries'}`;
+
+        // Render Dual-Bar Trend Chart (Up to last 14 entries in chronological order)
+        const chartEl = document.getElementById('scalp-trend-chart');
+        if (sorted.length === 0) {
+          chartEl.innerHTML = `
+            <div class="w-full h-full flex items-center justify-center text-center px-4">
+              <p class="text-xs text-slate-500">
+                Log your baseline scalp check-in today to visualize how Itch (cyan) and Bumps/Flaking (amber) trend downward across the next 12 weeks.
+              </p>
+            </div>
+          `;
+        } else {
+          const recent14 = sorted.slice(0, 14).reverse();
+          chartEl.innerHTML = `
+            <div class="w-full min-w-[320px] h-full flex items-end justify-around gap-1.5 sm:gap-2 px-1">
+              ${recent14
+                .map((entry) => {
+                  const itchVal = Math.max(1, Math.min(5, Number(entry.itch) || 1));
+                  const bumpsVal = Math.max(1, Math.min(5, Number(entry.bumps) || 1));
+                  const itchPct = Math.round((itchVal / 5) * 100);
+                  const bumpsPct = Math.round((bumpsVal / 5) * 100);
+                  return `
+                    <div class="flex flex-col items-center flex-1 min-w-[26px] max-w-[44px] h-full justify-end" title="${formatShortDate(entry.date)} — Itch: ${itchVal}/5, Bumps: ${bumpsVal}/5">
+                      <div class="w-full flex-1 flex items-end justify-center gap-0.5 sm:gap-1 pt-4">
+                        <div class="flex flex-col items-center justify-end h-full">
+                          <span class="text-[8px] font-mono font-bold text-cyan-300 mb-0.5">${itchVal}</span>
+                          <div class="w-2.5 sm:w-3 rounded-t-md bg-cyan-400 transition-all duration-300" style="height: ${Math.max(14, Math.round(itchPct * 0.78))}%;"></div>
+                        </div>
+                        <div class="flex flex-col items-center justify-end h-full">
+                          <span class="text-[8px] font-mono font-bold text-amber-300 mb-0.5">${bumpsVal}</span>
+                          <div class="w-2.5 sm:w-3 rounded-t-md bg-amber-400 transition-all duration-300" style="height: ${Math.max(14, Math.round(bumpsPct * 0.78))}%;"></div>
+                        </div>
+                      </div>
+                      <div class="text-[9px] font-mono text-slate-400 mt-1.5 truncate w-full text-center">
+                        ${formatShortDate(entry.date).replace(' ', '')}
+                      </div>
+                    </div>
+                  `;
+                })
+                .join('')}
+            </div>
+          `;
+        }
+
+        // Render Compact History List with Delete Button per Entry
+        const listEl = document.getElementById('scalp-log-list');
+        if (sorted.length === 0) {
+          listEl.innerHTML = `
+            <div class="text-center py-8 bg-[#0a0f1e] rounded-2xl border border-dashed border-[#1f2937]">
+              <p class="text-xs font-semibold text-slate-400">No scalp recovery entries recorded yet.</p>
+              <p class="text-[11px] text-slate-500 mt-1">Use the check-in form on the left to record Day 1.</p>
+            </div>
+          `;
+        } else {
+          listEl.innerHTML = '';
+          sorted.forEach((entry) => {
+            const item = document.createElement('div');
+            item.className = 'p-3 rounded-2xl bg-[#0a0f1e] border border-[#1f2937] flex items-start justify-between gap-3 print-subsurface';
+            item.innerHTML = `
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-xs font-mono font-bold text-slate-200 print-text-dark">${formatLongDate(entry.date)}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/35">
+                    Itch: ${entry.itch}/5
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35">
+                    Bumps: ${entry.bumps}/5
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed whitespace-pre-wrap print-text-muted">${
+                  entry.notes ? escapeHTML(entry.notes) : '<span class="italic text-slate-600">No notes added.</span>'
+                }</p>
+              </div>
+              <button type="button" class="p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition shrink-0 no-print" title="Delete entry" aria-label="Delete scalp check-in">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            `;
+
+            item.querySelector('button').addEventListener('click', () => {
+              openConfirm(
+                'Delete Scalp Entry?',
+                `Remove your scalp log from ${formatShortDate(entry.date)}?`,
+                () => {
+                  state.logs = state.logs.filter((l) => l.id !== entry.id);
+                  saveState();
+                  renderScalpLog();
+                  showToast('Scalp log entry deleted.', 'info');
+                }
+              );
+            });
+
+            listEl.appendChild(item);
+          });
+        }
+      }
+
+      // Master Render Coordinator
+      function renderAll() {
+        renderBanner();
+        renderOrderList();
+        renderTodayChecklist();
+        renderWeeklyGrid();
+        renderScalpLog();
+      }
+
+      // ============================================================
+      // 6. USER INTERACTIONS & ACTIONS
+      // ============================================================
+
+      function switchPhase(newPhase) {
+        state.phase = newPhase;
+        if (newPhase === 'phase2') {
+          // Default to Mon (1) if current selection is empty, otherwise keep first day
+          state.washDays = [state.washDays[0] ?? 1];
+        } else {
+          // Phase 1 defaults to Mon (1) & Thu (4) if fewer than 2 days selected
+          if (state.washDays.length < 2) {
+            const first = state.washDays[0] ?? 1;
+            state.washDays = [first, (first + 3) % 7];
+          }
+        }
+        saveState();
+        renderAll();
+        showToast(
+          newPhase === 'phase1'
+            ? 'Phase 1 enabled: Nizoral 2x/week'
+            : 'Phase 2 enabled: Nizoral 1x/week maintenance',
+          'info'
+        );
+      }
+
+      function handleWashDayToggle(dayIndex) {
+        if (state.phase === 'phase2') {
+          state.washDays = [dayIndex];
+        } else {
+          const exists = state.washDays.includes(dayIndex);
+          if (exists) {
+            if (state.washDays.length === 1) {
+              showToast('Keep at least 1 Nizoral wash day selected.', 'info');
+              return;
+            }
+            state.washDays = state.washDays.filter((d) => d !== dayIndex);
+          } else {
+            if (state.washDays.length >= 2) {
+              // Replace oldest selected day so max 2 remain selected in Phase 1
+              state.washDays = [state.washDays[state.washDays.length - 1], dayIndex];
+            } else {
+              state.washDays.push(dayIndex);
+            }
+          }
+        }
+        saveState();
+        renderAll();
+      }
+
+      // Copy Formatted Plain-Text Amazon.ca Shopping List with Visual "Copied!" Feedback
+      function copyOrderList() {
+        const formatGroup = (heading, groupCode) => {
+          const list = PRODUCTS.filter((p) => p.group === groupCode);
+          const rows = list.map((p, idx) => {
+            const status = state.orderStatuses[p.id] || p.defaultStatus;
+            const url = getProductUrl(p);
+            return [
+              `${idx + 1}. [${status}] ${p.name}`,
+              `   Verification: ${p.gelatinBadge}`,
+              `   Dosage: ${p.dosage}`,
+              `   Amazon.ca: ${url}`,
+            ].join('\n');
+          });
+          return `${heading}\n${rows.join('\n\n')}`;
+        };
+
+        const output = [
+          'SCALP & HAIR RECOVERY PROTOCOL — AMAZON.CA ORDER LIST (OTTAWA, ON)',
+          'Verified: ZERO Beef / ZERO Pork Gelatin',
+          `Date: ${formatLongDate(getTodayISO())}`,
+          '====================================================================',
+          '',
+          formatGroup('GROUP A: EXTERNAL TREATMENTS (TOPICAL — NO GELATIN)', 'A'),
+          '',
+          '--------------------------------------------------------------------',
+          formatGroup('GROUP B: INTERNAL SUPPLEMENTS (ZERO BEEF / ZERO PORK GELATIN)', 'B'),
+          '',
+          '--------------------------------------------------------------------',
+          formatGroup('GROUP C: OPTIONAL SUPPORT (ZERO BEEF / ZERO PORK GELATIN)', 'C'),
+        ].join('\n');
+
+        if (copyTextSafe(output)) {
+          const labelEl = document.getElementById('copy-order-btn-label');
+          const prevText = labelEl.textContent;
+          labelEl.textContent = 'Copied!';
+          setTimeout(() => {
+            labelEl.textContent = prevText;
+          }, 2000);
+          showToast('Amazon.ca order list copied to clipboard!');
+        } else {
+          showToast('Could not copy automatically. Please try again.', 'error');
+        }
+      }
+
+      // Export Full State as JSON Backup
+      function exportJSON() {
+        try {
+          const payload = {
+            app: 'Scalp & Hair Recovery Protocol Tracker (Zero Beef/Pork Gelatin)',
+            storageKey: STORAGE_KEY,
+            exportedAt: new Date().toISOString(),
+            data: state,
+          };
+          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `scalp-protocol-clean-backup-${getTodayISO()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showToast('JSON backup exported!');
+        } catch (err) {
+          console.error('JSON Export failed:', err);
+          showToast('Export failed. Please try again.', 'error');
+        }
+      }
+
+      // Import JSON Backup File
+      function importJSON(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const parsed = JSON.parse(e.target.result);
+            const imported = parsed.data || parsed;
+            if (!imported || typeof imported !== 'object') {
+              throw new Error('Malformed JSON backup');
+            }
+            const defaults = getDefaultState();
+            state = {
+              ...defaults,
+              ...imported,
+              washDays: Array.isArray(imported.washDays) && imported.washDays.length > 0 ? imported.washDays : defaults.washDays,
+              orderStatuses: { ...defaults.orderStatuses, ...(imported.orderStatuses || {}) },
+              customLinks: imported.customLinks && typeof imported.customLinks === 'object' ? imported.customLinks : {},
+              checks: imported.checks && typeof imported.checks === 'object' ? imported.checks : {},
+              logs: Array.isArray(imported.logs) ? imported.logs : [],
+            };
+            saveState();
+            renderAll();
+            showToast('Backup restored successfully!');
+          } catch (err) {
+            console.error('JSON Import failed:', err);
+            showToast('Invalid JSON backup file.', 'error');
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      // Reset Current Mon-Sun Week Checkoffs
+      function handleResetWeek() {
+        const weekDates = getCurrentWeekDates();
+        openConfirm(
+          'Reset Current Week?',
+          `Clear all daily checkoffs from ${formatShortDate(weekDates[0].iso)} to ${formatShortDate(weekDates[6].iso)}? Your Amazon.ca order statuses, custom product URLs, and scalp logs will stay safe.`,
+          () => {
+            weekDates.forEach((d) => {
+              delete state.checks[d.iso];
+            });
+            saveState();
+            renderAll();
+            showToast('Current week checkoffs reset.', 'info');
+          }
+        );
+      }
+
+      // Clear Today's Checkoffs
+      function handleClearToday() {
+        const todayISO = getTodayISO();
+        openConfirm(
+          "Clear Today's Checkoffs?",
+          `Uncheck all 8 items for today (${formatShortDate(todayISO)})?`,
+          () => {
+            state.checks[todayISO] = {};
+            saveState();
+            renderAll();
+            showToast("Today's checklist cleared.", 'info');
+          }
+        );
+      }
+
+      // ============================================================
+      // 7. EVENT BINDINGS & INITIALIZATION
+      // ============================================================
+      function bindEvents() {
+        // Header Quick Actions
+        document.getElementById('btn-export-json').addEventListener('click', exportJSON);
+        document.getElementById('input-import-json').addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          importJSON(file);
+          e.target.value = '';
+        });
+        document.getElementById('btn-print-sheet').addEventListener('click', () => window.print());
+
+        // Start Date & Phase Controls
+        document.getElementById('protocol-start-date').addEventListener('change', (e) => {
+          if (e.target.value) {
+            state.startDate = e.target.value;
+            saveState();
+            renderBanner();
+            showToast('Protocol start date updated.');
+          }
+        });
+
+        document.getElementById('btn-phase-1').addEventListener('click', () => switchPhase('phase1'));
+        document.getElementById('btn-phase-2').addEventListener('click', () => switchPhase('phase2'));
+
+        // Order List Copy Button
+        document.getElementById('btn-copy-order-list').addEventListener('click', copyOrderList);
+
+        // Checklist & Weekly Reset Buttons
+        document.getElementById('btn-clear-today').addEventListener('click', handleClearToday);
+        document.getElementById('btn-reset-week').addEventListener('click', handleResetWeek);
+
+        // Scalp Recovery Form Submission
+        document.getElementById('scalp-log-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const dateVal = document.getElementById('log-entry-date').value || getTodayISO();
+          const notesVal = document.getElementById('log-entry-notes').value.trim();
+
+          state.logs.push({
+            id: `log_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+            date: dateVal,
+            itch: selectedItch,
+            bumps: selectedBumps,
+            notes: notesVal,
+            timestamp: Date.now(),
+          });
+          saveState();
+          document.getElementById('log-entry-notes').value = '';
+          renderScalpLog();
+          showToast('Scalp recovery check-in saved!');
+        });
+
+        // Edit Direct Amazon.ca Link Modal
+        document.getElementById('edit-link-close').addEventListener('click', closeEditLinkModal);
+        document.getElementById('edit-link-cancel').addEventListener('click', closeEditLinkModal);
+        document.getElementById('edit-link-modal').addEventListener('click', (e) => {
+          if (e.target.id === 'edit-link-modal') closeEditLinkModal();
+        });
+
+        document.getElementById('edit-link-reset').addEventListener('click', () => {
+          if (!editingProductId) return;
+          delete state.customLinks[editingProductId];
+          saveState();
+          renderOrderList();
+          closeEditLinkModal();
+          showToast('Restored default Amazon.ca search link.', 'info');
+        });
+
+        document.getElementById('edit-link-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!editingProductId) return;
+          let raw = document.getElementById('edit-link-input').value.trim();
+          if (!raw) return;
+          if (!/^https?:\/\//i.test(raw)) {
+            raw = `https://${raw}`;
+          }
+          try {
+            new URL(raw);
+            state.customLinks[editingProductId] = raw;
+            saveState();
+            renderOrderList();
+            closeEditLinkModal();
+            showToast('Custom Amazon.ca link saved!');
+          } catch (err) {
+            showToast('Please enter a valid URL starting with https://', 'error');
+          }
+        });
+
+        // Confirmation Modal Events
+        document.getElementById('confirm-modal-cancel').addEventListener('click', closeConfirm);
+        document.getElementById('confirm-modal').addEventListener('click', (e) => {
+          if (e.target.id === 'confirm-modal') closeConfirm();
+        });
+        document.getElementById('confirm-modal-ok').addEventListener('click', () => {
+          const cb = pendingConfirmCallback;
+          closeConfirm();
+          if (typeof cb === 'function') cb();
+        });
+
+        // Keyboard Escape closes open modals
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeEditLinkModal();
+            closeConfirm();
+          }
+        });
+      }
+
+      // Initialize App on DOM Load
+      document.addEventListener('DOMContentLoaded', () => {
+        bindEvents();
+        renderAll();
+      });
+    })();
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
