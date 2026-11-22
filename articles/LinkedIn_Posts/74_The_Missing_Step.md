@@ -13,3 +13,4 @@ Pick the one onboarding page where your new hires stall most, and write one ques
 #AILeadership #Onboarding #LearningDesign #DataScience #iwork4dell
 
 Extended Reading: https://alhaol.github.io/articles/Articles/the-missing-step.html
+    
