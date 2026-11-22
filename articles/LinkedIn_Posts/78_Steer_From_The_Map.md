@@ -1,10 +1,14 @@
-Across 190 studies, adults read English non-fiction silently at an average of 238 words per minute. A single AI agent now streams thousands of words and tool outputs in that same minute, and three agents in parallel produce text more than 40 times faster than the person supervising them can read.
+You start three agents on a refactor, glance away for four minutes, and come back to thousands of lines of output. You scroll to the bottom and hope.
 
-Trying to stay focused by reading that stream line by line is a losing game. Nelson Cowan showed that the focus of human working memory holds about four items at once. When you spend all four slots tracking a scrolling transcript, you shift from steering the work to watching it go by. Across five levels of automation, Mica Endsley and Esin Kiris found that passive observers suffer the steepest drop in situation awareness and the slowest recovery when a system drifts.
+That is not supervision. It is watching.
 
-Human vision works on a different clock. Viewers extract the meaning of a picture in 13 milliseconds, and spatial diagrams replace linear search with perception. You do not out-read a fast agent stream. You make the agent draw a compact visual state at every checkpoint: a four-node state graph, a constraint board of invariants, and a delta matrix of only what moved.
+Adults read about 238 words a minute. One agent can burst about fifteen times faster, and working memory holds roughly four things at once. Follow the stream and all four slots fill with line numbers you are trying to keep track of. Nothing is left to judge the work. Decades of automation research show what happens to passive monitors: they lose the picture and recover slowest when something breaks.
 
-Cap every live agent checkpoint at four or five visual chunks, and pause the run automatically whenever one invariant turns amber.
+So stop reading the stream. Make the agent draw a small map at every checkpoint: four nodes, a few invariants, only the cells that moved. Keep everything blue and the one problem amber, and your eyes find it without searching.
+
+One catch: the map is the agent's account of its own work. Fill it from tests, benchmarks and real diffs, not from the agent's summary, and spot-check the raw output under one node now and then.
+
+You will never read as fast as the machine writes. You do not have to.
 
 #AgenticAI #HumanInTheLoop #CognitiveLoad #VisualThinking #Leadership #iwork4dell
 
