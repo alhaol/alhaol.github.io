@@ -5,7 +5,7 @@ tell, wait for your reply, and won't hand over the answer until you've genuinely
 is a standalone file you can open, fill in the `[BRACKETS]`, and paste into any model.
 
 <!-- PROMPTS:COUNT:START -->
-**10 prompts** across 3 categories: Learning, Workflow, Writing.
+**11 prompts** across 4 categories: Learning, Workflow, Writing, Decisions.
 <!-- PROMPTS:COUNT:END -->
 
 **Start at the hub:** [`index.html`](index.html) renders them all from the markdown below, fills in
@@ -36,6 +36,7 @@ to chain them into a full learn → practice → verify loop.
 | 8 | [The Local-First Harness](mds/08-local-first-harness.md) | Workflow | Force the agent to leave scripts, caches and graphs behind as it builds — so run two is deterministic and nearly free. |
 | 9 | [The Memory-First Editor](mds/09-memory-first-editor.md) | Writing | Seven cognitive passes over your draft — core, load, image, surprise, return, address, bookend — with you doing every rewrite. |
 | 10 | [The COMPOSE Protocol Skill](mds/10-compose-protocol-skill.md) | Workflow | Install a skill that makes your coding agent curate context, interview you, and test before it codes. |
+| 11 | [The Decision Council](mds/11-decision-council.md) | Decisions | Five advisors argue, review each other blind, and a chairman picks one option |
 <!-- PROMPTS:TABLE:END -->
 
 ## Layout
