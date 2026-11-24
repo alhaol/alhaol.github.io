@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quran Map</title>
+  <link rel="icon" type="image/png" href="../../assets/ibrahim-image-circle.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri+Quran&family=Noto+Naskh+Arabic:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #020617; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 70%);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      padding: 12px;
+      overflow: hidden;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+    }
+    .accent-text { color: #fbbf24; }
+    .btn-accent {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #020617;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .input-field {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus { outline: none; border-color: #fbbf24; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    /* ---- Treemap ---- */
+    .ar-ui { font-family: 'Noto Naskh Arabic', 'Amiri Quran', serif; }
+    #map { position: absolute; inset: 6px; }
+    .jgroup { position: absolute; border-radius: 6px; }
+    .tile {
+      position: absolute; overflow: hidden; border-radius: 4px; cursor: pointer; color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; line-height: 1.15; padding: 2px 4px;
+      box-shadow: inset 0 0 0 1px rgba(2, 6, 23, 0.55);
+      transition: filter .15s, opacity .2s, transform .15s;
+      text-shadow: 0 1px 2px rgba(0,0,0,.45);
+    }
+    .tile:hover { filter: brightness(1.22); z-index: 3; }
+    .tile.dim { opacity: .14; }
+    .tile.hit { box-shadow: inset 0 0 0 2px #fde68a; z-index: 2; }
+    .tile .num { position: absolute; top: 2px; left: 5px; font-size: 10px; opacity: .8; font-weight: 600; }
+    .tile:focus-visible { outline: 2px solid #fde68a; outline-offset: -2px; z-index: 5; }
+    .juz-mark { display: inline-block; font-family: 'Inter', 'Noto Naskh Arabic', sans-serif; font-size: 12px; font-weight: 700;
+      color: #fde68a; background: rgba(251,191,36,.14); border: 1px solid rgba(251,191,36,.4); border-radius: 999px;
+      padding: 1px 10px; margin: 0 .3em; vertical-align: middle; line-height: 1.6; white-space: nowrap; }
+    /* ---- Word notes ---- */
+    .gw { cursor: pointer; border-radius: 6px; text-decoration: underline dotted rgba(253,230,138,.75);
+      text-decoration-thickness: 2px; text-underline-offset: .42em; transition: background .15s; }
+    .gw:hover, .gw.active, .gw:focus-visible { background: rgba(253,230,138,.16); outline: none; }
+    .page.no-gloss .gw { text-decoration: none; cursor: inherit; background: none; pointer-events: none; }
+    #glossBtn.on { background: rgba(251,191,36,.18); color: #fbbf24; border-color: rgba(251,191,36,.4); }
+    #gloss { position: fixed; z-index: 65; width: min(380px, calc(100vw - 16px)); display: none; padding: 14px 16px;
+      background: rgba(15,23,42,.97); border: 1px solid rgba(253,230,138,.28); border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.6); font-size: 13px; line-height: 1.5; overflow-y: auto; }
+    #gloss.open { display: block; }
+    #gloss .g-word { font-family: 'Amiri Quran', serif; font-size: 30px; line-height: 1.6; color: #fde68a; }
+    #gloss .g-root span { display: inline-block; min-width: 24px; text-align: center; margin-left: 4px; padding: 0 5px; border-radius: 6px;
+      background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.3); color: #fde68a; font-family: 'Noto Naskh Arabic', serif; font-size: 15px; }
+    #gloss .g-ar { font-family: 'Noto Naskh Arabic', serif; direction: rtl; text-align: right; font-size: 15px; line-height: 1.8; }
+    #gloss .g-h { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #64748b; margin: 10px 0 2px; }
+    #gloss .g-see button { color: #fbbf24; font-weight: 600; margin-right: 8px; }
+    #gloss .g-see button:hover { text-decoration: underline; }
+    .ayah.flash { background: rgba(253,230,138,.22); border-radius: 6px; transition: background 1.5s; }
+    .tile .ar { font-family: 'Noto Naskh Arabic', serif; font-weight: 700; white-space: nowrap; }
+    .tile .en { opacity: .9; font-weight: 500; white-space: nowrap; }
+    .tile .meta { opacity: .7; white-space: nowrap; }
+    .chip { min-width: 24px; height: 22px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff;
+      border: 1px solid rgba(255,255,255,.12); cursor: pointer; transition: transform .12s, opacity .2s; }
+    .chip:hover, .chip.on { transform: translateY(-1px); box-shadow: 0 0 0 2px #fde68a; }
+    .seg button { padding: 5px 10px; font-size: 12px; font-weight: 600; color: #94a3b8; border-radius: 8px; }
+    .seg button.on { background: rgba(251,191,36,.15); color: #fbbf24; }
+    #tip { position: fixed; pointer-events: none; z-index: 60; display: none; max-width: 260px; }
+
+    /* ---- Reader ---- */
+    #reader { position: fixed; inset: 0; z-index: 50; background: #070d1c; display: none; flex-direction: column; }
+    #reader.open { display: flex; }
+    #readerBody { flex: 1; overflow-y: auto; touch-action: pan-x pan-y; }
+    .page { max-width: 1000px; margin: 0 auto; padding: 24px 18px 80px; font-size: calc(30px * var(--z, 1)); }
+    .quran { font-family: 'Amiri Quran', 'Noto Naskh Arabic', serif; direction: rtl; text-align: justify; line-height: 2.25; color: #f8fafc; }
+    .basmala { font-family: 'Amiri Quran', serif; text-align: center; font-size: 1.05em; color: #fde68a; margin: .2em 0 .6em; }
+    .ruku { --rc: 16,185,129; position: relative; background: rgba(var(--rc), .10); border-right: 5px solid rgba(var(--rc), .85);
+      border-radius: 14px; padding: 1.6em .9em .5em; margin: 0 0 .55em; scroll-margin-top: 12px; }
+    .rk-label { position: absolute; top: 8px; left: 12px; font-family: 'Inter', sans-serif; direction: ltr;
+      font-size: 12px; font-weight: 600; color: rgb(var(--rc)); letter-spacing: .03em; }
+    .rk-label-ar { position: absolute; top: 4px; right: 14px; font-family: 'Noto Naskh Arabic', serif; font-size: 13px; color: rgb(var(--rc)); }
+    .ayah-end { color: rgb(var(--rc)); font-size: .82em; margin: 0 .12em; white-space: nowrap; cursor: pointer; }
+    .ayah-end:hover { filter: brightness(1.4); }
+    .sajda { color: #fbbf24; }
+    .rk-chip { flex: none; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; cursor: pointer;
+      color: rgb(var(--rc)); background: rgba(var(--rc), .12); border: 1px solid rgba(var(--rc), .35); }
+    .rk-chip.on { background: rgba(var(--rc), .35); color: #fff; }
+    .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px;
+      background: rgba(51,65,85,.55); color: #e2e8f0; border: 1px solid rgba(255,255,255,.08); }
+    .icon-btn:hover { background: rgba(71,85,105,.8); }
+    .icon-btn:disabled { opacity: .35; cursor: default; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY (do not modify — shared site-wide access gate, see CLAUDE.md) -->
+<div id="loginView" style="position:fixed;inset:0;z-index:9999;background:#030712;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div style="width:100%;max-width:360px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:1.25rem;padding:2rem;box-shadow:0 25px 50px -12px rgba(0,0,0,0.8)">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="width:3.5rem;height:3.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:9999px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem">🔒</div>
+      <h2 style="color:white;font-size:1.25rem;font-weight:700;margin:0 0 0.25rem">Secure Access</h2>
+      <p style="color:#64748b;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;margin:0">Private App</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'">
+      </div>
+      <div>
+        <label style="display:block;color:#94a3b8;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password"
+          style="width:100%;background:#1e293b;border:1px solid #334155;color:white;border-radius:0.75rem;padding:0.75rem 1rem;font-size:0.875rem;outline:none;box-sizing:border-box;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#334155'"
+          onkeydown="if(event.key==='Enter')_login()">
+      </div>
+      <button onclick="_login()"
+        style="width:100%;background:#059669;color:white;font-weight:700;padding:0.75rem 1rem;border-radius:0.75rem;border:none;cursor:pointer;font-size:0.875rem;transition:background 0.2s;margin-top:0.25rem"
+        onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        Unlock
+      </button>
+      <p id="loginError" style="display:none;text-align:center;color:#f87171;font-size:0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:0.5rem;padding:0.5rem;margin:0">
+        Incorrect credentials. Try again.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="h-full flex flex-col gap-2 relative z-10">
+  <header class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+    <div class="flex items-baseline gap-3">
+      <h1 class="text-xl font-bold text-white">Quran Map</h1>
+      <p class="text-slate-400 text-xs hidden sm:block">All 114 surahs, tile size by ayah count, coloured by juz. Click a surah to read it.</p>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+      <div class="seg flex gap-1 bg-slate-800/60 rounded-xl p-1 border border-white/5">
+        <button data-mode="grouped" title="Nest surahs inside the juz where each one starts">Grouped by juz</button>
+        <button data-mode="flat" title="One continuous mushaf-order layout">Mushaf flow</button>
+      </div>
+      <input id="search" class="input-field" style="width:190px;padding:6px 10px;font-size:13px" placeholder="Search surah / number…" autocomplete="off">
+      <a href="../../links/" class="text-slate-400 hover:text-white text-sm whitespace-nowrap">← Apps Hub</a>
+    </div>
+  </header>
+
+  <div class="flex items-center gap-1 overflow-x-auto pb-1" id="legend">
+    <span class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mr-1 whitespace-nowrap">Juz</span>
+  </div>
+
+  <main id="quranMap" class="glass-panel relative flex-1 min-h-0">
+    <div id="map"><div class="h-full flex items-center justify-center text-slate-400 text-sm">Loading the Quran…</div></div>
+  </main>
+  <div class="text-[11px] text-slate-500 flex justify-between gap-2">
+    <span id="stats"></span>
+    <button id="continueBtn" class="hidden text-amber-300 hover:text-amber-200 font-semibold"></button>
+    <span class="hidden md:inline">Reads right to left. Hover a juz chip to see every surah in that juz; click it to keep the highlight.</span>
+  </div>
+</div>
+
+<div id="tip" class="glass-panel px-3 py-2 text-xs"></div>
+<div id="gloss" role="dialog" aria-label="Word note"></div>
+<div id="toast" class="glass-panel px-4 py-2 text-sm text-amber-200" style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:70;opacity:0;transition:opacity .25s;pointer-events:none"></div>
+
+<div id="reader" role="dialog" aria-modal="true">
+  <div id="readerBar" class="border-b border-white/10 bg-slate-900/90 px-3 py-2 flex flex-col gap-2">
+    <div class="flex items-center gap-2">
+      <button class="icon-btn" id="btnClose" title="Close (Esc)"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <button class="icon-btn" id="btnPrev" title="Previous surah (→)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+      <button class="icon-btn" id="btnNext" title="Next surah (←)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+      <div class="flex-1 min-w-0 flex items-center gap-3">
+        <span id="rdSwatch" class="w-2.5 h-8 rounded-full flex-none"></span>
+        <div class="min-w-0">
+          <div class="flex items-baseline gap-2 flex-wrap">
+            <span id="rdAr" class="ar-ui text-xl font-bold text-white"></span>
+            <span id="rdEn" class="text-sm font-semibold text-slate-200"></span>
+          </div>
+          <div id="rdMeta" class="text-[11px] text-slate-400 truncate"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1">
+        <button class="icon-btn hidden" id="glossBtn" title="Word notes: click an underlined word for its meaning (w)"><i data-lucide="book-a" class="w-4 h-4"></i></button>
+        <button class="icon-btn" id="zOut" title="Zoom out (−)"><i data-lucide="zoom-out" class="w-4 h-4"></i></button>
+        <button id="zVal" class="text-xs font-semibold text-slate-300 w-12 text-center" title="Reset zoom (0)">100%</button>
+        <button class="icon-btn" id="zIn" title="Zoom in (+)"><i data-lucide="zoom-in" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+    <div id="rkChips" class="flex gap-1.5 overflow-x-auto pb-0.5" dir="rtl"></div>
+  </div>
+  <div id="readerBody"><div class="page" id="page"></div></div>
+</div>
+
+<script>
+// === App logic ===
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var state = {
+    data: null,
+    mode: localStorage.getItem('quranMap.mode') || 'grouped',
+    zoom: parseFloat(localStorage.getItem('quranMap.zoom')) || 1,
+    juzHover: null, juzPinned: null, query: '',
+    current: 0, pushed: false
+  };
+  // One distinct background per ruku; consecutive rukus never share a colour.
+  var RUKU = ['16,185,129', '96,165,250', '192,132,252', '251,191,36', '248,113,113', '45,212,191', '244,114,182', '163,230,53'];
+  var arNum = function (n) { return String(n).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }); };
+  var juzHue = function (j) { return (j * 137.508) % 360; };
+  // Yellow-to-cyan hues read much brighter at the same HSL lightness, so darken them to keep white labels legible.
+  var juzColor = function (j, l) {
+    var h = juzHue(j), bright = h > 40 && h < 190 ? 9 : 0;
+    return 'hsl(' + h.toFixed(1) + ' 58% ' + (l != null ? l : (j % 2 ? 38 : 46) - bright) + '%)';
+  };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var normAr = function (s) { return s.replace(/[ً-ٰٟۖ-ۭـ]/g, '').replace(/[ٱأإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه'); };
+  // Transliterations vary (Faatiha / Fatihah, Yaseen / Ya-Sin): drop punctuation, collapse doubled letters, ignore a final h.
+  var normEn = function (s) { return s.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/ee/g, 'i').replace(/oo/g, 'u').replace(/(.)\1+/g, '$1').replace(/h\b/g, '').replace(/ /g, ''); };
+
+  // ---- Ordered squarified treemap (keeps mushaf order, near-square tiles) ----
+  function worst(row, side) {
+    var sum = 0, mx = 0, mn = Infinity;
+    row.forEach(function (r) { sum += r.a; if (r.a > mx) mx = r.a; if (r.a < mn) mn = r.a; });
+    var s2 = side * side, sum2 = sum * sum;
+    return Math.max(s2 * mx / sum2, sum2 / (s2 * mn));
+  }
+  function layout(items, x, y, w, h) {
+    var total = items.reduce(function (t, it) { return t + it.v; }, 0);
+    var area = w * h, out = [], i = 0;
+    var sc = items.map(function (it) { return { it: it, a: total ? it.v / total * area : 0 }; });
+    while (i < sc.length) {
+      var side = Math.min(w, h), row = [sc[i]], wr = worst(row, side), j = i + 1;
+      while (j < sc.length) {
+        var nr = row.concat(sc[j]), nw = worst(nr, side);
+        if (nw <= wr) { row = nr; wr = nw; j++; } else break;
+      }
+      var ra = row.reduce(function (t, r) { return t + r.a; }, 0);
+      if (w >= h) {
+        var cw = h ? ra / h : 0, cy = y;
+        row.forEach(function (r) { var rh = cw ? r.a / cw : 0; out.push({ it: r.it, x: x, y: cy, w: cw, h: rh }); cy += rh; });
+        x += cw; w -= cw;
+      } else {
+        var rh = w ? ra / w : 0, cx = x;
+        row.forEach(function (r) { var rw = rh ? r.a / rh : 0; out.push({ it: r.it, x: cx, y: y, w: rw, h: rh }); cx += rw; });
+        y += rh; h -= rh;
+      }
+      i = j;
+    }
+    return out;
+  }
+
+  // ---- Map rendering ----
+  function tileHTML(s, r, W) {
+    // A tiny surah next to a huge one (Al-Fatiha above Al-Baqarah) squarifies into an unclickable
+    // sliver; draw it as a square of the same area pinned to the same corner instead.
+    var lift = '';
+    if (Math.min(r.w, r.h) < 14) { var sq = Math.sqrt(r.w * r.h); r = { x: r.x, y: r.y, w: sq, h: sq }; lift = ';z-index:4;outline:2px solid #020617'; }
+    var x = W - r.x - r.w; // mirror: the mushaf reads right to left
+    var m = Math.min(r.w, r.h), big = r.w > 64 && r.h > 34, inner = '';
+    var arSize = Math.max(10, Math.min(46, Math.min(r.w / (s.ar.length * 0.55 + 1), r.h / 2.2)));
+    if (big) {
+      inner += '<div class="ar" style="font-size:' + arSize.toFixed(1) + 'px">' + esc(s.ar) + '</div>';
+      if (r.h > 58 && r.w > 80) inner += '<div class="en" style="font-size:' + Math.max(10, Math.min(15, arSize * 0.42)).toFixed(1) + 'px">' + esc(s.en) + '</div>';
+      if (r.h > 86 && r.w > 96) inner += '<div class="meta" style="font-size:10.5px">' + s.a.length + ' ayahs · ' + s.rk.length + ' ruku</div>';
+      inner = '<span class="num">' + s.n + '</span>' + inner;
+    } else {
+      inner = '<div style="font-size:' + Math.max(8, Math.min(13, m / 2.1)).toFixed(1) + 'px;font-weight:700">' + s.n + '</div>';
+    }
+    return '<div class="tile" data-n="' + s.n + '" tabindex="0" role="button" aria-label="' +
+      esc(s.n + '. ' + s.en + ', ' + s.a.length + ' ayahs') + '" style="left:' + (x + 0.5).toFixed(1) + 'px;top:' + (r.y + 0.5).toFixed(1) +
+      'px;width:' + Math.max(0, r.w - 1).toFixed(1) + 'px;height:' + Math.max(0, r.h - 1).toFixed(1) +
+      'px;background:' + juzColor(s.juz[0]) + lift + '">' + inner + '</div>';
+  }
+
+  function renderMap() {
+    var el = $('#map'), W = el.clientWidth, H = el.clientHeight, S = state.data;
+    if (!S || !W || !H) return;
+    var html = '';
+    if (state.mode === 'grouped') {
+      var groups = [];
+      S.forEach(function (s) {
+        var g = groups[groups.length - 1];
+        if (!g || g.j !== s.juz[0]) { g = { j: s.juz[0], v: 0, items: [] }; groups.push(g); }
+        g.items.push({ v: s.a.length, s: s }); g.v += s.a.length;
+      });
+      layout(groups, 0, 0, W, H).forEach(function (gr) {
+        var p = 2;
+        html += '<div class="jgroup" style="left:' + (W - gr.x - gr.w).toFixed(1) + 'px;top:' + gr.y.toFixed(1) + 'px;width:' + gr.w.toFixed(1) +
+          'px;height:' + gr.h.toFixed(1) + 'px;background:' + juzColor(gr.it.j, 20) + '" title="Juz ' + gr.it.j + '"></div>';
+        layout(gr.it.items, gr.x + p, gr.y + p, Math.max(0, gr.w - 2 * p), Math.max(0, gr.h - 2 * p)).forEach(function (r) {
+          html += tileHTML(r.it.s, r, W);
+        });
+      });
+    } else {
+      layout(S.map(function (s) { return { v: s.a.length, s: s }; }), 0, 0, W, H).forEach(function (r) { html += tileHTML(r.it.s, r, W); });
+    }
+    el.innerHTML = html;
+    applyHighlight();
+  }
+
+  function applyHighlight() {
+    var j = state.juzHover || state.juzPinned, q = state.query.trim();
+    var qa = normAr(q), qe = normEn(q), qn = /^\d+$/.test(q) ? +q : null;
+    document.querySelectorAll('.tile').forEach(function (t) {
+      var s = state.data[t.dataset.n - 1], match = true, hit = false;
+      if (j) match = s.juz.indexOf(j) !== -1;
+      if (q) {
+        hit = qn ? s.n === qn : ((qe && (s.key || (s.key = normEn(s.en) + '|' + normEn(s.alt) + '|' + normEn(s.tr))).indexOf(qe) !== -1) || (qa && normAr(s.ar).indexOf(qa) !== -1));
+        match = match && hit;
+      }
+      t.classList.toggle('dim', !match);
+      t.classList.toggle('hit', !!q && hit);
+    });
+    document.querySelectorAll('.chip').forEach(function (c) { c.classList.toggle('on', +c.dataset.j === state.juzPinned); });
+  }
+
+  function buildLegend() {
+    var lg = $('#legend'), h = '';
+    for (var j = 1; j <= 30; j++) h += '<button class="chip" data-j="' + j + '" style="background:' + juzColor(j) + '">' + j + '</button>';
+    lg.insertAdjacentHTML('beforeend', h);
+    lg.addEventListener('mouseover', function (e) { var c = e.target.closest('.chip'); if (c) { state.juzHover = +c.dataset.j; applyHighlight(); } });
+    lg.addEventListener('mouseout', function (e) { if (e.target.closest('.chip')) { state.juzHover = null; applyHighlight(); } });
+    lg.addEventListener('click', function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      state.juzPinned = state.juzPinned === +c.dataset.j ? null : +c.dataset.j; applyHighlight();
+    });
+  }
+
+  function juzRange(s) { return s.juz.length > 1 ? 'Juz ' + s.juz[0] + '–' + s.juz[s.juz.length - 1] : 'Juz ' + s.juz[0]; }
+
+  // ---- Tooltip ----
+  var tip = $('#tip');
+  $('#map').addEventListener('mousemove', function (e) {
+    var t = e.target.closest('.tile');
+    if (!t) { tip.style.display = 'none'; return; }
+    var s = state.data[t.dataset.n - 1];
+    tip.innerHTML = '<div class="flex items-baseline justify-between gap-3"><span class="font-bold text-white">' + s.n + '. ' + esc(s.en) +
+      '</span><span class="ar-ui text-base text-amber-200">' + esc(s.ar) + '</span></div><div class="text-slate-400">' + esc(s.tr) +
+      ' · ' + s.type + ' · revealed #' + s.order + '</div><div class="text-slate-300 mt-1">' + s.a.length + ' ayahs · ' + s.rk.length +
+      ' ruku · ' + juzRange(s) + ' · ' + pageRange(s) + '</div>';
+    tip.style.display = 'block';
+    var tx = e.clientX + 14, ty = e.clientY + 14, r = tip.getBoundingClientRect();
+    if (tx + r.width > innerWidth - 8) tx = e.clientX - r.width - 14;
+    if (ty + r.height > innerHeight - 8) ty = e.clientY - r.height - 14;
+    tip.style.left = tx + 'px'; tip.style.top = ty + 'px';
+  });
+  $('#map').addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+  function openFromMap(n) { tip.style.display = 'none'; state.pushed = true; location.hash = 's=' + n; }
+  $('#map').addEventListener('click', function (e) { var t = e.target.closest('.tile'); if (t) openFromMap(t.dataset.n); });
+  $('#map').addEventListener('keydown', function (e) {
+    var t = e.target.closest('.tile');
+    if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openFromMap(t.dataset.n); }
+  });
+  function pageRange(s) { return s.pages[0] === s.pages[1] ? 'page ' + s.pages[0] : 'pages ' + s.pages[0] + '–' + s.pages[1]; }
+
+  // ---- Reading position (one bookmark: the last surah read and how far down) ----
+  try { state.last = JSON.parse(localStorage.getItem('quranMap.last')); } catch (e) { state.last = null; }
+  function saveLast(k) {
+    var b = $('#readerBody'), max = b.scrollHeight - b.clientHeight;
+    var prevK = state.last && state.last.n === state.current ? state.last.k : 0;
+    state.last = { n: state.current, r: max > 0 ? b.scrollTop / max : 0, k: k != null ? k : prevK };
+    localStorage.setItem('quranMap.last', JSON.stringify(state.last));
+  }
+  function syncContinue() {
+    var L = state.last, btn = $('#continueBtn');
+    if (!L || !state.data || !state.data[L.n - 1]) { btn.classList.add('hidden'); return; }
+    var s = state.data[L.n - 1];
+    btn.textContent = '● Continue ' + s.en + (s.rk.length > 1 ? ' · Ruku ' + ((L.k || 0) + 1) : '');
+    btn.classList.remove('hidden');
+  }
+  $('#continueBtn').onclick = function () { if (state.last) openFromMap(state.last.n); };
+  var st;
+  $('#readerBody').addEventListener('scroll', function () {
+    if (!$('#reader').classList.contains('open')) return;
+    clearTimeout(st); st = setTimeout(function () { saveLast(); }, 250);
+  });
+
+  // ---- Reader ----
+  function setZoom(z, keep) {
+    var body = $('#readerBody'), ratio = body.scrollHeight ? body.scrollTop / body.scrollHeight : 0;
+    closeGloss();
+    state.zoom = Math.min(4, Math.max(0.5, Math.round(z * 100) / 100));
+    $('#page').style.setProperty('--z', state.zoom);
+    $('#zVal').textContent = Math.round(state.zoom * 100) + '%';
+    localStorage.setItem('quranMap.zoom', state.zoom);
+    if (keep !== false) body.scrollTop = ratio * body.scrollHeight;
+  }
+
+  // Where each juz begins inside a surah (skipping a juz that merely continues from the previous surah).
+  function juzStarts(s) {
+    var prev = s.n > 1 ? state.data[s.n - 2].jz : null, prevJ = prev ? prev[prev.length - 1][1] : 0, out = {};
+    s.jz.forEach(function (p) { if (p[0] > 0 || p[1] !== prevJ) out[p[0]] = p[1]; });
+    return out;
+  }
+
+  // ---- Word notes (gloss.json): rare words are underlined; clicking one opens an Arabic + English explanation ----
+  var GLOSS = { words: {}, at: {}, sources: {} }; // at[surah][ayahIndex] = { tokenIndex: key }
+  state.glossOn = localStorage.getItem('quranMap.gloss') !== 'off';
+  state.glossCtx = !!localStorage.getItem('quranMap.glossCtx');
+  function indexGloss(g) {
+    GLOSS.words = g.words || {}; GLOSS.sources = g.sources || {};
+    Object.keys(GLOSS.words).forEach(function (key) {
+      var p = key.split(':').map(Number), s = state.data[p[0] - 1], e = GLOSS.words[key];
+      if (!s || !s.a[p[1] - 1]) return;
+      var toks = s.a[p[1] - 1].split(' '), ti = p[2] - 1;
+      // Positions can drift if the text source changes; fall back to finding the word itself in the ayah.
+      if (!toks[ti] || normAr(toks[ti]) !== normAr(e.w)) {
+        ti = toks.findIndex(function (t) { return normAr(t) === normAr(e.w); });
+        if (ti < 0) { console.warn('gloss: word not found', key, e.w); return; }
+      }
+      ((GLOSS.at[p[0]] = GLOSS.at[p[0]] || {})[p[1] - 1] = GLOSS.at[p[0]][p[1] - 1] || {})[ti] = key;
+    });
+  }
+  function ayahText(n, i) {
+    var marks = GLOSS.at[n] && GLOSS.at[n][i], text = state.data[n - 1].a[i];
+    if (!marks) return esc(text);
+    return text.split(' ').map(function (t, ti) {
+      return marks[ti] ? '<span class="gw" role="button" tabindex="0" data-g="' + marks[ti] + '">' + esc(t) + '</span>' : esc(t);
+    }).join(' ');
+  }
+  function syncGlossBtn() {
+    $('#glossBtn').classList.toggle('on', state.glossOn);
+    $('#page').classList.toggle('no-gloss', !state.glossOn);
+  }
+  function openGloss(el) {
+    var key = el.dataset.g, e = GLOSS.words[key], box = $('#gloss'), p = key.split(':');
+    if (!e) return;
+    document.querySelectorAll('.gw.active').forEach(function (x) { x.classList.remove('active'); });
+    el.classList.add('active');
+    var see = (e.see || []).map(function (r) { return '<button data-ref="' + esc(r) + '">' + esc(r) + ' ↗</button>'; }).join('');
+    box.innerHTML =
+      '<div class="flex items-start justify-between gap-3">' +
+        '<div><div class="text-[11px] text-slate-500 font-semibold">' + esc(state.data[p[0] - 1].en) + ' ' + p[0] + ':' + p[1] + '</div>' +
+        '<div class="text-sm text-slate-300 italic">' + esc(e.tr || '') + '</div></div>' +
+        '<div class="g-word" dir="rtl">' + esc(e.w) + '</div>' +
+      '</div>' +
+      (e.root ? '<div class="g-root flex items-center gap-1 text-[11px] text-slate-400" dir="rtl"><span class="!bg-transparent !border-0 !text-slate-500 !text-[11px]">الجذر</span>' +
+        e.root.split(' ').map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') + '</div>' : '') +
+      (e.wbw ? '<div class="g-h">Word by word</div><div class="text-slate-300">“' + esc(e.wbw) + '”</div>' : '') +
+      '<div class="g-h">Meaning</div><div class="text-slate-100 font-medium">' + esc(e.en) + '</div>' +
+      '<div class="g-ar text-slate-100 mt-1">' + esc(e.ar) + '</div>' +
+      (e.form_en || e.form_ar ? '<div class="g-h">Word form</div><div class="text-slate-400 text-xs">' + esc(e.form_en || '') + '</div><div class="g-ar text-slate-400" style="font-size:13px;line-height:1.6">' + esc(e.form_ar || '') + '</div>' : '') +
+      (e.note_en || e.note_ar ? '<details' + (state.glossCtx ? ' open' : '') + '><summary class="g-h cursor-pointer select-none">Context &amp; sources</summary><div class="text-slate-300">' + esc(e.note_en || '') + '</div><div class="g-ar text-slate-300 mt-1" style="font-size:14px">' + esc(e.note_ar || '') + '</div></details>' : '') +
+      (see ? '<div class="g-h">See also</div><div class="g-see">' + see + '</div>' : '') +
+      ((e.src || []).length ? '<div class="mt-3 pt-2 border-t border-white/10 text-[10.5px] text-slate-500 leading-relaxed">Sources: ' +
+        e.src.map(function (k) { return '<bdi>' + esc(GLOSS.sources[k] || k) + '</bdi>'; }).join(' · ') + '</div>' : '');
+    box.classList.add('open');
+    var d = box.querySelector('details');
+    if (d) d.addEventListener('toggle', function () { state.glossCtx = d.open; localStorage.setItem('quranMap.glossCtx', d.open ? '1' : ''); placeGloss(el); });
+    placeGloss(el);
+  }
+  // Below the word if it fits, else on whichever side has more room; never cover the word, scroll inside if tall.
+  function placeGloss(el) {
+    var box = $('#gloss'), r = el.getBoundingClientRect(), m = 8, gap = 8;
+    var below = innerHeight - r.bottom - gap - m, above = r.top - gap - m;
+    box.style.maxHeight = 'none';
+    var bh = box.scrollHeight, bw = box.offsetWidth, top;
+    if (bh <= below || below >= above) { top = r.bottom + gap; box.style.maxHeight = below + 'px'; }
+    else { box.style.maxHeight = above + 'px'; top = r.top - gap - Math.min(bh, above); }
+    box.style.left = Math.min(Math.max(m, r.left + r.width / 2 - bw / 2), innerWidth - bw - m) + 'px';
+    box.style.top = top + 'px';
+  }
+  function closeGloss() {
+    $('#gloss').classList.remove('open');
+    document.querySelectorAll('.gw.active').forEach(function (x) { x.classList.remove('active'); });
+  }
+  $('#page').addEventListener('click', function (e) { var w = e.target.closest('.gw'); if (w) { e.stopPropagation(); w.classList.contains('active') ? closeGloss() : openGloss(w); } });
+  $('#page').addEventListener('keydown', function (e) { var w = e.target.closest('.gw'); if (w && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openGloss(w); } });
+  $('#gloss').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ref]'); if (!b) return;
+    closeGloss(); location.replace('#s=' + b.dataset.ref);
+  });
+  document.addEventListener('click', function (e) { if (!e.target.closest('#gloss') && !e.target.closest('.gw')) closeGloss(); });
+  $('#readerBody').addEventListener('scroll', closeGloss, { passive: true });
+  $('#glossBtn').onclick = function () {
+    state.glossOn = !state.glossOn; localStorage.setItem('quranMap.gloss', state.glossOn ? 'on' : 'off');
+    if (!state.glossOn) closeGloss(); syncGlossBtn();
+  };
+
+  var observer = null;
+  function showReader(n, ayah) {
+    var s = state.data[n - 1], wasOpen = $('#reader').classList.contains('open') && state.current === n;
+    state.current = n;
+    $('#rdAr').textContent = 'سورة ' + s.ar;
+    $('#rdEn').textContent = s.n + '. ' + s.en + ' — ' + s.tr;
+    $('#rdMeta').textContent = s.type + ' · ' + s.a.length + ' ayahs · ' + s.rk.length + ' ruku · ' + juzRange(s) + ' · ' + pageRange(s);
+    $('#rdSwatch').style.background = juzColor(s.juz[0], 55);
+    $('#btnPrev').disabled = n === 1; $('#btnNext').disabled = n === 114;
+
+    if (!wasOpen) {
+      var js = juzStarts(s), h = '<div class="quran">', chips = '';
+      if (n !== 1 && n !== 9) h += '<div class="basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+      s.rk.forEach(function (start, k) {
+        var end = (k + 1 < s.rk.length ? s.rk[k + 1] : s.a.length) - 1, rc = RUKU[k % RUKU.length];
+        h += '<section class="ruku" id="rk' + k + '" data-k="' + k + '" style="--rc:' + rc + '">' +
+          '<span class="rk-label">Ruku ' + (k + 1) + ' · Ayah ' + (start + 1) + (end > start ? '–' + (end + 1) : '') + '</span>' +
+          '<span class="rk-label-ar">الركوع ' + arNum(k + 1) + '</span><p>';
+        for (var i = start; i <= end; i++) {
+          if (js[i]) h += '<span class="juz-mark" title="Juz ' + js[i] + ' begins"><bdi>الجزء ' + arNum(js[i]) + '</bdi> · <bdi dir="ltr">Juz ' + js[i] + '</bdi></span>';
+          h += '<span class="ayah" id="a' + (i + 1) + '">' + ayahText(n, i) + (s.sj.indexOf(i) !== -1 ? ' <span class="sajda" title="Sajda (prostration)">۩</span>' : '') +
+            '<span class="ayah-end" data-a="' + (i + 1) + '" title="' + n + ':' + (i + 1) + ' (click to copy a link)">﴿' + arNum(i + 1) + '﴾</span></span> ';
+        }
+        h += '</p></section>';
+        chips += '<button class="rk-chip" data-k="' + k + '" style="--rc:' + rc + '" title="Ayah ' + (start + 1) + '–' + (end + 1) + '">' + (k + 1) + '</button>';
+      });
+      closeGloss();
+      $('#page').innerHTML = h + '</div>';
+      var gCount = $('#page').querySelectorAll('.gw').length;
+      $('#glossBtn').classList.toggle('hidden', !gCount);
+      $('#glossBtn').title = 'Word notes (' + gCount + ' in this surah): click an underlined word for its meaning (w)';
+      syncGlossBtn();
+      $('#rkChips').innerHTML = s.rk.length > 1 ? chips : '';
+      $('#rkChips').style.display = s.rk.length > 1 ? '' : 'none';
+      $('#reader').classList.add('open');
+      document.title = s.en + ' · Quran Map';
+      setZoom(state.zoom, false);
+      watchRukus();
+      $('#btnClose').focus({ preventScroll: true });
+    }
+
+    var body = $('#readerBody'), target = ayah && document.getElementById('a' + ayah);
+    if (target) {
+      target.scrollIntoView({ block: 'center' });
+      target.classList.add('flash'); setTimeout(function () { target.classList.remove('flash'); }, 1600);
+    } else if (!wasOpen) {
+      var L = state.last;
+      body.scrollTop = L && L.n === n ? L.r * (body.scrollHeight - body.clientHeight) : 0;
+    }
+  }
+
+  function watchRukus() {
+    if (observer) observer.disconnect();
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var k = en.target.dataset.k, bar = $('#rkChips'), on = null;
+        bar.querySelectorAll('.rk-chip').forEach(function (c) { var hit = c.dataset.k === k; c.classList.toggle('on', hit); if (hit) on = c; });
+        // Nudge the chip bar by hand: scrollIntoView here would cancel a smooth scroll already running in the reader.
+        if (on) {
+          var br = bar.getBoundingClientRect(), cr = on.getBoundingClientRect();
+          if (cr.left < br.left) bar.scrollLeft -= br.left - cr.left + 12;
+          else if (cr.right > br.right) bar.scrollLeft += cr.right - br.right + 12;
+        }
+        saveLast(+k);
+      });
+    }, { root: $('#readerBody'), rootMargin: '0px 0px -75% 0px' });
+    document.querySelectorAll('.ruku').forEach(function (r) { observer.observe(r); });
+  }
+  function hideReader() {
+    var wasOpen = $('#reader').classList.contains('open');
+    $('#reader').classList.remove('open'); document.title = 'Quran Map';
+    if (observer) observer.disconnect();
+    if (wasOpen) {
+      syncContinue();
+      var t = document.querySelector('.tile[data-n="' + state.current + '"]'); if (t) t.focus({ preventScroll: true });
+    }
+  }
+  function closeReader() {
+    if (state.pushed) { state.pushed = false; history.back(); }
+    else { history.replaceState(null, '', location.pathname + location.search); hideReader(); }
+  }
+  function go(n) { if (n >= 1 && n <= 114) location.replace('#s=' + n); }
+  function route() {
+    var m = location.hash.match(/^#s=(\d+)(?::(\d+))?$/), n = m ? +m[1] : 0;
+    if (state.data && n >= 1 && n <= 114) {
+      var a = m[2] ? +m[2] : 0;
+      showReader(n, a >= 1 && a <= state.data[n - 1].a.length ? a : 0);
+    } else { state.pushed = false; hideReader(); }
+  }
+
+  var toastT;
+  function toast(msg) {
+    var t = $('#toast'); t.textContent = msg; t.style.opacity = '1';
+    clearTimeout(toastT); toastT = setTimeout(function () { t.style.opacity = '0'; }, 1600);
+  }
+  // Clicking an ayah number puts a direct link to that ayah (#s=18:10) in the address bar and on the clipboard.
+  $('#page').addEventListener('click', function (e) {
+    var m = e.target.closest('.ayah-end'); if (!m) return;
+    var ref = state.current + ':' + m.dataset.a;
+    history.replaceState(null, '', '#s=' + ref);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(location.href).then(function () { toast('Link to ' + ref + ' copied'); }, function () { toast('Link to ' + ref + ' is in the address bar'); });
+    } else toast('Link to ' + ref + ' is in the address bar');
+  });
+
+  $('#btnClose').onclick = closeReader;
+  $('#btnPrev').onclick = function () { go(state.current - 1); };
+  $('#btnNext').onclick = function () { go(state.current + 1); };
+  $('#zIn').onclick = function () { setZoom(state.zoom + 0.1); };
+  $('#zOut').onclick = function () { setZoom(state.zoom - 0.1); };
+  $('#zVal').onclick = function () { setZoom(1); };
+  $('#rkChips').addEventListener('click', function (e) {
+    var c = e.target.closest('.rk-chip'); if (c) document.getElementById('rk' + c.dataset.k).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  // Ctrl/⌘ + wheel or trackpad pinch zooms the text, not the whole page.
+  $('#readerBody').addEventListener('wheel', function (e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault(); setZoom(state.zoom * (e.deltaY < 0 ? 1.06 : 1 / 1.06));
+  }, { passive: false });
+  // Two-finger pinch on touch screens.
+  var pinch = null;
+  var dist = function (t) { return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); };
+  $('#readerBody').addEventListener('touchstart', function (e) { if (e.touches.length === 2) pinch = { d: dist(e.touches), z: state.zoom }; }, { passive: true });
+  $('#readerBody').addEventListener('touchmove', function (e) {
+    if (pinch && e.touches.length === 2) { e.preventDefault(); setZoom(pinch.z * dist(e.touches) / pinch.d); }
+  }, { passive: false });
+  $('#readerBody').addEventListener('touchend', function (e) { if (e.touches.length < 2) pinch = null; });
+
+  document.addEventListener('keydown', function (e) {
+    if (!$('#reader').classList.contains('open') || e.target.tagName === 'INPUT' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === 'Escape') { if ($('#gloss').classList.contains('open')) closeGloss(); else closeReader(); }
+    else if ((e.key === 'w' || e.key === 'W') && !$('#glossBtn').classList.contains('hidden')) $('#glossBtn').click();
+    else if (e.key === 'ArrowLeft') go(state.current + 1);
+    else if (e.key === 'ArrowRight') go(state.current - 1);
+    else if (e.key === '+' || e.key === '=') setZoom(state.zoom + 0.1);
+    else if (e.key === '-' || e.key === '_') setZoom(state.zoom - 0.1);
+    else if (e.key === '0') setZoom(1);
+  });
+
+  // ---- Controls ----
+  function syncMode() { document.querySelectorAll('.seg button').forEach(function (b) { b.classList.toggle('on', b.dataset.mode === state.mode); }); }
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.onclick = function () { state.mode = b.dataset.mode; localStorage.setItem('quranMap.mode', state.mode); syncMode(); renderMap(); };
+  });
+  $('#search').addEventListener('input', function (e) { state.query = e.target.value; applyHighlight(); });
+  $('#search').addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { e.target.value = ''; state.query = ''; applyHighlight(); return; }
+    if (e.key !== 'Enter') return;
+    var hit = document.querySelector('.tile.hit');
+    if (hit) openFromMap(hit.dataset.n);
+  });
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(renderMap, 120); });
+  window.addEventListener('hashchange', route);
+
+  syncMode(); buildLegend(); lucide.createIcons();
+  // Word notes are optional: if gloss.json is missing or broken the reader simply shows no underlines.
+  var glossReq = fetch('./gloss.json').then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+  fetch('./data.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+    return glossReq.then(function (g) { state.data = d; try { indexGloss(g); } catch (e) { console.warn('gloss:', e); } return d; });
+  }).then(function (d) {
+    var ay = d.reduce(function (t, s) { return t + s.a.length; }, 0), rk = d.reduce(function (t, s) { return t + s.rk.length; }, 0);
+    $('#stats').textContent = d.length + ' surahs · ' + ay.toLocaleString() + ' ayahs · ' + rk + ' ruku · 30 juz';
+    renderMap(); syncContinue(); route();
+  }).catch(function (err) {
+    $('#map').innerHTML = '<div class="h-full flex items-center justify-center text-rose-300 text-sm">Could not load data.json (' + esc(err.message) + '). Serve this folder over http.</div>';
+  });
+})();
+</script>
+
+<script>
+// Shared login gate — do not modify.
+function _login() {
+  var u = document.getElementById('loginUsername').value;
+  var p = document.getElementById('loginPassword').value;
+  if (u.toLowerCase() === 'ibrahim' && p === 'ibrahimwin') {
+    document.getElementById('loginView').style.display = 'none';
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    var inputs = [document.getElementById('loginUsername'), document.getElementById('loginPassword')];
+    inputs.forEach(function(el) {
+      el.style.borderColor = '#ef4444';
+      setTimeout(function() { el.style.borderColor = '#334155'; }, 1000);
+    });
+  }
+}
+document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') _login();
+});
+</script>
+</body>
+</html>
