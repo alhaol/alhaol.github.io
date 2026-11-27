@@ -2388,6 +2388,9 @@
                                         <a href="${data.personalInfo.github}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
                                             ${getIcon('code', 16)} GitHub
                                         </a>` : ''}
+                                        ${'' /* Hidden 2026-11-27: ORCID, Semantic Scholar and arXiv pills, kept for the record.
+                                           URLs stay in conf/profile.json (personalInfo). To show them again, delete this
+                                           wrapper line and the closing comment line below.
                                         ${data.personalInfo.orcid ? `
                                         <a href="${data.personalInfo.orcid}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
                                             ${getIcon('research', 16)} ORCID
@@ -2400,6 +2403,7 @@
                                         <a href="${data.personalInfo.arxiv}" target="_blank" class="flex items-center gap-2 hover:bg-white/10 transition-all border border-white/30 px-4 py-2 rounded-full">
                                             ${getIcon('research', 16)} arXiv
                                         </a>` : ''}
+                                        */}
                                         <span class="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/30">
                                             ${getIcon('mapPin', 16)} ${data.personalInfo.location}
                                         </span>
