@@ -64,6 +64,7 @@ No build step, no package manager.
     ├── tier-lists/     # Exercise tier-list video playlist (7 videos)
     ├── todo/           # TaskMaster Pro — focus-mode task manager
     ├── warmup/         # Warmup & core workout playlist (25 videos)
+    ├── game-train/     # Siege Hands — left-hand & mouse muscle-memory trainer game
     └── wizard-duel/    # Wizard Duel — 2-player turn-based battle game with monsters
 ├── memory/             # Memory Classes — cognitive masterclasses built for long-term retention
 │   ├── index.html      # Memory Hub (data-driven from memory.json)
@@ -146,6 +147,7 @@ No build step, no package manager.
 | Hair | `/apps/hair/` | A 12-week scalp and hair recovery tracker: Nizoral wash-day schedule with a Phase 1/2 toggle, an eight-item daily checklist for the serum, shampoo and gelatin-free supplements, a Mon-Sun adherence grid, an Amazon.ca order and reorder list with a status per product and saved links, and an itch and bumps scalp log with a trend chart |
 | Solar | `/apps/solar/` | A family guide to home solar in Canada: power stations explained as hose, tank and pump with a runtime sandbox, panel types with a sun and winter-cold voltage simulator, MC4 and XT60i connectors with a series vs parallel wiring lab, a Costco, Amazon.ca, Canadian Tire and AliExpress buyer's guide with a bundle savings calculator, Ontario time-of-use peak-shaving savings, and a four-mission kids' quiz that remembers progress, a Measure It tab of Amazon.ca meters for power, voltage and current, 24 household appliances with start-up surges in the runtime sandbox, Ottawa winter and Ontario safety notes, and a light/dark toggle |
 | Quran Map | `/apps/quran-map/` | A full-screen treemap of all 114 surahs, each tile sized by its ayah count and coloured by the juz it starts in (grouped-by-juz or continuous mushaf layout, right to left), with juz-chip highlighting and search that tolerates spelling variants (Yaseen / Ya-Sin, Arabic too); click a surah to read its full Uthmani text, bundled offline in data.json, on one zoomable page (buttons, Ctrl+wheel, pinch, +/−) where each of the 558 standard rukus has its own background colour, juz starts are marked inline, a ruku bar jumps around the surah, prev/next pages through surahs, clicking an ayah number copies a direct link (#s=18:10), and a Continue button reopens the last surah at the spot you left, and essential words are underlined with notes (gloss.json): click one for quran.com's word-by-word English, the Arabic meaning from التفسير الميسر, word form, context from تفسير السعدي and related ayahs (777 words across all 114 surahs; `w` toggles) |
+| Siege Hands | `/apps/game-train/` | A left-hand and mouse muscle-memory trainer for tactical shooters: key drills, movement combos, a shooting range and a gunfight mode, with rebindable keys and saved progress. |
 
 
 ## Updating Content
